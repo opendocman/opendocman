@@ -1,13 +1,15 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
+//$SESSION_UID=102;
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
         header('Location:error.php?ec=1');
         exit;
 }
-include ('./config.php');
+
+include ('config.php');
 // includes
 if (!isset($last_message))
 {
