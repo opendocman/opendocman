@@ -173,7 +173,8 @@ if( !defined('function') )
 				$str_array = array();
 				for($i = 0; $i< $obj_array_len; $i++)
 				{
-					$str_array[$i] = array($i, $obj_array[$i]->getOwnerName());
+				   	$full_name_array = $OBJ_array[$i]->getOwnerFullName();           	
+					$str_array[$i] = array($i, $full_name_array[1] . ', ' . $full_name_array[0]);
 				}
 				break;
 			case 'created_date':

@@ -1,15 +1,15 @@
 <?php
-/*$where='department_only';
-  $keyword='Information Systems';
+$where='all';
+  $keyword='Nguyen Khoa';
   $SESSION_UID=102;
   $submit='submit';
- */
+
 session_start();
-if (!session_is_registered('SESSION_UID'))
+/*if (!session_is_registered('SESSION_UID'))
 {
         header('Location:error.php?ec=1');
         exit;
-}
+}*/
 /// includes
 include('config.php');
 
@@ -170,7 +170,8 @@ then return_array[index1] = (OBJ1, 'filename_only');
                         case 'author_only':
                                 for($i = 0; $i<$obj_array_len; $i++)
                                 {
-                                        $query_array[$i] = $OBJ_array[$i]->getOwnerName();
+                                    $full_name_array = $OBJ_array[$i]->getOwnerFullName();    
+                                	$query_array[$i] = $full_name_array[1] . ' ' . $full_name_array[0];
                                 }
                                 break;
 
