@@ -195,8 +195,8 @@ if(!isset($_REQUEST['submit']))
 if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 {
 
-	$idfield=explode(' ',trim($_REQUEST['idfield']));
-	$number=explode(' ',trim($_REQUEST['number']));
+	$idfield=explode(' ',trim(@$_REQUEST['idfield']));
+	$number=explode(' ',trim(@$_REQUEST['number']));
 	$boxes = array(); //init
 	$filenums = array();//init
 	foreach($number as $key=>$value)
@@ -208,8 +208,8 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 		$filenums[]=$value;
 	}
 
-	$type = substr($_REQUEST['mode'],9,1);
-	$mode= ereg_replace(" [[:digit:]]", "", $_REQUEST['mode']);
+	$type = substr(@$_REQUEST['mode'],9,1);
+	$mode= ereg_replace(" [[:digit:]]", "", @$_REQUEST['mode']);
 
 	if($mode == 'reviewer')
 		$access_mode = 'enabled';
