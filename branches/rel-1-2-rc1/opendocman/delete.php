@@ -19,7 +19,15 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 	// all ok, proceed!
 	//mysql_free_result($result);
 	if( !is_dir($GLOBALS['CONFIG']['archiveDir']) )
-	{	mkdir($GLOBALS['CONFIG']['archiveDir']);	}
+	{
+                // Make sure directory is writeable
+                if(!mkdir($GLOBALS['CONFIG']['archiveDir']))
+                {
+                        $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
+                        header('Location:error.php?ec=23&last_message=' .$last_message);
+                        exit;
+                }
+        }
 	for($i = 0; $i<$_REQUEST['num_checkboxes']; $i++)
 	{
 		if(@$_REQUEST['id' . $i])
