@@ -69,7 +69,7 @@ if( !defined('function') )
 		}
 		else
 		{
-			echo '<td bgcolor="#0000A0" align="left" valign="middle" width="' . (strlen('ODM ' . $GLOBALS['lang']['View'])*7) . '">'."\n";                                                            
+			echo '<td bgcolor="#0000A0" align="left" valign="middle" width="' . (strlen('ODM ' . $GLOBALS['lang']['View'])*8) . '">'."\n";                                                            
 			echo '<a class="statusbar" href="out.php" style="text-decoration:none">' . 'ODM ' . $GLOBALS['lang']['View'] . '</a>'."\n</td>";
 		}
 		?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
