@@ -84,7 +84,12 @@ The first two options also result in sending email to reviewer
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'On'
+'secureurl' => 'On',
+
+// Set the default language (english, spanish).
+// Local users may override this setting
+// check include/language folder for languages available
+'language' => 'english'
 
 );
 
@@ -101,6 +106,9 @@ $CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 
 // Set the revision directory. (relative to $dataDir)
 $CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
+
+// Include the language info
+include_once 'include/language/' . $GLOBALS['CONFIG']['language'] . '.php';
 
 //global $site_mail; 
 global $hostname;

@@ -37,11 +37,11 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 		if(isset($_REQUEST['redirection']))
 			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
 		<tr>
-        <td>Username</td>
+        <td><?php echo $GLOBALS['lang']['username']; ?></td>
         <td><input type="Text" name="frmuser" size="15"></td>
         </tr>
         <tr>
-        <td>Password</td>
+        <td><?php echo $GLOBALS['lang']['password']; ?></td>
         <td><input type="password" name="frmpass" size="15"></td>
         </tr>
         <tr>
