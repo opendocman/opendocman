@@ -92,6 +92,9 @@ if ( $user_obj->isRoot()	)
 		 <tr>
 		 <td><b><a href="rejects.php?mode=root<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Rejections</a></b></td>
 		 </tr>
+		 <tr>
+		 <td><b><a href="check_exp.php?<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Check Expiration</a></b></td>
+		 </tr>
 	   </table>
 	  </td>
 <?php

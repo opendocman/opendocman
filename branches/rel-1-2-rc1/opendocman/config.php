@@ -69,7 +69,16 @@ global $CONFIG;      $CONFIG = array(
 
 //This var sets the amount of days until each file need to be revise, 
 //assuming that there are 30 days a month for all months.
-'revision_expiration' => '90'
+'revision_expiration' => '90',
+
+/* Choose an action option when a file is found expired
+The first two options also result in sending email to reviewer
+ 	(1) Remove from file list until renewed
+	(2) Show in file list but non-checkoutable
+	(3) Send email to reviewer only
+	(4) Do Nothing
+*/
+'file_expired_action' => '1'
 );
 
 // Set the revision directory. (relative to $dataDir)

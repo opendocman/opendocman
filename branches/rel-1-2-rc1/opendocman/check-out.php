@@ -23,7 +23,7 @@ the server
 */
 $fileobj = new FileData($_GET['id'], $GLOBALS['connection'], $GLOBALS['database']);
 $fileobj->setId($_GET['id']);
-if ($fileobj->getError() != NULL || $fileobj->getStatus() != 0  || $fileobj->isArchived())
+if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isArchived())
 {
 	header('Location:error.php?ec=2');
 	exit;

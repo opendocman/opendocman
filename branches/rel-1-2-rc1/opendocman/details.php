@@ -155,7 +155,7 @@ if($filedata->isPublishable() ==-1 )
 ?></td>
 </tr>
 <?php
-if ($status != 0)
+if ($status > 0)
 {
 	// status != 0 -> file checked out to another user. status = uid of the check-out person
 	// query to find out who...

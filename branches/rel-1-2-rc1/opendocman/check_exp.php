@@ -1,5 +1,19 @@
 <?php
 include('config.php');
+$start_time = time();
+session_start();
+
+if (!isset($_REQUEST['last_message']))
+{
+	    $_REQUEST['last_message']='';
+}
+
+// includes
+include ('config.php');
+draw_header('Check Expirations');
+draw_menu(@$_SESSION['uid']);
+draw_status_bar('Check Expirations', $_REQUEST['last_message']);
+
 // Look up user
 $lquery = 'SELECT user.id FROM user where user.username="' . $GLOBALS['CONFIG']['root_username'] . '"';
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
@@ -36,35 +50,63 @@ $lok_year = $lcurrent_year - $lexp_years;
 
 $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_year));
 
-//get root's id
-
-$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND data.publishable!=-1";
+//get expired file
+$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND (data.publishable!=-1 and data.status!=-1)";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
-$user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
-$date = date("D F d Y");
-$time = date("h:i A");
-$get_full_name = $user_obj->getFullName();
-$full_name = $get_full_name[0].' '.$get_full_name[1];
-$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-$mail_headers = "From: $mail_from";
-$mail_subject='Review status for document ';
-$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
-$mail_body = 'was declined for publishing at '.$time.' on '.$date.' because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days.';
-$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
-echo 'Rejecting files last edited before ' . $lexpired_revision . '<br>'; 
+echo 'Rejecting files last edited before ' . $lexpired_revision . '<br>';
 echo 'Rejecting ' . mysql_num_rows($lresult) . ' file(s)<br>';
 for($i = 0; $i<mysql_num_rows($lresult); $i++)
-{	
-	list($lid, $lreviewer_comments) = mysql_fetch_row($lresult);	
-	$file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
-	$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
-	$mail_to = $user_obj->getEmailAddress();
-	mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
-	$file_obj->Publishable(-1);
-	$file_obj->setReviewerComments($reviewer_comments);
-	echo '&nbsp;&nbsp;' . $lid . '<br>';
+{
+	list($lid) = mysql_fetch_row($lresult);
+	echo '&nbsp;&nbsp;File ID: ' . $lid . '<br>';
 }
-$flag=1;
+// Notify owner
+if($GLOBALS['CONFIG']['file_expired_action'] != 4)
+{
+	//get root's id
+	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
+	$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
+	$user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
+	$date = date("D F d Y");
+	$time = date("h:i A");
+	$get_full_name = $user_obj->getFullName();
+	$full_name = $get_full_name[0].' '.$get_full_name[1];
+	$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
+	$mail_headers = "From: $mail_from";
+	$mail_subject='Review status for document ';
+	$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
+	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days.';
+	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
+	for($i = 0; $i<mysql_num_rows($lresult); $i++)
+	{	
+		list($lid) = mysql_fetch_row($lresult);	
+		$file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
+		$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
+		$mail_to = $user_obj->getEmailAddress();
+		mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+	}
+}
+if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) //do not show file
+{
+	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
+	$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
+	for($i = 0; $i<mysql_num_rows($lresult); $i++)
+	{
+		list($lid) = mysql_fetch_row($lresult);
+		$file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
+		$file_obj->Publishable(-1);
+		$file_obj->setReviewerComments($reviewer_comments);
+	}
+}
+if( $GLOBALS['CONFIG']['file_expired_action'] == 2 ) //lock file, not check-outable
+{
+	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
+	for($i = 0; $i<mysql_num_rows($lresult); $i++)
+	{
+		list($lid) = mysql_fetch_row($lresult);
+		$file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
+		$file_obj->setStatus(-1);
+	}
+}
 echo 'All proccesses are completed successfully';
 ?>
