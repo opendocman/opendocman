@@ -441,8 +441,8 @@ if( !defined('function') )
                         $realname = $file_obj->getRealname();
                         //$filesize = $file_obj->getFileSize();
                         //Get the file size in bytes.
-                        $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid_array[$index] . '.dat');
-
+                        if( !$file_obj->isArchived())	$filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid_array[$index] . '.dat');
+						else $filesize = display_filesize($GLOBALS['CONFIG']['archiveDir'] . $fileid_array[$index] . '.dat');
                         if($showCheckBox=='true')
                         {
 ?>
