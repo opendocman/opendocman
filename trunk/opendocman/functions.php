@@ -268,8 +268,8 @@ if( !defined('function') )
                 $index = $starting_index;
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $secureurl->encode($page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by) . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = "<TD class=$css_td_class NOWRAP><B>";
-                $link = "<A HREF=\"$page_url&sort_order=asc&sort_by=";
+                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"";
+                $link = "$page_url&sort_order=asc&sort_by=";
                 $default_url_mid = '">';
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
@@ -284,7 +284,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                     //   $str = $default_url_pre . $secureurl->encode($link . 'id'.$default_url_mid.'ID'.$default_url_post;
+                     $str = $default_url_pre . $secureurl->encode($link . 'id') . $default_url_mid.'ID'.$default_url_post;
                 }
                 echo($str);
 
@@ -294,7 +294,7 @@ if( !defined('function') )
                 }
                 else
                 { 
-                        $str = $default_url_pre.'file_name'.$default_url_mid.'File Name'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'file_name') . $default_url_mid.'File Name'.$default_url_post;
                 }
                 echo($str);
 
@@ -304,7 +304,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'description'.$default_url_mid.'Description'.$default_url_post;
+                        $str = $default_url_pre. $secureurl->encode($link .'description') . $default_url_mid.'Description'.$default_url_post;
                 }
                  echo($str);
 
@@ -317,24 +317,13 @@ if( !defined('function') )
                         $str = '<TD class="' . $css_td_class . '"><B>Rights<B></TD>';
                 }
                 echo($str);
-/*
-                if($sort_by == 'comments')
-                {
-                        $str = '<TD class="' . $css_td_class . '" NOWRAP><B>Comments<B> <IMG SRC="' . $sort_img . '"></TD>';
-                }
-                else 
-                {
-                        $str = '<TD class="' . $css_td_class . '" NOWRAP><B>Comments<B></TD>';
-                }
-                echo($str);
-*/
                 if($sort_by == 'created_date')
                 {
                         $str = $url_pre.'Created Date'.$url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre.'created_date'.$default_url_mid.'Created Date'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'created_date') . $default_url_mid.'Created Date'.$default_url_post;
                 }
                 echo($str);
 
@@ -344,7 +333,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'modified_on'.$default_url_mid.'Modified Date'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'modified_on') . $default_url_mid.'Modified Date'.$default_url_post;
                 }                
                 echo($str);
 
@@ -354,7 +343,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'author'.$default_url_mid.'Author'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'author') . $default_url_mid.'Author'.$default_url_post;
                 }
                 echo($str);
 
@@ -364,7 +353,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'department'.$default_url_mid.'Department'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid.'Department'.$default_url_post;
                 }
                 echo($str);
 
@@ -374,7 +363,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'size'.$default_url_mid.'Size'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link . 'size') . $default_url_mid.'Size'.$default_url_post;
                 }
                 echo($str);
 
@@ -507,18 +496,6 @@ if( !defined('function') )
                                 echo $rights[$i][1] . '|';
                         }
 ?>                      </TD>
-<? /*                        
-                        if($comment == '')
-                        {
-                                $comment='No comments available';                     
-                        }
-                        
-                        if(strlen($comment) > $GLOBALS['CONFIG']['displayable_len'])
-                        {
-                                $comment = substr($comment, 0, $GLOBALS['CONFIG']['displayable_len']).'...';
-                        }
-*/ ?>                       
-                    <?php /*<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $comment; ?></TD> */ ?>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $owner_name; ?></TD>
