@@ -95,7 +95,7 @@ elseif ($_GET['submit'] == 'view')
 	// Pass the mimetype so the browser can open it
         header ('Cache-control: private');
         header('Content-Type: ' . $_GET['mimetype']);
-        header('Content-Disposition: inline; filename=' . $realname);
+        header('Content-Disposition: inline; filename="' . $realname . '"');
 		// Apache is sending Last Modified header, so we'll do it, too
         $modified=filemtime($filename);
         header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
