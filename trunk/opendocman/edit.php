@@ -21,21 +21,23 @@ if (!session_is_registered('uid'))
   exit;
 }
 
-if (!isset($id) || $id == '')
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-  header('Location:error.php?ec=2');
-  exit;
+	header('Location:error.php?ec=2');
+  	exit;
 }
+if (!isset($_REQUEST['last_message']))
+{	$_REQUEST['last_message'] = '';	}
 include('config.php');
 if (!isset($submit))
 // form not yet submitted, display initial form
 {
 	draw_header('File Properties Modification');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Edit Document Properties', $message);
+	draw_status_bar('Edit Document Properties', $_REQUEST['last_message']);
 	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	checkUserPermission($id, $user_perm_obj->ADMIN_RIGHT);
-	$data_id = $id;
+	checkUserPermission($_REQUEST['id'], $user_perm_obj->ADMIN_RIGHT);
+	$data_id = $_REQUEST['id'];
 	// includes
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
 	//echo($GLOBALS['database']); echo($query); echo($connection);
@@ -46,7 +48,7 @@ if (!isset($submit))
 	  exit; //non-unique error
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
-	$query = "SELECT default_rights from data where data.id = $id";
+	$query = "SELECT default_rights from data where data.id = $data_id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
@@ -109,7 +111,7 @@ if (!isset($submit))
 	departments[all_Setting_pos] = all_Setting;
 	departments[default_Setting_pos] = default_Setting;
 <?php
-	$query = "SELECT name, dept_id, rights FROM department, dept_perms  WHERE department.id = dept_perms.dept_id and dept_perms.fid = $id ORDER by name";
+	$query = "SELECT name, dept_id, rights FROM department, dept_perms  WHERE department.id = dept_perms.dept_id and dept_perms.fid = $data_id ORDER by name";
 	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
@@ -127,7 +129,7 @@ if (!isset($submit))
 	// query to obtain current properties and rights 
 //	$query = "SELECT category, realname, description, comment FROM data WHERE id = '$id' AND status = '0' AND owner = '$_SESSION[uid]'";
 //	$result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
-	$filedata = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
+	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 	// error check
 	if( !$filedata->exists() ) //if (mysql_num_rows($result) <= 0)
 	{
@@ -251,8 +253,7 @@ if (!isset($submit))
 		$all_users[$i] = new User($uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
-	$filedata = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
-	$filedata->setId( $id );
+	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 	$user_forbidden_array = $filedata->getForbiddenRightUserIds();
 	$found = false;
 	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
