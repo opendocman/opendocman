@@ -32,7 +32,7 @@ $userPermObj = new User_Perms($_SESSION['uid'] , $GLOBALS['connection'], $GLOBAL
 */
 ?>
 <center>
-<table border="0" cellspacing="4" cellpadding="1">
+<table border="0" width="400" cellspacing="4" cellpadding="1">
 <?php
 // display details
 $ownerId = $filedata->getOwner();
