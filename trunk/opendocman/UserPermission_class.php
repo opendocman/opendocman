@@ -52,6 +52,7 @@ if( !defined('UserPermission_class') )
         
 	function getViewableFileIds()
 	{	
+		$array = array();
 		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
 		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
 		$query = 'SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = ' . $this->uid . '  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights<' . $this->VIEW_RIGHT .  ' and data.publishable = 1)';

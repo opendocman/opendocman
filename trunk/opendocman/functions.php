@@ -1170,6 +1170,7 @@ if( !defined('function') )
 	function removeElements($master_array, $removing_array)
 	{
 		$found = false;
+		$result_array = array();
 		for($i = 0; $i < sizeof($master_array); $i++)
 		{
 			$found=false;
