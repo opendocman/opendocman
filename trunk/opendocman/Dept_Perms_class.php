@@ -12,7 +12,7 @@ if( !defined('Dept_Perms_class') )
 {
   define('Dept_Perms_class', 'true');
   
-  class Dept_Perms
+  class Dept_Perms extends databaseData
   {
 	var $fid;
 	var $id;
@@ -31,11 +31,6 @@ if( !defined('Dept_Perms_class') )
 	var $FORBIDDEN_RIGHT = -1;
 	var $USER_MODE = 0;
 	var $FILE_MODE = 1;
-	var $USER_PERM_TABLE = 'user_perms';
-	var $DEPT_PERM_TABLE = 'dept_perms';
-	var $DATA_TABLE = 'data';
-	var $USER_TABLE = 'user';
-	var $DEPARTMENT_TABLE = 'department';
 
 	function Dept_Perms($id, $connection, $database)
 	{
@@ -74,9 +69,9 @@ if( !defined('Dept_Perms_class') )
 	{
 		$index = 0;
 		$fileid_array = array();
-		$query = "SELECT $this->DATA_TABLE.id, $this->DATA_TABLE.owner, $this->USER_TABLE.username 
-		FROM $this->DATA_TABLE, $this->USER_TABLE, $this->DEPT_PERM_TABLE 
-		WHERE $this->DEPT_PERM_TABLE.rights >= $right AND $this->DEPT_PERM_TABLE.dept_id=$this->id AND $this->DATA_TABLE.id=$this->DEPT_PERM_TABLE.fid AND $this->DATA_TABLE.owner=$this->USER_TABLE.id";                                                 
+		$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, $this->TABLE_USER.username 
+		FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
+		WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.owner=$this->TABLE_USER.id";                                                 
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
@@ -170,9 +165,9 @@ if( !defined('Dept_Perms_class') )
 	{
 		$this->error_flag = true; // reset flag
 		$right = -1;
-		$query = "SELECT $this->database.$this->DEPT_PERM_TABLE.rights from $this->database.$this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.dept_id = $this->id AND $this->DEPT_PERM_TABLE.fid = $data_id";
+		$query = "SELECT $this->database.$this->TABLE_DEPT_PERMs.rights FROM $this->database.$this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id AND $this->TABLE_DEPT_PERMS.fid = $data_id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
-		if(mysql_num_rows($result) ==1)
+		if(mysql_num_rows($result) == 1)
 		{
 			list ($right) = mysql_fetch_row($result);
 			if($right == $this->FORBIDDEN_RIGHT)
@@ -191,7 +186,7 @@ if( !defined('Dept_Perms_class') )
 	// right on file with data id of $data_id
 	function canDept($data_id, $right)
 	{
-		$query = "Select * from dept_perms where dept_perms.dept_id = $this->id and dept_perms.fid = $data_id and dept_perms.rights>=$right";
+		$query = "SELECT * FROM $this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.id = $this->id and $this->DEPT_PERM_TABLE.fid = $data_id AND $this->DEPT_PERM_TABLE.rights >= $right";
 		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		
 		switch(mysql_num_rows($result) )
@@ -205,7 +200,7 @@ if( !defined('Dept_Perms_class') )
 	// ID nuber ob $data_id
 	function getPermission($data_id)
 	{
-	  $query = "Select dept_perms.rights from dept_perms where dept_id = $this->id and fid = $data_id";
+	  $query = "SELECT $this->TABLE_DEPT_PERMS.rights FROM $this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and $this->TABLE_DEPT_PERMS.fid = $data_id";
 	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {

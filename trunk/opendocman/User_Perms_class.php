@@ -3,7 +3,7 @@ if ( !defined('User_Perms_class') )
 {
   define('User_Perms_class', 'true', false);
   
-  class User_Perms 
+  class User_Perms extends databaseData
   {
 	var $fid;
 	var $id;
@@ -23,11 +23,6 @@ if ( !defined('User_Perms_class') )
 	var $FORBIDDEN_RIGHT = -1;
 	var $USER_MODE = 0;
 	var $FILE_MODE = 1;
-	var $USER_PERM_TABLE = "user_perms";
-	var $DEPT_PERM_TABLE = "dept_perms";
-	var $DATA_TABLE = "data";
-	var $USER_TABLE = "user";
-	var $DEPARTMENT_TABLE = "department";
 	function User_Perms($id, $connection, $database)
 	{
 		$this->id = $id;  // this can be fid or uid
@@ -59,9 +54,16 @@ if ( !defined('User_Perms_class') )
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
-			$query = "SELECT data.id, data.owner, user.username FROM data, user WHERE user.id = data.owner and data.publishable = 1";
+			$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, 
+				$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER WHERE 
+				user.id = $this->TABLE_DATA.owner AND $this->TABLE_DATA.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
-			$query = "SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = $this->id  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights>=$right and data.publishable = 1)";
+			$query = "SELECT $this->TABLE_USER_PERMS.fid, $this->TABLE_DATA.owner, 
+				$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER, 
+				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
+				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
+				$this->TABLE_USER.id = $this->TABLE_DATA.owner AND $this->TABLE_USER_PERMS.rights>=$right 
+				AND $this->TABLE_DATA.publishable = 1)";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
 		$fileid_array = array();
@@ -129,7 +131,7 @@ if ( !defined('User_Perms_class') )
 	// return whether if this user is forbidden to have acc
 	function isForbidden($data_id)
 	{
-		$query = "SELECT user_perms.rights from user_perms WHERE user_perms.uid = $this->id";
+		$query = "SELECT $this->TABLE_USER_PERMS.rights FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.uid = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) ==1)
 		{
@@ -146,7 +148,7 @@ if ( !defined('User_Perms_class') )
 	{
 		if($this->user_obj->isRoot())
 			return true;
-		$query = "Select * from user_perms where user_perms.uid = $this->id and user_perms.fid = $data_id and user_perms.rights>=$right";
+		$query = "SELECT * FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.uid = $this->id AND $this->TABLE_USER_PERMS.fid = $data_id AND $this->TABLE_USER_PERMS.rights>=$right";
 		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		switch(mysql_num_rows($result) )
 		{
@@ -160,7 +162,7 @@ if ( !defined('User_Perms_class') )
 	{
 	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
 	  	return true;
-	  $query = "Select user_perms.rights from user_perms where uid = $this->id and fid = $data_id";
+	  $query = "SELECT $this->TABLE_USER_PERMS.rights FROM $this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
 	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {
@@ -169,7 +171,7 @@ if ( !defined('User_Perms_class') )
 	  }
 	  if (mysql_num_rows($result) == 0)
 	  {  
-		$query = 'SELECT dept_perms.rights from dept_perms where fid = ' . $data_id . ' AND dept_id = ' . $this->user_obj->getDeptId();	
+		$query = "SELECT $this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where fid = ' . $data_id . ' AND dept_id = " . $this->user_obj->getDeptId();	
 		$result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 		if(mysql_num_rows($result) == 1)
 	  	{

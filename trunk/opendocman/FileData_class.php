@@ -1,7 +1,26 @@
 <?php
 if( !defined('FileData_class') )
-{
+{	
   define('FileData_class', 'true', false);
+  
+  /*
+  		  mysql> describe data;
+		  +-------------------+----------------------+------+-----+---------------------+----------------+
+		  | id                | smallint(5) unsigned |      | PRI | NULL                | auto_increment |
+		  | category          | tinyint(4) unsigned  |      |     | 0                   |                |
+		  | owner             | tinyint(4) unsigned  |      |     | 0                   |                |
+		  | realname          | varchar(255)         |      |     |                     |                |
+		  | created           | datetime             |      |     | 0000-00-00 00:00:00 |                |
+		  | description       | varchar(255)         | YES  |     | NULL                |                |
+		  | comment           | varchar(255)         |      |     |                     |                |
+		  | status            | tinyint(4) unsigned  |      |     | 0                   |                |
+		  | department        | tinyint(4)           |      |     | 0                   |                |
+		  | default_rights    | int(4)               | YES  |     | NULL                |                |
+		  | publishable       | int(4)               | YES  |     | NULL                |                |
+		  | reviewer          | int(4)               | YES  |     | NULL                |                |
+		  | reviewer_comments | varchar(255)         | YES  |     | NULL                |                |
+		  +-------------------+----------------------+------+-----+---------------------+----------------+
+  */
   
   class FileData extends databaseData
   {
@@ -16,26 +35,21 @@ if( !defined('FileData_class') )
 	var $read_users;
 	var $write_users;
 	var $admin_users;
-	var $FORBIDDEN_RIGHT = -1;
-	var $NONE_RIGHT = 0;
-	var $VIEW_RIGHT = 1;
-	var $READ_RIGHT = 2;
-	var $WRITE_RIGHT = 3;
-	var $ADMIN_RIGHT = 4;
 	
 	function FileData($id, $connection, $database)
 	{
 		$this->field_name = 'realname';
 		$this->field_id = 'id';
 		$this->result_limit = 1;  //EVERY FILE IS LISTED UNIQUELY ON THE DATABASE DATA;
-		$this->tablename = 'data';
+		$this->tablename = $this->TABLE_DATA;
 		databaseData::databaseData($id, $connection, $database);
+		
 		$this->loadData();
 	}
 	// exists() return a boolean whether this file exists
 	function exists()
 	{
-	    $query = "SELECT * from data where data.id = $this->id";
+	    $query = "SELECT * FROM $this->tablename WHERE $this->tablename.id = $this->id";
 	    $result = mysql_query($query, $this->connection);
 	    switch(mysql_num_rows($result))
 	    {
@@ -48,7 +62,12 @@ if( !defined('FileData_class') )
 	This function load up all the fields in data table.*/
 	function loadData()
 	{
-		$query = "SELECT $this->tablename.category,$this->tablename.owner, $this->tablename.created, $this->tablename.description, $this->tablename.comment, $this->tablename.status, $this->tablename.department FROM data where data.id = $this->id";
+		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
+			$this->tablename.created, $this->tablename.description, 
+			$this->tablename.comment, $this->tablename.status, 
+			$this->tablename.department FROM $this->tablename 
+			WHERE $this->tablename.id = $this->id";
+		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
@@ -72,7 +91,7 @@ if( !defined('FileData_class') )
 	// return this file's category name
 	function getCategoryName()
 	{	
-		$query = 'SELECT name from category where id = ' . $this->category;
+		$query = "SELECT name FROM $this->TABLE_CATEGORY.id = $this->category";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit)
 			list($name) = mysql_fetch_row($result);
@@ -126,18 +145,25 @@ if( !defined('FileData_class') )
 	// return an aray of the user id of all the people who has $right right to this file
 	function getUserIds($right)
 	{
-	  $owner_query = "SELECT owner from data where id = $this->id";
-	  $u_query = "SELECT uid from user_perms where fid = $this->id and rights>=$right";
-	  $non_prev_user_query = "SELECT uid from user_perms where fid = $this->id and rights <$right";
+	  $owner_query = "SELECT owner FROM $this->tablename WHERE id = $this->id";
+	  $u_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id and rights >= $right";
+	  $non_prev_user_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right";
+	  
 	  $owner_result = mysql_query($owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
 	  $non_prev_u_reslt = mysql_query($non_prev_user_query, $this->connection) or die("Error in query: " .$non_prev_user_query . mysql_error() );  
+	  
 	  for($i = 0; $i<mysql_num_rows($non_prev_u_reslt); $i++)
 	  	list($not_u_uid[$i]) = mysql_fetch_row($non_prev_u_reslt);
-	  $d_query = "SELECT user.id, dept_perms.dept_id from dept_perms, user where fid = $this->id and user.department = dept_perms.dept_id and dept_perms.rights>= $right";
+	  
+	  $d_query = "SELECT $this->TABLE_USER.id, $this->TABLE_DEPT_PERMS.dept_id 
+	  	FROM $this->TABLE_DEPT_PERMS, $this->TABLE_USER WHERE fid = $this->id AND 
+	  	$this->TABLE_USER.department = $this->TABLE_DEPT_PERMS.dept_id and 
+	  	$this->TABLE_DEPT_PERMS.rights >= $right";
+	  
 	  for($i=0; $i<sizeof($not_u_uid); $i++)
 	  {
-		$d_query .= ' and user.id != ' . $not_u_uid[$i];
+		$d_query .= " and $TABLE->TABLE_USER.id != " . $not_u_uid[$i];
 	  }
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
 	  if(sizeof($owner_result) != 1)
@@ -174,7 +200,7 @@ if( !defined('FileData_class') )
 	// return the name of the deparment of the file
 	function getDeptName()
 	{
-		$query ='SELECT department.name from department where department.id = '.$this->getDepartment().';';
+		$query ="SELECT $this->TABLE_DEPARTMENT.name FROM $this->TABLE_DEPARTMENT WHERE $this->TABLE_DEPARTMENT.id = ".$this->getDepartment().';';
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
@@ -190,7 +216,7 @@ if( !defined('FileData_class') )
 	// return the latest modifying date on the file 
 	function getModifiedDate()
 	{
-		$query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY modified_on DESC LIMIT 1;";
+		$query = "SELECT $this->TABLE_LOG.modified_on FROM $this->TABLE_LOG WHERE $this->TABLE_LOG.id = '$this->id' ORDER BY $this->TABLE_LOG.modified_on DESC LIMIT 1;";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
                 if( mysql_num_rows($result) == $this->result_limit)
                         list($name) = mysql_fetch_row($result);
@@ -225,8 +251,13 @@ if( !defined('FileData_class') )
 	function getForbiddenRightUserIds()
 	{
 	
-	  $u_query = "SELECT uid from user_perms where fid = $this->id and rights = $this->FORBIDDEN_RIGHT";
-	  $d_query = "SELECT user.id, dept_perms.dept_id from dept_perms, user where fid = $this->id and user.department = dept_perms.dept_id and dept_perms.rights = $this->FORBIDDEN_RIGHT";
+	  $u_query = "SELECT $this->TABLE_USER_PERMS.uid FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.fid = $this->id and $this->TABLE_USER_PERMS.rights = $this->FORBIDDEN_RIGHT";
+	  $d_query = "SELECT $this->TABLE_USER.id, $this->TABLE_DEPT_PERMS.dept_id 
+	  	FROM $this->TABLE_DEPT_PERMS, $this->TABLE_USER WHERE 
+	  	$this->TABLE_DEPT_PERMS.fid = $this->id and 
+	  	$this->TABLE_USER.department = $this->TABLE_DEPT_PERMS.dept_id 
+	  	AND $this->TABLE_DEPT_PERMS.rights = $this->FORBIDDEN_RIGHT";
+	  
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
 	  
@@ -257,7 +288,7 @@ if( !defined('FileData_class') )
 	// return a boolean on whether or not this file is publisable
 	function isPublishable()
 	{
-		$query = "SELECT publishable from data where id = '$this->id'";
+		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
@@ -271,13 +302,13 @@ if( !defined('FileData_class') )
 	// this function sets the publisable field in the data table to $boolean
 	function Publishable($boolean = true)
 	{
-		$query = "UPDATE data SET publishable ='$boolean', data.reviewer = '$this->id' WHERE id = '$this->id'";
+		$query = "UPDATE $this->TABLE_DATA SET publishable ='$boolean', $this->TABLE_DATA.reviewer = '$this->id' WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
 	// return the user id of the reviewer
 	function getReviewerID()
 	{
-		$query = "SELECT data.reviewer from data where data.id = '$this->id'";
+		$query = "SELECT $this->TABLE_DATA.reviewer FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$num_hits = mysql_num_rows($result);
 		if($num_hits != 1)
@@ -307,15 +338,15 @@ if( !defined('FileData_class') )
   	// set $comments into the reviewer comment field in the DB
 	function setReviewerComments($comments)
 	{
-                $comments=addslashes($comments);
-		$query = "UPDATE data set data.reviewer_comments='$comments' where data.id='$this->id'";
+        $comments=addslashes($comments);
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.reviewer_comments='$comments' WHERE DATA.id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
 	// return the reviewer's comment toward this file
 	function getReviewerComments()
 	{
-		$query = "SELECT data.reviewer_comments FROM data WHERE data.id='$this->id'";
+		$query = "SELECT $this->TABLE_DATA.reviewer_comments FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) != 1)
@@ -327,7 +358,6 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $comments;
 	}
-
   }
 }
 ?>

@@ -5,7 +5,23 @@ if( !defined("databaseData_class") );
 
    class databaseData   //DO NOT INSTANTIATE THIS ABSTRACT CLASS
    {
-      	        var $name;
+      	var $TABLE_ADMIN = 'admin';
+      	var $TABLE_CATEGORY = 'category';
+      	var $TABLE_DATA = 'data';
+      	var $TABLE_DEPARTMENT = 'department';
+      	var $TABLE_DEPT_PERMS = 'dept_perms';
+      	var $TABLE_DEPT_REVIEWER = 'dept_reviewer';
+      	var $TABLE_LOG = 'log';
+      	var $TABLE_RIGHTS = 'rights';
+      	var $TABLE_USER = 'user';
+      	var $TABLE_USER_PERMS = 'user_perms';
+      	var $FORBIDDEN_RIGHT = -1;
+		var $NONE_RIGHT = 0;
+		var $VIEW_RIGHT = 1;
+		var $READ_RIGHT = 2;
+		var $WRITE_RIGHT = 3;
+		var $ADMIN_RIGHT = 4;
+   		var $name;
 		var $id;
 		var $connection;
 		var $database;

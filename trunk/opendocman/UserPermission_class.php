@@ -3,7 +3,7 @@ if( !defined('UserPermission_class') )
 {
   define('UserPermission_class', 'true', false);
   
-  class UserPermission
+  class UserPermission extends databaseData
   {
 	var $connection;
 	var $uid;
@@ -56,7 +56,14 @@ if( !defined('UserPermission_class') )
 		$array = array();
 		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
 		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
-		$query = 'SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = ' . $this->uid . '  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights<' . $this->VIEW_RIGHT .  ' and data.publishable = 1)';
+		
+		$query = "SELECT $this->TABLE_USER_PERMS.fid, $this->TABLE_DATA.owner, 
+			$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER, 
+			$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid 
+			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
+			user.id = $this->TABLE_DATA.owner and $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT 
+			AND $this->TABLE_DATA.publishable = 1)";
+		
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
 		for($index=0; $index < mysql_num_rows($result); $index++)
 		{
