@@ -76,9 +76,8 @@ if( !defined('User_class') )
 
                 if(mysql_num_rows($result) !=1 )
                 {
-                        header('Location:error.php?ec=14');
-                        exit;
-                }
+                	return false;
+				}
 
                 list($isadmin) = mysql_fetch_row($result);
                 return $isadmin;
@@ -143,8 +142,7 @@ if( !defined('User_class') )
 			return 0;
 		}
 	}
-	
-	function getAllReviewee() // this functions assume that you are a root thus allowing you to by pass everything
+	function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
 	{
 		$lquery = "SELECT id FROM data WHERE $this->TABLE_DATA.publishable = 0";
 		$lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
@@ -153,11 +151,11 @@ if( !defined('User_class') )
 		for($lindex = 0; $lindex< $lnum_files; $lindex++)
 		{
 			list($lfid) = mysql_fetch_row($lresult);
-			$lfile_data[$lindex] = new FileData($lfid, $this->connection, $this->database);
+			$lfile_data[$lindex] = $lfid;
 		}
 		return $lfile_data;
 	}
-	function getReviewee() //return an array of files that need reviewing under this person
+	function getRevieweeIds() //return an array of files that need reviewing under this person
 	{
 		if($this->isReviewer())
 		{
@@ -181,12 +179,12 @@ if( !defined('User_class') )
 			for($index = 0; $index< $num_files; $index++)
 			{
 				list($fid) = mysql_fetch_row($result);
-				$file_data[$index] = new FileData($fid, $this->connection, $this->database);
+				$file_data[$index] = $fid;
 			}
 			return $file_data;				
 		}		
 	}
-	function getAllRejectedFiles()
+	function getAllRejectedFileIds()
 	{
 		$query = "SELECT data.id FROM data WHERE publishable = '-1'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
@@ -195,11 +193,11 @@ if( !defined('User_class') )
 		for($index = 0; $index< $num_files; $index++)
 		{
 			list($fid) = mysql_fetch_row($result);
-			$file_data[$index] = new FileData($fid, $this->connection, $this->database);
+			$file_data[$index] = $fid;
 		}
 		return $file_data;
 	}
-	function getRejectedFiles()
+	function getRejectedFileIds()
 	{
 		$query = "SELECT data.id FROM data WHERE publishable = '-1' and data.owner = ".$this->id;
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
@@ -208,7 +206,7 @@ if( !defined('User_class') )
 		for($index = 0; $index< $num_files; $index++)
 		{
 			list($fid) = mysql_fetch_row($result);
-			$file_data[$index] = new FileData($fid, $this->connection, $this->database);
+			$file_data[$index] = $fid;
 		}
 		return $file_data;
 	}

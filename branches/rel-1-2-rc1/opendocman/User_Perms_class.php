@@ -55,14 +55,14 @@ if ( !defined('User_Perms_class') )
 	{
 		if($this->user_obj->isRoot())
 			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER WHERE 
-				user.id = $this->TABLE_DATA.owner AND $this->TABLE_DATA.publishable = 1";
+				user.id = $this->TABLE_DATA.owner AND $this->TABLE_DATA.publishable = 1 order by $this->TABLE_DATA.id asc";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
 			$query = "SELECT $this->TABLE_USER_PERMS.fid, $this->TABLE_DATA.owner, 
 				$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER, 
 				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
 				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
 				$this->TABLE_USER.id = $this->TABLE_DATA.owner AND $this->TABLE_USER_PERMS.rights>=$right 
-				AND $this->TABLE_DATA.publishable = 1)";
+				AND $this->TABLE_DATA.publishable = 1) order by $this->TABLE_DATA.id";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
 		$fileid_array = array();
@@ -135,7 +135,7 @@ if ( !defined('User_Perms_class') )
 		if(mysql_num_rows($result) ==1)
 		{
 			list ($right) = mysql_fetch_row($result);
-			if($right==$FORBIDDEN_RIGHT)
+			if($right==$this->FORBIDDEN_RIGHT)
 				return true;
 			else
 				return false;
@@ -169,18 +169,10 @@ if ( !defined('User_Perms_class') )
 	    list($permission) = mysql_fetch_row($result);
 	    return $permission;
 	  }
-	  if (mysql_num_rows($result) == 0)
+	  elseif (mysql_num_rows($result) == 0)
 	  {  
-		$query = "SELECT $this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where fid = '$data_id' AND dept_id = " . $this->user_obj->getDeptId();	
-		$result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
-		if(mysql_num_rows($result) == 1)
-	  	{
-	    	list($permission) = mysql_fetch_row($result);
-	    	return $permission;
-	  	}
+	  	return -999;
 	  }
-	  else
-	  {  return 'Non-unique error';	}
     }
   }
 }
