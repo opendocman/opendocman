@@ -791,7 +791,7 @@ if( !defined('function') )
                         if($showCheckBox=='true')
                         {
 ?>
-						<TD><input type="checkbox" value=" <?php echo $fid; ?>" name="checkbox <?php echo $checkbox_index;?>"></B></TD>
+						<TD><input type="checkbox" value="<?php echo $fid; ?>" name="checkbox<?php echo $checkbox_index;?>"></B></TD>
 <?php
                         }
 ?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
