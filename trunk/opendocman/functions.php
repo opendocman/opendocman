@@ -497,7 +497,7 @@ if( !defined('function') )
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
         }
 
-        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'a-z', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = false, $with_caption = false)
+        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'a-z', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
                 echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
@@ -531,11 +531,10 @@ if( !defined('function') )
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
                 echo("<TR bgcolor='83a9f7' id = '1'>");
-                if(isset($showCheckBox))
+                if($showCheckBox=='true')
                 {
                         echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
                 }
-
                 if($sort_by == 'id')
                 {
                         $str = $url_pre.'ID'.$url_post;
@@ -714,7 +713,7 @@ if( !defined('function') )
                         $dept_name = $fileobj_array[$index]->getDeptName();
                         $realname = $fileobj_array[$index]->getRealname();
                         $filesize = filesize($filename);
-                        if(isset($showCheckBox))
+                        if($showCheckBox=='true')
                         {
                                 echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
                         }
@@ -807,6 +806,11 @@ if( !defined('function') )
                 
                 <!----------------------Table Ends----------------------->
 <?php
+                if (!isset($num_checkboxes))
+                {
+                        $num_checkboxes='0';
+                }
+                
                 return $num_checkboxes;	
         }
 
@@ -904,10 +908,10 @@ if( !defined('function') )
 		</tr>
 		
 		<tr>
-		<td><font size="-1">Document created on <? echo fix_date($fileobj_array[$index]->getCreatedDate()); ?> by <b><? echo $fileobj_array[$index]->getOwnerName(); ?></b> for <b><? echo ($fileobj_array[$index]->getDepartment()); ?></b>| <? echo filesize($filename); ?> bytes</font></td>
+		<td><font size="-1">Document created on <?php echo fix_date($fileobj_array[$index]->getCreatedDate()); ?> by <b><?php echo $fileobj_array[$index]->getOwnerName(); ?></b> for <b><?php echo ($fileobj_array[$index]->getDepartment()); ?></b>| <?php echo filesize($filename); ?> bytes</font></td>
 		</tr>
 		
-<? 
+<?php 
 			// check the status of each file
 			// 0 -> file is not checked out
 			// display appropriate message and icon
@@ -917,7 +921,7 @@ if( !defined('function') )
 			<tr>
 			<td><img src="images/a.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#43c343"><b>This document is available to be checked out</b></font></td>
 			</tr>
-			<?
+			<?php
 			}
 			else if($fileobj_array[$index]->getStatus() != 0)
 			{
@@ -932,10 +936,10 @@ if( !defined('function') )
 				?>
 			<tr>
 			<td>
-			<img src="images/na.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#e9202a">This document is currently checked out to <b><? echo $username; ?></b></font>
+			<img src="images/na.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#e9202a">This document is currently checked out to <b><?php echo $username; ?></b></font>
 			</td>
 			</tr>
-<?
+<?php
 			}
 			else{}
 			$index++;
@@ -947,7 +951,7 @@ if( !defined('function') )
 		&nbsp;
 		</td>
 		</tr>
-<?
+<?php
         	}
 		echo '</table>';
 	}
@@ -1184,8 +1188,8 @@ if( !defined('function') )
 		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
 		if($user_perm_obj->getPermission($file_id) < $permittable_right)
 		{
-			echo 'Error: OpenDocMan is un able to find the requested file.' . "\n";
-			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for farther assistent.';
+			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";
+			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for further assistance.';
 			exit();
 		}
 	}
