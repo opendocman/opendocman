@@ -163,7 +163,7 @@ elseif($deleteuser){
 //Add Departments
 elseif($adddepartment)
 {
-		$query = "INSERT INTO department (name) VALUES ('$department')";
+		$query = "INSERT INTO department (name) VALUES ('" . addslashes($department) . '\')';
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Department successfully added');
@@ -177,7 +177,7 @@ elseif($adddepartment)
        		list($data_array[$index][0], $data_array[$index][1]) = mysql_fetch_row($result);
        	mysql_free_result($result);
        	//////Get the new department's id////////////
-       	$query = "SELECT id FROM department WHERE name = '$department'";
+       	$query = "SELECT id FROM department WHERE name = '" . addslashes($department) . "'";
        	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
        	$num_rows = mysql_num_rows($result);
        	if( $num_rows != 1 )
