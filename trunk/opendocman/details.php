@@ -191,7 +191,7 @@ if ($status > 0)
 <!-- inner table begins -->
 <!-- view option available at all time, place it outside the block -->
 <?php 
-if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->VIEW_RIGHT)
+if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->READ_RIGHT)
 {?>
 <td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
