@@ -163,6 +163,15 @@ if( !defined("databaseData_class") );
 		}
 		return $result_array;
 	}
+	function convertToFileDataOBJ($fid_array)
+	{
+		$filedata_array = array();
+		for($i = 0; $i<sizeof($fid_array); $i++)
+		{
+			$filedata_array[$i] = new FileData($fid_array[$i], $this->connection, $this->database, "data");
+		}
+		return $filedata_array;
+	}
 
    }
 // end inclusion control
