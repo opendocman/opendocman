@@ -40,10 +40,6 @@ if(!isset($_GET['submit']))
 	{	
                 $lmimetype = $GLOBALS['mimetypes']["$suffix"];	
         }
-	//echo "Realname is $realname<br>";
-	//echo "prefix = $prefix<br>";
-	//echo "suffix = $suffix<br>";
-	//echo "mime:$lmimetype";	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
 	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
 	echo '<BR>';
