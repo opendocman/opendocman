@@ -28,10 +28,9 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('config.php');
-
-$secureurl = new phpsecureurl;
+// Make sure user is admin
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-
+$secureurl = new phpsecureurl;
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if(!$user_obj->isAdmin() == true)
@@ -39,6 +38,11 @@ if(!$user_obj->isAdmin() == true)
     header('Location:' . $secureurl->encode('error.php?ec=4'));
     exit;
 }
+
+$secureurl = new phpsecureurl;
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+
+
 
 /*
    Add A New Department

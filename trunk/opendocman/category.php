@@ -27,28 +27,29 @@ if (!isset($_SESSION['uid']))
 }
 // includes
 include('config.php');
+$secureurl = new phpsecureurl;
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+if(!$user_obj->isAdmin())        
+{
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
+}
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 {
-	draw_menu($_SESSION['uid']);
+    draw_menu($_SESSION['uid']);
 }
 
-if(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add')
+if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 {
-                if (!isset($_REQUEST['last_message']))
-                {
-                        $_REQUEST['last_message']='';
-                }
-		draw_header('Add New Category');
-		draw_status_bar('Add New Category', $_REQUEST['last_message']);
-		// Check to see if user is admin
-		$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-		if(!$user_obj->isAdmin())        
-		{
-				draw_error('error.php?ec=4');
-				exit;
-		}
-?>
+    if (!isset($_REQUEST['last_message']))
+    {
+        $_REQUEST['last_message']='';
+    }
+    draw_header('Add New Category');
+    draw_status_bar('Add New Category', $_REQUEST['last_message']);
+    // Check to see if user is admin
+    ?>
 <center>
 <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
