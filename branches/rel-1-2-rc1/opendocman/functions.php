@@ -243,6 +243,8 @@ if( !defined('function') )
 	} 
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
+		if (sizeof($id_array) == 0 )
+			return $id_array;
 		if($sort_order == 'asc')
 			$sort_order = 'asc';
 		else
@@ -295,8 +297,9 @@ if( !defined('function') )
 			$lquery = 'SELECT data.id FROM data WHERE  (';
 			$lquery .= $lwhere_or_clause . ') ORDER BY data.filesize ' . $sort_order . ', data.id asc';
 		}
-		
+		$time = time(); 
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
+		echo "load mysql time: " . (time() - $time);
 		for($li = 0; $li<mysql_num_rows($lresult); $li++)
 			list($array[$li]) = mysql_fetch_row($lresult);
 		return $array;
@@ -565,13 +568,16 @@ if( !defined('function') )
                 for($i = 0; $i<sizeof($user_ID_array); $i++)
                         $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-        }
-
-        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
+		}
+		function getmicrotime(){ 
+			list($usec, $sec) = explode(" ",microtime()); 
+			return ((float)$usec + (float)$sec); 
+		}
+        function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
                 echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
-                $count = sizeof($fileobj_array);
+                $count = sizeof($fileid_array);
                 $css_td_class = "'listtable'";
                 if($sort_order == 'asc')
                 {
@@ -721,12 +727,13 @@ if( !defined('function') )
                 $unlock_highlighted_color = '#bdf9b6';
                 $lock_highlighted_color = '#ea7741';
                 echo "\n";
-                if(!isset($fileobj_array))
+                if(!isset($fileid_array))
                 {
                         echo '</TABLE>';
                         return 0;
                 }
-                while($index<sizeof($fileobj_array) and $index>=$starting_index and $index<=$stoping_index)
+        
+                while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
 						if($index%2!=0)
                         {
@@ -736,8 +743,8 @@ if( !defined('function') )
                         { 
                                 $tr_bgcolor = $even_row_color;
                         }
-                        
-                        if ($fileobj_array[$index]->getStatus() == 0 and $userperms_obj->getAuthority($fileobj_array[$index]->getId()) >= $userperms_obj->WRITE_RIGHT)
+                        $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
+						if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
                         {
                                 $lock = false;
                                 $highlighted_color = $unlock_highlighted_color;
@@ -751,50 +758,51 @@ if( !defined('function') )
                         if($with_caption == true )
                         {
                                 // correction for empty description
-                                echo "<TR bgcolor=\"$tr_bgcolor\" id=\"$index\" onMouseOver=\"this.style.backgroundColor='$highlighted_color'\"; return overlib('Comments');\" onMouseOut=\"this.style.backgroundColor='$tr_bgcolor'; return nd();\">";
+                                ?><TR bgcolor="<?php echo $tr_bgcolor;?>" id="<?php echo $index;?>" onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?>'"; return overlib('Comments');" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>'; return nd();"><?
                         }
                         else
                         {
-                                echo "<TR bgcolor=$tr_bgcolor id = $index onMouseOver=\"this.style.backgroundColor='$highlighted_color';\" onMouseOut=\"this.style.backgroundColor='$tr_bgcolor';\">";
-                        }
-                        
-                        if ($fileobj_array[$index]->getDescription() == '') 
+	                        ?><TR bgcolor=<?php echo $tr_bgcolor;?> id = <?php echo $index;?> onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?> ';" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>';"><?
+                        } 
+                        if ($file_obj->getDescription() == '') 
                         { 
                                 $description = 'No description available';
                         }
                         // set filename for filesize() call below
-                        $filename = $dataDir . $fileobj_array[$index]->getId() . '.dat';
-                        $fid = $fileobj_array[$index]->getId();
+                        $filename = $dataDir . $file_obj->getId() . '.dat';
+                        $fid = $file_obj->getId();
 
 
                         // begin displaying file list with basic information
-                        $comment = $fileobj_array[$index]->getComment();
-                        $description = $fileobj_array[$index]->getDescription();
-                        $created_date = fix_date($fileobj_array[$index]->getCreatedDate());
-                        if ($fileobj_array[$index]->getModifiedDate())
+                        $comment = $file_obj->getComment();
+                        $description = $file_obj->getDescription();
+                        $created_date = fix_date($file_obj->getCreatedDate());
+                        if ($file_obj->getModifiedDate())
                         {
-                                $modified_date = fix_date($fileobj_array[$index]->getModifiedDate());
+                                $modified_date = fix_date($file_obj->getModifiedDate());
                         }
                         //echo "$modified_date  and $fid fid";
-                        $full_name_array = $fileobj_array[$index]->getOwnerFullName();
+                        $full_name_array = $file_obj->getOwnerFullName();
                         $owner_name = $full_name_array[1].', '.$full_name_array[0];
-                        $user_obj = new User($fileobj_array[$index]->getOwner(), $fileobj_array[$index]->connection, $fileobj_array[$index]->database);
-                        $dept_name = $fileobj_array[$index]->getDeptName();
-                        $realname = $fileobj_array[$index]->getRealname();
-                        $filesize = filesize($filename);
+                        //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
+                        $dept_name = $file_obj->getDeptName();
+                        $realname = $file_obj->getRealname();
+                        $filesize = $file_obj->getFileSize();
                         if($showCheckBox=='true')
                         {
-                                echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
+?>
+						<TD><input type="checkbox" value=" <?php echo $fid; ?>" name="checkbox <?php echo $checkbox_index;?>"></B></TD>
+<?php
                         }
-                        echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
-                        echo '<TD class="' . $css_td_class . '" NOWRAP><a class="listtable" href="details.php?id=' . $fid . '">' . $realname . '</a></TD>';
-                        echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';
-
+?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
+                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid;?>"><?php echo $realname;?></a></TD>
+                        <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
+<?php
                         $read = array($userperms_obj->READ_RIGHT, 'r');
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
                         $rights = array($read, $write, $admin);
-                        $userright = $userperms_obj->getAuthority($fileobj_array[$index]->getId());
+                        $userright = $userperms_obj->getAuthority($file_obj->getId());
                         $index_found = -1;
                         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
                         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
@@ -818,49 +826,46 @@ if( !defined('function') )
                         {
                                 $rights[$i][1] = '-';
                         }
-                        echo "<TD class=\"$css_td_class\" NOWRAP>";
-                        
+?>						<TD class="<?php echo $css_td_class; ?>" NOWRAP>
+<?
                         for($i = 0; $i<sizeof($rights); $i++)
                         {
                                 echo $rights[$i][1] . '|';
                         }
-                        echo '</TD>';
-                        
+?>                      </TD>
+<?                        
                         if($comment == '')
                         {
-                                $comment='No comments available';
-                        
+                                $comment='No comments available';                     
                         }
                         
                         if(strlen($comment) > $GLOBALS['CONFIG']['displayable_len'])
                         {
                                 $comment = substr($comment, 0, $GLOBALS['CONFIG']['displayable_len']).'...';
                         }
-                        
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$comment</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$created_date</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$modified_date</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$owner_name</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$dept_name</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$filesize</TD>" ;
-                        
-                        if ($lock == false)
-                        {
-                                echo '<TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD>';
-                        }
-                        else
-                        {
-                                echo '<TD align="center" NOWRAP><img src="images/file_locked.png"></TD>';
-                        }
+?>                        
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $comment; ?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $owner_name; ?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $dept_name; ?></TD>
+						<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $filesize; ?></TD> 	      <?              
+						if ($lock == false)
+						{
+							?><TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD><?
+						}
+						else
+						{
+							?><TD align="center" NOWRAP><img src="images/file_locked.png"></TD><?
+						}
                         
                         $index++;
-                        echo '</TR>'."\n";
+                        ?></TR><?
                         $checkbox_index++;
                 }
-                echo '<INPUT type="hidden" name="num_checkboxes" value="' . $checkbox_index . '">'."\n";
-                echo '</HD6>'."\n";
-                echo '</TABLE>'."\n";
-?>
+                ?><INPUT type="hidden" name="num_checkboxes" value="<?php echo $checkbox_index;?>">
+                </HD6>
+                </TABLE>
                 <Script Language="javascript">
                 function selectAll(ctrl_checkbox)
                 {
