@@ -46,7 +46,7 @@ if( !defined('User_class') )
 			list($department) = mysql_fetch_row($result);
 			return $department;
 		}
-		$this->error = 'Non-unique uid: ' . $this->uid;
+		$this->error = 'Non-unique id: ' . $this->id;
 		return -1;
 
 	}
