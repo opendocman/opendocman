@@ -1,4 +1,4 @@
-<?
+<?php
 if( !defined('FileData_class') )
 {
   define('FileData_class', 'true', false);
@@ -240,7 +240,7 @@ if( !defined('FileData_class') )
 		$result = mysql_db_query($this->database, $query, $this->connection) or die('Error in query'. mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
-			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact knguyen@ksys.serverbox.org for help');
+			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
 			exit;
 		}
 		list($publishable) = mysql_fetch_row($result);
