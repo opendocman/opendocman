@@ -110,12 +110,8 @@ else
 	{
 		$lequate = '=';
 		$l_remain ='';
-		if( $lexact_phrase!='on' )
+		if( $lexact_phrase=!'on' )
 		{	
-			$lkeyword2 = $lkeyword;
-			$l_remain = strstr($lkeyword, ' ');
-			if($l_remain!='')
-				$lkeyword = strtok($lkeyword, ' ');
 			$lkeyword = '%' . $lkeyword . '%';
 		}
 		if($lcase_sensitivity!='on')
@@ -209,7 +205,7 @@ else
 	$query_array = array();
 	$search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
 	//echo 'khoa' . sizeof($search_result);
-	$page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
+	$page_url = $_SERVER['PHP_SELF'].'?keyword='.urlencode($_GET['keyword']).'&where='.urlencode($_GET['where']).'&submit='.urlencode($_GET['submit']) . '&exact_phrase=on';
 	$sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
 	list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
 	echo '<BR>';
