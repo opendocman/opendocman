@@ -5,7 +5,7 @@ if( !defined("databaseData_class") );
 
    class databaseData   //DO NOT INSTANTIATE THIS ABSTRACT CLASS
    {
-      	var $name;
+      	        var $name;
 		var $id;
 		var $connection;
 		var $database;
@@ -85,13 +85,13 @@ if( !defined("databaseData_class") );
 		}
 		elseif (mysql_num_rows($result) == 0)
 		{	
-			$this->error = 'Error: unable to fine id in database';
+			$this->error = 'Error: unable to find id in database';
 		}
 		else
 		{
 			list($name) = mysql_fetch_row($result);
+                        return $name;
 		}
-		return $name;
 	}
 	function reloadData() //assuming that userid will never change
 	{
