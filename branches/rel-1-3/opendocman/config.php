@@ -48,7 +48,7 @@ global $CONFIG;      $CONFIG = array(
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2rc1',
+'current_version' => ' OpenDocMan v1.3rc1',
 
 // The email address of the administrator of this site
 'site_mail' => 'admin@mydomain',
