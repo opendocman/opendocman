@@ -85,9 +85,12 @@ function do_install()
 
         // Create database
         $result = mysql_query("
-DROP DATABASE IF EXISTS $_REQUEST[database]
-CREATE DATABASE $_REQUEST[database]
-") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        DROP DATABASE IF EXISTS $_REQUEST[database]
+        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        
+        $result = mysql_query("
+        CREATE DATABASE $_REQUEST[database]
+        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
