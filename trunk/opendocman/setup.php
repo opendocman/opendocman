@@ -10,7 +10,8 @@
 <img src="images/logo.gif"><br>
 <?php
 
-        include ('config.php');
+include ('config.php');
+
 switch(@$_REQUEST['op']) {
     
     case "install":
@@ -26,23 +27,32 @@ switch(@$_REQUEST['op']) {
          do_update_11rc1();
          do_update_11rc2();
          do_update_11();
+         do_update_12rc1();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
          do_update_11rc1();
          do_update_11rc2();
          do_update_11();
+         do_update_12rc1();
          break;
 
    // User has version 11rc2 and is upgrading 
    case "update_11rc2":
          do_update_11rc2();
          do_update_11();
+         do_update_12rc1();
          break;
 
    // User has version 11 and is upgrading 
    case "update_11":
          do_update_11();
+         do_update_12rc1();
+         break;
+
+   // User has version 12rc1 and is upgrading 
+   case "update_11":
+         do_update_12rc1();
          break;
 
     default:
@@ -136,6 +146,14 @@ function do_update_11()
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
+function do_update_12rc1()
+{
+        echo 'Updating version 1.2rc1<br>';        
+        include("install/upgrade_12rc1.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
+
+
 function print_intro()
 {
 ?>
@@ -162,6 +180,9 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="setup.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="setup.php?op=update_12rc1">Upgrade from version 1.2rc1</a><br><br></td>
  </tr>
 </table>
 <hr>
