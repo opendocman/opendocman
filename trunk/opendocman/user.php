@@ -154,10 +154,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 </TR>
 <tr>
 <td></td>
-<td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validatemod(add_user);" value="Add User">
+<td columnspan=3 align="center"><input type="Submit" name="submit" onClick="return validatemod(add_user);" value="Add User">
 </form>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-<input type="Submit" name="submit" value="Cancel">
+<input type="Submit" name="cancel" value="Cancel">
 </form>
 </td>
 </tr>
@@ -169,7 +169,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 	 draw_footer();
         }
         // DELETE USER
-        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete User')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         {
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
@@ -199,10 +199,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 
                 mysql_free_result ($result);
                 ?> 
-
+                        ?
                         </td>
                         <td colspan="4" align="center">
-                        <input type="Submit" name="submit" value="deleteuser">
+                        <input type="Submit" name="submit" value="Delete User">
                         </td>
                         </form>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
@@ -246,7 +246,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         </td>
                         <tr>
                         <td colspan="4" align="center">
-                        <input type="Submit" name="submit" value="Delete User">
+                        <input type="Submit" name="submit" value="Delete">
                         </form>
                         </td>
                         <td>
@@ -355,20 +355,29 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         echo 'Sorry, demo mode only, you can\'t do that';
                 }
                 else
-        	{
-                        // Begin Not Demo Mode
-                        $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
-                        if (!isset($_REQUEST['last_message']))
-                        {
-                                $_REQUEST['last_message']='';
-                        }
-                        @draw_status_bar('Update User: ' . $user_obj->getName() ,$_POST['last_message']);	
-                        ?>
+                {
+                    // Check to see if user is admin
+                    $query = "SELECT admin FROM admin WHERE id = '" . $_SESSION['uid'] . "' and admin = '1'";
+                    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                    if(mysql_num_rows($result) <= 0)
+                    {
+                        header('Location:' . $secureurl->encode('error.php?ec=4'));
+                        exit;
+                    }
+
+                    // Begin Not Demo Mode
+                    $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+                    if (!isset($_REQUEST['last_message']))
+                    {
+                        $_REQUEST['last_message']='';
+                    }
+                    @draw_status_bar('Update User: ' . $user_obj->getName() ,$_POST['last_message']);	
+                    ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
                         {       window.location=url_location    }
 
-                </SCRIPT>
+                    </SCRIPT>
 
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -529,7 +538,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         </td>
                         <td>
                         <INPUT type="hidden" name="set_password" value="0">
-                        <input type="Submit" name="updateuser"  onClick="return verify(this.form, password, conf_password, set_password);" value="Modify User">
+                        <input type="Submit" name="submit"  onClick="return verify(this.form, password, conf_password, set_password);" value="Update User">
                         </form>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" >
                         <input type="Submit" name="submit" value="Cancel">
