@@ -53,8 +53,8 @@ if( !defined("databaseData_class") );
 	
 	function findId()
 	{
-		$query = "SELECT {$this->tablename}.$this->field_id FROM {$this->tablename} WHERE {$this->tablename}.$this->field_name='$this->name'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: $query. " . mysql_error());
+		$query = "SELECT {$this->database}.{$this->tablename}.$this->field_id FROM {$this->database}.{$this->tablename} WHERE {$this->database}.{$this->tablename}.$this->field_name='$this->name'";
+		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 
 		if( mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')
 		{
@@ -75,8 +75,9 @@ if( !defined("databaseData_class") );
 	comments if you need help with this function */
 	function findName()
 	{
-		$query = "SELECT $this->tablename.$this->field_name FROM $this->tablename WHERE {$this->tablename}.$this->field_id = $this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: " .$query . mysql_error());
+		$name = '';
+		$query = "SELECT {$this->database}.$this->tablename.$this->field_name FROM {$this->database}.$this->tablename WHERE {$this->database}.{$this->tablename}.$this->field_id = $this->id";
+		$result = mysql_query($query, $this->connection) or die ("Error in query: " .$query . mysql_error());
 		
 		if(mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')
 		{
