@@ -35,6 +35,7 @@ if( !defined('FileData_class') )
 	var $read_users;
 	var $write_users;
 	var $admin_users;
+	var $filesize;
 	
 	function FileData($id, $connection, $database)
 	{
@@ -65,13 +66,13 @@ if( !defined('FileData_class') )
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
 			$this->tablename.created, $this->tablename.description, 
 			$this->tablename.comment, $this->tablename.status, 
-			$this->tablename.department FROM $this->tablename 
-			WHERE $this->tablename.id = $this->id";
+			$this->tablename.department , $this->tablename.filesize
+			FROM $this->tablename WHERE $this->tablename.id = $this->id";
 		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
-			while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
+			while( list($category, $owner, $created_date, $description, $comment, $status, $department, $size) = mysql_fetch_row($result) )
 			{
 				$this->category = $category;
 				$this->owner = $owner;
@@ -80,11 +81,15 @@ if( !defined('FileData_class') )
 				$this->comment = $comment;
 				$this->status = $status;
 				$this->department = $department;
+				$this->filesize = $size;
 			}
 		}
 		else
 			$this->error = 'Non unique file id';
 	}
+	//return filesize
+	function getFileSize()
+	{	return $this->filesize;	}
 	// return this file's category id
 	function getCategory()
 	{	return $this->category;		}
