@@ -235,7 +235,7 @@ if (!isset($_REQUEST['submit']))
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while( list($dept_name, $dept_id, $rights) = mysql_fetch_row($result) )
 	{
-	      echo "\n\t" . '<input type="hidden" name="' . space_to_underscore($dept_name) . '" value=' . $rights . '>';
+	      echo "\n\t" . '<input type="hidden" name="' . str_replace(' ', '_', $dept_name) . '" value=' . $rights . '>';
 	}
 	echo "\n\t" . '<input type="hidden" name="default_Setting" value=' . $default_rights . '>';
 ?>
@@ -469,7 +469,7 @@ else
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
-		$string=addslashes(space_to_underscore($dept_name));
+		$string=addslashes(str_replace(' ', '_', $dept_name));
 		$query = "UPDATE dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}

@@ -304,9 +304,9 @@ if(!isset($_POST['submit'])) //un_submitted form
 		while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
 		{		
 			if($dept_id == $current_user_dept)
-				echo "\n\t".'<input type="hidden" name="'. space_to_underscore($dept_name).'" value="1"> '."\n";
+				echo "\n\t".'<input type="hidden" name="'. str_replace(' ', '_', $dept_name).'" value="1"> '."\n";
 			else
-				echo "\n\t".'<input type="hidden" name="'.space_to_underscore($dept_name).'" value="0"> '."\n";
+				echo "\n\t".'<input type="hidden" name="'.str_replace(' ', '_', $dept_name).'" value="0"> '."\n";
 		}
 		echo "\n\t".'<input type="hidden" name="default_Setting" value="0"> '."\n";
 		mysql_free_result ($result);
@@ -398,7 +398,7 @@ else //submited form
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
+		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[str_replace(' ', '_', $dept_name)]) . "', '$id')";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
