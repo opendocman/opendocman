@@ -110,9 +110,13 @@ break;
 case 20:
 $message = 'This operation cannot be done to a revision of a file';
 break;
-case 21:
 // operation cannot be done on file
+case 21:
 $message = 'This operation cannot be done on this file';
+break;
+// bad root_username setting
+case 22:
+$message = 'Unable to determin the root username.  Please check your config file';
 break;
 //default
 default:
