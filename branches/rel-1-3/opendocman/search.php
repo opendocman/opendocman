@@ -1,24 +1,6 @@
 <?php
 session_start();
-if (!session_is_registered('uid'))
-{
-	        header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
-			        exit;
-}
 include('config.php');
-
-/*$_GET['where']='department_only';
-$_GET['keyword']='Information Systems';
-$_SESSION['uid']=102;
-$_GET['submit']='submit';
-$_GET['exact_phrase']='on';
-$_GET['case_sensitivity']='';
-*/
-/// includes
-$start_time = time();
-draw_header('Search');
-draw_menu($_SESSION['uid']);
-draw_status_bar('Search', "");
 
 if(!isset($_GET['starting_index']))
 {
@@ -40,10 +22,29 @@ if(!isset($_GET['page']))
 {
         $_GET['page'] = 0;
 }
-echo '<body bgcolor="white">';
 if(!isset($_GET['submit']))
 {
-        ?>
+        if (!session_is_registered('uid'))
+		{
+			   header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_
+			   STRING'] ) );
+			                       exit;
+		}
+
+		/*$_GET['where']='department_only';
+		$_GET['keyword']='Information Systems';
+		$_SESSION['uid']=102;
+		$_GET['submit']='submit';
+		$_GET['exact_phrase']='on';
+		$_GET['case_sensitivity']='';
+		*/
+		/// includes
+		$start_time = time();
+		draw_header('Search');
+		draw_menu($_SESSION['uid']);
+		draw_status_bar('Search', "");
+		echo '<body bgcolor="white">';
+		?>
                 <center>
                 <p>
 
@@ -87,7 +88,19 @@ draw_footer();
 }
 else
 {
-    function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
+	$start_time = time();
+	draw_header('Search');
+	if(@$_REQUEST['anonymous'] != 'true')
+		draw_menu($_SESSION['uid']);
+	else
+	{
+		echo '<HTML><TITLE>OpenDocMan Anonymous Page: List All</TITLE></HTML>' . "\n\n";
+		echo "<H1><CENTER>OpenDocMan Anonymous Page</CENTER></H1>";
+	}
+	draw_status_bar('Search', "");
+	echo '<body bgcolor="white">';
+
+	function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
     {
 		$lequate = '=';
 		$l_remain ='';
@@ -175,16 +188,29 @@ else
 		{
 			 return array_values( array_unique( array_merge($lid_array, search($lwhere, substr($l_remain, 1), $lexact_phrase, $lcase_sensitivity, $lsearch_array) ) ) );
 		}
-		return array_values( array_intersect($lid_array, $lsearch_array) );
+		
+		return array_values( array_intersect($lsearch_array, $lid_array) );
     }
-	$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    //$s_getFTime = getmicrotime();
-    if($_GET['where'] == 'author_locked_files')
-    {	$view_able_files_id = $current_user->getExpiredFileIds();}
-    else
-    {	$view_able_files_id = $current_user_permission->getViewableFileIds();}
+	$view_able_files_id = array();
+	if(@$_REQUEST['anonymous'] != 'true')
+	{
+		$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+		$user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+		$current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+		//$s_getFTime = getmicrotime();
+		if($_GET['where'] == 'author_locked_files')
+		{	$view_able_files_id = $current_user->getExpiredFileIds();}
+		else
+		{	$view_able_files_id = $current_user_permission->getViewableFileIds();}
+	}
+	else
+	{
+		$current_user_permission = 'ANONYMOUS';
+		$l_query = 'SELECT id FROM data WHERE anonymous = 1';
+		$l_result = mysql_query($l_query) or die(mysql_error());
+		for($i = 0; $i<mysql_num_rows($l_result); $i++)
+			list($view_able_files_id[$i]) = mysql_fetch_row($l_result);
+	}
     //$e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
@@ -192,7 +218,11 @@ else
     //echo 'khoa' . sizeof($search_result);
     $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
 	$sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
-    list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
+    if(@$_REQUEST['anonymous'] == 'true')
+	{	list_files($sorted_result,  $current_user_permission, $page_url . '&anonymous=true',  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);	
+	}
+	else
+		list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
     echo '<BR>';
     list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();

@@ -370,8 +370,16 @@ if( !defined('function') )
                 echo '<HD6>';
                 $even_row_color = 'FCFCFC';
                 $odd_row_color = 'E3E7F9';
-                $unlock_highlighted_color = '#bdf9b6';
-                $lock_highlighted_color = '#ea7741';
+                if($userperms_obj == 'ANONYMOUS')
+				{
+					$unlock_highlighted_color = '#f9f9b6';
+					$lock_highlighted_color = '#f9f9b6';
+				}
+				else
+				{
+					$unlock_highlighted_color = '#bdf9b6';
+                	$lock_highlighted_color = '#ea7741';
+				}
                 echo "\n";
                 if(!isset($fileid_array))
                 {
@@ -463,21 +471,21 @@ if( !defined('function') )
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
 							
-                        $read = array($userperms_obj->READ_RIGHT, 'r');
-                        $write = array($userperms_obj->WRITE_RIGHT, 'w');
-                        $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
+                        $read = array($file_obj->READ_RIGHT, 'r');
+                        $write = array($file_obj->WRITE_RIGHT, 'w');
+                        $admin = array($file_obj->ADMIN_RIGHT, 'a');
                         $rights = array($read, $write, $admin);
                         if($userperms_obj != 'ANONYMOUS')
 							$userright = $userperms_obj->getAuthority($file_obj->getId());
 						else
-							$userright = $userperms_obj->READ_RIGHT;
+							$userright = $file_obj->READ_RIGHT;
                         $index_found = -1;
                         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
                         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
 						//and everything below it. 
 						for($i = sizeof($rights)-1; $i>=0; $i--)
 						{
-							if($userright==$rights[$i][1])
+							if($userright==$rights[$i][0])
 							{
 								$index_found = $i;
 								$i = 0;
@@ -689,7 +697,7 @@ if( !defined('function') )
 
 		function load(select_box)
 		{
-			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option + "&exact_phrase=on";
+			window.location = "search.php?anonymous=true&submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option + "&exact_phrase=on";
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////

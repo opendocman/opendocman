@@ -8,6 +8,8 @@ global $lang;
 //Login
 $lang['welcome'] = "Welcome to OpenDocMan";
 $lang['welcome2'] = "Log in to begin using The system's powerful storage, publishing and revision control features.";
+$lang['welcome_anonymous_title'] = 'OpenDocMan Anonymous Page: List All';
+$lang['welcome_anonymous_h1'] = 'OpenDocMan Anonymous Page';
 
 
 //GLOBAL TERMS
