@@ -4,70 +4,7 @@
 session_start();
 require('config.php');
 
-if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
-{
-    ?>
-<!--
-
-        index.php - displays a login form
-
-        -->
-
-        <html>
-        <head>
-        <TITLE><?php echo $GLOBALS['CONFIG']['title']; ?></TITLE>
-        <basefont face="Verdana">
-        </head>
-
-        <body bgcolor="White">
-
-        <table cellspacing="0" cellpadding="0">
-        <tr>
-        <td align="left"><img src="images/logo.gif" alt="Site Logo" border=0></td>
-        </tr>
-        </table>
-
-        <table border="0" cellspacing="5" cellpadding="5">
-        <tr>
-        <td valign="top">
-        <center>
-        <table border="0" cellspacing="5" cellpadding="5">
-        <form action="index.php" method="post">
-        <?php
-		if(isset($_REQUEST['redirection']))
-			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
-		<tr>
-        <td>Username</td>
-        <td><input type="Text" name="frmuser" size="15"></td>
-        </tr>
-        <tr>
-        <td>Password</td>
-        <td><input type="password" name="frmpass" size="15"></td>
-        </tr>
-        <tr>
-        <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
-        </tr>
-        </form>
-        </table>
-        </center>
-        </td>
-        <td valign="top">
-        Welcome to OpenDocMan.
-        <p>
-        Log in to begin using The system's powerful storage, publishing and revision control features.
-        </td>
-        <td width="20%">
-        &nbsp;
-    </td>
-        </tr>
-        </table>
-
-        </center>
-
-<?php
-        draw_footer();
-}
-elseif(isset($_POST['login']))
+if(isset($_POST['login']))
 {
 
         $frmuser = $_POST['frmuser'];
@@ -136,6 +73,70 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
                 }
         }
 }
+elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
+{
+    ?>
+<!--
+
+        index.php - displays a login form
+
+        -->
+
+        <html>
+        <head>
+        <TITLE><?php echo $GLOBALS['CONFIG']['title']; ?></TITLE>
+        <basefont face="Verdana">
+        </head>
+
+        <body bgcolor="White">
+
+        <table cellspacing="0" cellpadding="0">
+        <tr>
+        <td align="left"><img src="images/logo.gif" alt="Site Logo" border=0></td>
+        </tr>
+        </table>
+
+        <table border="0" cellspacing="5" cellpadding="5">
+        <tr>
+        <td valign="top">
+        <center>
+        <table border="0" cellspacing="5" cellpadding="5">
+        <form action="index.php" method="post">
+        <?php
+		if(isset($_REQUEST['redirection']))
+			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
+		<tr>
+        <td>Username</td>
+        <td><input type="Text" name="frmuser" size="15"></td>
+        </tr>
+        <tr>
+        <td>Password</td>
+        <td><input type="password" name="frmpass" size="15"></td>
+        </tr>
+        <tr>
+        <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
+        </tr>
+        </form>
+        </table>
+        </center>
+        </td>
+        <td valign="top">
+        Welcome to OpenDocMan.
+        <p>
+        Log in to begin using The system's powerful storage, publishing and revision control features.
+        </td>
+        <td width="20%">
+        &nbsp;
+    </td>
+        </tr>
+        </table>
+
+        </center>
+
+<?php
+        draw_footer();
+}
+
 else
 {
         echo 'Check your config';
