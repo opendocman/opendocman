@@ -11,7 +11,7 @@ include('config.php');
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 
 // Submitted so insert data now
-if($adduser)
+if(isset($adduser))
 {
 	// Check to make sure user does not already exist
     $query = "SELECT username FROM user WHERE username = '" . addslashes($username) . '\'';
@@ -42,7 +42,7 @@ if($adduser)
        $userid = mysql_insert_id($connection);
        $query = "INSERT INTO admin (id, admin) VALUES('$userid', '$admin')";
        $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
-	   if($reviewer)
+	   if(isset($reviewer))
 	   {
 			for($i = 0; $i<sizeof($department_review); $i++)
 			{
@@ -83,10 +83,10 @@ if($adduser)
        	mysql_close($connection);
     }
 }
-elseif($updateuser)
+elseif(isset($updateuser))
 {
 	
-	if(!$callee || $callee == '')
+	if(!isset($callee) || $callee == '')
 	{
 		$callee='admin.php';
 	}
@@ -121,7 +121,7 @@ elseif($updateuser)
 	// UPDATE into dept_reviewer
 	$query = "DELETE FROM dept_reviewer where user_id = $id";
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());  
-	if($reviewer)
+	if(isset($reviewer))
 	{
 		//Remove all entry for $id
 		$query = "DELETE FROM dept_reviewer where user_id = $id";
@@ -138,7 +138,8 @@ elseif($updateuser)
     mysql_close($connection);
 }
 // Delete USER
-elseif($deleteuser){
+elseif(isset($deleteuser))
+{
         // form has been submitted -> process data
         // DELETE admin info
         $query = "DELETE FROM admin WHERE id = $id";
@@ -161,7 +162,7 @@ elseif($deleteuser){
         mysql_close($connection);
 }
 //Add Departments
-elseif($adddepartment)
+elseif(isset($adddepartment))
 {
 		//Check to see if this department is already in DB
 		$query = "SELECT department.name from department where department.name=\"" . addslashes($department) . '"';
@@ -205,7 +206,8 @@ elseif($adddepartment)
         mysql_close($connection);
 }
 // UPDATE Department
-elseif($updatedepartment){
+elseif(isset($updatedepartment))
+{
         $query = "UPDATE department SET name='" . addslashes($name) ."' where id='$id'";
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -214,7 +216,8 @@ elseif($updatedepartment){
 	
         mysql_close($connection);
 }
-elseif($deletedepartment){
+elseif(isset($deletedepartment))
+{
 	// Delete department
         $query = "DELETE from department where id='$id'";
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
@@ -225,7 +228,8 @@ elseif($deletedepartment){
 }
 
 // Add Category
-elseif($addcategory){
+elseif(isset($addcategory))
+{
         $query = "INSERT INTO category (name) VALUES ('". addslashes($category) ."')";
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -234,7 +238,8 @@ elseif($addcategory){
         mysql_close($connection);
 }
 // Delete department
-elseif($deletecategory){
+elseif(isset($deletecategory))
+{
         $query = "DELETE from category where id='$id'";
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -243,7 +248,8 @@ elseif($deletecategory){
         mysql_close($connection);
 }
 // UPDATE Category
-elseif($updatecategory){
+elseif(isset($updatecategory))
+{
         $query = "UPDATE category SET name='". addslashes($name) ."' where id='$id'";
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page

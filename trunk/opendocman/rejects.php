@@ -9,34 +9,34 @@ include ('./config.php');
 // includes
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 
-if(!$starting_index)
+if(!isset($starting_index))
 {
         $starting_index = 0;
 }
 
-if(!$stoping_index)
+if(!isset($stoping_index))
 {
         $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
 }
 
-if(!$sort_by)
+if(!isset($sort_by))
 {
         $sort_by = 'id';
 }
 
-if(!$sort_order)
+if(!isset($sort_order))
 {
         $sort_order = 'a-z';
 }
 
-if(!$page)
+if(!isset($page))
 {
         $page = 0;
 }
 
 $with_caption = false;
 
-if(!$submit)
+if(!isset($submit))
 {
         draw_menu($SESSION_UID);
         draw_header('Rejected Files');
@@ -68,7 +68,7 @@ if(!$submit)
 elseif($submit=='Re-Submit For Review')
 {
         for($i = 0; $i<$num_checkboxes; $i++)
-                if($HTTP_POST_VARS["checkbox$i"])
+                if(isset($HTTP_POST_VARS["checkbox$i"]))
                 {
                         $fileid = $HTTP_POST_VARS["checkbox$i"];
                         $file_obj = new FileData($fileid, $connection, $database);
@@ -84,7 +84,7 @@ elseif($submit=='Delete file(s)')
         $url = 'delete.php?';
         $id = 0;
         for($i = 0; $i<$num_checkboxes; $i++)
-                if($HTTP_POST_VARS["checkbox$i"])
+                if(isset($HTTP_POST_VARS["checkbox$i"]))
                 {
                         $fileid = $HTTP_POST_VARS["checkbox$i"];
                         $url .= 'id'.$id.'='.$fileid.'&';

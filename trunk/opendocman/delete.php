@@ -8,7 +8,7 @@ if (!session_is_registered('SESSION_UID'))
 	header('Location:error.php?ec=1');
 	exit;
 }
-if(!$num_checkboxes)
+if(!isset($num_checkboxes))
 	$num_checkboxes =1;
 include('config.php');
 $userperm_obj = new User_Perms($SESSION_UID, $connection, $database);

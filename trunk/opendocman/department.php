@@ -13,7 +13,7 @@ if (!session_is_registered('SESSION_UID'))
 include('config.php');
 // open a connection to the database
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
-if($submit and $submit != 'Cancel')
+if(isset($submit) and $submit != 'Cancel')
 {
 	draw_menu($SESSION_UID);
 }

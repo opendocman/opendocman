@@ -1,9 +1,11 @@
 <?php
-
+// Report all PHP errors (bitwise 63 may be used in PHP 3)
+error_reporting (E_ALL);
 // includes
 include('config.php');
 
-if(!$login && $GLOBALS['CONFIG']['authen'] =='mysql')
+
+if(!isset($login) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
     ?>
 <!--
@@ -63,7 +65,7 @@ if(!$login && $GLOBALS['CONFIG']['authen'] =='mysql')
 <?php
         draw_footer();
 }
-elseif($login)
+elseif(isset($login))
 {
 
 
@@ -103,7 +105,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
 
     // check login and password
     // connect and execute query
-    if (!$_COOKIE['AuthUser'])
+    if (!isset($_COOKIE['AuthUser']))
     {
         header('Location: https://secureweb.ucdavis.edu:443/cgi-auth/sendback?'.$GLOBALS['CONFIG']['base_url']);
     }
@@ -130,6 +132,10 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
             mysql_close($connection);
         }
     }
+}
+else
+{
+        echo 'Check your config';
 }
 
 ?>

@@ -10,7 +10,7 @@ if (!session_is_registered('SESSION_UID'))
 // includes
 include('config.php');
 
-if($submit and $submit != 'Cancel')
+if(isset($submit) and $submit != 'Cancel')
 {
 	draw_menu($SESSION_UID);
 }

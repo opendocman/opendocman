@@ -17,14 +17,14 @@ if (!session_is_registered('SESSION_UID'))
   exit;
 }
 
-if (!$id || $id == '')
+if (!isset($id) || $id == '')
 {
   header('Location:error.php?ec=2');
   exit;
 }
 include('config.php');
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
-if (!$submit)
+if (!isset($submit))
 // form not yet submitted, display initial form
 {
 	draw_header('File Properties Modification');
@@ -264,7 +264,7 @@ if (!$submit)
 				$u = sizeof($user_forbidden_array);
 			}
 		}
-		if( !$found )
+		if(!isset($found))
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -287,7 +287,7 @@ if (!$submit)
 				$u = sizeof($user_view_array);
 			}
 		}
-		if( !$found )
+		if(!isset($found))
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -311,7 +311,7 @@ if (!$submit)
 				$u = sizeof($user_view_array);
 			}
 		}
-		if( !$found )
+		if(!isset($found))
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -335,7 +335,7 @@ if (!$submit)
 				$u = sizeof($user_view_array);
 			}
 		}
-		if( !$found )
+		if(!isset($found))
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -358,7 +358,7 @@ if (!$submit)
 				$u = sizeof($user_view_array);
 			}
 		}
-		if( !$found )
+		if(!isset($found))
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}

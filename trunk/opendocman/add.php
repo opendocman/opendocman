@@ -16,7 +16,7 @@ if (!session_is_registered('SESSION_UID'))
 include('config.php');
 // connect to DB
 $connection = mysql_connect($hostname, $user, $pass) or die ('Unable to connect!');
-if(!$submit) //un_submitted form
+if(!isset($submit)) //un_submitted form
 {
 	draw_header('Add New File');
 	draw_menu($SESSION_UID);
@@ -350,7 +350,7 @@ else //submited form
 	// for non_allowed file types
 	if ($allowedFile != 1) 
 	{ 
-		header('Location:error.php?ec=13'); 
+		header('Location:error.php?ec=13&message=Filetype is ' . $file_type); 
 		exit; 
 	}
 	// all checks completed, proceed!

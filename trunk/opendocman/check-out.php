@@ -7,7 +7,7 @@ if (!session_is_registered('SESSION_UID'))
 	header('Location:error.php?ec=1');
 	exit;
 }
-if (!$id || $id == '')
+if (!isset($id) || $id == '')
 {
 	header('Location:error.php?ec=2');
 	exit;
@@ -24,7 +24,7 @@ if ($fileobj->getError() != NULL || $fileobj->getStatus() != 0 )
 	header('Location:error.php?ec=2');
 	exit;
 }
-if (!$submit)
+if (!isset($submit))
 {
 	draw_header('Checkout');
 	draw_menu($SESSION_UID);

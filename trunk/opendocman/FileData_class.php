@@ -269,7 +269,7 @@ if( !defined('FileData_class') )
 	function getReviewerName()
 	{
 		$reviewer_id = $this->getReviewerID();
-		if($reviewer_id)
+		if(isset($reviewer_id))
 		{	
 			$user_obj = new User($reviewer_id, $this->connection, $this->database);
 			return $user_obj->getName();

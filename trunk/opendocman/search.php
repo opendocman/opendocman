@@ -17,30 +17,30 @@ draw_header('Search');
 draw_menu($SESSION_UID);
 draw_status_bar('Search', $message);
 
-if(!$starting_index)
+if(!isset($starting_index))
 {
         $starting_index = 0;
 }
-if(!$stoping_index)
+if(!isset($stoping_index)
 {
         $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
 }
-if(!$sort_by)
+if(!isset($sort_by))
 {
         $sort_by = 'id';
 }
-if(!$sort_order)
+if(!isset($sort_order))
 {
         $sort_order = 'a-z';
 }
-if(!$page)
+if(!isset($page))
 {
         $page = 0;
 }
 
 echo '<body bgcolor="white">';
 
-if(!$submit)
+if(!isset($submit))
 {
         ?>
                 <center>

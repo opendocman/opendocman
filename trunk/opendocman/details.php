@@ -10,7 +10,7 @@ if (!session_is_registered('SESSION_UID'))
 }
 
 // in case this file is accessed directly - check for $id
-if (!$id || $id == "")
+if (!isset($id) || $id == "")
 {
 	header('Location:error.php?ec=2');
 	exit;

@@ -302,7 +302,7 @@ if( !defined('function') )
 		echo "\n".'<!-------------------------------begin_draw_footer------------------------------>'."\n";
 		echo '<hr>'."\n";
 		echo ' <h5>'.$GLOBALS['CONFIG']['current_version'].'<BR>';
-		echo '(C) <a href="mailto:'.$GLOBALS['CONFIG']['site_mail'].'">'.$GLOBALS['CONFIG']['title'].'</a>'."\n";
+		echo '&copy; <a href="mailto:'.$GLOBALS['CONFIG']['site_mail'].'">'.$GLOBALS['CONFIG']['title'].'</a>'."\n";
 		echo ' </body>'."\n";
 		echo '</html>'."\n";
 		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
@@ -387,7 +387,7 @@ if( !defined('function') )
         function str_search($query, $str_array, $exactWord, $case_sensitivity = false)
         {
                 $found_array = array();
-                if(!$case_sensitivity)
+                if(!isset($case_sensitivity))
                 {
                         $query = strToLower($query);
                         for($i = 0; $i<sizeof($str_array); $i++)
@@ -396,7 +396,7 @@ if( !defined('function') )
                         }
                 }
 
-                if($exactWord)
+                if(isset($exactWord))
                 {
                         $index = 0 ;
                         for($i = 0; $i<sizeof($str_array); $i++)
@@ -426,7 +426,7 @@ if( !defined('function') )
                                                 $found_flag = 1;
                                         }
                                 }
-                                if(!$found_flag)
+                                if(!isset($found_flag))
                                         $found_not_exact_array[$index++] = false;
 
 
@@ -536,7 +536,7 @@ if( !defined('function') )
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
                 echo("<TR bgcolor='83a9f7' id = '1'>");
-                if($showCheckBox)
+                if(isset($showCheckBox))
                 {
                         echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
                 }
@@ -719,7 +719,7 @@ if( !defined('function') )
                         $dept_name = $fileobj_array[$index]->getDeptName();
                         $realname = $fileobj_array[$index]->getRealname();
                         $filesize = filesize($filename);
-                        if($showCheckBox)
+                        if(isset($showCheckBox))
                         {
                                 echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
                         }

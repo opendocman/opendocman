@@ -35,7 +35,7 @@ if($user_obj->isAdmin() == true)
         exit;
 }
 ////////////////////////////////////////////////////////////////////////////
-if($submit and $submit != 'Cancel')
+if(isset($submit) and $submit != 'Cancel')
 {
         draw_header('Admin users');
         draw_menu($SESSION_UID);
@@ -462,7 +462,7 @@ if($submit == 'adduser')
                                     $r = sizeof($department_reviewer);
                             }
                     }
-                    if( !$found )
+                    if( !isset($found) )
                    	{
                    		echo("<option VALUE=\"" .$all_department[$d][0] ."\">" .$all_department[$d][1] ."</option>\n");
                    	}

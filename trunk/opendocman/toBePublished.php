@@ -20,29 +20,29 @@ if(!$user_obj->isReviewer())
     header('Location:out.php?last_message=Access denied');
 }
 
-if(!$starting_index)
+if(!isset($starting_index))
 {
     $starting_index = 0;
 }
 
-if(!$stoping_index)
+if(!isset($stoping_index))
 {
     $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
-    if(!$sort_by)
+    if(!isset($sort_by))
     {
             $sort_by = 'id';
     }
 }
-if(!$sort_order)
+if(!isset($sort_order))
 {
     $sort_order = 'a-z';
 }
-if(!$page)
+if(!isset($page))
 {
     $page = 0;
 }
 
-if(!$submit)
+if(!isset($submit))
 {
 	draw_header('Files Review');
 	draw_menu($SESSION_UID);
@@ -320,7 +320,7 @@ elseif ($submit == 'Reject')
 	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' for the following reason(s):'."\n\n".$mail_break.$comments."\n".$mail_break;
 	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
 	for($i = 0; $i<$num_checkboxes; $i++)
-		if($HTTP_POST_VARS["checkbox$i"])
+		if(isset($HTTP_POST_VARS["checkbox$i"]))
 		{
 			$fileid = $HTTP_POST_VARS["checkbox$i"];
 			$file_obj = new FileData($fileid, $connection, $database);
@@ -348,7 +348,7 @@ elseif ($submit == 'Authorize')
         $mail_headers = "From: $mail_from";
         $dept_id = $user_obj->getDeptId();
         for($i = 0; $i<$num_checkboxes; $i++)
-                if($HTTP_POST_VARS["checkbox$i"])
+                if(isset($HTTP_POST_VARS["checkbox$i"]))
                 {
                         
                         $fileid = $HTTP_POST_VARS["checkbox$i"];
@@ -370,7 +370,7 @@ elseif ($submit == 'Authorize')
                         $file_obj->Publishable(1);
                         $file_obj->setReviewerComments($reviewer_comments);
 
-                        if($send_to_all)
+                        if(isset($send_to_all))
                         {
                                 $mail_subject=$file_obj->getName().' added to repository';
                                 
@@ -387,7 +387,7 @@ elseif ($submit == 'Authorize')
                                 email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
                         }
 
-                        if($send_to_dept)
+                        if(isset($send_to_dept))
                         {
                                  $mail_subject=$file_obj->getName().' added to repository';
                                 

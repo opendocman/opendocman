@@ -34,28 +34,28 @@ if( null != $rejected_files_obj[0])
 
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
-if(!$starting_index)
+if(!isset($starting_index))
 {
 	$starting_index = 0;
 }
 
-if(!$stoping_index)
+if(!isset($stoping_index))
 {
 	$limit=$GLOBALS['CONFIG']['page_limit'];
 	$stoping_index = ($starting_index+$limit-1);
 }
 
-if(!$sort_by)
+if(!isset($sort_by))
 {
 	$sort_by = 'id';
 }
 
-if(!$sort_order)
+if(!isset($sort_order))
 {
 	$sort_order = 'a-z';
 }
 
-if(!$page)
+if(!isset($page))
 {
 	$page = 0;
 }

@@ -6,7 +6,7 @@ if (!session_is_registered('SESSION_UID'))
 	exit;
 }
 include('config.php');
-if(!$submit)
+if(!isset($submit))
 {
 	draw_header('View File');
 	draw_menu($SESSION_UID);

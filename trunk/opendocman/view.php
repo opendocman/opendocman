@@ -11,7 +11,7 @@ if (!session_is_registered('SESSION_UID'))
         exit;
 }
 
-if (!$id || $id == '')
+if (!isset($id) || $id == '')
 {
         header('Location:error.php?ec=2');
         exit;
@@ -49,7 +49,7 @@ else
 
         // form not yet submitted
         // display information on how to initiate download
-        if (!$submit)
+        if (!isset($submit))
         {
                 draw_header();
                 draw_menu($SESSION_UID);

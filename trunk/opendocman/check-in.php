@@ -17,7 +17,7 @@ header('Location:error.php?ec=1');
 exit;
 }
 
-if (!$id || $id == '')
+if (!isset($id) || $id == '')
 {
 header('Location:error.php?ec=2');
 exit;
@@ -29,7 +29,7 @@ include('config.php');
 // open connection
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 
-if (!$submit)
+if (!isset($submit))
 {
 	draw_menu($SESSION_UID);
 	// form not yet submitted, display initial form
@@ -189,7 +189,7 @@ else
 		$dept_id = $user_obj->getDeptId();
 		mysql_close($connection);
 
-		if($send_to_all)
+		if(isset($send_to_all))
 		{
                         $mail_body='Filename: '. $fileobj->getName(). "\n\n";
                         $mail_body.='Date: ' . $date . "\n\n";
@@ -199,7 +199,7 @@ else
 			email_all($mail_from, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
 		}
 
-		if($send_to_dept)
+		if(isset($send_to_dept))
 		{
                         $mail_body='Filename: '. $fileobj->getName(). "\n\n";
                         $mail_body.='Date: ' . $date . "\n\n";
