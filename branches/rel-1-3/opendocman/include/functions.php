@@ -3,6 +3,7 @@
 if( !defined('function') )
 {
   	define('function', 'true', false);
+	
 	// BEGIN FUNCTIONS
 	// function to format mySQL DATETIME values
 	function fix_date($val)
@@ -21,7 +22,7 @@ if( !defined('function') )
 	}
 	
 	// Return a copy of $string where all the spaces are converted into underscores
-	function space_to_underscore($string)
+	/*function space_to_underscore($string)
 	{
 	    $string_len = strlen($string);
 	    $index = 0;
@@ -32,7 +33,7 @@ if( !defined('function') )
 	                $index++;
 	        }
 	    return $string;
-	}
+	}*/
 	// Draw the status bar for each page
 	function draw_status_bar($message, $lastmessage='')
 	{
@@ -54,7 +55,7 @@ if( !defined('function') )
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="out.php" style="text-decoration:none">' . $GLOBALS['lang']['home'] . '</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">' . $GLOBALS['lang']['preferences'] . '</a>'."\n</td>";
+		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">' . $GLOBALS['lang']['profile'] . '</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">' . $GLOBALS['lang']['help'] . '</a>'."\n</td>";
 ?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
