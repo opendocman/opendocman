@@ -78,6 +78,8 @@ if( !defined('function') )
 	}
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
+		if(sizeof($id_array) == 0 )
+			return $id_array;
 		if (sizeof($id_array) == 0 )
 			return $id_array;
 		$lwhere_or_clause = '';
