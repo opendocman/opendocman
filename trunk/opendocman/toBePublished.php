@@ -44,6 +44,10 @@ if(!isset($page))
 
 if(!isset($submit))
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Files Review');
 	draw_menu($SESSION_UID);
 	draw_status_bar('Document Listing for Review',  $last_message);
@@ -178,7 +182,7 @@ if(!isset($submit))
 draw_footer();
 
 }
-if($submit =='comments')
+if(isset($submit) && $submit =='comments')
 {
 
 	$idfield=explode(' ',trim($idfield));
@@ -304,7 +308,7 @@ if($submit =='comments')
 	</SCRIPT>
 	<?
 }
-elseif ($submit == 'Reject')
+elseif (isset($submit) && $submit == 'Reject')
 {
 	$mail_break = '--------------------------------------------------'."\n";
 	$reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
@@ -335,7 +339,7 @@ elseif ($submit == 'Reject')
 	
 	
 }
-elseif ($submit == 'Authorize')
+elseif (isset($submit) && $submit == 'Authorize')
 {
         $reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
         $user_obj = new User($SESSION_UID, $connection, $database);
