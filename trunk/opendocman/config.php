@@ -61,7 +61,7 @@ global $CONFIG;      $CONFIG = array(
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'https://www.stevesoffice.com/~logart/cvs/opendocman-1.2',
+'base_url' => 'http://www.example.com/opendocman-1.2',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -70,7 +70,7 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.2',
 
 // The email address of the administrator of this site
-'site_mail' => 'admin@mydomain',
+'site_mail' => 'admin@example.com',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
@@ -80,7 +80,7 @@ global $CONFIG;      $CONFIG = array(
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
 // Don't forget the trailing "/" 
-'dataDir' => '/home/logart/document_repository/',
+'dataDir' => '/var/www/document_repository/',
 
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
