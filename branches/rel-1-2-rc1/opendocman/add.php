@@ -196,13 +196,12 @@ if(!isset($_POST['submit'])) //un_submitted form
         </td>
 	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
 	</tr>
-	
+
 	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
 	<tr nowrap>
-	<td NOWRAP><b>Specific Permissions Settings</b>
-        </td>
+	  <td colspan="2" NOWRAP><b>Specific Permissions Settings</b></td>
 	</TR>
-	<TR><TD></TD>
+	<TR>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none">Forbidden</a></td>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none">View</a></td>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none">Read</a></td>
@@ -210,7 +209,6 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none">Admin</a></td>
 	</tr>
 	<tr>
-	<TD></TD>
 	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
 <?php
 	
@@ -244,7 +242,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -262,7 +260,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -279,7 +277,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -295,7 +293,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 			echo $str;
 		}
 		mysql_free_result ($result);
-?>	</SELECT>
+?>	</SELECT></td>
 	
 	</TR>
 	</TABLE>
