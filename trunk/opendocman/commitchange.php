@@ -65,7 +65,7 @@ if($adduser)
 		$mail_subject='Your account has been created';
 		$mail_greeting='Dear '.$new_user_full_name.":\n\r\tI would like to inform you that ";
 		$mail_body = 'your document management account was created at '.$time.' on '.$date.'.  You can now log into your account at this page:'."\n\r";
-                $mail_body.= 'http://cahfs.ucdavis.edu/~slawrence/cvs/vault'."\n\n";
+                $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
 		$mail_body.= 'Your login name is: '.$new_user_obj->getName()."\n\n";
 		if($GLOBALS['CONFIG']['authen'] == 'mysql')
 		{
