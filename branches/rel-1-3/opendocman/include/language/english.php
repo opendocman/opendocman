@@ -10,7 +10,7 @@ $lang['welcome'] = "Welcome to OpenDocMan";
 $lang['welcome2'] = "Log in to begin using The system's powerful storage, publishing and revision control features.";
 $lang['welcome_anonymous_title'] = 'OpenDocMan Anonymous Page: List All';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonymous Page';
-
+$lang['anonymous_link'] = 'Click here to view public files anonymously';
 
 //GLOBAL TERMS
 $lang['author'] = "Author";
@@ -21,6 +21,7 @@ $lang['password'] = "Password";
 $lang['profile'] = "Profile";
 $lang['username'] = "Username";
 $lang['sincerly'] = "Sincerly";
+$lang['anonymous'] = 'Anonymous';
 
 //Areas
 $lang['area_add_new_file'] = "Add New File";
