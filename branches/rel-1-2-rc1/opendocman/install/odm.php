@@ -1,6 +1,7 @@
 <?php
 // Admin table
 $result = mysql_query("
+CREATE TABLE IF NOT EXISTS admin (
   id smallint(5) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM;
