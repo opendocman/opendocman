@@ -59,11 +59,12 @@ global $hostname;
 global $database;
 global $user;
 global $pass;
+global $connection;
 
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 
 // list of allowed file types
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/vnd.ms-excel', 'application/msaccess', 'text/richtxt', 'application/vnd.ms-powerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 // All functions are in functions.php
 }
 ?>
