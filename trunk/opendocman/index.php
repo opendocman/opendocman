@@ -1,4 +1,4 @@
-<?
+<?php
 
 // includes
 include('config.php');
