@@ -102,10 +102,10 @@ $allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/p
 // <----- No need to edit below here ---->
 //
 // Set the revision directory. (relative to $dataDir)
-$CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
+$GLOBALS['CONFIG']['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 
 // Set the revision directory. (relative to $dataDir)
-$CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
+$GLOBALS['CONFIG']['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
 
 // Include the language info
 include_once 'include/language/' . $GLOBALS['CONFIG']['language'] . '.php';
