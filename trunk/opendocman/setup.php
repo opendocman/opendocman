@@ -10,7 +10,6 @@
 <img src="images/logo.gif"><br>
 <?php
 
-include ('config.php');
 
 switch(@$_REQUEST['op']) {
     
@@ -51,7 +50,7 @@ switch(@$_REQUEST['op']) {
          break;
 
    // User has version 12rc1 and is upgrading 
-   case "update_11":
+   case "update_12rc1":
          do_update_12rc1();
          break;
 
@@ -106,7 +105,7 @@ function do_install()
 
         // Grant privs
         $result = mysql_query("
-GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
+	GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
 ");
 
         include("install/odm.php");
@@ -121,12 +120,14 @@ function do_update_10()
         
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
+        include("config.php");
         include("install/upgrade_10.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
 {
         echo 'Updating version 1.1rc1<br>';        
+        include("config.php");
         include("install/upgrade_11rc1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
         
@@ -135,6 +136,7 @@ function do_update_11rc1()
 function do_update_11rc2()
 {
         echo 'Updating version 1.1rc2<br>';        
+        include("config.php");
         include("install/upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
@@ -142,6 +144,7 @@ function do_update_11rc2()
 function do_update_11()
 {
         echo 'Updating version 1.1<br>';        
+        include("config.php");
         include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
@@ -149,6 +152,7 @@ function do_update_11()
 function do_update_12rc1()
 {
         echo 'Updating version 1.2rc1<br>';        
+        include("config.php");
         include("install/upgrade_12rc1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
