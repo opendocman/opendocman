@@ -1,7 +1,9 @@
 <?php
 // Admin table
 $result = mysql_query("
-CREATE TABLE IF NOT EXISTS admin (id smallint(5) unsigned default NULL, admin tinyint(4) default NULL) TYPE=MyISAM;
+  id smallint(5) unsigned default NULL,
+  admin tinyint(4) default NULL
+) TYPE=MyISAM;
 ") or die("<br>Could not create admin table" .  mysql_error());
 
 // Admin user
@@ -11,7 +13,11 @@ INSERT INTO admin VALUES (1,1);
 
 // Category table
 $result = mysql_query("
-CREATE TABLE IF NOT EXISTS category (id smallint(5) unsigned NOT NULL auto_increment, name varchar(255) NOT NULL default '', PRIMARY KEY  (id)) TYPE=MyISAM;
+CREATE TABLE IF NOT EXISTS category (
+  id smallint(5) unsigned NOT NULL auto_increment,
+  name varchar(255) NOT NULL default '',
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;
 ") or die("<br>Could not create category table");
 
 $result = mysql_query("
@@ -40,14 +46,17 @@ CREATE TABLE IF NOT EXISTS data (
   created datetime NOT NULL default '0000-00-00 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) NOT NULL default '',
-  status smallint(6) unsigned default NULL,
+  status smallint(6) default NULL,
   department smallint(6) unsigned default NULL,
   default_rights tinyint(4) default NULL,
   publishable tinyint(4) default NULL,
   reviewer smallint(6) unsigned default NULL,
   reviewer_comments varchar(255) default NULL,
+  filesize bigint(20) default NULL,
   PRIMARY KEY  (id),
-  KEY data_idx (id,owner)
+  KEY data_idx (id,owner),
+  KEY id (id),
+  KEY id_2 (id)
 ) TYPE=MyISAM;
 ") or die("<br>Could not create data table");
 
@@ -87,7 +96,8 @@ CREATE TABLE IF NOT EXISTS log (
   id int(10) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
-  note text
+  note text,
+  revision varchar(255) default NULL
 ) TYPE=MyISAM;
 ") or die("<br>Could not create log table");
 
@@ -141,16 +151,16 @@ CREATE TABLE IF NOT EXISTS user (
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO user VALUES (1,'admin','',1,'','','User','Admin');
+INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User','Admin');
 ") or die("<br>Could not add user");
 
 // User permissions table
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS user_perms (
-fid smallint(5) unsigned default NULL,
-uid smallint(5) unsigned NOT NULL default '0',
-rights tinyint(4) NOT NULL default '0',
-KEY user_perms_idx (fid,uid,rights)
+  fid smallint(5) unsigned default NULL,
+  uid smallint(5) unsigned NOT NULL default '0',
+  rights tinyint(4) NOT NULL default '0',
+  KEY user_perms_idx (fid,uid,rights)
 ) TYPE=MyISAM;
 ") or die("<br>Could not create user_perms table");
 
