@@ -6,8 +6,8 @@ session_start();
 $start_time = time();
 if (!isset($_SESSION['uid']))
 {
-        header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
-		exit;
+	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
+	exit;
 }
 
 // includes
@@ -22,7 +22,7 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['databas
 
 if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
-	        echo '<img src="images/exclamation.gif"><a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
+	echo '<img src="images/exclamation.gif"><a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
 }
 
 $rejected_files_obj = $user_obj->getRejectedFileIds();
@@ -78,14 +78,14 @@ $llist_b = getmicrotime();
 list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
 $llist_e = getmicrotime();
 // clean up
-	
-	echo '</table>';
-	echo '<br>';
-	$limit=$GLOBALS['CONFIG']['page_limit'];
-	$total_hit = sizeof($file_id_array);
-	list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
-	echo '</center>';
-	draw_footer();	
+
+echo '</table>';
+echo '<br>';
+$limit=$GLOBALS['CONFIG']['page_limit'];
+$total_hit = sizeof($file_id_array);
+list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
+echo '</center>';
+draw_footer();	
 echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
 echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
 echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
