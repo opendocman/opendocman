@@ -175,7 +175,7 @@ CREATE TABLE user (
 # Dumping data for table 'user'
 #
 
-INSERT INTO user VALUES (1,'admin','',1,'5555551212','myemail@mydomain','User','Admin');
+INSERT INTO user VALUES (1,'admin','',1,'5555551212','admin@example.com','User','Admin');
 
 #
 # Table structure for table 'user_perms'

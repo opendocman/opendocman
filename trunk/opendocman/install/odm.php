@@ -219,7 +219,7 @@ CREATE TABLE user (
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User','Admin')
+INSERT INTO user VALUES (1,'admin','','1','5555551212','admin@example.com','User','Admin')
 ") or die("<br>Could not add user");
 
 // User permissions table
