@@ -145,6 +145,7 @@ if( !defined('FileData_class') )
 	// return an aray of the user id of all the people who has $right right to this file
 	function getUserIds($right)
 	{
+	  $result_array = array();
 	  $owner_query = "SELECT owner FROM $this->tablename WHERE id = $this->id";
 	  $u_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id and rights >= $right";
 	  //query for user who has right less than $right
@@ -181,8 +182,10 @@ if( !defined('FileData_class') )
 	  for($i = 0; $i<mysql_num_rows($d_result); $i++)
 	    list($d_uid[$i]) = mysql_fetch_row($d_result);
 	  
-	  $result_array = databaseData::combineArrays($owner_uid, $u_uid);
-	  $result_array = databaseData::combineArrays($result_array, $d_uid);
+	  if( isset($owner_uid) && isset($u_uid) )
+	  {	  $result_array = databaseData::combineArrays($owner_uid, $u_uid);	}
+	  if( isset($result_array) && isset($d_uid) )
+	  {	  $result_array = databaseData::combineArrays($result_array, $d_uid);	}
 	  
 	  mysql_free_result($owner_result);
 	  mysql_free_result($u_result);
