@@ -29,10 +29,12 @@ if(!isset($_GET['submit']))
 	
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
-	list($prefix , $suffix)= split ("\.", $realname);
+	$suffix = '';
+	if(strchr($realname, '.'))
+		list($prefix , $suffix)= split ("\.", $realname);
 	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
 	{	
-                $lmimetype = '';	
+                $lmimetype = $GLOBALS['mimetypes']['default'];	
         }
 	else 
 	{	
@@ -63,6 +65,8 @@ elseif ($_GET['submit'] == 'view')
 	if( isset($lrevision_id) )
 	{	$filename = $lrevision_dir . $lrequest_id . ".dat";
 	}
+	elseif( $file_obj->isArchived() )
+	{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
 	else
 	{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	}
 	// send headers to browser to initiate file download
@@ -83,6 +87,8 @@ elseif ($_GET['submit'] == 'Download')
 	if( isset($lrevision_id) )
 	{   $filename = $lrevision_dir . $lrequest_id . ".dat";
 	}
+	elseif( $file_obj->isArchived() )
+	{   $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
 	else
 	{   $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   }
 	// send headers to browser to initiate file download

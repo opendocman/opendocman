@@ -77,8 +77,10 @@ if(isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) <
 {
 	$reviewer_comments_fields[0] = 'To=Author(s)';
 }
-		
-$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+if($filedata->isArchived())
+{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	}
+else
+{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	}
 ?>
 <FORM name="data">
 <INPUT type="hidden" name="to" value="<?php echo substr($reviewer_comments_fields[0], 3) ?>">
@@ -185,7 +187,7 @@ if ($status == 0)
 	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$_REQUEST[id]' AND user_perms.uid = '$_SESSION[uid]' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) )
+	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
 	{
 		// if so, display link for checkout
 ?>
@@ -195,13 +197,13 @@ if ($status == 0)
 	}
 	mysql_free_result($result2);
 	
-	if ($userPermObj->canAdmin($_REQUEST['id']) == 1 && !@isset($lrevision_id))
+	if ($userPermObj->canAdmin($_REQUEST['id']) == 1 && !@isset($lrevision_id)  && !$filedata->isArchived())
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
 ?>
 		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/edit.png" alt="" border="0"></a></td>
-		<td align="center"><a href="delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>"><img src="images/delete.png" alt="Delete" border="0"></a></td>
+		<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
 <?php
 	}
 }//end if ($status == 0)
@@ -224,6 +226,11 @@ draw_footer();
 <SCRIPT LANGUAGE="JAVASCRIPT">
 	var message_window;
 	var mesg_window_frm;
+	function my_delete()
+	{
+		if(window.confirm("Are you sure?"))
+		{	window.location = "delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>";	}
+	}
 	function sendFields()
 	{
 		mesg_window_frm = message_window.document.author_note_form;

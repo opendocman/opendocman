@@ -30,9 +30,12 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 	header('Location:error.php?ec=2');
   	exit;
 }
+
+include('config.php');
+$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+if( $filedata->isArchived() ) header('Location:error.php?ec=21');
 if (!isset($_REQUEST['last_message']))
 {	$_REQUEST['last_message'] = '';	}
-include('config.php');
 if (!isset($_REQUEST['submit']))
 // form not yet submitted, display initial form
 {
@@ -257,7 +260,6 @@ if (!isset($_REQUEST['submit']))
 		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
-	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 	$user_forbidden_array = $filedata->getForbiddenRightUserIds();
 	$found = false;
 	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";

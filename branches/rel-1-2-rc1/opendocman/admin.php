@@ -84,10 +84,10 @@ if ( $user_obj->isRoot()	)
 	  <td>
 	 	<table border="0" valign="top">
 		 <tr>
-	      <td ><b><a href="delete.php?mode=view_del_archieve">Del/Undel</a></b></td>
+	      <td ><b><a href="delete.php?mode=view_del_archive">Del/Undel</a></b></td>
 	     </tr>
 	     <tr>
-		 <td><b><a href="toBePublished.php?mode=root">Revisions</a></b></td>
+		 <td><b><a href="toBePublished.php?mode=root">Reviews</a></b></td>
 		 </tr>
 		 <tr>
 		 <td><b><a href="rejects.php?mode=root">Rejections</a></b></td>

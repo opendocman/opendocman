@@ -48,7 +48,7 @@ if(!isset($_POST['submit']))
 		else
 			$fileobj_array = $user_obj->getRejectedFiles();
         $sorted_obj_array = obj_array_sort_interface($fileobj_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
-        echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
+        echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure\');">' . "\n";
 
 ?>	
                 <TABLE border="1"><TR><TD>

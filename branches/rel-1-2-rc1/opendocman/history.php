@@ -61,7 +61,10 @@ if ($comments == '')
     { 
         $comment = 'No author comments available'; 
     }
-$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+if($datafile->isArchived())
+{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	}
+else
+{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	}
 ?>
 <center>
 <table border="0" width="400" cellspacing="4" cellpadding="1">

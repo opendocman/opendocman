@@ -46,7 +46,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman',
+'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman1.2',
 
 // This is the browser window title
 'title' => 'Document Repository',

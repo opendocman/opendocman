@@ -76,17 +76,33 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 				$filename = $id . ".dat";
 				unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
+				if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )
+				{
+					$dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
+					if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )
+					{
+						$dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
+						while($lreadfile = readdir($dir))
+						{
+							if(is_file($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile"))
+							{
+								unlink($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile");
+							}
+						}
+						rmdir($GLOBALS['CONFIG']['revisionDir'] . $id);
+					}
+				}
 			}
 		}
 	}
 	// delete from directory
 	// clean up and back to main page
 	$last_message = urlencode('Document successfully deleted');
-	header('Location: out.php?last_message=' . $last_message);
+	header('Location: delete.php?mode=view_del_archive&last_message=' . $last_message);
 }
-elseif( $_REQUEST['mode'] == 'view_del_archieve' )
+elseif( $_REQUEST['mode'] == 'view_del_archive' )
 {
-	//publishable=2 for archieve deletion
+	//publishable=2 for archive deletion
 	$lquery = "SELECT id FROM data WHERE publishable=2";
 	$lresult = mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$array_id = array();
@@ -126,7 +142,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archieve' )
 	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$sorted_obj_array = obj_array_sort_interface($lfileobj_array, $_POST['sort_order'], $_POST['sort_by']);
-	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
+	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure?\');">' . "\n";
 
 ?>
 		<TABLE border="1"><TR><TD>

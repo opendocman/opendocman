@@ -307,6 +307,19 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $publishable;
 	}
+	function isArchived()
+	{
+		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
+		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
+		if(mysql_num_rows($result) != 1)
+		{
+			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+			exit;
+		}
+		list($publishable) = mysql_fetch_row($result);
+		mysql_free_result($result);
+		return ($publishable == 2);
+	}
 	// this function sets the publisable field in the data table to $boolean
 	function Publishable($boolean = true)
 	{
