@@ -163,7 +163,7 @@ if( !defined('FileData_class') )
 	  
 	  for($i=0; $i<sizeof($not_u_uid); $i++)
 	  {
-		$d_query .= " and $TABLE->TABLE_USER.id != " . $not_u_uid[$i];
+		$d_query .= " and $this->TABLE_USER.id != " . $not_u_uid[$i];
 	  }
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
 	  if(sizeof($owner_result) != 1)
@@ -260,13 +260,14 @@ if( !defined('FileData_class') )
 	  
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
-	  
+	  $d_uid = array();
+	  $u_uid = array();
 	  for($i = 0; $i<mysql_num_rows($u_result); $i++)
 	    list($u_uid[$i]) = mysql_fetch_row($u_result);
 	  for($i = 0; $i<mysql_num_rows($d_result); $i++)
 	    list($d_uid[$i]) = mysql_fetch_row($d_result);
 
-	  $result_array = databaseData::combineArrays($owner_uid, $u_uid);
+	  $result_array = databaseData::combineArrays(array(), $u_uid);
 	  $result_array = databaseData::combineArrays($result_array, $d_uid);
 	  
 	  mysql_free_result($u_result);
