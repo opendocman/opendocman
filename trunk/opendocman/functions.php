@@ -408,11 +408,11 @@ if( !defined('function') )
                         if($with_caption == true )
                         {
                                 // correction for empty description
-                                ?><TR bgcolor="<?php echo $tr_bgcolor;?>" id="<?php echo $index;?>" onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?>'" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>';"><?
+				echo '<TR bgcolor="' . $tr_bgcolor . '" id="' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\'" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
                         }
                         else
                         {
-	                        ?><TR bgcolor=<?php echo $tr_bgcolor;?> id = <?php echo $index;?> onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?> ';" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>';"><?
+	                        echo '<TR bgcolor="' . $tr_bgcolor . '" id = "' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\';" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
                         } 
                         if ($file_obj->getDescription() == '') 
                         { 
@@ -449,15 +449,13 @@ if( !defined('function') )
 
                         if($showCheckBox=='true')
                         {
+				echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
+			}
+				echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
 ?>
-						<TD><input type="checkbox" value="<?php echo $fid; ?>" name="checkbox<?php echo $checkbox_index;?>"></B></TD>
+				<TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
 <?php
-                        }
-?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
-                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
-                        <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
-<?php
-							
+                        	echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';							
                         $read = array($userperms_obj->READ_RIGHT, 'r');
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
@@ -486,8 +484,8 @@ if( !defined('function') )
                         {
                                 $rights[$i][1] = '-';
                         }
-?>						<TD class="<?php echo $css_td_class; ?>" NOWRAP>
-<?
+			echo '<TD class="' . $css_td_class . '" NOWRAP>';
+
                         for($i = 0; $i<sizeof($rights); $i++)
                         {
                                 echo $rights[$i][1] . '|';
@@ -564,7 +562,7 @@ if( !defined('function') )
 			// Page 0: 0-14, Page 1: 15-29, Page 2: 30-44
 			if( $current_page > 0 )
 			{
-				echo "<a href=\"$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1).'">Prev</a>&nbsp; &nbsp;';
+				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page-1)) . '&stoping_index=' . ($current_page*$page_limit-1) . '&page=' . ($current_page-1) . '">Prev</a>&nbsp; &nbsp;';
 			}
 
 			/* Suppose $link_limit is 20 and $current_page is 12.  Then $i=12 - 10=2.
@@ -594,14 +592,15 @@ if( !defined('function') )
 				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
 
 				/* Generate link */
-				else    echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=" . ($i*$page_limit) . "&stoping_index=".(($i+1)*$page_limit-1)."&page=$i" . "\">$i</a>&nbsp;&nbsp;";
+				else    
+					echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($i*$page_limit) . '&stoping_index=' . (($i+1)*$page_limit-1) . '&page=' . $i . '">' . $i . '</a>&nbsp;&nbsp;';
 				$index_result = $index_result + $page_limit;
 			}
 
 			//Generate Next link
 			if( $current_page < $num_pages-1 )
 			{
-				echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1).'">Next</a>&nbsp; &nbsp;';
+				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page+1)) . '&stoping_index=' . (($current_page+2)*$page_limit-1) . '&page=' . ($current_page+1) . '">Next</a>&nbsp; &nbsp;';
 			}
 		}
 
@@ -858,5 +857,6 @@ if( !defined('function') )
                         return "X";
                 }
         }
+}
 }
 ?>
