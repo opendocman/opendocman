@@ -8,6 +8,7 @@ if (!session_is_registered('uid'))
 	exit;
 }
 include('config.php');
+
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 {
@@ -29,6 +30,7 @@ $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['data
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
 
 ?>
 <center>
@@ -120,7 +122,9 @@ else
 </tr>
 
 <tr>
-<td>Owner: <?php echo $owner; ?></t</tr>
+<td>Owner: 
+<?php echo ' <A href="mailto:' . $user_obj->getEmailAddress() . ' ?Subject=Regarding%20your%20document:  ' . $realname . ' &Body=Hello%20 ' . $owner_fullname[0] . '"> ' . $owner . '</A> ';?></td>
+</tr>
 
 <tr>
 <td>Description of contents: <?php echo $description; ?></td>
