@@ -74,9 +74,15 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 }
 elseif(isset($_POST['login']))
 {
+    if(!valid_username($_POST['frmuser']))
+    {
+        echo "<font color=red>The username or password was invalid. Please try again.</font>";
+        exit;
+    }
 
-        $frmuser = $_POST['frmuser'];
-        $frmpass = $_POST['frmpass'];
+
+    $frmuser = $_POST['frmuser'];
+    $frmpass = $_POST['frmpass'];
         // check login and password
         // connect and execute query
         $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
