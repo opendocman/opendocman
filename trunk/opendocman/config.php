@@ -8,7 +8,6 @@ if( !defined('config') )
 
 // database parameters
 include 'functions.php';
-include 'ldap.inc';
 include 'classHeaders.php';
 include 'mimetypes.php';
 
@@ -43,7 +42,7 @@ global $CONFIG;      $CONFIG = array(
 // This is the browser window title
 'title' => 'Document Repository',
 
-// This is the program version for window title
+// This is the program version for window title (This should be set to the current version of the program)
 'current_version' => ' OpenDocMan v1.1',
 
 // The email address of the administrator of this site
@@ -59,6 +58,9 @@ global $CONFIG;      $CONFIG = array(
 'dataDir' => '/var/www/document_repository/'
 );
 
+// list of allowed file types 
+$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+/
 //global $site_mail; 
 global $hostname;
 global $database;
@@ -70,8 +72,6 @@ global $allowedFileTypes;
 $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
-// list of allowed file types
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 // All functions are in functions.php
 }
 ?>
