@@ -1,61 +1,62 @@
 <?php
 /*
-department.php - Administer Departments
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+   department.php - Administer Departments
+   Copyright (C) 2002, 2003, 2004  Stephen Lawrence
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
 // check for valid session 
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
+    exit;
 }
 
 // includes
 include('config.php');
-// open a connection to the database
-if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
+
+$secureurl = new phpsecureurl;
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+
+//If the user is not an admin and he/she is trying to access other account that
+// is not his, error out.
+if(!$user_obj->isAdmin() == true)
 {
-	draw_menu($_SESSION['uid']);
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
 }
 
-if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='add')
+/*
+   Add A New Department
+ */
+if(isset($_GET['submit']) && $_GET['submit']=='add')
 {
-        if (!isset($_POST['last_message']))
-        {
-                $_POST['last_message']='';
-        }
-        draw_status_bar('Add New Department', $_POST['last_message']);
-	draw_header('Add New Department');
-	// Check to see if user is admin
-	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	if(!$user_obj->isAdmin())        
-	{
-		draw_error('error.php?ec=4');
-		exit;
-	}
-?>
+    if (!isset($_POST['last_message']))
+    {
+        $_POST['last_message']='';
+    }
+    draw_header('Add New Department');
+    draw_menu($_SESSION['uid']);
+    draw_status_bar('Add New Department', $_POST['last_message']);
+    ?>
 
 <center>
  <table border="0" cellspacing="5" cellpadding="5">
-   <!-- for file upload, note ENCTYPE -->
    <form action="commitchange.php" method="POST" enctype="multipart/form-data">
-
     <tr>
      <td><b>Department</b></td>
      <td colspan="3"><input name="department" type="text"></td>
@@ -79,87 +80,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='add')
 <?php
 draw_footer();
 }
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='delete')
-{
-        // If demo mode, don't allow them to update the demo account
-        if (@$GLOBALS['CONFIG']['demo'] == 'true')
-        {
-                @draw_status_bar('Delete Department ' ,$_POST['last_message']);
-                echo 'Sorry, demo mode only, you can\'t do that';
-                draw_footer();
-                exit;
-        }
-        if (!isset($_POST['last_message']))
-        {
-                $_POST['last_message']='';
-        }
-	$delete='';
-	draw_header('Department Deletion');
-	draw_status_bar('Delete Department', $_POST['last_message']);
- // query to show item
-	echo '<center>'; 
-	echo '<table border="0">';
-	$query = "SELECT id, name FROM department where id='$_POST[item]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($lid, $lname) = mysql_fetch_row($result))
-    {
-        echo '<tr><td>Id # :</td><td>' . $lid . '</td></tr>';
-        echo '<tr><td>Name :</td><td>' . $lname . '</td></tr>';
-    }
-?>
-    <form action="commitchange.php?id=<?php echo $_POST['item'];?> " method="POST" enctype="multipart/form-data">
-     <tr>
-      <td valign="top">Are you sure you want to delete this?</td>
-	  <td colspan="4" align="center"><input type="Submit" name="deletedepartment" value="Yes"></td>
-    </form>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-     <td colspan="4" align="center"><input type="Submit" name="" value="No, Cancel"></td>
-    </form>
-    </tr>
-   </form>
-<?php
-draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
-{
-        if (!isset($_POST['last_message']))
-        {
-                $_POST['last_message']='';
-        }
-$deletepick='';
-draw_header('Department Selection');
-draw_status_bar('Choose Department to Delete', $_POST['last_message']);
-?>
-    <center>
-        <table border="0" cellspacing="5" cellpadding="5">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-        <tr>
-        <td><b>Department</b></td>
-        <td colspan="3"><select name="item">
-<?php
-	$query = 'SELECT id, name FROM department ORDER BY name';
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($lid, $lname) = mysql_fetch_row($result))
-    {
-        $str = '<option value="' . $lid . '"';
-        $str .= '>' . $lname . '</option>';
-        echo $str;
-    }
-    mysql_free_result ($result);
-    $deletepick='';
-?>
-    </select></td>
-    <tr>
-     <td colspan="4" align="center"><input type="Submit" name="delete" value="Delete"></td>
-    </tr>
-    </form>
-   	</table>
-	</center>
-    </body>
-    </html>
-<?php
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showitem')
+elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
 {
         if (!isset($_POST['last_message']))
         {
@@ -167,6 +88,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showitem')
         }
  // query to show item
 	draw_header('Department Information');
+    draw_menu($_SESSION['uid']);
  	draw_status_bar('Display Item Information', $_POST['last_message']);
     echo '<center>';
 	//select name
@@ -201,19 +123,20 @@ draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 {
-        if (!isset($_POST['last_message']))
-        {
-                $_POST['last_message']='';
-        }
-	draw_header('Department Selection');
-	draw_status_bar('Choose item to view', $_POST['last_message']);
-	$showpick='';
-?>
+    if (!isset($_POST['last_message']))
+    {
+        $_POST['last_message']='';
+    }
+    draw_header('Department Selection');
+    draw_menu($_SESSION['uid']);
+    draw_status_bar('Choose item to view', $_POST['last_message']);
+    $showpick='';
+    ?>
 	<center>
 	<table border="0" cellspacing="5" cellpadding="5">
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 	<tr>
-	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
+	<input type="hidden" name="state" value="<?php echo ($_GET['state']+1); ?>">
 	<td><b>Department</b></td>
 	<td colspan=3><select name="item">
 <?php 
@@ -228,7 +151,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 ?>
 	</select></td>
 	<tr>
-	<td colspan="2" align="center"><input type="Submit" name="submit" value="showitem">
+	<td colspan="2" align="center"><input type="Submit" name="submit" value="Show Department">
 	</form><p>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>">
 	<input type="Submit" name="submit" value="Cancel">
@@ -248,6 +171,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
         }
 	$dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
 	draw_header('Department Update');
+    draw_menu($_SESSION['uid']);
 	draw_status_bar('Update Department: ' . $dept_obj->getName(),$_POST['last_message']);
 ?>
 	<center>
@@ -271,7 +195,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 ?>        </tr>
 	  <tr>
            <td>
-            <input type="Submit" name="updatedepartment" value="Modify Department">
+            <input type="Submit" name="submit" value="Update Department">
            </td>
           </form>
           <form action="<?php echo $_SERVER['PHP_SELF']; ?>" >
@@ -290,6 +214,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                 $_POST['last_message']='';
         }
 	draw_header('Department Selection');
+    draw_menu($_SESSION['uid']);
 	draw_status_bar('Modify Department',$_POST['last_message']);
 ?>
 	<center>
@@ -325,12 +250,19 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	</tr>
 	</table>
 	</center>
-<?php
-	draw_footer();
+    <?php
+    draw_footer();
 }
-elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
+elseif (isset($_POST['submit']) and $_POST['submit'] == 'Cancel')
 {
-        $_POST['last_message'] = 'Action Canceled';	
-        header ('Location: admin.php?last_message=' . $_POST['last_message']);
+    
+    $_POST['last_message'] ="Action Cancelled";
+    header('Location:' . $secureurl->encode('admin.php'));
 }
+else
+{
+    $_POST['last_message'] ="Unrecognizable action";
+    header('Location:' . $secureurl->encode('admin.php'));
+}
+
 ?>
