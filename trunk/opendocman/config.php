@@ -13,11 +13,10 @@ include 'mimetypes.php';
 require_once('crumb.php');
 
 // Database Settings - Change these to match your database
-$database = 'opendocman'; // Enter the name of the database here
-$user = 'opendocman'; // Enter the username for the database
-$pass = 'opendocman'; // Enter the password for the username
-$hostname = 'localhost'; // Enter the hostname that is serving the database
-
+$GLOBALS['database'] = 'opendocman'; // Enter the name of the database here
+$GLOBALS['user'] = 'opendocman'; // Enter the username for the database
+$GLOBALS['pass'] = 'opendocman'; // Enter the password for the username
+$GLOBALS['hostname'] = 'localhost'; // Enter the hostname that is serving the database
 
 global $CONFIG;      $CONFIG = array(
 'debug' => '0',
@@ -62,7 +61,7 @@ global $CONFIG;      $CONFIG = array(
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
 // Don't forget the trailing "/" 
-'dataDir' => '/var/www/document_repository/', 
+'dataDir' => '/var/www/document_repository/',
 
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
@@ -94,7 +93,7 @@ The first two options also result in sending email to reviewer
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
 // because of its file type. It should display the proper MIME type there, and you can 
 // then add that string to this list to allow it
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 
 // <----- No need to edit below here ---->
 //
@@ -104,16 +103,9 @@ $CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 // Set the revision directory. (relative to $dataDir)
 $CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
 
-//global $site_mail; 
-global $hostname;
-global $database;
-global $user;
-global $pass;
-global $connection;
-global $allowedFileTypes; 
-
-$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
+$GLOBALS['connection'] = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect: " . mysql_error());
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
+
 // All functions are in functions.php
 require_once 'secureurl.class.php';
 include 'secureurl.php';
