@@ -44,7 +44,7 @@ if(!isset($_GET['submit']))
 	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
-	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
+	echo 'To view your file in a new window <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
 	echo 'If you are not able to do so for some reason, ';
 	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
 	echo '</form>';
