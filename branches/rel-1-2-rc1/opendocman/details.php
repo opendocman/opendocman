@@ -21,7 +21,7 @@ $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
 	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
-	@draw_status_bar('Rev.' . $lrevision_id,$_REQUEST['last_message']);
+	@draw_status_bar('Rev.' . $lrevision_id . ' - Details',$_REQUEST['last_message']);
 }
 else 
 	@draw_status_bar('File Details',$_REQUEST['last_message']);
