@@ -184,7 +184,9 @@ else
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		list($username) = mysql_fetch_row($result);
 		// update revision log
-		$query = "INSERT INTO log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', $lrevision_num)";
+		$query = 'UPDATE log set log.revision=' . ($lrevision_num - 1) . ' where log.id = ' . $_POST['id'] . ' and log.revision = "current"';
+		mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$query = "INSERT INTO log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 		// update file status
@@ -194,7 +196,8 @@ else
 		// rename and save file
 		$newFileName = $_POST['id'] . '.dat';
 		copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
-
+		$lquery = 'UPDATE data set data.filesize = ' . filesize($GLOBALS['CONFIG']['dataDir'] . $newFileName) . ' WHERE data.id = ' .  $_POST['id'];
+		mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $lquery. " . mysql_error());
 		//Send email
 		$date = date('D F d Y');
 		$time = date('h:i A');
