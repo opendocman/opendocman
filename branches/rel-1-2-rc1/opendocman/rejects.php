@@ -2,8 +2,8 @@
 session_start();
 if (!session_is_registered('uid'))
 {
-        header('Location:error.php?ec=1');
-        exit;
+        header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
+		exit;
 }
 include ('./config.php');
 // includes

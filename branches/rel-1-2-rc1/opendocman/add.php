@@ -10,7 +10,7 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-	header('Location:error.php?ec=1');
+	header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
 	exit;
 }
 include('config.php');
@@ -352,7 +352,7 @@ else //submited form
 		} 
 	}	
 	// for non_allowed file types
-	if ($allowedFile != 1) 
+	if (!isset($allowedFile)) 
 	{ 
 		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
 		exit; 

@@ -5,8 +5,7 @@
 session_start();
 if (!isset($_SESSION['uid']))
 {
-        echo "error";
-	draw_error('error.php?ec=1');
+	header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
 	exit;
 }
 

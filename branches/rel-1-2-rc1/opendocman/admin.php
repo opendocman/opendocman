@@ -6,7 +6,7 @@ session_start();
 include('config.php');
 if (!isset($_SESSION['uid']))
 {
-	draw_error('error.php?ec=1');
+	header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
 	exit;
 }
 // open a connection to the database

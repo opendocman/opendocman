@@ -7,8 +7,8 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-        header('Location:error.php?ec=1');
-        exit;
+        header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
+		exit;
 }
 
 
@@ -20,12 +20,6 @@ if (!isset($_REQUEST['last_message']))
 // includes
 global $state; $state = 1;
 include ('config.php');
-
-require_once("crumb.php");
-$crumb = new crumb();
-$crumb->addCrumb($state, "Home", $_SERVER['REQUEST_URI']);	
-$crumb->printTrail($state);
-
 draw_header('File Listing');
 draw_menu($_SESSION['uid']);
 draw_status_bar('Document Listing', $_REQUEST['last_message']);

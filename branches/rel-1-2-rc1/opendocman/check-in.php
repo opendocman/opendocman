@@ -5,9 +5,8 @@
 session_start();
 if (!isset($_SESSION['uid']))
 {
-        $last_message='Failed';
-        header('Location:error.php?ec=1&last_message=' . urlencode($last_message));
-        exit;
+        header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
+		exit;
 }
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')

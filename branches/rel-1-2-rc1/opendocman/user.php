@@ -7,8 +7,8 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-        header('Location:error.php?ec=1');
-        exit;
+        header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
+		exit;
 }
 
 // includes

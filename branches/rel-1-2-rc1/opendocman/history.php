@@ -12,7 +12,7 @@ exit;
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-header('Location:error.php?ec=2');
+header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
 exit;
 }
 
