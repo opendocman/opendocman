@@ -8,6 +8,7 @@ if( !defined("databaseData_class") );
       	var $name;
 		var $id;
 		var $connection;
+		var $database;
 		var $tablename;
 		var $error;
 		var $field_name;
@@ -65,6 +66,7 @@ if( !defined("databaseData_class") );
 	{
 		$query = "SELECT $this->tablename.$this->field_name FROM $this->tablename WHERE {$this->tablename}.$this->field_id = $this->id";
 		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: " .$query . mysql_error());
+		
 		if(mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')
 		{
 			$this->error='Error: non-unique';
@@ -105,7 +107,7 @@ if( !defined("databaseData_class") );
 					$found = true;
 				}
 			}
-			if(!isset($found))
+			if(!$found)
 			{
 				$result_array[$result_array_index++] = $low_priority_array[$l];
 			}

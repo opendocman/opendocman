@@ -66,7 +66,7 @@ if( !defined('classHeader') )
 					$found = true;
 				}
 			}
-			if(!isset($found))
+			if(!$found)
 			{
 				$result_array[$result_array_index++] = $low_priority_array[$l];
 			}
