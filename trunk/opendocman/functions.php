@@ -138,7 +138,7 @@ if( !defined('function') )
             echo '<a href="in.php"><img src="images/check-in.png" alt="Check In" border=0></a>'."\n";
             echo '<a href="search.php"><img src="images/search.png" alt="Search" border=0></a>'."\n";
             echo '<a href="add.php"><img src="images/add.png" alt="Add" border="0"></a>'."\n";
-            if($uid != NULL and $current_user_obj->isAdmin())
+            if($uid != NULL && $current_user_obj->isAdmin())
             {
                 echo '<a href="admin.php"><img src="images/setting.png" alt="Administration" border="0"></a>'."\n";
             }
