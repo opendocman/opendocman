@@ -4,12 +4,12 @@ session_start();
 //$_SESSION['uid'] = 102;
 //$_GET['submit'] = 'view_checkedout';
 //echo $_POST['submit'];
-/*if (!session_is_registered('uid'))
+if (!session_is_registered('uid'))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
 	exit;
 }
-*/
+
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);

@@ -6,7 +6,7 @@ session_start();
 $start_time = time();
 if (!isset($_SESSION['uid']))
 {
-        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+        header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
 		exit;
 }
 

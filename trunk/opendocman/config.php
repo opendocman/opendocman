@@ -75,7 +75,16 @@ The first two options also result in sending email to reviewer
 'file_expired_action' => '1', 
 
 //Authorization control: On or Off (case sensitive)
-'authorization' => 'On'
+//If set On, every document added or checked back must be reviewed by an admin
+//before it can go public.  To disable this review queue, set this variable to Off.
+//When set to Off, all newly added or checked back in documents will immediately go public
+'authorization' => 'On',
+
+//Authorization control: On or Off (case sensitive)
+//When set to 'On', all urls will be secured
+//When set to 'Off', all urls are normal and readable
+'secureurl' => 'On'
+
 );
 
 // List of allowed file types

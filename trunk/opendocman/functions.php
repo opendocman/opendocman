@@ -60,7 +60,7 @@ if( !defined('function') )
 ?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
 		<TD bgcolor="#0000A0" align="left" valign="middle">
 <?php	$crumb = new crumb();
-		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['REQUEST_URI']);	
+		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']);	
 		$crumb->printTrail($_REQUEST['state']);
 		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
 	    echo '<b><font size="-2" face="Arial" color="White">';
