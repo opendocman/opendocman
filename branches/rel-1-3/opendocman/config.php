@@ -7,10 +7,10 @@ if( !defined('config') )
 // config.php - useful variables/functions
 
 // database parameters
-include 'functions.php';
-include 'classHeaders.php';
-include 'mimetypes.php';
-require_once('crumb.php');
+include 'include/functions.php';
+include 'include/classHeaders.php';
+include 'include/mimetypes.php';
+include 'include/crumb.php';
 
 // Database Settings - Change these to match your database
 $database = 'opendocman'; // Enter the name of the database here
