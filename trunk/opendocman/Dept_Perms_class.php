@@ -1,12 +1,22 @@
 <?php 
 /*
-   Written By: Nguyen Duy Khoa
-   Last Modified: 02/07/2003
-   Email: knguyen@ksys.serverbox.org
-   
-   Dept_Perms is designed to handle permission settings
-   of each department.
- */
+Dept_Perms_class.php - Dept_Perms is designed to handle permission settings of each department.
+Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
 if( !defined('Dept_Perms_class') )
 {

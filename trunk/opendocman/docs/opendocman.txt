@@ -334,7 +334,7 @@ and File Management under this menu item.
 
 Stephen Lawrence Jr. - Project Lead/Programmer
 
-Khoa Nguyen - PHP and Javascript Programming
+Khoa Nguyen (knguyen@ksys.serverbox.org) - PHP and Javascript Programming
 
 Originally inspired by an article called cracking the vault.
 
