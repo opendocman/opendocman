@@ -127,7 +127,7 @@ else
                 // Put all the author name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author_only':
-                $lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name = \'' . $lkeyword . '\'';
+                $lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
                 break;
 
                 // Put all the department name for each of the OBJ in the OBJ array into an array
@@ -160,9 +160,9 @@ else
             	break;
             default : break;
         }
-  	 	$lquery .= ') ORDER BY data.id ASC LIMIT ' . $GLOBALS['CONFIG']['page_limit'];
-  	 	$lresult = mysql_query($lquery, $GLOBALS['connection']) or die("Error in query: $lquery" . mysql_error() );
-  	 	$lindex = 0;
+  	 	$lquery .= ') ORDER BY data.id ASC';
+  	 	$lresult = mysql_query($lquery) or die("Error in query: $lquery" . mysql_error() );
+  	 	$lindex = 0;//echo '----' . $lquery;
   	 	$lid_array = array();
   	 	$llen = mysql_num_rows($lresult);
   	 	while( $lindex < $llen )
@@ -174,17 +174,18 @@ else
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $s_getFTime = time();
-    $view_able_files_obj = $current_user_permission->getAllowedFileIds();
+    $view_able_files_id = $current_user_permission->getAllowedFileIds();
     $e_getFTime = time();
-    $obj_array_len = sizeof($view_able_files_obj);
+    $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
-    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_word'], @$_GET['case_sensitivity'], $view_able_files_obj);
+    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_word'], @$_GET['case_sensitivity'], $view_able_files_id);
+    //echo 'khoa' . sizeof($search_result);
     $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
-    $sorted_obj_array = $current_user_permission->convertToFileDataOBJ($search_result);
+//    $sorted_obj_array = $current_user_permission->convertToFileDataOBJ($search_result);
     //$sorted_obj_array = obj_array_sort_interface($search_result, $_GET['sort_order'], $_GET['sort_by']);
-    list_files($sorted_obj_array,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
+    list_files($search_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
     echo '<BR>';
-    list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
+    list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();
     echo '<br> <b> Load Page Time: ' . (time() - $start_time) . ' </b>';
     echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
