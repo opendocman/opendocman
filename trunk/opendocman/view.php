@@ -5,7 +5,7 @@
 session_start();
 ob_end_clean();		//Make sure there are no garbage in buffer.
 ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
         header('Location:error.php?ec=1');
         exit;
@@ -24,8 +24,8 @@ include_once('classHeaders.php');
 // verify again that user has view rights
 
 /*
-   $query = "SELECT id, realname FROM data, perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$SESSION_UID' AND perms.fid = data.id";
-   $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+   $query = "SELECT id, realname FROM data, perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
+   $result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
  */
 //if (mysql_num_rows($result) <= 0)
 $filedata = new FileData($GLOBALS['connection'], $GLOBALS['database'], 'data');
@@ -52,13 +52,13 @@ else
         if (!isset($submit))
         {
                 draw_header();
-                draw_menu($SESSION_UID);
+                draw_menu($_SESSION['uid']);
                 draw_status_bar('Add New User', $message);
                 ?>
                         <p>
 
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
                         <input type="submit" name="submit" value="Click here"> to begin downloading the selected document to your local workstation.
                         </form>
                         Once the document has completed downloading, you may <a href="out.php">continue browsing</a> The Vault.
@@ -76,7 +76,7 @@ else
                 //mysql_free_result($result);
 
                 // get the filename
-                $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+                $filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
 
                 // send headers to browser to initiate file download
                 header ('Content-Type: application/octet-stream'); 
