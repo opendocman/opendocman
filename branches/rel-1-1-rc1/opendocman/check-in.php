@@ -219,7 +219,7 @@ else
 
 		// clean up and back to main page
 		$last_message = 'Document successfully checked in';
-		header('Location: out.php?last_message=' . $last_message);
+		header('Location: out.php?last_message=' . urlencode($last_message));
 	}
 }
 ?>
