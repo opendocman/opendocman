@@ -144,7 +144,7 @@ if( !defined('function') )
 	}
 	function obj_array_sort_interface($obj_array, $sort_order, $sort_by)
 	{
-		if(sizeof($obj_array)<=1 and $obj_array[0]==null)
+		if(sizeof($obj_array)<=1 and !isset($obj_array) )
 			return $obj_array;
 		switch($sort_by)
 		{
@@ -657,7 +657,7 @@ if( !defined('function') )
                 $unlock_highlighted_color = '#bdf9b6';
                 $lock_highlighted_color = '#ea7741';
                 echo "\n";
-                if($fileobj_array[0] == null)
+                if(!isset($fileobj_array))
                 {
                         echo '</TABLE>';
                         return 0;
