@@ -25,10 +25,14 @@ require('config.php');
 
 if(isset($_POST['login']))
 {
-
-        $frmuser = $_POST['frmuser'];
-        $frmpass = $_POST['frmpass'];
-        // check login and password
+    if(!valid_username($_POST['frmuser']))
+    {
+        echo "<font color=red>The username or password was invalid. Please try again.</font>";
+        exit;
+    }
+    $frmuser = $_POST['frmuser'];
+    $frmpass = $_POST['frmpass'];
+    // check login and password
         // connect and execute query
         $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
         $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());

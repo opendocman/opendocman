@@ -875,5 +875,13 @@ if( !defined('function') )
                         return "X";
                 }
         }
+        function valid_username($username)
+        {
+            $unrx = '^[a-zA-Z0-9]'; // allow only letters and numbers. Limit 5 - 25 characters.
+            if(ereg($unrx, $username))
+                return true;
+            else
+                return false;
+        }
 }
 ?>
