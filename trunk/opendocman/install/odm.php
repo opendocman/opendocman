@@ -1,4 +1,5 @@
 <?php
+// For version ODM 1.2rc1
 // Admin table
 $result = mysql_query("
 DROP TABLE IF EXISTS admin;
