@@ -291,5 +291,23 @@ if( !defined('User_class') )
 		mysql_free_result($result);
 		return $full_name;
 	}
+	function getPreference()
+	{
+		$array = array();
+		global $USER_PREF;
+		foreach ($USER_PREF as $key => $value)
+		{
+			$array[$key] = 'default';
+		}
+		$lquery = 'SELECT  name, value FROM user_pref WHERE owner = ' . $_SESSION['uid'];
+		$lresult = mysql_query($lquery, $this->connection) or die('Error querying: ' . $lquery . '|' . mysql_error());
+		$len = mysql_num_rows($lresult);
+		for($i = 0; $i< $len; $i++)
+		{
+			list($name, $u_value) = mysql_fetch_row($lresult);
+			$array[$name]=$u_value;
+		}
+		return $array;
+	}
   }
 }
