@@ -23,7 +23,6 @@ switch(@$_REQUEST['op']) {
     // User has version 1.0 and is upgrading
     case "update_10":
          do_update_10();
-         do_update_11rc1();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
@@ -33,6 +32,11 @@ switch(@$_REQUEST['op']) {
    // User has version 11rc1 and is upgrading 
    case "update_11rc2":
          do_update_11rc2();
+         break;
+  
+   // User has version 11-Final and is upgrading 
+   case "update_11":
+         do_update_11();
          break;
 
     default:
@@ -89,28 +93,41 @@ function do_install()
 
 function do_update_10()
 {
-        echo 'Updating version 1.0<br>';        
+        echo 'Updating version 1.0 to latest<br>';        
         
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
         include("install/upgrade_10.php");
+        include("install/upgrade_11rc1.php");
         include("install/upgrade_11rc2.php");
+        include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
 {
-        echo 'Updating version 1.1rc1<br>';        
+        echo 'Updating version 1.1rc1 to latest<br>';        
+        include("install/upgrade_11rc1.php");
         include("install/upgrade_11rc2.php");
+        include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
         
 }
 
 function do_update_11rc2()
 {
-        echo 'Updating version 1.1rc2<br>';        
+        echo 'Updating version 1.1rc2 to latest<br>';        
         include("install/upgrade_11rc2.php");
+        include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
+
+function do_update_11()
+{
+        echo 'Updating version 1.1<br>';        
+        include("install/upgrade_11.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
+
 
 function print_intro()
 {
@@ -122,7 +139,7 @@ function print_intro()
   <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
  </tr>
  <tr>
-  <td>Please choose one from the following:<br><br></td>
+  <td>Please choose one from the following based on your current version:<br><br></td>
  </tr>
  <tr>
   <td><a href="setup.php?op=install">New Installation</a><br><br></td>
@@ -135,6 +152,9 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="setup.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="setup.php?op=update_11">Upgrade from version 1.1-Final</a><br><br></td>
  </tr>
 </table>
 <hr>
