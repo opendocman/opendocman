@@ -7,17 +7,17 @@ if( !defined('config') )
 // config.php - useful variables/functions
 
 // database parameters
-include 'functions.php';
-include 'ldap.inc';
-include 'classHeaders.php';
-include 'mimetypes.php';
-require_once('crumb.php');
+include_once 'functions.php';
+include_once 'ldap.inc';
+include_once 'classHeaders.php';
+include_once 'mimetypes.php';
+include_once 'crumb.php';
 
 // Database Settings - Change these to match your database
-$database = 'opendocman_khoa'; // Enter the name of the database here
-$user = 'vault1'; // Enter the username for the database
-$pass = 'vault1'; // Enter the password for the username
-$hostname = 'musa'; // Enter the hostname that is serving the database
+$database = 'opendocman'; // Enter the name of the database here
+$user = 'opendocman'; // Enter the username for the database
+$pass = 'opendocman'; // Enter the password for the username
+$hostname = 'localhost'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -47,7 +47,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman1.2',
+'base_url' => 'http://mydomain/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -56,16 +56,16 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.2rc1  ',
 
 // The email address of the administrator of this site
-'site_mail' => 'admin@yourdomainaa.com',
+'site_mail' => 'admin@mydomain',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'kdng',
+'root_username'  => 'admin',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/usr/home/httpd/document_repository/', 
+'dataDir' => '/var/www/document_repository/', 
 
 //This var sets the amount of days until each file need to be revise, 
 //assuming that there are 30 days a month for all months.
