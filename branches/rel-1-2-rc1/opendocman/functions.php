@@ -290,13 +290,11 @@ if( !defined('function') )
 		{
 			$lquery = 'SELECT data.id FROM data ORDER BY data.filesize ' . $sort_order . ', data.id asc';
 		}
-		$time = getmicrotime(); 
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
-		echo "load mysql time: " . (getmicrotime() - $time);
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
 			list($array[$li]) = mysql_fetch_row($lresult);
-		return array_values( array_intersect($array, $id_array) ); 
+		return	array_values( array_intersect($array, $id_array) ); 
 	}
 	function my_sort2 ($lquery, $sort_order = 'asc', $sort_by = 'id')
 	{
@@ -627,7 +625,12 @@ if( !defined('function') )
 		}
         function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
-                echo "\n".'<!----------------------Table Starts----------------------->'."\n";
+                if(sizeof($fileid_array)==0)
+				{
+					echo'<B><font size="10">No file found</font></B>' . "\n";
+					exit;
+				}
+				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
                 $count = sizeof($fileid_array);
                 $css_td_class = "'listtable'";
@@ -788,7 +791,7 @@ if( !defined('function') )
         			$_REQUEST['state']=1;
                 while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
-						if($index%2!=0)
+                	if($index%2!=0)
                         {
                                 $tr_bgcolor = $odd_row_color;
                         }
@@ -822,19 +825,24 @@ if( !defined('function') )
                                 $description = 'No description available';
                         }
                         // set filename for filesize() call below
-                        $filename = $dataDir . $file_obj->getId() . '.dat';
+                        //$filename = $dataDir . $file_obj->getId() . '.dat';
                         $fid = $file_obj->getId();
 
 
                         // begin displaying file list with basic information
                         $comment = $file_obj->getComment();
                         $description = $file_obj->getDescription();
+                        
+                        
                         $created_date = fix_date($file_obj->getCreatedDate());
                         if ($file_obj->getModifiedDate())
-                        {
-                                $modified_date = fix_date($file_obj->getModifiedDate());
+                        {   
+                        	$modified_date = fix_date($file_obj->getModifiedDate());
                         }
+                        
                         //echo "$modified_date  and $fid fid";
+                        
+                        
                         $full_name_array = $file_obj->getOwnerFullName();
                         $owner_name = $full_name_array[1].', '.$full_name_array[0];
                         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
@@ -851,6 +859,7 @@ if( !defined('function') )
                         <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid.'&state=' . ($_REQUEST['state']+1);?>"><?php echo $realname;?></a></TD>
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
+							
                         $read = array($userperms_obj->READ_RIGHT, 'r');
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');

@@ -95,6 +95,9 @@ if ( $user_obj->isRoot()	)
 		 <tr>
 		 <td><b><a href="check_exp.php?<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Check Expiration</a></b></td>
 		 </tr>
+		 <tr>
+		 <td><b><a href="file_ops.php?<?php echo '&state=' . ($_REQUEST['state']+1); ?>&submit=view_checkedout">Checked-Out Files</a></b></td>
+		 </tr>
 	   </table>
 	  </td>
 <?php
