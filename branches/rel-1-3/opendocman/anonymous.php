@@ -1,7 +1,13 @@
 <?php
 include 'config.php';
+session_start();
 if(!isset($_REQUEST['mode']) || @$_REQUEST['mode'] == 'showall')
 {
+	if(isset($_SESSION['uid']))
+	{
+		$_SESSION['uid.bak'] = $_SESSION['uid'];
+		session_unregister('uid');
+	}
 	if(!isset($_GET['starting_index']))    $_GET['starting_index'] = 0;
 	if(!isset($_GET['stoping_index']))	   $_GET['stoping_index'] = ($_GET['starting_index']+$GLOBALS['CONFIG']['page_limit']-1);
 	if(!isset($_GET['sort_by']))   $_GET['sort_by'] = 'id';
@@ -23,6 +29,7 @@ if(!isset($_REQUEST['mode']) || @$_REQUEST['mode'] == 'showall')
 	$limit=$GLOBALS['CONFIG']['page_limit'];
 	$total_hit = sizeof($array_id);
 	list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $_SERVER['PHP_SELF'] . '?mode=showall', $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
+	$_SESSION['uid'] = $_SESSION['uid.bak']; session_unregister('uid.bak');
 
 }
 if(@$_REQUEST['mode'] == 'view_file')
