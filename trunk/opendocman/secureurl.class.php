@@ -68,6 +68,10 @@ class phpsecureurl{
 			$code = base64_encode($param);
 			return $debut.@$sep.$this->var_name."=".$code.@$fin;
 		}
+		else
+		{
+			return $url;
+		}
 	} // methode return ?aku=dfgdfgdgdfgdgdfhgjdfhjghj all parameter are hide in one
 
 	// methode returm something like ?aku=dfgdfgdgdfgdgdfhgjdfhjghj all parameters un one
