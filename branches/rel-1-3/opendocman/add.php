@@ -199,21 +199,22 @@ if(!isset($_POST['submit'])) //un_submitted form
 
 	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
 	<tr nowrap>
-	  <td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
-	</TR>
-	<TR>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_forbidden']; ?></a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_view']; ?></a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_read']; ?></a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_modify']; ?></a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_admin']; ?></a></td>
-	</tr>
-	<tr>
-	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
-<?php
-	
-	// query to get a list of available users
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		
+		<td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
+			</TR>
+			<TR>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_forbidden']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_view']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_read']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_modify']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_admin']; ?></a></td>
+			</tr>
+			<tr>
+			<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
+			<?php
+
+			// query to get a list of available users
+			$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -224,47 +225,12 @@ if(!isset($_POST['submit'])) //un_submitted form
 			echo $str;
 		}
 		mysql_free_result ($result);
-?>
-	</select></td>
-	<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
-<?php 
-		////////////////////View//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-	$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		?>
+			</select></td>
+			<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
+			<?php 
+			////////////////////View//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -276,14 +242,30 @@ if(!isset($_POST['submit'])) //un_submitted form
 			echo $str;
 		}
 		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		?>
+			</SELECT></td>
+			<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
+			<?php
+			////////////////////Read//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>
+			</SELECT></td>
+			<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
+			<?php
+			//////////////////Modify////////////////////////////
+			$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
 			$str = '<option value="' . $id . '"';
@@ -293,10 +275,26 @@ if(!isset($_POST['submit'])) //un_submitted form
 			echo $str;
 		}
 		mysql_free_result ($result);
-?>	</SELECT></td>
-	
-	</TR>
-	</TABLE>
+		?>
+			</SELECT></td>
+			<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
+			<?php
+			////////////////////ADMIN//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>	</SELECT></td>
+
+			</TR>
+			</TABLE>
 	<tr>
 	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_add_document']; ?>"></td>
 	</tr>

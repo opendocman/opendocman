@@ -104,9 +104,10 @@ else
 </FORM>
 <tr>
 <td>
-<?php 
+<?php
+$userperm = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 // display red or green icon depending on file status
-if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
+if ($status == 0  && $userperm->getAuthority($_REQUEST['id'])>= $user->ADMIN_RIGHT) 
 { 
 ?> 
 	<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">

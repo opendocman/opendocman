@@ -23,7 +23,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 	header('Location:error.php?ec=2');
   	exit;
 }
-
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 if( $filedata->isArchived() ) header('Location:error.php?ec=21');
 if (!isset($_REQUEST['last_message']))

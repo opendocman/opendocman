@@ -199,7 +199,7 @@ if( !defined('UserPermission_class') )
 	function getAuthority($data_id)
 	{
 		$file_obj = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
-		if($this->user_obj->isRoot())
+		if($this->user_obj->isRoot() || $this->user_obj->isReviewer($data_id))
 			return $this->ADMIN_RIGHT;
 		if($file_obj->isOwner($this->uid) && $file_obj->isLocked() )
 			return $this->WRITE_RIGHT;

@@ -143,6 +143,26 @@ if( !defined('User_class') )
 			return 0;
 		}
 	}
+	function isReviewerOfDept($dept_id)
+	{
+		$query = "SELECT * from dept_reviewer where user_id = " . $this->id . ' AND dept_id = ' . $dept_id;
+		$result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
+		if(mysql_num_rows($result) > 0)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	function isReviewerOfFile($fileid)
+	{
+		$file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
+		return $this->isReviewerOfDept($file_obj->getDept());
+	}
+
 	function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
 	{
 		$lquery = "SELECT id FROM data WHERE $this->TABLE_DATA.publishable = 0";
