@@ -22,6 +22,10 @@ $hostname = 'localhost'; // Enter the hostname that is serving the database
 global $CONFIG;      $CONFIG = array(
 'debug' => '0',
 
+// This setting is for a demo installation, where random people will be
+// all loggging in as the same username/password like 'demo/demo'.
+'demo' => 'false', 
+
 // This is useful if you have a web-based kerberos authenticatio site
 // Set to either kerbauth or mysql
 //'authen' => 'kerbauth',
