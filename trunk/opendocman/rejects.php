@@ -41,8 +41,8 @@ if(!isset($submit))
         draw_status_bar('Rejected Document Listing', $last_message);
         $page_url = $_SERVER['PHP_SELF'] . '?';
 
-        $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
-        $userperms = new UserPermission($SESSION_UID, $GLOBALS['connection'], $database);
+        $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+        $userperms = new UserPermission($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
         $fileobj_array = $user_obj->getRejectedFiles();
         $sorted_obj_array = obj_array_sort_interface($fileobj_array, $sort_order, $sort_by);
         echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
@@ -69,8 +69,8 @@ elseif($submit=='Re-Submit For Review')
                 if(isset($HTTP_POST_VARS["checkbox$i"]))
                 {
                         $fileid = $HTTP_POST_VARS["checkbox$i"];
-                        $file_obj = new FileData($fileid, $GLOBALS['connection'], $database);
-                        //$user_obj = new User($file_obj->getOwner(), $connection, $database);
+                        $file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
+                        //$user_obj = new User($file_obj->getOwner(), $connection, $GLOBALS['database']);
                         //$mail_to = $user_obj->getEmailAddress();									
                         //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
                         $file_obj->Publishable(0);

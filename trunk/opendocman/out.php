@@ -24,11 +24,11 @@ if(!isset($last_message) )
 draw_status_bar('Document Listing', $last_message);
 sort_browser(); 
 $query = "SELECT * FROM dept_reviewer WHERE dept_reviewer.user_id = $SESSION_UID";
-$result = mysql_db_query($database, $query, $connection) or die ("Error in Query".mysql_error());
+$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in Query".mysql_error());
 $count = mysql_num_rows($result);
 $department_id = array();
 $index = 0;
-$user_obj = new User($SESSION_UID, $connection, $database);
+$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 
 if($user_obj->isReviewer() && sizeof($user_obj->getReviewee()) > 0)
 {
@@ -72,7 +72,7 @@ if(!isset($page))
 //set values
 $page_url = $_SERVER['PHP_SELF'] . '?submit=true';
 list($user_department)=mysql_fetch_row($result);
-$user_perms = new UserPermission($SESSION_UID, $connection, $database);
+$user_perms = new UserPermission($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 $file_obj_array = $user_perms->getAllowedFileOBJs();
 $count = sizeof($file_obj_array);
 

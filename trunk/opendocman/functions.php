@@ -924,7 +924,7 @@ if( !defined('function') )
 				// not 0 -> implies file is checked out to another user
 				// run a query to find out user's name
 				//$query2 = "SELECT username FROM user WHERE id = '$result[$index]->getStatus()'";
-				//$result2 = mysql_db_query($database, $query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
+				//$result2 = mysql_db_query($GLOBALS['database'], $query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
 				$user = $fileobj_array[$index]->getCheckerOBJ();
 				$username = $user->getName();
 				//list($username) = mysql_fetch_row($result2);
@@ -1184,7 +1184,7 @@ if( !defined('function') )
 		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
 		if($user_perm_obj->getPermission($file_id) < $permittable_right)
 		{
-			echo 'Error: OpenDocMan is not able to the requested file.' . "\n";
+			echo 'Error: OpenDocMan is un able to find the requested file.' . "\n";
 			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for farther assistent.';
 			exit();
 		}

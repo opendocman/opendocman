@@ -10,7 +10,7 @@ if (!session_is_registered('SESSION_UID'))
 	exit;
 }
 // open a connection to the database
-$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
+$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {

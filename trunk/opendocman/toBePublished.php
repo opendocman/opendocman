@@ -11,7 +11,7 @@ if (!session_is_registered('SESSION_UID'))
 
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
-$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
+$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 $flag = 0;
 
 if(!$user_obj->isReviewer())
@@ -51,7 +51,7 @@ if(!isset($submit))
 	draw_menu($SESSION_UID);
 	draw_status_bar('Document Listing for Review',  $last_message);
 	$page_url = $_SERVER['PHP_SELF'] . '?';
-	$userpermission = new UserPermission($SESSION_UID, $GLOBALS['connection'], $database);
+	$userpermission = new UserPermission($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 	$obj_array = $user_obj->getReviewee();
 	$sorted_obj_array = obj_array_sort_interface($obj_array, $sort_order, $sort_by);
 	$flag=0;
@@ -248,7 +248,7 @@ if(isset($submit) && $submit =='comments')
 		<TR><TD valign="top">Email these users:</TD><TD><SELECT name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
 		<?php
 			$query = "SELECT user.id, user.first_name, user.last_name from user";
-			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
+			$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
 			echo "\n\t\t\t\t<OPTION value=\"0\" selected>no one</OPTION>";			
 			while( list($id, $first_name, $last_name) = mysql_fetch_row($result) )
 			{
@@ -311,7 +311,7 @@ elseif (isset($submit) && $submit == 'Reject')
 {
 	$mail_break = '--------------------------------------------------'."\n";
 	$reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
-	$user_obj = new user($SESSION_UID, $GLOBALS['connection'], $database);
+	$user_obj = new user($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 	$date = date("D F d Y");
 	$time = date("h:i A");
 	$get_full_name = $user_obj->getFullName();
@@ -326,8 +326,8 @@ elseif (isset($submit) && $submit == 'Reject')
 		if(isset($HTTP_POST_VARS["checkbox$i"]))
 		{
 			$fileid = $HTTP_POST_VARS["checkbox$i"];
-			$file_obj = new FileData($fileid, $GLOBALS['connection'], $database);
-			$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $database);
+			$file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
+			$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
 			$mail_to = $user_obj->getEmailAddress();
 			mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);	
 			$file_obj->Publishable(-1);
@@ -341,7 +341,7 @@ elseif (isset($submit) && $submit == 'Reject')
 elseif (isset($submit) && $submit == 'Authorize')
 {
         $reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
-        $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
+        $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
         $date = date("D F d Y");
         $time = date("h:i A");
         $get_full_name = $user_obj->getFullName();
@@ -355,8 +355,8 @@ elseif (isset($submit) && $submit == 'Authorize')
                 {
                         
                         $fileid = $HTTP_POST_VARS["checkbox$i"];
-                        $file_obj = new FileData($fileid, $GLOBALS['connection'], $database);
-                        $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $database);
+                        $file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
+                        $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
                         $mail_to = $user_obj->getEmailAddress();
                         
                         $mail_body='Your file has been authorized for publication.'."\n\n";

@@ -11,7 +11,7 @@ if(!isset($submit))
 	draw_header('View File');
 	draw_menu($SESSION_UID);
 	draw_status_bar('File View',$last_message);
-	$file_obj = new FileData($id, $GLOBALS['connection'], $database);
+	$file_obj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
 	$realname = $file_obj->getName();
@@ -40,7 +40,7 @@ elseif ($submit == 'view')
 	//echo "mimetype = $mimetype<br>";
 	//exit;
 	//echo "ID is $id";
-	$file_obj = new FileData($id, $GLOBALS['connection'], $database);
+	$file_obj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . ".dat";
 	// send headers to browser to initiate file download
@@ -55,7 +55,7 @@ elseif ($submit == 'view')
 }
 elseif ($submit=='Download')
 {
-	$file_obj = new FileData($id, $GLOBALS['connection'], $database);
+	$file_obj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . ".dat";
 	// send headers to browser to initiate file download

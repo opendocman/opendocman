@@ -13,7 +13,7 @@ if(isset($adduser))
 {
 	// Check to make sure user does not already exist
     $query = "SELECT username FROM user WHERE username = '" . addslashes($username) . '\'';
-    $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
     // If the above statement returns more than 0 rows, the user exists, so display error
     if(mysql_num_rows($result) > 0)
@@ -35,23 +35,23 @@ if(isset($adduser))
 
 	   // INSERT into user
        $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($username)."', password('". addslashes($password) ."'), '$department' ,'" . addslashes($phonenumber) . "','". addslashes($Email)."', '" . addslashes($last_name) . "', '" . addslashes($first_name) . '\' )';
-       $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+       $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
        // INSERT into admin
        $userid = mysql_insert_id($GLOBALS['connection']);
        $query = "INSERT INTO admin (id, admin) VALUES('$userid', '$admin')";
-       $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+       $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	   if(isset($reviewer))
 	   {
 			for($i = 0; $i<sizeof($department_review); $i++)
 			{
 				$query = "INSERT INTO dept_reviewer (dept_id, user_id) values($department_review[$i], $userid)";
-			   	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+			   	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 			}
 	   }
 	   
 	   // mail user telling him/her that his/her account has been created.
-       	$user_obj = new user($SESSION_UID, $GLOBALS['connection'], $database);
-       	$new_user_obj = new User($userid, $GLOBALS['connection'], $database);
+       	$user_obj = new user($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+       	$new_user_obj = new User($userid, $GLOBALS['connection'], $GLOBALS['database']);
        	$date = date('D F d Y');
 		$time = date('h:i A');
 		$get_full_name = $user_obj->getFullName();
@@ -87,10 +87,10 @@ elseif(isset($updateuser))
 	{
 		$callee='admin.php';
 	}
-	$user_obj = new User($id, $GLOBALS['connection'], $database);
+	$user_obj = new User($id, $GLOBALS['connection'], $GLOBALS['database']);
 	// UPDATE admin info
     $query = "UPDATE admin set admin='$admin' where id = '$id'";
-    $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     
         if(strcmp(substr($phonenumber,0,1), '(') !=0)
 	   	{
@@ -113,20 +113,20 @@ elseif(isset($updateuser))
 	$query.= 'last_name="' . addslashes($last_name) . '",';
 	$query.= 'first_name="' . addslashes($first_name) . '" ';
 	$query.= 'WHERE id="' . $id . '"';
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// UPDATE into dept_reviewer
 	$query = "DELETE FROM dept_reviewer where user_id = $id";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
 	if(isset($reviewer))
 	{
 		//Remove all entry for $id
 		$query = "DELETE FROM dept_reviewer where user_id = $id";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 		for($i = 0; $i<sizeof($department_review); $i++)
 		{
 			$query = "INSERT INTO dept_reviewer (dept_id, user_id) values($department_review[$i], $id)";
-			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+			$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 		}
 	}
 	// back to main page
@@ -139,18 +139,18 @@ elseif(isset($deleteuser))
         // form has been submitted -> process data
         // DELETE admin info
         $query = "DELETE FROM admin WHERE id = $id";
-        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // DELETE user info
         $query = "DELETE FROM user WHERE id = $id";
-        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // DELETE perms info
         $query = "DELETE FROM user_perms WHERE uid = $id";
-        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // Change data info to nobody
         $query = "UPDATE data SET owner='99' where owner = '$id'";
-        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // back to main page
         $last_message = urlencode($id . ' User successfully deleted');
@@ -161,20 +161,20 @@ elseif(isset($adddepartment))
 {
 		//Check to see if this department is already in DB
 		$query = "SELECT department.name from department where department.name=\"" . addslashes($department) . '"';
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         if(mysql_num_rows($result) != 0)
         {
 	       	header('Location: error.php?ec=3&message=' . $department . ' already exist in the database');
         	exit;
         }
 		$query = "INSERT INTO department (name) VALUES ('" . addslashes($department) . '\')';
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Department successfully added');
         /////////Give New Department data's default rights///////////
         ////Get all default rights////
         $query = "SELECT id, default_rights from data";
-       	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+       	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
         $num_rows = mysql_num_rows($result);
         $data_array = array();
        	for($index = 0; $index< $num_rows; $index++)
@@ -182,7 +182,7 @@ elseif(isset($adddepartment))
        	mysql_free_result($result);
        	//////Get the new department's id////////////
        	$query = "SELECT id FROM department WHERE name = '" . addslashes($department) . "'";
-       	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+       	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
        	$num_rows = mysql_num_rows($result);
        	if( $num_rows != 1 )
        	{
@@ -195,7 +195,7 @@ elseif(isset($adddepartment))
         for($index = 0; $index < $num_rows; $index++)
        	{
        		$query = "INSERT INTO dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
-       		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());        
+       		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());        
        	}
        	header('Location: admin.php?last_message=' . $last_message);
 }
@@ -204,14 +204,14 @@ elseif(isset($updatedepartment))
 {
     //Check to see if this department is already in DB
 	$query = "SELECT department.name from department where department.name=\"" . addslashes($name) . '" and department.id!=' . $id;
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
        	header('Location: error.php?ec=3&message=' . $department . ' already exist in the database');
     	exit;
     }    
 	$query = "UPDATE department SET name='" . addslashes($name) ."' where id='$id'";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $last_message = urlencode('Department successfully updated - name=' . $name . '- id=' . $id);
     header('Location: admin.php?last_message=' . $last_message);
@@ -220,7 +220,7 @@ elseif(isset($deletedepartment))
 {
 	// Delete department
         $query = "DELETE from department where id='$id'";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Department (' . $id . ') successfully deleted');
         header('Location: admin.php?last_message=' . $last_message);
@@ -230,7 +230,7 @@ elseif(isset($deletedepartment))
 elseif(isset($addcategory))
 {
         $query = "INSERT INTO category (name) VALUES ('". addslashes($category) ."')";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Category successfully added');
         header('Location: admin.php?last_message=' . $last_message);
@@ -239,7 +239,7 @@ elseif(isset($addcategory))
 elseif(isset($deletecategory))
 {
         $query = "DELETE from category where id='$id'";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Category (' . $id . ') successfully deleted');
         header('Location: admin.php?last_message=' . $last_message);
@@ -248,7 +248,7 @@ elseif(isset($deletecategory))
 elseif(isset($updatecategory))
 {
         $query = "UPDATE category SET name='". addslashes($name) ."' where id='$id'";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Category ' . $name . ' successfully updated');
         header('Location: admin.php?last_message=' . $last_message);

@@ -25,10 +25,10 @@ include_once('classHeaders.php');
 
 /*
    $query = "SELECT id, realname FROM data, perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$SESSION_UID' AND perms.fid = data.id";
-   $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+   $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
  */
 //if (mysql_num_rows($result) <= 0)
-$filedata = new FileData($GLOBALS['connection'], $database, 'data');
+$filedata = new FileData($GLOBALS['connection'], $GLOBALS['database'], 'data');
 $filedata->setId($id);
 
 if ($filedata->getError() != '')

@@ -34,7 +34,7 @@ if (!isset($submit))
 
 	// pre-fill the form with some information so that user knows which file is being updated
 	$query = "SELECT description, realname from data WHERE id = '$id' AND status = '$SESSION_UID'";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// in case script is directly accessed, query above will return 0 rows
 	if (mysql_num_rows($result) <= 0)
@@ -124,7 +124,7 @@ else
 	
 	// checks
 	$query = "select realname from data where data.id = '$id'";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{	header('Location:error.php?ec=16'); exit;	}
 	list($realname) = mysql_fetch_row($result);
@@ -155,21 +155,21 @@ else
 	}
 	
 	// query to ensure that user has modify rights
-	$fileobj = new FileData($id, $GLOBALS['connection'], $database);
+	$fileobj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 	if($fileobj->getError() == '' and $fileobj->getStatus() == $SESSION_UID)
 	{
 		// all OK, proceed!
   		$query = "SELECT username FROM user WHERE id='$SESSION_UID'";
-    	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		list($username) = mysql_fetch_row($result);
 				
 	 	// update revision log
 		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($note) ."')";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 		// update file status
 		$query = "UPDATE data SET status = '0', publishable='0' WHERE id='$id'";
-		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 		// rename and save file
 		$newFileName = $id . '.dat';
@@ -178,7 +178,7 @@ else
 		//Send email
 		$date = date('D F d Y');
 		$time = date('h:i A');
-		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
+		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 		$get_full_name = $user_obj->getFullName();
 		$full_name = $get_full_name[0].' '.$get_full_name[1];
 		$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';

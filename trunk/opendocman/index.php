@@ -65,11 +65,8 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 }
 elseif(isset($_POST['login']))
 {
-
-$hostname=$GLOBALS['hostname'];
 $user=$GLOBALS['user'];
 $pass=$GLOBALS['pass'];
-$database=$GLOBALS['database'];
 
 $frmuser=$_POST['frmuser'];
 $frmpass=$_POST['frmpass'];
@@ -77,7 +74,7 @@ $frmpass=$_POST['frmpass'];
     // check login and password
     // connect and execute query
     $query = "SELECT id, username, password from user WHERE username = '$frmuser' AND password = PASSWORD('$frmpass')";
-    $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // if row exists - login/pass is correct
     if (mysql_num_rows($result) == 1)
     {
@@ -116,7 +113,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
         list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
         //// query to get id num from username
         $query = "SELECT id FROM user WHERE username='$userid'";
-        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ('Error in query: '.$query . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ('Error in query: '.$query . mysql_error());
         // if row exists then the user has an account
         if (mysql_num_rows($result) == 1)
         {

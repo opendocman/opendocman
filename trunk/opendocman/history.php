@@ -22,7 +22,7 @@ draw_header($title);
 draw_menu($SESSION_UID);
 draw_status_bar('Document Listing', $last_message);
 
-$datafile = new FileData($id, $GLOBALS['connection'], $database);
+$datafile = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 // verify
 if ($datafile->getError() != NULL)
 {
@@ -118,7 +118,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 <?
 	// query to obtain a list of modifications
 	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
-	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// iterate through resultset
 	while(list($last_name, $first_name, $modified_on, $note) = mysql_fetch_row($result))
