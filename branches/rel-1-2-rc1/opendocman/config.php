@@ -65,6 +65,10 @@ global $CONFIG;      $CONFIG = array(
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
 'dataDir' => '/usr/home/httpd/document_repository/', 
+
+//This var sets the amount of days until each file need to be revise, 
+//assuming that there are 30 days a month for all months.
+'revision_expiration' => '90'
 );
 
 // Set the revision directory. (relative to $dataDir)
@@ -85,7 +89,7 @@ $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pa
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
 // list of allowed file types
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 // All functions are in functions.php
 }
 ?>
