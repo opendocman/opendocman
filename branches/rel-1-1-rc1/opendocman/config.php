@@ -13,22 +13,19 @@ include 'classHeaders.php';
 include 'mimetypes.php';
 
 // Database Settings - Change these to match your database
-$database = 'vault'; // Enter the name of the database here
-$user = 'vault1'; // Enter the username for the database
-$pass = 'vault1'; // Enter the password for the username
-$hostname = 'musa.davis.cvdls'; // Enter the hostname that is serving the database
+$database = 'opendocman'; // Enter the name of the database here
+$user = 'opendocman'; // Enter the username for the database
+$pass = 'opendocman'; // Enter the password for the username
+$hostname = 'localhost'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
 'debug' => '0',
 
-// This setting is for a demo installation, where random people will be
-// all loggging in as the same username/password like 'demo/demo'.
-'demo' => 'false', 
 // This is useful if you have a web-based kerberos authenticatio site
 // Set to either kerbauth or mysql
-'authen' => 'kerbauth',
-//'authen' => 'mysql',
+//'authen' => 'kerbauth',
+'authen' => 'mysql',
 
 // Not Working
 //Should we use ldap for user info lookup?
@@ -46,16 +43,16 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://cahfs.ucdavis.edu/~slawrence/cvs/opendocman',
+'base_url' => 'http://www.yourdomainaa.com/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
 
 // This is the program version for window title
-'current_version' => ' OpenDocMan v1.1rc1  ',
+'current_version' => ' OpenDocMan v1.1rc2  ',
 
 // The email address of the administrator of this site
-'site_mail' => 'slawrence@ucdavis.edu',
+'site_mail' => 'admin@yourdomainaa.com',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
@@ -64,7 +61,7 @@ global $CONFIG;      $CONFIG = array(
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/usr/home/httpd/document_repository/'
+'dataDir' => '/var/www/document_repository/'
 );
 
 //global $site_mail; 
