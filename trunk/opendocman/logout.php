@@ -1,4 +1,4 @@
-<?
+<?php
 include ('config.php');
 
 	// If kerbauth, then display warning about shutting down browser
