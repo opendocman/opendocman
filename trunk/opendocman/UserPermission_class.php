@@ -12,7 +12,7 @@ if( !defined('UserPermission_class') )
 	var $userperm_obj;
 	var $deptperm_obj;
 	var $FORBIDDEN_RIGHT;
-	var $NON_RIGHT;
+	var $NONE_RIGHT;
 	var $VIEW_RIGHT;
 	var $READ_RIGHT;
 	var $WRITE_RIGHT;
@@ -27,7 +27,7 @@ if( !defined('UserPermission_class') )
 		$this->userperm_obj = new User_Perms($this->user_obj->getId(), $connection, $database);
 		$this->deptperm_obj = new Dept_Perms($this->user_obj->getDeptId(), $connection, $database);
 		$this->FORBIDDEN_RIGHT = $this->userperm_obj->FORBIDDEN_RIGHT;
-		$this->NONE_RIGHT = $this->userperm_obj->NONE_RIGHE;
+		$this->NONE_RIGHT = $this->userperm_obj->NONE_RIGHT;
 		$this->VIEW_RIGHT = $this->userperm_obj->VIEW_RIGHT;
 		$this->READ_RIGHT = $this->userperm_obj->READ_RIGHT;
 		$this->WRITE_RIGHT = $this->userperm_obj->WRITE_RIGHT;
