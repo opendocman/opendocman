@@ -51,7 +51,7 @@ draw_footer();
 	// mysql auth, so just kill session and show login prompt
 	{
         	session_start();
-        	if(session_unregister('SESSION_UID'))
+        	if(session_unregister('uid'))
         	{
 			header('Location:index.php');
 		}
