@@ -33,7 +33,7 @@ global $CONFIG;      $CONFIG = array(
 'authen' => 'mysql',
 
 // Set the number of files that show up on each page
-'page_limit' => '100',
+'page_limit' => '15',
 
 // Set the number of page links that show up on each page
 'num_page_limit' => '10', 
@@ -60,7 +60,6 @@ global $CONFIG;      $CONFIG = array(
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-// Make sure to put an ending / !!
 'dataDir' => '/var/www/document_repository/', 
 
 //This var sets the amount of days until each file needs to be revised, 
@@ -90,7 +89,7 @@ The first two options also result in sending email to reviewer
 // Set the default language (english, spanish).
 // Local users may override this setting
 // check include/language folder for languages available
-'language' => 'english', 
+'language' => 'english',
 
 /* Author's default right to his/her right.  Below is the list from the right table.
    If yours is any different, please use your own ODM.right table's values
@@ -104,15 +103,20 @@ The first two options also result in sending email to reviewer
    |       3 | write       |
    |       4 | admin       |
    +---------+-------------+
-   */
+ */
 'owner_default_right' => '3',
 
 /* HTTPS enforced login.  If this option is turned on, the login page will only take https connections.  If the user uses http, ODM will redirect itself to a HTTPS connection.  SSL must be enabled with your webserver for this feature to work
 1)On
 2)Off
 */
-'SSL_enforced' => 'Off'
+'SSL_enforced' => 'On',
 
+/* ODM normally creates a database for its own use.  However, if you cannot give
+ ODM its own database, you can set the table_prefix to have it uses your current
+  database.  Table_prefix allow you to have many programs use the same databases
+  without having table name clashing.*/
+  'table_prefix' => 'ODM'
 );
 
 // List of allowed file types
@@ -140,7 +144,7 @@ global $pass;
 global $connection;
 global $allowedFileTypes; 
 
-$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!  " . mysql_error());
+$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 // All functions are in functions.php
 require_once 'secureurl.class.php';
