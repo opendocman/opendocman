@@ -113,7 +113,7 @@ elseif ($_GET['submit'] == 'Download')
 	// send headers to browser to initiate file download
 	header('Cache-control: private');
 	header ('Content-Type: application/octet-stream');
-	header ('Content-Disposition: attachment; filename=' . $realname);
+	header ('Content-Disposition: attachment; filename="' . $realname . '"');
 	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: public');
 	readfile($filename);
