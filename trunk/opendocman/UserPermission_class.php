@@ -40,7 +40,7 @@ if( !defined('UserPermission_class') )
 		$writeable_array = $this->getWriteableFileIds();
 		$adminable_array = $this->getAdminableFileIds();
 		$result_array = $this->combineArrays($adminable_array, $writeable_array);
-		$ressult_array = $this->combineArrays($result_array, $readable_array);
+		$result_array = $this->combineArrays($result_array, $readable_array);
 		$result_array = $this->combinearrays($result_array, $viewable_array);
 		return $result_array;
 	}
