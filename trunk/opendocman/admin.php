@@ -18,6 +18,11 @@ if(!$user_obj->isAdmin())
 	draw_error('error.php?ec=4');
 	exit;
 }
+if(!isset($last_message))
+{
+        $last_message='';
+}
+
 draw_header('Admin');
 draw_menu($SESSION_UID);
 draw_status_bar('Admin',$last_message);
