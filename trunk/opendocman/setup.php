@@ -84,12 +84,17 @@ function do_install()
         mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
 
         // Create database
-        $result = mysql_query("CREATE DATABASE $_REQUEST[database]") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        $result = mysql_query("
+DROP DATABASE IF EXISTS $_REQUEST[database]
+CREATE DATABASE $_REQUEST[database]
+") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
         // Grant privs
-        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT");
+        $result = mysql_query("
+GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
+");
 
         include("install/odm.php");
         include("config.php");
@@ -141,7 +146,7 @@ function print_intro()
   <td>Please choose one from the following based on your current version:<br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=install">New Installation</a><br><br></td>
+  <td><a href="setup.php?op=install">New Installation (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
   <td><a href="setup.php?op=update_10">Upgrade from version 1.0</a><br><br></td>

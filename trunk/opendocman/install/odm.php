@@ -2,7 +2,10 @@
 // For version ODM 1.2rc1 fresh install
 // Admin table
 $result = mysql_query("
-DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS admin
+") or die("<br>Could not create admin table" .  mysql_error());
+
+$result = mysql_query("
 CREATE TABLE admin (
   id smallint(5) unsigned default NULL,
   admin tinyint(4) default NULL
@@ -17,6 +20,9 @@ INSERT INTO admin VALUES (1,1);
 // Category table
 $result = mysql_query("
 DROP TABLE IF EXISTS category;
+") or die("<br>Could not create category table" .  mysql_error());
+
+$result = mysql_query("
 CREATE TABLE category (
   id smallint(5) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
@@ -25,15 +31,27 @@ CREATE TABLE category (
 ") or die("<br>Could not create category table");
 
 $result = mysql_query("
-INSERT INTO category VALUES (1,'SOP');
-INSERT INTO category VALUES (2,'Training Manual');
-INSERT INTO category VALUES (3,'Letter');
-INSERT INTO category VALUES (4,'Presentation');
+INSERT INTO category VALUES (1,'SOP')
+") or die("<br>Could not create category");
+
+$result = mysql_query("
+ INSERT INTO category VALUES (2,'Training Manual')
+") or die("<br>Could not create category");
+
+$result = mysql_query("
+ INSERT INTO category VALUES (3,'Letter')
+") or die("<br>Could not create category");
+
+$result = mysql_query("
+ INSERT INTO category VALUES (4,'Presentation')
 ") or die("<br>Could not create category");
 
 // Data table
 $result = mysql_query("
 DROP TABLE IF EXISTS data;
+") or die("<br>Could not create data table");
+
+$result = mysql_query("
 CREATE TABLE data (
   id smallint(5) unsigned NOT NULL auto_increment,
   category tinyint(4) unsigned NOT NULL default '0',
@@ -61,6 +79,9 @@ CREATE TABLE data (
 // Department Table
 $result = mysql_query("
 DROP TABLE IF EXISTS department;
+") or die("<br>Could not create department table");
+
+$result = mysql_query("
 CREATE TABLE department (
   id smallint(5) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
@@ -75,6 +96,9 @@ INSERT INTO department VALUES (1,'Information Systems');
 // Department Permissions table
 $result = mysql_query("
 DROP TABLE IF EXISTS dept_perms;
+") or die("<br>Could not create dept_perms table");
+
+$result = mysql_query("
 CREATE TABLE dept_perms (
   fid smallint(5) unsigned default NULL,
   dept_id smallint(5) unsigned default NULL,
@@ -88,6 +112,9 @@ CREATE TABLE dept_perms (
 // Department Reviewer table
 $result = mysql_query("
 DROP TABLE IF EXISTS dept_reviewer;
+") or die("<br>Could not create dept_reviewer table");
+
+$result = mysql_query("
 CREATE TABLE dept_reviewer (
   dept_id smallint(5) unsigned default NULL,
   user_id smallint(5) unsigned default NULL
@@ -102,6 +129,9 @@ INSERT INTO dept_reviewer VALUES (1,1);
 // Log table
 $result = mysql_query("
 DROP TABLE IF EXISTS log;
+") or die("<br>Could not create log table");
+
+$result = mysql_query("
 CREATE TABLE log (
   id int(10) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
@@ -116,6 +146,9 @@ CREATE TABLE log (
 // Rights table
 $result = mysql_query("
 DROP TABLE IF EXISTS rights;
+") or die("<br>Could not create rights table");
+
+$result = mysql_query("
 CREATE TABLE rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
@@ -124,17 +157,35 @@ CREATE TABLE rights (
 
 // Rights values
 $result = mysql_query("
-INSERT INTO rights VALUES (0,'none');
-INSERT INTO rights VALUES (1,'view');
-INSERT INTO rights VALUES (-1,'forbidden');
-INSERT INTO rights VALUES (2,'read');
-INSERT INTO rights VALUES (3,'write');
-INSERT INTO rights VALUES (4,'admin');
+ INSERT INTO rights VALUES (0,'none')
+") or die("<br>Could not add rights entry");
+
+$result = mysql_query("
+ INSERT INTO rights VALUES (1,'view')
+") or die("<br>Could not add rights entry");
+
+$result = mysql_query("
+ INSERT INTO rights VALUES (-1,'forbidden')
+") or die("<br>Could not add rights entry");
+
+$result = mysql_query("
+ INSERT INTO rights VALUES (2,'read')
+") or die("<br>Could not add rights entry");
+
+$result = mysql_query("
+ INSERT INTO rights VALUES (3,'write')
+") or die("<br>Could not add rights entry");
+
+$result = mysql_query("
+ INSERT INTO rights VALUES (4,'admin')
 ") or die("<br>Could not add rights entry");
 
 // User table
 $result = mysql_query("
 DROP TABLE IF EXISTS user;
+") or die("<br>Could not create user table");
+
+$result = mysql_query("
 CREATE TABLE user (
   id smallint(5) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
@@ -156,6 +207,9 @@ INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User
 // User permissions table
 $result = mysql_query("
 DROP TABLE IF EXISTS user_perms;
+") or die("<br>Could not create user_perms table");
+
+$result = mysql_query("
 CREATE TABLE IF NOT EXISTS user_perms (
   fid smallint(5) unsigned default NULL,
   uid smallint(5) unsigned NOT NULL default '0',
