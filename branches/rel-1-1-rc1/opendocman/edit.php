@@ -249,8 +249,8 @@ if (!isset($_REQUEST['submit']))
 	$all_users = array();
 	for($i = 0; $i<mysql_num_rows($result); $i++)
 	{
-		list($uid) = mysql_fetch_row($result);
-		$all_users[$i] = new User($uid, $GLOBALS['connection'], $GLOBALS['database']);
+		list($my_uid) = mysql_fetch_row($result);
+		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
 	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
