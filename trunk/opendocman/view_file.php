@@ -49,8 +49,12 @@ if(!isset($_GET['submit']))
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
 	$suffix = '';
-	if(strchr($realname, '.'))
-		list($prefix , $suffix)= split ("\.", $realname);
+    if(strchr($realname, '.'))
+    {
+        // Fix by blackwes
+        $prefix = (substr($realname,0,(strrpos($realname,"."))));
+        $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));    
+    }
 	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
 	{	
                 $lmimetype = $GLOBALS['mimetypes']['default'];	
