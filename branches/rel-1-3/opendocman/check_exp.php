@@ -119,4 +119,5 @@ if( $GLOBALS['CONFIG']['file_expired_action'] == 2 ) //lock file, not check-outa
 	}
 }
 echo 'All proccesses are completed successfully';
+draw_footer();
 ?>
