@@ -1,23 +1,25 @@
 <?php
-/*$where='all';
+/*
+$where='all';
   $keyword='Nguyen Khoa';
   $_SESSION['uid']=102;
   $submit='submit';
 */
-session_start();
+
+/*session_start();
 if (!session_is_registered('uid'))
 {
         header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 		exit;
 }
-/*
+*/
 $_GET['submit']='';
 $_SESSION['uid']=102;
-$_GET['keyword']='T';
-$_GET['where']='all';
-$_GET['exact_word']='';
+$_GET['keyword']='-1';
+$_GET['where']='author_locked_files';
+$_GET['exact_phrase']='on';
 $_GET['case_sensitivity']='';
-*/
+
 /// includes
 $start_time = time();
 include('config.php');
@@ -64,7 +66,7 @@ if(!isset($_GET['submit']))
                    <tr>
                     <td valign="top"><b>Search</b></td>
                     <td><select name="where">
-                      <option value="author_only">Author only</option>
+                      <option value="author_only">Author (Last_name  First_name)</option>
                       <option value="department_only">Department only</option>
                       <option value="category_only">Category only</option>
                       <option value="descriptions_only">Descriptions only</option>
@@ -94,18 +96,23 @@ else
 {
     function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
     {
-    	$lequate = '=';
+    	$lkeyword2 = $lkeyword;
+		$l_remain = strstr($lkeyword, ' ');
+		if($l_remain!='')
+			$lkeyword = strtok($lkeyword, ' ');
+		$lequate = '=';
     	if( $lexact_phrase!='on' )
     	{	
     		$lkeyword = '%' . $lkeyword . '%';
-    		if($lcase_sensitivity!='on')
-    		{		
-    			$lequate = ' LIKE ';
-    		}
-    		else 
-    		{
-    			$lequate = ' REGEXP BINARY';
-    		}
+    		
+    	}
+    	if($lcase_sensitivity!='on')
+    	{		
+    		$lequate = ' LIKE ';
+    	}
+    	else 
+    	{
+    		$lequate = ' REGEXP BINARY';
     	}
     	
     	$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
@@ -114,15 +121,27 @@ else
         {
         	// Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
+            case 'author_locked_files':
+                $lquery .= 'data.status' . $lequate  . '\'' . $lkeyword . '\' AND data.owner=\'' . $_SESSION['uid'] . '\'';
+                break;
+        	
+        	// Put all the category for each of the OBJ in the OBJ array into an array
+            // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'category_only':
                 $lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 // Put all the author name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author_only':
-                $lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
-                break;
+        if( $lexact_phrase=='on' )
+		{ $lquery .= 'user.first_name' . $lequate . '\'' . substr($l_remain, 1) . '\' AND ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
 
+		}
+		else
+		{
+				$lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+		}
+				break;
                 // Put all the department name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
             case 'department_only':
@@ -154,20 +173,28 @@ else
             default : break;
         }
   	 	$lquery .= ') ORDER BY data.id ASC';
+		//echo $lquery;
   	 	$lresult = mysql_query($lquery) or die("Error in query: $lquery" . mysql_error() );
   	 	$lindex = 0;//echo '----' . $lquery;
   	 	$lid_array = array();
   	 	$llen = mysql_num_rows($lresult);
   	 	while( $lindex < $llen )
   	 	{ 	list($lid_array[$lindex++]) = mysql_fetch_row($lresult);	} 
-  	 	return array_values( array_intersect($lid_array, $lsearch_array) );
+		if($l_remain != '' && $lexact_phrase != "on")
+		{
+			 return array_values( array_intersect($lid_array, ( array_merge($lsearch_array, search($lwhere, substr($l_remain, 1), $lexact_phrase, $lcase_sensitivity, $lsearch_array) ) ) ) );
+		}
+		return array_values( array_intersect($lid_array, $lsearch_array) );
     }
 	
 	$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $s_getFTime = getmicrotime();
-    $view_able_files_id = $current_user_permission->getViewableFileIds();
+    if($_REQUEST['where'] == 'author_locked_files')
+    {	$view_able_files_id = $current_user->getExpiredFileIds();}
+    else
+    {	$view_able_files_id = $current_user_permission->getViewableFileIds();}
     $e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();

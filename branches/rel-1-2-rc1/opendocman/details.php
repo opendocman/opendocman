@@ -1,6 +1,6 @@
 <?php
 // details.php - display file information  check for session
-//$_SESSION['uid']=140; $_REQUEST['id']=65;
+//$_SESSION['uid']=102; $_REQUEST['id']=75;
 session_start();
 if (!session_is_registered('uid'))
 {
@@ -28,7 +28,7 @@ else
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-$userPermObj = new User_Perms($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
+$userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
 
 ?>
 <center>
@@ -44,7 +44,6 @@ $created = $filedata->getCreatedDate();
 $description = $filedata->getDescription();
 $comment = $filedata->getComment();
 $status = $filedata->getStatus();
-$userRights = $userPermObj->canWrite($_REQUEST['id']);
 $reviewer = $filedata->getReviewerName();
 // corrections
 if ($description == '') 
@@ -177,12 +176,12 @@ if ($status > 0)
 <!-- inner table begins -->
 <!-- view option available at all time, place it outside the block -->
 <?php 
-if($userPermObj->canRead($_REQUEST['id']))
+if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->VIEW_RIGHT)
 {?>
 <td align="center"><a href="view_file.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
 }		
-if ($status == 0)
+if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
@@ -193,13 +192,12 @@ if ($status == 0)
 	{
 		// if so, display link for checkout
 ?>
-	
 		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
 	
-	if ($userPermObj->canAdmin($_REQUEST['id']) == 1 && !@isset($lrevision_id)  && !$filedata->isArchived())
+	if ($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id)  && !$filedata->isArchived())
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 

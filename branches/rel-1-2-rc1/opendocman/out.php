@@ -1,16 +1,16 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-//$_SESSION['uid']=140; $sort_by = 'author';
+$_SESSION['uid']=102; $sort_by = 'author';
 $start_time = time();
-session_start();
+//session_start();
 
-if (!isset($_SESSION['uid']))
+/*if (!isset($_SESSION['uid']))
 {
         header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 		exit;
 }
-
+*/
 
 if (!isset($_REQUEST['last_message']))
 {
@@ -39,7 +39,12 @@ if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-	        echo '<img src="images/exclamation_red.gif"><a href="rejects.php?state=1"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
+	echo '<img src="images/exclamation_red.gif"><a href="rejects.php?state=1"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
+}
+$llen = $user_obj->getNumExpiredFiles();
+if($llen > 0)
+{
+	echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'"> '. $llen . ' of your document(s) expired!</a> <BR>';
 }
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
@@ -93,7 +98,7 @@ $llist_e = getmicrotime();
 	list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
 	echo '</center>';
 	draw_footer();	
-echo '<br> <b> Load Page Time: ' . (time() - $start_time) . ' </b>';
+echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
 echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
 echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
 echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	

@@ -36,6 +36,7 @@ if( !defined('FileData_class') )
 	var $write_users;
 	var $admin_users;
 	var $filesize;
+	var	$isLocked;
 	
 	function FileData($id, $connection, $database)
 	{
@@ -86,6 +87,7 @@ if( !defined('FileData_class') )
 		}
 		else
 			$this->error = 'Non unique file id';
+		$this->isLocked = $this->status==-1;
 	}
 	//return filesize
 	function getFileSize()
@@ -397,6 +399,8 @@ if( !defined('FileData_class') )
 		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 0 WHERE $this->TABLE_DATA.id = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
+	function isLocked()
+	{	return $this->isLocked;	}
   }
 }
 ?>

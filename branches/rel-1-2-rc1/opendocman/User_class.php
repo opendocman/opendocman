@@ -211,7 +211,25 @@ if( !defined('User_class') )
 		}
 		return $file_data;
 	}
-        
+    function getExpiredFileIds()
+    {
+    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lresult = mysql_query($lquery) or die(mysql_error());
+    	$llen = mysql_num_rows($lresult);
+    	$file_data = array();
+    	for($index = 0; $index< $llen; $index++)
+		{
+			list($fid) = mysql_fetch_row($lresult);
+			$file_data[$index] = $fid;
+		}
+		return $file_data;
+    }
+    function getNumExpiredFiles()
+    {
+    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lresult = mysql_query($lquery) or die(mysql_error());
+    	return mysql_num_rows($lresult);
+    }
 	function getEmailAddress()
 	{
 		$query = "SELECT user.Email FROM user WHERE user.id=".$this->id;

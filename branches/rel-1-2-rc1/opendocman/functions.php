@@ -1056,7 +1056,7 @@ if( !defined('function') )
 
 		function load(select_box)
 		{
-			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option;
+			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option + "&exact_phrase=on";
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
@@ -1220,8 +1220,8 @@ if( !defined('function') )
 	}
 	function checkUserPermission($file_id, $permittable_right)
 	{
-		$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-		if(!$user_perm_obj->user_obj->isRoot() && $user_perm_obj->getPermission($file_id) < $permittable_right)
+		$userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+		if(!$userperm_obj->user_obj->isRoot() && $userperm_obj->getAuthority($file_id) < $permittable_right)
 		{
 			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";
 			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for further assistance.';

@@ -172,8 +172,11 @@ if( !defined('UserPermission_class') )
   	// by combining and prioritizing user and deparment right
 	function getAuthority($data_id)
 	{
+		$file_obj = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 		if($this->user_obj->isRoot())
 			return $this->ADMIN_RIGHT;
+		if($file_obj->isOwner($this->uid) && $file_obj->isLocked() )
+			return $this->WRITE_RIGHT;
 		$uperm = $this->userperm_obj->getPermission($data_id);
 		$dperm = $this->deptperm_obj->getPermission($data_id);
 		if( $uperm>=$this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
