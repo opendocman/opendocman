@@ -858,5 +858,4 @@ if( !defined('function') )
                 }
         }
 }
-}
 ?>
