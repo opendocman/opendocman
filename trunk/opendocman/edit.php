@@ -275,21 +275,28 @@ if (!isset($_REQUEST['submit']))
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
 	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights=" . $filedata->FORBIDDEN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+	{
 		list($user_forbidden_array[$i]) = mysql_fetch_row($lresult);
+	}
+
 	$found = false;
 	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
-		for($u = 0; $u<sizeof($user_forbidden_array); $u++)
+		if(isset($user_forbidden_array))
 		{
-			if($all_users[$a]->getId() == $user_forbidden_array[$u])
-			{
-				echo '<option value="' . $all_users[$a]->getId() . '" selected> ' . $all_users[$a]->getName() . '</option>';
-				$found = true;
-				$u = sizeof($user_forbidden_array);
-			}
+				for($u = 0; $u<sizeof($user_forbidden_array); $u++)
+				{
+						if($all_users[$a]->getId() == $user_forbidden_array[$u])
+						{
+								echo '<option value="' . $all_users[$a]->getId() . '" selected> ' . $all_users[$a]->getName() . '</option>';
+								$found = true;
+								$u = sizeof($user_forbidden_array);
+						}
+				}
 		}
 		if(!$found)
 		{
