@@ -45,16 +45,16 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         <td><input type="password" name="frmpass" size="15"></td>
         </tr>
         <tr>
-        <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
+        <td colspan="2" align="CENTER"><input type="Submit" name="login" value="<?php echo $GLOBALS['lang']['enter']; ?>"></td>
         </tr>
         </form>
         </table>
         </center>
         </td>
         <td valign="top">
-        Welcome to OpenDocMan.
+        <?php echo $GLOBALS['lang']['welcome']; ?>
         <p>
-        Log in to begin using The system's powerful storage, publishing and revision control features.
+        <?php echo $GLOBALS['lang']['welcome2']; ?>
         </td>
         <td width="20%">
         &nbsp;
