@@ -1,3 +1,9 @@
+# MySQL dump 8.16
+#
+# Host: musa.davis.cvdls    Database: vault
+#--------------------------------------------------------
+# Server version	4.0.5-beta-max
+
 #
 # Table structure for table 'admin'
 #
@@ -86,6 +92,25 @@ CREATE TABLE dept_perms (
 ) TYPE=MyISAM;
 
 #
+# Dumping data for table 'dept_perms'
+#
+
+#
+# Table structure for table 'dept_reviewer'
+#
+
+CREATE TABLE dept_reviewer (
+  dept_id smallint(5) unsigned default NULL,
+  user_id smallint(5) unsigned default NULL
+) TYPE=MyISAM;
+
+#
+# Dumping data for table 'dept_reviewer'
+#
+
+INSERT INTO dept_reviewer VALUES (1,1);
+
+#
 # Table structure for table 'log'
 #
 
@@ -95,6 +120,10 @@ CREATE TABLE log (
   modified_by varchar(25) default NULL,
   note text
 ) TYPE=MyISAM;
+
+#
+# Dumping data for table 'log'
+#
 
 #
 # Table structure for table 'rights'
@@ -148,5 +177,9 @@ CREATE TABLE user_perms (
   rights tinyint(4) NOT NULL default '0',
   KEY user_perms_idx (fid,uid,rights)
 ) TYPE=MyISAM;
+
+#
+# Dumping data for table 'user_perms'
+#
 
 

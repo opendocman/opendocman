@@ -81,6 +81,11 @@ CREATE TABLE IF NOT EXISTS dept_reviewer (
 ) TYPE=MyISAM
 ") or die("<br>Could not create dept_reviewer table");
 
+// data for table 'dept_reviewer'
+$result = mysql_query("
+INSERT INTO dept_reviewer VALUES (1,1)
+") or die("<br>Could add to dept_reviewer table");
+
 // Log table
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS log (
