@@ -78,6 +78,8 @@ if( !defined('function') )
 	}
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
+		if(!isset($id_array[0]))
+			return $id_array;
 		if (sizeof($id_array) == 0 )
 			return $id_array;
 		$lwhere_or_clause = '';
@@ -87,7 +89,7 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
 		}
 		elseif($sort_by == 'file_name')
 		{
@@ -99,25 +101,24 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'created_date' )
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data
+				.id asc';
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="c
+				urrent" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
 		}
 		elseif($sort_by == 'description')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'size')
-		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.filesize ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ',
+			data.id asc';
 		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
 			list($array[$li]) = mysql_fetch_row($lresult);
-		return	array_values( array_intersect($array, $id_array) ); 
+		return  array_values( array_intersect($array, $id_array) );
 	}
 	// This function draws the menu screen
         function draw_menu($uid='')
