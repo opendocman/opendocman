@@ -2,34 +2,34 @@
 session_start();
 if (!session_is_registered('uid'))
 {
-        header('Location:error.php?ec=1');
-        exit;
+        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+		exit;
 }
 include ('./config.php');
 // includes
-if(!isset($_POST['starting_index']))
+if(!isset($_REQUEST['starting_index']))
 {
-        $_POST['starting_index'] = 0;
+        $_REQUEST['starting_index'] = 0;
 }
 
-if(!isset($_POST['stoping_index']))
+if(!isset($_REQUEST['stoping_index']))
 {
-        $_POST['stoping_index'] = $_POST['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
+        $_REQUEST['stoping_index'] = $_REQUEST['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
 }
 
-if(!isset($_POST['sort_by']))
+if(!isset($_REQUEST['sort_by']))
 {
-        $_POST['sort_by'] = 'id';
+        $_REQUEST['sort_by'] = 'id';
 }
 
-if(!isset($_POST['sort_order']))
+if(!isset($_REQUEST['sort_order']))
 {
-        $_POST['sort_order'] = 'a-z';
+        $_REQUEST['sort_order'] = 'asc';
 }
 
-if(!isset($_POST['page']))
+if(!isset($_REQUEST['page']))
 {
-        $_POST['page'] = 0;
+        $_REQUEST['page'] = 0;
 }
 
 $with_caption = false;
@@ -38,25 +38,29 @@ if(!isset($_POST['submit']))
 {
         draw_menu($_SESSION['uid']);
         draw_header('Rejected Files');
-        @draw_status_bar('Rejected Document Listing', $_POST['last_message']);
-        $page_url = $_SERVER['PHP_SELF'] . '?';
+        @draw_status_bar('Rejected Document Listing', $_REQUEST['last_message']);
+        $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
         $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
         $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-        $fileobj_array = $user_obj->getRejectedFiles();
-        $sorted_obj_array = obj_array_sort_interface($fileobj_array, $_POST['sort_order'], $_POST['sort_by']);
-        echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
-
-?>	
+		if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
+			$fileid_array = $user_obj->getAllRejectedFileIds();
+		else
+			$fileid_array = $user_obj->getRejectedFileIds();
+        $sorted_id_array = my_sort($fileid_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
+		?>
+		 <?php
+			 if(@$_REQUEST['mode']=='root')
+				 echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' onsubmit="closeWindow(1250);" method="POST">';
+			 else
+				 echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1000);" method="POST">';?>
                 <TABLE border="1"><TR><TD>
 
 <?php
 
-                list_files($sorted_obj_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true, $with_caption);
-        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url, $_POST['page'], $_POST['sort_by'], $_POST['sort_order']);
-
+        list_files($sorted_id_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
+        list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
 ?>
-
                 </TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="submit" value="Re-Submit For Review"><INPUT type="submit" name="submit" value="Delete file(s)">
                 </TABLE></FORM>
 
@@ -75,11 +79,11 @@ elseif($_POST['submit'] == 'Re-Submit For Review')
                         //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
                         $file_obj->Publishable(0);
                 }
-        header('Location:' . $_SERVER['PHP_SELF'] . '?last_message=File authorization completed successfully');
+        header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message=File authorization completed successfully');
 }
 elseif($_POST['submit']=='Delete file(s)')
 {
-        $url = 'delete.php?';
+        $url = 'delete.php?mode=tmpdel&';
         $id = 0;
         for($i = 0; $i<$_POST['num_checkboxes']; $i++)
                 if(isset($_POST["checkbox$i"]))
