@@ -698,7 +698,7 @@ if( !defined('function') )
 						<option id='0' selected><?php echo $GLOBALS['lang']['label_select_one']; ?></option>
 						<option id='1' value='author'><?php echo $GLOBALS['lang']['label_author']; ?></option>
 						<option id='2' value='department'><?php echo $GLOBALS['lang']['label_department']; ?></option>
-						<option id='3' value='category'><?php echo $GLOBALS['lang']['label_file_category']; ?></option>
+						<option id='3' value='category'><?php echo $GLOBALS['lang']['label_category']; ?></option>
 					</select>
 				</td>
 				<td>
