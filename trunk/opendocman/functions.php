@@ -424,7 +424,7 @@ if( !defined('function') )
                         if($with_caption == true )
                         {
                                 // correction for empty description
-                                ?><TR bgcolor="<?php echo $tr_bgcolor;?>" id="<?php echo $index;?>" onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?>'"; return overlib('Comments');" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>'; return nd();"><?
+                                ?><TR bgcolor="<?php echo $tr_bgcolor;?>" id="<?php echo $index;?>" onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?>'" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>';"><?
                         }
                         else
                         {
