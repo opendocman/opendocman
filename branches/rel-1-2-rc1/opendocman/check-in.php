@@ -166,17 +166,17 @@ else
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		$lrevision_num = mysql_num_rows($result);
 		// if dir not available, create it
-		if( !is_dir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir']) )
-		{	mkdir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir']);	}
-		if( !is_dir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
-		{   mkdir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id']); }
+		if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
+		{	mkdir($GLOBALS['CONFIG']['revisionDir']);	}
+		if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
+		{   mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']); }
 		$lfilename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] .'.dat';
 		//read and close
 		$lfhandler = fopen ($lfilename, "r");
 		$lfcontent = fread($lfhandler, filesize ($lfilename));
 		fclose ($lfhandler);
 		//write and close
-		$lfhandler = fopen ($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id'] . '/' . $_POST['id'] . '_' . ($lrevision_num - 1) . '.dat', "w");
+		$lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'] . '/' . $_POST['id'] . '_' . ($lrevision_num - 1) . '.dat', "w");
 		fwrite($lfhandler, $lfcontent);
 		fclose ($lfhandler);
 		// all OK, proceed!

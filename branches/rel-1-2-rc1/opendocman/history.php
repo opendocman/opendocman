@@ -160,7 +160,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	$extra_message = '';
 	if( $current_revision == $revision_id)
 		$extra_message = ' (current)';
-	if( is_file($GLOBALS['CONFIG']['dataDir'] . $GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
+	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
 	{	echo '<td><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '">' . $revision_id . '</a>' . $extra_message; }
 	else
 	{	echo '<td><font size="-1">' . $revision_id . $extra_message; 	}

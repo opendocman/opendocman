@@ -39,9 +39,6 @@ global $CONFIG;      $CONFIG = array(
 // Set the number of files that show up on each page
 'page_limit' => '20',
 
-// Set the revision directory. (relative to $dataDir)
-'revisionDir' => 'revisionDir/',
-
 // Set the number of page links that show up on each age
 'num_page_limit' => '10', 
 
@@ -67,8 +64,14 @@ global $CONFIG;      $CONFIG = array(
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/usr/home/httpd/document_repository/'
+'dataDir' => '/usr/home/httpd/document_repository/', 
 );
+
+// Set the revision directory. (relative to $dataDir)
+$CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
+
+// Set the revision directory. (relative to $dataDir)
+$CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
 
 //global $site_mail; 
 global $hostname;

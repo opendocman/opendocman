@@ -11,7 +11,7 @@ $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
 	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
-		$lrevision_dir = $GLOBALS['CONFIG']['dataDir'] . $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+		$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 if( !isset ($_REQUEST['last_message']) )
 {	
