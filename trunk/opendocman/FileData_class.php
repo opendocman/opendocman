@@ -147,12 +147,16 @@ if( !defined('FileData_class') )
 	{
 	  $owner_query = "SELECT owner FROM $this->tablename WHERE id = $this->id";
 	  $u_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id and rights >= $right";
-	  $non_prev_user_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right";
+	  //query for user who has right less than $right
+	  $non_prev_user_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right"; 
 	  
 	  $owner_result = mysql_query($owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
+	  // result of $non_prev_user_query query.  Look above for more information.
 	  $non_prev_u_reslt = mysql_query($non_prev_user_query, $this->connection) or die("Error in query: " .$non_prev_user_query . mysql_error() );  
 	  
+	  $not_u_uid = array();// array of user_id that are forbidden on the file
+	  $d_uid = array();// init for array of dept_id;
 	  for($i = 0; $i<mysql_num_rows($non_prev_u_reslt); $i++)
 	  	list($not_u_uid[$i]) = mysql_fetch_row($non_prev_u_reslt);
 	  
