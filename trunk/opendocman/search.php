@@ -37,7 +37,6 @@ if(!isset($_GET['page']))
 {
         $_GET['page'] = 0;
 }
-
 echo '<body bgcolor="white">';
 
 if(!isset($_GET['submit']))
@@ -149,7 +148,9 @@ then return_array[index1] = (OBJ1, 'filename_only');
          */
         function OBJs_to_strs($where, $query, $exact_word, $case_sensitivity, $OBJ_array)
         {
-                $obj_array_len = sizeof($OBJ_array);
+                if( sizeof( $OBJ_array ) == 0 )
+					return $OBJ_array;
+				$obj_array_len = sizeof($OBJ_array);
                 //all search cases supported by this search engine.
                 //use to perform an all search.
                 $cases = array('filenames_only', 'descriptions_only', 'comments_only', 'author_only', 'department_only', 'category_only');
