@@ -16,8 +16,7 @@ include('config.php');
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
-$connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
-$user_obj = new User($SESSION_UID, $connection, $GLOBALS['database']);
+$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
 if($SESSION_UID != $item && $user_obj->isAdmin() != true )
 {
         header('Location:error.php?ec=4');
@@ -90,7 +89,7 @@ if($submit == 'adduser')
                 <?php			
                 // query to get a list of departments
                 $query = "SELECT id, name FROM department ORDER BY name";
-        $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         while(list($id, $name) = mysql_fetch_row($result))
         {
@@ -117,7 +116,7 @@ if($submit == 'adduser')
                 <SELECT name='department_review[]' multiple>
                 <?php 
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
-        $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die("Error in query: $query". mysql_error());
+        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
         echo '<OPTION SELECTED>Select the department(s)</OPTION>';
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
         {
@@ -156,7 +155,7 @@ if($submit == 'adduser')
 
                         <?php
                         $query = 'SELECT id, first_name, last_name FROM user WHERE id=' . $item .'';
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $first_name, $last_name) = mysql_fetch_row($result))
                 {
                         echo $first_name.' '.$last_name;
@@ -196,7 +195,7 @@ if($submit == 'adduser')
                         <select name="item">
                         <?php
                         $query = "SELECT id,username, last_name, first_name FROM user ORDER BY last_name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username,$last_name, $first_name) = mysql_fetch_row($result))
                 {
                         echo '<option value=' . $id . '>' . $last_name . ', ' . $first_name . ' - ' . $username . '</option>';
@@ -233,7 +232,7 @@ if($submit == 'adduser')
                         <table border=0>
                         <th>User Information</th>
                         <?php
-                        $user_obj = new User($item, $connection, $GLOBALS['database']);
+                        $user_obj = new User($item, $GLOBALS['connection'], $GLOBALS['database']);
                 $full_name = $user_obj->getFullName();
                 echo "<tr><td>ID#:</td><td>$item</td></tr>";
                 echo "<TR><TD>First Name</TD><TD>".$full_name[0]."</TD></TR>";
@@ -281,7 +280,7 @@ if($submit == 'adduser')
                         <select name="item">
                         <?php
                         $query = 'SELECT id, username, first_name, last_name FROM user ORDER BY last_name';
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
                 {
                         echo '<option value="' . $id . '">' . $last_name . ',' . $first_name . ' - ' . $username . '</option>';
@@ -306,7 +305,7 @@ if($submit == 'adduser')
         }
         elseif($submit == 'Modify User')
         {
-        		$user_obj = new User($SESSION_UID, $connection, $GLOBALS['database']);
+        		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
                 draw_status_bar("Update User",$message);
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
@@ -323,7 +322,7 @@ if($submit == 'adduser')
                         // query to get a list of users
                         echo '<INPUT type="hidden" name="callee" value="'.$callee.'">';
                 $query = "SELECT * FROM user where id='$item' ORDER BY username";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
                 echo '<tr>';
                 echo '<td><B>User ID: </td><td colspan=4>'.$id.'</td>';
@@ -376,7 +375,7 @@ if($submit == 'adduser')
 <?php
                 // query to get a list of departments
                 $query = "SELECT department.id, department.name FROM department ORDER BY department.name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $userdepartment = $user_obj->getDeptID();
                 while(list($id, $name) = mysql_fetch_row($result))
                 {
@@ -400,7 +399,7 @@ if($submit == 'adduser')
                 <td colspan=1>
 <?php
                 // query to get a list of departments
-                $user_obj = new User($item, $connection, $GLOBALS['database']);
+                $user_obj = new User($item, $GLOBALS['connection'], $GLOBALS['database']);
                 //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
@@ -433,9 +432,9 @@ if($submit == 'adduser')
                 <OPTION value='-1'>Choose the department(s)</OPTION>
 <?php
                 $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = $item";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
-                $result2 = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result2 = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $hits = mysql_num_rows($result);
                 //for dept that this user is reviewing for
                 for($i = 0; $i< $hits; $i++)
@@ -514,7 +513,7 @@ if($submit == 'adduser')
 
                 // Check to see if user is admin
                 $query = "SELECT admin FROM admin WHERE id = '$SESSION_UID' and admin = '1'";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 if(mysql_num_rows($result) <= 0)
                 {
                         header('Location:error.php?ec=4');
@@ -531,7 +530,7 @@ if($submit == 'adduser')
 
                         // query to get a list of users
                         $query = "SELECT id, username, first_name, last_name FROM user ORDER BY last_name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 
                 while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
@@ -564,7 +563,7 @@ if($submit == 'adduser')
         elseif($submit == 'change_password_pick')
         {
                 draw_status_bar('Change password', $last_message);
-                $user_obj = new User($SESSION_UID, $connection, $GLOBALS['database']);
+                $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
                 $submit_message = 'Changing password';
 ?>
                         <br>
@@ -599,7 +598,7 @@ if($submit == 'adduser')
         elseif($submit == 'change_personal_info_pick')
         {
                 draw_status_bar('Change password', $last_message);
-                $user_obj = new User($SESSION_UID, $connection, $GLOBALS['database']);
+                $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
 ?>
