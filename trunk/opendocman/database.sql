@@ -108,6 +108,7 @@ CREATE TABLE dept_reviewer (
 # Dumping data for table 'dept_reviewer'
 #
 
+INSERT INTO dept_reviewer VALUES (1,1);
 
 #
 # Table structure for table 'log'
