@@ -60,7 +60,7 @@ global $CONFIG;      $CONFIG = array(
 
 // list of allowed file types 
 $allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
-/
+
 //global $site_mail; 
 global $hostname;
 global $database;
