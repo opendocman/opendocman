@@ -1,11 +1,14 @@
-<?php 
+<?php
+
 include('config.php');
+
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
 	header('Location:error.php?ec=1');
 	exit;
 }
+
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
@@ -13,34 +16,31 @@ $user_obj = new User($SESSION_UID, $connection, $database);
 $flag = 0;
 
 if(!$user_obj->isReviewer())
-        {
-	        header('Location:out.php?last_message=Access denied');
-        }
+{
+    header('Location:out.php?last_message=Access denied');
+}
 
 if(!$starting_index)
-        {
-	        $starting_index = 0;
-        }
+{
+    $starting_index = 0;
+}
 
 if(!$stoping_index)
-        {
-	        $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
-                if(!$sort_by)
-                {
-                        $sort_by = 'id';
-                }
-	}
-
-
+{
+    $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
+    if(!$sort_by)
+    {
+            $sort_by = 'id';
+    }
+}
 if(!$sort_order)
-        {
-	        $sort_order = 'a-z';
-        }
-
+{
+    $sort_order = 'a-z';
+}
 if(!$page)
-        {
-	        $page = 0;
-        }
+{
+    $page = 0;
+}
 
 if(!$submit)
 {
@@ -49,12 +49,12 @@ if(!$submit)
 	draw_status_bar('Document Listing for Review',  $last_message);
 	$page_url = $_SERVER['PHP_SELF'] . '?';
 	$userpermission = new UserPermission($SESSION_UID, $connection, $database);
+	$obj_array = $user_obj->getReviewee();
 	$sorted_obj_array = obj_array_sort_interface($obj_array, $sort_order, $sort_by);
 	$flag=0;
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">'. "\n";
 	echo '<TABLE border="1"><TR><TD>';
-	$obj_array = $user_obj->getReviewee();
-	list_files($obj_array, $userpermission, 'toBePublished.php?', $GLOBALS['CONFIG']['dataDir'], $sort_order, $sort_by, $starting_index, $stoping_index, true);
+	list_files($sorted_obj_array, $userpermission, 'toBePublished.php?', $GLOBALS['CONFIG']['dataDir'], $sort_order, $sort_by, $starting_index, $stoping_index, true);
 	list_nav_generator(sizeof($obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url, $page, $sort_by, $sort_order);
 ?>
 	</TD>

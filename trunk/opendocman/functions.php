@@ -206,7 +206,7 @@ if( !defined('function') )
 				$str_array = array();
 				for($i = 0; $i< $obj_array_len; $i++)
 				{
-					$str_array[$i] = array($i, $obj_array[$i]->getOwnerDeptName());
+					$str_array[$i] = array($i, $obj_array[$i]->getDeptName());
 				}
 				break;
 			default : // do an id sort
