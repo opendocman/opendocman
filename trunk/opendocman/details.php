@@ -91,7 +91,7 @@ $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 <td>
 <?php 
 // display red or green icon depending on file status
-if ($status == 0) 
+if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
 { 
 ?> 
 	<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">
