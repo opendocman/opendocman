@@ -1,3 +1,31 @@
+2003-07-14 13:55  khoang82
+
+	* UserPermission_class.php: code clean up for
+	UserPermission_class.php
+
+2003-07-14 12:40  khoang82
+
+	* check_exp.php: add iteration listing
+
+2003-07-14 12:38  khoang82
+
+	* FileData_class.php: remove filesize db lookup
+
+2003-07-10 14:49  logart
+
+	* index.php: require config.php
+
+2003-07-10 13:00  logart
+
+	* FileData_class.php, add.php, check-in.php, database.sql,
+	details.php, functions.php, history.php, in.php, install/odm.php,
+	install/upgrade_11.php: changed filesize functions to use actual
+	filesystem filesize instead of writing the size to the database.
+
+2003-07-09 14:18  logart
+
+	* ChangeLog: release 1.2rc1
+
 2003-07-09 11:10  logart
 
 	* config.php: added some comments
