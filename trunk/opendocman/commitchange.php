@@ -110,11 +110,11 @@ elseif($updateuser)
 	{
 		$query .= "password = password('". addslashes($password) ."'), ";
 	}
-	$query.= 'department="' . $department . '",';
-	$query.= 'phone="' . $phonenumber . '",';
-	$query.= 'Email="' . $Email . '" ,';
-	$query.= 'last_name="' . $last_name . '",';
-	$query.= 'first_name="' . $first_name . '" ';
+	$query.= 'department="' . addslashes($department) . '",';
+	$query.= 'phone="' . addslashes($phonenumber) . '",';
+	$query.= 'Email="' . addslashes($Email) . '" ,';
+	$query.= 'last_name="' . addslashes($last_name) . '",';
+	$query.= 'first_name="' . addslashes($first_name) . '" ';
 	$query.= 'WHERE id="' . $id . '"';
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	
@@ -159,27 +159,6 @@ elseif($deleteuser){
         $last_message = urlencode($id . ' User successfully deleted');
         header('Location: admin.php?last_message=' . $last_message);
         mysql_close($connection);
-}
-
-elseif ($submit == 'change_personal_info')
-{
-	$user_obj = new User($SESSION_UID, $connection, $database);
-	$user_obj->changeName($username);
-	$last_message = 'Your information has been changed';
-	header('Location:profile.php?last_message=' . $last_message);
-}
-
-elseif ($submit == 'change_password')
-{
-	$user_obj = new User($SESSION_UID, $connection, $database);
-	if($user_obj->validatePassword($current_password)==false)
-	{
-		echo('Please go back and enter your current password corectly');
-		exit;
-	}
-	$user_obj->changePassword($new_password);
-	$last_message = 'Your password has been changed';
-	header('Location:profile.php?last_message=' . $last_message);
 }
 //Add Departments
 elseif($adddepartment)
