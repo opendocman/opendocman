@@ -4,7 +4,7 @@
 session_start();
 if (!session_is_registered('uid'))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
 	exit;
 }
 if(strchr($_REQUEST['id'], '_') )
