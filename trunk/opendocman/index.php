@@ -121,7 +121,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
         $connection = mysql_connect($hostname, $user, $pass) or die ('Unable to connect!');
         $query = "SELECT id FROM user WHERE username='$userid'";
         $result = mysql_db_query($database, $query, $connection) or die ('Error in query: '.$query . mysql_error());
-        // if row exists - login/pass is correct
+        // if row exists then the user has an account
         if (mysql_num_rows($result) == 1)
         {
             // initiate a session
@@ -135,6 +135,11 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
             mysql_free_result ($result);	
             // close connection
             mysql_close($connection);
+        }
+        // User passed auth, but does not have an account
+        else 
+        {
+             header('Location:error.php?ec=19');
         }
     }
 }

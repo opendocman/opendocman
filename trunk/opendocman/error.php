@@ -97,6 +97,10 @@ break;
 case 18:
 $message = 'This file cannot be uploaded propertly';
 break;
+case 19:
+$message = 'You do not currently have an account. Please contact <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a> to request one.';
+break;
+
 }
 echo($message);
 //echo 'Please try to <a href="'.$GLOBALS['CONFIG']['base_url'].'">Log-in</a> again.';
