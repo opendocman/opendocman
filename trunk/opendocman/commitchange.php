@@ -192,7 +192,7 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 //
 //
 //
-    if ($isAdmin)
+    if ($user_obj->isAdmin())
     {
         $query = "DELETE FROM dept_reviewer WHERE user_id = '$_POST[$id]'";
         $result = mysql_query($query, $GLOBALS['connection'])
@@ -208,23 +208,6 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
             }
         }
     }
-
-    // UPDATE into dept_reviewer
-    $query = "DELETE FROM dept_reviewer where user_id = '$_POST[id]'";
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
-	if(isset($_POST['reviewer']))
-	{
-		//Remove all entry for $id
-		$query = "DELETE FROM dept_reviewer where user_id = $_POST[id]";
-		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-		$depts_rev = $_POST['department_review'];
-		for($i = 0; $i<sizeof($_POST['department_review']); $i++)
-		{
-            $dept_rev=$depts_rev[$i];
-			$query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $_POST[id])";
-			$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-		}
-	}
 
 	// back to main page
 	if(!isset($_POST['caller']))
