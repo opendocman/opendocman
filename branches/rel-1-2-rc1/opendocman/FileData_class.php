@@ -200,6 +200,8 @@ if( !defined('FileData_class') )
 	// return the status of the file
 	function getStatus()
 	{	return $this->status;		}
+	function setStatus($value)
+	{	mysql_query('UPDATE data set status=' . $value . ' where data.id = ' . $this->id) or die(mysql_error());}
 	// return a User OBJ of the person who checked out this file
 	function getCheckerOBJ()
 	{
