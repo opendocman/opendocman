@@ -1,15 +1,15 @@
 <?php
-$where='all';
+/*$where='all';
   $keyword='Nguyen Khoa';
   $SESSION_UID=102;
   $submit='submit';
-
+*/
 session_start();
-/*if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('SESSION_UID'))
 {
         header('Location:error.php?ec=1');
         exit;
-}*/
+}
 /// includes
 include('config.php');
 
