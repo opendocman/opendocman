@@ -1,5 +1,5 @@
-#LyX 1.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 218
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
 \textclass linuxdoc
 \language english
 \inputencoding default
@@ -11,6 +11,8 @@
 \paperpackage a4
 \use_geometry 0
 \use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
 \paperorientation portrait
 \secnumdepth 3
 \tocdepth 3
@@ -25,16 +27,16 @@
 \layout Standard
 \added_space_top 0.3cm \added_space_bottom 0.3cm 
 
-\begin_inset Figure size 555 97
-file ../../images/logo.eps
-flags 10
+\begin_inset Graphics
+	filename ../../images/logo.eps
+	display grayscale
 
 \end_inset 
 
 
 \layout Date
 
-July 9th, 2003
+October 15th, 2003
 \layout Abstract
 
 OpenDocMan is a full featured Web-based document management system designed
@@ -289,7 +291,8 @@ $> mysql -u opendocman -p opendocman < database.sql
 \layout Enumerate
 
 Make a directory for the files to be stored that is accessible to the web
- server but not available by browsing
+ server but not available by browsing.
+ Make sure the permissions on the folder is correct
 \begin_deeper 
 \layout Verbatim
 
@@ -550,8 +553,8 @@ For developers, when there is a new version release, a few new files need
 upgrade_x.php - where x is the release name.
  This file should follow the same format as the other upgrade_x.php files
  and is used for upgrades only.
- This should be built from the output of a program like mysqldiff.pl and
- is the "diff"erence between the it's version, and the version before it.
+ This should be built from the output of a program like mysqldiff and is
+ the "diff"erence between the it's version, and the version before it.
  
 \layout Enumerate
 
@@ -590,6 +593,14 @@ These files MUST be kept syncronized for each release!
 \layout Section
 
 Changes
+\layout Subsection
+
+1.2rc1 - October 16, 2003
+\layout Itemize
+
+Fixed next_link bug
+\layout Itemize
+
 \layout Subsection
 
 1.2rc1 - July 9th, 2003
