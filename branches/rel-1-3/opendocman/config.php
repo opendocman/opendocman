@@ -42,16 +42,16 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://mydomain/opendocman',
+'base_url' => 'http://www.example.com/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.3rc1',
+'current_version' => ' OpenDocMan v1.3.1',
 
 // The email address of the administrator of this site
-'site_mail' => 'admin@mydomain',
+'site_mail' => 'admin@example.com',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
@@ -116,7 +116,7 @@ The first two options also result in sending email to reviewer
  ODM its own database, you can set the table_prefix to have it uses your current
   database.  Table_prefix allow you to have many programs use the same databases
   without having table name clashing.*/
-  'table_prefix' => 'ODM'
+  'table_prefix' => 'ODM_'
 );
 
 // List of allowed file types
