@@ -30,6 +30,11 @@ if(isset($_POST['login']))
         echo "<font color=red>The username or password was invalid. Please try again.</font>";
         exit;
     }
+    if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
+    {
+        echo "<font color=red>There is a problem with your dataDir. Check to make sure it exists and is writeable</font>";
+        exit;
+    }
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
     // check login and password
