@@ -57,7 +57,7 @@ echo 'Rejecting ' . mysql_num_rows($lresult) . ' file(s)<br>';
 for($i = 0; $i<mysql_num_rows($lresult); $i++)
 {
 	list($lid) = mysql_fetch_row($lresult);
-	echo '&nbsp;&nbsp;File ID: ' . $lid . '<br>';
+	echo '&nbsp;&nbsp;' . $i . ' File ID: ' . $lid . '<br>';
 }
 // Notify owner
 if($GLOBALS['CONFIG']['file_expired_action'] != 4)
