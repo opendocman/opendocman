@@ -90,7 +90,7 @@ else
     function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
     {
 		$lequate = '=';
-		$lremain ='';
+		$l_remain ='';
     	if( $lexact_phrase!='on' )
 		{	
 			$lkeyword2 = $lkeyword;
@@ -126,7 +126,8 @@ else
                 // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author_only':
         		if( $lexact_phrase=='on' )
-				{ $lquery .= 'user.first_name' . $lequate . '\'' . substr($l_remain, 1) . '\' AND ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+				{ 
+					$lquery .= 'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . 'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
 				}
 				else
 				{
@@ -164,7 +165,6 @@ else
             default : break;
         }
   	 	$lquery .= ') ORDER BY data.id ASC';
-		//echo $lquery;
   	 	$lresult = mysql_query($lquery) or die("Error in query: $lquery" . mysql_error() );
   	 	$lindex = 0;//echo '----' . $lquery;
   	 	$lid_array = array();
