@@ -1,0 +1,188 @@
+
+
+
+
+Stephen Lawrence
+
+May 6th, 2003
+
+Abstract
+
+OpenDocMan is a full featured Web-based document management
+system designed to conform to ISO 17025/IEC. It features
+automatic installation, file check-in/out, departmental
+access control, file moderation, fine grained user access
+control, email notificaiton and a great search function.
+Written in PHP, and utilizing MySQL for the backend, this
+project is useful for any company looking to keep their
+documentation in a centralized repository.
+
+Table of Contents
+
+1 Introduction
+    1.1 Requirements
+2 Update Procedure
+3 New Installation
+4 Credits
+5 Automated Installation and Upgrade Notes (For Developers)
+
+
+
+1 Introduction
+
+1.1 Requirements
+
+* Apache Webserver 1.3.x (or any other webserver, that supports
+  PHP) (http://www.apache.org/)
+
+* MySQL Server 3.22+ (http://www.mysql.com/)
+
+* PHP 4+ compiled with MySQL-Support (http://www.php.net/)
+
+2 Update Procedure
+
+To update your current version to the latest release:
+
+1. Rename your current opendocman folder.
+
+2. Unarchive opendocman and edit the config.php (Look at your
+  old config.php file for some of the needed settings).
+
+3. Load the setup.php page and click on the appropriate upgrade
+  link. (ex. http://www.mydomain.com/opendocman/setup.php)
+
+3 New Installation
+
+1. Untar files into any dir in your webserver documents dir
+  (ex. /var/www)
+
+2. Edit config.php
+
+  (a) All parameters are commented and should be self explanatory.
+    Change any that apply, especially the database parameters.
+
+3. If you DO have database creation permissions to your MySQL
+  database then you can use the automatic setup script (preferred
+  method).
+
+  (a) Load the setup.php page and click on the new install
+    link. (ex. http://www.mydomain.com/opendocman/setup.php)
+
+  (b) Enter the username and password of a user that has database
+    creation permissions for the database configured in
+    config.php
+
+  (c) Skip step 4 and move on to step 5
+
+4. If you DO NOT have database creation permissions, be advised
+  that you should be carefull in doing things manually
+
+  (a) NOTE: The entries below are just examples.
+
+  (b) create a MySQL-database and MySQL-User for opendocman
+
+    $> mysql -u root -p
+
+    Welcome to the MySQL monitor. Commands end with ; or
+    \g.
+
+    Your MySQL connection id is 5525 to server version: 3.22.32
+
+    Type 'help' for help.
+
+    mysql> create database opendocman;
+
+    mysql> grant select,insert,update,delete,create on opendocman.*
+    to opendocman@localhost identified by 'opendocman';
+
+    mysql> flush privileges;
+
+    mysql> exit;
+
+    $> mysql -u opendocman -p opendocman < database.sql
+
+5. Make a directory for the files to be stored that is accessible
+  to the web server but not available by browsing
+
+  $>mkdir /usr/local/opendocman/data
+
+6. Point your favorite webbrowser to the opendocman folder:
+  ex. "http://www.mydomain.com/opendocman"
+
+7. Login as "admin" (without password). After that, go to
+  "admin->users->update->admin" and set your admin password.
+
+8. Add departments, categories, users, etc.
+
+9. Enjoy!
+
+4 Credits
+
+Stephen Lawrence Jr. - Project Lead/Programmer
+
+Khoa Nguyen - PHP and Javascript Programming
+
+Originally inspired by an article called cracking the vault.
+
+5 Automated Installation and Upgrade Notes (For Developers)
+
+There is a new folder named "install" which contains files
+use by the new script called setup.php. This is an automated
+web-based update/installation script. Here is how it works
+for users:
+
+1. The user loads setup.php into their browser. They can either
+  select the new installation link, or one of the upgrade
+  links.
+
+2. For a new installation:
+
+  (a) The user will be prompted to enter a priviledged mysql
+    username and password. This is for the database creation
+    and grant assignments. The script will then proceed
+    to install all the necessary data structures and default
+    data entries for the most current version of ODM.
+
+3. For updates:
+
+  (a) The user will be shown their current version (which comes
+    from config.php), and they would then click on the appropriate
+    upgrade link. For example, if their version number is
+    1.0, they would click on the "Upgrade from 1.0" link.
+    This will apply all necessary database changes to their
+    current database.
+
+For developers, when there is a new version release, a few
+new files need to be created and a current files modified.
+
+1. upgrade_x.php - where x is the release name. This file
+  should follow the same format as the other upgrade_x.php
+  files and is used for upgrades only. This should be built
+  from the output of a program like mysqldiff.pl and is
+  the "diff"erence between the it's version, and the version
+  before it. 
+
+2. Setup.php - add a new function for the new version upgrade
+  (ex. "do_update_x()") where x is the release name. 
+
+  (a) Inside this new function, you must "include" each previous
+    upgrade file in succession (see upgrade_10.php for an
+    exmaple, which is for a user upgrading from 1.0 to the
+    latest). 
+
+  (b) Add a new case statement for the new upgrade call 
+
+  (c) Add a new link to print_intro() for the upgrade function
+
+3. odm.php - This file should follow the same format as the
+  current odm.php file, and should contain all the necessary
+  sql commands to create a new installation based on the
+  latest database schema. 
+
+4. database.sql - This should contain the same sql commands
+  as odm.php, only in a mysqldump format for users that
+  need to manually install the program for some reason.
+  This can be a mysqldump straight from the latest database
+  schema.
+
+These files MUST be kept syncronized for each release!

@@ -1,0 +1,290 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass linuxdoc
+\language english
+\inputencoding default
+\fontscheme default
+\graphics default
+\paperfontsize 10
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Standard
+\added_space_top 0.3cm \added_space_bottom 0.3cm 
+
+\begin_inset Figure size 555 97
+file ../../images/logo.eps
+flags 10
+
+\end_inset 
+
+
+\layout Author
+
+Stephen Lawrence
+\layout Date
+
+May 6th, 2003
+\layout Abstract
+
+OpenDocMan is a full featured Web-based document management system designed
+ to conform to ISO 17025/IEC.
+ It features automatic installation, file check-in/out, departmental access
+ control, file moderation, fine grained user access control, email notificaiton
+ and a great search function.
+ Written in PHP, and utilizing MySQL for the backend, this project is useful
+ for any company looking to keep their documentation in a centralized repository.
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
+\layout Section
+
+Introduction
+\layout Subsection
+
+Requirements
+\layout Itemize
+
+Apache Webserver 1.3.x (or any other webserver, that supports PHP) (http://www.apac
+he.org/)
+\layout Itemize
+
+MySQL Server 3.22+ (http://www.mysql.com/)
+\layout Itemize
+
+PHP 4+ compiled with MySQL-Support (http://www.php.net/)
+\layout Section
+
+Update Procedure
+\layout Standard
+
+To update your current version to the latest release:
+\layout Enumerate
+
+Rename your current opendocman folder.
+\layout Enumerate
+
+Unarchive opendocman and edit the config.php (Look at your old config.php
+ file for some of the needed settings).
+\layout Enumerate
+
+Load the setup.php page and click on the appropriate upgrade link.
+ (ex.
+ http://www.mydomain.com/opendocman/setup.php)
+\layout Section
+
+New Installation
+\layout Enumerate
+
+Untar files into any dir in your webserver documents dir (ex.
+ /var/www)
+\layout Enumerate
+
+Edit config.php
+\begin_deeper 
+\layout Enumerate
+
+All parameters are commented and should be self explanatory.
+ Change any that apply, especially the database parameters.
+\end_deeper 
+\layout Enumerate
+
+If you DO have database creation permissions to your MySQL database then
+ you can use the automatic setup script (preferred method).
+\begin_deeper 
+\layout Enumerate
+
+Load the setup.php page and click on the new install link.
+ (ex.
+ http://www.mydomain.com/opendocman/setup.php)
+\layout Enumerate
+
+Enter the username and password of a user that has database creation permissions
+ for the database configured in config.php
+\layout Enumerate
+
+Skip step 4 and move on to step 5
+\end_deeper 
+\layout Enumerate
+
+If you DO NOT have database creation permissions, be advised that you should
+ be carefull in doing things manually
+\begin_deeper 
+\layout Enumerate
+
+NOTE: The entries below are just examples.
+\layout Enumerate
+
+create a MySQL-database and MySQL-User for opendocman
+\begin_deeper 
+\layout Verbatim
+
+$> mysql -u root -p
+\layout Verbatim
+
+Welcome to the MySQL monitor.
+ Commands end with ; or 
+\backslash 
+g.
+\layout Verbatim
+
+Your MySQL connection id is 5525 to server version: 3.22.32
+\layout Verbatim
+
+Type 'help' for help.
+\layout Verbatim
+
+mysql> create database opendocman;
+\layout Verbatim
+
+mysql> grant select,insert,update,delete,create on opendocman.* to opendocman@loc
+alhost identified by 'opendocman';
+\layout Verbatim
+
+mysql> flush privileges;
+\layout Verbatim
+
+mysql> exit;
+\layout Verbatim
+
+$> mysql -u opendocman -p opendocman < database.sql
+\end_deeper 
+\end_deeper 
+\layout Enumerate
+
+Make a directory for the files to be stored that is accessible to the web
+ server but not available by browsing
+\begin_deeper 
+\layout Verbatim
+
+$>mkdir /usr/local/opendocman/data
+\end_deeper 
+\layout Enumerate
+
+Point your favorite webbrowser to the opendocman folder: ex.
+ "http://www.mydomain.com/opendocman"
+\layout Enumerate
+
+Login as "admin" (without password).
+ After that, go to "admin->users->update->admin" and set your admin password.
+\layout Enumerate
+
+Add departments, categories, users, etc.
+\layout Enumerate
+
+Enjoy!
+\layout Section
+
+Credits
+\layout Author
+
+Stephen Lawrence Jr.
+ - Project Lead/Programmer
+\layout Author
+
+Khoa Nguyen - PHP and Javascript Programming
+\layout Standard
+
+Originally inspired by an article called cracking the vault.
+\layout Section
+
+Automated Installation and Upgrade Notes (For Developers)
+\layout Standard
+
+There is a new folder named "install" which contains files use by the new
+ script called setup.php.
+ This is an automated web-based update/installation script.
+ Here is how it works for users:
+\layout Enumerate
+
+The user loads setup.php into their browser.
+ They can either select the new installation link, or one of the upgrade
+ links.
+\layout Enumerate
+
+For a new installation:
+\begin_deeper 
+\layout Enumerate
+
+The user will be prompted to enter a priviledged mysql username and password.
+ This is for the database creation and grant assignments.
+ The script will then proceed to install all the necessary data structures
+ and default data entries for the most current version of ODM.
+\end_deeper 
+\layout Enumerate
+
+For updates:
+\begin_deeper 
+\layout Enumerate
+
+The user will be shown their current version (which comes from config.php),
+ and they would then click on the appropriate upgrade link.
+ For example, if their version number is 1.0, they would click on the "Upgrade
+ from 1.0" link.
+ This will apply all necessary database changes to their current database.
+\end_deeper 
+\layout Standard
+
+For developers, when there is a new version release, a few new files need
+ to be created and a current files modified.
+\layout Enumerate
+
+upgrade_x.php - where x is the release name.
+ This file should follow the same format as the other upgrade_x.php files
+ and is used for upgrades only.
+ This should be built from the output of a program like mysqldiff.pl and
+ is the "diff"erence between the it's version, and the version before it.
+ 
+\layout Enumerate
+
+Setup.php - add a new function for the new version upgrade (ex.
+ "do_update_x()") where x is the release name.
+ 
+\begin_deeper 
+\layout Enumerate
+
+Inside this new function, you must "include" each previous upgrade file
+ in succession (see upgrade_10.php for an exmaple, which is for a user upgrading
+ from 1.0 to the latest).
+ 
+\layout Enumerate
+
+Add a new case statement for the new upgrade call 
+\layout Enumerate
+
+Add a new link to print_intro() for the upgrade function
+\end_deeper 
+\layout Enumerate
+
+odm.php - This file should follow the same format as the current odm.php file,
+ and should contain all the necessary sql commands to create a new installation
+ based on the latest database schema.
+ 
+\layout Enumerate
+
+database.sql - This should contain the same sql commands as odm.php, only
+ in a mysqldump format for users that need to manually install the program
+ for some reason.
+ This can be a mysqldump straight from the latest database schema.
+\layout Standard
+
+These files MUST be kept syncronized for each release!
+\the_end
