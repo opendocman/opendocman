@@ -316,7 +316,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 {
                         $_REQUEST['last_message']='';
                 }
-                draw_status_bar("Update User",$_POST['last_message']);
+                if( isset( $_POST['last_message'] ) )
+				{	draw_status_bar("Update User",$_POST['last_message']);	}
+				else
+				{	draw_status_bar("Update User",'');	}
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
