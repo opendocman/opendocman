@@ -19,17 +19,16 @@ include('config.php');
 draw_header('File Detail');
 draw_menu($_SESSION['uid']);
 @draw_status_bar('File Details',$_REQUEST['last_message']);
-
+$lrequest_id = $_REQUEST['id']; //save an original copy of id
+if(strchr($_REQUEST['id'], '_') )
+{
+	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+}
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $userPermObj = new User_Perms($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
 
-/*if( !$userPermObj->canView($_REQUEST['id']) )
-{	
-        echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); 
-}
-*/
 ?>
 <center>
 <table border="0" width="400" cellspacing="4" cellpadding="1">
@@ -128,6 +127,20 @@ else
 <tr>
 <td>Author comment: <?php echo $comment; ?></td>
 </tr>
+
+<tr>
+<td>Revision:
+	<?php
+if(isset($lrevision_id))
+{
+	if( $lrevision_id == 0)
+		echo 'original revision';
+	else
+		echo $lrevision_id;
+}
+else echo 'latest'; ?>
+</td>
+</tr>
 <?php
 
 if($filedata->isPublishable() ==-1 )
@@ -163,7 +176,7 @@ if ($status != 0)
 <?php 
 if($userPermObj->canRead($_REQUEST['id']))
 {?>
-<td align="center"><a href="view_file.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/view.png" alt="" border="0"></a></td>
+<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id; ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
 }		
 if ($status == 0)
@@ -173,17 +186,17 @@ if ($status == 0)
 	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$_REQUEST[id]' AND user_perms.uid = '$_SESSION[uid]' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT)
+	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) )
 	{
 		// if so, display link for checkout
 ?>
 	
-		<td align="center"><a href="check-out.php?id=<?php echo $_REQUEST['id']; ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
+		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id; ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
 	
-	if ($userPermObj->canAdmin($_REQUEST['id']) == 1)
+	if ($userPermObj->canAdmin($_REQUEST['id']) == 1 && !@isset($lrevision_id))
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
@@ -196,7 +209,7 @@ if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
 ?>
-<td align="center"><a href="history.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
+<td align="center"><a href="history.php?id=<?php echo $lrequest_id; ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
 
 </tr>
 <!-- inner table ends -->

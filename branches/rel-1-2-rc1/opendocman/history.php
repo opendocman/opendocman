@@ -27,7 +27,11 @@ if( !isset($_REQUEST['last_message']) )
 {	draw_status_bar('Document Listing', '');	}
 else 
 { draw_status_bar('Document Listing', $_REQUEST['last_message']); }
-
+//revision parsing
+if(strchr($_REQUEST['id'], '_') )
+{
+	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+}
 $datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 // verify
 if ($datafile->getError() != NULL)
@@ -101,7 +105,19 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 <tr>
 <td>Author comment: <?php echo $comments; ?></td>
 </tr>
-
+<tr>
+<td>Revision: 
+<?php 
+	if(isset($lrevision_id))
+	{
+		if( $lrevision_id == 0)
+			echo 'original revision';
+		else
+			echo $lrevision_id; 
+	}
+	else echo 'latest'; ?>
+</td>
+</tr>
 <tr>
 <td>&nbsp;</td>
 </tr>
@@ -117,20 +133,39 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 <td colspan=2>
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr>
+	<td><font size="-1"><b>Revision Number</b></font>
 	<td><font size="-1"><b>Modified on</b></font>
 	<td><font size="-1"><b>By</b></font>
 	<td><font size="-1"><b>Note</b></font>	</td>
 	</tr>
 <?php
 	// query to obtain a list of modifications
-	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
+	if( isset($lrevision_id) )
+	{
+		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by AND log.revision <= $lrevision_id ORDER BY log.modified_on DESC";
+	}
+	else
+	{
+		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
+	}
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$current_revision = mysql_num_rows($result) - 1;
 	// iterate through resultset
-	while(list($last_name, $first_name, $modified_on, $note) = mysql_fetch_row($result))
+	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
 	{
 ?>
 	<tr>
+<?php
+	$extra_message = '';
+	if( $current_revision == $revision_id)
+		$extra_message = ' (current)';
+	if( is_file($GLOBALS['CONFIG']['dataDir'] . $GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
+	{	echo '<td><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '">' . $revision_id . '</a>' . $extra_message; }
+	else
+	{	echo '<td><font size="-1">' . $revision_id . $extra_message; 	}
+?>
+	</font></td>
 	<td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
 	<td><font size="-1"><?php echo $last_name.', '.$first_name; ?></font></td>
 	<td><font size="-1"><?php echo $note; ?></font></td>

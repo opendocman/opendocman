@@ -365,13 +365,10 @@ else //submited form
 	//Find out the owners' username to add to log
 	$query = "SELECT username from user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	while ( list($username) = mysql_fetch_row($result) )
-	{
-		$username=$username;
-	}
+	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import')";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 0)";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 

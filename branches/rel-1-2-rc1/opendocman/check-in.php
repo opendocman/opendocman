@@ -105,79 +105,96 @@ if (!isset($_POST['submit']))
 }//end if (!$submit)
 else
 {
-// form has been submitted, process data
-	
+	// form has been submitted, process data
+
 	// checks
 	$query = "select realname from data where data.id = '$_POST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
-	
-        // 
-        if(mysql_num_rows($result) != 1)
+
+	// 
+	if(mysql_num_rows($result) != 1)
 	{	
-                $last_message='Failed';
-                header('Location:error.php?ec=16&last_message=' . urlencode($last_message)); 
-                exit;	
-        }
-	
-        list($realname) = mysql_fetch_row($result);
-	
-        if($_FILES['file']['name'] != $realname)
-        {
-                $last_message='Failed';
-                header('Location:error.php?ec=15&last_message=' . urlencode($last_message)); 
-                exit;	
-        }
-	
-        // no file!
+		$last_message='Failed';
+		header('Location:error.php?ec=16&last_message=' . urlencode($last_message)); 
+		exit;	
+	}
+
+	list($realname) = mysql_fetch_row($result);
+
+	if($_FILES['file']['name'] != $realname)
+	{
+		$last_message='Failed';
+		header('Location:error.php?ec=15&last_message=' . urlencode($last_message)); 
+		exit;	
+	}
+
+	// no file!
 	if ($_FILES['file']['size'] <= 0)
 	{ 
-                $last_message='Failed';
+		$last_message='Failed';
 		header('Location:error.php?ec=11&last_message=' . urlencode($last_message));
 		exit;
 	}
-	
+
 	// check file type
 	foreach($GLOBALS['allowedFileTypes'] as $this)
 	{
 		if ($_FILES['file']['type'] == $this) 
 		{ 
 			$allowedFile = 1;
-		    break; 
+			break; 
 		} 
-        else
-        {       
-            $allowedFile = 0;
-        }
+		else
+		{       
+			$allowedFile = 0;
+		}
 	}
 	// illegal file type!
 	if ($allowedFile != 1) 
 	{ 
-        $last_message='Failed';
+		$last_message='Failed';
 		header('Location:error.php?ec=13&last_message=' . urlencode($last_message)); 
 		exit; 
 	}
-	
+
 	// query to ensure that user has modify rights
 	$fileobj = new FileData($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
 	{
-		// all OK, proceed!
-  		$query = "SELECT username FROM user WHERE id='$_SESSION[uid]'";
-    	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		list($username) = mysql_fetch_row($result);
-				
-	 	// update revision log
-		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."')";
+		//look to see how many revision are there
+		$query = "SELECT * FROM log WHERE log.id = $_POST[id]";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	
+		$lrevision_num = mysql_num_rows($result);
+		// if dir not available, create it
+		if( !is_dir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir']) )
+		{	mkdir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir']);	}
+		if( !is_dir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
+		{   mkdir($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id']); }
+		$lfilename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] .'.dat';
+		//read and close
+		$lfhandler = fopen ($lfilename, "r");
+		$lfcontent = fread($lfhandler, filesize ($lfilename));
+		fclose ($lfhandler);
+		//write and close
+		$lfhandler = fopen ($GLOBALS['CONFIG']['dataDir'].$GLOBALS['CONFIG']['revisionDir'] . $_POST['id'] . '/' . $_POST['id'] . '_' . ($lrevision_num - 1) . '.dat', "w");
+		fwrite($lfhandler, $lfcontent);
+		fclose ($lfhandler);
+		// all OK, proceed!
+		$query = "SELECT username FROM user WHERE id='$_SESSION[uid]'";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		list($username) = mysql_fetch_row($result);
+		// update revision log
+		$query = "INSERT INTO log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', $lrevision_num)";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
 		// update file status
 		$query = "UPDATE data SET status = '0', publishable='0' WHERE id='$_POST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	
+
 		// rename and save file
 		$newFileName = $_POST['id'] . '.dat';
 		copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
-		
+
 		//Send email
 		$date = date('D F d Y');
 		$time = date('h:i A');
@@ -189,32 +206,32 @@ else
 		$dept_id = $user_obj->getDeptId();
 		if(isset($send_to_all))
 		{
-                        $mail_body='Filename: '. $fileobj->getName(). "\n\n";
-                        $mail_body.='Date: ' . $date . "\n\n";
-                        $mail_body.='Time: ' . $time . "\n\n";
-                        $mail_body.='Action: Updated'."\n\n";
+			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
+			$mail_body.='Date: ' . $date . "\n\n";
+			$mail_body.='Time: ' . $time . "\n\n";
+			$mail_body.='Action: Updated'."\n\n";
 
 			email_all($mail_from, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
 		}
 
 		if(isset($send_to_dept))
 		{
-                        $mail_body='Filename: '. $fileobj->getName(). "\n\n";
-                        $mail_body.='Date: ' . $date . "\n\n";
-                        $mail_body.='Time: ' . $time . "\n\n";
-                        $mail_body.='Action: Updated'."\n\n";
-			
-                        email_dept($mail_from, $dept_id, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
+			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
+			$mail_body.='Date: ' . $date . "\n\n";
+			$mail_body.='Time: ' . $time . "\n\n";
+			$mail_body.='Action: Updated'."\n\n";
+
+			email_dept($mail_from, $dept_id, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
 		}
 
 		if(isset($send_to_users) && sizeof($send_to_users) > 0)
 		{
-                        $mail_body='Filename: '. $fileobj->getName(). "\n\n";
-                        $mail_body.='Date: ' . $date . "\n\n";
-                        $mail_body.='Time: ' . $time . "\n\n";
-                        $mail_body.='Action: Updated'."\n\n";
-			
-                        email_users_id($mail_from, $send_to_users, $fileobj->getName().' was updated in OpenDocMan',$mail_body, $mail_headers);
+			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
+			$mail_body.='Date: ' . $date . "\n\n";
+			$mail_body.='Time: ' . $time . "\n\n";
+			$mail_body.='Action: Updated'."\n\n";
+
+			email_users_id($mail_from, $send_to_users, $fileobj->getName().' was updated in OpenDocMan',$mail_body, $mail_headers);
 		}
 
 		// clean up and back to main page

@@ -39,6 +39,9 @@ global $CONFIG;      $CONFIG = array(
 // Set the number of files that show up on each page
 'page_limit' => '20',
 
+// Set the revision directory. (relative to $dataDir)
+'revisionDir' => 'revisionDir/',
+
 // Set the number of page links that show up on each age
 'num_page_limit' => '10', 
 

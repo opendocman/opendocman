@@ -7,6 +7,12 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+$lrequest_id = $_REQUEST['id']; //save an original copy of id
+if(strchr($_REQUEST['id'], '_') )
+{
+	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+		$lrevision_dir = $GLOBALS['CONFIG']['dataDir'] . $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+}
 if( !isset ($_REQUEST['last_message']) )
 {	
         $_REQUEST['last_message']='';	
@@ -37,10 +43,10 @@ if(!isset($_GET['submit']))
 	//echo "suffix = $suffix<br>";
 	//echo "mime:$lmimetype";	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
-	echo '<INPUT type="hidden" name="id" value="'.$_REQUEST['id'].'">';
+	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
-	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($_REQUEST['id']).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
+	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
 	echo 'If you are not able to do so for some reason, ';
 	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
 	echo '</form>';
@@ -54,7 +60,11 @@ elseif ($_GET['submit'] == 'view')
 	//echo "ID is $_REQUEST['id']";
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+	if( isset($lrevision_id) )
+	{	$filename = $lrevision_dir . $lrequest_id . ".dat";
+	}
+	else
+	{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	}
 	// send headers to browser to initiate file download
 	header('Content-Length: '.filesize($filename));
 	// Pass the mimetype so the browser can open it
@@ -70,7 +80,11 @@ elseif ($_GET['submit'] == 'Download')
 {
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+	if( isset($lrevision_id) )
+	{   $filename = $lrevision_dir . $lrequest_id . ".dat";
+	}
+	else
+	{   $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   }
 	// send headers to browser to initiate file download
 	header('Cache-control: private');
 	header ('Content-Type: application/octet-stream');
