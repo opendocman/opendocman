@@ -13,6 +13,11 @@ draw_header('Check Expirations');
 draw_menu(@$_SESSION['uid']);
 draw_status_bar('Check Expirations', $_REQUEST['last_message']);
 
+if( $GLOBALS['CONFIG']['authorization']!= "On" ) 
+{
+	echo 'STATUS: Authorization is not turned ON.  Authorization = ON is required for file expiration'; exit;
+}
+
 // Look up user
 $lquery = 'SELECT user.id FROM user where user.username="' . $GLOBALS['CONFIG']['root_username'] . '"';
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
