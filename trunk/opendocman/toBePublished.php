@@ -359,6 +359,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 	$date = date("D F d Y");
 	$time = date("h:i A");
 	$get_full_name = $user_obj->getFullName();
+	$dept_id = $user_obj->getDeptId();
 	$full_name = $get_full_name[0].' '.$get_full_name[1];
 	$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
 	$mail_headers = "From: $mail_from"; 
@@ -377,6 +378,52 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 			mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);	
 			$file_obj->Publishable(-1);
 			$file_obj->setReviewerComments($reviewer_comments);
+
+            if(isset($_POST['send_to_all']))
+            {
+                $mail_subject=$file_obj->getName().' was rejected from repository';
+                $mail_body='A new file has been rejected.'."\n\n";
+                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
+                $mail_body.='Status: Rejected'. "\n\n";
+                $mail_body.='Date: ' . $date . "\n\n";
+                $mail_body.='Time: ' . $time . "\n\n";
+                $mail_body.='Reviewer: ' . $full_name . "\n\n";
+                $mail_body.='Thank you,'. "\n\n";
+                $mail_body.='Automated Document Messenger'. "\n\n";
+                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+                email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
+            }
+
+            if(isset($_POST['send_to_dept']))
+            {
+                $mail_subject=$file_obj->getName().' rejected from repository';
+                $mail_body='A new file has been rejected.'."\n\n";
+                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
+                $mail_body.='Status: Rejected'. "\n\n";
+                $mail_body.='Date: ' . $date . "\n\n";
+                $mail_body.='Time: ' . $time . "\n\n";
+                $mail_body.='Reviewer: ' . $full_name . "\n\n";
+                $mail_body.='Thank you,'. "\n\n";
+                $mail_body.='Automated Document Messenger'. "\n\n";
+                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+                email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
+            }
+            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
+            {
+                $mail_subject=$file_obj->getName().' rejected from repository';
+
+                $mail_body='A new file has been rejected.'."\n\n";
+                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
+                $mail_body.='Status: Rejected'. "\n\n";
+                $mail_body.='Date: ' . $date . "\n\n";
+                $mail_body.='Time: ' . $time . "\n\n";
+                $mail_body.='Reviewer: ' . $full_name . "\n\n";
+                $mail_body.='Thank you,'. "\n\n";
+                $mail_body.='Automated Document Messenger'. "\n\n";
+                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+                email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
+            }
+
 		}
 	}
 	$flag=1;
