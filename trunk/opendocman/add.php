@@ -19,7 +19,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 {
 	draw_header('Add New File');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Add new document', $_POST['last_message']);
+	@draw_status_bar('Add new document', $_POST['last_message']);
 	echo '<body bgcolor="white">';
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
