@@ -46,6 +46,7 @@ draw_menu($_SESSION['uid']);
 	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">File Operations</th></font>'; ?>
 	  <tr>
 	   <td>
+<!-- User Admin -->
 	    <table border="0">
 		 <tr>
 	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=adduser&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
@@ -62,6 +63,7 @@ draw_menu($_SESSION['uid']);
 		</table>
 	   </td>
 	   <td>
+<!-- Department Admin -->
 	 	<table border="0">
 		 <tr>
 	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
@@ -81,6 +83,7 @@ draw_menu($_SESSION['uid']);
 	   </table>
 	  </td>
 	   <td>
+<!-- Category Admin -->
 	 	<table border="0">
 		 <tr>
 	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
@@ -102,6 +105,7 @@ if ( $user_obj->isRoot()	)
 {
 ?>	  
 	  <td>
+<!-- Admin-Only Section -->
 	 	<table border="0" valign="top">
 		 <tr>
 	      <td ><b><a href="<?php echo $secureurl->encode('delete.php?mode=view_del_archive&state=' . ($_REQUEST['state']+1)); ?>">Del/Undel</a></b></td>
