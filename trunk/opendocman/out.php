@@ -2,7 +2,7 @@
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
 //session_start();
-$_SESSION['uid']=102; $sort_by = 'author';
+//$_SESSION['uid']=102; $sort_by = 'author';
 $start_time = time();
 if (!isset($_SESSION['uid']))
 {
