@@ -1,0 +1,107 @@
+2003-01-06 09:03  logart
+
+	* config.php: sjl fixed some filetypes that were not working, like
+	pdf,powerpoint, etc.  globalized $connection
+
+2003-01-05 08:38  logart
+
+	* index.php: sjl changed opening <? to <?php
+
+2002-12-23 11:24  logart
+
+	* README: sjl added developer info added register_globals comment
+
+2002-12-20 15:50  khoang82
+
+	* check-in.php, edit.php: addslashes into all the them.  fix mixed
+	quotation problem in edit.php
+
+2002-12-20 15:40  khoang82
+
+	* add.php: add addslashes() into add.php
+
+2002-12-20 14:58  khoang82
+
+	* commitchange.php: add addslashes to add department
+
+2002-12-20 14:54  khoang82
+
+	* commitchange.php: add addslashes() to updateuser
+
+2002-12-20 14:50  khoang82
+
+	* commitchange.php: add addslashes() to adduser
+
+2002-12-20 14:49  khoang82
+
+	* user.php: fix validation on adduser
+
+2002-12-20 14:39  khoang82
+
+	* profile.php, user.php: profile.php: delete change password field
+	user.php: changed to handle unchanged password field
+
+2002-12-20 10:40  khoang82
+
+	* functions.php, out.php, toBePublished.php: functions.php:	fix
+	sorting algorithm in sort_by='department' to sort by the file's
+	dept not it's owner toBePublished.php:	    fix sorting.
+
+2002-12-20 10:09  khoang82
+
+	* profile.php, user.php: fixed reviewer's setting in adduser and
+	updateuser.  fixed profile.php to send correct parameters
+
+2002-12-19 15:27  logart
+
+	* BUGS, COPYING, Department_class.php, Dept_Perms_class.php,
+	FileData_class.php, FormCheck.js, TODO, UserPermission_class.php,
+	User_Perms_class.php, add.php, admin.php, category.php,
+	check-in.php, check-out.php, LICENSE, README, classHeaders.php,
+	commitchange.php, config.php, database.sql, databaseData_class.php,
+	delete.php, department.php, details.php, edit.php, error.php,
+	history.php, in.php, index.php, linkcontrol.css, out.php,
+	overlib.js, overlib_mini.js, personal_info.php,
+	php_coding_standard.html, User_class.php, functions.php, help.html,
+	logout.php, mimetypes.php, profile.php, rejects.php, search.php,
+	toBePublished.php, user.php, userinfo.php, view.php, view_file.php,
+	images/a.jpg, images/add.png, images/admin.gif,
+	images/blue_left.gif, images/check-in.png, images/check-in_dev.xcf,
+	images/check-out.png, images/check-out.xcf, images/delete.png,
+	images/detete.xcf, images/edit.png, images/edit.xcf,
+	images/file_locked.png, images/file_locked.xcf,
+	images/file_unlocked.png, images/file_unlocked.xcf,
+	images/icon_sort_az.gif, images/icon_sort_null.gif,
+	images/icon_sort_za.gif, images/logout.jpg, images/logout.png,
+	images/logout_logo.gif, images/na.jpg, images/revision.png,
+	images/revision.xcf, images/companylogo.gif, images/logo.gif,
+	images/search.png, images/search.xcf, images/setting.png,
+	images/txt.png, images/view.png, images/view.xcf: Initial revision
+
+2002-12-19 15:27  logart
+
+	* BUGS, COPYING, Department_class.php, Dept_Perms_class.php,
+	FileData_class.php, FormCheck.js, TODO, UserPermission_class.php,
+	User_Perms_class.php, add.php, admin.php, category.php,
+	check-in.php, check-out.php, LICENSE, README, classHeaders.php,
+	commitchange.php, config.php, database.sql, databaseData_class.php,
+	delete.php, department.php, details.php, edit.php, error.php,
+	history.php, in.php, index.php, linkcontrol.css, out.php,
+	overlib.js, overlib_mini.js, personal_info.php,
+	php_coding_standard.html, User_class.php, functions.php, help.html,
+	logout.php, mimetypes.php, profile.php, rejects.php, search.php,
+	toBePublished.php, user.php, userinfo.php, view.php, view_file.php,
+	images/a.jpg, images/add.png, images/admin.gif,
+	images/blue_left.gif, images/check-in.png, images/check-in_dev.xcf,
+	images/check-out.png, images/check-out.xcf, images/delete.png,
+	images/detete.xcf, images/edit.png, images/edit.xcf,
+	images/file_locked.png, images/file_locked.xcf,
+	images/file_unlocked.png, images/file_unlocked.xcf,
+	images/icon_sort_az.gif, images/icon_sort_null.gif,
+	images/icon_sort_za.gif, images/logout.jpg, images/logout.png,
+	images/logout_logo.gif, images/na.jpg, images/revision.png,
+	images/revision.xcf, images/companylogo.gif, images/logo.gif,
+	images/search.png, images/search.xcf, images/setting.png,
+	images/txt.png, images/view.png, images/view.xcf: sjl Initial
+	Import
+
