@@ -8,7 +8,7 @@ setData(selected_rb_name) is invoked.  This function will set the data in the ap
 
 session_start();
 
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
 	header('Location:error.php?ec=1');
 	exit;
@@ -17,9 +17,13 @@ include('config.php');
 // connect to DB
 if(!isset($_POST['submit'])) //un_submitted form
 {
+        if (!isset($_REQUEST['last_message']))
+        {
+                $_REQUEST['last_message']='';
+        }
 	draw_header('Add New File');
 	draw_menu($_SESSION['uid']);
-	@draw_status_bar('Add new document', $_POST['last_message']);
+	draw_status_bar('Add new document', $_REQUEST['last_message']);
 	echo '<body bgcolor="white">';
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
@@ -166,7 +170,7 @@ if(!isset($_POST['submit'])) //un_submitted form
     </TR>
     <TR>
 	<!-- Loading Authority radio_button group -->
-	<TD><a ndex="24" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none">Authority</a></td>
+	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none">Authority</a></td>
 	<!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
 	<TD>
 <?php
@@ -319,6 +323,7 @@ draw_footer();
 }
 else //submited form
 {
+        $result_array = array();
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -329,7 +334,7 @@ else //submited form
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
 	//can't upload empty file
-	if ($file_size <= 0) 
+	if ($_FILES['file']['size'] <= 0) 
 	{ 
 		header('Location:error.php?ec=11'); 
 		exit; 
@@ -337,7 +342,7 @@ else //submited form
 	// check file type.  refer to config.php to see which file types are allowed
 	foreach($allowedFileTypes as $this)
 	{
-		if ($file_type == $this) 
+		if ($_FILES['file']['type'] == $this) 
 		{ 
 		$allowedFile = 1;
 		break; 
@@ -346,12 +351,12 @@ else //submited form
 	// for non_allowed file types
 	if ($allowedFile != 1) 
 	{ 
-		header('Location:error.php?ec=13&message=Filetype is ' . $file_type); 
+		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
 		exit; 
 	}
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES('" . addslashes($category) . "', '" . addslashes($_SESSION[uid]) . "', '" . addslashes($file_name) . "', NOW(), '" . addslashes($description) . "','" . addslashes($current_user_dept) . "', '" . addslashes($comment) . "','" . addslashes($default_Setting) . "', 0)";
+	$query = "INSERT INTO data (category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES('" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0)";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
@@ -362,11 +367,11 @@ else //submited form
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while ( list($username) = mysql_fetch_row($result) )
 	{
-		$lusername=$username;
+		$username=$username;
 	}
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($lusername) . "', 'Initial import')";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
@@ -376,19 +381,35 @@ else //submited form
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES($fileId, " . addslashes(${ space_to_underscore($dept_name) }) . ", '$id')";		
+		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', 'addslashes(space_to_underscore($dept_name)))', '$id')";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
 	// In case of repetitions, higher priority ones stay.  
 	// Priority is in this order (admin, modify, read, view)
 	$filedata = new FileData($fileId, $GLOBALS['connection'], $GLOBALS['database']);	
-	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $write, $filedata->WRITE_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $read, $filedata->READ_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $view, $filedata->VIEW_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $forbidden, $filedata->FORBIDDEN_RIGHT);
+
+        if  (isset ($_REQUEST['admin']))
+        {
+	        $result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);
+        }
+
+        if (isset ($_REQUEST['read']))
+        {
+	        $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);
+        }
+
+        if (isset ($_REQUEST['view']))
+        {
+	        $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);
+        }
+
+        if (isset ($_REQUEST['forbidden']))
+        {
+        	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);
+        }
 	// INSERT user permissions - view
-	for($i = 0; $i<sizeof($result_array); $i++)
+        for($i = 0; $i<sizeof($result_array); $i++)
 	{
 		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
@@ -397,22 +418,22 @@ else //submited form
 	// use id to generate a file name
 	// save uploaded file with new name
 	$newFileName = $fileId . '.dat';
-	copy($file, $GLOBALS['CONFIG']['dataDir'] .'/' . $newFileName);
-	if (!is_uploaded_file ($file))
+	if (!is_uploaded_file ($_FILES['file']['tmp_name']))
 	{
 		header('Location: error.php?ec=18');
 		exit;
 	}
+	move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
 	$message = urlencode('Document successfully added');
-	header('Location: out.php?message=' . $message);
+	header('Location: out.php?last_message=' . $message);
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">
 
-	var index = 0;
+    var index = 0;
     var index2 = 0;
-	var begin_Authority;
+    var begin_Authority;
     var end_Authority;
     var frm_main = document.main;
     var dept_drop_box = frm_main.dept_drop_box;
