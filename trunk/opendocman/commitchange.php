@@ -79,15 +79,15 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         }
        $query = "INSERT INTO admin (id, admin) VALUES('$userid', '$_POST[admin]')";
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	   if(isset($_POST['reviewer']))
-	   {
-			for($i = 0; $i<sizeof($_POST['department_review']); $i++)
-			{
-                                $dept_rev=$_POST['department_review'][$i];
-				$query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
-			   	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-			}
-	   }
+       if(isset($_POST['reviewer']))
+       {
+           for($i = 0; $i<sizeof($_POST['department_review']); $i++)
+           {
+               $dept_rev=$_POST['department_review'][$i];
+               $query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
+               $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+           }
+       }
 	   
 	   // mail user telling him/her that his/her account has been created.
        	$user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -128,20 +128,25 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
            header('Location:' . $secureurl->encode('error.php?ec=4'));
            exit;
     }
+
     if(!isset($_POST['admin']) || $_POST['admin'] == '')
     {
             $_POST['admin'] = 'no';
     }
+
 	if(!isset($_POST['caller']) || $_POST['caller'] == '')
 	{
 		$_POST['caller'] = 'admin.php';
     }
+
     $user_obj = new User($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+
     // UPDATE admin info
     $query = "UPDATE admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // UPDATE into user
     $query = "UPDATE user SET username='". addslashes($_POST['username']) ."',";
+
 	if (!empty($_POST['password']))
 	{
 		$query .= "password = password('". addslashes($_POST['password']) ."'), ";
@@ -175,8 +180,37 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 	$query.= 'WHERE id="' . $_POST['id'] . '"';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
-	// UPDATE into dept_reviewer
-	$query = "DELETE FROM dept_reviewer where user_id = '$_POST[id]'";
+// This needs testing
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+    if ($isAdmin)
+    {
+        $query = "DELETE FROM dept_reviewer WHERE user_id = '$_POST[$id]'";
+        $result = mysql_query($query, $GLOBALS['connection'])
+            or die("Error in query: $query". mysql_error());
+        if(isset($_REQUEST['reviewer']))
+        {
+            $depts_rev = addslashes($_REQUEST['department_review']);
+            for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
+            {
+                $dept_rev=$depts_rev[$i];
+                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', $id)";
+                $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+            }
+        }
+    }
+
+    // UPDATE into dept_reviewer
+    $query = "DELETE FROM dept_reviewer where user_id = '$_POST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
 	if(isset($_POST['reviewer']))
 	{
