@@ -27,7 +27,7 @@ if(!isset($_GET['starting_index']))
 
 if(!isset($_GET['stoping_index']))
 {
-    $_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
+    $_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit'];
 }
 
 if(!isset($_GET['sort_by']))
@@ -44,15 +44,15 @@ if(!isset($_GET['page']))
     $_GET['page'] = 0;
 }
 
-if(!isset($_POST['submit']))
+if(!isset($_REQUEST['submit']))
 {
-        if (!isset($_POST['last_message']))
+        if (!isset($_REQUEST['last_message']))
         {
-                $_POST['last_message']='';
+                $_REQUEST['last_message']='';
         }
 	draw_header('Files Review');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Document Listing for Review',  $_POST['last_message']);
+	draw_status_bar('Document Listing for Review',  $_REQUEST['last_message']);
 	$page_url = $_SERVER['PHP_SELF'] . '?';
 	$userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$obj_array = $user_obj->getReviewee();
@@ -184,13 +184,13 @@ if(!isset($_POST['submit']))
 draw_footer();
 
 }
-if(isset($_POST['submit']) && $_POST['submit'] =='comments')
+if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 {
 
-	$idfield=explode(' ',trim($_POST['idfield']));
-	$number=explode(' ',trim($_POST['number']));
-	$boxes;
-	$filenums;
+	$idfield=explode(' ',trim($_REQUEST['idfield']));
+	$number=explode(' ',trim($_REQUEST['number']));
+	$boxes = array(); //init
+	$filenums = array();//init
 	foreach($number as $key=>$value)
 	{
 		$boxes[]="checkbox".$value;
@@ -200,8 +200,8 @@ if(isset($_POST['submit']) && $_POST['submit'] =='comments')
 		$filenums[]=$value;
 	}
 
-	$type = substr($_POST['mode'],9,1);
-	$mode= ereg_replace(" [[:digit:]]", "", $_POST['mode']);
+	$type = substr($_REQUEST['mode'],9,1);
+	$mode= ereg_replace(" [[:digit:]]", "", $_REQUEST['mode']);
 		
 	if($mode == 'reviewer')
 		$access_mode = 'enabled';
@@ -238,7 +238,7 @@ if(isset($_POST['submit']) && $_POST['submit'] =='comments')
 	
 
 	
-	<TR><input type="hidden" name="num_checkboxes" value="<?php echo $num; ?>"></TR>
+	<TR><input type="hidden" name="num_checkboxes" value="<?php echo $_REQUEST['num']; ?>"></TR>
 	<?php
 	foreach ($boxes as $key=>$value)
 	{
@@ -312,7 +312,7 @@ if(isset($_POST['submit']) && $_POST['submit'] =='comments')
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 {
 	$mail_break = '--------------------------------------------------'."\n";
-	$reviewer_comments = "To=$_POST['to'];Subject=$_POST['subject'];Comments=$_POST['comments'];";
+	$reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
 	$user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$date = date("D F d Y");
 	$time = date("h:i A");
@@ -322,9 +322,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 	$mail_headers = "From: $mail_from"; 
 	$mail_subject='Review status for document ';
 	$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
-	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' for the following reason(s):'."\n\n".$mail_break.$comments."\n".$mail_break;
+	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' for the following reason(s):'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
 	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
 	for($i = 0; $i<$_POST['num_checkboxes']; $i++)
+	{
 		if(isset($_POST["checkbox$i"]))
 		{
 			$fileid = $_POST["checkbox$i"];
@@ -335,16 +336,15 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 			$file_obj->Publishable(-1);
 			$file_obj->setReviewerComments($reviewer_comments);
 		}
+	}
 	$flag=1;
-	header("Location:$_SERVER['PHP_SELF']?last_message=File rejection completed successfully");	
+	header("Location:$_SERVER[PHP_SELF]?last_message=File rejection completed successfully");	
 	
 	
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 {
-        echo "post_submit is $_POST['submit']";
-        exit;
-        $reviewer_comments = "To=$_POST['to'];Subject=$_POST['subject'];Comments=$_POST['comments'];";
+        $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
         $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
         $date = date("D F d Y");
         $time = date("h:i A");
@@ -371,7 +371,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                         $mail_body.='Reviewer: ' . $full_name . "\n\n";
                         $mail_body.='Thank you,'. "\n\n";
                         $mail_body.='Automated Document Messenger'. "\n\n";
-                        $mail_body.=$GLOBAL['CONFIG']['base_url'] . "\n\n";
+                        $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                         
                         mail($mail_to, $mail_subject. $file_obj->getName(), $mail_body, $mail_headers);
                         $file_obj->Publishable(1);
@@ -389,7 +389,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                                 $mail_body.='Reviewer: ' . $full_name . "\n\n";
                                 $mail_body.='Thank you,'. "\n\n";
                                 $mail_body.='Automated Document Messenger'. "\n\n";
-                                $mail_body.=$GLOBAL['CONFIG']['base_url'] . "\n\n";
+                                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                                 
                                 email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
                         }
@@ -406,11 +406,11 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                                 $mail_body.='Reviewer: ' . $full_name . "\n\n";
                                 $mail_body.='Thank you,'. "\n\n";
                                 $mail_body.='Automated Document Messenger'. "\n\n";
-                                $mail_body.=$GLOBAL['CONFIG']['base_url'] . "\n\n";
+                                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                                 
                                 email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
                         }
-                        if(isset ($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users[0]']!= 0)
+                        if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
                         {
                                 $mail_subject=$file_obj->getName().' added to repository';
 
@@ -422,7 +422,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                                 $mail_body.='Reviewer: ' . $full_name . "\n\n";
                                 $mail_body.='Thank you,'. "\n\n";
                                 $mail_body.='Automated Document Messenger'. "\n\n";
-                                $mail_body.=$GLOBAL['CONFIG']['base_url'] . "\n\n";
+                                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
 
                                 email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
                         }
