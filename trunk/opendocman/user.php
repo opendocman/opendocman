@@ -3,6 +3,7 @@
 // check for valid session
 // if changes are to be made on other account, then $item will contain
 // the other account's id number. 
+
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -121,25 +122,26 @@ if($submit == 'adduser')
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
         {
                 echo '<OPTION value="' . $dept_id . '">' . $dept_name . '</OPTION>' . "\n";
-                ?>
-                        </SELECT>
-                        </TD>
-                        </TR>
-                        <tr>
-                        <td></td>
-                        <td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validate(add_user);" value="Add User">
-                        </form>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                        <input type="Submit" name="submit" value="Cancel">
-                        </form>
-                        </td>
-                        </tr>
-                        </table>
-                        </center>
-
-                        <?php
-                        draw_footer();
         }
+?>
+</SELECT>
+</TD>
+</TR>
+<tr>
+<td></td>
+<td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validate(add_user);" value="Add User">
+</form>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<input type="Submit" name="submit" value="Cancel">
+</form>
+</td>
+</tr>
+</table>
+</center>
+
+<?php
+                       
+	 draw_footer();
 }
         elseif($submit == 'Delete User')
         {
@@ -322,62 +324,57 @@ if($submit == 'adduser')
                         echo '<INPUT type="hidden" name="callee" value="'.$callee.'">';
                 $query = "SELECT * FROM user where id='$item' ORDER BY username";
                 $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
-                ?>
+                list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
+                echo '<tr>';
+                echo '<td><B>User ID: </td><td colspan=4>'.$id.'</td>';
+                echo '<input type=hidden name=id value="'.$id.'">';
+                echo '</tr>';
+                echo '<tr>';
+                echo '<td><b>Last Name: </td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="'.$last_name.'"></td></TR>';
+                echo '<td><b>First Name</td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="'.$first_name.'"></td></TR>';
+                echo '<td><b>User name: </td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'.$username.'"></td></TR>';
 
-                        <?
-                        while(list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-                                echo '<tr>';
-                                echo '<td><B>User ID: </td><td colspan=4>'.$id.'</td>';
-                                echo '<input type=hidden name=id value="'.$id.'">';
-                                echo '</tr>';
-                                echo '<tr>';
-                                echo '<td><b>Last Name: </td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="'.$last_name.'"></td></TR>';
-                                echo '<td><b>First Name</td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="'.$first_name.'"></td></TR>';
-                                echo '<td><b>User name: </td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'.$username.'"></td></TR>';
-
-                                echo "<tr>";
-                                echo ("<td><b>Phone Number: </td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\"></td>");
-                                // If mysqlauthentication, then ask for password
-                                if( $GLOBALS["CONFIG"]["authen"] =='mysql' && $update_pwd=='true')
-                                {
-                                        ?>
-                                                <tr>
-                                                <td><b>Password</b></td>
-                                                <td>
-                                                <input name="password" type="password">
-                                                </td>
-                                                </tr>
-                                                <tr>
-                                                <td><b>Confirm Password</b></td>
-                                                <td>
-                                                <input name="conf_password" type="password">
-                                                </td>
-                                                </tr>
-                                                </tr>
-                                                <tr>
-
-                                                </tr>
-                                                <tr>
-                                                <td><b>E-mail Address: </td>
-                                                <td colspan=4>
-                                                <input name="Email" type="text" value="<?php echo $Email; ?>"></td>
-                                                </tr>
-                                                <tr>
+                echo "<tr>";
+                echo ("<td><b>Phone Number: </td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\"></td>");
+                // If mysqlauthentication, then ask for password
+                if( $GLOBALS["CONFIG"]["authen"] =='mysql' && $update_pwd=='true')
+                {
+?>
+                    <tr>
+                    <td><b>Password</b></td>
+                    <td>
+                    <input name="password" type="password">
+                    </td>
+                    </tr>
+                    <tr>
+                    <td><b>Confirm Password</b></td>
+                    <td>
+                    <input name="conf_password" type="password">
+                    </td>
+                    </tr>
+                    </tr>
+<?php                     
+                }//endif
+?>
+                <tr>
+                <td><b>E-mail Address: </td>
+                <td colspan=4>
+                <input name="Email" type="text" value="<?php echo $Email; ?>"></td>
+                </tr>
+          		<tr>
+   		
 <?php
-                        }
-                mysql_free_result ($result);
-                ?>
-                        </tr>
-                        <tr>
-                        <td><b>Department</b></td>
-                        <td colspan=3>
+				mysql_free_result ($result);
+?>
+                </tr>
+                <tr>
+                <td><b>Department</b></td>
+                <td colspan=3>
 
-                        <select name="department" <?php echo $mode; ?>>
-
-                        <?php
-                        // query to get a list of departments
-                        $query = "SELECT department.id, department.name FROM department ORDER BY department.name";
+                <select name="department" <?php echo $mode; ?>>
+<?php
+                // query to get a list of departments
+                $query = "SELECT department.id, department.name FROM department ORDER BY department.name";
                 $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
                 $userdepartment = $user_obj->getDeptID();
                 while(list($id, $name) = mysql_fetch_row($result))
@@ -393,16 +390,16 @@ if($submit == 'adduser')
                 }
 
                 mysql_free_result ($result);
-                ?>
-                        </select>
-                        </td>
-                        </tr>
-                        <tr>
-                        <td><b>Admin?</b></td>
-                        <td colspan=1>
-                        <?php
-                        // query to get a list of departments
-                        $user_obj = new User($item, $connection, $database);
+?>
+                </select>
+                </td>
+                </tr>
+                <tr>
+                <td><b>Admin?</b></td>
+                <td colspan=1>
+<?php
+                // query to get a list of departments
+                $user_obj = new User($item, $connection, $database);
                 //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
@@ -413,49 +410,61 @@ if($submit == 'adduser')
                         echo '<input name="admin" type="checkbox" value="1"  '.$mode.'></input>'."\n";
                 }
                 if($user_obj->isReviewer())
-                        $checked = 'checked';
+                {
+                	$checked = 'checked';
+                }
                 else
-                        $checked = '';
-                ?>
-                        </TR>
-                        <TR>
-                        <TD><B>Reviewer</B></TD>
-                        <?php
-                        echo '<TD><INPUT type="checkbox" '.$checked.' name="reviewer" '.$mode.'></TD></TR>'."\n";
-                ?>
-                        </td>
-                        </tr>
-                        <TR><TD></TD>
-                        <TD>
-                        <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
-                        <OPTION value='-1'>Choose the department(s)</OPTION>
-                        <?php
-                        $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = $item";
+                {
+                	$checked = '';
+                }
+?>
+                </TR>
+                <TR>
+                <TD><B>Reviewer</B></TD>
+<?php
+                echo '<TD><INPUT type="checkbox" '.$checked.' name="reviewer" '.$mode.'></TD></TR>'."\n";
+?>
+                </td>
+                </tr>
+                <TR><TD></TD>
+                <TD>
+                <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
+                <OPTION value='-1'>Choose the department(s)</OPTION>
+<?php
+                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = $item";
                 $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
                 $result2 = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
                 $hits = mysql_num_rows($result);
+                //for dept that this user is reviewing for
                 for($i = 0; $i< $hits; $i++)
-                        list($department_reviewer[$i][0], $department_reviewer[$i][1]) = mysql_fetch_row($result);
-                $hits = mysql_num_rows($result2);
+               	{
+               		list($department_reviewer[$i][0], $department_reviewer[$i][1]) = mysql_fetch_row($result);
+               	}
+                // for all depts
+               	$hits = mysql_num_rows($result2);
                 for($i=0; $i<$hits; $i++)
-                        list( $department[$i][0], $department[$i][1]) = mysql_fetch_row($result2);
+                {
+                	list( $all_department[$i][0], $all_department[$i][1]) = mysql_fetch_row($result2);
+                }
                 mysql_free_result($result);
                 mysql_free_result($result2);
-                for($d= 0; $d<sizeof($department); $d++)
+                for($d= 0; $d<sizeof($all_department); $d++)
                 {
-                        $found = false;
-                        for($r = 0; $r<sizeof($department_reviewer); $r++)
-                        {
-                                if($department[$d][0] == $department_reviewer[$r][0])
-                                {
-                                        echo("<option value=\"" . $department[$d][0] ."\" selected> " . $department[$d][1] ."</option>\n");
-                                        $found = true;
-                                        $r = sizeof($department_reviewer);
-                                }
-                        }
-                        if( !$found )
-                                echo("<option VALUE=\"" .$department[$d][0] ."\">" .$department[$d][1] ."</option>\n");
+                    $found = false;
+                    for($r = 0; $r<sizeof($department_reviewer); $r++)
+                    {
+                            if($all_department[$d][0] == $department_reviewer[$r][0])
+                            {
+                                    echo("<option value=\"" . $all_department[$d][0] ."\" selected> " . $all_department[$d][1] ."</option>\n");
+                                    $found = true;
+                                    $r = sizeof($department_reviewer);
+                            }
+                    }
+                    if( !$found )
+                   	{
+                   		echo("<option VALUE=\"" .$all_department[$d][0] ."\">" .$all_department[$d][1] ."</option>\n");
+                   	}
                 }
 
                 ?>
@@ -476,7 +485,7 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-}
+
         elseif($submit == 'updatepick')
         {
                 draw_status_bar('Modify User',$message);
