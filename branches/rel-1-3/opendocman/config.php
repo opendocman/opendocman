@@ -7,10 +7,10 @@ if( !defined('config') )
 // config.php - useful variables/functions
 
 // database parameters
-include 'include/functions.php';
-include 'include/classHeaders.php';
-include 'include/mimetypes.php';
-include 'include/crumb.php';
+include 'include/library/functions.php';
+include 'include/library/classHeaders.php';
+include 'include/mimetypes.inc';
+include 'include/library/crumb.php';
 
 // Database Settings - Change these to match your database
 $database = 'opendocman'; // Enter the name of the database here
@@ -147,7 +147,7 @@ global $allowedFileTypes;
 $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 // All functions are in functions.php
-require_once 'secureurl.class.php';
-include 'secureurl.php';
+require_once ('include/library/secureurl.class.php');
+include ('include/library/secureurl.php');
 }
 ?>
