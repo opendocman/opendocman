@@ -965,7 +965,8 @@ if( !defined('function') )
 	function sort_browser()
 	{
 ?>
-		<SCRIPT language="javascript">
+		<SCRIPT language="javascript" src="functions.js"></SCRIPT>
+		<SCRIPT language="JAVASCRIPT">
 		var category_option = '';
 		var category_item_option = '';
 		
@@ -1029,7 +1030,7 @@ if( !defined('function') )
 
 		function load(select_box)
 		{
-			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option;
+			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option);
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////

@@ -12,7 +12,7 @@ include('config.php');
 if(isset($_REQUEST['adduser']))
 {
 	// Check to make sure user does not already exist
-    $query = "SELECT username FROM user WHERE username = '" . addslashes($_REQUEST['username']) . '\'';
+    $query = "SELECT username FROM user WHERE username = '" . addslashes($_POST['username']) . '\'';
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
     // If the above statement returns more than 0 rows, the user exists, so display error
@@ -34,7 +34,7 @@ if(isset($_REQUEST['adduser']))
     	}
 
 	   // INSERT into user
-       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_REQUEST['username'])."', password('". addslashes($_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
+       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
        // INSERT into admin
        $userid = mysql_insert_id($GLOBALS['connection']);
@@ -111,7 +111,7 @@ elseif(isset($_REQUEST['updateuser']))
 	   	}
 
 	// UPDATE into user
-        $query = "UPDATE user SET username='". addslashes($_REQUEST['username']) ."',";
+        $query = "UPDATE user SET username='". addslashes($_POST['username']) ."',";
 	if (!empty($_REQUEST['password']))
 	{
 		$query .= "password = password('". addslashes($_REQUEST['password']) ."'), ";

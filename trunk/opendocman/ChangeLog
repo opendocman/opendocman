@@ -1,3 +1,101 @@
+2003-03-25 15:34  logart
+
+	* install/upgrade.php: fixed typo added 11rc1
+
+2003-03-25 15:34  logart
+
+	* setup.php: added 11rc1
+
+2003-03-25 15:33  logart
+
+	* install/upgrade_11rc1.php: initial import
+
+2003-03-25 15:33  logart
+
+	* install/upgrade_11rc1.php: file upgrade_11rc1.php was initially
+	added on branch rel-1-1-rc1.
+
+2003-03-25 10:03  khoang82
+
+	* delete.php: make this script $register_globals off compatible
+
+2003-03-24 10:14  khoang82
+
+	* FormCheck.js: phonenumber validation has been removed
+
+2003-03-24 10:04  khoang82
+
+	* view_file.php: fix https viewing and downloading problem
+
+2003-03-19 13:52  logart
+
+	* config.php: updated version removed specifics from config
+
+2003-03-19 13:50  logart
+
+	* docs/: README.html, README.txt: updated ver #
+
+2003-03-19 11:54  logart
+
+	* images/exclamation_red.gif: file exclamation_red.gif was
+	initially added on branch rel-1-1-rc1.
+
+2003-03-19 11:54  logart
+
+	* images/exclamation.gif: file exclamation.gif was initially added
+	on branch rel-1-1-rc1.
+
+2003-03-19 11:54  logart
+
+	* out.php, images/exclamation.gif, images/exclamation_red.gif:
+	added yellow ! for new notice added red ! for rejected notice
+
+2003-03-18 07:44  logart
+
+	* view_file.php: added backslash thanks Huy
+
+2003-03-17 17:11  logart
+
+	* check-in.php: fixed urlencoding on last_message
+
+2003-03-17 15:49  logart
+
+	* edit.php: fixed $uid var
+
+2003-03-14 14:21  khoang82
+
+	* add.php: init status to 0 where upload new file
+
+2003-03-14 14:20  khoang82
+
+	* UserPermission_class.php: add revokable admin right of file owner
+
+2003-03-13 16:20  khoang82
+
+	* functions.php: fix urlencode for sort_browser.  Resolving
+	bug-702377
+
+2003-03-12 13:20  logart
+
+	* user.php: added demo logic to Modify user
+
+2003-03-12 13:06  logart
+
+	* config.php: added a demo mode setting
+
+2003-03-12 11:52  logart
+
+	* setup.php, commitchange.php: fixed username issues from bug
+	#702453
+
+2003-03-12 09:11  logart
+
+	* edit.php: added urlencode to message
+
+2003-03-11 14:06  logart
+
+	* ChangeLog: updated to 1.1rc1
+
 2003-03-11 13:57  logart
 
 	* setup.php: added include

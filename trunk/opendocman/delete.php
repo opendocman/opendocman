@@ -14,7 +14,11 @@ include('config.php');
 $userperm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 // all ok, proceed!
 //mysql_free_result($result);
-for($i = 0; $i<$num_checkboxes; $i++)
+if(!isset($_REQUEST['num_checkboxes']))
+	$lnum_checkboxes = 1;
+else
+	$lnum_checkboxes = $_REQUEST['num_checkboxes'];
+for($i = 0; $i< $lnum_checkboxes; $i++)
 	if($_REQUEST['id' . $i])
 	{
 		$id = $_REQUEST['id' . $i];
