@@ -5,12 +5,12 @@ session_start();
 //$_SESSION['uid']=102; $sort_by = 'author';
 $start_time = time();
 
-/*if (!isset($_SESSION['uid']))
+if (!isset($_SESSION['uid']))
 {
         header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 		exit;
 }
-*/
+
 
 if (!isset($_REQUEST['last_message']))
 {

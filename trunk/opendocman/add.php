@@ -323,6 +323,10 @@ else //submited form
 {
 	for($khoa = 0; $khoa<1; $khoa++)// change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
 	{
+		if ($GLOBALS['CONFIG']['authorization'] == 'On')
+			$lpublishable = '0';
+		else
+			$lpublishable= '1';
 	$result_array = array();
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
@@ -374,7 +378,7 @@ else //submited form
         }
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0 )";
+	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 

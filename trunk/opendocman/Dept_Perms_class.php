@@ -67,9 +67,10 @@ if( !defined('Dept_Perms_class') )
 	than $right */
 	function loadData_UserPerm($right)
 	{
+		$s1 = getmicrotime();
 		$index = -1;
 		$fileid_array = array();
-		$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
+		$query = "SELECT $this->TABLE_DEPT_PERMS.fid FROM $this->TABLE_DATA, $this->TABLE_DEPT_PERMS 
 			WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id 
 			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.publishable=1";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());

@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!session_is_registered('uid'))
+{
+	        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+			        exit;
+}
 /*
 $where='all';
   $keyword='Nguyen Khoa';

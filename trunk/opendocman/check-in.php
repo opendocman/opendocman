@@ -103,6 +103,10 @@ if (!isset($_POST['submit']))
 }//end if (!$submit)
 else
 {
+	if ($GLOBALS['CONFIG']['authorization'] == 'On')
+		$lpublishable = '0';
+	else
+		$lpublishable= '1';
 	// form has been submitted, process data
 
 	// checks
@@ -203,7 +207,7 @@ else
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 		// update file status
-		$query = "UPDATE data SET status = '0', publishable='0' WHERE id='$_POST[id]'";
+		$query = "UPDATE data SET status = '0', publishable='$lpublishable' WHERE id='$_POST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 		// rename and save file

@@ -72,7 +72,10 @@ The first two options also result in sending email to reviewer
 	(3) Send email to reviewer only
 	(4) Do Nothing
 */
-'file_expired_action' => '1'
+'file_expired_action' => '1', 
+
+//Authorization control: On or Off (case sensitive)
+'authorization' => 'On'
 );
 
 // List of allowed file types
