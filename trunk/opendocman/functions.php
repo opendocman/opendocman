@@ -68,7 +68,7 @@ if( !defined('function') )
 		{
 			$message='Select';
 		}
-		echo '<link rel="stylesheet" type="text/css" href="linkcontrol.css">'."\n";
+		echo '<link rel="stylesheet" type="text/css" href="' . $GLOBALS['CONFIG']['base_url'] . '/linkcontrol.css">'."\n";
 		echo '<center>'."\n";
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
 		echo '<tr>'."\n";
@@ -77,11 +77,11 @@ if( !defined('function') )
 		//echo $message;
 		//echo '</font></b></td>'."\n";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="out.php" style="text-decoration:none">Home</a>'."\n</td>";
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php" style="text-decoration:none">Home</a>'."\n</td>";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
 		?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
 			<TD bgcolor="#0000A0" align="left" valign="middle">
 			<?php	$crumb = new crumb();
@@ -157,16 +157,16 @@ if( !defined('function') )
             }
             echo '<table width="100%" cellspacing="0" cellpadding="0">'."\n";
             echo '<tr>'."\n";
-            echo '<td align="left"><a href="out.php"><img src="images/companylogo.gif" alt="'.$GLOBALS['CONFIG']['title'].'" border="0"></a></td>'."\n";
+            echo '<td align="left"><a href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/companylogo.gif" alt="'.$GLOBALS['CONFIG']['title'].'" border="0"></a></td>'."\n";
             echo '<td align="right" nowrap>'."\n";
-            echo '<a href="in.php"><img src="images/check-in.png" alt="Check In" border=0></a>'."\n";
-            echo '<a href="search.php"><img src="images/search.png" alt="Search" border=0></a>'."\n";
-            echo '<a href="add.php"><img src="images/add.png" alt="Add" border="0"></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/in.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/check-in.png" alt="Check In" border=0></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/search.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/search.png" alt="Search" border=0></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/add.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/add.png" alt="Add" border="0"></a>'."\n";
             if($uid != NULL && $current_user_obj->isAdmin())
             {
-                echo '<a href="admin.php"><img src="images/setting.png" alt="Administration" border="0"></a>'."\n";
+                echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/admin.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/setting.png" alt="Administration" border="0"></a>'."\n";
             }
-            echo '<a href="logout.php"><img src="images/logout.png" alt="Logout" border="0"></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/logout.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/logout.png" alt="Logout" border="0"></a>'."\n";
             echo '</td>'."\n";
             echo '</tr>'."\n";
             echo '</table>'."\n";
@@ -271,17 +271,17 @@ if( !defined('function') )
                 $css_td_class = "'listtable'";
                 if($sort_order == 'asc')
                 {
-                        $sort_img = 'images/icon_sort_az.gif';
+                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_az.gif';
                         $next_sort = 'desc';
                 }
                 else if($sort_order == 'desc')
                 {
-                        $sort_img = 'images/icon_sort_za.gif';
+                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_za.gif';
                         $next_sort = 'asc';
                 }
                 else 
                 {
-                        $sort_img ='images/icon_sort_null';
+                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_null';
                         $next_sort = 'asc';
                 }		
 
@@ -522,11 +522,11 @@ if( !defined('function') )
 						<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $filesize; ?></TD> 	      <?php              
 						if ($lock == false)
 						{
-							?><TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD><?php
+							?><TD NOWRAP><CENTER><img src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/images/file_unlocked.png"></CENTER></TD><?php
 						}
 						else
 						{
-							?><TD align="center" NOWRAP><img src="images/file_locked.png"></TD><?php
+							?><TD align="center" NOWRAP><img src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/images/file_locked.png"></TD><?php
 						}
                         
                         $index++;
