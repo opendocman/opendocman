@@ -354,7 +354,7 @@ else //submited form
 	}
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES('$category', '$SESSION_UID', '$file_name', NOW(), '$description','$current_user_dept', '$comment','$default_Setting', 0)";
+	$query = "INSERT INTO data (category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES('" . addslashes($category) . "', '" . addslashes($SESSION_UID) . "', '" . addslashes($file_name) . "', NOW(), '" . addslashes($description) . "','" . addslashes($current_user_dept) . "', '" . addslashes($comment) . "','" . addslashes($default_Setting) . "', 0)";
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
@@ -369,7 +369,7 @@ else //submited form
 	}
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '$lusername', 'Initial import')";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($lusername) . "', 'Initial import')";
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	
 
@@ -379,7 +379,7 @@ else //submited form
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES($fileId, " . ${ space_to_underscore($dept_name) } . ", '$id')";		
+		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES($fileId, " . addslashes(${ space_to_underscore($dept_name) }) . ", '$id')";		
 		$result2 = mysql_db_query($database, $query, $connection) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
