@@ -90,7 +90,7 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
 		}
 		elseif($sort_by == 'file_name')
 		{
