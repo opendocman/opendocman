@@ -218,7 +218,7 @@ if (!$submit)
 	</tr>
 	<tr>
 	<td valign="top">Description</td>
-	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo $description; ?>"></td>
+	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo str_replace('"', '&quot;', $description); ?>"></td>
 	</tr>
 	<tr>
 	<td valign="top">Comment</td>
@@ -406,7 +406,7 @@ else
 		exit; 
 	}
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE data SET category='$category', description='".addslashes($description)."', comment='".addslashes($comment)."', default_rights=$default_Setting WHERE id = '$id'");
+	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($category) . "', description='" . addslashes($description)."', comment='" . addslashes($comment)."', default_rights='" . addslashes($default_Setting) . "' WHERE id = '$id'");
 	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	
 	// clean out old permissions
@@ -428,7 +428,7 @@ else
 	$result = mysql_db_query($database, $query, $connection) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
-		$string=space_to_underscore($dept_name);
+		$string=addslashes(space_to_underscore($dept_name));
 		$query = "UPDATE dept_perms SET rights =\"".$$string."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
 		$result2 = mysql_db_query($database, $query, $connection) or die("Error in query: $query. " . mysql_error() );
 	}

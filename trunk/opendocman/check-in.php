@@ -167,7 +167,7 @@ else
 		list($username) = mysql_fetch_row($result);
 				
 	 	// update revision log
-		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$id', NOW(), '$username', '". addslashes($note) ."')";
+		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($note) ."')";
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	
 		// update file status
