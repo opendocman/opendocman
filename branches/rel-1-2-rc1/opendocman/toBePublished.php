@@ -436,7 +436,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 				$mail_body.='Thank you,'. "\n\n";
 				$mail_body.='Automated Document Messenger'. "\n\n";
 				$mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
 				email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
 			}
 		}
