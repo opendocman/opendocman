@@ -39,13 +39,13 @@ if(!isset($_POST['submit'])) //un_submitted form
         {
                 $_REQUEST['last_message']='';
         }
-	draw_header('Add New File');
+	draw_header($GLOBALS['lang']['area_add_new_file']);
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Add new document', $_REQUEST['last_message']);
+	draw_status_bar($GLOBALS['lang']['area_add_new_file'], $_REQUEST['last_message']);
 	echo '<body bgcolor="white">';
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
-	$query ="SELECT user.department from user where user.id='$_SESSION[uid]'";
+	$query ="SELECT  ". $GLOBALS['CONFIG']['table_prefix'] . "department from " . $GLOBALS['CONFIG']['table_prefix'] . "user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1) /////////////If somehow this user belongs to many departments, then error out.
 	{
@@ -54,7 +54,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
 	//Get a list of department names and id to populate javascript obj//
-	$query = "SELECT name, id FROM department ORDER by name";
+	$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER by name";
 	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
@@ -138,19 +138,19 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<input type="hidden" name="MAX_FILE_SIZE" value="50000000">
 	<tr>
 	<td>
-	<a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none">File Location</a>
+	<a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_file_location']; ?></a>
 	</td>
 	<td colspan=3><input tabindex="0" name="file" type="file">
 	</td>
 	</tr>
 	<tr>
 	<td>
-	<a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none">Category</a>
+	<a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_category']; ?></a>
 	</td>
 	<td colspan=3><select tabindex=2 name="category" >
 <?php
 	/////////////// Populate category drop down list//////////////
-	$query = "SELECT id, name FROM category ORDER BY name";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result)) 
 	{ 
@@ -164,15 +164,15 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<!-- Set Department rights on the file -->
         <TR>
 	<TD>
-	<a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none">Department</a>
+	<a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_department']; ?></a>
 	</TD>
      		<TD COLSPAN=3><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
-				<option value=0> Select a Department</option>
-				<option value=1> Default Setting for Unset Department</option>
-				<option value=2> All Departments</option>
+				<option value=0> <?php echo $GLOBALS['lang']['label_select_a_department']; ?></option>
+				<option value=1> <?php echo $GLOBALS['lang']['label_default_for_unset']; ?></option>
+				<option value=2> <?php echo $GLOBALS['lang']['label_all_departments']; ?></option>
 <?php
 	//////Populate department drop down list/////////////////
-   	$query = "SELECT id, name FROM department ORDER BY name";
+   	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
    	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
   	while(list($id, $name) = mysql_fetch_row($result))
@@ -188,145 +188,146 @@ if(!isset($_POST['submit'])) //un_submitted form
     </TR>
     <TR>
 	<!-- Loading Authority radio_button group -->
-	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none">Authority</a></td>
+	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_department_authority']; ?></a></td>
 	<!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
 	<TD>
-<?php
-      	$query = "SELECT RightId, Description FROM rights order by RightId";
-      	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
-      	while(list($RightId, $Description) = mysql_fetch_row($result))
-      	{	
-      		echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
-		}     
+	<?php
+	$query = "SELECT RightId, Description FROM " . $GLOBALS['CONFIG']['table_prefix'] . "rights order by RightId";
+$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
+while(list($RightId, $Description) = mysql_fetch_row($result))
+{	
+	echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
+}     
 ?>
-	</TD>
-	</TR>
-	<tr>
-	<td>
-        <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none">Description</a>
-        </td>
-	<td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
-	</tr>
-	
-	<tr>
-	<td>
-        <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none">Comment</a>
-        </td>
-	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
-	</tr>
+</TD>
+</TR>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_description']; ?></a>
+</td>
+<td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
+</tr>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_comment']; ?></a>
+</td>
+<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
+</tr>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Anonymous" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['anonymous']; ?></a></td>
+<td><INPUT name="anonymous" type="checkbox"></td>
+</tr>
+<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
+<tr nowrap>
 
-	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
-	<tr nowrap>
-	  <td colspan="2" NOWRAP><b>Specific Permissions Settings</b></td>
-	</TR>
-	<TR>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none">Forbidden</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none">View</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none">Read</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none">Modify</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none">Admin</a></td>
-	</tr>
+<td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
+			</TR>
+			<TR>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_forbidden']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_view']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_read']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_modify']; ?></a></td>
+			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_admin']; ?></a></td>
+			</tr>
+			<tr>
+			<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
+			<?php
+
+			// query to get a list of available users
+			$query = "SELECT id, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		//////////////////Forbidden////////////////////
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>
+			</select></td>
+			<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
+			<?php 
+			////////////////////View//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		//////////////////Forbidden////////////////////
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>
+			</SELECT></td>
+			<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
+			<?php
+			////////////////////Read//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>
+			</SELECT></td>
+			<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
+			<?php
+			//////////////////Modify////////////////////////////
+			$query = "SELECT id, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>
+			</SELECT></td>
+			<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
+			<?php
+			////////////////////ADMIN//////////////////////////
+			$query = "SELECT id, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+		{
+			$str = '<option value="' . $id . '"';
+			// select current user's name
+			if($id == $_SESSION['uid']) {$str .= ' selected';}
+			$str .= '>'.$last_name.', '.$first_name.'</option>';
+			echo $str;
+		}
+		mysql_free_result ($result);
+		?>	</SELECT></td>
+
+			</TR>
+			</TABLE>
 	<tr>
-	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
-<?php
-	
-	// query to get a list of available users
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</select></td>
-	<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
-<?php 
-		////////////////////View//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-	$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>
-	</SELECT></td>
-	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
-<?php
-	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		//////////////////Forbidden////////////////////
-		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-		{
-			$str = '<option value="' . $id . '"';
-			// select current user's name
-			if($id == $_SESSION['uid']) {$str .= ' selected';}
-			$str .= '>'.$last_name.', '.$first_name.'</option>';
-			echo $str;
-		}
-		mysql_free_result ($result);
-?>	</SELECT></td>
-	
-	</TR>
-	</TABLE>
-	<tr>
-	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="Add Document"></td>
+	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_add_document']; ?>"></td>
 	</tr>
 <?php	
-		$query = "SELECT name, id FROM department ORDER BY name";
+		$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
 		{		
 			if($dept_id == $current_user_dept)
-				echo "\n\t".'<input type="hidden" name="'. space_to_underscore($dept_name).'" value="1"> '."\n";
+				echo "\n\t".'<input type="hidden" name="'. str_replace(' ', '_', $dept_name).'" value="1"> '."\n";
 			else
-				echo "\n\t".'<input type="hidden" name="'.space_to_underscore($dept_name).'" value="0"> '."\n";
+				echo "\n\t".'<input type="hidden" name="'.str_replace(' ', '_', $dept_name).'" value="0"> '."\n";
 		}
 		echo "\n\t".'<input type="hidden" name="default_Setting" value="0"> '."\n";
 		mysql_free_result ($result);
@@ -347,7 +348,7 @@ else //submited form
 			$lpublishable= '1';
 	$result_array = array();
 	//get user's department
-	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
+	$query ="SELECT department from " . $GLOBALS['CONFIG']['table_prefix'] . "user where id=$_SESSION[uid]";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
@@ -398,36 +399,40 @@ else //submited form
         {
                 if (!is_writeable($GLOBALS['CONFIG']['dataDir']))
                 {
-                        $last_message='Folder Permissions Error: ' . $GLOBALS['CONFIG']['dataDir'] . ' not writeable!';
+                        $last_message=$GLOBALS['lang']['message_folder_perms_error'] . ' ' . $GLOBALS['CONFIG']['dataDir'] . ' ' . $GLOBALS['lang']['message_not_writeable'];
                         header('Location:error.php?ec=23&last_message=' .$last_message);
                         exit;
                 }
         }
-	// all checks completed, proceed!
-	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
+		// all checks completed, proceed!
+		// INSERT file info into data table
+		$anonymous = 0;
+		if(@$_REQUEST['anonymous'] == 'on')
+			$anonymous =1;
+
+	$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "data (status, category, owner, realname, created, description, department, comment, default_rights, publishable, anonymous) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable, " . $anonymous . ')';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
 	$fileId = mysql_insert_id($GLOBALS['connection']);
 	
 	//Find out the owners' username to add to log
-	$query = "SELECT username from user where id='$_SESSION[uid]'";
+	$query = "SELECT username from " . $GLOBALS['CONFIG']['table_prefix'] . "user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
+	$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', '" . $GLOBALS['lang']['message_initial_import'] . "', '" . $GLOBALS['lang']['message_current'] . "')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
 	//Insert Department Rights into dept_perms
-	$query = "SELECT name, id FROM department ORDER BY name";
+	$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
+		$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[str_replace(' ', '_', $dept_name)]) . "', '$id')";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
@@ -457,7 +462,7 @@ else //submited form
 	// INSERT user permissions - view
         for($i = 0; $i<sizeof($result_array); $i++)
 	{
-		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
 
@@ -477,7 +482,7 @@ else //submited form
 	else
 		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
-	$message = urlencode('Document successfully added');
+	$message = urlencode($GLOBALS['lang']['message_document_added']);
 	header('Location: out.php?last_message=' . $message);
 	}
 }
