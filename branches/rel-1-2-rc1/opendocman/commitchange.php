@@ -102,7 +102,7 @@ elseif(isset($_REQUEST['updateuser']))
         $query = "UPDATE admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     
-        if(strlen($_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), '(') !=0)
+        /*if(strlen($_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), '(') !=0)
 	   	{
 	    	$phonenumber=ereg_replace(' ', '', $_REQUEST['phonenumber']);
 	    	$areacode=substr($phonenumber,0,3);
@@ -110,7 +110,7 @@ elseif(isset($_REQUEST['updateuser']))
 	    	$lastfour=substr($phonenumber,6,4);
 	    	$_REQUEST['phonenumber']='(' . $areacode . ') ' . $firstthree . '-' . $lastfour;
 	   	}
-
+*/
 	// UPDATE into user
         $query = "UPDATE user SET username='". addslashes($_POST['username']) ."',";
 	if (!empty($_REQUEST['password']))
