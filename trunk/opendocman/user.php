@@ -129,7 +129,7 @@ if($submit == 'adduser')
 </TR>
 <tr>
 <td></td>
-<td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validate(add_user);" value="Add User">
+<td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validatemod(add_user);" value="Add User">
 </form>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="Submit" name="submit" value="Cancel">
