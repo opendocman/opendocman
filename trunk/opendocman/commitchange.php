@@ -34,7 +34,7 @@ if(isset($_POST['adduser']))
     	}
 
 	   // INSERT into user
-       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes($_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($first_name) . '\' )';
+       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes($_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
        // INSERT into admin
        $userid = mysql_insert_id($GLOBALS['connection']);
@@ -88,9 +88,9 @@ elseif(isset($_POST['updateuser']))
         {
                 $_POST['admin'] = 'no';
         }
-	if(!isset($_POST['callee']) || $_POST['callee'] == '')
+	if(!isset($_POST['caller']) || $_POST['caller'] == '')
 	{
-		$callee='admin.php';
+		$caller='admin.php';
 	}
 	$user_obj = new User($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	// UPDATE admin info
@@ -128,16 +128,19 @@ elseif(isset($_POST['updateuser']))
 		//Remove all entry for $id
 		$query = "DELETE FROM dept_reviewer where user_id = $_POST[id]";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+		$depts_rev = $_POST['department_review'];
 		for($i = 0; $i<sizeof($_POST['department_review']); $i++)
 		{
-                        $dept_rev=$_POST['department_review'][$i];
+            $dept_rev=$depts_rev[$i];
 			$query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $_POST[id])";
 			$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 		}
 	}
 	// back to main page
+	if(!isset($_REQUEST['caller']))
+	{	$_REQUEST['caller'] = 'admin.php';	}
     $last_message = urlencode('User successfully updated');
-    header('Location: ' . $_POST['callee'] . '?last_message=' . $last_message);
+    header('Location: ' . $_REQUEST['caller'] . '?last_message=' . $last_message);
 }
 // Delete USER
 elseif(isset($_POST['deleteuser']))
