@@ -3,7 +3,7 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	 header('Location:index.php?redirection=' . $_SERVER['REQUEST_URI']);
+	header('Location:index.php?redirection=' . urlencode($_SERVER['REQUEST_URI']));
 	exit;
 }
 include('config.php');

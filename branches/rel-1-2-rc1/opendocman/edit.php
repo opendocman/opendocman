@@ -21,7 +21,7 @@ if(strchr($_REQUEST['id'], '_') )
 }
 if (!session_is_registered('uid'))
 {
-  header('Location:error.php?ec=1');
+  header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
   exit;
 }
 
