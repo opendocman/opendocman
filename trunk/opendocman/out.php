@@ -17,13 +17,14 @@ if (!isset($_REQUEST['last_message']))
 }
 
 // includes
+
 include ('config.php');
 draw_header('File Listing');
 draw_menu($_SESSION['uid']);
 draw_status_bar('Document Listing', $_REQUEST['last_message']);
 sort_browser(); 
 $query = "SELECT * FROM dept_reviewer WHERE dept_reviewer.user_id = $_SESSION[uid]";
-$result = mysql_query($query) or die ("Error in Query".mysql_error());
+$result = mysql_query($query) or die ("Error in Query:$query".mysql_error());
 $count = mysql_num_rows($result);
 $department_id = array();
 $index = 0;
