@@ -40,15 +40,6 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          break;
 
-   // User has version 11 and is upgrading 
-   case "update_11":
-         do_update_11();
-         break;
-   // User has version 11rc1 and is upgrading 
-   case "update_11rc2":
-         do_update_11rc2();
-         break;
-  
    // User has version 11-Final and is upgrading 
    case "update_11":
          do_update_11();
