@@ -1,3 +1,36 @@
+2004-07-25 17:55  logart
+
+	* install/odm.php, database.sql: changed admin email to RFC
+	  compliant example.com
+
+2004-07-25 17:50  logart
+
+	* config.php: vanilla changed default URL to RFC proper example.com
+
+2004-07-25 17:45  logart
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  FormCheck.js, UserPermission_class.php, User_Perms_class.php,
+	  User_class.php, add.php, admin.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, classHeaders.php, commitchange.php,
+	  config.php, databaseData_class.php, delete.php, department.php,
+	  details.php, edit.php, error.php, file_ops.php,
+	  functions.archive.php, functions.php, help.html, history.php,
+	  in.php, index.php, ldap.inc, linkcontrol.css, logout.php,
+	  mimetypes.php, out.php, personal_info.php, profile.php,
+	  rejects.php, search.php, secureurl.php, setup.php,
+	  toBePublished.php, user.php, view.php, view_file.php,
+	  docs/developers.txt, docs/opendocman-5.html, docs/opendocman.txt,
+	  docs/src/opendocman.lyx, install/odm.php, install/upgrade.php,
+	  install/upgrade_10.php, install/upgrade_11.php,
+	  install/upgrade_11rc1.php, install/upgrade_11rc2.php,
+	  install/upgrade_12rc1.php: added copyright to all files added
+	  Khoa Nguyen to copyright notices where appropriate
+
+2004-07-25 08:46  logart
+
+	* ChangeLog: preparing for 1.2 release
+
 2004-07-24 18:37  logart
 
 	* commitchange.php: fixed security vulnerability where commitchange
@@ -13,6 +46,11 @@
 
 	* details.php: Fixed bug ID#917813: View only was able to read
 
+2004-06-30 23:57  logart
+
+	* view_file.php (rel-1-3): Fixed bug ID#909399: view file does not
+	  open new window
+
 2004-06-30 23:53  logart
 
 	* setup.php: Added smart defaults for database connection form
@@ -22,6 +60,11 @@
 
 	* view_file.php: Fixed bug ID#909399: View file does not open in
 	  new window
+
+2004-03-05 07:45  logart
+
+	* include/library/Dept_Perms_class.php (rel-1-3): fixed missing ?>
+	  at bottom of page
 
 2004-02-25 10:20  logart
 
@@ -122,6 +165,11 @@
 
 	* ChangeLog, docs/src/opendocman.lyx: comment changes
 
+2003-10-20 13:46  khoang82
+
+	* include/library/: Department_class.php, Dept_Perms_class.php,
+	  FileData_class.php, functions.php (rel-1-3): New commnets added
+
 2003-10-15 16:16  logart
 
 	* setup.php, install/upgrade.php, install/upgrade_12rc1.php: added
@@ -131,9 +179,281 @@
 
 	* ChangeLog: release 1.2 Final
 
+2003-10-15 14:19  khoang82
+
+	* docs/API/html/: Department__class_8php.html,
+	  Dept__Perms__class_8php.html, FileData__class_8php.html,
+	  UserPermission__class_8php.html, User__Perms__class_8php.html,
+	  User__class_8php.html, annotated.html,
+	  classDepartment-members.html, classDepartment.html,
+	  classDept__Perms-members.html, classDept__Perms.html,
+	  classFileData-members.html, classFileData.html,
+	  classHeaders_8php.html, classUser-members.html, classUser.html,
+	  classUserPermission-members.html, classUserPermission.html,
+	  classUser__Perms-members.html, classUser__Perms.html,
+	  classcrumb-members.html, classcrumb.html,
+	  classdatabaseData-members.html, classdatabaseData.html,
+	  classphpsecureurl-members.html, classphpsecureurl.html,
+	  crumb_8php.html, databaseData__class_8php.html, files.html,
+	  functions.html, functions_8php.html, functions_func.html,
+	  functions_vars.html, globals.html, globals_func.html,
+	  globals_vars.html, hierarchy.html, index.html,
+	  secureurl_8class_8php.html, secureurl_8php.html (rel-1-3): new
+	  docs added for Dept_Perms
+
+2003-10-15 14:18  khoang82
+
+	* docs/API/: doc_config, doc_footer (rel-1-3): added customized
+	  footer.  modify configuration file to use footer
+
 2003-10-15 14:15  logart
 
 	* config.php: v1.2 release
+
+2003-10-13 16:49  khoang82
+
+	* docs/API/html/: Department__class_8php.html,
+	  Dept__Perms__class_8php.html, FileData__class_8php.html,
+	  UserPermission__class_8php.html, User__Perms__class_8php.html,
+	  User__class_8php.html, annotated.html,
+	  classDepartment-members.html, classDepartment.html,
+	  classDept__Perms-members.html, classDept__Perms.html,
+	  classFileData-members.html, classFileData.html,
+	  classHeaders_8php.html, classUser-members.html, classUser.html,
+	  classUserPermission-members.html, classUserPermission.html,
+	  classUser__Perms-members.html, classUser__Perms.html,
+	  classcrumb-members.html, classcrumb.html,
+	  classdatabaseData-members.html, classdatabaseData.html,
+	  classphpsecureurl-members.html, classphpsecureurl.html,
+	  crumb_8php.html, databaseData__class_8php.html, files.html,
+	  functions.html, functions_8php.html, functions_func.html,
+	  functions_vars.html, globals.html, globals_func.html,
+	  globals_vars.html, hierarchy.html, index.html,
+	  secureurl_8class_8php.html, secureurl_8php.html (rel-1-3): update
+
+2003-10-13 16:49  khoang82
+
+	* include/library/: crumb.php, databaseData_class.php (rel-1-3):
+	  add comments
+
+2003-10-13 15:01  khoang82
+
+	* docs/API/doc_config (rel-1-3): add doxygen configuration file
+
+2003-10-13 14:58  khoang82
+
+	* docs/API/html/: Department__class_8php.html,
+	  Dept__Perms__class_8php.html, FileData__class_8php.html,
+	  UserPermission__class_8php.html, User__Perms__class_8php.html,
+	  User__class_8php.html, annotated.html,
+	  classDepartment-members.html, classDepartment.html,
+	  classDepartment.png, classDept__Perms-members.html,
+	  classDept__Perms.html, classDept__Perms.png,
+	  classFileData-members.html, classFileData.html,
+	  classFileData.png, classHeaders_8php.html,
+	  classUser-members.html, classUser.html, classUser.png,
+	  classUserPermission-members.html, classUserPermission.html,
+	  classUserPermission.png, classUser__Perms-members.html,
+	  classUser__Perms.html, classUser__Perms.png,
+	  classcrumb-members.html, classcrumb.html,
+	  classdatabaseData-members.html, classdatabaseData.html,
+	  classdatabaseData.png, classphpsecureurl-members.html,
+	  classphpsecureurl.html, crumb_8php.html,
+	  databaseData__class_8php.html, doxygen.css, doxygen.png,
+	  files.html, functions.html, functions_8php.html,
+	  functions_func.html, functions_vars.html, globals.html,
+	  globals_func.html, globals_vars.html, hierarchy.html, index.html,
+	  secureurl_8class_8php.html, secureurl_8php.html (rel-1-3): Add
+	  API docs
+
+2003-10-09 15:03  khoang82
+
+	* anonymous.php (rel-1-3): fix undefine error
+
+2003-10-09 15:02  khoang82
+
+	* include/library/functions.php (rel-1-3): fix output of anonymous
+	  page
+
+2003-10-08 14:41  khoang82
+
+	* config.php (rel-1-3): fix includes to use the include/library/
+	  dir
+
+2003-10-08 14:35  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  databaseData_class.php, secureurl.class.php, secureurl.php
+	  (rel-1-3): remove these files from root dir
+
+2003-10-08 14:34  khoang82
+
+	* include/library/: Department_class.php, Dept_Perms_class.php,
+	  FileData_class.php, UserPermission_class.php,
+	  User_Perms_class.php, User_class.php, databaseData_class.php,
+	  secureurl.class.php, secureurl.php (rel-1-3): moving all of these
+	  files into include/library
+
+2003-10-08 14:28  khoang82
+
+	* include/: user_pref_config.inc, user_pref_config.php (rel-1-3):
+	  rename this file
+
+2003-10-08 14:27  khoang82
+
+	* include/: mimetypes.inc, mimetypes.php (rel-1-3): rename files
+
+2003-10-08 14:24  khoang82
+
+	* include/library/: classHeaders.php, crumb.php, functions.php
+	  (rel-1-3): move these into include/librabry
+
+2003-10-08 14:22  khoang82
+
+	* include/: classHeaders.php, crumb.php, functions.php (rel-1-3):
+	  mv them off the include folder
+
+2003-10-08 13:48  khoang82
+
+	* config.php (rel-1-3): add configurable table_prefix field
+
+2003-10-06 08:31  logart
+
+	* include/functions.php (rel-1-3): only show user menu items if
+	  logged in, not in anonymous mode.
+
+2003-10-06 08:31  logart
+
+	* anonymous.php (rel-1-3): added footer call
+
+2003-10-06 08:22  logart
+
+	* config.php (rel-1-3): vanilla again
+
+2003-09-23 17:09  khoang82
+
+	* FileData_class.php, add.php, anonymous.php, config.php, edit.php,
+	  include/functions.php, include/language/english.php (rel-1-3):
+	  complete anonymous browsing feature
+
+2003-09-23 15:08  khoang82
+
+	* include/: functions.php, language/english.php (rel-1-3): allow
+	  user to switch between ODM and anonymous ODM
+
+2003-09-23 14:19  khoang82
+
+	* anonymous.php (rel-1-3): switchable from normal mode to anonymous
+	  mode without login and out.  Still need to provide links for user
+	  to do so instead of remember the link
+
+2003-09-23 11:44  khoang82
+
+	* index.php (rel-1-3): add anonymous link for user
+
+2003-09-23 11:43  khoang82
+
+	* include/language/english.php (rel-1-3): add anonymous link entry
+
+2003-09-22 09:07  khoang82
+
+	* anonymous.php, search.php, include/functions.php,
+	  include/language/english.php (rel-1-3): interna anonymous page.
+	  Give it sort_browser() and pagination
+
+2003-09-22 09:05  khoang82
+
+	* toBePublished.php (rel-1-3): fix last item selected being
+	  authorized instead of reject
+
+2003-09-19 14:39  logart
+
+	* include/language/: README, spanish.php, sync.sh (rel-1-3): added
+	  sync.sh to help with keeping language files synced up Added
+	  README Added Spanish translation (Author:  Pablo Luis Zorzoli
+	  <pablozorzoli@yahoo.com.ar>)
+
+2003-09-19 09:13  logart
+
+	* check_exp.php (rel-1-3): added internationalizations
+
+2003-09-19 09:12  logart
+
+	* include/language/english.php (rel-1-3): added language
+
+2003-09-19 09:10  khoang82
+
+	* toBePublished.php (rel-1-3): fix reject goes to out.php
+
+2003-09-18 16:52  khoang82
+
+	* anonymous.php (rel-1-3): anonymous page for public view.  driven
+	  by anonymous field in ODM.data.anonymous
+
+2003-09-18 16:51  khoang82
+
+	* include/functions.php (rel-1-3): add anonymous features
+
+2003-09-18 15:39  khoang82
+
+	* view_file.php (rel-1-3): remove unneccessayr comments
+
+2003-09-18 15:39  khoang82
+
+	* FileData_class.php (rel-1-3): adding feature for anonymous logon
+
+2003-09-18 15:34  khoang82
+
+	* include/language/english.php (rel-1-3): fix a word
+
+2003-09-18 15:29  khoang82
+
+	* include/user_pref_config.php (rel-1-3): new settings for
+	  user_pref
+
+2003-09-18 15:27  khoang82
+
+	* user.php (rel-1-3): adding user pref page
+
+2003-09-18 15:26  khoang82
+
+	* profile.php (rel-1-3): add profile modifying page
+
+2003-09-18 15:26  khoang82
+
+	* index.php (rel-1-3): removing extra space
+
+2003-09-18 15:24  khoang82
+
+	* include/functions.php (rel-1-3): remove space_to_underscore()
+	  with str_replace()
+
+2003-09-18 15:15  khoang82
+
+	* add.php, edit.php (rel-1-3): use str_replace
+
+2003-09-18 14:57  khoang82
+
+	* User_class.php (rel-1-3): Pref
+
+2003-09-18 10:37  khoang82
+
+	* toBePublished.php (rel-1-3): fixed SF [ 789337 ] Email to
+	  department on multiple files
+
+2003-09-18 10:07  khoang82
+
+	* out.php (rel-1-3): turn on statistic report
+
+2003-09-18 10:06  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php (rel-1-3): code
+	  optimization
+
+2003-09-18 10:03  khoang82
+
+	* config.php, index.php (rel-1-3): feature [ 781555 ] SSL ODM.
 
 2003-09-17 14:25  khoang82
 
@@ -143,13 +463,184 @@
 
 	* functions.php, search.php: fix search, mysort, and pagination
 
+2003-09-17 11:51  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  add.php, admin.php, category.php, check-in.php, check-out.php,
+	  check_exp.php, classHeaders.php, commitchange.php, crumb.php,
+	  databaseData_class.php, delete.php, department.php, details.php,
+	  edit.php, error.php, file_ops.php, functions.php, history.php,
+	  in.php, index.php, logout.php, out.php, personal_info.php,
+	  rejects.php, search.php, setup.php, toBePublished.php, user.php,
+	  view.php, view_file.php (rel-1-2-rc1): re-allign the code for
+	  better readability
+
+2003-09-17 11:13  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, details.php, edit.php, history.php,
+	  profile.php, toBePublished.php, user.php, view.php, view_file.php
+	  (rel-1-2-rc1): resolve IIS problem toward REQUEST_URI
+
+2003-09-17 11:06  khoang82
+
+	* out.php (rel-1-2-rc1): resolve IIS issues of REQUEST_URI
+
+2003-09-17 11:05  khoang82
+
+	* toBePublished.php (rel-1-2-rc1): remove irrelevant space
+
+2003-09-17 10:58  khoang82
+
+	* functions.php (rel-1-2-rc1): fix pagination
+
+2003-09-17 10:50  khoang82
+
+	* functions.php (rel-1-2-rc1): fix my_sort() 1.2
+
+2003-09-17 10:47  khoang82
+
+	* search.php (rel-1-2-rc1): fix search for 1.2
+
+2003-09-17 10:38  khoang82
+
+	* config.php (rel-1-2-rc1): vanilla config.php
+
 2003-09-17 09:51  logart
 
 	* setup.php: format changes
 
+2003-09-16 13:50  khoang82
+
+	* check_exp.php (rel-1-3): if authorization is not turned on,
+	  disable this script
+
+2003-09-16 13:47  khoang82
+
+	* admin.php (rel-1-3): disable check_exp in admin if authorization
+	  is not on
+
+2003-09-16 11:16  khoang82
+
+	* include/user_pref_config.php (rel-1-3): setting for personal
+	  preference for ODM
+
+2003-09-16 10:38  khoang82
+
+	* toBePublished.php (rel-1-3): fixed SF ticket [ 799747 ]
+	  authorisation email contents
+
+2003-09-16 09:56  khoang82
+
+	* search.php (rel-1-3): fix search bugs
+
+2003-09-16 09:26  khoang82
+
+	* edit.php (rel-1-3): if file moderation feature is disabled, there
+	  is no need for moderation for edit.php
+
+2003-09-16 09:16  khoang82
+
+	* edit.php (rel-1-3): any file property being alter will need
+	  moderation from now on.
+
+2003-09-15 16:29  khoang82
+
+	* UserPermission_class.php, User_class.php, add.php, details.php,
+	  edit.php (rel-1-3): giving reviewer automatic and non revokable
+	  admin right for the files they are responsible for
+
+2003-09-15 16:25  khoang82
+
+	* config.php (rel-1-3): add a setting to allow the webmaster set
+	  the default right that every author will have when commiting a
+	  file
+
+2003-09-15 13:49  khoang82
+
+	* include/functions.php (rel-1-3): fix broken sort by author
+
+2003-09-12 13:38  khoang82
+
+	* include/functions.php (rel-1-3): fix list_file() to work with
+	  archived files on filesize
+
+2003-09-12 13:38  khoang82
+
+	* config.php (rel-1-3): fix archivefolder var
+
+2003-09-12 13:27  khoang82
+
+	* config.php (rel-1-3): include in the include folder
+
+2003-09-12 11:59  khoang82
+
+	* search.php (rel-1-3): fix 717817 Search by Department Broken
+
+2003-09-12 11:58  khoang82
+
+	* include/functions.php (rel-1-3): fix pagination nav.
+
 2003-08-26 10:17  logart
 
 	* FormCheck.js: added & to email regexp as per RFC
+
+2003-07-23 11:56  logart
+
+	* include/functions.php (rel-1-3): renamed lang var
+
+2003-07-23 11:56  logart
+
+	* include/language/english.php (rel-1-3): added admin and category
+	  words
+
+2003-07-23 11:51  logart
+
+	* admin.php, category.php (rel-1-3): internat
+
+2003-07-23 09:47  logart
+
+	* add.php (rel-1-3): internat
+
+2003-07-23 09:16  logart
+
+	* out.php (rel-1-3): renamed lang var
+
+2003-07-23 09:15  logart
+
+	* index.php (rel-1-3): internat
+
+2003-07-23 09:15  logart
+
+	* include/language/english.php (rel-1-3): added stuff for
+	  functions.php
+
+2003-07-23 09:14  logart
+
+	* classHeaders.php, crumb.php, functions.php, mimetypes.php
+	  (rel-1-3): relocated to include/
+
+2003-07-23 09:14  logart
+
+	* include/: classHeaders.php, crumb.php, functions.php,
+	  mimetypes.php (rel-1-3): moved these files to the include folder
+	  internationalization complete for functions.php
+
+2003-07-22 15:44  logart
+
+	* config.php (rel-1-3): updated version num
+
+2003-07-22 15:23  logart
+
+	* config.php, index.php, include/language/english.php,
+	  include/language/spanish.php (rel-1-3): New Feature:
+	  Internationalization Support
+
+2003-07-22 15:17  logart
+
+	* check-in.php, delete.php, install/upgrade_11.php (rel-1-3): Same
+	  changes as 1.2 branch
 
 2003-07-22 15:16  logart
 
@@ -382,6 +873,40 @@
 	  setup.php, user.php, install/odm.php: merged and conflicts fixed
 	  from 1.2rc1
 
+2003-06-17 15:19  khoang82
+
+	* edit.php (rel-1-2-rc1): remove extra comments
+
+2003-06-17 15:13  khoang82
+
+	* functions.archive.php (rel-1-2-rc1): This file contains functions
+	  that are not used in ODM1.2-rc1.
+
+2003-06-17 15:12  khoang82
+
+	* functions.php (rel-1-2-rc1): Alot of the functions I wrote for
+	  previous versions are no longer useful for this version, 1.2rc1.
+	  So I decided to store those functions in the file
+	  functions.archive.php.  ODM-1.2rc1 does not need the file
+	  functions.archive.php to run.  This file is only for archiving
+	  purpose so if we ever need any of these functions in the future,
+	  we do not need to redesign them.
+
+2003-06-17 15:06  khoang82
+
+	* edit.php (rel-1-2-rc1): Fix: [ 694688 ] better permission scheme
+	  Resolution: Originally, the permission select boxes in edit.php
+	  are to show users who has certain right to the chosen file.
+	  However, when the admin alter anything on this page and submit,
+	  there is no way to figure out which of these users where
+	  specifically given their rights and which one got theirs through
+	  inheriting it.  So the new design for this page will both more
+	  straight forward for the user and the programmers.  The
+	  permission select boxes are now used to directly specify which
+	  user has which right to the file.  Admin needs not to set
+	  inheriting rights.  When the admin sets rights to the department,
+	  he indirectly set inheriting rights for all users.
+
 2003-06-10 08:24  logart
 
 	* User_class.php: fixed variable typo
@@ -389,6 +914,34 @@
 2003-06-10 08:03  logart
 
 	* ChangeLog: sjl
+
+2003-06-05 17:17  khoang82
+
+	* check-in.php (rel-1-2-rc1): not allowing the user to check-in a
+	  file if this file had not been checked out
+
+2003-06-05 16:59  khoang82
+
+	* error.php, file_ops.php (rel-1-2-rc1): file_ops.php are
+	  operations for root user.  error.php error messages are now in
+	  bigger red font
+
+2003-06-05 16:48  khoang82
+
+	* admin.php, commitchange.php, functions.php (rel-1-2-rc1): add
+	  feature where root can clear check out status of a checked out
+	  file
+
+2003-06-05 16:47  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php (rel-1-2-rc1):
+	  optimize ODM
+
+2003-06-04 15:35  khoang82
+
+	* commitchange.php (rel-1-2-rc1): from now on ODM will not enforce
+	  phonenumber format
 
 2003-05-30 08:56  logart
 
@@ -402,6 +955,11 @@
 
 	* config.php: cleaned up settings, added remarks, moved filetypes
 	  up
+
+2003-05-29 18:06  khoang82
+
+	* Dept_Perms_class.php, UserPermission_class.php, add.php,
+	  functions.php, out.php, search.php (rel-1-2-rc1): fix minor bugs
 
 2003-05-28 17:18  khoang82
 
@@ -425,6 +983,10 @@
 
 	* databaseData_class.php, profile.php, rejects.php, search.php,
 	  view.php: 1.2-rc1 code merge
+
+2003-05-28 16:21  khoang82
+
+	* details.php (rel-1-2-rc1): fix bread crums output
 
 2003-05-28 12:35  logart
 
@@ -457,6 +1019,115 @@
 2003-05-28 10:50  logart
 
 	* setup.php: added 1.1-Final upgrades
+
+2003-05-22 18:29  khoang82
+
+	* FileData_class.php, UserPermission_class.php, User_class.php,
+	  details.php, functions.php, out.php, search.php (rel-1-2-rc1):
+	  new codes to allow user to update their expired files
+
+2003-05-14 19:44  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php, functions.php,
+	  search.php, UserPermission_class.php (rel-1-2-rc1): upgrade
+	  search and security engine for optimized speed
+
+2003-05-14 16:55  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, department.php, details.php, edit.php,
+	  history.php, in.php, out.php, profile.php, rejects.php,
+	  search.php, toBePublished.php, user.php, view.php, view_file.php
+	  (rel-1-2-rc1): enforce urlencode() on url redirection
+
+2003-05-09 11:55  logart
+
+	* install/odm.php (rel-1-2-rc1): fixed missing create statement for
+	  admin table
+
+2003-05-09 11:55  logart
+
+	* setup.php (rel-1-2-rc1): missing 1.1 upgrade link
+
+2003-05-09 11:54  logart
+
+	* delete.php (rel-1-2-rc1): fixed directory perms issue
+
+2003-05-09 11:54  logart
+
+	* add.php, check-in.php, error.php (rel-1-2-rc1): fixed problem
+	  with directory missing or not writeable
+
+2003-05-09 09:52  logart
+
+	* add.php (rel-1-2-rc1): fixed error in UPDATE query
+
+2003-05-09 09:46  logart
+
+	* add.php (rel-1-2-rc1): re-aligned the permissions selects
+
+2003-05-09 09:40  logart
+
+	* linkcontrol.css (rel-1-2-rc1): removed bold from hover because it
+	  was causing the cells to resize
+
+2003-05-09 08:44  logart
+
+	* setup.php (rel-1-2-rc1): removed extra includes in functions
+
+2003-05-09 08:41  logart
+
+	* setup.php (rel-1-2-rc1): added all updates up to 1.1
+
+2003-05-09 08:37  logart
+
+	* install/upgrade_11.php (rel-1-2-rc1): Initial Import
+
+2003-05-09 08:36  logart
+
+	* install/odm.php (rel-1-2-rc1): 1.2rc1 schema
+
+2003-05-09 08:22  logart
+
+	* database.sql (rel-1-2-rc1): applied changes in opendocman_khoa to
+	  this file
+
+2003-05-08 16:43  khoang82
+
+	* commitchange.php (rel-1-2-rc1): comment out phonenumber formating
+
+2003-05-08 16:38  khoang82
+
+	* functions.php (rel-1-2-rc1): drop left message in drawstatus()
+
+2003-05-08 16:33  khoang82
+
+	* admin.php, check-out.php, check_exp.php, config.php, details.php,
+	  rejects.php, toBePublished.php (rel-1-2-rc1): add optionals for
+	  file expiration
+
+2003-05-08 16:32  khoang82
+
+	* FileData_class.php (rel-1-2-rc1): add setStatus()
+
+2003-05-07 16:57  khoang82
+
+	* delete.php, toBePublished.php (rel-1-2-rc1): fix undefined index
+
+2003-05-07 16:57  khoang82
+
+	* rejects.php (rel-1-2-rc1): fixed inconsistent root_mode
+
+2003-05-07 16:56  khoang82
+
+	* functions.php (rel-1-2-rc1): add
+	  array getAllUser() where array =  return a 2D array of users.   >
+		array[0][0] = id   >	   array[0][1] = "LastName,
+	  FirstName"   >       array[0][2] = "username"
+
+2003-05-07 16:54  khoang82
+
+	* edit.php (rel-1-2-rc1): add change ownership functionality
 
 2003-05-06 16:27  logart
 
@@ -511,25 +1182,198 @@
 
 	* config.php: removed ldap refs
 
+2003-04-30 15:32  khoang82
+
+	* delete.php (rel-1-2-rc1): fix POST to REQUEST for generality
+
+2003-04-25 17:49  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, department.php, details.php, history.php,
+	  in.php, index.php, out.php, profile.php, rejects.php, search.php,
+	  toBePublished.php, user.php, view.php, view_file.php
+	  (rel-1-2-rc1): add bookmarkable URL feature
+
 2003-04-25 17:09  khoang82
 
 	* add.php, error.php: fix error output message $allowedFile
+
+2003-04-25 15:46  khoang82
+
+	* User_class.php, admin.php, category.php, commitchange.php,
+	  config.php, crumb.php, department.php, details.php,
+	  functions.php, history.php, in.php, linkcontrol.css, logout.php,
+	  out.php, search.php, user.php (rel-1-2-rc1): integrating bread
+	  crumb class into OpenDocMan
 
 2003-04-23 16:34  logart
 
 	* User_Perms_class.php: fixed bug in 139
 
+2003-04-18 16:11  khoang82
+
+	* functions.php (rel-1-2-rc1): remove extra spaces in list_files()
+
+2003-04-18 16:10  khoang82
+
+	* error.php (rel-1-2-rc1): add new error message
+
+2003-04-18 16:09  khoang82
+
+	* delete.php (rel-1-2-rc1): upgrade list archives mode to use new
+	  list_files()
+
+2003-04-18 16:08  khoang82
+
+	* config.php (rel-1-2-rc1): add new configuration for file
+	  expiration
+
+2003-04-18 16:07  khoang82
+
+	* add.php (rel-1-2-rc1): uncommented header('')
+
+2003-04-18 15:28  khoang82
+
+	* check_exp.php (rel-1-2-rc1): fix redudent rejects
+
+2003-04-18 15:25  khoang82
+
+	* check_exp.php (rel-1-2-rc1): cron script to reject expired files
+
+2003-04-16 16:17  khoang82
+
+	* add.php, config.php, out.php (rel-1-2-rc1): recovered out.php.
+	  Leave major optimization for later alter add.php to just add 1
+	  copy of the file.  (debuging code can add multiple copies of the
+	  file)
+
 2003-04-14 10:38  logart
 
 	* functions.php: fixed type with \ replaced " with '
+
+2003-04-11 16:01  khoang82
+
+	* UserPermission_class.php (rel-1-2-rc1): optimized and remove
+	  redundancy
+
+2003-04-11 16:00  khoang82
+
+	* User_Perms_class.php, User_class.php (rel-1-2-rc1): optimized
+
+2003-04-11 15:58  khoang82
+
+	* toBePublished.php (rel-1-2-rc1): fixed to use the new list_file()
+
+2003-04-11 15:56  khoang82
+
+	* search.php (rel-1-2-rc1): uses new search().	Must faster, much
+	  more reliable, and much more stable
+
+2003-04-11 15:54  khoang82
+
+	* rejects.php (rel-1-2-rc1): optimized for speed.  changed to used
+	  new list_file()
+
+2003-04-11 15:53  khoang82
+
+	* out.php (rel-1-2-rc1): optimized for speed.  Not a working
+	  version.  Please use earlier verion
+
+2003-04-11 15:52  khoang82
+
+	* functions.php (rel-1-2-rc1): add getmicrotime() for debug add
+	  optimized list_file() for speed
+
+2003-04-11 15:50  khoang82
+
+	* FileData_class.php (rel-1-2-rc1): add function getFileSize()
+
+2003-04-11 15:49  khoang82
+
+	* Dept_Perms_class.php (rel-1-2-rc1): remove owner's exclusive file
+	  administration from this class
+
+2003-04-11 15:47  khoang82
+
+	* databaseData_class.php (rel-1-2-rc1): add function
+	  convertToFileDataOBJ($fid_array) to the root class so other
+	  derrived ones can inherit it.
+
+2003-04-11 15:46  khoang82
+
+	* check-in.php (rel-1-2-rc1): change uploaded revision to 'current'
+	  and change the last revision from 'current' to a numeric one
 
 2003-04-08 08:39  logart
 
 	* check-in.php: changed copy to move_uploaded_file
 
+2003-04-02 18:36  khoang82
+
+	* add.php, admin.php, delete.php, error.php, functions.php,
+	  out.php, rejects.php, search.php, toBePublished.php
+	  (rel-1-2-rc1): my_sort function added which reduces sorting time
+	  dramatically
+
+2003-03-28 09:37  khoang82
+
+	* FileData_class.php, admin.php, check-out.php, config.php,
+	  delete.php, details.php, edit.php, error.php, history.php,
+	  mimetypes.php, rejects.php, view_file.php (rel-1-2-rc1): admin
+	  ==> rewording check-out.php ==> allow it to work with archived
+	  files config ==> nothing new delete ==> when delete files, delete
+	  their revisions as well, add confirmation in view_archives mode,
+	  details ==> allow it to work with archive files, block archives
+	  from being edit, check-out, or delete edit ==> block user from
+	  hacking the url into editing archives error ==> add new error
+	  FileData_class.php ==> add isArchived() fucntion history,
+	  view_file, rejects ==> allow them to work with archives
+
+2003-03-27 11:00  khoang82
+
+	* delete.php, functions.php (rel-1-2-rc1): somehow no
+	  file-relocating function is provided by php, so fmove() is added
+	  to functions.php delete.php now moves files to archive folder
+	  when being archieved and move it out into dataDir with
+	  unarchived.
+
+	  last_message should be set for all file operations
+
+2003-03-27 10:34  khoang82
+
+	* check-in.php, config.php, history.php, view_file.php
+	  (rel-1-2-rc1): fix folder comlexity in config.php
+
+2003-03-27 10:14  khoang82
+
+	* check-out.php, delete.php, details.php, edit.php, error.php
+	  (rel-1-2-rc1): add new error to error.php saying operation may
+	  not be done on revision copy error out when user tries to
+	  checkout, delete, edit a revision copy
+
+2003-03-27 09:59  khoang82
+
+	* add.php, check-in.php, config.php, details.php, history.php,
+	  view_file.php (rel-1-2-rc1): revision feature added
+
 2003-03-26 14:36  logart
 
 	* config.php: demo got lost during merge - put back in
+
+2003-03-26 08:45  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php, FormCheck.js,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  add.php, admin.php, check-in.php, commitchange.php, config.php,
+	  delete.php, details.php, edit.php, functions.php, out.php,
+	  rejects.php, search.php, toBePublished.php, user.php,
+	  view_file.php (rel-1-2-rc1): commiting rel-1-2-rc1 after
+	  branching off.  initial imports
+
+2003-03-26 08:43  khoang82
+
+	* images/: exclamation.gif, exclamation_red.gif (rel-1-2-rc1): add
+	  exclamation images
 
 2003-03-26 08:30  logart
 
@@ -543,6 +1387,95 @@
 	  docs/README.html, docs/README.txt, images/exclamation.gif,
 	  images/exclamation_red.gif, install/upgrade.php,
 	  install/upgrade_11rc1.php: merged from rel-1-1-rc1 branch
+
+2003-03-25 15:36  logart
+
+	* ChangeLog (rel-1-1-rc1): new
+
+2003-03-25 15:34  logart
+
+	* install/upgrade.php (rel-1-1-rc1): fixed typo added 11rc1
+
+2003-03-25 15:34  logart
+
+	* setup.php (rel-1-1-rc1): added 11rc1
+
+2003-03-25 15:33  logart
+
+	* install/upgrade_11rc1.php (rel-1-1-rc1): initial import
+
+2003-03-25 10:03  khoang82
+
+	* delete.php (rel-1-1-rc1): make this script $register_globals off
+	  compatible
+
+2003-03-24 10:14  khoang82
+
+	* FormCheck.js (rel-1-1-rc1): phonenumber validation has been
+	  removed
+
+2003-03-24 10:04  khoang82
+
+	* view_file.php (rel-1-1-rc1): fix https viewing and downloading
+	  problem
+
+2003-03-19 13:52  logart
+
+	* config.php (rel-1-1-rc1): updated version removed specifics from
+	  config
+
+2003-03-19 13:50  logart
+
+	* docs/: README.html, README.txt (rel-1-1-rc1): updated ver #
+
+2003-03-19 11:54  logart
+
+	* out.php, images/exclamation.gif, images/exclamation_red.gif
+	  (rel-1-1-rc1): added yellow ! for new notice added red ! for
+	  rejected notice
+
+2003-03-18 07:44  logart
+
+	* view_file.php (rel-1-1-rc1): added backslash thanks Huy
+
+2003-03-17 17:11  logart
+
+	* check-in.php (rel-1-1-rc1): fixed urlencoding on last_message
+
+2003-03-17 15:49  logart
+
+	* edit.php (rel-1-1-rc1): fixed $uid var
+
+2003-03-14 14:21  khoang82
+
+	* add.php (rel-1-1-rc1): init status to 0 where upload new file
+
+2003-03-14 14:20  khoang82
+
+	* UserPermission_class.php (rel-1-1-rc1): add revokable admin right
+	  of file owner
+
+2003-03-13 16:20  khoang82
+
+	* functions.php (rel-1-1-rc1): fix urlencode for sort_browser.
+	  Resolving bug-702377
+
+2003-03-12 13:20  logart
+
+	* user.php (rel-1-1-rc1): added demo logic to Modify user
+
+2003-03-12 13:06  logart
+
+	* config.php (rel-1-1-rc1): added a demo mode setting
+
+2003-03-12 11:52  logart
+
+	* setup.php, commitchange.php (rel-1-1-rc1): fixed username issues
+	  from bug #702453
+
+2003-03-12 09:11  logart
+
+	* edit.php (rel-1-1-rc1): added urlencode to message
 
 2003-03-11 14:06  logart
 
@@ -1666,4 +2599,32 @@
 	  images/search.png, images/search.xcf, images/setting.png,
 	  images/txt.png, images/view.png, images/view.xcf: Initial
 	  revision
+
+2002-12-19 15:27  logart
+
+	* BUGS, COPYING, Department_class.php, Dept_Perms_class.php,
+	  FileData_class.php, FormCheck.js, TODO, UserPermission_class.php,
+	  User_Perms_class.php, add.php, admin.php, category.php,
+	  check-in.php, check-out.php, LICENSE, README, classHeaders.php,
+	  commitchange.php, config.php, database.sql,
+	  databaseData_class.php, delete.php, department.php, details.php,
+	  edit.php, error.php, history.php, in.php, index.php,
+	  linkcontrol.css, out.php, overlib.js, overlib_mini.js,
+	  personal_info.php, php_coding_standard.html, User_class.php,
+	  functions.php, help.html, logout.php, mimetypes.php, profile.php,
+	  rejects.php, search.php, toBePublished.php, user.php,
+	  userinfo.php, view.php, view_file.php, images/a.jpg,
+	  images/add.png, images/admin.gif, images/blue_left.gif,
+	  images/check-in.png, images/check-in_dev.xcf,
+	  images/check-out.png, images/check-out.xcf, images/delete.png,
+	  images/detete.xcf, images/edit.png, images/edit.xcf,
+	  images/file_locked.png, images/file_locked.xcf,
+	  images/file_unlocked.png, images/file_unlocked.xcf,
+	  images/icon_sort_az.gif, images/icon_sort_null.gif,
+	  images/icon_sort_za.gif, images/logout.jpg, images/logout.png,
+	  images/logout_logo.gif, images/na.jpg, images/revision.png,
+	  images/revision.xcf, images/companylogo.gif, images/logo.gif,
+	  images/search.png, images/search.xcf, images/setting.png,
+	  images/txt.png, images/view.png, images/view.xcf: sjl Initial
+	  Import
 
