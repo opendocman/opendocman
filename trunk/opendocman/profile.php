@@ -16,7 +16,6 @@ draw_status_bar('User Information', $last_message);
 <?php echo '<INPUT type="hidden" name="callee" value="' . $_SERVER['PHP_SELF'] . '">'; ?>
 <table name="list" align="center", border="1">
 <tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $SESSION_UID; ?>&callee=<?php echo $_SERVER['PHP_SELF']; ?>">Change Personal Info</a><center></td></tr>
-<tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $SESSION_UID; ?>&callee=<?php echo $_SERVER['PHP_SELF']; ?>&update_pwd=true">Change Password</a><center></td></tr>
 </table>
 </center>
 <?php

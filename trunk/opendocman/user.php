@@ -337,13 +337,14 @@ if($submit == 'adduser')
                 echo "<tr>";
                 echo ("<td><b>Phone Number: </td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\"></td>");
                 // If mysqlauthentication, then ask for password
-                if( $GLOBALS["CONFIG"]["authen"] =='mysql' && $update_pwd=='true')
+                if( $GLOBALS["CONFIG"]["authen"] =='mysql')
                 {
 ?>
                     <tr>
                     <td><b>Password</b></td>
                     <td>
                     <input name="password" type="password">
+                    <font size="1">Leave empty if unchange</font>
                     </td>
                     </tr>
                     <tr>
@@ -473,7 +474,8 @@ if($submit == 'adduser')
                         <td colspan="1" align="right">
                         </td>
                         <td>
-                        <input type="Submit" name="updateuser"  onClick="return validatemod(update);" value="Modify User">
+                        <INPUT type="hidden" name="set_password" value="0">
+                        <input type="Submit" name="updateuser"  onClick="return verify(this.form, password, conf_password, set_password);" value="Modify User">
                         </form>
                         <form action="<?php echo $PHP_SELF; ?>" >
                         <input type="Submit" name="submit" value="Cancel">
@@ -482,8 +484,28 @@ if($submit == 'adduser')
                         </tr>
                         </table>
                         </center>
-                        <?php
-                        draw_footer();
+                        <SCRIPT language="JAVASCRIPT">
+                        	function verify(this_form, pwd, conf_pwd, set_password)
+                        	{
+                        		if(pwd.value != "" && pwd.value != conf_pwd.value)
+                        		{
+                        			alert("Password and Confirm Password fields do not match, Please check it again."); 
+									return false;
+                        		}
+                       			if(pwd.value != "")
+                       			{
+                       				set_password.value = true;
+                       			}
+                       			esle
+                       			{
+                       				set_password.value = false;
+                       			}
+                        		return validatePhone(this_form) && validateEmail(this_form);
+                        	
+                        	}
+                        	</SCRIPT>
+                        	<?php
+                          draw_footer();
         }
 
         elseif($submit == 'updatepick')
