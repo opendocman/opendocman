@@ -113,7 +113,7 @@ function do_install()
 
         // Create database
         $sql = "DROP DATABASE IF EXISTS $_REQUEST[database]";
-        $result = mysql_query($sql);
+        if(!$result = mysql_query($sql)) die ('Sorry, there was a problem with the DROP statement');
 
         $sql = "CREATE DATABASE $_REQUEST[database]";
         $result = mysql_query($sql) or die("<br>Unable to Create Database - Error in query:" . mysql_error());
@@ -123,7 +123,7 @@ function do_install()
         echo 'Database Selected<br>';
 
         // Grant privs
-        $sql = "GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'";
+        $sql = "GRANT ALL ON $_REQUEST[database].* to $_POST[username]@'$_POST[roothost]' identified by '$_REQUEST[password]'";
         $result = mysql_query($sql) or die("<br>Unable to set grant - Error in query:" . mysql_error());
         include("install/odm.php");
         include("config.php");
