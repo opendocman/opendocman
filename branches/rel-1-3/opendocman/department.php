@@ -11,6 +11,15 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('config.php');
+// Check to see if user is admin
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$secureurl = new phpsecureurl;
+if(!$user_obj->isAdmin())
+{
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
+}
+
 // open a connection to the database
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 {
@@ -25,13 +34,6 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='add')
         }
         draw_status_bar('Add New Department', $_POST['last_message']);
 	draw_header('Add New Department');
-	// Check to see if user is admin
-	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	if(!$user_obj->isAdmin())        
-	{
-		draw_error('error.php?ec=4');
-		exit;
-	}
 ?>
 
 <center>

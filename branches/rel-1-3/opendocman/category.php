@@ -9,10 +9,17 @@ if (!isset($_SESSION['uid']))
 }
 // includes
 include('config.php');
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$secureurl = new phpsecureurl;
+if(!$user_obj->isAdmin())        
+{
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
+}
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 {
-	draw_menu($_SESSION['uid']);
+    draw_menu($_SESSION['uid']);
 }
 
 if(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add')
@@ -24,12 +31,6 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add')
 		draw_header($GLOBALS['lang']['area_add_new_category']);
 		draw_status_bar($GLOBALS['lang']['area_add_new_category'], $_REQUEST['last_message']);
 		// Check to see if user is admin
-		$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-		if(!$user_obj->isAdmin())        
-		{
-				draw_error('error.php?ec=4');
-				exit;
-		}
 ?>
 <center>
 <table border="0" cellspacing="5" cellpadding="5">
