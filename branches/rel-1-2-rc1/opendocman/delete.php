@@ -136,7 +136,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 	}
 	draw_menu($_SESSION['uid']);
 	draw_header('Rejected Files');
-	@draw_status_bar('Rejected Document Listing', $_POST['last_message']);
+	@draw_status_bar('Rejected Document Listing', $_REQUEST['last_message']);
 	$page_url = $_SERVER['PHP_SELF'] . '?';
 
 	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
