@@ -116,11 +116,16 @@ elseif(isset($_REQUEST['updateuser']))
 	{
 		$query .= "password = password('". addslashes($_REQUEST['password']) ."'), ";
 	}
-	$query.= 'department="' . addslashes($_REQUEST['department']) . '",';
-	$query.= 'phone="' . addslashes($_REQUEST['phonenumber']) . '",';
-	$query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,';
-	$query.= 'last_name="' . addslashes($_REQUEST['last_name']) . '",';
-	$query.= 'first_name="' . addslashes($_REQUEST['first_name']) . '" ';
+	if( isset( $_REQUEST['department'] ) )
+	{	$query.= 'department="' . addslashes($_REQUEST['department']) . '",';	}
+	if( isset( $_REQUEST['phonenumber'] ) )
+	{	$query.= 'phone="' . addslashes($_REQUEST['phonenumber']) . '",';	}
+	if( isset( $_REQUEST['Email'] ) )
+	{	$query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,';	}
+	if( isset( $_REQUEST['last_name'] ) )
+	{	$query.= 'last_name="' . addslashes($_REQUEST['last_name']) . '",';	}
+	if( isset( $_REQUEST['first_name'] ) )
+	{	$query.= 'first_name="' . addslashes($_REQUEST['first_name']) . '" ';	}
 	$query.= 'WHERE id="' . $_REQUEST['id'] . '"';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
