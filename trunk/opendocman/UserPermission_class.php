@@ -1,4 +1,4 @@
-<?
+<?php
 if( !defined('UserPermission_class') )
 {
   define('UserPermission_class', 'true', false);
