@@ -212,7 +212,7 @@ if($submit == 'adduser')
                         </form>
                         </td>
                         <td>
-                        <form action="<?php echo $PHP_SELF; ?>">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
@@ -273,7 +273,7 @@ if($submit == 'adduser')
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php $PHP_SELF; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                         <tr>
                         <td><b>User</b></td>
                         <td colspan=3>
@@ -305,7 +305,7 @@ if($submit == 'adduser')
         }
         elseif($submit == 'Modify User')
         {
-        		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+        		$user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
                 draw_status_bar("Update User",$message);
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
@@ -476,7 +476,7 @@ if($submit == 'adduser')
                         <INPUT type="hidden" name="set_password" value="0">
                         <input type="Submit" name="updateuser"  onClick="return verify(this.form, password, conf_password, set_password);" value="Modify User">
                         </form>
-                        <form action="<?php echo $PHP_SELF; ?>" >
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" >
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
@@ -521,7 +521,7 @@ if($submit == 'adduser')
                 }
                 ?>
                         <center>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?update_pwd=true" method="POST" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
                         <td><b>Username to modify:</b></td>
@@ -549,7 +549,7 @@ if($submit == 'adduser')
                         </td>
                         </form>
                         <td colspan="4" align="center">
-                        <form action="<?php echo $PHP_SELF; ?>">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
