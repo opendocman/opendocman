@@ -1,4 +1,5 @@
 <?php
+include_once('config.php');
 /*
 odm.php - main file for creating a fresh installation
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence
@@ -18,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// For version ODM 1.2rc1 fresh install
+// For version ODM 1.3.0 fresh install
 // Admin table
 
 $sql = "DROP TABLE IF EXISTS " . $GLOBALS['CONFIG']['table_prefix'] . "admin";
