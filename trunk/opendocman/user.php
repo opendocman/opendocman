@@ -311,8 +311,12 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User')
         {
-        		$user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
-                @draw_status_bar("Update User",$_POST['last_message']);
+        	$user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+                if (!isset($_REQUEST['last_message']))
+                {
+                        $_REQUEST['last_message']='';
+                }
+                draw_status_bar("Update User",$_POST['last_message']);
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
