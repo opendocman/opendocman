@@ -75,13 +75,13 @@ if( !defined('UserPermission_class') )
 			AND $this->TABLE_DATA.publishable = 1)";
 		
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
-		for($index=0; $index < mysql_num_rows($result); $index++)
+		$len = mysql_num_rows($result);
+		for($index=0; $index < $len; $index++)
 		{
 			list($array[$index]) = mysql_fetch_row($result);
 		}
-		$deptperm_filearray = removeElements($deptperm_filearray, $array); 
-		$published_filearray = $this->user_obj->getPublishedData(1);
-		$result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
+		$deptperm_filearray = array_diff($deptperm_filearray, $array); 
+		$result_array = array_values( array_unique( array_merge($userperm_filearray, $deptperm_filearray) ) );
 		return $result_array;
 	}
 	// return an array of all the Allowed files ( right >= view_right) OBJ 
@@ -159,7 +159,7 @@ if( !defined('UserPermission_class') )
 	}
 	// convert an array of file id into an array of file Obj correspondent to 
 	// the ids in the id array.
-    function convertToFileDataOBJ($fid_array)
+    /*function convertToFileDataOBJ($fid_array)
 	{
 		$filedata_array = array();
 		for($i = 0; $i<sizeof($fid_array); $i++)
@@ -167,29 +167,19 @@ if( !defined('UserPermission_class') )
 			$filedata_array[$i] = new FileData($fid_array[$i], $this->connection, $this->database, "data");
 		}
 		return $filedata_array;
-	}
+	}*/
   	// return the authority that this user have on file data_id
   	// by combining and prioritizing user and deparment right
-    function getAuthority($data_id)
+	function getAuthority($data_id)
 	{
-	    if($this->user_obj->isRoot())
+		if($this->user_obj->isRoot())
 			return $this->ADMIN_RIGHT;
 		$uperm = $this->userperm_obj->getPermission($data_id);
-	    $dperm = $this->deptperm_obj->getPermission($data_id);
-	    $filedata = new FileData($data_id, $this->connection, $this->database);
-	    if( $filedata->isOwner($this->uid) )
-	    {  return $this->ADMIN_RIGHT;	}
-	    if( $uperm>=$this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
-	    {
-	      if($dperm>=$this->deptperm_obj->NONE_RIGHT and $dperm <= $this->deptperm_obj->ADMIN_RIGHT)
-	      {
-		if($dperm>=$uperm)
-		{  return $dperm;  }
+		$dperm = $this->deptperm_obj->getPermission($data_id);
+		if( $uperm>=$this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
+			return $uperm;
 		else
-		{ return $uperm; }
-	      }
-	      return $uperm;
-	    }
+			return $dperm;
 	}
   }
 }
