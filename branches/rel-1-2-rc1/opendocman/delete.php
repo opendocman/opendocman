@@ -18,6 +18,8 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 		$_REQUEST['num_checkboxes'] =1;
 	// all ok, proceed!
 	//mysql_free_result($result);
+	if( !is_dir($GLOBALS['CONFIG']['archiveDir']) )
+	{	mkdir($GLOBALS['CONFIG']['archiveDir']);	}
 	for($i = 0; $i<$_REQUEST['num_checkboxes']; $i++)
 	{
 		if(@$_REQUEST['id' . $i])
@@ -31,12 +33,13 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 			{
 				$file_obj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 				$file_obj->temp_delete();
+				fmove($GLOBALS['CONFIG']['dataDir'] . $id . '.dat', $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat');
 			}
 		}
 	}
 	// delete from directory
 	// clean up and back to main page
-	$last_message = urlencode('Document successfully deleted');
+	$last_message = urlencode('Document has been archived');
 	header('Location: out.php?last_message=' . $last_message);
 }
 elseif( $_REQUEST['mode'] == 'pmntdel' )
@@ -72,7 +75,7 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 				$query = "DELETE FROM log WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 				$filename = $id . ".dat";
-				unlink($GLOBALS['CONFIG']['dataDir'] . $filename);
+				unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
 			}
 		}
 	}
@@ -128,7 +131,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archieve' )
 ?>
 		<TABLE border="1"><TR><TD>
 <?php
-		list_files($sorted_obj_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true);
+		list_files($sorted_obj_array, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true);
 	list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url, $_POST['page'], $_POST['sort_by'], $_POST['sort_order']);
 ?>
 		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit"
@@ -159,9 +162,10 @@ elseif($_REQUEST['mode'] = 'Undelete')
 		{
 			$file_obj = new FileData($_REQUEST["checkbox$i"], $GLOBALS['connection'], $GLOBALS['database']);
 			$file_obj->undelete();
+			 fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
 		}
 	}
-	header('Location:' . $_REQUEST['caller']);
+	header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode('Document has been unarchived'));
 }
 
 ?>

@@ -1112,5 +1112,18 @@ if( !defined('function') )
 			exit();
 		}
 	}
+	function fmove($source_file, $destination_file)
+	{
+		//read and close
+		$lfhandler = fopen ($source_file, "r");
+		$lfcontent = fread($lfhandler, filesize ($source_file));
+		fclose ($lfhandler);
+		//write and close
+		$lfhandler = fopen ($destination_file, "w");
+		fwrite($lfhandler, $lfcontent);
+		fclose ($lfhandler);
+		//delete source file
+		unlink($source_file);
+	}
 }
 ?>
