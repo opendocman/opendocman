@@ -245,4 +245,4 @@ if( !defined('Dept_Perms_class') )
 		}
 	}//end class
 }//end ifdef
-?
+?>
