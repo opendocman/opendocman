@@ -28,7 +28,7 @@ if (!isset($submit))
 {
 	draw_header('Checkout');
 	draw_menu($SESSION_UID);
-	draw_status_bar('Check Out Document', $lastmessage);
+	draw_status_bar('Check Out Document');
 	// form not yet submitted
 	// display information on how to initiate download
 ?>
