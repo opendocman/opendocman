@@ -726,7 +726,7 @@ if( !defined('function') )
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
                         $rights = array($read, $write, $admin);
                         $userright = $userperms_obj->getAuthority($fileobj_array[$index]->getId());
-                        $index_found = 0;
+                        $index_found = -1;
                         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
                         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
                         //and everything below it. 
@@ -739,7 +739,7 @@ if( !defined('function') )
                                 }
                         }
                         //Found the user right, now bold every below it.  For those that matches, make them different.
-                        for($i = $index_found; $i>=0; $i--)
+            			for($i = $index_found; $i>=0; $i--)
                         {
                                 $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
                         }

@@ -1,6 +1,7 @@
 <?php
 
 include('config.php');
+//$SESSION_UID = 102;
 
 session_start();
 if (!session_is_registered('SESSION_UID'))
