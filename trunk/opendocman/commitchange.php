@@ -7,6 +7,7 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+$secureurl = new phpsecureurl;
 // connect to DB
 // Submitted so insert data now
 if(isset($_REQUEST['adduser']))
@@ -18,7 +19,7 @@ if(isset($_REQUEST['adduser']))
     // If the above statement returns more than 0 rows, the user exists, so display error
     if(mysql_num_rows($result) > 0)
     {
- 	   header('Location:error.php?ec=3');
+ 	   header('Location:' . $secureurl->encode('error.php?ec=3'));
            exit;
     }
     else
@@ -73,7 +74,7 @@ if(isset($_REQUEST['adduser']))
 		$mail_to = $new_user_obj->getEmailAddress();
 		mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
 		$_REQUEST['last_message'] = urlencode('User successfully added');
-       	header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+       	header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
     }
 }
 elseif(isset($_REQUEST['updateuser']))
@@ -133,7 +134,7 @@ elseif(isset($_REQUEST['updateuser']))
     header('Location: ' . $_REQUEST['caller'] . '?last_message=' . $_REQUEST['last_message']);
 }
 // Delete USER
-elseif(isset($_REQUEST['deleteuser']))
+elseif(@$_REQUEST['submit'] == 'deleteuser' )
 {
         // form has been submitted -> process data
         // DELETE admin info
@@ -153,17 +154,17 @@ elseif(isset($_REQUEST['deleteuser']))
 
         // back to main page
         $_REQUEST['last_message'] = urlencode($_REQUEST['id'] . ' User successfully deleted');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+        header('Location:' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 //Add Departments
-elseif(isset($_REQUEST['adddepartment']))
+elseif(@$_REQUEST['submit'] == 'Add Department')
 {
 		//Check to see if this department is already in DB
 		$query = "SELECT department.name from department where department.name=\"" . addslashes($_REQUEST['department']) . '"';
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         if(mysql_num_rows($result) != 0)
         {
-	       	header('Location: error.php?ec=3&message=' . $_REQUEST['department'] . ' already exist in the database');
+	       	header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $_REQUEST['department'] . ' already exist in the database'));
         	exit;
         }
 		$query = "INSERT INTO department (name) VALUES ('" . addslashes($_REQUEST['department']) . '\')';
@@ -185,7 +186,7 @@ elseif(isset($_REQUEST['adddepartment']))
        	$num_rows = mysql_num_rows($result);
        	if( $num_rows != 1 )
        	{
-       		header('Location: error.php?ec=14&message=unable to identify ' . $_REQUEST['department']);
+       		header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $_REQUEST['department']));
        		exit;	
        	}
         list($newly_added_dept_id) = mysql_fetch_row($result);
@@ -196,7 +197,7 @@ elseif(isset($_REQUEST['adddepartment']))
        		$query = "INSERT INTO dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
        		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());        
        	}
-       	header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+       	header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // UPDATE Department
 elseif(isset($_REQUEST['updatedepartment']))
@@ -206,14 +207,14 @@ elseif(isset($_REQUEST['updatedepartment']))
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
-       	header('Location: error.php?ec=3&last_message=' . $_REQUEST['name'] . ' already exist in the database');
+       	header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_REQUEST['name'] . ' already exist in the database'));
     	exit;
     }    
 	$query = "UPDATE department SET name='" . addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $_REQUEST['last_message'] = urlencode('Department successfully updated - name=' . $_REQUEST['name'] . '- id=' . $_REQUEST['id']);
-    header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 elseif(isset($_REQUEST['deletedepartment']))
 {
@@ -222,17 +223,17 @@ elseif(isset($_REQUEST['deletedepartment']))
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $last_message = urlencode('Department (' . $_REQUEST['id'] . ') successfully deleted');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 
 // Add Category
-elseif(isset($_REQUEST['addcategory']))
+elseif(@$_REQUEST['submit']=='Add Category')
 {
         $query = "INSERT INTO category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $_REQUEST['last_message'] = urlencode('Category successfully added');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // Delete department
 elseif(isset($_REQUEST['deletecategory']))
@@ -241,7 +242,7 @@ elseif(isset($_REQUEST['deletecategory']))
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $_REQUEST['last_message'] = urlencode('Category (' . $_REQUEST['id'] . ') successfully deleted');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // UPDATE Category
 elseif(isset($_REQUEST['updatecategory']))
@@ -250,7 +251,7 @@ elseif(isset($_REQUEST['updatecategory']))
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
         $_REQUEST['last_message'] = urlencode('Category ' . $_REQUEST['name'] . ' successfully updated');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 
 else

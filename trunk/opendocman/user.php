@@ -13,6 +13,7 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('config.php');
+$secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
@@ -24,7 +25,7 @@ if (isset($_SESSION['uid']) & isset($_GET['item']))
 {
         if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
         {
-                header('Location:error.php?ec=4');
+                header('Location:' . $secureurl->encode('error.php?ec=4'));
                 exit;
         }
 }
@@ -38,7 +39,7 @@ if($user_obj->isAdmin() == true)
         $mode = 'disabled';
         if($mode == 'disabled' && $_GET['item'] != $_SESSION['uid'])
 {
-        header('Location:error.php?ec=4');
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
         exit;
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -156,10 +157,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="commitchange.php?id=<?php echo $_POST['item'];?> " method="POST" enctype="multipart/form-data">
+                        <form action="commitchange.php" method="POST" enctype="multipart/form-data">
                         <tr>
                         <td valign="top">Are you sure you want to delete 
-
+						<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
                         <?php
                         $query = 'SELECT id, first_name, last_name FROM user WHERE id=' . $_POST['item'] .'';
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -173,7 +174,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 
                         </td>
                         <td colspan="4" align="center">
-                        <input type="Submit" name="deleteuser" value="Yes">
+                        <input type="Submit" name="submit" value="deleteuser">
                         </td>
                         </form>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
@@ -195,7 +196,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>"
                         <tr>
                         <td><b>User</b></td>
@@ -282,7 +283,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>"
                         <tr>
                         <td><b>User</b></td>
@@ -521,7 +522,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                        			{
                        				set_password.value = false;
                        			}
-                        		return validatePhone(this_form) && validateEmail(this_form);
+                        		return validateEmail(this_form);
                         	
                         	}
                         	</SCRIPT>
@@ -539,7 +540,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 if(mysql_num_rows($result) <= 0)
                 {
-                        header('Location:error.php?ec=4');
+                        header('Location:' . $secureurl->encode('error.php?ec=4'));
                         exit;
                 }
                 ?>
@@ -651,10 +652,10 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
         {
                 $last_message="Action Cancelled";
-                header('Location:admin.php?last_message='.$last_message);
+                header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));
         }
         else 
         {	
-        	header('Location:admin.php?last_message=' . urlencode('Unrecognizalbe action'));
+        	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));
         }
 ?>

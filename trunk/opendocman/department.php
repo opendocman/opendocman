@@ -43,10 +43,10 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='add')
      <td><b>Department</b></td>
      <td colspan="3"><input name="department" type="text"></td>
     </tr>
-	<input type="hidden" name="adddepartment" value="Add Department">
+	<input type="hidden" name="submit" value="Add Department">
     <tr>
     <td></td>
-     <td colspan="4" align="center"><input type="Submit" name="adddepartment" value="Add Department"></td>
+     <td colspan="4" align="center"><input type="Submit" name="submit" value="Add Department"></td>
     </form>
     </tr>
     <tr>

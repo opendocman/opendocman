@@ -31,6 +31,7 @@ checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
 $user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
+$secureurl = new phpsecureurl;
 
 ?>
 <center>
@@ -47,6 +48,7 @@ $description = $filedata->getDescription();
 $comment = $filedata->getComment();
 $status = $filedata->getStatus();
 $reviewer = $filedata->getReviewerName();
+$filesize = $filedata->getFileSize();
 // corrections
 if ($description == '') 
 { 
@@ -114,7 +116,7 @@ else
 </tr>
 
 <tr>
-<td>File size: <?php echo filesize($filename); ?> bytes</td>
+<td>File size: <?php echo $filesize; ?> bytes</td>
 </tr>
 
 <tr>
@@ -182,7 +184,7 @@ if ($status > 0)
 <?php 
 if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->VIEW_RIGHT)
 {?>
-<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/view.png" alt="" border="0"></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
 }		
 if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
@@ -196,7 +198,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	{
 		// if so, display link for checkout
 ?>
-		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
+		<td align="center"><a href="<?php echo $secureurl->encode("check-out.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1) . '&access_right=modify');?>"><img src="images/check-out.png" alt="" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
@@ -206,7 +208,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
 ?>
-		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id'] . '&state=' . ($_REQUEST['state']+1);?>"><img src="images/edit.png" alt="" border="0"></a></td>
+		<td align="center"><a href="<?php echo $secureurl->encode("edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state']+1));?>"><img src="images/edit.png" alt="" border="0"></a></td>
 		<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
 <?php
 	}
@@ -214,7 +216,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 // ability to view revision history is always available 
 // put it outside the block
 ?>
-<td align="center"><a href="history.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("history.php?id=$lrequest_id&state=" . ($_REQUEST['state']+1)); ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
 
 </tr>
 <!-- inner table ends -->
@@ -233,7 +235,7 @@ draw_footer();
 	function my_delete()
 	{
 		if(window.confirm("Are you sure?"))
-		{	window.location = "delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>";	}
+		{	window.location = "<?php echo $secureurl->encode('delete.php?mode=tmpdel&id0=' . $_REQUEST['id']); ?>";	}
 	}
 	function sendFields()
 	{

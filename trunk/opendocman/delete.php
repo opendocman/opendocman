@@ -156,13 +156,19 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 ?>
 		<TABLE border="1"><TR><TD>
 <?php
-		list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true);
+		$list_status = list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true);
 	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
-?>
+		if( $list_status != -1)
+		{
+?>	
+		
 		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit"
 		name="mode" value="Delete file(s)">
 		</TABLE>
 		<input type="hidden" name="caller" value="<?php echo $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];?>">
+		<?
+		}
+		?>
 		</FORM>
 <?php
 }

@@ -542,7 +542,7 @@ if( !defined('function') )
 
         function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
         {
-                $secureurl = new phpsecureurl;
+				$secureurl = new phpsecureurl;
 				if($total_hit<$page_limit)
                 {
                         return 0;

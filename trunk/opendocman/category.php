@@ -38,11 +38,11 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add')
 		<td><b>Category</b></td>
 		<td colspan="3"><input name="category" type="text"></td>
 	</tr>
-	<input type="hidden" name="addcategory" value="Add Category">
+	<input type="hidden" name="submit" value="Add Category">
 	<tr>
 		
 </table>
-<input type="Submit" name="addcategory" value="Add Category">
+<input type="Submit" name="submit" value="Add Category">
 </form>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="Submit" name="submit" value="Cancel">
@@ -72,7 +72,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 	}
 ?>
 	<TABLE name="delete_table">
-	<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>&id=<?php echo $_REQUEST['item'];?> " method="POST" enctype="multipart/form-data">
+	<form action="commitchange.php" method="POST" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
 		<tr>
 			<td valign="top">Are you sure you want to delete this?</td>
 			<td colspan="4" align="center"><input type="Submit" name="deletecategory" value="Yes"></td>
@@ -97,7 +98,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 ?>
 	<center>
 	<table border="0" cellspacing="5" cellpadding="5">
-	<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
 				<td><b>Category</b></td>

@@ -11,6 +11,7 @@ if (!isset($_SESSION['uid']))
 include('config.php');
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$secureurl = new phpsecureurl;
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
@@ -28,23 +29,23 @@ draw_menu($_SESSION['uid']);
 	   <td>
 	    <table border="0">
 		 <tr>
-	      <td><b><a href="user.php?submit=adduser<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=adduser&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=deletepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Delete</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>">Delete</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>">Display</a></b></td>
 	     </tr>
 		</table>
 	   </td>
 	   <td>
 	 	<table border="0">
 		 <tr>
-	      <td><b><a href="department.php?submit=add<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
 	     </tr>
 		 <!-- 
 	     <tr>
@@ -52,10 +53,10 @@ draw_menu($_SESSION['uid']);
 	     </tr>
 		 -->
 	     <tr>
-	      <td><b><a href="department.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="department.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>">Display</a></b></td>
 	     </tr>
 		</td>
 	   </table>
@@ -63,16 +64,16 @@ draw_menu($_SESSION['uid']);
 	   <td>
 	 	<table border="0">
 		 <tr>
-	      <td><b><a href="category.php?submit=add<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>">Add</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=deletepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Delete</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>">Delete</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
+	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>">Display</a></b></td>
 	     </tr>
 		</td>
 	   </table>
@@ -84,19 +85,19 @@ if ( $user_obj->isRoot()	)
 	  <td>
 	 	<table border="0" valign="top">
 		 <tr>
-	      <td ><b><a href="delete.php?mode=view_del_archive<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Del/Undel</a></b></td>
+	      <td ><b><a href="<?php echo $secureurl->encode('delete.php?mode=view_del_archive&state=' . ($_REQUEST['state']+1)); ?>">Del/Undel</a></b></td>
 	     </tr>
 	     <tr>
-		 <td><b><a href="toBePublished.php?mode=root<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Reviews</a></b></td>
+		 <td><b><a href="<?php echo $secureurl->encode('toBePublished.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>">Reviews</a></b></td>
 		 </tr>
 		 <tr>
-		 <td><b><a href="rejects.php?mode=root<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Rejections</a></b></td>
+		 <td><b><a href="<?php echo $secureurl->encode('rejects.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>">Rejections</a></b></td>
 		 </tr>
 		 <tr>
-		 <td><b><a href="check_exp.php?<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Check Expiration</a></b></td>
+		 <td><b><a href="<?php echo $secureurl->encode('check_exp.php?&state=' . ($_REQUEST['state']+1)); ?>">Check Expiration</a></b></td>
 		 </tr>
 		 <tr>
-		 <td><b><a href="file_ops.php?<?php echo '&state=' . ($_REQUEST['state']+1); ?>&submit=view_checkedout">Checked-Out Files</a></b></td>
+		 <td><b><a href="<?php echo $secureurl->encode('file_ops.php?&state=' . ($_REQUEST['state']+1)); ?>&submit=view_checkedout">Checked-Out Files</a></b></td>
 		 </tr>
 	   </table>
 	  </td>

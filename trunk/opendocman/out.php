@@ -1,19 +1,13 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-session_start();
-//$_SESSION['uid']=102; $sort_by = 'author';
+//session_start();
+$_SESSION['uid']=102; $sort_by = 'author';
 $start_time = time();
 if (!isset($_SESSION['uid']))
 {
         header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
 		exit;
-}
-
-
-if (!isset($_REQUEST['last_message']))
-{
-    $_REQUEST['last_message']='';
 }
 
 // includes

@@ -12,11 +12,11 @@ $where='all';
   $_SESSION['uid']=102;
   $submit='submit';
 */
-/*
-$_GET['submit']='';
-$_SESSION['uid']=102;
-$_GET['keyword']='-1';
-$_GET['where']='author_locked_files';
+
+/*$_GET['submit']='submit';
+$_GET['uid']=102;
+$_GET['keyword']='Nguyen Khoa';
+$_GET['where']='author';
 $_GET['exact_phrase']='on';
 $_GET['case_sensitivity']='';
 */

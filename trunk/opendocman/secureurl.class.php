@@ -57,12 +57,12 @@ class phpsecureurl{
 		if($GLOBALS['CONFIG']['secureurl'] == 'On')
 		{
 			$pos_debut=strpos($url,"?"); if(!$pos_debut){$sep="&";}
-			$pos_fin=strpos($url," ");
-			if($pos_fin){
-				$pos_long=$pos_fin-$pos_debut-1; $fin=substr($url,$pos_fin); 
-			}else{
+			//$pos_fin=strpos($url," ");
+			//if($pos_fin){
+			//	$pos_long=$pos_fin-$pos_debut-1; $fin=substr($url,$pos_fin); 
+			//}else{
 				$pos_long=strlen($url)-$pos_debut-1;
-			}
+			//}
 			$debut=substr($url,0,$pos_debut+1);
 			$param=substr($url,$pos_debut+1,$pos_long);
 			$code = base64_encode($param);
