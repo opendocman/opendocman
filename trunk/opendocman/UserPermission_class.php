@@ -51,6 +51,9 @@ if( !defined('UserPermission_class') )
                 return $this->convertToFileDataOBJ( $this->getAllowedFileIds() );	
     }
     // // return an array of all the Allowed files ( right >= view_right) ID     
+    // One might ask why getViewableFileIds() doesn't return the combined
+    // result of User_perm and Dept_Perm classes.  User_Perm_class only know
+    // of it self and the same goes with Dept_Perms.  
 	function getViewableFileIds()
 	{	
 		$array = array();
