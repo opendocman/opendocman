@@ -1,3 +1,34 @@
+2003-05-06 16:22  logart
+
+	* setup.php, docs/opendocman-1.html, docs/opendocman-2.html,
+	docs/opendocman-3.html, docs/opendocman-4.html,
+	docs/opendocman-5.html, docs/opendocman-6.html,
+	docs/opendocman.html, docs/opendocman.pdf, docs/opendocman.txt,
+	docs/src/opendocman.lyx, images/logo.eps: added dev notes and
+	configuration to documentation added links to documentation in
+	setup script
+
+2003-05-06 16:19  logart
+
+	* config.php: moved filetypes to better location removed ldap.inc
+	call
+
+2003-05-06 15:40  logart
+
+	* docs/opendocman.pdf: Initial import of PDF manual
+
+2003-05-06 15:38  logart
+
+	* docs/: README.html, README.txt, opendocman-1.html,
+	opendocman-2.html, opendocman-3.html, opendocman-4.html,
+	opendocman-5.html, opendocman.html, opendocman.txt,
+	src/opendocman.lyx: improved documentation  - Added html/text
+	formats
+
+2003-05-06 10:07  logart
+
+	* ChangeLog: release 1.1 final
+
 2003-05-06 10:06  logart
 
 	* install/upgrade_11rc2.php: initial import of upgrade script from
