@@ -112,30 +112,19 @@ function do_install()
         mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
 
         // Create database
-        $result = mysql_query("
-        DROP DATABASE IF EXISTS $_REQUEST[database]
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        $sql = "DROP DATABASE IF EXISTS $_REQUEST[database]";
+        $result = mysql_query($sql);
 
-        $result = mysql_query("
-        CREATE DATABASE $_REQUEST[database]
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
-        echo 'Database Created<br>';
+        $sql = "CREATE DATABASE $_REQUEST[database]";
+        $result = mysql_query($sql) or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
         echo 'Database Selected<br>';
 
         // Grant privs
-        $result = mysql_query("
-	GRANT ALL ON $_REQUEST[database].* to $_POST[username]@$_POST[roothost] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
-");
-        echo 'Grant is set<br>';
-
-        $result = mysql_query("
-        FLUSH PRIVILEGES
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
+        $sql = "GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'";
+        $result = mysql_query($sql) or die("<br>Unable to set grant - Error in query:" . mysql_error());
         include("install/odm.php");
         include("config.php");
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
@@ -185,7 +174,6 @@ function do_update_12rc1()
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
-
 function print_intro()
 {
 ?>
@@ -214,7 +202,7 @@ function print_intro()
   <td><a href="setup.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_12rc1">Upgrade from version 1.2rc1</a><br><br></td>
+  <td><a href="setup.php?op=update_12rc1">Upgrade from version 1.2</a><br><br></td>
  </tr>
 </table>
 <hr>

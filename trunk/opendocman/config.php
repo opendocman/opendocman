@@ -25,6 +25,12 @@ if( !defined('config') )
 
 // config.php - useful variables/functions
 
+// database parameters
+include 'include/library/functions.php';
+include 'include/library/classHeaders.php';
+include 'include/mimetypes.inc';
+include 'include/library/crumb.php';
+
 // Database Settings - Change these to match your database
 $GLOBALS['database'] = 'opendocman'; // Enter the name of the database here
 $GLOBALS['user'] = 'opendocman'; // Enter the username for the database
@@ -55,13 +61,13 @@ global $CONFIG;      $CONFIG = array(
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'http://www.example.com/opendocman-1.2',
+'base_url' => 'http://www.example.com/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2p1',
+'current_version' => ' OpenDocMan v1.3.0',
 
 // The email address of the administrator of this site
 'site_mail' => 'admin@example.com',
@@ -101,8 +107,39 @@ The first two options also result in sending email to reviewer
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'On'
+'secureurl' => 'On',
 
+// Set the default language (english, spanish).
+// Local users may override this setting
+// check include/language folder for languages available
+'language' => 'english',
+
+/* Author's default right to his/her right.  Below is the list from the right table.
+   If yours is any different, please use your own ODM.right table's values
+   +---------+-------------+
+   | RightId | Description |
+   +---------+-------------+
+   |       0 | none        |
+   |       1 | view        |
+   |      -1 | forbidden   |
+   |       2 | read        |
+   |       3 | write       |
+   |       4 | admin       |
+   +---------+-------------+
+ */
+'owner_default_right' => '3',
+
+/* HTTPS enforced login.  If this option is turned on, the login page will only take https connections.  If the user uses http, ODM will redirect itself to a HTTPS connection.  SSL must be enabled with your webserver for this feature to work
+1)On
+2)Off
+*/
+'SSL_enforced' => 'On',
+
+/* ODM normally creates a database for its own use.  However, if you cannot give
+ ODM its own database, you can set the table_prefix to have it uses your current
+  database.  Table_prefix allow you to have many programs use the same databases
+  without having table name clashing.*/
+  'table_prefix' => 'ODM_'
 );
 
 // List of allowed file types
@@ -114,15 +151,15 @@ $GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'ap
 // <----- No need to edit below here ---->
 //
 // Set the revision directory. (relative to $dataDir)
-$CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
+$GLOBALS['CONFIG']['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 
 // Set the revision directory. (relative to $dataDir)
-$CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
+$GLOBALS['CONFIG']['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
+
+// Include the language info
+include_once 'include/language/' . $GLOBALS['CONFIG']['language'] . '.php';
 
 $GLOBALS['connection'] = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect: " . mysql_error());
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
-
-// All functions and includes are in functions.php
-include_once('functions.php');
 }
 ?>

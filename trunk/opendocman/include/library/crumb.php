@@ -27,6 +27,7 @@ class crumb {
 	 * @param post boolean	 
 	 * @desc Add a bread crumb to the session array. If post is true add the $_POST args to the URL.
 	 */	
+	//Adcrum to class//
 	function addCrumb($level, $title, $url, $post = false) {
 		
 		$tstr = "";

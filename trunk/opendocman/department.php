@@ -28,20 +28,21 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('config.php');
-// Make sure user is admin
+// Check to see if user is admin
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $secureurl = new phpsecureurl;
-//If the user is not an admin and he/she is trying to access other account that
-// is not his, error out.
-if(!$user_obj->isAdmin() == true)
+if(!$user_obj->isAdmin())
 {
     header('Location:' . $secureurl->encode('error.php?ec=4'));
     exit;
 }
 
-$secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-
+// open a connection to the database
+if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
+{
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
+}
 
 
 /*
@@ -57,7 +58,6 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
     draw_menu($_SESSION['uid']);
     draw_status_bar('Add New Department', $_POST['last_message']);
     ?>
-
 <center>
  <table border="0" cellspacing="5" cellpadding="5">
    <form action="commitchange.php" method="POST" enctype="multipart/form-data">
@@ -84,7 +84,87 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
 <?php
 draw_footer();
 }
-elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='delete')
+{
+        // If demo mode, don't allow them to update the demo account
+        if (@$GLOBALS['CONFIG']['demo'] == 'true')
+        {
+                @draw_status_bar('Delete Department ' ,$_POST['last_message']);
+                echo 'Sorry, demo mode only, you can\'t do that';
+                draw_footer();
+                exit;
+        }
+        if (!isset($_POST['last_message']))
+        {
+                $_POST['last_message']='';
+        }
+	$delete='';
+	draw_header('Department Deletion');
+	draw_status_bar('Delete Department', $_POST['last_message']);
+ // query to show item
+	echo '<center>'; 
+	echo '<table border="0">';
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_POST[item]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    while(list($lid, $lname) = mysql_fetch_row($result))
+    {
+        echo '<tr><td>Id # :</td><td>' . $lid . '</td></tr>';
+        echo '<tr><td>Name :</td><td>' . $lname . '</td></tr>';
+    }
+?>
+    <form action="commitchange.php?id=<?php echo $_POST['item'];?> " method="POST" enctype="multipart/form-data">
+     <tr>
+      <td valign="top">Are you sure you want to delete this?</td>
+	  <td colspan="4" align="center"><input type="Submit" name="deletedepartment" value="Yes"></td>
+    </form>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+     <td colspan="4" align="center"><input type="Submit" name="" value="No, Cancel"></td>
+    </form>
+    </tr>
+   </form>
+<?php
+draw_footer();
+}
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
+{
+        if (!isset($_POST['last_message']))
+        {
+                $_POST['last_message']='';
+        }
+$deletepick='';
+draw_header('Department Selection');
+draw_status_bar('Choose Department to Delete', $_POST['last_message']);
+?>
+    <center>
+        <table border="0" cellspacing="5" cellpadding="5">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+        <tr>
+        <td><b>Department</b></td>
+        <td colspan="3"><select name="item">
+<?php
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'department ORDER BY name';
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    while(list($lid, $lname) = mysql_fetch_row($result))
+    {
+        $str = '<option value="' . $lid . '"';
+        $str .= '>' . $lname . '</option>';
+        echo $str;
+    }
+    mysql_free_result ($result);
+    $deletepick='';
+?>
+    </select></td>
+    <tr>
+     <td colspan="4" align="center"><input type="Submit" name="delete" value="Delete"></td>
+    </tr>
+    </form>
+   	</table>
+	</center>
+    </body>
+    </html>
+<?php
+}
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showitem')
 {
         if (!isset($_POST['last_message']))
         {
@@ -96,7 +176,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
  	draw_status_bar('Display Item Information', $_POST['last_message']);
     echo '<center>';
 	//select name
-	$query = "SELECT name,id FROM department where id='$_POST[item]'";
+	$query = "SELECT name,id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_POST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo '<table name="main" cellspacing="15" border="0">';
     echo '<th>ID</th><th>Dept. Name</th>';
@@ -109,7 +189,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
     </tr>
 <?php
     // Display all users assigned to this department
-    $query = "SELECT department.id, user.first_name, user.last_name FROM department, user where department.id='$_POST[item]' and user.department='$_POST[item]'";
+    $query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "department.id, " . $GLOBALS['CONFIG']['table_prefix'] . "user.first_name, " . $GLOBALS['CONFIG']['table_prefix'] . "user.last_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department, " . $GLOBALS['CONFIG']['table_prefix'] . "user where " . $GLOBALS['CONFIG']['table_prefix'] . "department.id='$_POST[item]' and " . $GLOBALS['CONFIG']['table_prefix'] . "user.department='$_POST[item]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lfirst_name, $llast_name) = mysql_fetch_row($result))
 	{	
@@ -144,7 +224,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 	<td><b>Department</b></td>
 	<td colspan=3><select name="item">
 <?php 
-	$query = 'SELECT id, name FROM department ORDER BY name';
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'department ORDER BY name';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -184,7 +264,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 	  <tr>
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM department where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_REQUEST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -230,7 +310,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	<td colspan="3"><select name="item">
 <?php
 	// query to get a list of departments
-	$query = "SELECT id, name FROM department ORDER BY name";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 	while(list($lid, $lname) = mysql_fetch_row($result))

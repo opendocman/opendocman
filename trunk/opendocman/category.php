@@ -28,7 +28,6 @@ if (!isset($_SESSION['uid']))
 // includes
 include('config.php');
 $secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 if(!$user_obj->isAdmin())        
 {
     header('Location:' . $secureurl->encode('error.php?ec=4'));
@@ -42,41 +41,50 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 
 if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 {
+    // Check to see if user is admin
     if (!isset($_REQUEST['last_message']))
     {
         $_REQUEST['last_message']='';
     }
-    draw_header('Add New Category');
-    draw_status_bar('Add New Category', $_REQUEST['last_message']);
+    draw_header($GLOBALS['lang']['area_add_new_category']);
+    draw_status_bar($GLOBALS['lang']['area_add_new_category'], $_REQUEST['last_message']);
     // Check to see if user is admin
     ?>
-<center>
-<form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
-<table border="0" cellspacing="5" cellpadding="5">
+        <center>
+        <table border="0" cellspacing="5" cellpadding="5">
+        <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 	<tr>
-		<td><b>Category</b></td>
-		<td colspan="3"><input name="category" type="text"></td>
+	    <td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
+	    <td colspan="3"><input name="category" type="text"></td>
+	        <input type="hidden" name="submit" value="Add Category">
 	</tr>
-	<input type="hidden" name="submit" value="Add Category">
 	<tr>
-		
-</table>
-<input type="Submit" name="submit" value="Add Category">
+            <td></td>
+            <td>
+                <input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_add_category']; ?>">
+            </td>
+        </tr>
 </form>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-<input type="Submit" name="submit" value="Cancel">
+        <tr>
+            <td></td>
+            <td>
+                <input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>">
+            </td>
+        </tr>
 </form>
+</table>
 </center>
 <?php
 	draw_footer();
 }
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['button_delete'])
 {
         // If demo mode, don't allow them to update the demo account
         if (@$GLOBALS['CONFIG']['demo'] == 'true')
         {
-                @draw_status_bar('Delete Category ' ,$_POST['last_message']);
-                echo 'Sorry, demo mode only, you can\'t do that';
+                @draw_status_bar($GLOBALS['lang']['area_delete_category'] ,$_POST['last_message']);
+                echo $GLOBALS['lang']['message_sorry_demo_mode'];
                 draw_footer();
                 exit;
         }
@@ -85,12 +93,12 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
         {       
                 $_REQUEST['last_message']='';
         }
-	draw_header('Category Deletion');
-	draw_status_bar('Delete Item', $_REQUEST['last_message']);
+	draw_header($GLOBALS['lang']['area_delete_category']);
+	draw_status_bar($GLOBALS['lang']['area_delete_category'], $_REQUEST['last_message']);
 	// query to show item
 	echo '<center>'; 
 	echo '<table border=0>';
-	$query = 'SELECT id, name FROM category where id="' . $_REQUEST['item'] . '"';
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'category where id="' . $_REQUEST['item'] . '"';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -102,11 +110,11 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 	<form action="commitchange.php" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
 		<tr>
-			<td valign="top">Are you sure you want to delete this?</td>
-			<td colspan="4" align="center"><input type="Submit" name="deletecategory" value="Yes"></td>
+			<td valign="top"><?php echo $GLOBALS['lang']['message_are_you_sure_remove']; ?></td>
+			<td colspan="4" align="center"><input type="Submit" name="deletecategory" value="<?php echo $GLOBALS['lang']['button_yes']; ?>"></td>
 	</form>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
-		<td colspan="4" align="center"><input type="Submit" name="" value="No, Cancel"></td>
+		<td colspan="4" align="center"><input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>"></td>
 	</form>
 		</tr>
 	</TABLE>
@@ -120,18 +128,18 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
                 $_REQUEST['last_message']='';
         }
 	$deletepick='';
-	draw_header('Category Selection');
-	draw_status_bar('Choose Item to Delete', $_REQUEST['last_message']);
+	draw_header($GLOBALS['lang']['area_delete_category']);
+	draw_status_bar($GLOBALS['lang']['area_delete_category'], $_REQUEST['last_message']);
 ?>
 	<center>
 	<table border="0" cellspacing="5" cellpadding="5">
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
-				<td><b>Category</b></td>
+				<td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
 				<td colspan=3><select name="item">
 <?php
-	$query = 'SELECT id, name FROM category ORDER BY name';
+	$query = 'SELECT id, name FROM '  . $GLOBALS['CONFIG']['table_prefix'] . 'category ORDER BY name';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -146,8 +154,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 	<tr>
 		<td></td>
 		<td colspan="2" align="center">
-		<input type="Submit" name="submit" value="delete">
-		<input type="Submit" name="submit" value="Cancel">
+		<input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_delete']; ?>">
+		<input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>">
 		</td>
 	</tr>
 			</form>
@@ -156,30 +164,34 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 <?php
 	draw_footer();
 }
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['button_display_category'])
 {
 	// query to show item
-	draw_header('Category Information');
+	draw_header($GLOBALS['lang']['area_display_category']);
         if (!isset($_REQUEST['last_message']))
         {
                 $_REQUEST['last_message'] = '';
         }
-	draw_status_bar('Display Item Information', $_REQUEST['last_message']);
+	draw_status_bar($GLOBALS['lang']['area_display_category'], $_REQUEST['last_message']);
 	echo '<center>';
 	// Select name
-	$query = "SELECT category.name FROM category where category.id='$_REQUEST[item]'";
+	$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.realname, " . $GLOBALS['CONFIG']['table_prefix'] . "user.username, " . $GLOBALS['CONFIG']['table_prefix'] . "department.name, " . $GLOBALS['CONFIG']['table_prefix'] . "category.name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data," . $GLOBALS['CONFIG']['table_prefix'] . "user," . $GLOBALS['CONFIG']['table_prefix'] . "department," . $GLOBALS['CONFIG']['table_prefix'] . "category where " . $GLOBALS['CONFIG']['table_prefix'] . "data.category='$_REQUEST[item]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user.id = " . $GLOBALS['CONFIG']['table_prefix'] . "data.owner AND " . $GLOBALS['CONFIG']['table_prefix'] . "department.id = " . $GLOBALS['CONFIG']['table_prefix'] . "data.department AND " . $GLOBALS['CONFIG']['table_prefix'] . "data.category = " . $GLOBALS['CONFIG']['table_prefix'] . "category.id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	echo('<table name="main" cellspacing="15" border="0">');
-	list($lcategory) = mysql_fetch_row($result);
-	echo '<th>Name</th><th>ID</th>';
+	echo '<th>' . $GLOBALS['lang']['label_name'] . '</th><th>' . $GLOBALS['lang']['label_user'] . '</th><th>' . $GLOBALS['lang']['label_department'] . '</th><th>' . $GLOBALS['lang']['label_category'] . '</th>';
+	while (list($lrealname, $lusername, $ldepartment, $lcategory) = mysql_fetch_row($result))
+        {
 	echo '<tr>';
+	echo '<td>' . $lrealname . '</td>';	
+	echo '<td>' . $lusername . '</td>';	
+	echo '<td>' . $ldepartment . '</td>';	
 	echo '<td>' . $lcategory . '</td>';	
-	echo '<td>' . $_REQUEST['item'] . '</td>';
 	echo '</tr>';	
+        }
 ?>
 	<form action="admin.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 		<tr>
-			<td colspan="4" align="center"><input type="Submit" name="" value="Back"></td>
+			<td colspan="4" align="center"><input type="Submit" name="" value="<?php echo $GLOBALS['lang']['button_back']; ?>"></td>
 		</tr>
 	</form>
 	</table>
@@ -193,8 +205,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                 {
                         $_REQUEST['last_message']='';
                 }       
-		draw_header('Category Selection');
-		draw_status_bar('Choose item to view', $_REQUEST['last_message']);
+		draw_header($GLOBALS['lang']['area_display_category']);
+		draw_status_bar($GLOBALS['lang']['area_display_category'], $_REQUEST['last_message']);
 		$showpick='';
 ?>
 			<center>
@@ -202,10 +214,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
-			<td><b>Category</b></td>
+			<td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
 			<td colspan="3"><select name="item">
 <?php
-			$query = 'SELECT id, name FROM category ORDER BY name';
+			$query = 'SELECT id, name FROM '  . $GLOBALS['CONFIG']['table_prefix'] . 'category ORDER BY name';
 			$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($lid, $lname) = mysql_fetch_row($result))
 		{
@@ -217,8 +229,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 		<tr>
 		<td></td>
 		<td colspan="3" align="center">
-		<input type="Submit" name="submit" value="Show Category">
-		<input type="Submit" name="submit" value="Cancel">
+		<input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_display_category']; ?>">
+		<input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>">
 		</td>
 		</tr>
 		</form>
@@ -229,14 +241,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 <?php
 	draw_footer();
 }
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['button_update'])
 {
         if (!isset($_REQUEST['last_message']))
         {
                 $_REQUEST['last_message']='';
         }
-	draw_header('Update Category');
-	draw_status_bar('Update Item', $_REQUEST['last_message']);
+	draw_header($GLOBALS['lang']['area_update_category']);
+	draw_status_bar($GLOBALS['lang']['area_update_category'], $_REQUEST['last_message']);
 ?>
 	<center>
 		<table border="0" cellspacing="5" cellpadding="5">
@@ -244,7 +256,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM category where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category where id='$_REQUEST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -256,10 +268,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 	mysql_free_result ($result);
 ?>
 		<td>
-			<input type="Submit" name="updatecategory" value="Modify Category">
+			<input type="Submit" name="updatecategory" value="<?php echo $GLOBALS['lang']['button_modify_category']; ?>">
 	</form>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>">
-		<input type="Submit" name="submit" value="Cancel">
+		<input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>">
 	</form>
 			</td>
 		</tr>
@@ -274,19 +286,19 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
         {
                 $_REQUEST['last_message']='';
         }
-	draw_header('Category Selection');
-	draw_status_bar('Modify Item',$_REQUEST['last_message']);
+	draw_header($GLOBALS['lang']['area_update_category']);
+	draw_status_bar($GLOBALS['lang']['area_update_category'],$_REQUEST['last_message']);
 ?>
 	<center>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<table border="0">
 				<tr>
-				<td><b>Category to modify:</b></td>
+				<td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
 				<td colspan="3"><select name="item">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM category ORDER BY name";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -299,8 +311,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	<tr>
         <td></td>
         <td colspan="3" align="center">
-        <input type="Submit" name="submit" value="Update">
-        <input type="Submit" name="submit" value="Cancel">
+        <input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_update']; ?>">
+        <input type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_cancel']; ?>">
         </td>
         </tr>
 	</form></TD>
@@ -310,7 +322,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 <?php
 	draw_footer();
 }
-elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
+elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['button_cancel'])
 {
 		$_REQUEST['last_message']=urlencode('Action canceled');
 		header ('Location: admin.php?last_message=' . $_REQUEST['last_message']);

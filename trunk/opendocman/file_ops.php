@@ -67,7 +67,7 @@ if(@$_GET['submit'] == 'view_checkedout')
 	draw_header('Checked-out File Listing');
 	draw_menu($_SESSION['uid']);
 	draw_status_bar('Checked-out File Listing', @$_REQUEST['last_message']);
-	$lquery = 'SELECT data.id FROM data WHERE data.status>0';
+	$lquery = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE status>0';
 	$lresult = mysql_query($lquery) or die("Error in querying: $lquery" . mysql_error());
 	$llen = mysql_num_rows($lresult);
 	$array_id = array();
@@ -87,7 +87,7 @@ if(@$_GET['submit'] == 'view_checkedout')
 }
 elseif (@$_POST['submit'] == 'Clear Status')
 {
-	$lquery = 'UPDATE data set status=0 where id=';
+	$lquery = 'UPDATE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data set status=0 where id=';
 	for($i=0; $i<$_POST['num_checkboxes']; $i++)
 	{
 		if(@$_POST['checkbox'.$i])

@@ -33,7 +33,7 @@ draw_menu($_SESSION['uid']);
 @draw_status_bar('Documents Currently Checked Out To You', $_POST['last_message']); 
 
 // query to get list of documents checked out to this user
-$query = "SELECT data.id, user.last_name, user.first_name, realname, created, description, status FROM data,user WHERE status = '$_SESSION[uid]' AND data.owner = user.id";
+$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.id, " . $GLOBALS['CONFIG']['table_prefix'] . "user.last_name, " . $GLOBALS['CONFIG']['table_prefix'] . "user.first_name, realname, created, description, status FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data," . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE status = '$_SESSION[uid]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "data.owner = " . $GLOBALS['CONFIG']['table_prefix'] . "user.id";
 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 // how many records?

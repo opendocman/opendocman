@@ -28,12 +28,17 @@ if (!isset($_REQUEST['last_message']))
 }
 
 // includes
-draw_header('Check Expirations');
+draw_header($GLOBALS['lang']['area_file_expiration']);
 draw_menu(@$_SESSION['uid']);
-draw_status_bar('Check Expirations', $_REQUEST['last_message']);
+draw_status_bar($GLOBALS['lang']['area_file_expiration'], $_REQUEST['last_message']);
+
+if( $GLOBALS['CONFIG']['authorization']!= "On" ) 
+{
+	echo 'STATUS: Authorization is not turned ON.  Authorization = ON is required for file expiration'; exit;
+}
 
 // Look up user
-$lquery = 'SELECT user.id FROM user where user.username="' . $GLOBALS['CONFIG']['root_username'] . '"';
+$lquery = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user where username="' . $GLOBALS['CONFIG']['root_username'] . '"';
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
 if(mysql_num_rows($lresult) != 1)
 {	header('location:error.php?ec=22');	}
@@ -69,21 +74,25 @@ $lok_year = $lcurrent_year - $lexp_years;
 $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_year));
 
 //get expired file
-$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND (data.publishable!=-1 and data.status!=-1)";
+$lquery = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.id, " . $GLOBALS['CONFIG']['table_prefix'] . "data.reviewer_comments FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data, " . $GLOBALS['CONFIG']['table_prefix'] . "log WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "data.id = " . $GLOBALS['CONFIG']['table_prefix'] . "log.id AND " . $GLOBALS['CONFIG']['table_prefix'] . "log.revision='current' AND modified_on<'$lexpired_revision' AND (" . $GLOBALS['CONFIG']['table_prefix'] . "data.publishable!=-1 and " . $GLOBALS['CONFIG']['table_prefix'] . "data.status!=-1)";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-echo 'Rejecting files last edited before ' . $lexpired_revision . '<br>';
-echo 'Rejecting ' . mysql_num_rows($lresult) . ' file(s)<br>';
+
+echo $GLOBALS['lang']['message_rejecting_files'] . ' ' . $lexpired_revision . '<br>';
+echo mysql_num_rows($lresult) . ' ' . $GLOBALS['lang']['message_rejected'] . '<br>';
 for($i = 0; $i<mysql_num_rows($lresult); $i++)
 {
 	list($lid) = mysql_fetch_row($lresult);
-	echo '&nbsp;&nbsp;' . $i . ' File ID: ' . $lid . '<br>';
+	echo '&nbsp;&nbsp;' . $i . ' ID: ' . $lid . '<br>';
 }
 // Notify owner
 if($GLOBALS['CONFIG']['file_expired_action'] != 4)
 {
 	//get root's id
 	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-	$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
+        $lauthor=$GLOBALS['lang']['author'];
+        $lsubject=$GLOBALS['lang']['email_file_expired'];
+        $lcomment=$GLOBALS['lang']['email_file_was_rejected_expired'];
+	$reviewer_comments = 'To=' . $lauthor . ';Subject=' . $lsubject . ';Comments=' . $lcomment . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ';';
 	$user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
 	$date = date("D F d Y");
 	$time = date("h:i A");
@@ -91,17 +100,19 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
 	$full_name = $get_full_name[0].' '.$get_full_name[1];
 	$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
 	$mail_headers = "From: $mail_from";
-	$mail_subject='Review status for document ';
-	$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
-	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days.';
-	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
+	$mail_subject=$GLOBALS['lang']['email_file_expired'];
+	//$mail_body = 'was declined for publishing at '.$time.' on '.$date.' because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days.';
+	$mail_salute="\n\r\n\r" . $GLOBALS['lang']['sincerly'] . "\n\r$full_name";
 	for($i = 0; $i<mysql_num_rows($lresult); $i++)
 	{	
 		list($lid) = mysql_fetch_row($lresult);	
 		$file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
 		$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
 		$mail_to = $user_obj->getEmailAddress();
-		mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+	        $mail_body = $GLOBALS['lang']['email_status_expired'] . "\n";
+                $mail_body.= $GLOBALS['lang']['email_revision_days'] . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . "\n";
+                $mail_body.= $GLOBALS['lang']['label_filename'] . ': ' . $file_obj->getName() . "\n";
+		mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
 	}
 }
 if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) //do not show file

@@ -114,7 +114,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <select name="department">
                 <?php			
                 // query to get a list of departments
-                $query = "SELECT id, name FROM department ORDER BY name";
+                $query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         while(list($id, $name) = mysql_fetch_row($result))
@@ -141,7 +141,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <TD>
                 <SELECT name='department_review[]' multiple>
                 <?php 
-        $query = "SELECT department.id, department.name FROM department ORDER BY name";
+        $query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
         echo '<OPTION SELECTED>Select the department(s)</OPTION>';
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
@@ -190,7 +190,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <td valign="top">Are you sure you want to delete 
 						<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
                         <?php
-                        $query = 'SELECT id, first_name, last_name FROM user WHERE id=' . $_POST['item'] .'';
+                        $query = 'SELECT id, first_name, last_name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user WHERE id=' . $_POST['item'] .'';
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $first_name, $last_name) = mysql_fetch_row($result))
                 {
@@ -232,7 +232,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <td colspan=3>
                         <select name="item">
                         <?php
-                        $query = "SELECT id,username, last_name, first_name FROM user ORDER BY last_name";
+                        $query = "SELECT id,username, last_name, first_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username,$last_name, $first_name) = mysql_fetch_row($result))
                 {
@@ -321,7 +321,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <td colspan=3>
                         <select name="item">
                         <?php
-                        $query = 'SELECT id, username, first_name, last_name FROM user ORDER BY last_name';
+                        $query = 'SELECT id, username, first_name, last_name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user ORDER BY last_name';
                 $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
                 {
@@ -385,7 +385,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <form name="update" action="commitchange.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
                         <?php
-                $query = "SELECT * FROM user where id='" . $_REQUEST['item'] . "' ORDER BY username";
+                $query = "SELECT * FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user where id='" . $_REQUEST['item'] . "' ORDER BY username";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
                 echo '<tr>';
@@ -438,7 +438,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <select name="department" <?php echo $mode; ?>>
 <?php
                 // query to get a list of departments
-                $query = "SELECT department.id, department.name FROM department ORDER BY department.name";
+                $query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $userdepartment = $user_obj->getDeptID();
                 while(list($id, $name) = mysql_fetch_row($result))
@@ -495,9 +495,9 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
                 <OPTION value='-1'>Choose the department(s)</OPTION>
 <?php
-                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '$_REQUEST[item]'";
+                $query = "SELECT dept_id, user_id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer where user_id = '$_REQUEST[item]'";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                $query = "SELECT department.id, department.name FROM department ORDER BY name";
+                $query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
                 $result2 = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $hits = mysql_num_rows($result);
                 //for dept that this user is reviewing for
@@ -577,7 +577,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 @draw_status_bar('Modify User',$_POST['$last_message']);
 
                 // Check to see if user is admin
-                $query = "SELECT admin FROM admin WHERE id = '" . $_SESSION['uid'] . "' and admin = '1'";
+                $query = "SELECT admin FROM " . $GLOBALS['CONFIG']['table_prefix'] . "admin WHERE id = '" . $_SESSION['uid'] . "' and admin = '1'";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 if(mysql_num_rows($result) <= 0)
                 {
@@ -595,7 +595,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <?php
 
                         // query to get a list of users
-                        $query = "SELECT id, username, first_name, last_name FROM user ORDER BY last_name";
+                        $query = "SELECT id, username, first_name, last_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY last_name";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 
@@ -704,6 +704,27 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 $last_message="Action Cancelled";
                 header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));
         }
+		elseif( @$_REQUEST['submit'] == 'Modify Pref')
+		{
+			draw_status_bar("Personal Preferences");
+			echo '<BR>';
+			$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+			$array = $user_obj->getPreference();
+			foreach ($USER_PREF as $key => $value)
+			{
+				echo "\n" . $key . ':  ';
+				echo '<SELECT name="' . $key . '">' . "\n";
+				foreach ($value as $key2 => $value2)
+				{
+					if($array[$key] == $value2)
+						echo '<option selected>' . $value[$key2] . '</option>' . "\n";
+					else
+						echo '<option>' . $value[$key2] . '</option>' . "\n";
+				}
+				echo '</SELECT><BR><BR>' . "\n";
+			}
+
+		}
         else 
         {	
         	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));

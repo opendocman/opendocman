@@ -41,7 +41,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 	header('Location:error.php?ec=2');
   	exit;
 }
-
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 if( $filedata->isArchived() ) header('Location:error.php?ec=21');
 if (!isset($_REQUEST['last_message']))
@@ -56,7 +55,7 @@ if (!isset($_REQUEST['submit']))
 	checkUserPermission($_REQUEST['id'], $user_perm_obj->ADMIN_RIGHT);
 	$data_id = $_REQUEST['id'];
 	// includes
-	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
+	$query ="SELECT department from " . $GLOBALS['CONFIG']['table_prefix'] . "user where id=$_SESSION[uid]";
 	//echo($GLOBALS['database']); echo($query); echo($connection);
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
@@ -65,7 +64,7 @@ if (!isset($_REQUEST['submit']))
 	  exit; //non-unique error
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
-	$query = "SELECT default_rights from data where data.id = $data_id";
+	$query = "SELECT default_rights from " . $GLOBALS['CONFIG']['table_prefix'] . "data where id = $data_id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
@@ -128,7 +127,7 @@ if (!isset($_REQUEST['submit']))
 	departments[all_Setting_pos] = all_Setting;
 	departments[default_Setting_pos] = default_Setting;
 <?php
-	$query = "SELECT name, dept_id, rights FROM department, dept_perms  WHERE department.id = dept_perms.dept_id and dept_perms.fid = $data_id ORDER by name";
+	$query = "SELECT name, dept_id, rights FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department, " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms  WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "department.id = " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms.dept_id and " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms.fid = $data_id ORDER by name";
 	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
@@ -162,6 +161,9 @@ if (!isset($_REQUEST['submit']))
 		$realname = $filedata->getName();
 		$description = $filedata->getDescription();
 		$comment = $filedata->getComment();
+		$anonymous = '';
+		if( $filedata->isAnonymous())
+			$anonymous = 'checked';
 		$owner_id = $filedata->getOwner();
 		// display the form
 ?>
@@ -201,7 +203,7 @@ if (!isset($_REQUEST['submit']))
 		<td colspan="3"><select name="category">
 <?php
 		// query for category list
-		$query = "SELECT id, name FROM category ORDER BY name";
+		$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category ORDER BY name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($ID, $CATEGORY) = mysql_fetch_row($result))
 		{
@@ -227,7 +229,7 @@ if (!isset($_REQUEST['submit']))
 		<option value="2"> All Departments</option>
 <?php
 		// query to get a list of department 
-		$query = "SELECT id, name FROM department ORDER BY name";
+		$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
         while(list($dept_id, $name) = mysql_fetch_row($result))
@@ -243,18 +245,18 @@ if (!isset($_REQUEST['submit']))
 		<!-- Loading Authority radio_button group -->
 		<TD>Authority: </TD> <TD>  	
 <?php
-      	$query = "SELECT RightId, Description FROM rights order by RightId";
+      	$query = "SELECT RightId, Description FROM " . $GLOBALS['CONFIG']['table_prefix'] . "rights order by RightId";
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{
       		echo $Description . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
       	}
      
-	$query = "SELECT department.name, dept_perms.dept_id, dept_perms.rights FROM dept_perms, department where dept_perms.dept_id = department.id and fid = ".$filedata->getId()." ORDER BY name";
+	$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "department.name, " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms.dept_id, " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms.rights FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms, " . $GLOBALS['CONFIG']['table_prefix'] . "department where " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms.dept_id = " . $GLOBALS['CONFIG']['table_prefix'] . "department.id and fid = ".$filedata->getId()." ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while( list($dept_name, $dept_id, $rights) = mysql_fetch_row($result) )
 	{
-	      echo "\n\t" . '<input type="hidden" name="' . space_to_underscore($dept_name) . '" value=' . $rights . '>';
+	      echo "\n\t" . '<input type="hidden" name="' . str_replace(' ', '_', $dept_name) . '" value=' . $rights . '>';
 	}
 	echo "\n\t" . '<input type="hidden" name="default_Setting" value=' . $default_rights . '>';
 ?>
@@ -267,6 +269,10 @@ if (!isset($_REQUEST['submit']))
 	<tr>
 	<td valign="top">Comment</td>
 	<td colspan="3"><textarea name="comment" rows="4"><?php  echo $comment; ?></textarea></td>
+	</tr>
+	<tr>
+	<td>Anonymous</td>
+	<td><input type="checkbox" name="anonymous" <?php echo $anonymous; ?> ></td>
 	</tr>
 	</table>
 	<table border="1" cellspacing="0" cellpadding="3">
@@ -282,7 +288,7 @@ if (!isset($_REQUEST['submit']))
 <?php 
 	$id = $data_id;
 	// GET ALL USERS
-	$query = "SELECT id from user order by username";
+	$query = "SELECT id from " . $GLOBALS['CONFIG']['table_prefix'] . "user order by username";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ( "Error in query(forbidden): " .$query . mysql_error() );
 	$all_users = array();
 	for($i = 0; $i<mysql_num_rows($result); $i++)
@@ -291,7 +297,7 @@ if (!isset($_REQUEST['submit']))
 		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
-	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights=" . $filedata->FORBIDDEN_RIGHT;
+	$lquery = "SELECT uid FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = $id AND rights=" . $filedata->FORBIDDEN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
@@ -326,7 +332,7 @@ if (!isset($_REQUEST['submit']))
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
 	<td><select name="view[]" multiple size = 10 onchange="changeList(this, this.form);">
 <?php
-	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->VIEW_RIGHT;
+	$lquery = "SELECT uid FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = $id AND rights>=" . $filedata->VIEW_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
 		list($user_view_array[$i]) = mysql_fetch_row($lresult);
@@ -353,7 +359,7 @@ if (!isset($_REQUEST['submit']))
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
 	<td><select name="read[]" multiple size="10" onchange="changeList(this, this.form);">
 	<?php 
-	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->READ_RIGHT;
+	$lquery = "SELECT uid FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = $id AND rights>=" . $filedata->READ_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
 		list($user_read_array[$i]) = mysql_fetch_row($lresult);
@@ -380,7 +386,7 @@ if (!isset($_REQUEST['submit']))
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
 	<td><select name="modify[]" multiple size = 10 onchange="changeList(this, this.form);">
 	<?php 
-	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->WRITE_RIGHT;
+	$lquery = "SELECT uid FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = $id AND rights>=" . $filedata->WRITE_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
 		list($user_write_array[$i]) = mysql_fetch_row($lresult);
@@ -407,7 +413,7 @@ if (!isset($_REQUEST['submit']))
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
 	<td><select name="admin[]" multiple size = 10 onchange="changeList(this, this.form);">
 	<?php 
-	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->ADMIN_RIGHT;
+	$lquery = "SELECT uid FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = $id AND rights>=" . $filedata->ADMIN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
 		list($user_admin_array[$i]) = mysql_fetch_row($lresult);
@@ -458,21 +464,24 @@ else
 	if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin'])) { header("Location:error.php?ec=12"); exit; }
 	
 	// query to verify
-	$query = "SELECT status FROM data WHERE id = '$_REQUEST[id]' and status = '0'";
+	$query = "SELECT status FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE id = '$_REQUEST[id]' and status = '0'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) <= 0)
 	{
 		header('Location:error.php?ec=2'); 
 		exit; 
 	}
+	$anonymous = 0;
+	if(@$_REQUEST['anonymous'] == 'on')
+		$anonymous =1;
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
+	mysql_escape_string($query = "UPDATE " . $GLOBALS['CONFIG']['table_prefix'] . "data SET anonymous = $anonymous, category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(isset($_REQUEST['users']))
-		mysql_query('UPDATE data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
+		mysql_query('UPDATE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
 	
 	// clean out old permissions
-	$query = "DELETE FROM user_perms WHERE fid = '$_REQUEST[id]'";
+	$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = '$_REQUEST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$result_array = array();// init;
 	if( isset( $_REQUEST['admin'] ) && isset ($_REQUEST['modify']) )
@@ -486,21 +495,25 @@ else
 	//display_array2D($result_array);
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
-		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($_REQUEST[id], '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms (fid, uid, rights) VALUES($_REQUEST[id], '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		//echo $query."<br>";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
 	//UPDATE Department Rights into dept_perms
-	$query = "SELECT name, id FROM department ORDER BY name";
+	$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
-		$string=addslashes(space_to_underscore($dept_name));
-		$query = "UPDATE dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
+		$string=addslashes(str_replace(' ', '_', $dept_name));
+		$query = "UPDATE " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and dept_id =$id";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// clean up
 	mysql_freeresult($result);
+	if ($GLOBALS['CONFIG']['authorization'] == 'On')
+	{
+		mysql_query('UPDATE " . $GLOBALS['CONFIG']['table_prefix'] . "data SET publishable = 0 WHERE id = ' . $filedata->getId(), $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+	}
 	$message = urlencode('Document successfully updated');
 	header('Location: out.php?last_message=' . $message);
 }

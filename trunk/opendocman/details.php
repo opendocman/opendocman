@@ -122,9 +122,10 @@ else
 </FORM>
 <tr>
 <td>
-<?php 
+<?php
+$userperm = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 // display red or green icon depending on file status
-if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
+if ($status == 0  && $userperm->getAuthority($_REQUEST['id'])>= $user->ADMIN_RIGHT) 
 { 
 ?> 
 	<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">
@@ -218,7 +219,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
-	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$_REQUEST[id]' AND user_perms.uid = '$_SESSION[uid]' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
+	$query2 = "SELECT status FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data, " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms.fid = '$_REQUEST[id]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms.uid = '$_SESSION[uid]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms.rights = '2' AND " . $GLOBALS['CONFIG']['table_prefix'] . "data.status = '0' AND " . $GLOBALS['CONFIG']['table_prefix'] . "data.id = " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
