@@ -37,6 +37,7 @@ if( !defined('FileData_class') )
 	var $admin_users;
 	var $filesize;
 	var	$isLocked;
+	var $anonymous;
 	
 	function FileData($id, $connection, $database)
 	{
@@ -67,13 +68,13 @@ if( !defined('FileData_class') )
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
 			$this->tablename.created, $this->tablename.description, 
 			$this->tablename.comment, $this->tablename.status, 
-			$this->tablename.department 
+			$this->tablename.department, $this->tablename.anonymous 
 			FROM $this->tablename WHERE $this->tablename.id = $this->id";
 		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
-			while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
+			while( list($category, $owner, $created_date, $description, $comment, $status, $department, $anonymous) = mysql_fetch_row($result) )
 			{
 				$this->category = $category;
 				$this->owner = $owner;
@@ -111,6 +112,9 @@ if( !defined('FileData_class') )
 	// return a boolean on whether the user ID $uid is the owner of this file	
 	function isOwner($uid)
 	{	return ($this->getOwner()==$uid);	}
+	// return whether this file can by anonymously viewed
+	function isAnonymous()
+	{	return $this->anonymous;	}
 	// return the ID of the owner of this file
 	function getOwner()
 	{	return $this->owner;		}
