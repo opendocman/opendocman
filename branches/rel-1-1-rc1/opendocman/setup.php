@@ -74,7 +74,7 @@ function do_install()
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
         // Grant privs
-        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_REQUEST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT");
+        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT");
 
         include("install/odm.php");
         include("config.php");
