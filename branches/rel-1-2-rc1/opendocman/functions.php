@@ -47,10 +47,10 @@ if( !defined('function') )
 		echo '<center>'."\n";
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
 		echo '<tr>'."\n";
-		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
-		echo '<b><font size="-2" face="Arial" color="White">'."\n";
-		echo $message;
-		echo '</font></b></td>'."\n";
+		//echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
+		//echo '<b><font size="-2" face="Arial" color="White">'."\n";
+		//echo $message;
+		//echo '</font></b></td>'."\n";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="out.php" style="text-decoration:none">Home</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
