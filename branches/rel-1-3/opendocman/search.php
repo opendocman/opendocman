@@ -6,17 +6,11 @@ if (!session_is_registered('uid'))
 			        exit;
 }
 include('config.php');
-/*
-$where='all';
-  $keyword='Nguyen Khoa';
-  $_SESSION['uid']=102;
-  $submit='submit';
-*/
 
-/*$_GET['submit']='submit';
-$_GET['uid']=102;
-$_GET['keyword']='Nguyen Khoa';
-$_GET['where']='author';
+/*$_GET['where']='department_only';
+$_GET['keyword']='Information Systems';
+$_SESSION['uid']=102;
+$_GET['submit']='submit';
 $_GET['exact_phrase']='on';
 $_GET['case_sensitivity']='';
 */
@@ -95,15 +89,15 @@ else
 {
     function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
     {
-    	$lkeyword2 = $lkeyword;
-		$l_remain = strstr($lkeyword, ' ');
-		if($l_remain!='')
-			$lkeyword = strtok($lkeyword, ' ');
 		$lequate = '=';
+		$lremain ='';
     	if( $lexact_phrase!='on' )
-    	{	
-    		$lkeyword = '%' . $lkeyword . '%';
-    		
+		{	
+			$lkeyword2 = $lkeyword;
+			$l_remain = strstr($lkeyword, ' ');
+			if($l_remain!='')
+				$lkeyword = strtok($lkeyword, ' ');
+			$lkeyword = '%' . $lkeyword . '%';
     	}
     	if($lcase_sensitivity!='on')
     	{		
@@ -113,10 +107,9 @@ else
     	{
     		$lequate = ' REGEXP BINARY';
     	}
-    	
     	$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
     	$larray_len = sizeof($lsearch_array);
-    	switch($lwhere)
+		switch($lwhere)
         {
         	// Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
@@ -132,14 +125,13 @@ else
                 // Put all the author name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author_only':
-        if( $lexact_phrase=='on' )
-		{ $lquery .= 'user.first_name' . $lequate . '\'' . substr($l_remain, 1) . '\' AND ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
-
-		}
-		else
-		{
-				$lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
-		}
+        		if( $lexact_phrase=='on' )
+				{ $lquery .= 'user.first_name' . $lequate . '\'' . substr($l_remain, 1) . '\' AND ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+				}
+				else
+				{
+					$lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+				}
 				break;
                 // Put all the department name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
@@ -179,18 +171,17 @@ else
   	 	$llen = mysql_num_rows($lresult);
   	 	while( $lindex < $llen )
   	 	{ 	list($lid_array[$lindex++]) = mysql_fetch_row($lresult);	} 
-		if($l_remain != '' && $lexact_phrase != "on")
+		if(@$l_remain != '' && $lexact_phrase != "on")
 		{
-			 return array_values( array_intersect($lid_array, ( array_merge($lsearch_array, search($lwhere, substr($l_remain, 1), $lexact_phrase, $lcase_sensitivity, $lsearch_array) ) ) ) );
+			 return array_values( array_unique( array_merge($lid_array, search($lwhere, substr($l_remain, 1), $lexact_phrase, $lcase_sensitivity, $lsearch_array) ) ) );
 		}
 		return array_values( array_intersect($lid_array, $lsearch_array) );
     }
-	
 	$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     //$s_getFTime = getmicrotime();
-    if($_REQUEST['where'] == 'author_locked_files')
+    if($_GET['where'] == 'author_locked_files')
     {	$view_able_files_id = $current_user->getExpiredFileIds();}
     else
     {	$view_able_files_id = $current_user_permission->getViewableFileIds();}
@@ -200,8 +191,6 @@ else
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
     //echo 'khoa' . sizeof($search_result);
     $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
-//    $sorted_obj_array = $current_user_permission->convertToFileDataOBJ($search_result);
-    //$sorted_obj_array = obj_array_sort_interface($search_result, $_GET['sort_order'], $_GET['sort_by']);
 	$sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
     list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
     echo '<BR>';
