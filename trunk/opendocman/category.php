@@ -17,6 +17,10 @@ if(isset($submit) and $submit != 'Cancel')
 
 if($submit == 'add')
 {
+                if (!isset($last_message))
+                {
+                        $last_message='';
+                }
 		draw_header('Add New Category');
 		draw_status_bar('Add New Category', $last_message);
 		// Check to see if user is admin
@@ -79,6 +83,10 @@ elseif($submit == 'delete')
 }
 elseif($submit == 'deletepick')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	$deletepick='';
 	draw_header('Category Selection');
 	draw_status_bar('Choose Item to Delete', $last_message);
@@ -144,6 +152,10 @@ elseif($submit == 'Show Category')
 }
 elseif($submit == 'showpick')
 {
+                if (!isset($last_message))
+                {
+                        $last_message='';
+                }       
 		draw_header('Category Selection');
 		draw_status_bar('Choose item to view', $last_message);
 		$showpick='';
@@ -181,6 +193,10 @@ elseif($submit == 'showpick')
 }
 elseif($submit == 'Update')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Update Category');
 	draw_status_bar('Update Item', $last_message);
 ?>
@@ -216,6 +232,10 @@ draw_footer();
 }
 elseif($submit == 'updatepick')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Category Selection');
 	draw_status_bar('Modify Item',$last_message);
 ?>
