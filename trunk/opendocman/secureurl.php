@@ -31,3 +31,4 @@ elseif(isset($_GET['aku']))
  //echo 'dkakdkdk'.$_REQUEST['id'];
  //echo("Location:$_SERVER[SCRIPT_NAME]?" . $HTTP_SERVER_VARS['QUERY_STRING']); exit;
 }
+?>
