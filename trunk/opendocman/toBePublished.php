@@ -235,7 +235,7 @@ if(isset($submit) && $submit =='comments')
 	
 
 	
-	<TR><input type="hidden" name="num_checkboxes" value="<?= $num; ?>"></TR>
+	<TR><input type="hidden" name="num_checkboxes" value="<?php echo $num; ?>"></TR>
 	<?php
 	foreach ($boxes as $key=>$value)
 	{
@@ -260,7 +260,7 @@ if(isset($submit) && $submit =='comments')
 	<?php
 	if($mode == 'reviewer')
 	{?>
-	<CENTER><BR><INPUT type="Submit" name="submit" value="<?= $submit_value; ?>"  onClick='updateInfo();'>
+	<CENTER><BR><INPUT type="Submit" name="submit" value="<?php echo $submit_value; ?>"  onClick='updateInfo();'>
 	<INPUT type="button" name="submit" value="Cancel" onClick="fastclose();"></CENTER>
 	<?php
 	}
@@ -305,7 +305,7 @@ if(isset($submit) && $submit =='comments')
 	
 	
 	</SCRIPT>
-	<?
+	<?php
 }
 elseif (isset($submit) && $submit == 'Reject')
 {
