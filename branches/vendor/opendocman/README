@@ -1,0 +1,97 @@
+
+readme
+
+###########################################################################
+# OpenDocMan                                                              #
+# version 1.0                                                             #
+#                                                                         #
+# Copyright (C) Stephen Lawrence, 2000 - 2002                             #
+# email: logart@users.sourceforge.net                                     #
+# www  : http://sourceforge.net/projects/opendocman/                      #
+#                                                                         #
+# This program is free software; you can redistribute it and/or modify    #
+# it under the terms of the GNU General Public License as published by    #
+# the Free Software Foundation; either version 2 of the License, or       #
+# (at your option) any later version.                                     #
+#                                                                         #
+# This program is distributed in the hope that it will be useful,         #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of          #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           #
+# GNU General Public License for more details.                            #
+#                                                                         #
+# You should have received a copy of the GNU General Public License       #
+# along with this program; if not, write to the Free Software             #
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.               #
+#                                                                         #
+###########################################################################
+
+###########################################################################
+# REQUIREMENTS                                                            #
+###########################################################################
+
+- Apache Webserver 1.3.x (or any other webserver, that supports PHP)
+  (http://www.apache.org/)
+
+- MySQL Server 3.22+
+  (http://www.mysql.com/)
+
+- PHP 4+ compiled with MySQL-Support
+  (http://www.php.net/)
+
+###########################################################################
+# UPDATE                                                                  #
+###########################################################################
+
+No update at this time, first release.
+
+###########################################################################
+# INSTALLATION                                                            #
+###########################################################################
+
+- just copy all the files into any dir in your webserver documents dir
+  (i.e.: /var/www/opendocman)
+
+- create a MySQL-database and MySQL-User for opendocman
+   -> database username
+   -> database password
+
+  $> mysql -u root -p
+  
+
+  Welcome to the MySQL monitor.  Commands end with ; or \g.
+  Your MySQL connection id is 5525 to server version: 3.22.32
+
+  Type 'help' for help.
+
+  mysql> create database opendocman;
+  mysql> grant select,insert,update,delete,create on opendocman.* to opendocman@localhost identified by 'opendocman';
+  mysql> flush all privileges;
+  mysql> exit
+
+- create MySQL-Tables
+  $> mysql -u  -p opendocman < database.sql
+
+- make a directory for the files to be stored that is accessible to the web server
+  $>mkdir /var/www/opendocman/data
+
+- edit the configfile ("config.php")
+
+        All parameters are commented and should be self explanatory. Change any
+        that apply.
+
+
+###########################################################################
+#                                                                         #
+
+- point your favorite webbrowser to "http://foo.bar/opendocman",
+  login as "admin" (without password). After that, go to "admin->users->update->admin" and set your 
+  admin password.
+
+- Add departments, categories, users, etc.
+
+- Enjoy!
+
+#                                                                         #
+###########################################################################
+
+
