@@ -124,11 +124,18 @@ if( !defined('FileData_class') )
 	{
 	  $owner_query = "SELECT owner from data where id = $this->id";
 	  $u_query = "SELECT uid from user_perms where fid = $this->id and rights>=$right";
+	  $non_prev_user_query = "SELECT uid from user_perms where fid = $this->id and rights <$right";
+	  $owner_result = mysql_db_query($this->database, $owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
+	  $u_result = mysql_db_query($this->database, $u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
+	  $non_prev_u_reslt = mysql_query($non_prev_user_query, $this->connection) or die("Error in query: " .$non_prev_user_query . mysql_error() );  
+	  for($i = 0; $i<mysql_num_rows($non_prev_u_reslt); $i++)
+	  	list($not_u_uid[$i]) = mysql_fetch_row($non_prev_u_reslt);
 	  $d_query = "SELECT user.id, dept_perms.dept_id from dept_perms, user where fid = $this->id and user.department = dept_perms.dept_id and dept_perms.rights>= $right";
-	  $owner_result = mysql_db_query($this->database, $owner_query, $this->connection) or die("Error in query: ".$querry . mysql_error() );
-	  $u_result = mysql_db_query($this->database, $u_query, $this->connection) or die("Error in query: " .$querry . mysql_error() );
-	  $d_result = mysql_db_query($this->database, $d_query, $this->connection) or die("Error in query: " .$querry . mysql_error() );
-	  
+	  for($i=0; $i<sizeof($not_u_uid); $i++)
+	  {
+		$d_query .= ' and user.id != ' . $not_u_uid[$i];
+	  }
+	  $d_result = mysql_db_query($this->database, $d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
 	  if(sizeof($owner_result) != 1)
 	  {
 	    echo 'Error in DB, multiple ownership';
@@ -139,7 +146,6 @@ if( !defined('FileData_class') )
 	    list($u_uid[$i]) = mysql_fetch_row($u_result);
 	  for($i = 0; $i<mysql_num_rows($d_result); $i++)
 	    list($d_uid[$i]) = mysql_fetch_row($d_result);
-
 	  
 	  $result_array = databaseData::combineArrays($owner_uid, $u_uid);
 	  $result_array = databaseData::combineArrays($result_array, $d_uid);
