@@ -20,7 +20,7 @@ if($submit and $submit != 'Cancel')
 
 if($submit=='add')
 {
-draw_status_bar('Add New Department', $message);
+draw_status_bar('Add New Department', $last_message);
 
 	draw_header('Add New Department');
 	// Check to see if user is admin

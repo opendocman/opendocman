@@ -163,6 +163,14 @@ elseif($deleteuser){
 //Add Departments
 elseif($adddepartment)
 {
+		//Check to see if this department is already in DB
+		$query = "SELECT department.name from department where department.name=\"" . addslashes($department) . '"';
+		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+        if(mysql_num_rows($result) != 0)
+        {
+	       	header('Location: error.php?ec=3&message=' . $department . ' already exist in the database');
+        	exit;
+        }
 		$query = "INSERT INTO department (name) VALUES ('" . addslashes($department) . '\')';
 		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -182,7 +190,7 @@ elseif($adddepartment)
        	$num_rows = mysql_num_rows($result);
        	if( $num_rows != 1 )
        	{
-       		header('Location = error.php?ec=14&message=unable to identify ' . $department);
+       		header('Location: error.php?ec=14&message=unable to identify ' . $department);
        		exit;	
        	}
         list($newly_added_dept_id) = mysql_fetch_row($result);
