@@ -78,7 +78,7 @@ if( !defined('function') )
 	}
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
-		if(sizeof($id_array) == 0 )
+		if(!isset($id_array[0]))
 			return $id_array;
 		if (sizeof($id_array) == 0 )
 			return $id_array;
@@ -234,10 +234,10 @@ if( !defined('function') )
 		}
         function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
-                if(sizeof($fileid_array)==0)
+                if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
 				{
 					echo'<B><font size="10">No file found</font></B>' . "\n";
-					exit;
+					return -1;
 				}
 				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
