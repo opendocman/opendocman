@@ -2,7 +2,7 @@
 // Report all PHP errors (bitwise 63 may be used in PHP 3)
 // includes
 session_start();
-include('config.php');
+require('config.php');
 
 if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
