@@ -346,7 +346,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 		{
 			$fileid = $_POST["checkbox$i"];
 			$file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
-			$file_obj->Publishable(1);
+			$file_obj->Publishable(-1);
 			$file_obj->setReviewerComments($reviewer_comments);
 			$filenames .= $file_obj->getName() . ', ';
 		}
