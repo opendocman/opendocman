@@ -235,7 +235,8 @@ if( !defined('function') )
 		}
         function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
-                if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
+           $secureurl= new phpsecureurl;
+        	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
 				{
 					echo'<B><font size="10">No file found</font></B>' . "\n";
 					return -1;
@@ -265,9 +266,10 @@ if( !defined('function') )
                 echo(" found document(s)</FONT></B>\n");
                 echo('<BR><BR>'."\n");
                 $index = $starting_index;
-                $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
+                $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $secureurl->encode($page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by) . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=asc&sort_by=";
+                $default_url_pre = "<TD class=$css_td_class NOWRAP><B>";
+                $link = "<A HREF=\"$page_url&sort_order=asc&sort_by=";
                 $default_url_mid = '">';
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
@@ -282,7 +284,7 @@ if( !defined('function') )
                 }
                 else
                 {
-                        $str = $default_url_pre.'id'.$default_url_mid.'ID'.$default_url_post;
+                     //   $str = $default_url_pre . $secureurl->encode($link . 'id'.$default_url_mid.'ID'.$default_url_post;
                 }
                 echo($str);
 
@@ -315,7 +317,7 @@ if( !defined('function') )
                         $str = '<TD class="' . $css_td_class . '"><B>Rights<B></TD>';
                 }
                 echo($str);
-
+/*
                 if($sort_by == 'comments')
                 {
                         $str = '<TD class="' . $css_td_class . '" NOWRAP><B>Comments<B> <IMG SRC="' . $sort_img . '"></TD>';
@@ -325,7 +327,7 @@ if( !defined('function') )
                         $str = '<TD class="' . $css_td_class . '" NOWRAP><B>Comments<B></TD>';
                 }
                 echo($str);
-
+*/
                 if($sort_by == 'created_date')
                 {
                         $str = $url_pre.'Created Date'.$url_post;
@@ -466,7 +468,7 @@ if( !defined('function') )
 <?php
                         }
 ?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
-                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid.'&state=' . ($_REQUEST['state']+1);?>"><?php echo $realname;?></a></TD>
+                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
 							
@@ -505,7 +507,7 @@ if( !defined('function') )
                                 echo $rights[$i][1] . '|';
                         }
 ?>                      </TD>
-<?                        
+<? /*                        
                         if($comment == '')
                         {
                                 $comment='No comments available';                     
@@ -515,8 +517,8 @@ if( !defined('function') )
                         {
                                 $comment = substr($comment, 0, $GLOBALS['CONFIG']['displayable_len']).'...';
                         }
-?>                        
-                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $comment; ?></TD>
+*/ ?>                       
+                    <?php /*<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $comment; ?></TD> */ ?>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $owner_name; ?></TD>
