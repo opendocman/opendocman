@@ -23,7 +23,7 @@ draw_menu($_SESSION['uid']);
 ?>
 	<center>	
 	<table border="1" cellspacing="5" cellpadding="5" >
-	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font>
+	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font><th bgcolor ="#83a9f7"><font color="#FFFFFF">File Operations</th></font>
 	  <tr>
 	   <td>
 	    <table border="0">
@@ -77,7 +77,26 @@ draw_menu($_SESSION['uid']);
 		</td>
 	   </table>
 	  </td>
-
+<?php
+if ( $user_obj->isRoot()	)
+{
+?>	  
+	  <td>
+	 	<table border="0" valign="top">
+		 <tr>
+	      <td ><b><a href="delete.php?mode=view_del_archieve">Del/Undel</a></b></td>
+	     </tr>
+	     <tr>
+		 <td><b><a href="toBePublished.php?mode=root">Revisions</a></b></td>
+		 </tr>
+		 <tr>
+		 <td><b><a href="rejects.php?mode=root">Rejections</a></b></td>
+		 </tr>
+	   </table>
+	  </td>
+<?php
+}
+?>
 	 </tr>
 	</table>
    </center>

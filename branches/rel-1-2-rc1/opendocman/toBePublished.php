@@ -53,15 +53,18 @@ if(!isset($_REQUEST['submit']))
 	draw_header('Files Review');
 	draw_menu($_SESSION['uid']);
 	draw_status_bar('Document Listing for Review',  $_REQUEST['last_message']);
-	$page_url = $_SERVER['PHP_SELF'] . '?';
+	$page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 	$userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	$obj_array = $user_obj->getReviewee();
+	if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
+		$obj_array = $user_obj->getAllReviewee();
+	else
+		$obj_array = $user_obj->getReviewee();
 	$sorted_obj_array = obj_array_sort_interface($obj_array, $_GET['sort_order'], $_GET['sort_by']);
 	$flag=0;
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">'. "\n";
 	echo '<TABLE border="1"><TR><TD>';
 	list_files($sorted_obj_array, $userpermission, 'toBePublished.php?', $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], true);
-	list_nav_generator(sizeof($obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
+	list_nav_generator(sizeof($obj_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 ?>
 	</TD>
       </TR>

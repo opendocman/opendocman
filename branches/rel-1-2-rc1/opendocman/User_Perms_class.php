@@ -54,8 +54,7 @@ if ( !defined('User_Perms_class') )
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
-			$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, 
-				$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER WHERE 
+			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER WHERE 
 				user.id = $this->TABLE_DATA.owner AND $this->TABLE_DATA.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
 			$query = "SELECT $this->TABLE_USER_PERMS.fid, $this->TABLE_DATA.owner, 
@@ -72,7 +71,7 @@ if ( !defined('User_Perms_class') )
 		//$fileid_array[$index][2] ==> username
 		while($index< mysql_num_rows($result) )
 		{
-			list($fileid_array[$index][0],$fileid_array[$index][1],$fileid_array[$index][2] ) = mysql_fetch_row($result);
+			list($fileid_array[$index] ) = mysql_fetch_row($result);
 			$index++;	
 		}
 		return $fileid_array;

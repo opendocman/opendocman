@@ -69,8 +69,7 @@ if( !defined('Dept_Perms_class') )
 	{
 		$index = 0;
 		$fileid_array = array();
-		$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, $this->TABLE_USER.username 
-			FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
+		$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
 			WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id 
 			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.owner=$this->TABLE_USER.id
 			AND $this->TABLE_DATA.publishable=1";                                                 
@@ -80,7 +79,7 @@ if( !defined('Dept_Perms_class') )
 		//$fileid_array[$index][2] ==> username
 		while( $index< mysql_num_rows($result) ) 
 		{
-			list($fileid_array[$index][0],$fileid_array[$index][1],$fileid_array[$index][2] ) = mysql_fetch_row($result);
+			list($fileid_array[$index] ) = mysql_fetch_row($result);
 			$index++;	
 		}
 		return $fileid_array;		

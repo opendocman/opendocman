@@ -366,6 +366,17 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $comments;
 	}
+	function temp_delete()
+	{
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 2 WHERE $this->TABLE_DATA.id = $this->id";
+		$result = mysql_query($query, $this->connection) or
+			die("Error in query: $query" . mysql_error());
+	}
+	function undelete()
+	{
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 0 WHERE $this->TABLE_DATA.id = $this->id";
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+	}
   }
 }
 ?>

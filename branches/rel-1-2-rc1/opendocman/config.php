@@ -13,10 +13,10 @@ include 'classHeaders.php';
 include 'mimetypes.php';
 
 // Database Settings - Change these to match your database
-$database = 'opendocman'; // Enter the name of the database here
-$user = 'opendocman'; // Enter the username for the database
-$pass = 'opendocman'; // Enter the password for the username
-$hostname = 'localhost'; // Enter the hostname that is serving the database
+$database = 'vault'; // Enter the name of the database here
+$user = 'vault1'; // Enter the username for the database
+$pass = 'vault1'; // Enter the password for the username
+$hostname = 'musa'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -37,13 +37,16 @@ global $CONFIG;      $CONFIG = array(
 //'ldap_basedn' => 'ou=University of California Davis,o=University of California,c=US',
 
 // Set the number of files that show up on each page
-'page_limit' => '10',
+'page_limit' => '20',
+
+// Set the number of page links that show up on each age
+'num_page_limit' => '10', 
 
 // Set the maximum displayable length of text field
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://www.yourdomainaa.com/opendocman',
+'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -56,12 +59,12 @@ global $CONFIG;      $CONFIG = array(
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'admin',
+'root_username'  => 'kdng',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/var/www/document_repository/'
+'dataDir' => '/usr/home/httpd/document_repository/'
 );
 
 //global $site_mail; 

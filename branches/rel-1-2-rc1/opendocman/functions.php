@@ -67,6 +67,7 @@ if( !defined('function') )
 	
 	function int_array2D_sort($int_array, $sort_order)
 	{
+		$start_time = time();
 		$arraysize = sizeof($int_array);
 		$largest_num = 0;
 		for($i = 0; $i<$arraysize; $i++)
@@ -90,10 +91,13 @@ if( !defined('function') )
 				{	$int_array[$i][1] = '0'.$int_array[$i][1];	}
 			}
 		}
-		return str_array2D_sort($int_array, $sort_order);
+		$sorted_array = str_array2D_sort($int_array, $sort_order);
+		echo '<br> <b> int_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
+		return $sorted_array;
 	}
 	function str_array2D_sort($str_array, $sort_order)
 	{
+		$start_time = time();
 		switch($sort_order)
 		{
 			case 'a-z':
@@ -116,7 +120,7 @@ if( !defined('function') )
 						}
 					}
 				}
-				return $str_array;
+				
 				break;
 			case 'z-a':
 				$str_array_len = sizeof($str_array);
@@ -138,9 +142,10 @@ if( !defined('function') )
 						}
 					}
 				}
-				return $str_array;
-			default : break;
-		}		
+				break;		
+		}
+		echo '<br> <b> str_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
+		return $str_array;		
 	}
 	function obj_array_sort_interface($obj_array, $sort_order, $sort_by)
 	{
@@ -533,7 +538,7 @@ if( !defined('function') )
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
                 $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=a-z&sort_by=";
-                $default_url_mid = '\">';
+                $default_url_mid = '">';
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
                 echo("<TR bgcolor='83a9f7' id = '1'>");
@@ -820,7 +825,7 @@ if( !defined('function') )
                 return $num_checkboxes;	
         }
 
-        function list_nav_generator($total_hit, $page_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'a-z')
+        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'a-z')
         {
                 if($total_hit<$page_limit)
                 {
@@ -829,138 +834,44 @@ if( !defined('function') )
 
                 echo '<center>Result Page:&nbsp;&nbsp;';
                 $num_pages = ceil($total_hit/($page_limit));
+          		$shown_pages = 0;
+          		if($num_pages > $link_limit )
+          		{	$shown_pages = $link_limit;	}
+          		else { $shown_pages = $num_pages; }
                 $index_result = 0;
                 
                 if( $current_page > 0 )
                 {
-                        echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)."'>Prev</a>&nbsp; &nbsp;";
+                     echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)."'>Prev</a>&nbsp; &nbsp;";
                 }
                 
-                for($i = 0; $i< $num_pages; $i++)
-                {       
-                        if($current_page== $i)
-                        {
-                                echo $i . '&nbsp;&nbsp;';
-                        }
-                        else
-                        {
-                                echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i'>$i</a>&nbsp; &nbsp;"; 
-                        }
-                $index_result = $index_result + $page_limit;
-                }
-                
+				if($current_page >= $link_limit/2)
+                {	$i = $current_page - $link_limit/2; 	}
+				else if($current_page < $link_limit/2)
+				{	$i = 0;	}
+				else
+				{	$i = $current_page;	}
+				if( $current_page + ceil($link_limit/2) > $num_pages)
+					$last_page = $num_pages;
+				else
+					$last_page =  $current_page + ceil($link_limit/2);
+				for(; $i < $last_page; $i++)
+				{       
+					if($current_page== $i)
+					{
+						echo $i . '&nbsp;&nbsp;';
+					}
+					else
+					{
+						echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i'>$i</a>&nbsp; &nbsp;"; 
+					}
+					$index_result = $index_result + $page_limit;
+				}
                 if( $current_page < $num_pages-1 )
                 {
                         echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)."'>Next</a>&nbsp; &nbsp;";
                 }
         }
-
-	function list_files2($fileobj_array, $userperms_obj, $dataDir)
-	{
-		$count = sizeof($fileobj_array);
-		echo '<tr>';
-		echo '<td>';
-		echo $count; 
-		echo ' document(s) found<p></td>';
-		echo '</tr>';
-		$index = 0;
-		echo '<table name="list">';
-		while($index<sizeof($fileobj_array))
-		{
-	
-		// correction for empty description
-		if ($fileobj_array[$index]->getDescription() == '') 
-                { 
-                        $description = 'No description available'; 
-                }
-		
-		// set filename for filesize() call below
-		$filename = $dataDir . $fileobj_array[$index]->getId() . '.dat';
-		
-		// begin displaying file list with basic information
-		echo '<tr>';
-		echo '<td><b><a href="details.php?id=' . $fileobj_array[$index]->getId() . '">' . $fileobj_array[$index]->getName() . '</a></b>';
-			$read = array($userperms_obj->READ_RIGHT, "r");
-			$write = array($userperms_obj->WRITE_RIGHT, "w");
-			$admin = array($userperms_obj->ADMIN_RIGHT, "a");
-			$rights = array($read, $write, $admin);
-			$userright = $userperms_obj->getAuthority($fileobj_array[$index]->getId());
-			$index_found = 0;
-			for($i = sizeof($rights)-1; $i>=0; $i--)
-			{
-				if($userright==$rights[$i][0])
-				{
-				   $index_found = $i;
-				   $i = 0;
-				}
-			}
-			for($i = $index_found; $i>=0; $i--)
-                        {
-			    $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
-                        }
-	
-			echo '&nbsp;&nbsp';
-			for($i = 0; $i<sizeof($rights); $i++)
-			  echo($rights[$i][1]."|");
-		  ?>
-					
-		
-		
-		</td>
-		</tr>
-		
-		<tr>
-		<td><font size="-1"><?php echo $fileobj_array[$index]->getDescription(); ?></font></td>
-		</tr>
-		
-		<tr>
-		<td><font size="-1">Document created on <?php echo fix_date($fileobj_array[$index]->getCreatedDate()); ?> by <b><?php echo $fileobj_array[$index]->getOwnerName(); ?></b> for <b><?php echo ($fileobj_array[$index]->getDepartment()); ?></b>| <?php echo filesize($filename); ?> bytes</font></td>
-		</tr>
-		
-<?php 
-			// check the status of each file
-			// 0 -> file is not checked out
-			// display appropriate message and icon
-			if ($fileobj_array[$index]->getStatus() == 0 and $userperms_obj->getAuthority($fileobj_array[$index]->getId()) >= $userperms_obj->WRITE_RIGHT)
-			{	
-			?>
-			<tr>
-			<td><img src="images/a.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#43c343"><b>This document is available to be checked out</b></font></td>
-			</tr>
-			<?php
-			}
-			else if($fileobj_array[$index]->getStatus() != 0)
-			{
-				// not 0 -> implies file is checked out to another user
-				// run a query to find out user's name
-				//$query2 = "SELECT username FROM user WHERE id = '$result[$index]->getStatus()'";
-				//$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
-				$user = $fileobj_array[$index]->getCheckerOBJ();
-				$username = $user->getName();
-				//list($username) = mysql_fetch_row($result2);
-				// and display message and icon
-				?>
-			<tr>
-			<td>
-			<img src="images/na.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#e9202a">This document is currently checked out to <b><?php echo $username; ?></b></font>
-			</td>
-			</tr>
-<?php
-			}
-			else{}
-			$index++;
-	
-?>
-		
-		<tr>
-		<td>
-		&nbsp;
-		</td>
-		</tr>
-<?php
-        	}
-		echo '</table>';
-	}
 
 	function sort_browser()
 	{

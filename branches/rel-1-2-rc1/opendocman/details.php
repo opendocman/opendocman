@@ -189,7 +189,7 @@ if ($status == 0)
 		// additional actions are available 
 ?>
 		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/edit.png" alt="" border="0"></a></td>
-		<td align="center"><a href="delete.php?id0=<?php echo $_REQUEST['id']; ?>"><img src="images/delete.png" alt="Delete" border="0"></a></td>
+		<td align="center"><a href="delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>"><img src="images/delete.png" alt="Delete" border="0"></a></td>
 <?php
 	}
 }//end if ($status == 0)
