@@ -1,9 +1,3 @@
-# MySQL dump 8.16
-#
-# Host: musa.davis.cvdls    Database: vault
-#--------------------------------------------------------
-# Server version	4.0.5-beta-max
-
 #
 # Table structure for table 'admin'
 #
@@ -44,7 +38,7 @@ INSERT INTO category VALUES (4,'Presentation');
 
 CREATE TABLE data (
   id smallint(5) unsigned NOT NULL auto_increment,
-  category tinyint(4) unsigned NOT NULL default '0',
+  category smallint(5) unsigned NOT NULL default '0',
   owner smallint(6) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',

@@ -30,6 +30,11 @@ switch(@$_REQUEST['op']) {
          do_update_11rc1();
          break;
 
+   // User has version 11rc1 and is upgrading 
+   case "update_11rc2":
+         do_update_11rc2();
+         break;
+
     default:
          print_intro();
          break;
@@ -89,13 +94,22 @@ function do_update_10()
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
         include("install/upgrade_10.php");
+        include("install/upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
 {
         echo 'Updating version 1.1rc1<br>';        
+        include("install/upgrade_11rc2.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
         
-        echo 'No database changes to apply! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
+
+function do_update_11rc2()
+{
+        echo 'Updating version 1.1rc2<br>';        
+        include("install/upgrade_11rc2.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function print_intro()
@@ -118,6 +132,9 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="setup.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="setup.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
  </tr>
 </table>
 <?php

@@ -34,7 +34,7 @@ INSERT INTO category VALUES (4,'Presentation')
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS data (
   id smallint(5) unsigned NOT NULL auto_increment,
-  category tinyint(4) unsigned NOT NULL default '0',
+  category smallint(5) unsigned NOT NULL default '0',
   owner smallint(6) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
