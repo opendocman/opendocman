@@ -1,11 +1,9 @@
 <?php
 // Report all PHP errors (bitwise 63 may be used in PHP 3)
-error_reporting (E_ALL);
 // includes
 include('config.php');
 
-
-if(!isset($login) && $GLOBALS['CONFIG']['authen'] =='mysql')
+if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
     ?>
 <!--
@@ -65,16 +63,22 @@ if(!isset($login) && $GLOBALS['CONFIG']['authen'] =='mysql')
 <?php
         draw_footer();
 }
-elseif(isset($login))
+elseif(isset($_POST['login']))
 {
 
+$hostname=$GLOBALS['hostname'];
+$user=$GLOBALS['user'];
+$pass=$GLOBALS['pass'];
+$database=$GLOBALS['database'];
+
+$frmuser=$_POST['frmuser'];
+$frmpass=$_POST['frmpass'];
 
     // check login and password
     // connect and execute query
     $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
     $query = "SELECT id, username, password from user WHERE username = '$frmuser' AND password = PASSWORD('$frmpass')";
     $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
-
     // if row exists - login/pass is correct
     if (mysql_num_rows($result) == 1)
     {
@@ -83,6 +87,7 @@ elseif(isset($login))
         // register the user's ID
         session_register('SESSION_UID');
         list($id, $username, $password) = mysql_fetch_row($result);
+        global $SESSION_UID;
         $SESSION_UID = $id;
         // redirect to main page
         header('Location:out.php');
