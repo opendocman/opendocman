@@ -241,6 +241,8 @@ if(isset($submit) && $submit =='comments')
 	{
 		echo '<TR><INPUT type="hidden" name="' . $value .'" value="' . $filenums[$key] . '"></TR>';
 	}
+	if($mode == 'reviewer')
+	{
 	?>
 		<TABLE border="0">
 		<TR><TD>Email all users</TD><TD><INPUT type="checkbox" name="send_to_all" onchange="send_to_dept.disabled = !send_to_dept.disabled; author_note_form.elements['send_to_users[]'].disabled = !author_note_form.elements['send_to_users[]'].disabled;"></TD></TR>
@@ -257,10 +259,7 @@ if(isset($submit) && $submit =='comments')
 			echo "\n";
 		?>
 		</SELECT></TD></TR></TABLE>
-	<?php
-	if($mode == 'reviewer')
-	{?>
-	<CENTER><BR><INPUT type="Submit" name="submit" value="<?php echo $submit_value; ?>"  onClick='updateInfo();'>
+		<CENTER><BR><INPUT type="Submit" name="submit" value="<?php echo $submit_value; ?>"  onClick='updateInfo();'>
 	<INPUT type="button" name="submit" value="Cancel" onClick="fastclose();"></CENTER>
 	<?php
 	}
