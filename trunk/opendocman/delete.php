@@ -161,9 +161,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 		if( $list_status != -1)
 		{
 ?>	
-		
-		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit"
-		name="mode" value="Delete file(s)">
+		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit" name="mode" value="Delete file(s)">
 		</TABLE>
 		<input type="hidden" name="caller" value="<?php echo $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];?>">
 		<?
