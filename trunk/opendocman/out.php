@@ -1,9 +1,9 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-$_SESSION['uid']=102; $sort_by = 'author';
+session_start();
+//$_SESSION['uid']=102; $sort_by = 'author';
 $start_time = time();
-//session_start();
 
 /*if (!isset($_SESSION['uid']))
 {
@@ -22,7 +22,7 @@ global $state; $state = 1;
 include ('config.php');
 draw_header('File Listing');
 draw_menu($_SESSION['uid']);
-draw_status_bar('Document Listing', $_REQUEST['last_message']);
+draw_status_bar('Document Listing', @$_REQUEST['last_message']);
 sort_browser(); 
 $query = "SELECT * FROM dept_reviewer WHERE dept_reviewer.user_id = $_SESSION[uid]";
 $result = mysql_query($query) or die ("Error in Query:$query".mysql_error());

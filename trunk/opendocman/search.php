@@ -5,21 +5,14 @@ $where='all';
   $_SESSION['uid']=102;
   $submit='submit';
 */
-
-/*session_start();
-if (!session_is_registered('uid'))
-{
-        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
-		exit;
-}
-*/
+/*
 $_GET['submit']='';
 $_SESSION['uid']=102;
 $_GET['keyword']='-1';
 $_GET['where']='author_locked_files';
 $_GET['exact_phrase']='on';
 $_GET['case_sensitivity']='';
-
+*/
 /// includes
 $start_time = time();
 include('config.php');

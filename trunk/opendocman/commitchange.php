@@ -24,16 +24,6 @@ if(isset($_REQUEST['adduser']))
     else
     {     
     	$phonenumber = @$_REQUEST['phonenumber'];
-		if(strlen(@$_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), "(") !=0)
-    	{
-	    		
-	    	$phonenumber=ereg_replace(' ', '', $_REQUEST['phonenumber']);
-	    	$areacode=substr($phonenumber,0,3);
-	    	$firstthree=substr($phonenumber,3,3);
-	    	$lastfour=substr($phonenumber,6,4);
-	    	$phonenumber='(' . $areacode . ') ' . $firstthree . '-' . $lastfour;
-    	}
-
 	   // INSERT into user
        $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -101,16 +91,6 @@ elseif(isset($_REQUEST['updateuser']))
 	// UPDATE admin info
         $query = "UPDATE admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    
-        /*if(strlen($_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), '(') !=0)
-	   	{
-	    	$phonenumber=ereg_replace(' ', '', $_REQUEST['phonenumber']);
-	    	$areacode=substr($phonenumber,0,3);
-	    	$firstthree=substr($phonenumber,3,3);
-	    	$lastfour=substr($phonenumber,6,4);
-	    	$_REQUEST['phonenumber']='(' . $areacode . ') ' . $firstthree . '-' . $lastfour;
-	   	}
-*/
 	// UPDATE into user
         $query = "UPDATE user SET username='". addslashes($_POST['username']) ."',";
 	if (!empty($_REQUEST['password']))

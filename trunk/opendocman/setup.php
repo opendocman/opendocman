@@ -40,12 +40,12 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          break;
 
-   // User has version 11-Final and is upgrading 
+   // User has version 11 and is upgrading 
    case "update_11":
          do_update_11();
          break;
 
-   default:
+    default:
          print_intro();
          break;
 }
@@ -99,31 +99,11 @@ function do_install()
 
 function do_update_10()
 {
-        echo 'Updating version 1.0 to latest<br>';        
+        echo 'Updating version 1.0<br>';        
         
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
         include("install/upgrade_10.php");
-        include("install/upgrade_11rc1.php");
-        include("install/upgrade_11rc2.php");
-        include("install/upgrade_11.php");
-        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
-}
-function do_update_11rc1()
-{
-        echo 'Updating version 1.1rc1 to latest<br>';        
-        include("install/upgrade_11rc1.php");
-        include("install/upgrade_11rc2.php");
-        include("install/upgrade_11.php");
-        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
-        
-}
-
-function do_update_11rc2()
-{
-        echo 'Updating version 1.1rc2 to latest<br>';        
-        include("install/upgrade_11rc2.php");
-        include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
@@ -140,13 +120,13 @@ function do_update_11rc2()
         include("install/upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
+
 function do_update_11()
 {
-        echo 'Updating version 1.1 to latest<br>';        
+        echo 'Updating version 1.1<br>';        
         include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
-
 
 function print_intro()
 {

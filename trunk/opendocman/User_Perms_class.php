@@ -55,12 +55,12 @@ if ( !defined('User_Perms_class') )
 	{
 		if($this->user_obj->isRoot())
 			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA WHERE 
-				$this->TABLE_DATA.publishable = 1 order by $this->TABLE_DATA.id asc";
+				$this->TABLE_DATA.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
 			$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,
 				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
 				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
-				$this->TABLE_USER_PERMS.rights>=$right AND $this->TABLE_DATA.publishable = 1) order by $this->TABLE_DATA.id";
+				$this->TABLE_USER_PERMS.rights>=$right AND $this->TABLE_DATA.publishable = 1)";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = -1;
 		$fileid_array = array();

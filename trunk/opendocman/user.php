@@ -113,7 +113,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 </td>
                 </tr>
                 <TR>
-                <TD><B>Reviewer?</B></TD>
+        <TD><B>Reviewer?</B></TD>
                 <TD><INPUT type='checkbox' name='reviewer' value='1'></TD>
                 </TR>
                 <TR>
@@ -321,18 +321,6 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         @draw_status_bar('Update User ' ,$_POST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                 }
-                else
-        	{
-                        // Begin Not Demo Mode
-                        $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
-                        if (!isset($_REQUEST['last_message']))
-                        {
-                                $_REQUEST['last_message']='';
-                        }
-                        if( isset( $_POST['last_message'] ) )
-			{	
-                                draw_status_bar("Update User",$_POST['last_message']);	
-                        }
                 else
         	{
                         // Begin Not Demo Mode

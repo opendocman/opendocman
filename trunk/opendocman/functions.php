@@ -1,5 +1,5 @@
 <?php
-include ('config.php');
+//require_once ('config.php');
 if( !defined('function') )
 {
   	define('function', 'true', false);
@@ -76,183 +76,6 @@ if( !defined('function') )
 	    <!------------------end_draw_status_bar------------------->
 	    <?php
 	}
-	
-	function int_array2D_sort($int_array, $sort_order)
-	{
-		$start_time = time();
-		$arraysize = sizeof($int_array);
-		$largest_num = 0;
-		for($i = 0; $i<$arraysize; $i++)
-		{
-			if($int_array[$i][1]> $largest_num)
-			{	$largest_num = $int_array[$i][1];	}
-		}
-		$str_largest_num = ''.$largest_num;
-		$prefix_zeros = '';
-		for($i = 0; $i < strlen($str_largest_num)-1; $i++)
-		{	$prefix_zeros = $prefix_zeros.'0';	}
-		$smallest_allow_num = (int)('1'.$prefix_zeros);
-		$smallest_allow_num_digits = strlen($prefix_zeros)+1;
-		for($i = 0; $i<$arraysize; $i++)
-		{
-			if($int_array[$i][1]<$smallest_allow_num)
-			{
-				$current_num_digits = strlen((string)($int_array[$i][1]));
-				$num_of_zeros = $smallest_allow_num_digits - $current_num_digits;
-				for($j = 0; $j < $num_of_zeros; $j++)
-				{	$int_array[$i][1] = '0'.$int_array[$i][1];	}
-			}
-		}
-		$sorted_array = str_array2D_sort($int_array, $sort_order);
-		echo '<br> <b> int_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
-		return $sorted_array;
-	}
-	function str_array2D_sort($str_array, $sort_order)
-	{
-		$start_time = time();
-		switch($sort_order)
-		{
-			case 'asc':
-				$str_array_len = sizeof($str_array);
-				$sorted_array = array();
-				$current_index = 0;
-				$swap_array = array();
-				for($i = 0; $i<$str_array_len; $i++)
-				{
-					$current_index = $i;
-					for($j = $i - 1; $j>=0; $j--)
-					{
-						$result = strcasecmp($str_array[$j][1], $str_array[$current_index][1]);
-						if($result > 0)
-						{
-							$swap_array=$str_array[$j];
-							$str_array[$j] = $str_array[$current_index];
-							$str_array[$current_index] = $swap_array;
-							$current_index = $j;
-						}
-					}
-				}
-				
-				break;
-			case 'desc':
-				$str_array_len = sizeof($str_array);
-				$sorted_array = array();
-				$current_index = 0;
-				$swap_array = array();
-				for($i = 0; $i<$str_array_len; $i++)
-				{
-					$current_index = $i;
-					for($j = $i - 1; $j>=0; $j--)
-					{
-						$result = strcasecmp($str_array[$j][1], $str_array[$current_index][1]);
-						if($result < 0)
-						{
-							$swap_array=$str_array[$j];
-							$str_array[$j] = $str_array[$current_index];
-							$str_array[$current_index] = $swap_array;
-							$current_index = $j;
-						}
-					}
-				}
-				break;		
-		}
-		echo '<br> <b> str_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
-		return $str_array;		
-	}
-	function obj_array_sort_interface($obj_array, $sort_order, $sort_by)
-	{
-		if(sizeof($obj_array)<=1 and !isset($obj_array) )
-			return $obj_array;
-		switch($sort_by)
-		{
-			case 'file_name':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getName());
-				}
-				break;
-			case 'description':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getDescription());
-				}
-				break;
-			case 'modified_on':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getModifiedDate());
-				}
-				break;
-			case 'author':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-				   	$full_name_array = $obj_array[$i]->getOwnerFullName();           	
-					$str_array[$i] = array($i, $full_name_array[1] . ', ' . $full_name_array[0]);
-				}
-				break;
-			case 'created_date':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getCreatedDate());
-				}
-				break;
-			case 'size':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getId());
-					$str_array[$i][1] = filesize($GLOBALS['CONFIG']['dataDir'].$str_array[$i][1].'.dat');
-				}
-				break;
-			case 'id':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getId());
-				}
-				break;
-			case 'department':
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getDeptName());
-				}
-				break;
-			default : // do an id sort
-				$obj_array_len = sizeof($obj_array);
-				$str_array = array();
-				for($i = 0; $i< $obj_array_len; $i++)
-				{
-					$str_array[$i] = array($i, $obj_array[$i]->getId());
-				}
-				break;
-		}
-		if($sort_by == 'id' or $sort_by == 'size')
-		{	$str_sorted_array = int_array2D_sort($str_array, $sort_order);	}
-		else
-		{	$str_sorted_array = str_array2D_sort($str_array, $sort_order);	}
-			
-		$str_sorted_array_len = sizeof($str_sorted_array);
-		$obj_sorted_array = array();
-		for($i = 0; $i<$str_sorted_array_len; $i++)
-		{
-			$obj_sorted_array[$i] = $obj_array[$str_sorted_array[$i][0]];
-		}
-		return $obj_sorted_array;
-	} 
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
 		if (sizeof($id_array) == 0 )
@@ -290,71 +113,11 @@ if( !defined('function') )
 		{
 			$lquery = 'SELECT data.id FROM data ORDER BY data.filesize ' . $sort_order . ', data.id asc';
 		}
-		$time = getmicrotime(); 
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
-		echo "load mysql time: " . (getmicrotime() - $time);
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
 			list($array[$li]) = mysql_fetch_row($lresult);
-		return array_values( array_intersect($array, $id_array) ); 
-	}
-	function my_sort2 ($lquery, $sort_order = 'asc', $sort_by = 'id')
-	{
-		if (strlen($lquery) == 0 )
-			return $lquery;
-		if($sort_order == 'asc')
-			$sort_order = 'asc';
-		else
-			$sort_order = 'desc';
-		$clauses = array();
-		$clauses[0] = substr($lquery, 0, strpos($lquery, 'from'));
-		
-		if( $sort_by == 'id' )
-		{
-			$lquery = 'SELECT id from data WHERE ';
-			$lquery .= $lwhere_or_clause . ' ORDER BY id ' . $sort_order;
-		}
-		elseif($sort_by == 'author')
-		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND (';
-			$lquery .= $lwhere_or_clause . ') ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
-		}
-		elseif($sort_by == 'file_name')
-		{
-			$lquery = 'SELECT data.id FROM data WHERE ';
-			$lquery .= $lwhere_or_clause . ' ORDER BY data.realname ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'department')
-		{
-			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id AND (';
-			$lquery .= $lwhere_or_clause . ') ORDER BY department.name ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'created_date' )
-		{
-			$lquery = 'SELECT data.id FROM data WHERE ';
-            $lquery .= $lwhere_or_clause . ' ORDER BY data.created ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'modified_on')
-		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" AND (';
-			$lquery .= $lwhere_or_clause . ') GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'description')
-		{
-			$lquery = 'SELECT data.id FROM data WHERE  (';
-			$lquery .= $lwhere_or_clause . ') ORDER BY data.description ' . $sort_order . ', data.id asc';
-		}
-		elseif($sort_by == 'size')
-		{
-			$lquery = 'SELECT data.id FROM data WHERE  (';
-			$lquery .= $lwhere_or_clause . ') ORDER BY data.filesize ' . $sort_order . ', data.id asc';
-		}
-		$time = time(); 
-		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
-		echo "load mysql time: " . (time() - $time);
-		for($li = 0; $li<mysql_num_rows($lresult); $li++)
-			list($array[$li]) = mysql_fetch_row($lresult);
-		return $array;
+		return	array_values( array_intersect($array, $id_array) ); 
 	}
 	// This function draws the menu screen
         function draw_menu($uid='')
@@ -411,8 +174,6 @@ if( !defined('function') )
 <?php
 		echo '	</HEAD>'."\n";
 		echo '  	<body bgcolor="white">'."\n";
-		echo ' 		<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>'."\n";
-		echo ' 		<script language="JavaScript" src="./overlib.js"><!-- overLIB (c) Erik Bosrup --></script>'."\n";
 		echo '<!----------------------------End drawing header----------------------------->'."\n";
 	}
 
@@ -431,163 +192,6 @@ if( !defined('function') )
 		echo '</html>'."\n";
 		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
 	}
-        function view_file($filename)
-        {
-                header('Content-Length: '.filesize($GLOBALS['CONFIG']['dataDir'].'/'.$filename));
-                //header("Content-Type: application/pdf");
-                header('Content-Disposition: inline; filename='.$GLOBALS['CONFIG']['dataDir'].'/'.$filename);
-                // Apache is sending Last Modified header, so we'll do it, too
-                //header("Last-Modified:  Just now");   // something like Thu, 0
-                readfile($GLOBALS['CONFIG']['dataDir'].'/'.$filename);
-        }
-
-        function parse_string($string, $delimiter)
-        {
-                $parsedArray = array();
-                for($i = 0; $i<strlen($string); $i++)
-                {
-                        $pos = strpos($string, $delimiter, $i);
-                        if($pos ==NULL)
-                        { 
-                                $pos = strlen($string);
-                                $parsedArray[sizeof($parsedArray)]=substr($string, $i, ($pos-$i));
-                                $i = strlen($string);
-                        }
-                        else
-                        {
-                                $parsedArray[sizeof($parsedArray)]=substr($string, $i, ($pos-$i));
-                                $i = $pos;
-                        }
-                }
-                return $parsedArray;
-        }
-	function add_arrays($array1, $array2)
-	{
-		$result_array = $array1;
-		$index = sizeof($result_array);
-		for($i = 0; $i<sizeof($array2); $i++)
-			$result_array[$index++] = $array2[$i];
-		return $result_array;
-	}
-	function trim_strings($str_array, $percentage)
-	{
-		$result_array = array();
-		$result_array_index = 0;
-		for($i=0; $i<sizeof($str_array); $i++)
-		{
-			$word_len = strlen($str_array[$i]);
-			$matching_len = (int)($percentage / 100 * $word_len);
-			$temp_array = array();
-			$temp_array_index = 0;
-			for($j = 0; $j<=$word_len-$matching_len; $j++)
-			{
-				$temp_array[$temp_array_index++] = substr($str_array[$i], $j, $matching_len);
-			}
-			$result_array[$result_array_index++] = $temp_array;
-		}
-		return $result_array;
-	}
-	function len_filter_str_array($str_array, $len)
-	{
-		$array_len = sizeof($str_array);
-		$result_array = array();
-		$index = 0;
-		for($i = 0; $i<$array_len; $i++)
-		{
-			if(strlen($str_array[$i])>=$len)
-				$result_array[$index++] = $str_array[$i];
-		}
-		return $result_array;
-	}
-				
-	function word_count($string)
-	{
-		$count = 0;
-		for($i = 0; $i<strlen($string); $i++)
-			if($string[$i] == " ")
-				$count++;
-		return (count+1);
-	}
-        function str_search($query, $str_array, $exactWord, $case_sensitivity = false)
-        {
-                $found_array = array();
-                if(!isset($case_sensitivity))
-                {
-                        $query = strToLower($query);
-                        for($i = 0; $i<sizeof($str_array); $i++)
-                        {
-                                $str_array[$i] = strToLower($str_array[$i]);
-                        }
-                }
-
-                if(isset($exactWord))
-                {
-                        $index = 0 ;
-                        for($i = 0; $i<sizeof($str_array); $i++)
-                        {
-                                $found_array[$index++]=($query == $str_array[$i]);
-                        }
-
-                        return $found_array;
-                }
-                else
-                {
-                        $found_exact_array = str_search($query, $str_array, true, $case_sensitivity);
-                        $found_not_exact_array = array();
-                        $index = 0;
-                        for($i = 0; $i<sizeof($str_array); $i++)
-                        {
-                                $small_array = parse_string($str_array[$i], " ");
-                                $temp_array = str_search($query, $small_array, true, $case_sensitivity);
-                                $temp_array_size = sizeof($temp_array);
-                                $found_flag=false;
-                                for($j = 0; $j<$temp_array_size; $j++)
-                                {
-                                        if($temp_array[$j]==1)
-                                        {
-                                                $found_not_exact_array[$index++] = true;
-                                                $j = $temp_array_size;
-                                                $found_flag = 1;
-                                        }
-                                }
-                                if(!$found_flag)
-                                {
-                                	$found_not_exact_array[$index++] = false;
-                                }
-
-
-                        }
-                        return mergeArrays($found_not_exact_array, $found_exact_array, true);
-                }
-        }
-        function mergeArrays($high_priority_array, $low_priority_array, $priority_factor)
-        {
-                $array_len = sizeof($high_priority_array);
-                if($array_len != sizeof($low_priority_array) )
-                        return 0;
-                for($i = 0; $i < $array_len; $i++)
-                {
-                        if($high_priority_array[$i] != $priority_factor && $low_priority_array[$i] == $priority_factor)
-                        {
-                                $high_priority_array[$i] = $low_priority_array[$i];
-                        }
-                }
-                return $high_priority_array;
-        }
-        function merge2DArrays($high_priority_array, $low_priority_array, $priority_factor, $comparison_index)
-        {
-                $array_len = sizeof($high_priority_array);
-                if($array_len != sizeof($low_priority_array) )
-                        return 0;
-                for($i = 0; $i < $array_len; $i++)
-                {
-                        if($high_priority_array[$i][$comparison_index] != $priority_factor && $low_priority_array[$i][$comparison_index] == $priority_factor)
-                        {
-                                $high_priority_array[$i] = $low_priority_array[$i];
-                        }
-                }
-                return $high_priority_array;
-        }
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
                 $query = "SELECT Email from user";
@@ -621,13 +225,19 @@ if( !defined('function') )
                         $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
 		}
+		
 		function getmicrotime(){ 
 			list($usec, $sec) = explode(" ",microtime()); 
 			return ((float)$usec + (float)$sec); 
 		}
         function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
-                echo "\n".'<!----------------------Table Starts----------------------->'."\n";
+                if(sizeof($fileid_array)==0)
+				{
+					echo'<B><font size="10">No file found</font></B>' . "\n";
+					exit;
+				}
+				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
                 $count = sizeof($fileid_array);
                 $css_td_class = "'listtable'";
@@ -649,17 +259,17 @@ if( !defined('function') )
 
                 echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
                 echo $count; 
-                echo ' found document(s)</FONT></B>' . "\n";
-                echo '<BR><BR>'."\n";
+                echo(" found document(s)</FONT></B>\n");
+                echo('<BR><BR>'."\n");
                 $index = $starting_index;
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = '<TD class=' . $css_td_class . ' NOWRAP><B><A HREF="' . $page_url . '&sort_order=a-z&sort_by=';
+                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=asc&sort_by=";
                 $default_url_mid = '">';
-                $default_url_post = '<B></TD>';
-                echo '<TABLE name="list_file" border="0" hspace="0" hgap="0" CELLPADDING="1" CELLSPACING="1">';
-                echo '<TR bgcolor="83a9f7" id = "1">';
-                if($showCheckBox =='true')
+                $default_url_post = "<B></TD>";
+                echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
+                echo("<TR bgcolor='83a9f7' id = '1'>");
+                if($showCheckBox=='true')
                 {
                         echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
                 }
@@ -788,7 +398,7 @@ if( !defined('function') )
         			$_REQUEST['state']=1;
                 while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
-						if($index%2!=0)
+                	if($index%2!=0)
                         {
                                 $tr_bgcolor = $odd_row_color;
                         }
@@ -822,19 +432,24 @@ if( !defined('function') )
                                 $description = 'No description available';
                         }
                         // set filename for filesize() call below
-                        $filename = $dataDir . $file_obj->getId() . '.dat';
+                        //$filename = $dataDir . $file_obj->getId() . '.dat';
                         $fid = $file_obj->getId();
 
 
                         // begin displaying file list with basic information
                         $comment = $file_obj->getComment();
                         $description = $file_obj->getDescription();
+                        
+                        
                         $created_date = fix_date($file_obj->getCreatedDate());
                         if ($file_obj->getModifiedDate())
-                        {
-                                $modified_date = fix_date($file_obj->getModifiedDate());
+                        {   
+                        	$modified_date = fix_date($file_obj->getModifiedDate());
                         }
+                        
                         //echo "$modified_date  and $fid fid";
+                        
+                        
                         $full_name_array = $file_obj->getOwnerFullName();
                         $owner_name = $full_name_array[1].', '.$full_name_array[0];
                         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
@@ -851,6 +466,7 @@ if( !defined('function') )
                         <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid.'&state=' . ($_REQUEST['state']+1);?>"><?php echo $realname;?></a></TD>
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
+							
                         $read = array($userperms_obj->READ_RIGHT, 'r');
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
@@ -992,8 +608,7 @@ if( !defined('function') )
 	function sort_browser()
 	{
 ?>
-		<SCRIPT language="javascript" src="functions.js"></SCRIPT>
-		<SCRIPT language="JAVASCRIPT">
+		<SCRIPT language="javascript">
 		var category_option = '';
 		var category_item_option = '';
 		
@@ -1149,24 +764,7 @@ if( !defined('function') )
 			echo ($filesize);
 		}
 	}
-	/* fixQuote is used to make a normal string with embbed single and double quotation
-	 into a proper HTML string that a browser can understand without loosing any characters
-	 in it.  Let's say your string is 
-	$your_str1 = "I like the author "Khoa Nguyen".  That's the author i like".  
-	$your_str2 = "I like the author \"Khoa Nguyen\".  That's the author i like".  
-	Let's say you want to echo this string to the value of some textfield in your HTML
-	Then have this in your HTML:
-	<INPUT type="text" value="<?php echo(fixQuote($your_str1)); ?>"
-	<INPUT type="text" value="<?php echo(fixQuote($your_str2)); ?>"
-	*/
-
-	function fixQuote($string)
-	{
-		$string[$i] = str_replace('"', '&quot;', $string);
-		$string[$i] = str_replace('\\', '', $string);
-	}
 	/////////////////////////////////////////////////Debuging function/////////////////////////////////
-
 	function display_array($array)
 	{
 		for($i=0; $i<sizeof($array); $i++)
@@ -1174,7 +772,6 @@ if( !defined('function') )
 			echo($i.":".$array[$i]."<br>");
                 }
 	}
-
 	function display_array2D($array)
 	{
 		for($i=0; $i<sizeof($array); $i++)
@@ -1185,10 +782,9 @@ if( !defined('function') )
                         }
                 }
 	}
-
     function makeRandomPassword() 
     {
-            $pass='';
+        $pass='';
 	    $salt = 'abchefghjkmnpqrstuvw3456789';
 	    srand((double)microtime()*1000000); 
 	    $i = 0;
@@ -1200,24 +796,6 @@ if( !defined('function') )
 	            $i++;
 	    }
     return $pass;	
-	}
-
-	function removeElements($master_array, $removing_array)
-	{
-		$found = false;
-		$result_array = array();
-		for($i = 0; $i < sizeof($master_array); $i++)
-		{
-			$found=false;
-			for($j=0;$j < sizeof($removing_array); $j++)
-			{
-				if($master_array[$i] == $removing_array[$j])
-				{	$found=true;break;	}
-			}
-			if(!$found)
-			{	$result_array[sizeof($result_array)] = $master_array[$i];	}
-		}
-		return $result_array;
 	}
 	function checkUserPermission($file_id, $permittable_right)
 	{

@@ -2,11 +2,7 @@
 // For version ODM 1.2rc1
 // Admin table
 $result = mysql_query("
-DROP TABLE IF EXISTS admin;
-") or die("<br>Could not create admin table" .  mysql_error());
-
-$result = mysql_query("
-CREATE TABLE admin (
+CREATE TABLE IF NOT EXISTS admin (
   id smallint(5) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM;
@@ -19,11 +15,7 @@ INSERT INTO admin VALUES (1,1);
 
 // Category table
 $result = mysql_query("
-DROP TABLE IF EXISTS category;
-") or die("<br>Could not create category table");
-
-$result = mysql_query("
-CREATE TABLE category (
+CREATE TABLE IF NOT EXISTS category (
   id smallint(5) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
@@ -195,16 +187,12 @@ CREATE TABLE user (
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO user VALUES (1,'admin','',1,'5555551212','myemail@asdfa.com','User','Admin');
+INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User','Admin');
 ") or die("<br>Could not add user");
 
 // User permissions table
 $result = mysql_query("
-DROP TABLE IF EXISTS user_perms;
-") or die("<br>Could not create user_perms table");
-
-$result = mysql_query("
-CREATE TABLE user_perms (
+CREATE TABLE IF NOT EXISTS user_perms (
   fid smallint(5) unsigned default NULL,
   uid smallint(5) unsigned NOT NULL default '0',
   rights tinyint(4) NOT NULL default '0',

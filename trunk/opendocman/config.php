@@ -13,10 +13,10 @@ include 'mimetypes.php';
 require_once('crumb.php');
 
 // Database Settings - Change these to match your database
-$database = 'opendocman'; // Enter the name of the database here
-$user = 'opendocman'; // Enter the username for the database
-$pass = 'opendocman'; // Enter the password for the username
-$hostname = 'localhost'; // Enter the hostname that is serving the database
+$database = 'opendocman_khoa'; // Enter the name of the database here
+$user = 'vault1'; // Enter the username for the database
+$pass = 'vault1'; // Enter the password for the username
+$hostname = 'musa'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -41,7 +41,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://www.yourdomainaa.com/opendocman',
+'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman1.2',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -54,7 +54,7 @@ global $CONFIG;      $CONFIG = array(
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'admin',
+'root_username'  => 'kdng',
 
 // location of file repository
 // this should ideally be outside the Web server root

@@ -1,12 +1,4 @@
 <?php
-/*
-All source code copyright and proprietary Melonfire, 2001. All content, brand names and trademarks copyright and proprietary Melonfire, 2001. All rights reserved. Copyright infringement is a violation of law.
-
-This source code is provided with NO WARRANTY WHATSOEVER. It is meant for illustrative purposes only, and is NOT recommended for use in production environments. 
-
-Read more articles like this one at http://www.melonfire.com/community/columns/trog/ and http://www.melonfire.com/
-*/
-
 // edit.php - edit file properties
 
 // check session and $id
@@ -281,7 +273,10 @@ if (!isset($_REQUEST['submit']))
 		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
-	$user_forbidden_array = $filedata->getForbiddenRightUserIds();
+	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights=" . $filedata->FORBIDDEN_RIGHT;
+	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+		list($user_forbidden_array[$i]) = mysql_fetch_row($lresult);
 	$found = false;
 	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
 	for($a = 0; $a<sizeof($all_users); $a++)
@@ -306,7 +301,10 @@ if (!isset($_REQUEST['submit']))
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
 	<td><select name="view[]" multiple size = 10 onchange="changeList(this, this.form);">
 <?php
-	$user_view_array = $filedata->getViewRightUserIds();
+	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->VIEW_RIGHT;
+	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+		list($user_view_array[$i]) = mysql_fetch_row($lresult);
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -329,8 +327,11 @@ if (!isset($_REQUEST['submit']))
 
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
 	<td><select name="read[]" multiple size="10" onchange="changeList(this, this.form);">
-<?php 
-	$user_read_array = $filedata->getReadRightUserIds();
+	<?php 
+	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->READ_RIGHT;
+	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+		list($user_read_array[$i]) = mysql_fetch_row($lresult);
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -353,8 +354,11 @@ if (!isset($_REQUEST['submit']))
 
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
 	<td><select name="modify[]" multiple size = 10 onchange="changeList(this, this.form);">
-<?php 
-	$user_write_array = $filedata->getWriteRightUserIds();
+	<?php 
+	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->WRITE_RIGHT;
+	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+		list($user_write_array[$i]) = mysql_fetch_row($lresult);
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -377,8 +381,11 @@ if (!isset($_REQUEST['submit']))
 
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
 	<td><select name="admin[]" multiple size = 10 onchange="changeList(this, this.form);">
-<?php 
-	$user_admin_array = $filedata->getAdminRightUserIds();
+	<?php 
+	$lquery = "SELECT user_perms.uid FROM user_perms WHERE user_perms.fid = $id AND user_perms.rights>=" . $filedata->ADMIN_RIGHT;
+	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
+	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+		list($user_admin_array[$i]) = mysql_fetch_row($lresult);
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;

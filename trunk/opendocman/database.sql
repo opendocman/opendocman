@@ -1,6 +1,4 @@
 # MySQL dump 8.16
-#
-# Host: musa.davis.cvdls    Database: opendocman_steve
 #--------------------------------------------------------
 # Server version	4.0.12-max-log
 
@@ -40,6 +38,7 @@ INSERT INTO category VALUES (2,'Training Manual');
 INSERT INTO category VALUES (3,'Letter');
 INSERT INTO category VALUES (4,'Presentation');
 
+
 #
 # Table structure for table 'data'
 #
@@ -67,11 +66,6 @@ CREATE TABLE data (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'data'
-#
-
-
-#
 # Table structure for table 'department'
 #
 
@@ -87,6 +81,7 @@ CREATE TABLE department (
 #
 
 INSERT INTO department VALUES (1,'Information Systems');
+
 
 #
 # Table structure for table 'dept_perms'
@@ -180,7 +175,8 @@ CREATE TABLE user (
 # Dumping data for table 'user'
 #
 
-INSERT INTO user VALUES (1,'admin','',1,'5555551212','myemail@asdfa.com','User','Admin');
+INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User','Admin');
+
 
 #
 # Table structure for table 'user_perms'
@@ -193,9 +189,4 @@ CREATE TABLE user_perms (
   rights tinyint(4) NOT NULL default '0',
   KEY user_perms_idx (fid,uid,rights)
 ) TYPE=MyISAM;
-
-#
-# Dumping data for table 'user_perms'
-#
-
 
