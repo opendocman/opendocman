@@ -75,34 +75,58 @@ break;
 // illegal file type
 case 13:
 $message = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types:<br><ul align=left>';
-foreach($GLOBALS['allowedFileTypes'] as $this)
-{
-	$message .= '<li>'.$this;
-}
+//echo "_File array is " . array_values($_FILES['file']);
+	foreach($GLOBALS['allowedFileTypes'] as $this)
+	{
+		$message .= '<li>'.$this;
+	}
 $message .= '</ul>';
 break;
+//non-unique account
 case 14:
 $message = 'Non-unique account.  Please contact '.$GLOBALS['CONFIG']['site_mail'].' for help.';
 break;
+//check-in wrong filename
 case 15:
 $message = 'Error: wrong file!  Please check in the right file.';
 break;
+//non unique id in filename
 case 16: 
 $message = 'Non-unique key field in database.';
 break;
+// file cannot be checked-in
 case 17: 
 $message = 'This file cannot be checked in';
 break;
-default:
-$message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
-break;
+//non-complete upload
 case 18:
 $message = 'This file cannot be uploaded propertly';
 break;
+//no account in ODM
 case 19:
 $message = 'You do not currently have an account. Please contact <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a> to request one.';
 break;
+// cannot do this on revision
+case 20:
+$message = 'This operation cannot be done to a revision of a file';
+break;
+// operation cannot be done on file
+case 21:
+$message = 'This operation cannot be done on this file';
+break;
+// bad root_username setting
+case 22:
+$message = 'Unable to determine the root username.  Please check your config file';
+break;
+// Folder not writable
+case 23:
+$message ='Folder Error. Check Last Message in status bar for details'; 
+break;
 
+//default
+default:
+$message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
+break;
 }
 echo($message);
 //echo 'Please try to <a href="'.$GLOBALS['CONFIG']['base_url'].'">Log-in</a> again.';

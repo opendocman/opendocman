@@ -3,10 +3,16 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:error.php?ec=1');
+	header('Location:index.php?redirection=' . urlencode($_SERVER['REQUEST_URI']));
 	exit;
 }
 include('config.php');
+$lrequest_id = $_REQUEST['id']; //save an original copy of id
+if(strchr($_REQUEST['id'], '_') )
+{
+	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+		$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+}
 if( !isset ($_REQUEST['last_message']) )
 {	
         $_REQUEST['last_message']='';	
@@ -23,10 +29,12 @@ if(!isset($_GET['submit']))
 	
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
-	list($prefix , $suffix)= split ("\.", $realname);
+	$suffix = '';
+	if(strchr($realname, '.'))
+		list($prefix , $suffix)= split ("\.", $realname);
 	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
 	{	
-                $lmimetype = '';	
+                $lmimetype = $GLOBALS['mimetypes']['default'];	
         }
 	else 
 	{	
@@ -37,10 +45,10 @@ if(!isset($_GET['submit']))
 	//echo "suffix = $suffix<br>";
 	//echo "mime:$lmimetype";	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
-	echo '<INPUT type="hidden" name="id" value="'.$_REQUEST['id'].'">';
+	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
-	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($_REQUEST['id']).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
+	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
 	echo 'If you are not able to do so for some reason, ';
 	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
 	echo '</form>';
@@ -54,7 +62,13 @@ elseif ($_GET['submit'] == 'view')
 	//echo "ID is $_REQUEST['id']";
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+	if( isset($lrevision_id) )
+	{	$filename = $lrevision_dir . $lrequest_id . ".dat";
+	}
+	elseif( $file_obj->isArchived() )
+	{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
+	else
+	{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	}
 	// send headers to browser to initiate file download
 	header('Content-Length: '.filesize($filename));
 	// Pass the mimetype so the browser can open it
@@ -70,7 +84,13 @@ elseif ($_GET['submit'] == 'Download')
 {
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$realname = $file_obj->getName();
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+	if( isset($lrevision_id) )
+	{   $filename = $lrevision_dir . $lrequest_id . ".dat";
+	}
+	elseif( $file_obj->isArchived() )
+	{   $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
+	else
+	{   $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   }
 	// send headers to browser to initiate file download
 	header('Cache-control: private');
 	header ('Content-Type: application/octet-stream');

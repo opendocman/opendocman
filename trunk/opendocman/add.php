@@ -10,7 +10,7 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-	header('Location:error.php?ec=1');
+	header('Location:index.php?redirection=' . urlencode($_SERVER['REQUEST_URI']));
 	exit;
 }
 include('config.php');
@@ -196,13 +196,12 @@ if(!isset($_POST['submit'])) //un_submitted form
         </td>
 	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
 	</tr>
-	
+
 	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
 	<tr nowrap>
-	<td NOWRAP><b>Specific Permissions Settings</b>
-        </td>
+	  <td colspan="2" NOWRAP><b>Specific Permissions Settings</b></td>
 	</TR>
-	<TR><TD></TD>
+	<TR>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none">Forbidden</a></td>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none">View</a></td>
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none">Read</a></td>
@@ -210,7 +209,6 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none">Admin</a></td>
 	</tr>
 	<tr>
-	<TD></TD>
 	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
 <?php
 	
@@ -244,7 +242,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -262,7 +260,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -279,7 +277,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 		}
 		mysql_free_result ($result);
 ?>
-	</SELECT>
+	</SELECT></td>
 	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
@@ -295,7 +293,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 			echo $str;
 		}
 		mysql_free_result ($result);
-?>	</SELECT>
+?>	</SELECT></td>
 	
 	</TR>
 	</TABLE>
@@ -323,6 +321,8 @@ draw_footer();
 }
 else //submited form
 {
+	for($khoa = 0; $khoa<1; $khoa++)// change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
+	{
 	$result_array = array();
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
@@ -340,6 +340,7 @@ else //submited form
 		exit; 
 	}
 	// check file type.  refer to config.php to see which file types are allowed
+	$allowedFile = 0;
 	foreach($allowedFileTypes as $this)
 	{
 		if ($_FILES['file']['type'] == $this) 
@@ -354,9 +355,26 @@ else //submited form
 		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
 		exit; 
 	}
+
+        // Check to make sure the dir is available and writeable        
+        if (!is_dir($GLOBALS['CONFIG']['dataDir']))
+        {
+                $last_message=$GLOBALS['CONFIG']['dataDir'] . ' missing!';
+                header('Location:error.php?ec=23&last_message=' .$last_message);
+                exit;
+        }
+        else
+        {
+                if (!is_writeable($GLOBALS['CONFIG']['dataDir']))
+                {
+                        $last_message='Folder Permissions Error: ' . $GLOBALS['CONFIG']['dataDir'] . ' not writeable!';
+                        header('Location:error.php?ec=23&last_message=' .$last_message);
+                        exit;
+                }
+        }
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0)";
+	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0 )";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
@@ -365,13 +383,10 @@ else //submited form
 	//Find out the owners' username to add to log
 	$query = "SELECT username from user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	while ( list($username) = mysql_fetch_row($result) )
-	{
-		$username=$username;
-	}
+	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import')";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
@@ -418,15 +433,24 @@ else //submited form
 	// use id to generate a file name
 	// save uploaded file with new name
 	$newFileName = $fileId . '.dat';
-	if (!is_uploaded_file ($_FILES['file']['tmp_name']))
+	
+	if($khoa==0)
 	{
-		header('Location: error.php?ec=18');
-		exit;
+		if (!is_uploaded_file ($_FILES['file']['tmp_name']))
+		{
+			header('Location: error.php?ec=18');
+			exit;
+		}
+		move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	}
-	move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+	else
+		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
+	$lquery = "UPDATE data set data.filesize='filesize($GLOBALS[CONFIG][dataDir]/$newFileName)' WHERE data.id = '$fileId'";
+	mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error() );
 	$message = urlencode('Document successfully added');
 	header('Location: out.php?last_message=' . $message);
+	}
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">

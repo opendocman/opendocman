@@ -7,8 +7,8 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-        header('Location:error.php?ec=1');
-        exit;
+        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+		exit;
 }
 
 // includes
@@ -151,7 +151,8 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete User')
         {
                 $delete='';
-                @draw_status_bar('Delete User', $_POST['last_message']);
+                $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                @draw_status_bar('Delete ' . $user_obj->getName(), $_POST['last_message']);
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -194,7 +195,8 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="<?php $_SERVER['PHP_SELF']?>" method="POST" enctype="multipart/form-data">
+                        <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>"
                         <tr>
                         <td><b>User</b></td>
                         <td colspan=3>
@@ -232,13 +234,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User')
         {
                 // query to show item
-                @draw_status_bar("Display Item Information", $_POST['last_message']);
+                $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                @draw_status_bar('Show User: ' . $user_obj->getName(), $_POST['last_message']);
                 ?>
                         <center>
                         <table border=0>
                         <th>User Information</th>
                         <?php
-                        $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                        
                 $full_name = $user_obj->getFullName();
                 echo '<tr><td>ID#:</td><td>' . $_POST['item'] . '</td></tr>';
                 echo "<TR><TD>First Name</TD><TD>".$full_name[0]."</TD></TR>";
@@ -280,6 +283,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
                         <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>"
                         <tr>
                         <td><b>User</b></td>
                         <td colspan=3>
@@ -314,7 +318,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar("Update User",$_POST['last_message']);
+                        @draw_status_bar('Update User ' ,$_POST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                 }
                 else
@@ -329,11 +333,16 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 			{	
                                 draw_status_bar("Update User",$_POST['last_message']);	
                         }
-			else
-			{
-                                draw_status_bar("Update User",'');	
+                else
+        	{
+                        // Begin Not Demo Mode
+                        $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+                        if (!isset($_REQUEST['last_message']))
+                        {
+                                $_REQUEST['last_message']='';
                         }
-                ?>
+                        @draw_status_bar('Update User: ' . $user_obj->getName() ,$_POST['last_message']);	
+                        ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
                         {       window.location=url_location    }
@@ -548,6 +557,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 ?>
                         <center>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>"
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
                         <td><b>Username to modify:</b></td>

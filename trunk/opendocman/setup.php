@@ -23,12 +23,27 @@ switch(@$_REQUEST['op']) {
     // User has version 1.0 and is upgrading
     case "update_10":
          do_update_10();
+         do_update_11rc1();
+         do_update_11rc2();
+         do_update_11();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
          do_update_11rc1();
+         do_update_11rc2();
+         do_update_11();
          break;
 
+   // User has version 11rc2 and is upgrading 
+   case "update_11rc2":
+         do_update_11rc2();
+         do_update_11();
+         break;
+
+   // User has version 11 and is upgrading 
+   case "update_11":
+         do_update_11();
+         break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc2":
          do_update_11rc2();
@@ -39,7 +54,7 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          break;
 
-    default:
+   default:
          print_intro();
          break;
 }
@@ -120,7 +135,20 @@ function do_update_11rc2()
         include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
+function do_update_11rc1()
+{
+        echo 'Updating version 1.1rc1<br>';        
+        include("install/upgrade_11rc1.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+        
+}
 
+function do_update_11rc2()
+{
+        echo 'Updating version 1.1rc2<br>';        
+        include("install/upgrade_11rc2.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
 function do_update_11()
 {
         echo 'Updating version 1.1 to latest<br>';        
@@ -154,7 +182,7 @@ function print_intro()
   <td><a href="setup.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_11">Upgrade from version 1.1-Final</a><br><br></td>
+  <td><a href="setup.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
  </tr>
 </table>
 <hr>

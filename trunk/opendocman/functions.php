@@ -36,37 +36,50 @@ if( !defined('function') )
 	// Draw the status bar for each page
 	function draw_status_bar($message, $lastmessage='')
 	{
-	    	echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
+	    if(!isset($_REQUEST['state']))
+	    	$_REQUEST['state']=1;
+		echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
 		if (!isset ($message))
-                    {
-                        $message='Select';
-                    }
+		{
+			$message='Select';
+        }
 		echo '<link rel="stylesheet" type="text/css" href="linkcontrol.css">'."\n";
 		echo '<center>'."\n";
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
 		echo '<tr>'."\n";
-		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
-		echo '<b><font size="-2" face="Arial" color="White">'."\n";
-		echo $message;
-		echo '</font></b></td>'."\n";
+		//echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
+		//echo '<b><font size="-2" face="Arial" color="White">'."\n";
+		//echo $message;
+		//echo '</font></b></td>'."\n";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="out.php" style="text-decoration:none">Home</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
-	    echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
+?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
+		<TD bgcolor="#0000A0" align="left" valign="middle">
+<?php	$crumb = new crumb();
+		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['REQUEST_URI']);	
+		$crumb->printTrail($_REQUEST['state']);
+		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
 	    echo '<b><font size="-2" face="Arial" color="White">';
 		echo 'Last Message: '.$lastmessage;
-	    echo '</td></font></b>'."\n";
-	    echo '</tr>'."\n";
-	    echo '</table>'."\n";
-	    echo '</center>'."\n";
-	    echo "\n".'<!------------------end_draw_status_bar------------------->'."\n";
+	    echo '</td>';
+	    
+?>	    </font></b>
+		</TD>
+	    </tr>
+	    </table>
+	    </center>
+	    
+	    <!------------------end_draw_status_bar------------------->
+	    <?php
 	}
 	
 	function int_array2D_sort($int_array, $sort_order)
 	{
+		$start_time = time();
 		$arraysize = sizeof($int_array);
 		$largest_num = 0;
 		for($i = 0; $i<$arraysize; $i++)
@@ -90,13 +103,16 @@ if( !defined('function') )
 				{	$int_array[$i][1] = '0'.$int_array[$i][1];	}
 			}
 		}
-		return str_array2D_sort($int_array, $sort_order);
+		$sorted_array = str_array2D_sort($int_array, $sort_order);
+		echo '<br> <b> int_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
+		return $sorted_array;
 	}
 	function str_array2D_sort($str_array, $sort_order)
 	{
+		$start_time = time();
 		switch($sort_order)
 		{
-			case 'a-z':
+			case 'asc':
 				$str_array_len = sizeof($str_array);
 				$sorted_array = array();
 				$current_index = 0;
@@ -116,9 +132,9 @@ if( !defined('function') )
 						}
 					}
 				}
-				return $str_array;
+				
 				break;
-			case 'z-a':
+			case 'desc':
 				$str_array_len = sizeof($str_array);
 				$sorted_array = array();
 				$current_index = 0;
@@ -138,9 +154,10 @@ if( !defined('function') )
 						}
 					}
 				}
-				return $str_array;
-			default : break;
-		}		
+				break;		
+		}
+		echo '<br> <b> str_array2D_sort Time: ' . (time() - $start_time) . ' </b><br>';
+		return $str_array;		
 	}
 	function obj_array_sort_interface($obj_array, $sort_order, $sort_by)
 	{
@@ -236,7 +253,109 @@ if( !defined('function') )
 		}
 		return $obj_sorted_array;
 	} 
-	
+	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
+	{
+		if (sizeof($id_array) == 0 )
+			return $id_array;
+		$lwhere_or_clause = '';
+		if( $sort_by == 'id' )
+		{
+			$lquery = 'SELECT id from data ORDER BY id ' . $sort_order;
+		}
+		elseif($sort_by == 'author')
+		{
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+		}
+		elseif($sort_by == 'file_name')
+		{
+			$lquery = 'SELECT data.id FROM data ORDER BY data.realname ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'department')
+		{
+			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id ORDER BY department.name ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'created_date' )
+		{
+			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'modified_on')
+		{
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'description')
+		{
+			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'size')
+		{
+			$lquery = 'SELECT data.id FROM data ORDER BY data.filesize ' . $sort_order . ', data.id asc';
+		}
+		$time = getmicrotime(); 
+		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
+		echo "load mysql time: " . (getmicrotime() - $time);
+		$len = mysql_num_rows($lresult);
+		for($li = 0; $li<$len; $li++)
+			list($array[$li]) = mysql_fetch_row($lresult);
+		return array_values( array_intersect($array, $id_array) ); 
+	}
+	function my_sort2 ($lquery, $sort_order = 'asc', $sort_by = 'id')
+	{
+		if (strlen($lquery) == 0 )
+			return $lquery;
+		if($sort_order == 'asc')
+			$sort_order = 'asc';
+		else
+			$sort_order = 'desc';
+		$clauses = array();
+		$clauses[0] = substr($lquery, 0, strpos($lquery, 'from'));
+		
+		if( $sort_by == 'id' )
+		{
+			$lquery = 'SELECT id from data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY id ' . $sort_order;
+		}
+		elseif($sort_by == 'author')
+		{
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+		}
+		elseif($sort_by == 'file_name')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY data.realname ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'department')
+		{
+			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY department.name ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'created_date' )
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+            $lquery .= $lwhere_or_clause . ' ORDER BY data.created ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'modified_on')
+		{
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" AND (';
+			$lquery .= $lwhere_or_clause . ') GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'description')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.description ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'size')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.filesize ' . $sort_order . ', data.id asc';
+		}
+		$time = time(); 
+		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
+		echo "load mysql time: " . (time() - $time);
+		for($li = 0; $li<mysql_num_rows($lresult); $li++)
+			list($array[$li]) = mysql_fetch_row($lresult);
+		return $array;
+	}
 	// This function draws the menu screen
         function draw_menu($uid='')
         {
@@ -501,28 +620,31 @@ if( !defined('function') )
                 for($i = 0; $i<sizeof($user_ID_array); $i++)
                         $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-        }
-
-        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'a-z', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
+		}
+		function getmicrotime(){ 
+			list($usec, $sec) = explode(" ",microtime()); 
+			return ((float)$usec + (float)$sec); 
+		}
+        function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
                 echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
-                $count = sizeof($fileobj_array);
+                $count = sizeof($fileid_array);
                 $css_td_class = "'listtable'";
-                if($sort_order == 'a-z')
+                if($sort_order == 'asc')
                 {
                         $sort_img = 'images/icon_sort_az.gif';
-                        $next_sort = 'z-a';
+                        $next_sort = 'desc';
                 }
-                else if($sort_order == 'z-a')
+                else if($sort_order == 'desc')
                 {
                         $sort_img = 'images/icon_sort_za.gif';
-                        $next_sort = 'a-z';
+                        $next_sort = 'asc';
                 }
                 else 
                 {
                         $sort_img ='images/icon_sort_null';
-                        $next_sort = 'a-z';
+                        $next_sort = 'asc';
                 }		
 
                 echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
@@ -657,14 +779,16 @@ if( !defined('function') )
                 $unlock_highlighted_color = '#bdf9b6';
                 $lock_highlighted_color = '#ea7741';
                 echo "\n";
-                if(!isset($fileobj_array))
+                if(!isset($fileid_array))
                 {
                         echo '</TABLE>';
                         return 0;
                 }
-                while($index<sizeof($fileobj_array) and $index>=$starting_index and $index<=$stoping_index)
+        		if(!isset($_REQUEST['state']))
+        			$_REQUEST['state']=1;
+                while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
-                        if($index%2!=0)
+						if($index%2!=0)
                         {
                                 $tr_bgcolor = $odd_row_color;
                         }
@@ -672,8 +796,8 @@ if( !defined('function') )
                         { 
                                 $tr_bgcolor = $even_row_color;
                         }
-                        
-                        if ($fileobj_array[$index]->getStatus() == 0 and $userperms_obj->getAuthority($fileobj_array[$index]->getId()) >= $userperms_obj->WRITE_RIGHT)
+                        $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
+						if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
                         {
                                 $lock = false;
                                 $highlighted_color = $unlock_highlighted_color;
@@ -687,51 +811,51 @@ if( !defined('function') )
                         if($with_caption == true )
                         {
                                 // correction for empty description
-                                echo "<TR bgcolor=\"$tr_bgcolor\" id=\"$index\" onMouseOver=\"this.style.backgroundColor='$highlighted_color'\"; return overlib('Comments');\" onMouseOut=\"this.style.backgroundColor='$tr_bgcolor'; return nd();\">";
+                                ?><TR bgcolor="<?php echo $tr_bgcolor;?>" id="<?php echo $index;?>" onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?>'"; return overlib('Comments');" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>'; return nd();"><?
                         }
                         else
                         {
-                                echo "<TR bgcolor=$tr_bgcolor id = $index onMouseOver=\"this.style.backgroundColor='$highlighted_color';\" onMouseOut=\"this.style.backgroundColor='$tr_bgcolor';\">";
-                        }
-                        
-                        if ($fileobj_array[$index]->getDescription() == '') 
+	                        ?><TR bgcolor=<?php echo $tr_bgcolor;?> id = <?php echo $index;?> onMouseOver="this.style.backgroundColor='<?php echo $highlighted_color;?> ';" onMouseOut="this.style.backgroundColor='<?php echo $tr_bgcolor;?>';"><?
+                        } 
+                        if ($file_obj->getDescription() == '') 
                         { 
                                 $description = 'No description available';
                         }
-
                         // set filename for filesize() call below
-                        $filename = $dataDir . $fileobj_array[$index]->getId() . '.dat';
-                        $fid = $fileobj_array[$index]->getId();
+                        $filename = $dataDir . $file_obj->getId() . '.dat';
+                        $fid = $file_obj->getId();
 
 
                         // begin displaying file list with basic information
-                        $comment = $fileobj_array[$index]->getComment();
-                        $description = $fileobj_array[$index]->getDescription();
-                        $created_date = fix_date($fileobj_array[$index]->getCreatedDate());
-                        if ($fileobj_array[$index]->getModifiedDate())
+                        $comment = $file_obj->getComment();
+                        $description = $file_obj->getDescription();
+                        $created_date = fix_date($file_obj->getCreatedDate());
+                        if ($file_obj->getModifiedDate())
                         {
-                                $modified_date = fix_date($fileobj_array[$index]->getModifiedDate());
+                                $modified_date = fix_date($file_obj->getModifiedDate());
                         }
                         //echo "$modified_date  and $fid fid";
-                        $full_name_array = $fileobj_array[$index]->getOwnerFullName();
+                        $full_name_array = $file_obj->getOwnerFullName();
                         $owner_name = $full_name_array[1].', '.$full_name_array[0];
-                        $user_obj = new User($fileobj_array[$index]->getOwner(), $fileobj_array[$index]->connection, $fileobj_array[$index]->database);
-                        $dept_name = $fileobj_array[$index]->getDeptName();
-                        $realname = $fileobj_array[$index]->getRealname();
-                        $filesize = filesize($filename);
+                        //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
+                        $dept_name = $file_obj->getDeptName();
+                        $realname = $file_obj->getRealname();
+                        $filesize = $file_obj->getFileSize();
                         if($showCheckBox=='true')
                         {
-                                echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
+?>
+						<TD><input type="checkbox" value="<?php echo $fid; ?>" name="checkbox<?php echo $checkbox_index;?>"></B></TD>
+<?php
                         }
-                        echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
-                        echo '<TD class="' . $css_td_class . '" NOWRAP><a class="listtable" href="details.php?id=' . $fid . '">' . $realname . '</a></TD>';
-                        echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';
-
+?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
+                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid.'&state=' . ($_REQUEST['state']+1);?>"><?php echo $realname;?></a></TD>
+                        <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
+<?php
                         $read = array($userperms_obj->READ_RIGHT, 'r');
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
                         $rights = array($read, $write, $admin);
-                        $userright = $userperms_obj->getAuthority($fileobj_array[$index]->getId());
+                        $userright = $userperms_obj->getAuthority($file_obj->getId());
                         $index_found = -1;
                         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
                         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
@@ -755,49 +879,46 @@ if( !defined('function') )
                         {
                                 $rights[$i][1] = '-';
                         }
-                        echo "<TD class=\"$css_td_class\" NOWRAP>";
-                        
+?>						<TD class="<?php echo $css_td_class; ?>" NOWRAP>
+<?
                         for($i = 0; $i<sizeof($rights); $i++)
                         {
                                 echo $rights[$i][1] . '|';
                         }
-                        echo '</TD>';
-                        
+?>                      </TD>
+<?                        
                         if($comment == '')
                         {
-                                $comment='No comments available';
-                        
+                                $comment='No comments available';                     
                         }
                         
                         if(strlen($comment) > $GLOBALS['CONFIG']['displayable_len'])
                         {
                                 $comment = substr($comment, 0, $GLOBALS['CONFIG']['displayable_len']).'...';
                         }
-                        
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$comment</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$created_date</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$modified_date</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$owner_name</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$dept_name</TD>" ;
-                        echo "<TD class=\"$css_td_class\" NOWRAP>$filesize</TD>" ;
-                        
-                        if ($lock == false)
-                        {
-                                echo '<TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD>';
-                        }
-                        else
-                        {
-                                echo '<TD align="center" NOWRAP><img src="images/file_locked.png"></TD>';
-                        }
+?>                        
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $comment; ?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $owner_name; ?></TD>
+                        <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $dept_name; ?></TD>
+						<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $filesize; ?></TD> 	      <?              
+						if ($lock == false)
+						{
+							?><TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD><?
+						}
+						else
+						{
+							?><TD align="center" NOWRAP><img src="images/file_locked.png"></TD><?
+						}
                         
                         $index++;
-                        echo '</TR>'."\n";
+                        ?></TR><?
                         $checkbox_index++;
                 }
-                echo '<INPUT type="hidden" name="num_checkboxes" value="' . $checkbox_index . '">'."\n";
-                echo '</HD6>'."\n";
-                echo '</TABLE>'."\n";
-?>
+                ?><INPUT type="hidden" name="num_checkboxes" value="<?php echo $checkbox_index;?>">
+                </HD6>
+                </TABLE>
                 <Script Language="javascript">
                 function selectAll(ctrl_checkbox)
                 {
@@ -820,7 +941,7 @@ if( !defined('function') )
                 return $num_checkboxes;	
         }
 
-        function list_nav_generator($total_hit, $page_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'a-z')
+        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
         {
                 if($total_hit<$page_limit)
                 {
@@ -829,138 +950,44 @@ if( !defined('function') )
 
                 echo '<center>Result Page:&nbsp;&nbsp;';
                 $num_pages = ceil($total_hit/($page_limit));
+          		$shown_pages = 0;
+          		if($num_pages > $link_limit )
+          		{	$shown_pages = $link_limit;	}
+          		else { $shown_pages = $num_pages; }
                 $index_result = 0;
                 
                 if( $current_page > 0 )
                 {
-                        echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)."'>Prev</a>&nbsp; &nbsp;";
+                     echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)."'>Prev</a>&nbsp; &nbsp;";
                 }
                 
-                for($i = 0; $i< $num_pages; $i++)
-                {       
-                        if($current_page== $i)
-                        {
-                                echo $i . '&nbsp;&nbsp;';
-                        }
-                        else
-                        {
-                                echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i'>$i</a>&nbsp; &nbsp;"; 
-                        }
-                $index_result = $index_result + $page_limit;
-                }
-                
+				if($current_page >= $link_limit/2)
+                {	$i = $current_page - $link_limit/2; 	}
+				else if($current_page < $link_limit/2)
+				{	$i = 0;	}
+				else
+				{	$i = $current_page;	}
+				if( $current_page + ceil($link_limit/2) > $num_pages)
+					$last_page = $num_pages;
+				else
+					$last_page =  $current_page + ceil($link_limit/2);
+				for(; $i < $last_page; $i++)
+				{       
+					if($current_page== $i)
+					{
+						echo $i . '&nbsp;&nbsp;';
+					}
+					else
+					{
+						echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i'>$i</a>&nbsp; &nbsp;"; 
+					}
+					$index_result = $index_result + $page_limit;
+				}
                 if( $current_page < $num_pages-1 )
                 {
                         echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)."'>Next</a>&nbsp; &nbsp;";
                 }
         }
-
-	function list_files2($fileobj_array, $userperms_obj, $dataDir)
-	{
-		$count = sizeof($fileobj_array);
-		echo '<tr>';
-		echo '<td>';
-		echo $count; 
-		echo ' document(s) found<p></td>';
-		echo '</tr>';
-		$index = 0;
-		echo '<table name="list">';
-		while($index<sizeof($fileobj_array))
-		{
-	
-		// correction for empty description
-		if ($fileobj_array[$index]->getDescription() == '') 
-                { 
-                        $description = 'No description available'; 
-                }
-		
-		// set filename for filesize() call below
-		$filename = $dataDir . $fileobj_array[$index]->getId() . '.dat';
-		
-		// begin displaying file list with basic information
-		echo '<tr>';
-		echo '<td><b><a href="details.php?id=' . $fileobj_array[$index]->getId() . '">' . $fileobj_array[$index]->getName() . '</a></b>';
-			$read = array($userperms_obj->READ_RIGHT, "r");
-			$write = array($userperms_obj->WRITE_RIGHT, "w");
-			$admin = array($userperms_obj->ADMIN_RIGHT, "a");
-			$rights = array($read, $write, $admin);
-			$userright = $userperms_obj->getAuthority($fileobj_array[$index]->getId());
-			$index_found = 0;
-			for($i = sizeof($rights)-1; $i>=0; $i--)
-			{
-				if($userright==$rights[$i][0])
-				{
-				   $index_found = $i;
-				   $i = 0;
-				}
-			}
-			for($i = $index_found; $i>=0; $i--)
-                        {
-			    $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
-                        }
-	
-			echo '&nbsp;&nbsp';
-			for($i = 0; $i<sizeof($rights); $i++)
-			  echo($rights[$i][1]."|");
-		  ?>
-					
-		
-		
-		</td>
-		</tr>
-		
-		<tr>
-		<td><font size="-1"><?php echo $fileobj_array[$index]->getDescription(); ?></font></td>
-		</tr>
-		
-		<tr>
-		<td><font size="-1">Document created on <?php echo fix_date($fileobj_array[$index]->getCreatedDate()); ?> by <b><?php echo $fileobj_array[$index]->getOwnerName(); ?></b> for <b><?php echo ($fileobj_array[$index]->getDepartment()); ?></b>| <?php echo filesize($filename); ?> bytes</font></td>
-		</tr>
-		
-<?php 
-			// check the status of each file
-			// 0 -> file is not checked out
-			// display appropriate message and icon
-			if ($fileobj_array[$index]->getStatus() == 0 and $userperms_obj->getAuthority($fileobj_array[$index]->getId()) >= $userperms_obj->WRITE_RIGHT)
-			{	
-			?>
-			<tr>
-			<td><img src="images/a.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#43c343"><b>This document is available to be checked out</b></font></td>
-			</tr>
-			<?php
-			}
-			else if($fileobj_array[$index]->getStatus() != 0)
-			{
-				// not 0 -> implies file is checked out to another user
-				// run a query to find out user's name
-				//$query2 = "SELECT username FROM user WHERE id = '$result[$index]->getStatus()'";
-				//$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
-				$user = $fileobj_array[$index]->getCheckerOBJ();
-				$username = $user->getName();
-				//list($username) = mysql_fetch_row($result2);
-				// and display message and icon
-				?>
-			<tr>
-			<td>
-			<img src="images/na.jpg" width=40 height=33 alt="" border=0 align="absmiddle"><font size="-1" color="#e9202a">This document is currently checked out to <b><?php echo $username; ?></b></font>
-			</td>
-			</tr>
-<?php
-			}
-			else{}
-			$index++;
-	
-?>
-		
-		<tr>
-		<td>
-		&nbsp;
-		</td>
-		</tr>
-<?php
-        	}
-		echo '</table>';
-	}
 
 	function sort_browser()
 	{
@@ -1013,8 +1040,8 @@ if( !defined('function') )
 			if(category_item_option == 'choose_an_author')
 				exit();
 			order_array = new Array();
-				order_array[0] = new Array('Ascending', 0, 'a-z');
-				order_array[1] = new Array('Descending', 1, 'z-a');
+				order_array[0] = new Array('Ascending', 0, 'asc');
+				order_array[1] = new Array('Descending', 1, 'desc');
 			options_array = document.forms['browser_sort'].elements['category_item_order'].options;
 			
 			options_array[0] = new Option('Choose an Order');
@@ -1030,7 +1057,7 @@ if( !defined('function') )
 
 		function load(select_box)
 		{
-			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option);
+			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option + "&exact_phrase=on";
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
@@ -1194,13 +1221,44 @@ if( !defined('function') )
 	}
 	function checkUserPermission($file_id, $permittable_right)
 	{
-		$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-		if(!$user_perm_obj->user_obj->isRoot() && $user_perm_obj->getPermission($file_id) < $permittable_right)
+		$userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+		if(!$userperm_obj->user_obj->isRoot() && $userperm_obj->getAuthority($file_id) < $permittable_right)
 		{
 			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";
 			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for further assistance.';
 			exit();
 		}
+	}
+	function fmove($source_file, $destination_file)
+	{
+		//read and close
+		$lfhandler = fopen ($source_file, "r");
+		$lfcontent = fread($lfhandler, filesize ($source_file));
+		fclose ($lfhandler);
+		//write and close
+		$lfhandler = fopen ($destination_file, "w");
+		fwrite($lfhandler, $lfcontent);
+		fclose ($lfhandler);
+		//delete source file
+		unlink($source_file);
+	}
+	/* return a 2D array of users.
+	array[0][0] = id
+	array[0][1] = "LastName, FirstName"
+	array[0][2] = "username"
+	*/
+	function getAllUsers()
+	{
+		$lquery = 'SELECT id, last_name, first_name, username FROM user';
+		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
+		$llen = mysql_num_rows($lresult);
+		$return_array = array();
+		for($li = 0;$li<$llen; $li++)
+		{
+			list($lid, $llast_name, $lfirst_name, $lusername) = mysql_fetch_row($lresult);
+			$return_array[$li] = array($lid, "$llast_name, $lfirst_name", $lusername);
+		}
+		return $return_array;
 	}
 }
 ?>
