@@ -23,6 +23,10 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 		if(@$_REQUEST['id' . $i])
 		{
 			$id = $_REQUEST['id' . $i];
+			if(strchr($id, '_') )
+			{
+				header('Location:error.php?ec=20');
+			}
 			if($userperm_obj->canAdmin($id))
 			{
 				$file_obj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
@@ -48,6 +52,10 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 		if(@$_REQUEST['id' . $i])
 		{
 			$id = $_REQUEST['id' . $i];
+			if(strchr($id, '_') )
+			{
+				header('Location:error.php?ec=20');
+			}
 			if($userperm_obj->canAdmin($id))
 			{
 				// delete from db

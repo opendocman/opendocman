@@ -7,6 +7,10 @@ if (!session_is_registered('uid'))
 	header('Location:error.php?ec=1');
 	exit;
 }
+if(strchr($_REQUEST['id'], '_') )
+{
+	    header('Location:error.php?ec=20');
+}
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
 	header('Location:error.php?ec=2');

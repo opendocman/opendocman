@@ -15,6 +15,10 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 //$submit=true;
 
 session_start();
+if(strchr($_REQUEST['id'], '_') )
+{
+	    header('Location:error.php?ec=20');
+}
 if (!session_is_registered('uid'))
 {
   header('Location:error.php?ec=1');

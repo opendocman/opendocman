@@ -7,7 +7,6 @@ if (!session_is_registered('uid'))
 	header('Location:error.php?ec=1');
 	exit;
 }
-
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 {

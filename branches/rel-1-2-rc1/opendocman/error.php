@@ -102,6 +102,8 @@ $message = 'This file cannot be uploaded propertly';
 break;
 case 19:
 $message = 'You do not currently have an account. Please contact <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a> to request one.';
+case 20:
+$message = 'This operation cannot be done to a revision of a file';
 break;
 
 }
