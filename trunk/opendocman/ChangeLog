@@ -1,3 +1,91 @@
+2003-03-11 13:57  logart
+
+	* setup.php: added include
+
+2003-03-11 11:57  logart
+
+	* database.sql, install/odm.php: added dept_reviewer
+
+2003-03-11 11:37  logart
+
+	* setup.php: removed hostname
+
+2003-03-11 10:19  logart
+
+	* setup.php: removed ''
+
+2003-03-11 10:11  logart
+
+	* setup.php: added roothost to grant
+
+2003-03-11 09:49  logart
+
+	* setup.php, install/odm.php, install/upgrade_10.php: removed ;
+	causing problems with 3.23 of mysql
+
+2003-03-07 16:23  logart
+
+	* setup.php: fixed config.php problems added username,password,new
+	database form fields
+
+2003-03-07 13:21  khoang82
+
+	* details.php: fixing permission display
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/details.php,v retrieving
+	revision 1.13 diff -r1.13 details.php 94c94 < if ($status == 0) ---
+	> if ($status == 0  && $user->canWrite($_REQUEST['id']))
+
+2003-03-06 16:56  khoang82
+
+	* edit.php: remove old comments
+
+2003-03-06 16:34  khoang82
+
+	* details.php: Fix Bugs item #679855, long comments problem
+	
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/details.php,v retrieving
+	revision 1.12 diff -r1.12 details.php 35c35 < <table border="0"
+	cellspacing="4" cellpadding="1"> ---
+	> <table border="0" width="400" cellspacing="4" cellpadding="1">
+
+2003-03-06 16:32  khoang82
+
+	* add.php: fix undefined $dept_name RCS file:
+	/cvsroot/opendocman/opendocman/add.php,v retrieving revision 1.10
+	diff -r1.10 add.php 326c326 <	      $result_array = array(); ---
+	>	$result_array = array();
+	384c384 <		$query = "INSERT INTO dept_perms (fid,
+	rights, dept_id) VALUES('$fileId',
+	'addslashes(space_to_underscore($dept_name)))', '$id')"; ---
+	>		$query = "INSERT INTO dept_perms (fid, rights,
+	dept_id) VALUES('$fileId', '" .
+	addslashes($_REQUEST[space_to_underscore($dept_name)]) . "',
+	'$id')";
+
+2003-03-06 16:30  khoang82
+
+	* FileData_class.php: fix 0 offset Index: FileData_class.php
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/FileData_class.php,v
+	retrieving revision 1.11 diff -r1.11 FileData_class.php 147a148
+	>	  $result_array = array();
+	184,185c185,188 <	  $result_array =
+	databaseData::combineArrays($owner_uid, $u_uid); <	  
+	$result_array = databaseData::combineArrays($result_array, $d_uid);
+	---
+	>	  if( isset($owner_uid) && isset($u_uid) )
+	>	  {	  $result_array =
+	databaseData::combineArrays($owner_uid, $u_uid);      }
+	>	  if( isset($result_array) && isset($d_uid) )
+	>	  {	  $result_array =
+	databaseData::combineArrays($result_array, $d_uid);   }
+
+2003-03-05 15:02  logart
+
+	* ChangeLog: updated
+
 2003-03-05 15:00  logart
 
 	* setup.php: added comments
