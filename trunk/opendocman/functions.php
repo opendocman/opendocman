@@ -594,9 +594,7 @@ if( !defined('function') )
 				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
 
 				/* Generate link */
-				else    echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=" . ($
-					i*$page_limit) . "&stoping_index=".(($i+1)*$page_limit-1)."&page=$i" . "\">$i</a>&nbsp;
-				&nbsp;";
+				else    echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=" . ($i*$page_limit) . "&stoping_index=".(($i+1)*$page_limit-1)."&page=$i" . "\">$i</a>&nbsp;&nbsp;";
 				$index_result = $index_result + $page_limit;
 			}
 
