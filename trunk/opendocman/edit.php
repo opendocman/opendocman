@@ -442,7 +442,7 @@ else
 	// clean up
 	mysql_freeresult($result);
 	$message = 'Document successfully updated';
-	header('Location: out.php?message=' . $message);
+	header('Location: out.php?last_message=' . $message);
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">
