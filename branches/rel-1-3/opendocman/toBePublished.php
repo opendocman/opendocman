@@ -368,8 +368,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 	$mail_subject='File(s) declined for publication';
 
 	mail($mail_to, $mail_subject, $mail_body, $mail_headers);
-	$file_obj->Publishable(1);
-	$file_obj->setReviewerComments($reviewer_comments);
 
 	if(isset($_POST['send_to_all'])) 
 		email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
