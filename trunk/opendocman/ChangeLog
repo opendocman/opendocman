@@ -1,3 +1,276 @@
+2003-10-09 15:03  khoang82
+
+	* anonymous.php: fix undefine error
+
+2003-10-08 14:41  khoang82
+
+	* config.php: fix includes to use the include/library/ dir
+
+2003-10-08 14:35  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	UserPermission_class.php, User_Perms_class.php, User_class.php,
+	databaseData_class.php, secureurl.class.php, secureurl.php: remove
+	these files from root dir
+
+2003-10-08 13:48  khoang82
+
+	* config.php: add configurable table_prefix field
+
+2003-10-06 08:31  logart
+
+	* anonymous.php: added footer call
+
+2003-10-06 08:22  logart
+
+	* config.php: vanilla again
+
+2003-09-23 17:09  khoang82
+
+	* FileData_class.php, add.php, anonymous.php, config.php, edit.php:
+	complete anonymous browsing feature
+
+2003-09-23 14:19  khoang82
+
+	* anonymous.php: switchable from normal mode to anonymous mode
+	without login and out.	Still need to provide links for user to do
+	so instead of remember the link
+
+2003-09-23 11:44  khoang82
+
+	* index.php: add anonymous link for user
+
+2003-09-22 09:07  khoang82
+
+	* anonymous.php, search.php: interna anonymous page.  Give it
+	sort_browser() and pagination
+
+2003-09-22 09:05  khoang82
+
+	* toBePublished.php: fix last item selected being authorized
+	instead of reject
+
+2003-09-19 09:13  logart
+
+	* check_exp.php: added internationalizations
+
+2003-09-19 09:10  khoang82
+
+	* toBePublished.php: fix reject goes to out.php
+
+2003-09-18 16:52  khoang82
+
+	* anonymous.php: anonymous page for public view.  driven by
+	anonymous field in ODM.data.anonymous
+
+2003-09-18 16:52  khoang82
+
+	* anonymous.php: file anonymous.php was initially added on branch
+	rel-1-3.
+
+2003-09-18 15:39  khoang82
+
+	* view_file.php: remove unneccessayr comments
+
+2003-09-18 15:39  khoang82
+
+	* FileData_class.php: adding feature for anonymous logon
+
+2003-09-18 15:27  khoang82
+
+	* user.php: adding user pref page
+
+2003-09-18 15:26  khoang82
+
+	* profile.php: add profile modifying page
+
+2003-09-18 15:26  khoang82
+
+	* index.php: removing extra space
+
+2003-09-18 15:15  khoang82
+
+	* add.php, edit.php: use str_replace
+
+2003-09-18 14:57  khoang82
+
+	* User_class.php: Pref
+
+2003-09-18 10:37  khoang82
+
+	* toBePublished.php: fixed SF [ 789337 ] Email to department on
+	multiple files
+
+2003-09-18 10:07  khoang82
+
+	* out.php: turn on statistic report
+
+2003-09-18 10:06  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php: code optimization
+
+2003-09-18 10:03  khoang82
+
+	* config.php, index.php: feature [ 781555 ] SSL ODM.
+
+2003-09-17 14:25  khoang82
+
+	* functions.php: fix bugs
+
+2003-09-17 14:19  khoang82
+
+	* functions.php, search.php: fix search, mysort, and pagination
+
+2003-09-17 11:51  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	UserPermission_class.php, User_Perms_class.php, User_class.php,
+	add.php, admin.php, category.php, check-in.php, check-out.php,
+	check_exp.php, classHeaders.php, commitchange.php, crumb.php,
+	databaseData_class.php, delete.php, department.php, details.php,
+	edit.php, error.php, file_ops.php, functions.php, history.php,
+	in.php, index.php, logout.php, out.php, personal_info.php,
+	rejects.php, search.php, setup.php, toBePublished.php, user.php,
+	view.php, view_file.php: re-allign the code for better readability
+
+2003-09-17 11:13  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	commitchange.php, details.php, edit.php, history.php, profile.php,
+	toBePublished.php, user.php, view.php, view_file.php: resolve IIS
+	problem toward REQUEST_URI
+
+2003-09-17 11:06  khoang82
+
+	* out.php: resolve IIS issues of REQUEST_URI
+
+2003-09-17 11:05  khoang82
+
+	* toBePublished.php: remove irrelevant space
+
+2003-09-17 10:58  khoang82
+
+	* functions.php: fix pagination
+
+2003-09-17 10:50  khoang82
+
+	* functions.php: fix my_sort() 1.2
+
+2003-09-17 10:47  khoang82
+
+	* search.php: fix search for 1.2
+
+2003-09-17 10:38  khoang82
+
+	* config.php: vanilla config.php
+
+2003-09-17 09:51  logart
+
+	* setup.php: format changes
+
+2003-09-16 13:50  khoang82
+
+	* check_exp.php: if authorization is not turned on, disable this
+	script
+
+2003-09-16 13:47  khoang82
+
+	* admin.php: disable check_exp in admin if authorization is not on
+
+2003-09-16 10:38  khoang82
+
+	* toBePublished.php: fixed SF ticket [ 799747 ] authorisation email
+	contents
+
+2003-09-16 09:56  khoang82
+
+	* search.php: fix search bugs
+
+2003-09-16 09:26  khoang82
+
+	* edit.php: if file moderation feature is disabled, there is no
+	need for moderation for edit.php
+
+2003-09-16 09:16  khoang82
+
+	* edit.php: any file property being alter will need moderation from
+	now on.
+
+2003-09-15 16:29  khoang82
+
+	* UserPermission_class.php, User_class.php, add.php, details.php,
+	edit.php: giving reviewer automatic and non revokable admin right
+	for the files they are responsible for
+
+2003-09-15 16:25  khoang82
+
+	* config.php: add a setting to allow the webmaster set the default
+	right that every author will have when commiting a file
+
+2003-09-12 13:38  khoang82
+
+	* config.php: fix archivefolder var
+
+2003-09-12 13:27  khoang82
+
+	* config.php: include in the include folder
+
+2003-09-12 11:59  khoang82
+
+	* search.php: fix 717817 Search by Department Broken
+
+2003-08-26 10:17  logart
+
+	* FormCheck.js: added & to email regexp as per RFC
+
+2003-07-23 11:51  logart
+
+	* admin.php, category.php: internat
+
+2003-07-23 09:47  logart
+
+	* add.php: internat
+
+2003-07-23 09:16  logart
+
+	* out.php: renamed lang var
+
+2003-07-23 09:15  logart
+
+	* index.php: internat
+
+2003-07-23 09:14  logart
+
+	* classHeaders.php, crumb.php, functions.php, mimetypes.php:
+	relocated to include/
+
+2003-07-22 15:44  logart
+
+	* config.php: updated version num
+
+2003-07-22 15:23  logart
+
+	* config.php, index.php: New Feature: Internationalization Support
+
+2003-07-22 15:17  logart
+
+	* check-in.php, delete.php, install/upgrade_11.php: Same changes as
+	1.2 branch
+
+2003-07-22 15:16  logart
+
+	* check-in.php, delete.php, install/upgrade_11.php: bug fixes for
+	permissions on folder creation removed ; from upgrade script
+
+2003-07-21 14:42  logart
+
+	* check-in.php, delete.php: mkdir expecting two args in some
+	versions
+
+2003-07-21 10:31  logart
+
+	* ChangeLog: added new version
+
 2003-07-21 10:19  logart
 
 	* ChangeLog: rel-1.2rc1 package
@@ -218,13 +491,13 @@
 
 2003-06-17 15:13  khoang82
 
-	* functions.archive.php: file functions.archive.php was initially
-	added on branch rel-1-2-rc1.
+	* functions.archive.php: This file contains functions that are not
+	used in ODM1.2-rc1.
 
 2003-06-17 15:13  khoang82
 
-	* functions.archive.php: This file contains functions that are not
-	used in ODM1.2-rc1.
+	* functions.archive.php: file functions.archive.php was initially
+	added on branch rel-1-2-rc1.
 
 2003-06-17 15:12  khoang82
 
@@ -424,12 +697,12 @@
 
 2003-05-09 08:37  logart
 
-	* install/upgrade_11.php: file upgrade_11.php was initially added
-	on branch rel-1-2-rc1.
+	* install/upgrade_11.php: Initial Import
 
 2003-05-09 08:37  logart
 
-	* install/upgrade_11.php: Initial Import
+	* install/upgrade_11.php: file upgrade_11.php was initially added
+	on branch rel-1-2-rc1.
 
 2003-05-09 08:36  logart
 
@@ -586,12 +859,12 @@
 
 2003-04-18 15:25  khoang82
 
-	* check_exp.php: file check_exp.php was initially added on branch
-	rel-1-2-rc1.
+	* check_exp.php: cron script to reject expired files
 
 2003-04-18 15:25  khoang82
 
-	* check_exp.php: cron script to reject expired files
+	* check_exp.php: file check_exp.php was initially added on branch
+	rel-1-2-rc1.
 
 2003-04-16 16:17  khoang82
 
