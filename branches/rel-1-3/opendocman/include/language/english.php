@@ -109,4 +109,8 @@ $lang['email_file_was_rejected_expired'] = "Your file has expired. Please update
 $lang['email_file_expired'] = "A File Has Expired";
 $lang['email_revision_days'] = "Maximum number of days before expiration:";
 $lang['email_status_expired'] = "Status: Expired";
+
+//Single word
+$lang['Public'] = 'Public';
+$lang['View'] = $lang['label_view'];
 ?>
