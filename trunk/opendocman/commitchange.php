@@ -8,10 +8,17 @@ if (!isset($_SESSION['uid']))
 }
 include('config.php');
 $secureurl = new phpsecureurl;
+
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+
 // connect to DB
 // Submitted so insert data now
 if(isset($_REQUEST['adduser']))
 {
+    if (!$user_obj->isAdmin()){
+           header('Location:' . $secureurl->encode('error.php?ec=4'));
+           exit;
+    }
 	// Check to make sure user does not already exist
     $query = "SELECT username FROM user WHERE username = '" . addslashes($_POST['username']) . '\'';
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -79,11 +86,15 @@ if(isset($_REQUEST['adduser']))
 }
 elseif(isset($_REQUEST['updateuser']))
 {
-	
-        if(!isset($_REQUEST['admin']) || $_REQUEST['admin'] == '')
-        {
-                $_REQUEST['admin'] = 'no';
-        }
+    // Check to make sure they are either the user being modified or an admin
+    if (($_REQUEST['id'] != $_SESSION['uid']) || !$user_obj->isAdmin()){
+           header('Location:' . $secureurl->encode('error.php?ec=4'));
+           exit;
+    }
+    if(!isset($_REQUEST['admin']) || $_REQUEST['admin'] == '')
+    {
+            $_REQUEST['admin'] = 'no';
+    }
 	if(!isset($_REQUEST['caller']) || $_REQUEST['caller'] == '')
 	{
 		$_REQUEST['caller'] = 'admin.php';
@@ -136,6 +147,12 @@ elseif(isset($_REQUEST['updateuser']))
 // Delete USER
 elseif(@$_REQUEST['submit'] == 'deleteuser' )
 {
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        }
+    
         // form has been submitted -> process data
         // DELETE admin info
         $query = "DELETE FROM admin WHERE id = '$_REQUEST[id]'";
@@ -159,6 +176,12 @@ elseif(@$_REQUEST['submit'] == 'deleteuser' )
 //Add Departments
 elseif(@$_REQUEST['submit'] == 'Add Department')
 {
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
+
 		//Check to see if this department is already in DB
 		$query = "SELECT department.name from department where department.name=\"" . addslashes($_REQUEST['department']) . '"';
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -201,7 +224,12 @@ elseif(@$_REQUEST['submit'] == 'Add Department')
 }
 // UPDATE Department
 elseif(isset($_REQUEST['updatedepartment']))
-{
+{ 
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin()){
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    } 
     //Check to see if this department is already in DB
 	$query = "SELECT department.name from department where department.name=\"" . addslashes($_REQUEST['name']) . '" and department.id!=' . $_REQUEST['id'];
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -218,6 +246,12 @@ elseif(isset($_REQUEST['updatedepartment']))
 }
 elseif(isset($_REQUEST['deletedepartment']))
 {
+    
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
 	// Delete department
         $query = "DELETE from department where id='$_REQUEST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -229,6 +263,11 @@ elseif(isset($_REQUEST['deletedepartment']))
 // Add Category
 elseif(@$_REQUEST['submit']=='Add Category')
 {
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
         $query = "INSERT INTO category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -238,6 +277,11 @@ elseif(@$_REQUEST['submit']=='Add Category')
 // Delete department
 elseif(isset($_REQUEST['deletecategory']))
 {
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
         $query = "DELETE from category where id='$_REQUEST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
@@ -247,6 +291,11 @@ elseif(isset($_REQUEST['deletecategory']))
 // UPDATE Category
 elseif(isset($_REQUEST['updatecategory']))
 {
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
         $query = "UPDATE category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
