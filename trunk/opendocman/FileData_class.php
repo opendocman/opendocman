@@ -340,7 +340,7 @@ if( !defined('FileData_class') )
 	function setReviewerComments($comments)
 	{
         $comments=addslashes($comments);
-		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.reviewer_comments='$comments' WHERE DATA.id='$this->id'";
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.reviewer_comments='$comments' WHERE $this->TABLE_DATA.id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}

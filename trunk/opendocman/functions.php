@@ -8,11 +8,16 @@ if( !defined('function') )
 	function fix_date($val)
 	{
 		//split it up into components
-		$arr = explode(' ', $val);
-		$timearr = explode(':', $arr[1]);
-		$datearr = explode('-', $arr[0]);
-		// create a timestamp with mktime(), format it with date()
-		return date('d M Y (H:i)', mktime($timearr[0], $timearr[1], $timearr[2], $datearr[1], $datearr[2], $datearr[0]));
+		if( $val != 0 )
+		{
+			$arr = explode(' ', $val);
+			$timearr = explode(':', $arr[1]);
+			$datearr = explode('-', $arr[0]);
+			// create a timestamp with mktime(), format it with date()
+			return date('d M Y (H:i)', mktime($timearr[0], $timearr[1], $timearr[2], $datearr[1], $datearr[2], $datearr[0]));
+		}
+		else
+		{	return 0;	}
 	}
 	
 	// Return a copy of $string where all the spaces are converted into underscores
@@ -525,10 +530,10 @@ if( !defined('function') )
                 echo(" found document(s)</FONT></B>\n");
                 echo('<BR><BR>'."\n");
                 $index = $starting_index;
-                $url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"".$page_url."&sort_order=$next_sort&sort_by=$sort_by\">";
-                $url_post = "<B></A> <IMG SRC=$sort_img></TD>";
+                $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
+                $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
                 $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=a-z&sort_by=";
-                $default_url_mid = "\">";
+                $default_url_mid = '\">';
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
                 echo("<TR bgcolor='83a9f7' id = '1'>");

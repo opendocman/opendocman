@@ -70,8 +70,10 @@ if( !defined('Dept_Perms_class') )
 		$index = 0;
 		$fileid_array = array();
 		$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, $this->TABLE_USER.username 
-		FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
-		WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.owner=$this->TABLE_USER.id";                                                 
+			FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
+			WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id 
+			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.owner=$this->TABLE_USER.id
+			AND $this->TABLE_DATA.publishable=1";                                                 
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
@@ -177,7 +179,7 @@ if( !defined('Dept_Perms_class') )
 		}
 		else 
 		{
-			$this->error = "Non-unique database entry found in $this->database.$this->DEPT_PERM_TABLE";
+			$this->error = "Non-unique database entry found in $this->database.$this->TABLE_DEPT_PERMS";
 			$this->error_flag = false;
 			return 0;
 		}	
