@@ -76,6 +76,9 @@ global $CONFIG;      $CONFIG = array(
 // Don't forget the trailing "/" 
 'dataDir' => '/var/www/document_repository/',
 
+// Set the maximum file upload size
+'max_filesize' => '5000000',
+
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
 'revision_expiration' => '90',

@@ -355,12 +355,21 @@ else //submited form
 		exit; //non-unique error
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
+
 	//can't upload empty file
-	if ($_FILES['file']['size'] <= 0) 
+	if ($_FILES['file']['size'] <= 0 )
 	{ 
 		header('Location:error.php?ec=11'); 
 		exit; 
 	}
+
+    // File too big?
+    if($_FILES['file']['size'] >  $GLOBALS['CONFIG']['max_filesize'] ) 
+    {
+		header('Location:error.php?ec=25'); 
+		exit; 
+	}
+        
 	// check file type.  refer to config.php to see which file types are allowed
 	$allowedFile = 0;
 	foreach($allowedFileTypes as $this)

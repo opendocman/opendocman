@@ -135,6 +135,10 @@ break;
 case 24:
 $message ='This page requires root clearance level.';
 break;
+// File too big
+case 25:
+$message ='The file is too large. Max size is ' . $GLOBALS['CONFIG']['max_filesize'];
+break;
 //default
 default:
 $message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
