@@ -105,7 +105,7 @@ function do_install()
 
         // Grant privs
         $result = mysql_query("
-	GRANT ALL ON $_REQUEST[database].* to $_POST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
+	GRANT ALL ON $_REQUEST[database].* to $_POST[username]@$_POST[roothost] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
 ");
 
         include("install/odm.php");
