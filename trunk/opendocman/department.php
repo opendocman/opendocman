@@ -19,8 +19,11 @@ if(isset($submit) and $submit != 'Cancel')
 
 if($submit=='add')
 {
-draw_status_bar('Add New Department', $last_message);
-
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
+        draw_status_bar('Add New Department', $last_message);
 	draw_header('Add New Department');
 	// Check to see if user is admin
 	$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
@@ -61,9 +64,13 @@ draw_footer();
 }
 elseif($submit =='delete')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	$delete='';
 	draw_header('Department Deletion');
-	draw_status_bar('Delete Department', $message);
+	draw_status_bar('Delete Department', $last_message);
  // query to show item
 	echo '<center>'; 
 	echo '<table border="0">';
@@ -88,10 +95,15 @@ elseif($submit =='delete')
 <?php
 draw_footer();
 }
-elseif($submit == 'deletepick'){
+elseif($submit == 'deletepick')
+{
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 $deletepick='';
 draw_header('Department Selection');
-draw_status_bar('Choose Department to Delete', $message);
+draw_status_bar('Choose Department to Delete', $last_message);
 ?>
     <center>
         <table border="0" cellspacing="5" cellpadding="5">
@@ -124,6 +136,10 @@ draw_status_bar('Choose Department to Delete', $message);
 }
 elseif($submit == 'showitem')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
  // query to show item
 	draw_header('Department Information');
  	draw_status_bar('Display Item Information', $last_message);
@@ -160,8 +176,12 @@ draw_footer();
 }
 elseif($submit == 'showpick')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Department Selection');
-	draw_status_bar('Choose item to view', $message);
+	draw_status_bar('Choose item to view', $last_message);
 	$showpick='';
 ?>
 	<center>
@@ -196,8 +216,12 @@ draw_footer();
 }
 elseif($submit == 'modify')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Department Update');
-	draw_status_bar('Update Department',$message);
+	draw_status_bar('Update Department',$last_message);
 ?>
 	<center>
 	<table border="0" cellspacing="5" cellpadding="5">
@@ -232,8 +256,12 @@ elseif($submit == 'modify')
 }
 elseif($submit == 'updatepick')
 {
+        if (!isset($last_message))
+        {
+                $last_message='';
+        }
 	draw_header('Department Selection');
-	draw_status_bar('Modify Department',$message);
+	draw_status_bar('Modify Department',$last_message);
 ?>
 	<center>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" enctype="multipart/form-data">
@@ -272,6 +300,7 @@ elseif($submit == 'updatepick')
 }
 elseif ($submit == 'Cancel')
 {
-	header ('Location: admin.php?last_message=' . $last_message);
+        $last_message = 'Action Canceled';	
+        header ('Location: admin.php?last_message=' . $last_message);
 }
 ?>
