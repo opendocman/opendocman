@@ -11,7 +11,7 @@ if (!session_is_registered('SESSION_UID'))
 if(!isset($num_checkboxes))
 	$num_checkboxes =1;
 include('config.php');
-$userperm_obj = new User_Perms($SESSION_UID, $connection, $database);
+$userperm_obj = new User_Perms($SESSION_UID, $GLOBALS['connection'], $database);
 // all ok, proceed!
 //mysql_free_result($result);
 for($i = 0; $i<$num_checkboxes; $i++)
@@ -22,24 +22,23 @@ for($i = 0; $i<$num_checkboxes; $i++)
 		{
 			// delete from db
 			$query = "DELETE FROM data WHERE id = '$id'";
-			$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		
 			// delete from db
 			$query = "DELETE FROM dept_perms WHERE fid = '$id'";
-			$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		
 			$query = "DELETE FROM user_perms WHERE fid = '$id'";
-			$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		
 			$query = "DELETE FROM log WHERE id = '$id'";
-			$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+			$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 			$filename = $id . ".dat";
 			unlink($GLOBALS['CONFIG']['dataDir'] . $filename);
 		}
 	}
 	// delete from directory
 	// clean up and back to main page
-	mysql_close($connection);
 	$last_message = urlencode('Document successfully deleted');
 	header('Location: out.php?last_message=' . $last_message);
 ?>

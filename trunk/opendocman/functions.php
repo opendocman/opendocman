@@ -238,8 +238,7 @@ if( !defined('function') )
             echo "\n".'<!------------------begin_draw_menu------------------->'."\n";
             if($uid != NULL)
             {
-                $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']);
-                $current_user_obj = new User($GLOBALS['SESSION_UID'], $connection, $GLOBALS['database']);
+            	$current_user_obj = new User($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
             }
             echo '<table width="100%" cellspacing="0" cellpadding="0">'."\n";
             echo '<tr>'."\n";
@@ -466,27 +465,23 @@ if( !defined('function') )
         }
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
-                $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
                 $query = "SELECT Email from user";
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query . " . mysql_error());	
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
                         mail($mail_to, $mail_subject, $mail_body, $mail_header);
                 }
                 mysql_free_result($result);
-                mysql_close($connection);
         }
         function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
         {
-                $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
                 $query = 'SELECT Email from user where user.department = '.$dept_id;
-                $result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query . " . mysql_error());	
+                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
                         mail($mail_to, $mail_subject, $mail_body, $mail_header);
                 }
                 mysql_free_result($result);
-                mysql_close($connection);
         }
         function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body, $mail_header)
         {
@@ -497,11 +492,9 @@ if( !defined('function') )
         }
         function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)
         {
-                $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
                 for($i = 0; $i<sizeof($user_ID_array); $i++)
-                        $OBJ_array[$i] = new User($user_ID_array[$i], $connection, $GLOBALS['database']);
+                        $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-                mysql_close($connection);
         }
 
         function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'a-z', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = false, $with_caption = false)
@@ -931,7 +924,7 @@ if( !defined('function') )
 				// not 0 -> implies file is checked out to another user
 				// run a query to find out user's name
 				//$query2 = "SELECT username FROM user WHERE id = '$result[$index]->getStatus()'";
-				//$result2 = mysql_db_query($database, $query2, $connection) or die ("Error in query: $query2 . " . mysql_error());
+				//$result2 = mysql_db_query($database, $query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
 				$user = $fileobj_array[$index]->getCheckerOBJ();
 				$username = $user->getName();
 				//list($username) = mysql_fetch_row($result2);
@@ -1029,10 +1022,9 @@ if( !defined('function') )
 			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option;
 		}
 <?php
-		$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']);
-		////////////////////////////////FOR AUTHOR///////////////////////////////////////////
+		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
 		$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $connection) or die('Error in query'. mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("author_array = new Array();\n");
@@ -1044,7 +1036,7 @@ if( !defined('function') )
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
 		$query = "SELECT name, id FROM department ORDER BY name ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $connection) or die('Error in query'. mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("department_array = new Array();\n");
@@ -1056,7 +1048,7 @@ if( !defined('function') )
 		}
 		///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
 		$query = "SELECT name, id FROM category ORDER BY name ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $connection) or die('Error in query'. mysql_error());
+		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("category_array = new Array();\n");
@@ -1189,8 +1181,7 @@ if( !defined('function') )
 	}
 	function checkUserPermission($file_id, $permittable_right)
 	{
-		$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']);
-		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $connection, $GLOBALS['database']);
+		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
 		if($user_perm_obj->getPermission($file_id) < $permittable_right)
 		{
 			echo 'Error: OpenDocMan is not able to the requested file.' . "\n";

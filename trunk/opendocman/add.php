@@ -15,7 +15,6 @@ if (!session_is_registered('SESSION_UID'))
 }
 include('config.php');
 // connect to DB
-$connection = mysql_connect($hostname, $user, $pass) or die ('Unable to connect!');
 if(!isset($submit)) //un_submitted form
 {
 	draw_header('Add New File');
@@ -25,7 +24,7 @@ if(!isset($submit)) //un_submitted form
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
 	$query ='SELECT user.department from user where user.id=' . $SESSION_UID;
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1) /////////////If somehow this user belongs to many departments, then error out.
 	{
 		header('Location:error.php?ec=14');
@@ -36,7 +35,7 @@ if(!isset($submit)) //un_submitted form
 	list($current_user_dept) = mysql_fetch_row($result);
 	//Get a list of department names and id to populate javascript obj//
 	$query = "SELECT name, id FROM department ORDER by name";
-	$result = mysql_db_query ($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query ($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
 	///////Define a class that hold Department information (id, name, and rights)/////////
@@ -132,7 +131,7 @@ if(!isset($submit)) //un_submitted form
 <?php
 	/////////////// Populate category drop down list//////////////
 	$query = "SELECT id, name FROM category ORDER BY name";
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result)) 
 	{ 
 		echo '<option value="' . $id . '">' . $name . '</option>'; 
@@ -154,7 +153,7 @@ if(!isset($submit)) //un_submitted form
 <?php
 	//////Populate department drop down list/////////////////
    	$query = "SELECT id, name FROM department ORDER BY name";
-   	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+   	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
   	while(list($id, $name) = mysql_fetch_row($result))
     {
@@ -174,7 +173,7 @@ if(!isset($submit)) //un_submitted form
 	<TD>
 <?php
       	$query = "SELECT RightId, Description FROM rights order by RightId";
-      	$result = mysql_db_query($database, $query, $connection) or die("Error in querry: $query. " . mysql_error());
+      	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{	
       		echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
@@ -215,7 +214,7 @@ if(!isset($submit)) //un_submitted form
 	
 	// query to get a list of available users
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
@@ -231,7 +230,7 @@ if(!isset($submit)) //un_submitted form
 <?php 
 		////////////////////View//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
@@ -248,7 +247,7 @@ if(!isset($submit)) //un_submitted form
 <?php
 	////////////////////Read//////////////////////////
 	$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
@@ -266,7 +265,7 @@ if(!isset($submit)) //un_submitted form
 <?php
 	////////////////////Read//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
@@ -283,7 +282,7 @@ if(!isset($submit)) //un_submitted form
 <?php
 	////////////////////Read//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
 		{
@@ -303,7 +302,7 @@ if(!isset($submit)) //un_submitted form
 	</tr>
 <?php	
 		$query = "SELECT name, id FROM department ORDER BY name";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
 		{		
 			if($dept_id == $current_user_dept)
@@ -313,7 +312,6 @@ if(!isset($submit)) //un_submitted form
 		}
 		echo "\n\t".'<input type="hidden" name="default_Setting" value="0"> '."\n";
 		mysql_free_result ($result);
-		mysql_close($connection);
 ?>
 	</form>
 	</table>
@@ -325,7 +323,7 @@ else //submited form
 {
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$SESSION_UID";
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
 		header('Location:error.php?ec=14');
@@ -356,14 +354,14 @@ else //submited form
 	// all checks completed, proceed!
 	// INSERT file info into data table
 	$query = "INSERT INTO data (category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES('" . addslashes($category) . "', '" . addslashes($SESSION_UID) . "', '" . addslashes($file_name) . "', NOW(), '" . addslashes($description) . "','" . addslashes($current_user_dept) . "', '" . addslashes($comment) . "','" . addslashes($default_Setting) . "', 0)";
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
-	$fileId = mysql_insert_id($connection);
+	$fileId = mysql_insert_id($GLOBALS['connection']);
 	
 	//Find out the owners' username to add to log
 	$query = "SELECT username from user where id='$SESSION_UID'";
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while ( list($username) = mysql_fetch_row($result) )
 	{
 		$lusername=$username;
@@ -371,22 +369,22 @@ else //submited form
 	
 	// Add a log entry
 	$query = "INSERT INTO log (id,modified_on, modified_by, note) VALUES ( '$fileId', NOW(), '" . addslashes($lusername) . "', 'Initial import')";
-	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
 	//Insert Department Rights into dept_perms
 	$query = "SELECT name, id FROM department ORDER BY name";
-	$result = mysql_db_query($database, $query, $connection) or die("Error in query: $query. " . mysql_error() );
+	$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
 		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES($fileId, " . addslashes(${ space_to_underscore($dept_name) }) . ", '$id')";		
-		$result2 = mysql_db_query($database, $query, $connection) or die("Error in query: $query. " . mysql_error() );
+		$result2 = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
 	// In case of repetitions, higher priority ones stay.  
 	// Priority is in this order (admin, modify, read, view)
-	$filedata = new FileData($fileId, $connection, $database);	
+	$filedata = new FileData($fileId, $GLOBALS['connection'], $database);	
 	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $write, $filedata->WRITE_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $read, $filedata->READ_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $view, $filedata->VIEW_RIGHT);
@@ -395,7 +393,7 @@ else //submited form
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
 		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
-		$result = mysql_db_query($database, $query, $connection) or die("Error in query: $query" .mysql_error());;
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
 
 	// use id to generate a file name
@@ -410,8 +408,6 @@ else //submited form
 	// back to main page
 	$message = urlencode('Document successfully added');
 	header('Location: out.php?message=' . $message);
-	mysql_close($connection);
-
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">

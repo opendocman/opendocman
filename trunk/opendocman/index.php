@@ -76,9 +76,8 @@ $frmpass=$_POST['frmpass'];
 
     // check login and password
     // connect and execute query
-    $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
     $query = "SELECT id, username, password from user WHERE username = '$frmuser' AND password = PASSWORD('$frmpass')";
-    $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // if row exists - login/pass is correct
     if (mysql_num_rows($result) == 1)
     {
@@ -93,13 +92,11 @@ $frmpass=$_POST['frmpass'];
         header('Location:out.php');
         mysql_free_result ($result);	
         // close connection
-        mysql_close($connection);		
     }
     else
         // login/pass check failed
     {
         mysql_free_result ($result);	
-        mysql_close($connection);
         // redirect to error page
         header('Location: error.php?ec=0');
     }
@@ -118,9 +115,8 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
     {
         list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
         //// query to get id num from username
-        $connection = mysql_connect($hostname, $user, $pass) or die ('Unable to connect!');
         $query = "SELECT id FROM user WHERE username='$userid'";
-        $result = mysql_db_query($database, $query, $connection) or die ('Error in query: '.$query . mysql_error());
+        $result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ('Error in query: '.$query . mysql_error());
         // if row exists then the user has an account
         if (mysql_num_rows($result) == 1)
         {
@@ -134,7 +130,6 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
             header('Location:out.php');
             mysql_free_result ($result);	
             // close connection
-            mysql_close($connection);
         }
         // User passed auth, but does not have an account
         else 

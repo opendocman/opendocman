@@ -15,9 +15,8 @@ draw_menu($SESSION_UID);
 draw_status_bar('Documents Currently Checked Out To You', $last_message); 
 
 // query to get list of documents checked out to this user
-$connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 $query = "SELECT data.id, user.last_name, user.first_name, realname, created, description, status FROM data,user WHERE status = '$SESSION_UID' AND data.owner = user.id";
-$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 // how many records?
 $count = mysql_num_rows($result);
@@ -56,7 +55,6 @@ $count = mysql_num_rows($result);
 <?php
 // clean up
 mysql_free_result ($result);
-mysql_close($connection);
 ?>
 </table>
 	<form action="out.php">

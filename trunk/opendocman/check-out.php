@@ -17,7 +17,7 @@ include('config.php');
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
 the server
 */
-$fileobj = new FileData($id, $connection, $database);
+$fileobj = new FileData($id, $GLOBALS['connection'], $database);
 $fileobj->setId($id);
 if ($fileobj->getError() != NULL || $fileobj->getStatus() != 0 )
 {
@@ -54,7 +54,7 @@ else
 		// since this user has checked it out and will modify it
 		// update db to reflect new status
 		$query = "UPDATE data SET status = '$SESSION_UID' WHERE id = '$id'";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_db_query($database, $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	}
 	// calculate filename
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
@@ -67,5 +67,4 @@ else
 	readfile($filename); 
 	}
 // clean up
-mysql_close($connection);
 ?>

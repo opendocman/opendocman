@@ -19,11 +19,10 @@ include('config.php');
 draw_header('File Detail');
 draw_menu($SESSION_UID);
 draw_status_bar('File Details',$last_message);
-$connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
-$filedata = new FileData($id, $connection, $database);
+$filedata = new FileData($id, $GLOBALS['connection'], $database);
 checkUserPermission($id, $filedata->VIEW_RIGHT);
-$user = new User_Perms($SESSION_UID, $connection, $database);
-$userPermObj = new User_Perms($SESSION_UID , $connection, $database);
+$user = new User_Perms($SESSION_UID, $GLOBALS['connection'], $database);
+$userPermObj = new User_Perms($SESSION_UID , $GLOBALS['connection'], $database);
 if( !$userPermObj->canView($id) )
 {	echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); }
 ?>
@@ -153,8 +152,8 @@ if ($status == 0)
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
 	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$id' AND user_perms.uid = '$SESSION_UID' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
-	$result2 = mysql_db_query($database, $query2, $connection) or die ("Error in query: $query2. " . mysql_error());
-	$user_perms = new UserPermission($SESSION_UID, $connection, $database);
+	$result2 = mysql_db_query($database, $query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
+	$user_perms = new UserPermission($SESSION_UID, $GLOBALS['connection'], $database);
 	if($user_perms->getAuthority($id)>=$user_perms->WRITE_RIGHT)
 	{
 		// if so, display link for checkout
@@ -213,5 +212,4 @@ draw_footer();
 	
 <?php
 // clean up
-mysql_close($connection);
 ?>

@@ -1,7 +1,7 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-//$SESSION_UID=102;
+//$SESSION_UID=140;
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -9,14 +9,18 @@ if (!session_is_registered('SESSION_UID'))
         exit;
 }
 
-include ('config.php');
+
 // includes
 if (!isset($last_message))
 {
     $last_message='';
 }
+
+include ('config.php');
 draw_header('File Listing');
 draw_menu($SESSION_UID);
+if(!isset($last_message) )
+	$last_message="";
 draw_status_bar('Document Listing', $last_message);
 sort_browser(); 
 $query = "SELECT * FROM dept_reviewer WHERE dept_reviewer.user_id = $SESSION_UID";

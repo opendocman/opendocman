@@ -10,8 +10,7 @@ if (!session_is_registered('SESSION_UID'))
 	exit;
 }
 // open a connection to the database
-$connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
-$user_obj = new User($SESSION_UID, $connection, $database);
+$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $database);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {

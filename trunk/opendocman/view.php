@@ -28,7 +28,7 @@ include_once('classHeaders.php');
    $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
  */
 //if (mysql_num_rows($result) <= 0)
-$filedata = new FileData($connection, $database, 'data');
+$filedata = new FileData($GLOBALS['connection'], $database, 'data');
 $filedata->setId($id);
 
 if ($filedata->getError() != '')
@@ -88,5 +88,4 @@ else
         }
 }
 // clean up
-mysql_close($connection);
 ?>

@@ -212,9 +212,9 @@ then return_array[index1] = (OBJ1, 'filename_only');
                 }
                 return $query_array;
         }
-        $current_user = new User($SESSION_UID, $connection, $database);
-        $user_perms = new User_Perms($SESSION_UID, $connection, $database);
-        $current_user_permission = new UserPermission($SESSION_UID, $connection, $database);
+        $current_user = new User($SESSION_UID, $GLOBALS['connection'], $database);
+        $user_perms = new User_Perms($SESSION_UID, $GLOBALS['connection'], $database);
+        $current_user_permission = new UserPermission($SESSION_UID, $GLOBALS['connection'], $database);
         $view_able_files_obj = $current_user_permission->getAllowedFileOBJs();
         $obj_array_len = sizeof($view_able_files_obj);
         $query_array = array();
