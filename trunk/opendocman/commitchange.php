@@ -14,7 +14,7 @@ $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!
 if($adduser)
 {
 	// Check to make sure user does not already exist
-    $query = "SELECT username FROM user WHERE username = '$username'";
+    $query = "SELECT username FROM user WHERE username = '" . addslashes($username) . '\'';
     $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 
     // If the above statement returns more than 0 rows, the user exists, so display error
@@ -36,7 +36,7 @@ if($adduser)
     	}
 
 	   // INSERT into user
-       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($username)."', password('". addslashes($password) ."'), '$department' ,'$phonenumber','". addslashes($Email)."', '$last_name', '$first_name'" .")";
+       $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($username)."', password('". addslashes($password) ."'), '$department' ,'" . addslashes($phonenumber) . "','". addslashes($Email)."', '" . addslashes($last_name) . "', '" . addslashes($first_name) . '\' )';
        $result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
        // INSERT into admin
        $userid = mysql_insert_id($connection);
