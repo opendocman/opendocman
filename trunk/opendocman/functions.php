@@ -238,7 +238,7 @@ if( !defined('function') )
            $secureurl= new phpsecureurl;
         	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
 				{
-					echo'<B><font size="10">No file found</font></B>' . "\n";
+					echo'<B><font size="10">No files found</font></B>' . "\n";
 					return -1;
 				}
 				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
@@ -433,6 +433,7 @@ if( !defined('function') )
                         // begin displaying file list with basic information
                         $comment = $file_obj->getComment();
                         $description = $file_obj->getDescription();
+                        $description = substr($description, 0, 35);
                         
                         
                         $created_date = fix_date($file_obj->getCreatedDate());
