@@ -15,14 +15,12 @@ if( !defined("databaseData_class") );
 		var $field_id;
 		var $result_limit;  
 
-	// MUST IMPLEMENT $RESULT_LIMIT SO THAT DATA CLASS CAN USE THIS FEATURE AND DISABLE THE LIMIT.  NEED A WHILE LOOOP
-		
 	function databaseData($id, $connection, $database)
 	{
 		$this->connection = $connection;
 		$this->database = $database;
-		$this->setId($id);
-		$this->result_limit = 1;
+		$this->setId($id); //setId not only set the $id data member but also find and set name
+		$this->result_limit = 1; //expect unique data fields on default
 	}
 	function setTableName($tablename)
 	{	
@@ -30,8 +28,18 @@ if( !defined("databaseData_class") );
 	}
 	function setId($id)
 	{
+		/*setId($id) sets the data member $id and it also look
+		a name that is correspondent to that id and set it to
+		the data member field $name*/
 		$this->id = $id;
 		$this->name = $this->findName();
+	}
+	function setName($name)
+	{
+		/*setName can only be used under the assumption that
+		the name field in the DB is unquie, e.g. username*/
+		$this->name = $name;
+		$this->id = findId();
 	}
 	function getName()
 	{
@@ -50,9 +58,10 @@ if( !defined("databaseData_class") );
 
 		if( mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')
 		{
+			/*if the result is more than expected error var is set*/
 			$this->error='Error: non-unique';
 		}
-		elseif (mysql_num_rows($result) == 0)
+		elseif (mysql_num_rows($result) == 0) // record must exist.  Error message is stored
 		{
 			$this->error = 'Error: unable to fine id in database';
 		}
@@ -62,6 +71,8 @@ if( !defined("databaseData_class") );
 		}
 		return $id;
 	}
+	/* logic in findName() is simular to findId().  Please look at findId()'s 
+	comments if you need help with this function */
 	function findName()
 	{
 		$query = "SELECT $this->tablename.$this->field_name FROM $this->tablename WHERE {$this->tablename}.$this->field_id = $this->id";
@@ -83,30 +94,50 @@ if( !defined("databaseData_class") );
 	}
 	function reloadData() //assuming that userid will never change
 	{
+		/* Since all the data are set at the time when $id or $name
+		is set.  If another program access the DB and changes any
+		information, this OBJ will no longer contain up-to-date
+		information.  reloadData() will reload all the data */
+		
 		$this->setId($this->id);
 	}
 	
 	function getError()
 	{	
+		/* Get error will return the last thrown error */
 		return $this->error;	
 	}
 
 	function combineArrays($high_priority_array, $low_priority_array)
 	{
+		/* combineArrays() uses a linear search agolrithm with the
+		cost of n*n, n being the size of the biggest array.  combineArrays()
+		gives $high_priority_array the advantage by merging the
+		low_priority_aray onto it.  One can look at these two arrays
+		as 2 sets and cobineArrays acts as a union operator.
+		For briefness, let's $high = $high_priority_array and
+		$low = $low_priority_array */
+		
 		$found = false;
 		$result_array = array();
-		$result_array = $high_priority_array;
+		$result_array = $high_priority_array; //$high is being kept
 		$result_array_index = sizeof($high_priority_array);
-		for($l = 0 ; $l<sizeof($low_priority_array); $l++)
+		for($l = 0 ; $l<sizeof($low_priority_array); $l++) //iterate through $low
 		{
+			/* each $low element will be compared with
+			every $high element*/
 			for($r = 0; $r<sizeof($result_array); $r++)
 			{
 				if($result_array[$r] == $low_priority_array[$l])
 				{
+					/* if a $low element is already in the 
+					$high array, it is ignored */
 					$r = sizeof($result_array);
 					$found = true;
 				}
 			}
+			/* if certain $low element is not found in $high, it 
+			will be append to the back of high*/
 			if(!$found)
 			{
 				$result_array[$result_array_index++] = $low_priority_array[$l];
