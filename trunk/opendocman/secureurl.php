@@ -1,5 +1,5 @@
 <?php
-if($GLOBALS['CONFIG']['secureurl'] == 'On' && (isset($_GET['id']) || isset($_GET['state']) || isset($_GET['id0']) || isset($_GET['where']) || isset($_GET['sort_order']) || isset($_GET['submit'])))
+if($GLOBALS['CONFIG']['secureurl'] == 'On' && (isset($_GET['id']) || isset($_GET['state']) || isset($_GET['id0']) || isset($_GET['where']) || isset($_GET['sort_order']) || isset($_GET['submit']) ) )
 {
 	$secureurl = new phpsecureurl;
 	header('Location:' . $secureurl->encode("$_SERVER[SCRIPT_NAME]?$HTTP_SERVER_VARS[QUERY_STRING]"));

@@ -44,7 +44,7 @@
 *    class 
 *
 ********************************************************************/
-
+require_once('config.php');
 class phpsecureurl{
 
 	var $var_name="aku"; 			// you hide all your URL in thid parmeter "aku" is an example you can redefine
@@ -54,19 +54,22 @@ class phpsecureurl{
 	}
 //*******************************************
 	function encode($url){ 			// methode to encode $url = par1=toto&par2=tioti& ...
-		$pos_debut=strpos($url,"?"); if(!$pos_debut){$sep="&";}
-		$pos_fin=strpos($url," ");
-		if($pos_fin){
-			$pos_long=$pos_fin-$pos_debut-1; $fin=substr($url,$pos_fin); 
-		}else{
-			$pos_long=strlen($url)-$pos_debut-1;
+		if($GLOBALS['CONFIG']['secureurl'] == 'On')
+		{
+			$pos_debut=strpos($url,"?"); if(!$pos_debut){$sep="&";}
+			$pos_fin=strpos($url," ");
+			if($pos_fin){
+				$pos_long=$pos_fin-$pos_debut-1; $fin=substr($url,$pos_fin); 
+			}else{
+				$pos_long=strlen($url)-$pos_debut-1;
+			}
+			$debut=substr($url,0,$pos_debut+1);
+			$param=substr($url,$pos_debut+1,$pos_long);
+			$code = base64_encode($param);
+			return $debut.@$sep.$this->var_name."=".$code.@$fin;
 		}
-		$debut=substr($url,0,$pos_debut+1);
-		$param=substr($url,$pos_debut+1,$pos_long);
-		$code = base64_encode($param);
-		return $debut.@$sep.$this->var_name."=".$code.@$fin;
 	} // methode return ?aku=dfgdfgdgdfgdgdfhgjdfhjghj all parameter are hide in one
-	
+
 	// methode returm something like ?aku=dfgdfgdgdfgdgdfhgjdfhjghj all parameters un one
 	// $url can be 				"http://www.moserveur.com/monfichier.php?var1=dfdf& var2=fdsgdf&var3=dfg "
 	// or 						"http://www.moserveur.com/monfichier.php?var1=dfdf& var2=fdsgdf&var3=dfg target=_self"
