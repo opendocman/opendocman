@@ -13,9 +13,9 @@ if (!isset($_SESSION['uid']))
 // includes
 global $state; $state = 1;
 require_once 'config.php';
-draw_header('File Listing');
+draw_header($GLOBALS['lang']['area_document_listing']);
 draw_menu($_SESSION['uid']);
-draw_status_bar('Document Listing', @$_REQUEST['last_message']);
+draw_status_bar($GLOBALS['lang']['area_document_listing'], @$_REQUEST['last_message']);
 sort_browser();
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
