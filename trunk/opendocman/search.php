@@ -116,7 +116,7 @@ else
                         $search_result = str_search($query, $query_array, $exact_word, $case_sensitivity);
                         for($j = 0; $j < sizeof($search_result); $j++)
                         {
-                                $search_result[$j] = array($search_result[$j], $cases[$i]);
+                                $search_result[$j] = array($search_result[$j]);
                         }
                 }	
                 $search_result_len = sizeof($search_result);
