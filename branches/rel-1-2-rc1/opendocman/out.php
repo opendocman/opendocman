@@ -78,11 +78,11 @@ $file_id_array = $user_perms->getViewableFileIds();
 $end_P = getmicrotime();
 $count = sizeof($file_id_array);
 $lsort_b = getmicrotime();
-//$sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']);
+$sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']);
 $lsort_e = getmicrotime();
 //$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
 $llist_b = getmicrotime();
-list_files($file_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
+list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
 $llist_e = getmicrotime();
 // clean up
 	

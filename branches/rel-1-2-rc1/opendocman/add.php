@@ -323,7 +323,7 @@ draw_footer();
 }
 else //submited form
 {
-	for($khoa = 0; $khoa<2; $khoa++)
+	for($khoa = 0; $khoa<1; $khoa++)// change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
 	{
 	$result_array = array();
 	//get user's department
@@ -359,7 +359,7 @@ else //submited form
 	}
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0)";
+	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0 )";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
@@ -419,16 +419,20 @@ else //submited form
 	// save uploaded file with new name
 	$newFileName = $fileId . '.dat';
 	
-	if($khoa==0){
-	if (!is_uploaded_file ($_FILES['file']['tmp_name']))
+	if($khoa==0)
 	{
-		header('Location: error.php?ec=18');
-		exit;
+		if (!is_uploaded_file ($_FILES['file']['tmp_name']))
+		{
+			header('Location: error.php?ec=18');
+			exit;
+		}
+		move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	}
-		move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);}
 	else
 		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
+	$lquery = 'UPDATE data set data.filesize=' . filesize($GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName) . ' WHERE data.id = ' . $fileId;
+	mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error() );
 	$message = urlencode('Document successfully added');
 	//header('Location: out.php?last_message=' . $message);
 	}

@@ -13,7 +13,7 @@ include 'classHeaders.php';
 include 'mimetypes.php';
 
 // Database Settings - Change these to match your database
-$database = 'vault'; // Enter the name of the database here
+$database = 'opendocman_khoa'; // Enter the name of the database here
 $user = 'vault1'; // Enter the username for the database
 $pass = 'vault1'; // Enter the password for the username
 $hostname = 'musa'; // Enter the hostname that is serving the database
@@ -37,7 +37,7 @@ global $CONFIG;      $CONFIG = array(
 //'ldap_basedn' => 'ou=University of California Davis,o=University of California,c=US',
 
 // Set the number of files that show up on each page
-'page_limit' => '20',
+'page_limit' => '15',
 
 // Set the number of page links that show up on each age
 'num_page_limit' => '10', 
@@ -52,14 +52,14 @@ global $CONFIG;      $CONFIG = array(
 'title' => 'Document Repository',
 
 // This is the program version for window title
-'current_version' => ' OpenDocMan v1.1rc1  ',
+'current_version' => ' OpenDocMan v1.2rc1  ',
 
 // The email address of the administrator of this site
 'site_mail' => 'admin@yourdomainaa.com',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'kdng',
+'root_username'  => 'root',
 
 // location of file repository
 // this should ideally be outside the Web server root
