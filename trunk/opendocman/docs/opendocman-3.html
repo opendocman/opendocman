@@ -46,6 +46,14 @@ Users will be told to contact this person if they encounter errors.</LI>
 be set to one of the current users of opendocman. The root user will
 be able to access all files and have authority for everything. (ex.
 jsmith)</LI>
+<LI>revision_expiration [integer]- Period in days that
+files will expire.</LI>
+<LI>file_expired_action [1,2,3,4] - Action to take on files
+that expire.</LI>
+<LI>authorization [On, Off] - Turn file moderation on or
+off.</LI>
+<LI>secureurl [On,Off] - Hide the URL contents from prying
+eyes</LI>
 <LI>dataDir - Location of file repository. This should ideally be
 outside the Web server root. Make sure the server has permissions
 to read/write files in this folder!</LI>
@@ -58,7 +66,7 @@ tweeking depending on what types of files your users have.</LI>
 
 <P>When a user is set up as an "admin", they will see an admin menu
 in the upper right while they are logged in. There are options for
-User, Category, and Department management under this menu item.
+User, Category, Department, and File Management under this menu item.
 <HR>
 <A HREF="opendocman-4.html">Next</A>
 <A HREF="opendocman-2.html">Previous</A>

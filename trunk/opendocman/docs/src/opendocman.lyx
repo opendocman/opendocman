@@ -34,14 +34,14 @@ flags 10
 
 \layout Date
 
-May 6th, 2003
+July 9th, 2003
 \layout Abstract
 
 OpenDocMan is a full featured Web-based document management system designed
  to conform to ISO 17025/IEC.
- It features automatic installation, file check-in/out, departmental access
- control, file moderation, fine grained user access control, email notificaiton
- and a great search function.
+ It features automatic installation, file expiration, multiple version handling,
+ file check-in/out, departmental access control, file moderation, fine grained
+ user access control, email notificaiton and a great search function.
  Written in PHP, and utilizing MySQL for the backend, this project is useful
  for any company looking to keep their documentation in a centralized repository.
 \layout Standard
@@ -55,6 +55,15 @@ OpenDocMan is a full featured Web-based document management system designed
 \layout Section
 
 Introduction
+\layout Standard
+
+OpenDocMan is a full featured Web-based document management system designed
+ to conform to ISO 17025/IEC.
+ It features automatic installation, file expiration, multiple version handling,
+ file check-in/out, departmental access control, file moderation, fine grained
+ user access control, email notificaiton and a great search function.
+ Written in PHP, and utilizing MySQL for the backend, this project is useful
+ for any company looking to keep their documentation in a centralized repository.
 \layout Subsection
 
 Features
@@ -83,7 +92,8 @@ reviewers
 \begin_inset Quotes erd
 \end_inset 
 
- to authorize or decline files for publication to the repository
+ to authorize or decline files for publication to the repository.
+ Can be turned off.
 \layout Enumerate
 
 Email Notification - The system has a built in email notification system
@@ -115,6 +125,38 @@ root
 \end_inset 
 
  user can do all.
+\layout Enumerate
+
+Multiple Document Versions - Instead of overwriting a document when a new
+ version is added, the old versions are kept, so there is a traceable change
+ path.
+\layout Enumerate
+
+Archiving function for deleted files - Files that are deleted are now put
+ into an 
+\begin_inset Quotes eld
+\end_inset 
+
+archive
+\begin_inset Quotes erd
+\end_inset 
+
+ state and can be left there, un-archived, or permanently deleted.
+\layout Enumerate
+
+Bookmarkable URL's - You can bookmark a page in OpenDocMan and email it
+ to a co-worker, etc..
+\layout Enumerate
+
+Breakcrumb Navigation - As you navigate through the site, breadcrumb links
+ are generated to aid in backward navigation.
+\layout Enumerate
+
+File Expiration - Files can be set to automatically expire after a definable
+ period.
+ The expiration action can be one of either Remove from file list until
+ renewed, Show in file list but non-checkoutable, Send email to reviewer
+ only, or Do Nothing.
 \layout Subsection
 
 Requirements
@@ -128,6 +170,18 @@ MySQL Server 3.22+ (http://www.mysql.com/)
 \layout Itemize
 
 PHP 4+ compiled with MySQL-Support (http://www.php.net/)
+\layout Itemize
+
+Linux
+\layout Subsubsection
+
+Partially Tested
+\layout Itemize
+
+Microsoft IIS Server
+\layout Itemize
+
+MS-Windows
 \layout Section
 
 Installation and Updating
@@ -319,6 +373,18 @@ g.
  jsmith)
 \layout Itemize
 
+revision_expiration [integer]- Period in days that files will expire.
+\layout Itemize
+
+file_expired_action [1,2,3,4] - Action to take on files that expire.
+\layout Itemize
+
+authorization [On, Off] - Turn file moderation on or off.
+\layout Itemize
+
+secureurl [On,Off] - Hide the URL contents from prying eyes
+\layout Itemize
+
 dataDir - Location of file repository.
  This should ideally be outside the Web server root.
  Make sure the server has permissions to read/write files in this folder!
@@ -342,14 +408,80 @@ admin
 \end_inset 
 
 , they will see an admin menu in the upper right while they are logged in.
- There are options for User, Category, and Department management under this
- menu item.
+ There are options for User, Category, Department, and File Management under
+ this menu item.
 \layout Section
 
 Tutorial
 \layout Subsection
 
 Adding a file
+\layout Enumerate
+
+Click on the 
+\begin_inset Quotes eld
+\end_inset 
+
+Add
+\begin_inset Quotes erd
+\end_inset 
+
+ icon in the menu area
+\layout Enumerate
+
+Click on the 
+\begin_inset Quotes eld
+\end_inset 
+
+Browse
+\begin_inset Quotes erd
+\end_inset 
+
+ button and select the file to upload
+\layout Enumerate
+
+Choose a category for the file.
+ This will be used during file searches to help narrow the search result.
+\layout Enumerate
+
+Setup the default departmental permissions.
+ You may set up individual departments with different settings, set all
+ departments to the same setting, and/or select default permissions for
+ any unset department.
+ The program will remember your settings as you go, so as you select each
+ department, the current permission will show.
+ 
+\layout Enumerate
+
+Enter a description.
+ This will be used you can go back to set department and alter the setting
+ and will display in the main file list.
+\layout Enumerate
+
+Add any comments necessary for users of the file.
+\layout Enumerate
+
+Set specific user premissions, if any.
+ You may shift-click, ctrl-click, or click on any of the usernames in any
+ of the columns to specify certain rights to certain users of the file.
+ 
+\layout Enumerate
+
+Click on 
+\begin_inset Quotes eld
+\end_inset 
+
+Add Document
+\begin_inset Quotes erd
+\end_inset 
+
+
+\layout Enumerate
+
+If you have file moderation turned on, you will now have to authorize the
+ file before it is available for viewing.
+ If file moderation is turned off, you should see the file in the main file
+ list now.
 \layout Subsection
 
 Adding a user
@@ -455,4 +587,192 @@ database.sql - This should contain the same sql commands as odm.php, only
 \layout Standard
 
 These files MUST be kept syncronized for each release!
+\layout Section
+
+Changes
+\layout Subsection
+
+1.2rc1 - July 9th, 2003
+\layout Itemize
+
+Better permission: new design for this page will be both more straight forward
+ for the user and the programmers.
+ The permission select boxes are now used to directly specify which user
+ has which right to the file.
+ Admin needs not to set inheriting rights.
+ When the admin sets rights to the department, he indirectly set inheriting
+ rights for all users.
+ Require more testing.
+\layout Itemize
+
+Multiple version of document: Instead of overwriting a document when a new
+ version is added, keep the old versions, so there is a traceable change
+ path.
+ Revision configuration is in config.php Revision dir will be created if
+ not.
+ Inside revision folder, for each file, a folder will be created with their
+ name (e.g 80/ for 80.dat).
+ Inside 80 folder for example, there will files with the naming of format
+ of 80_x.dat were x is the revision number.
+ User can view these older revision through details.php
+\layout Itemize
+
+Add archiving function for deleted files: When file is deleted by user,
+ they are moved into an archiving folder.
+ This folder is configurable in config.php.
+ Root user can permenently delete the files in admin.php under Del/Undel
+ link
+\layout Itemize
+
+Add ability to change owner of file: Admin can change owner in edit.php.
+ New or old owner can have their rights revolked
+\layout Itemize
+
+File Expiration: file expiration script's name is check_exp.php.
+ This script will run under root authority.
+ Anyone can invoke it if they know its url.
+ A link to this page is in Admin.php.
+ Configuration to this script is available in config.php under "revision_expirati
+on"
+\layout Itemize
+
+Enable/Disable Reviewing/Authorization: User can disable the Review and
+ Authorization proccess in config.php setting under "authorization".
+ After disabled, when files are added or check-ined, they by pass the whole
+ Review and Authorization proccess
+\layout Itemize
+
+Drop the Comment column in out.php: Comments columns are droped out of any
+ table listing
+\layout Itemize
+
+bookmarkable URL: Url are now bookmarkable
+\layout Itemize
+
+Wildcard search: Wild card search are now integrated into search.php.
+ To search for the key word "Administration", user can type in Admin.
+\layout Itemize
+
+add bread crumb: Bread Crums are added to the project for betting browsing
+\layout Itemize
+
+Should allow telephone numbers in international format: telephone numbers
+ enforcement are removed
+\layout Itemize
+
+Add a timeout function to checked-out document: In admin.php, root user can
+ see all the checked out files and clear their check-out status
+\layout Itemize
+
+3-4 seconds for 5000 files with DB of 3.4 mb in size: ODM1.2-rc1 is optimized
+ to handle a heavy amount of data in a few seconds
+\layout Subsection
+
+1.1-Final - May 6th, 2003
+\layout Itemize
+
+Added icons to the review notices
+\layout Itemize
+
+changed from using copy() to move_uploaded_file() instead 
+\layout Itemize
+
+New users guide added to docs/ 
+\layout Itemize
+
+Small database schema changes
+\layout Subsection
+
+1.1rc2 - March 23, 2003
+\layout Itemize
+
+This release fixes a number of bugs with user sessions, url encoding, file
+ viewing, and others.
+ See changelog for details.
+\backslash 
+ Also added a demo mode setting which will make it a "read only" installation
+ for demo purposes, where the users will not be able to modify their info
+ (password, phone, etc).
+ Added new icons for notices.
+\layout Itemize
+
+setup.php, commitchange.php: fixed username issues from bug #702453
+\layout Itemize
+
+config.php: added a demo mode setting
+\layout Itemize
+
+functions.php: fix urlencode for sort_browser.
+ Resolving bug-702377
+\layout Itemize
+
+view_file.php: added backslash thanks Huy
+\layout Itemize
+
+out.php, images/exclamation.gif, images/exclamation_red.gif: added yellow !
+ for new notice added red ! for rejected notice
+\layout Itemize
+
+view_file.php: fix https viewing and downloading problem
+\layout Itemize
+
+FormCheck.js: phonenumber validation has been removed
+\layout Subsection
+
+1.1rc1 - March 10, 2003
+\layout Itemize
+
+New: web based installer/updater 
+\layout Itemize
+
+New: Ability to run with register_globals=off 
+\layout Itemize
+
+New: New mysql connection method 
+\layout Itemize
+
+New: error_reporting can be set to any level 
+\layout Itemize
+
+New: short_open_tags can be off.
+\layout Itemize
+
+edit.php: fixed error: unable to set modify permission to users
+\layout Itemize
+
+toBePublished.php: fixed PHP_SELF
+\layout Itemize
+
+databaseData_class.php: a new level of abstraction has been added to this
+ foundation class.
+ Unlike before, this class's DB information such as database name, and table
+ names can now be configured.
+ All derived classes inherit this feature.
+ One big drawback is the readability every query has been dramatically reduced.
+\layout Itemize
+
+FileData_class.php: fixed error in sql statement
+\layout Itemize
+
+search.php: fixed some locals that were set to _GET
+\layout Itemize
+
+add.php: turned off error rep for status_bar
+\layout Itemize
+
+search.php: fixed undefined var $cases in 119
+\layout Itemize
+
+view_file.php: fixed bug in split code.
+ Missing backslashe for period
+\layout Itemize
+
+install/: odm1.1rc1.php, upgrade.php, upgrade_10.php: initial import of installation
+ scripts
+\layout Itemize
+
+database.sql: fixed column types (tinyint to smallint, etc.)
+\layout Subsection
+
+1.0 - Initial Release - December 19, 2003
 \the_end
