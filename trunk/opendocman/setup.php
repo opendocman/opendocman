@@ -70,11 +70,11 @@ Please complete the following form to create your new database
  <table align="center">
   <tr>
    <td>
-    <input type="text" name="rootname"> Mysql Root User <br>
+    <input type="text" name="rootname" value="root"> Mysql Root User <br>
     <input type="password" name="rootpass"> Mysql Root Password <br>
-    <input type="text" name="roothost"> Mysql Hostname <br>
-    <input type="text" name="database"> New Database Name <br>
-    <input type="text" name="username"> New Database User Name<br>
+    <input type="text" name="roothost" value="localhost"> Mysql Hostname <br>
+    <input type="text" name="database" value="opendocman"> New Database Name <br>
+    <input type="text" name="username" value="opendocman"> New Database User Name<br>
     <input type="password" name="password"> New Database Password<br>
     <input type="submit" name="op" value="commitinstall"><br>
    </td>
@@ -96,17 +96,26 @@ function do_install()
         $result = mysql_query("
         DROP DATABASE IF EXISTS $_REQUEST[database]
         ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-        
+
         $result = mysql_query("
         CREATE DATABASE $_REQUEST[database]
         ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
+        echo 'Database Created<br>';
+
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
+
+        echo 'Database Selected<br>';
 
         // Grant privs
         $result = mysql_query("
 	GRANT ALL ON $_REQUEST[database].* to $_POST[username]@$_POST[roothost] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
 ");
+        echo 'Grant is set<br>';
+
+        $result = mysql_query("
+        FLUSH PRIVILEGES
+        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
         include("install/odm.php");
         include("config.php");
