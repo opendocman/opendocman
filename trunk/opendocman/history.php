@@ -9,6 +9,7 @@ if (!session_is_registered('uid'))
 header('Location:index.php?redirection=' . urlencode($_SERVER['REQUEST_URI']));
 exit;
 }
+include('config.php');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -17,7 +18,6 @@ exit;
 }
 
 // includes
-include('config.php');
 if( !isset($_REQUEST['title']) )
 {	draw_header('');	}
 else 

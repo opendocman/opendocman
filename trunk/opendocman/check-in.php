@@ -8,6 +8,7 @@ if (!isset($_SESSION['uid']))
         header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 		exit;
 }
+include('config.php');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -17,7 +18,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 }
 
 // includes
-include('config.php');
 
 // open connection
 if (!isset($_POST['submit']))

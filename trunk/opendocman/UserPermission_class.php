@@ -73,7 +73,6 @@ if( !defined('UserPermission_class') )
 			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid 
 			AND $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT 
 			AND $this->TABLE_DATA.publishable = 1)";
-		
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
 		$len = mysql_num_rows($result);
 		for($index=0; $index < $len; $index++)

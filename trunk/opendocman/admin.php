@@ -3,12 +3,12 @@ session_start();
 // admin.php - administration functions for admin users 
 // check for valid session
 // includes
-include('config.php');
 if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
 }
+include('config.php');
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 // Check to see if user is admin

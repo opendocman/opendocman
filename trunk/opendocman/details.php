@@ -7,6 +7,7 @@ if (!session_is_registered('uid'))
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
 }
+include('config.php');
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 {
@@ -14,7 +15,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 	exit;
 }
 
-include('config.php');
 draw_header('File Detail');
 draw_menu($_SESSION['uid']);
 $lrequest_id = $_REQUEST['id']; //save an original copy of id

@@ -5,6 +5,7 @@ if (!session_is_registered('uid'))
 	        header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 			        exit;
 }
+include('config.php');
 /*
 $where='all';
   $keyword='Nguyen Khoa';
@@ -21,7 +22,6 @@ $_GET['case_sensitivity']='';
 */
 /// includes
 $start_time = time();
-include('config.php');
 draw_header('Search');
 draw_menu($_SESSION['uid']);
 draw_status_bar('Search', "");

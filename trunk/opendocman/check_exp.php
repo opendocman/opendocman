@@ -9,7 +9,6 @@ if (!isset($_REQUEST['last_message']))
 }
 
 // includes
-include ('config.php');
 draw_header('Check Expirations');
 draw_menu(@$_SESSION['uid']);
 draw_status_bar('Check Expirations', $_REQUEST['last_message']);

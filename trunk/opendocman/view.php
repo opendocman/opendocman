@@ -10,6 +10,7 @@ if (!session_is_registered('uid'))
         header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
         exit;
 }
+include_once('config.php');
 
 if (!isset($id) || $id == '')
 {
@@ -18,8 +19,6 @@ if (!isset($id) || $id == '')
 }
 
 // includes
-include_once('config.php');
-include_once('classHeaders.php');
 // in case file is accessed directly
 // verify again that user has view rights
 

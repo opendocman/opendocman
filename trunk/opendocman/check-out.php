@@ -7,6 +7,7 @@ if (!session_is_registered('uid'))
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
 }
+include('config.php');
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -16,7 +17,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 	header('Location:error.php?ec=2');
 	exit;
 }
-include('config.php');
 /* if the user has read-only authority on the file, his check out 
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
 the server

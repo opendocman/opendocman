@@ -7,6 +7,7 @@
 //$submit=true;
 
 session_start();
+include('config.php');
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -23,7 +24,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
   	exit;
 }
 
-include('config.php');
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 if( $filedata->isArchived() ) header('Location:error.php?ec=21');
 if (!isset($_REQUEST['last_message']))
