@@ -426,8 +426,10 @@ if( !defined('function') )
                                                 $found_flag = 1;
                                         }
                                 }
-                                if(!isset($found_flag))
-                                        $found_not_exact_array[$index++] = false;
+                                if(!$found_flag)
+                                {
+                                	$found_not_exact_array[$index++] = false;
+                                }
 
 
                         }
@@ -1170,5 +1172,4 @@ if( !defined('function') )
         } 
 	
 }
-
 ?>
