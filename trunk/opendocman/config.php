@@ -25,12 +25,6 @@ if( !defined('config') )
 
 // config.php - useful variables/functions
 
-// database parameters
-include 'functions.php';
-include 'classHeaders.php';
-include 'mimetypes.php';
-require_once('crumb.php');
-
 // Database Settings - Change these to match your database
 $GLOBALS['database'] = 'opendocman'; // Enter the name of the database here
 $GLOBALS['user'] = 'opendocman'; // Enter the username for the database
@@ -125,8 +119,7 @@ $CONFIG['archiveDir'] = $GLOBALS['CONFIG']['dataDir'] . 'archiveDir/';
 $GLOBALS['connection'] = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect: " . mysql_error());
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
-// All functions are in functions.php
-require_once 'secureurl.class.php';
-include 'secureurl.php';
+// All functions and includes are in functions.php
+include_once('functions.php');
 }
 ?>
