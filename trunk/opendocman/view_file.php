@@ -7,7 +7,9 @@ if (!isset($_SESSION['uid']))
 }
 include('config.php');
 if( !isset ($_REQUEST['last_message']) )
-{	$_REQUEST['last_message']='';	}
+{	
+        $_REQUEST['last_message']='';	
+}
 if(!isset($_GET['submit']))
 {
 	draw_header('View File');
@@ -20,21 +22,24 @@ if(!isset($_GET['submit']))
 	
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
-	list($prefix,$suffix)= split ('.', $realname);
-	echo $suffix;
-	if( !isset($mimetypes["$suffix"]) )
-	{	$mimetype = '';	}
+	list($prefix,$suffix)= split ("\.", $realname);
+	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
+	{	
+                $lmimetype = '';	
+        }
 	else 
-	{	$mimetype = $mimetypes["$suffix"];	}
+	{	
+                $lmimetype = $GLOBALS['mimetypes']["$suffix"];	
+        }
 	//echo "Realname is $realname<br>";
 	//echo "prefix = $prefix<br>";
 	//echo "suffix = $suffix<br>";
-	//echo "mime:$mimetype";	
+	//echo "mime:$lmimetype";	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
 	echo '<INPUT type="hidden" name="id" value="'.$_REQUEST['id'].'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
-	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($_REQUEST['id']).'&mimetype='.urlencode("$mimetype").'">Click Here</a><br><br>';
+	echo 'To view your file in a new window <a class="body" style="text-decoration:none" href="view_file.php?submit=view&id='.urlencode($_REQUEST['id']).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
 	echo 'If you are not able to do so for some reason, ';
 	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
 	echo '</form>';
