@@ -391,7 +391,7 @@ if( !defined('function') )
                                 $tr_bgcolor = $even_row_color;
                         }
                         $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
-						if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
+						if ($userperms_obj != 'ANONYMOUS' && $file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
                         {
                                 $lock = false;
                                 $highlighted_color = $unlock_highlighted_color;
@@ -450,8 +450,16 @@ if( !defined('function') )
 						<TD><input type="checkbox" value="<?php echo $fid; ?>" name="checkbox<?php echo $checkbox_index;?>"></B></TD>
 <?php
                         }
-?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
-                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
+						echo "<TD class=\"$css_td_class\">$fid<B></TD>";
+                        if($userperms_obj != 'ANONYMOUS')
+						{
+                        	echo "<TD class=\"$css_td_class\" NOWRAP><a class=\"listtable\" href=\"" . $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>";
+						}
+						else
+						{
+							echo "<TD class=\"$css_td_class\" NOWRAP><a class=\"listtable\" href=\"javascript:my_open('" . $secureurl->encode("anonymous.php?id=$fid") . "&mode=view_file');\">$realname</a></TD>";
+						}
+						?>
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
 							
@@ -459,19 +467,22 @@ if( !defined('function') )
                         $write = array($userperms_obj->WRITE_RIGHT, 'w');
                         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
                         $rights = array($read, $write, $admin);
-                        $userright = $userperms_obj->getAuthority($file_obj->getId());
+                        if($userperms_obj != 'ANONYMOUS')
+							$userright = $userperms_obj->getAuthority($file_obj->getId());
+						else
+							$userright = $userperms_obj->READ_RIGHT;
                         $index_found = -1;
                         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
                         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
-                        //and everything below it. 
-                        for($i = sizeof($rights)-1; $i>=0; $i--)
-                        {
-                                if($userright==$rights[$i][0])
-                                {
-                                        $index_found = $i;
-                                        $i = 0;
-                                }
-                        }
+						//and everything below it. 
+						for($i = sizeof($rights)-1; $i>=0; $i--)
+						{
+							if($userright==$rights[$i][1])
+							{
+								$index_found = $i;
+								$i = 0;
+							}
+						}
                         //Found the user right, now bold every below it.  For those that matche, make them different.
             			for($i = $index_found; $i>=0; $i--)
                         {
@@ -512,15 +523,17 @@ if( !defined('function') )
                 </HD6>
                 </TABLE>
                 <Script Language="javascript">
-                function selectAll(ctrl_checkbox)
-                {
-                        elements = document.forms[0].elements;
-                        for(i = 0; i< elements.length; i++)
-                                {
-                                        if(elements[i].type == "checkbox")
-                                                elements[i].checked = ctrl_checkbox.checked;
-                                        }
-                                } 
+				function selectAll(ctrl_checkbox)
+				{
+					elements = document.forms[0].elements;
+					for(i = 0; i< elements.length; i++)
+					{
+						if(elements[i].type == "checkbox")
+							elements[i].checked = ctrl_checkbox.checked;
+					}
+				}
+				function my_open(address)
+				{	window.open(address, 'View Window', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=600,height=500');	}
                 </script>
                 
                 <!----------------------Table Ends----------------------->
