@@ -120,60 +120,55 @@ else
     	{
     		$lequate = ' REGEXP BINARY';
     	}
-    	$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
+    	$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data, ' . $GLOBALS['CONFIG']['table_prefix'] . 'user, ' . $GLOBALS['CONFIG']['table_prefix'] . 'department, ' . $GLOBALS['CONFIG']['table_prefix'] . 'category WHERE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.owner = ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.id AND ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.department=' . $GLOBALS['CONFIG']['table_prefix'] . 'department.id AND ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.category = ' . $GLOBALS['CONFIG']['table_prefix'] . 'category.id AND (';
     	$larray_len = sizeof($lsearch_array);
 		switch($lwhere)
         {
         	// Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'author_locked_files':
-                $lquery .= 'data.status' . $lequate  . '\'' . $lkeyword . '\' AND data.owner=\'' . $_SESSION['uid'] . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'data.status' . $lequate  . '\'' . $lkeyword . '\' AND data.owner=\'' . $_SESSION['uid'] . '\'';
                 break;
         	
         	// Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'category_only':
-                $lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'category.name' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 // Put all the author name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author_only':
         		if( $lexact_phrase=='on' )
 				{ 
-					$lquery .= 'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . 'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
+					$lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
 				}
 				else
 				{
-					$lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+					$lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
 				}
 				break;
                 // Put all the department name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
             case 'department_only':
-                $lquery .= 'department.name' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'department.name' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 // Put all the description for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the description array are synchronized.
             case 'descriptions_only':
-                $lquery .= 'data.description' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'data.description' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 // Put all the file name for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the file name array are synchronized.
             case 'filenames_only':
-                $lquery .= 'data.realname= \'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'data.realname= \'' . $lkeyword . '\'';
                 break;
                 // Put all the comments for each of the OBJ in the OBJ array into an array
                 // Notice, the index of the OBJ_array and the comments array are synchronized.
             case 'comments_only':
-                $lquery .= 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
             case 'all':
-            	$lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-            				'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-            				'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-            				'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-            				'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-            				'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+            	$lquery .= $GLOBALS['CONFIG']['table_prefix'] . 'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
             	break;
             default : break;
         }
@@ -206,7 +201,7 @@ else
 	else
 	{
 		$current_user_permission = 'ANONYMOUS';
-		$l_query = 'SELECT id FROM data WHERE anonymous = 1';
+		$l_query = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE anonymous = 1';
 		$l_result = mysql_query($l_query) or die(mysql_error());
 		for($i = 0; $i<mysql_num_rows($l_result); $i++)
 			list($view_able_files_id[$i]) = mysql_fetch_row($l_result);

@@ -89,7 +89,7 @@ if(!isset($_REQUEST['submit']))
 			<INPUT type="hidden" name="checkedboxes" value="">
 			<INPUT type="hidden" name="checkednumber" value=0>
 			<INPUT type="hidden" name="fileid" value="">
-			<?
+			<?php
 	}
 	?>
 		</TABLE>
@@ -270,7 +270,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 			<TR><TD>Email whole department</TD><TD><INPUT type="checkbox" name="send_to_dept" onchange="check(this.form.elements['send_to_users[]'], this, send_to_all);"></TD></TR>
 			<TR><TD valign="top">Email these users:</TD><TD><SELECT name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
 			<?php
-			$query = "SELECT user.id, user.first_name, user.last_name from user";
+			$query = "SELECT id, first_name, last_name from "  . $GLOBALS['CONFIG']['table_prefix'] . "user";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
 		echo "\n\t\t\t\t<OPTION value=\"0\" selected>no one</OPTION>";			
 		while( list($id, $first_name, $last_name) = mysql_fetch_row($result) )
@@ -425,5 +425,3 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 }
 ?>
 <BODY onload="closeifdown();"></BODY>
-<?php	
-?>

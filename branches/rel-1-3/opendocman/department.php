@@ -84,7 +84,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='delete')
  // query to show item
 	echo '<center>'; 
 	echo '<table border="0">';
-	$query = "SELECT id, name FROM department where id='$_POST[item]'";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_POST[item]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lname) = mysql_fetch_row($result))
     {
@@ -122,7 +122,7 @@ draw_status_bar('Choose Department to Delete', $_POST['last_message']);
         <td><b>Department</b></td>
         <td colspan="3"><select name="item">
 <?php
-	$query = 'SELECT id, name FROM department ORDER BY name';
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'department ORDER BY name';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lname) = mysql_fetch_row($result))
     {
@@ -155,7 +155,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showitem')
  	draw_status_bar('Display Item Information', $_POST['last_message']);
     echo '<center>';
 	//select name
-	$query = "SELECT name,id FROM department where id='$_POST[item]'";
+	$query = "SELECT name,id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_POST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo '<table name="main" cellspacing="15" border="0">';
     echo '<th>ID</th><th>Dept. Name</th>';
@@ -168,7 +168,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showitem')
     </tr>
 <?php
     // Display all users assigned to this department
-    $query = "SELECT department.id, user.first_name, user.last_name FROM department, user where department.id='$_POST[item]' and user.department='$_POST[item]'";
+    $query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "department.id, " . $GLOBALS['CONFIG']['table_prefix'] . "user.first_name, " . $GLOBALS['CONFIG']['table_prefix'] . "user.last_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department, " . $GLOBALS['CONFIG']['table_prefix'] . "user where " . $GLOBALS['CONFIG']['table_prefix'] . "department.id='$_POST[item]' and " . $GLOBALS['CONFIG']['table_prefix'] . "user.department='$_POST[item]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lfirst_name, $llast_name) = mysql_fetch_row($result))
 	{	
@@ -202,7 +202,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 	<td><b>Department</b></td>
 	<td colspan=3><select name="item">
 <?php 
-	$query = 'SELECT id, name FROM department ORDER BY name';
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'department ORDER BY name';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -241,7 +241,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 	  <tr>
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM department where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department where id='$_REQUEST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -286,7 +286,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	<td colspan="3"><select name="item">
 <?php
 	// query to get a list of departments
-	$query = "SELECT id, name FROM department ORDER BY name";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 	while(list($lid, $lname) = mysql_fetch_row($result))

@@ -45,7 +45,7 @@ if( !defined('FileData_class') )
 		$this->field_name = 'realname';
 		$this->field_id = 'id';
 		$this->result_limit = 1;  //EVERY FILE IS LISTED UNIQUELY ON THE DATABASE DATA;
-		$this->tablename = $this->TABLE_DATA;
+		$this->tablename = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DATA;
 		databaseData::databaseData($id, $connection, $database);
 		
 		$this->loadData();
@@ -312,7 +312,7 @@ if( !defined('FileData_class') )
                                 return $this->error;
                 }*/
         
-        $query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY log.modified_on DESC limit 1;";
+        $query = "SELECT modified_on FROM $this->TABLE_LOG WHERE id = '$this->id' ORDER BY modified_on DESC limit 1;";
 		$result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
         list($name) = mysql_fetch_row($result);       
         return $name;

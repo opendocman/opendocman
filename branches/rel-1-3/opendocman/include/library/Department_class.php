@@ -26,6 +26,16 @@ if( !defined('Department_class') )
 		$this->field_name = 'name';
 		$this->field_id = 'id';
 		$this->result_limit = 1; //there is only 1 department with a certain department_id and department_name
+        $this->TABLE_ADMIN = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_ADMIN;
+        $this->TABLE_CATEGORY = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_CATEGORY;
+        $this->TABLE_DATA = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DATA;
+        $this->TABLE_DEPARTMENT = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPARTMENT;
+        $this->TABLE_DEPT_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_PERMS;
+        $this->TABLE_DEPT_REVIEWER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_REVIEWER;
+        $this->TABLE_LOG = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_LOG;
+        $this->TABLE_RIGHTS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_RIGHTS;
+        $this->TABLE_USER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER;
+        $this->TABLE_USER_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER_PERMS;
 		$this->tablename = $this->TABLE_DEPARTMENT;
 		databaseData::databaseData($id, $connection, $database);
 	}

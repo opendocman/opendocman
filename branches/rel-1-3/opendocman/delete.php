@@ -70,17 +70,17 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 			if($userperm_obj->canAdmin($id))
 			{
 				// delete from db
-				$query = "DELETE FROM data WHERE id = '$id'";
+				$query = "DELETE FROM "  . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 			
 				// delete from db
-				$query = "DELETE FROM dept_perms WHERE fid = '$id'";
+				$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 			
-				$query = "DELETE FROM user_perms WHERE fid = '$id'";
+				$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 			
-				$query = "DELETE FROM log WHERE id = '$id'";
+				$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "log WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 				$filename = $id . ".dat";
 				unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
@@ -111,8 +111,8 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 elseif( $_REQUEST['mode'] == 'view_del_archive' )
 {
 	//publishable=2 for archive deletion
-	$lquery = "SELECT id FROM data WHERE publishable=2";
-	$lresult = mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$lquery = "SELECT id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE publishable=2";
+	$lresult = mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $lquery. " . mysql_error());
 	$array_id = array();
 	for($i = 0; $i < mysql_num_rows($lresult); $i++)
 	{	list($array_id[$i]) = mysql_fetch_row($lresult);	}
@@ -164,7 +164,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit" name="mode" value="Delete file(s)">
 		</TABLE>
 		<input type="hidden" name="caller" value="<?php echo $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];?>">
-		<?
+		<?php
 		}
 		?>
 		</FORM>

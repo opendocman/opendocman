@@ -22,7 +22,7 @@ if( !defined('function') )
 	}
 	function getAllDeptID()
 	{
-		$query= "SELECT id from department ORDER BY department.id";
+		$query= "SELECT id from " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY department.id";
 		$result = mysql_query($query);
 		$llen = mysql_num_rows($result);
 		$result_array = array();
@@ -110,31 +110,31 @@ if( !defined('function') )
 		$lwhere_or_clause = '';
 		if( $sort_by == 'id' )
 		{
-			$lquery = 'SELECT id from data ORDER BY id ' . $sort_order;
+			$lquery = 'SELECT id from ' . $GLOBALS['CONFIG']['table_prefix'] . 'data ORDER BY id ' . $sort_order;
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data, ' . $GLOBALS['CONFIG']['table_prefix'] . 'user WHERE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.owner = ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.id ORDER BY ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.last_name ' . $sort_order . ' , ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.first_name ' . $sort_order  . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		elseif($sort_by == 'file_name')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.realname ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data ORDER BY ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.realname ' . $sort_order . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		elseif($sort_by == 'department')
 		{
-			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id ORDER BY department.name ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data, ' . $GLOBALS['CONFIG']['table_prefix'] . 'department WHERE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.department = ' . $GLOBALS['CONFIG']['table_prefix'] . 'department.id ORDER BY ' . $GLOBALS['CONFIG']['table_prefix'] . 'department.name ' . $sort_order . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		elseif($sort_by == 'created_date' )
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data ORDER BY ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.created ' . $sort_order . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'log, ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id = ' . $GLOBALS['CONFIG']['table_prefix'] . 'log.id AND ' . $GLOBALS['CONFIG']['table_prefix'] . 'log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		elseif($sort_by == 'description')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data ORDER BY ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.description ' . $sort_order . ', ' . $GLOBALS['CONFIG']['table_prefix'] . 'data.id asc';
 		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
@@ -217,7 +217,7 @@ if( !defined('function') )
 	}
 	function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
 	{
-		$query = "SELECT Email from user";
+		$query = "SELECT Email from " . $GLOBALS['CONFIG']['table_prefix'] . "user";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
 		while( list($mail_to) = mysql_fetch_row($result) )
 		{
@@ -227,7 +227,7 @@ if( !defined('function') )
 	}
 	function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
 	{
-		$query = 'SELECT Email from user where user.department = '.$dept_id;
+		$query = 'SELECT Email from ' . $GLOBALS['CONFIG']['table_prefix'] . 'user where ' . $GLOBALS['CONFIG']['table_prefix'] . 'user.department = '.$dept_id;
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
 		while( list($mail_to) = mysql_fetch_row($result) )
 		{
@@ -724,7 +724,7 @@ if( !defined('function') )
 		}
 		<?php
 			///////////////////////////////FOR AUTHOR///////////////////////////////////////////
-			$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
+			$query = "SELECT last_name, first_name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user ORDER BY username ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -736,7 +736,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
-		$query = "SELECT name, id FROM department ORDER BY name ASC";
+		$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -748,7 +748,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
-		$query = "SELECT name, id FROM category ORDER BY name ASC";
+		$query = "SELECT name, id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -852,7 +852,7 @@ if( !defined('function') )
 	 */
 	function getAllUsers()
 	{
-		$lquery = 'SELECT id, last_name, first_name, username FROM user';
+		$lquery = 'SELECT id, last_name, first_name, username FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user';
 		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
 		$llen = mysql_num_rows($lresult);
 		$return_array = array();

@@ -13,6 +13,7 @@ if ( !defined('User_Perms_class') )
 	var $file_obj;
 	var $error;
 	var $chosen_mode;
+	var $chosen_mode;
 	var $connection, $database;
 	
 	var $NONE_RIGHT = 0;
@@ -30,6 +31,16 @@ if ( !defined('User_Perms_class') )
 		$this->database = $database;
 		$this->user_obj = new User($id, $connection, $database);
 		$this->deptperms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection, $database);
+        $this->TABLE_ADMIN = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_ADMIN;
+        $this->TABLE_CATEGORY = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_CATEGORY;
+        $this->TABLE_DATA = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DATA;
+        $this->TABLE_DEPARTMENT = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPARTMENT;
+        $this->TABLE_DEPT_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_PERMS;
+        $this->TABLE_DEPT_REVIEWER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_REVIEWER;
+        $this->TABLE_LOG = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_LOG;
+        $this->TABLE_RIGHTS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_RIGHTS;
+        $this->TABLE_USER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER;
+        $this->TABLE_USER_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER_PERMS;
 	}
 	// return an array of user whose permission is >= view_right
 	function getCurrentViewOnly()
@@ -54,7 +65,7 @@ if ( !defined('User_Perms_class') )
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
-			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA WHERE 
+			$query = "SELECT id FROM $this->TABLE_DATA WHERE 
 				$this->TABLE_DATA.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
 			$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,

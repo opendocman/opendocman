@@ -25,7 +25,7 @@ if (!isset($_POST['submit']))
 	// form not yet submitted, display initial form
 
 	// pre-fill the form with some information so that user knows which file is being updated
-	$query = "SELECT description, realname from data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
+	$query = "SELECT description, realname from " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// in case script is directly accessed, query above will return 0 rows
@@ -110,7 +110,7 @@ else
 	// form has been submitted, process data
 
 	// checks
-	$query = "select realname from data where data.id = '$_POST[id]'";
+	$query = "SELECT realname FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE id = '$_POST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
 
 	// 
@@ -164,7 +164,7 @@ else
 	if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
 	{
 		//look to see how many revision are there
-		$query = "SELECT * FROM log WHERE log.id = $_POST[id]";
+		$query = "SELECT * FROM " . $GLOBALS['CONFIG']['table_prefix'] . "log WHERE id = $_POST[id]";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		$lrevision_num = mysql_num_rows($result);
 		// if dir not available, create it
@@ -197,17 +197,17 @@ else
 		fwrite($lfhandler, $lfcontent);
 		fclose ($lfhandler);
 		// all OK, proceed!
-		$query = "SELECT username FROM user WHERE id='$_SESSION[uid]'";
+		$query = "SELECT username FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE id='$_SESSION[uid]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		list($username) = mysql_fetch_row($result);
 		// update revision log
-		$query = 'UPDATE log set log.revision=' . ($lrevision_num - 1) . ' where log.id = ' . $_POST['id'] . ' and log.revision = "current"';
+		$query = 'UPDATE ' . $GLOBALS['CONFIG']['table_prefix'] . 'log SET revision=' . ($lrevision_num - 1) . ' where id = ' . $_POST['id'] . ' and revision = "current"';
 		mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		$query = "INSERT INTO log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
+		$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 		// update file status
-		$query = "UPDATE data SET status = '0', publishable='$lpublishable' WHERE id='$_POST[id]'";
+		$query = "UPDATE " . $GLOBALS['CONFIG']['table_prefix'] . "data SET status = '0', publishable='$lpublishable' WHERE id='$_POST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 		// rename and save file

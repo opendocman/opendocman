@@ -80,7 +80,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['bu
 	// query to show item
 	echo '<center>'; 
 	echo '<table border=0>';
-	$query = 'SELECT id, name FROM category where id="' . $_REQUEST['item'] . '"';
+	$query = 'SELECT id, name FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'category where id="' . $_REQUEST['item'] . '"';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -121,7 +121,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 				<td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
 				<td colspan=3><select name="item">
 <?php
-	$query = 'SELECT id, name FROM category ORDER BY name';
+	$query = 'SELECT id, name FROM '  . $GLOBALS['CONFIG']['table_prefix'] . 'category ORDER BY name';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -157,7 +157,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['bu
 	draw_status_bar($GLOBALS['lang']['area_display_category'], $_REQUEST['last_message']);
 	echo '<center>';
 	// Select name
-	$query = "SELECT data.realname, user.username, department.name, category.name FROM data,user,department,category where data.category='$_REQUEST[item]' AND user.id = data.owner AND department.id = data.department AND data.category = category.id";
+	$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.realname, " . $GLOBALS['CONFIG']['table_prefix'] . "user.username, " . $GLOBALS['CONFIG']['table_prefix'] . "department.name, " . $GLOBALS['CONFIG']['table_prefix'] . "category.name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data," . $GLOBALS['CONFIG']['table_prefix'] . "user," . $GLOBALS['CONFIG']['table_prefix'] . "department," . $GLOBALS['CONFIG']['table_prefix'] . "category where " . $GLOBALS['CONFIG']['table_prefix'] . "data.category='$_REQUEST[item]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user.id = " . $GLOBALS['CONFIG']['table_prefix'] . "data.owner AND " . $GLOBALS['CONFIG']['table_prefix'] . "department.id = " . $GLOBALS['CONFIG']['table_prefix'] . "data.department AND " . $GLOBALS['CONFIG']['table_prefix'] . "data.category = " . $GLOBALS['CONFIG']['table_prefix'] . "category.id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	echo('<table name="main" cellspacing="15" border="0">');
 	echo '<th>' . $GLOBALS['lang']['label_name'] . '</th><th>' . $GLOBALS['lang']['label_user'] . '</th><th>' . $GLOBALS['lang']['label_department'] . '</th><th>' . $GLOBALS['lang']['label_category'] . '</th>';
@@ -199,7 +199,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 			<td><b><?php echo $GLOBALS['lang']['label_category']; ?></b></td>
 			<td colspan="3"><select name="item">
 <?php
-			$query = 'SELECT id, name FROM category ORDER BY name';
+			$query = 'SELECT id, name FROM '  . $GLOBALS['CONFIG']['table_prefix'] . 'category ORDER BY name';
 			$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($lid, $lname) = mysql_fetch_row($result))
 		{
@@ -238,7 +238,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == $GLOBALS['lang']['bu
 		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM category where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category where id='$_REQUEST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -280,7 +280,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 				<td colspan="3"><select name="item">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM category ORDER BY name";
+	$query = "SELECT id, name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{

@@ -143,11 +143,11 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	
 	if( isset($lrevision_id) )
 	{
-		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by AND log.revision <= $lrevision_id ORDER BY log.modified_on DESC";
+		$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "user.last_name, " . $GLOBALS['CONFIG']['table_prefix'] . "user.first_name, " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_on, " . $GLOBALS['CONFIG']['table_prefix'] . "log.note, " . $GLOBALS['CONFIG']['table_prefix'] . "log.revision FROM " . $GLOBALS['CONFIG']['table_prefix'] . "log, " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "log.id = '$_REQUEST[id]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user.username = " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_by AND " . $GLOBALS['CONFIG']['table_prefix'] . "log.revision <= $lrevision_id ORDER BY " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_on DESC";
 	}
 	else
 	{
-		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
+		$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "user.last_name, " . $GLOBALS['CONFIG']['table_prefix'] . "user.first_name, " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_on, " . $GLOBALS['CONFIG']['table_prefix'] . "log.note, " . $GLOBALS['CONFIG']['table_prefix'] . "log.revision FROM " . $GLOBALS['CONFIG']['table_prefix'] . "log, " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "log.id = '$_REQUEST[id]' AND " . $GLOBALS['CONFIG']['table_prefix'] . "user.username = " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_by ORDER BY " . $GLOBALS['CONFIG']['table_prefix'] . "log.modified_on DESC";
 	}
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$current_revision = mysql_num_rows($result) - 1;

@@ -13,16 +13,16 @@ if( !defined('User_class') )
                 $this->root_username = $GLOBALS['CONFIG']['root_username'];
                 $this->field_name = 'username';
                 $this->field_id = 'id';
-                $this->tablename= 'user';
+                $this->tablename= $GLOBALS['CONFIG']['table_prefix'] . 'user';
                 $this->result_limit = 1; //there is only 1 user with a certain user_name or user_id
-                databaseData::setTableName('user');
+                databaseData::setTableName($GLOBALS['CONFIG']['table_prefix'] .'user');
                 databaseData::databaseData($id, $connection, $database);
 
         }
         
         function getDeptName()
         {
-                $query = "SELECT department.name FROM department, user WHERE user.id = $this->id and user.department=department.id";
+                $query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "department.name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "department, " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "user.id = $this->id and " . $GLOBALS['CONFIG']['table_prefix'] . "user.department=" . $GLOBALS['CONFIG']['table_prefix'] . "department.id";
                 $result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
                 if(mysql_num_rows($result)==1)
                 {
@@ -38,7 +38,7 @@ if( !defined('User_class') )
 	
         function getDeptId()
 	{
-		$query = "SELECT user.department FROM user WHERE user.id = $this->id";
+		$query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "user.department FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "user.id = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		
 		if(mysql_num_rows($result)==1)
@@ -55,7 +55,7 @@ if( !defined('User_class') )
         {
                 $data_published = array();
                 $index = 0;
-                $query = "SELECT data.id FROM data, user WHERE data.owner = $this->id and user.id = data.owner and data.publishable = $publishable";
+                $query = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data, " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "data.owner = $this->id and " . $GLOBALS['CONFIG']['table_prefix'] . "user.id = " . $GLOBALS['CONFIG']['table_prefix'] . "data.owner and " . $GLOBALS['CONFIG']['table_prefix'] ."data.publishable = $publishable";
                 $result = mysql_query($query, $this->connection) or die("Error in query: ". $query .mysql_error());
                 while($index<mysql_num_rows($result))
                 {
@@ -72,7 +72,7 @@ if( !defined('User_class') )
                         return true;
                 }
 
-                $query = "SELECT admin.admin FROM admin WHERE admin.id = $this->id";
+                $query = "SELECT admin FROM " . $GLOBALS['CONFIG']['table_prefix'] . "admin WHERE id = $this->id";
                 $result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 
                 if(mysql_num_rows($result) !=1 )
@@ -132,7 +132,7 @@ if( !defined('User_class') )
 
 	function isReviewer()
 	{
-		$query = "SELECT * from dept_reviewer where user_id = " . $this->id;
+		$query = "SELECT * from " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer where user_id = " . $this->id;
 		$result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
 		if(mysql_num_rows($result) > 0)
 		{
@@ -145,7 +145,7 @@ if( !defined('User_class') )
 	}
 	function isReviewerOfDept($dept_id)
 	{
-		$query = "SELECT * from dept_reviewer where user_id = " . $this->id . ' AND dept_id = ' . $dept_id;
+		$query = "SELECT * from " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer where user_id = " . $this->id . ' AND dept_id = ' . $dept_id;
 		$result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
 		if(mysql_num_rows($result) > 0)
 		{
@@ -165,8 +165,8 @@ if( !defined('User_class') )
 
 	function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
 	{
-		$lquery = "SELECT id FROM data WHERE $this->TABLE_DATA.publishable = 0";
-		$lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
+		$lquery = "SELECT id FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.publishable = 0";
+		$lresult = mysql_query($lquery, $this->connection) or die("Error in lquery: $lquery" . mysql_error());
 		$lfile_data = array();
 		$lnum_files = mysql_num_rows($lresult);
 		for($lindex = 0; $lindex< $lnum_files; $lindex++)
@@ -180,19 +180,19 @@ if( !defined('User_class') )
 	{
 		if($this->isReviewer())
 		{
-			$query = "SELECT dept_id FROM dept_reviewer WHERE user_id = ".$this->id;
+			$query = "SELECT dept_id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer WHERE user_id = ".$this->id;
 			$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 			$num_depts = mysql_num_rows($result);
-			$query = "SELECT id FROM data WHERE (";
+			$query = "SELECT id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE (";
 			for($index = 0; $index < $num_depts; $index++)
 			{
 				list($dept) = mysql_fetch_row($result);
 				if($index != $num_depts -1)
-					$query = $query . " data.department = $dept or";
+					$query = $query . " department = $dept or";
 				else 
-					$query = $query . " data.department = $dept )";
+					$query = $query . " department = $dept )";
 			}
-			$query = $query . " and data.publishable = 0";
+			$query = $query . " and publishable = 0";
 			mysql_free_result($result);
 			$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 			$file_data = array();
@@ -207,7 +207,7 @@ if( !defined('User_class') )
 	}
 	function getAllRejectedFileIds()
 	{
-		$query = "SELECT data.id FROM data WHERE publishable = '-1'";
+		$query = "SELECT id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE publishable = '-1'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$file_data = array();
 		$num_files = mysql_num_rows($result);
@@ -220,7 +220,7 @@ if( !defined('User_class') )
 	}
 	function getRejectedFileIds()
 	{
-		$query = "SELECT data.id FROM data WHERE publishable = '-1' and data.owner = ".$this->id;
+		$query = "SELECT id FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data WHERE publishable = '-1' and owner = ".$this->id;
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$file_data = array();
 		$num_files = mysql_num_rows($result);
@@ -233,7 +233,7 @@ if( !defined('User_class') )
 	}
     function getExpiredFileIds()
     {
-    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lquery = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE status=-1 AND owner = "' . $this->id . '"';
     	$lresult = mysql_query($lquery) or die(mysql_error());
     	$llen = mysql_num_rows($lresult);
     	$file_data = array();
@@ -246,13 +246,13 @@ if( !defined('User_class') )
     }
     function getNumExpiredFiles()
     {
-    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lquery = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE status=-1 AND owner = "' . $this->id . '"';
     	$lresult = mysql_query($lquery) or die(mysql_error());
     	return mysql_num_rows($lresult);
     }
 	function getEmailAddress()
 	{
-		$query = "SELECT user.Email FROM user WHERE user.id=".$this->id;
+		$query = "SELECT Email FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE id=".$this->id;
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) > 1)
 		{
@@ -266,7 +266,7 @@ if( !defined('User_class') )
 
 	function getPhoneNumber()        
 	{
-		$query = "SELECT user.phone FROM user WHERE user.id=".$this->id; 
+		$query = "SELECT phone FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE id=".$this->id; 
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) > 1)
 		{
@@ -280,7 +280,7 @@ if( !defined('User_class') )
 
 	function getFullName()//Return full name array where array[0]=firstname and array[1]=lastname        
 	{
-		$query = "SELECT user.first_name, user.last_name FROM user WHERE user.id=".$this->id;
+		$query = "SELECT first_name, last_name FROM " . $GLOBALS['CONFIG']['table_prefix'] . "user WHERE id=".$this->id;
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error()); 
 		if(mysql_num_rows($result) > 1)
 		{
@@ -299,7 +299,7 @@ if( !defined('User_class') )
 		{
 			$array[$key] = 'default';
 		}
-		$lquery = 'SELECT  name, value FROM user_pref WHERE owner = ' . $_SESSION['uid'];
+		$lquery = 'SELECT  name, value FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user_pref WHERE owner = ' . $_SESSION['uid'];
 		$lresult = mysql_query($lquery, $this->connection) or die('Error querying: ' . $lquery . '|' . mysql_error());
 		$len = mysql_num_rows($lresult);
 		for($i = 0; $i< $len; $i++)

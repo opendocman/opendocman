@@ -61,6 +61,16 @@ class databaseData   //DO NOT INSTANTIATE THIS ABSTRACT CLASS
 		$this->database = $database;
 		$this->setId($id); //setId not only set the $id data member but also find and set name
 		$this->result_limit = 1; //expect unique data fields on default
+        $this->TABLE_ADMIN = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_ADMIN;
+        $this->TABLE_CATEGORY = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_CATEGORY;
+        $this->TABLE_DATA = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DATA;
+        $this->TABLE_DEPARTMENT = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPARTMENT;
+        $this->TABLE_DEPT_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_PERMS;
+        $this->TABLE_DEPT_REVIEWER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_REVIEWER;
+        $this->TABLE_LOG = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_LOG;
+        $this->TABLE_RIGHTS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_RIGHTS;
+        $this->TABLE_USER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER;
+        $this->TABLE_USER_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER_PERMS;
 	}
 	/**
 		Set the tablename for which the object will operate on

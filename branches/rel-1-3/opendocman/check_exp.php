@@ -19,7 +19,7 @@ if( $GLOBALS['CONFIG']['authorization']!= "On" )
 }
 
 // Look up user
-$lquery = 'SELECT user.id FROM user where user.username="' . $GLOBALS['CONFIG']['root_username'] . '"';
+$lquery = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'user where username="' . $GLOBALS['CONFIG']['root_username'] . '"';
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
 if(mysql_num_rows($lresult) != 1)
 {	header('location:error.php?ec=22');	}
@@ -55,7 +55,7 @@ $lok_year = $lcurrent_year - $lexp_years;
 $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_year));
 
 //get expired file
-$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND (data.publishable!=-1 and data.status!=-1)";
+$lquery = "SELECT " . $GLOBALS['CONFIG']['table_prefix'] . "data.id, " . $GLOBALS['CONFIG']['table_prefix'] . "data.reviewer_comments FROM " . $GLOBALS['CONFIG']['table_prefix'] . "data, " . $GLOBALS['CONFIG']['table_prefix'] . "log WHERE " . $GLOBALS['CONFIG']['table_prefix'] . "data.id = " . $GLOBALS['CONFIG']['table_prefix'] . "log.id AND " . $GLOBALS['CONFIG']['table_prefix'] . "log.revision='current' AND modified_on<'$lexpired_revision' AND (" . $GLOBALS['CONFIG']['table_prefix'] . "data.publishable!=-1 and " . $GLOBALS['CONFIG']['table_prefix'] . "data.status!=-1)";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
 
 echo $GLOBALS['lang']['message_rejecting_files'] . ' ' . $lexpired_revision . '<br>';

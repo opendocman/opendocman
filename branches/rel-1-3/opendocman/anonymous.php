@@ -19,7 +19,7 @@ if(!isset($_REQUEST['mode']) || @$_REQUEST['mode'] == 'showall')
 	draw_header($GLOBALS['lang']['area_document_listing']);
 	draw_status_bar($GLOBALS['lang']['area_document_listing'], @$_REQUEST['last_message']);
 	sort_browser();
-	$l_query = 'SELECT id FROM data WHERE anonymous = 1 and publishable = 1';
+	$l_query = 'SELECT id FROM ' . $GLOBALS['CONFIG']['table_prefix'] . 'data WHERE anonymous = 1 and publishable = 1';
 	$l_result = mysql_query($l_query) or die(mysql_error());
 	$array_id = array();
 	for($i = 0; $i<mysql_num_rows($l_result); $i++)

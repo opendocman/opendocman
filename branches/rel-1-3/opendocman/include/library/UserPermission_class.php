@@ -26,6 +26,16 @@ if( !defined('UserPermission_class') )
 		$this->user_obj = new User($this->uid, $this->connection, $this->database);
 		$this->userperm_obj = new User_Perms($this->user_obj->getId(), $connection, $database);
 		$this->deptperm_obj = new Dept_Perms($this->user_obj->getDeptId(), $connection, $database);
+        $this->TABLE_ADMIN = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_ADMIN;
+        $this->TABLE_CATEGORY = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_CATEGORY;
+        $this->TABLE_DATA = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DATA;
+        $this->TABLE_DEPARTMENT = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPARTMENT;
+        $this->TABLE_DEPT_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_PERMS;
+        $this->TABLE_DEPT_REVIEWER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_DEPT_REVIEWER;
+        $this->TABLE_LOG = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_LOG;
+        $this->TABLE_RIGHTS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_RIGHTS;
+        $this->TABLE_USER = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER;
+        $this->TABLE_USER_PERMS = $GLOBALS['CONFIG']['table_prefix'] . $this->TABLE_USER_PERMS;
 		$this->FORBIDDEN_RIGHT = $this->userperm_obj->FORBIDDEN_RIGHT;
 		$this->NONE_RIGHT = $this->userperm_obj->NONE_RIGHT;
 		$this->VIEW_RIGHT = $this->userperm_obj->VIEW_RIGHT;
