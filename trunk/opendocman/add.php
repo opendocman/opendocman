@@ -28,8 +28,6 @@ if(!isset($submit)) //un_submitted form
 	if(mysql_num_rows($result) != 1) /////////////If somehow this user belongs to many departments, then error out.
 	{
 		header('Location:error.php?ec=14');
-		ob_end_flush();
-		ob_end_clean();
 		exit; //non-unique error
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
@@ -209,7 +207,7 @@ if(!isset($submit)) //un_submitted form
 	</tr>
 	<tr>
 	<TD></TD>
-	<td><select tabindex="8" name="forbidden[]" multiple size="10">
+	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
 <?php
 	
 	// query to get a list of available users
@@ -226,7 +224,7 @@ if(!isset($submit)) //un_submitted form
 		mysql_free_result ($result);
 ?>
 	</select></td>
-	<td><select tabindex="9" name="view[]" multiple size="10">
+	<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php 
 		////////////////////View//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
@@ -243,7 +241,7 @@ if(!isset($submit)) //un_submitted form
 		mysql_free_result ($result);
 ?>
 	</SELECT>
-	<td><select tabindex="10"  name="read[]" multiple size="10">
+	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
 	$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
@@ -261,7 +259,7 @@ if(!isset($submit)) //un_submitted form
 		mysql_free_result ($result);
 ?>
 	</SELECT>
-	<td><select tabindex="11" name="modify[]" multiple size="10">
+	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
@@ -278,7 +276,7 @@ if(!isset($submit)) //un_submitted form
 		mysql_free_result ($result);
 ?>
 	</SELECT>
-	<td><select tabindex="12" name="admin[]" multiple size="10">
+	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
 		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
@@ -559,6 +557,56 @@ else //submited form
 				index++;
 			}
 		} 
+	}
+	function changeList(select_list, current_form)
+	{
+		var select_list_array = new Array();
+		select_list_array[0] = current_form['view[]']; 
+		select_list_array[1] = current_form['read[]']; 
+		select_list_array[2] = current_form['modify[]'];
+		select_list_array[3] = current_form['admin[]'];
+		for( var i=0; i < select_list_array.length; i++)
+		{
+			if(select_list_array[i] == select_list)
+			{
+				for(var j=0; j< select_list.options.length; j++)
+				{
+					if(select_list.options[j].selected)
+					{
+						for(var k=0; k < i; k++)
+						{
+							select_list_array[k].options[j].selected=true;	
+						}//end for
+						current_form['forbidden[]'].options[j].selected=false;
+					}//end if
+					else
+					{
+						for(var k=i+1; k < select_list_array.length; k++)
+						{
+							select_list_array[k].options[j].selected=false;
+						}
+					}//end else
+				}//end for	
+			}//end if
+		}//end for
+	}
+	function changeForbiddenList(select_list, current_form)
+	{
+		var select_list_array = new Array();
+		select_list_array[0] = current_form['view[]']; 
+		select_list_array[1] = current_form['read[]']; 
+		select_list_array[2] = current_form['modify[]'];
+		select_list_array[3] = current_form['admin[]'];
+		for(var i=0; i < select_list.options.length; i++)
+		{
+			if(select_list.options[i].selected==true)
+			{
+				for( var j=0; j < select_list_array.length; j++)
+				{
+					select_list_array[j].options[i].selected=false;	
+				}//end for
+			}
+		} //end for
 	}
 
 </SCRIPT>
