@@ -176,7 +176,14 @@ else
 	
 		// rename and save file
 		$newFileName = $_POST['id'] . '.dat';
-		copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
+		//copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
+                if (!move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName))
+                {
+                        $last_message='Check-in Failed';
+                        header('Location:error.php?ec=18&last_message=' . urlencode($last_message));
+                        exit;
+                }
+                                
 		
 		//Send email
 		$date = date('D F d Y');
