@@ -44,10 +44,10 @@ if(!isset($_POST['submit']))
         $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
         $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 		if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
-			$fileobj_array = $user_obj->getAllRejectedFiles();
+			$fileid_array = $user_obj->getAllRejectedFileIds();
 		else
-			$fileobj_array = $user_obj->getRejectedFiles();
-        $sorted_obj_array = obj_array_sort_interface($fileobj_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
+			$fileid_array = $user_obj->getRejectedFileIds();
+        $sorted_id_array = my_sort($fileid_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
         echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure\');">' . "\n";
 
 ?>	
@@ -55,8 +55,8 @@ if(!isset($_POST['submit']))
 
 <?php
 
-        list_files($sorted_obj_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
-        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
+        list_files($sorted_id_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
+        list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
 ?>
                 </TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="submit" value="Re-Submit For Review"><INPUT type="submit" name="submit" value="Delete file(s)">
                 </TABLE></FORM>
