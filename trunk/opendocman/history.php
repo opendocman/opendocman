@@ -1,4 +1,4 @@
-<?
+<?php
 
 // history.php - display revision history
 
@@ -115,7 +115,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	<td><font size="-1"><b>By</b></font>
 	<td><font size="-1"><b>Note</b></font>	</td>
 	</tr>
-<?
+<?php
 	// query to obtain a list of modifications
 	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
 	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -129,7 +129,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	<td><font size="-1"><?php echo $last_name.', '.$first_name; ?></font></td>
 	<td><font size="-1"><?php echo $note; ?></font></td>
 	</tr>
-<?
+<?php
 	}
 	// clean up
 	mysql_free_result($result);
@@ -140,7 +140,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 
 </table>
 </center>
-<?
+<?php
 draw_footer();
 }
 ?>
