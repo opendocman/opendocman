@@ -527,17 +527,17 @@ if( !defined('function') )
 
                 echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
                 echo $count; 
-                echo(" found document(s)</FONT></B>\n");
-                echo('<BR><BR>'."\n");
+                echo ' found document(s)</FONT></B>' . "\n";
+                echo '<BR><BR>'."\n";
                 $index = $starting_index;
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=a-z&sort_by=";
-                $default_url_mid = '\">';
-                $default_url_post = "<B></TD>";
-                echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
-                echo("<TR bgcolor='83a9f7' id = '1'>");
-                if($showCheckBox=='true')
+                $default_url_pre = '<TD class=' . $css_td_class . ' NOWRAP><B><A HREF="' . $page_url . '&sort_order=a-z&sort_by=';
+                $default_url_mid = '">';
+                $default_url_post = '<B></TD>';
+                echo '<TABLE name="list_file" border="0" hspace="0" hgap="0" CELLPADDING="1" CELLSPACING="1">';
+                echo '<TR bgcolor="83a9f7" id = "1">';
+                if($showCheckBox =='true')
                 {
                         echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
                 }
