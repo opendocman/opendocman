@@ -552,7 +552,10 @@ else //submited form
 	
 	function spTo_(string)
 	{
-		return string.replace(" ", "_");
+		// Joe Jeskiewicz fix
+		var pattern = / /g;
+		return string.replace(pattern, "_");
+	//	return string.replace(" ", "_");
 	}
 	
 	function setData(selected_rb_name)

@@ -596,10 +596,15 @@ else
 			index++;
     	}
     }
-	function spTo_(string)
-	{
-		return string.replace(" ", "_");
-	}
+
+    function spTo_(string)
+    {
+        // Joe Jeskiewicz fix
+        var pattern = / /g;
+        return string.replace(pattern, "_");
+    //  return string.replace(" ", "_");
+    }
+
 	function setData(selected_rb_name)
 	{
 		var index = 0;
