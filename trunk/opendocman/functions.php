@@ -29,7 +29,7 @@ if( !defined('function') )
 	    return $string;
 	}
 	// Draw the status bar for each page
-	function draw_status_bar($message, $lastmessage)
+	function draw_status_bar($message, $lastmessage='')
 	{
 	    	echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
 		if (!isset ($message))
