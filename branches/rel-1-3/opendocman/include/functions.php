@@ -529,58 +529,85 @@ if( !defined('function') )
                         $num_checkboxes='0';
                 }
                 
-                return $num_checkboxes;	
-        }
+				return $num_checkboxes;	
+		}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
+		{
+			//enable secure URL
+			$secureurl = new phpsecureurl;
 
-        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
-        {
-				$secureurl = new phpsecureurl;
-				if($total_hit<$page_limit)
-                {
-                        return 0;
-                }
+			//if the number of listing item is less than the configed number of item per page
+			//no pagination needed
+			if($total_hit<$page_limit)  return 0;
+			echo '<center>Result Page:&nbsp;&nbsp;';
 
-                echo '<center>Result Page:&nbsp;&nbsp;';
-                $num_pages = ceil($total_hit/($page_limit));
-          		$shown_pages = 0;
-          		if($num_pages > $link_limit )
-          		{	$shown_pages = $link_limit;	}
-          		else { $shown_pages = $num_pages; }
-                $index_result = 0;
-                
-                if( $current_page > 0 )
-                {
-                     echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)).'">Prev</a>&nbsp; &nbsp;';
-                }
-                
-				if($current_page >= $link_limit/2)
-                {	$i = $current_page - $link_limit/2; 	}
-				else if($current_page < $link_limit/2)
-				{	$i = 0;	}
-				else
-				{	$i = $current_page;	}
-				if( $current_page + ceil($link_limit/2) > $num_pages)
-					$last_page = $num_pages;
-				else
-					$last_page =  $current_page + ceil($link_limit/2);
-				for(; $i < $last_page; $i++)
-				{       
-					if($current_page== $i)
-					{
-						echo $i . '&nbsp;&nbsp;';
-					}
-					else
-					{
-						echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i") . "\">$i</a>&nbsp; &nbsp;"; 
-					}
-					$index_result = $index_result + $page_limit;
-				}
-                if( $current_page < $num_pages-1 )
-                {
-                        echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)).'">Next</a>&nbsp; &nbsp;';
-                }
-        }
+			//calculate number of pages for the number of hits on
+			$num_pages = ceil($total_hit/($page_limit));
 
+			//init
+			$shown_pages = 0;
+			$index_result = 0;
+
+			// if there are more pages than the configed number of link allowed per page
+			// show all upto $link_limit
+			if($num_pages > $link_limit )   $shown_pages = $link_limit;
+
+			// if the number is the same or less than, show all
+			else { $shown_pages = $num_pages; }
+
+			// suppose $current_page=2, $page_limit=15, then this will give a link to print
+			// starting_index=15 and stopping_index=29.  That will be the Prev. link.
+			// Page 0: 0-14, Page 1: 15-29, Page 2: 30-44
+			if( $current_page > 0 )
+			{
+				echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starti
+					ng_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)).'">Prev</a>&nbsp; &nbsp;';
+			}
+
+			/* Suppose $link_limit is 20 and $current_page is 12.  Then $i=12 - 10=2.
+			   See for loop below to see what $i is. */
+			if($current_page >= $link_limit/2)
+			{   $i = $current_page - $link_limit/2;     }
+
+			/* Suppose $current_page is 8.  Then $i = 0*/
+			else if($current_page < $link_limit/2)
+			{   $i = 0; }
+
+			// Suppose the admin define $link_limit = 20.  That means there are only 20 links available
+			// on the navigator.  Ten of them is for moving backward and the other 10 is for moving forward
+			// Suppose there are only 200 pages and $current_page is at 198.  Then the last page is the 200,
+			// the max number of pages.
+			if( $current_page + ceil($link_limit/2) > $num_pages)   $last_page = $num_pages;
+
+			/* If not, the last page will be the current page + 10*/
+			else    $last_page =  $current_page + ceil($link_limit/2);
+
+			/*Suppose $i=2, $link_limit is 20, $current_page is 12, and $last_page=12+10=22
+			  So why do I set $i?  Since $current_page=12, then the for loop will start at link 2 - 12 - 22,
+			  where 12 is right in the middle.  Every time the user move forward, the window of 20 links,
+			  10 on the left and 10 on the right, will move.*/
+			for(; $i < $last_page; $i++)
+			{
+				/* There is no need to have the current page be a link.  The user only needs link
+				   to move forward or backward. */
+				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+
+				/* Generate link */
+				else    echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=" . ($i*$page_limit) . "&stoping_index=".(($i+1)*$page_limit-1)."&page=$i") . "\">$i</a>&nbsp;
+				&nbsp;";
+				$index_result = $index_result + $page_limit;
+			}
+
+			//Generate Next link
+			if( $current_page < $num_pages-1 )
+			{
+				echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starti
+					ng_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)).'">Next</a>&nbsp; &nbsp;';
+			}
+		}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function sort_browser()
 	{
 ?>
