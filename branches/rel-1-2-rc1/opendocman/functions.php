@@ -1259,5 +1259,23 @@ if( !defined('function') )
 		//delete source file
 		unlink($source_file);
 	}
+	/* return a 2D array of users.
+	array[0][0] = id
+	array[0][1] = "LastName, FirstName"
+	array[0][2] = "username"
+	*/
+	function getAllUsers()
+	{
+		$lquery = 'SELECT id, last_name, first_name, username FROM user';
+		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
+		$llen = mysql_num_rows($lresult);
+		$return_array = array();
+		for($li = 0;$li<$llen; $li++)
+		{
+			list($lid, $llast_name, $lfirst_name, $lusername) = mysql_fetch_row($lresult);
+			$return_array[$li] = array($lid, "$llast_name, $lfirst_name", $lusername);
+		}
+		return $return_array;
+	}
 }
 ?>
