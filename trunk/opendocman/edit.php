@@ -10,11 +10,11 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 // edit.php - edit file properties
 
 // check session and $id
-/*$SESSION_UID=102;
+$SESSION_UID=102;
 $id=67;
-$submit=true;
-*/
-session_start();
+//$submit=true;
+
+/*session_start();
 if (!session_is_registered('SESSION_UID'))
 {
   header('Location:error.php?ec=1');
@@ -25,7 +25,7 @@ if (!isset($id) || $id == '')
 {
   header('Location:error.php?ec=2');
   exit;
-}
+}*/
 include('config.php');
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 if (!isset($submit))
@@ -306,13 +306,13 @@ if (!isset($submit))
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
-		for($u = 0; $u<sizeof($user_view_array); $u++)
+		for($u = 0; $u<sizeof($user_read_array); $u++)
 		{
-			if($all_users[$a]->getId() == $user_view_array[$u])
+			if($all_users[$a]->getId() == $user_read_array[$u])
 			{
 				echo '<option value="' . $all_users[$a]->getId() . '" selected> ' . $all_users[$a]->getName() . '</option>';
 				$found = true;
-				$u = sizeof($user_view_array);
+				$u = sizeof($user_read_array);
 			}
 		}
 		if(!$found)
@@ -330,13 +330,13 @@ if (!isset($submit))
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
-		for($u = 0; $u<sizeof($user_view_array); $u++)
+		for($u = 0; $u<sizeof($user_write_array); $u++)
 		{
-			if($all_users[$a]->getId() == $user_view_array[$u])
+			if($all_users[$a]->getId() == $user_write_array[$u])
 			{
 				echo '<option value="' . $all_users[$a]->getId() . '" selected> ' . $all_users[$a]->getName() . '</option>';
 				$found = true;
-				$u = sizeof($user_view_array);
+				$u = sizeof($user_write_array);
 			}
 		}
 		if(!$found)
@@ -350,16 +350,17 @@ if (!isset($submit))
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
 	<td><select name="admin[]" multiple size = 10>
 <?php 
+	$user_admin_array = $filedata->getAdminRightUserIds();
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
-		for($u = 0; $u<sizeof($user_view_array); $u++)
+		for($u = 0; $u<sizeof($user_admin_array); $u++)
 		{
-			if($all_users[$a]->getId() == $user_view_array[$u])
+			if($all_users[$a]->getId() == $user_admin_array[$u])
 			{
 				echo '<option value="' . $all_users[$a]->getId() . '" selected> ' . $all_users[$a]->getName() . '</option>';
 				$found = true;
-				$u = sizeof($user_view_array);
+				$u = sizeof($user_admin_array);
 			}
 		}
 		if(!$found)
@@ -425,7 +426,7 @@ else
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
 		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($id, '".$result_array[$i][0]."','". $result_array[$i][1]."')";
-		echo $query."<br>";
+		//echo $query."<br>";
 		$result = mysql_db_query($database, $query, $connection) or die("Error in query: $query" .mysql_error());;
 	}
 	//UPDATE Department Rights into dept_perms
