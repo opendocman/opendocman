@@ -93,9 +93,13 @@ if ( $user_obj->isRoot()	)
 		 <tr>
 		 <td><b><a href="<?php echo $secureurl->encode('rejects.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>"><?php echo $GLOBALS['lang']['label_rejected_files']; ?></a></b></td>
 		 </tr>
+		 <?php
+		 if( $GLOBALS['CONFIG']['authorization'] == "On" )
+		 {?>
 		 <tr>
 		 <td><b><a href="<?php echo $secureurl->encode('check_exp.php?&state=' . ($_REQUEST['state']+1)); ?>"><?php echo $GLOBALS['lang']['label_run_expiration']; ?></a></b></td>
 		 </tr>
+		 <?php } ?>
 		 <tr>
 		 <td><b><a href="<?php echo $secureurl->encode('file_ops.php?&state=' . ($_REQUEST['state']+1)); ?>&submit=view_checkedout"><?php echo $GLOBALS['lang']['label_checked_out_files']; ?></a></b></td>
 		 </tr>
