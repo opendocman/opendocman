@@ -141,20 +141,18 @@ else
 	{
 		if ($_FILES['file']['type'] == $this) 
 		{ 
-		        $allowedFile = 1;
-		        break; 
+			$allowedFile = 1;
+		    break; 
 		} 
-                else
-                {       
-                        
-		        $allowedFile = 0;
-		        break; 
-                }
+        else
+        {       
+            $allowedFile = 0;
+        }
 	}
 	// illegal file type!
 	if ($allowedFile != 1) 
 	{ 
-                $last_message='Failed';
+        $last_message='Failed';
 		header('Location:error.php?ec=13&last_message=' . urlencode($last_message)); 
 		exit; 
 	}
