@@ -495,18 +495,18 @@ if( !defined('function') )
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $owner_name; ?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $dept_name; ?></TD>
-						<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $filesize; ?></TD> 	      <?              
+						<TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $filesize; ?></TD> 	      <?php              
 						if ($lock == false)
 						{
-							?><TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD><?
+							?><TD NOWRAP><CENTER><img src="images/file_unlocked.png"></CENTER></TD><?php
 						}
 						else
 						{
-							?><TD align="center" NOWRAP><img src="images/file_locked.png"></TD><?
+							?><TD align="center" NOWRAP><img src="images/file_locked.png"></TD><?php
 						}
                         
                         $index++;
-                        ?></TR><?
+                        ?></TR><?php
                         $checkbox_index++;
                 }
                 ?><INPUT type="hidden" name="num_checkboxes" value="<?php echo $checkbox_index;?>">
