@@ -8,6 +8,7 @@ if( !defined('User_class') )
 	var $root_username;
         
         function User($id, $connection, $database)
+
         {
                 $this->root_username = $GLOBALS['CONFIG']['root_username'];
                 $this->field_name = 'username';

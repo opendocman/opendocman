@@ -98,6 +98,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 	<center>
 	<table border="0" cellspacing="5" cellpadding="5">
 	<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
 				<td><b>Category</b></td>
 				<td colspan=3><select name="item">
@@ -171,6 +172,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 			<center>
 			<table border="0" cellspacing="5" cellpadding="5">
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
 			<td><b>Category</b></td>
 			<td colspan="3"><select name="item">
@@ -249,6 +251,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 ?>
 	<center>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<table border="0">
 				<tr>
 				<td><b>Category to modify:</b></td>

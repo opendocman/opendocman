@@ -2,7 +2,11 @@
 include ('config.php');
 
 	// If kerbauth, then display warning about shutting down browser
-
+	session_start();
+	// Unset all of the session variables.
+	$_SESSION = array();
+	// Finally, destroy the session.
+	session_destroy();
 	if($GLOBALS["CONFIG"]["authen"] =='kerbauth')
 	{
 

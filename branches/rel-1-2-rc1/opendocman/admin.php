@@ -28,23 +28,23 @@ draw_menu($_SESSION['uid']);
 	   <td>
 	    <table border="0">
 		 <tr>
-	      <td><b><a href="user.php?submit=adduser">Add</a></b></td>
+	      <td><b><a href="user.php?submit=adduser<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=deletepick">Delete</a></b></td>
+	      <td><b><a href="user.php?submit=deletepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Delete</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=updatepick">Update</a></b></td>
+	      <td><b><a href="user.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="user.php?submit=showpick">Display</a></b></td>
+	      <td><b><a href="user.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
 	     </tr>
 		</table>
 	   </td>
 	   <td>
 	 	<table border="0">
 		 <tr>
-	      <td><b><a href="department.php?submit=add">Add</a></b></td>
+	      <td><b><a href="department.php?submit=add<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
 	     </tr>
 		 <!-- 
 	     <tr>
@@ -52,10 +52,10 @@ draw_menu($_SESSION['uid']);
 	     </tr>
 		 -->
 	     <tr>
-	      <td><b><a href="department.php?submit=updatepick">Update</a></b></td>
+	      <td><b><a href="department.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="department.php?submit=showpick">Display</a></b></td>
+	      <td><b><a href="department.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
 	     </tr>
 		</td>
 	   </table>
@@ -63,16 +63,16 @@ draw_menu($_SESSION['uid']);
 	   <td>
 	 	<table border="0">
 		 <tr>
-	      <td><b><a href="category.php?submit=add">Add</a></b></td>
+	      <td><b><a href="category.php?submit=add<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Add</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=deletepick">Delete</a></b></td>
+	      <td><b><a href="category.php?submit=deletepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Delete</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=updatepick">Update</a></b></td>
+	      <td><b><a href="category.php?submit=updatepick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Update</a></b></td>
 	     </tr>
 	     <tr>
-	      <td><b><a href="category.php?submit=showpick">Display</a></b></td>
+	      <td><b><a href="category.php?submit=showpick<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Display</a></b></td>
 	     </tr>
 		</td>
 	   </table>
@@ -84,13 +84,13 @@ if ( $user_obj->isRoot()	)
 	  <td>
 	 	<table border="0" valign="top">
 		 <tr>
-	      <td ><b><a href="delete.php?mode=view_del_archive">Del/Undel</a></b></td>
+	      <td ><b><a href="delete.php?mode=view_del_archive<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Del/Undel</a></b></td>
 	     </tr>
 	     <tr>
-		 <td><b><a href="toBePublished.php?mode=root">Reviews</a></b></td>
+		 <td><b><a href="toBePublished.php?mode=root<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Reviews</a></b></td>
 		 </tr>
 		 <tr>
-		 <td><b><a href="rejects.php?mode=root">Rejections</a></b></td>
+		 <td><b><a href="rejects.php?mode=root<?php echo '&state=' . ($_REQUEST['state']+1); ?>">Rejections</a></b></td>
 		 </tr>
 	   </table>
 	  </td>

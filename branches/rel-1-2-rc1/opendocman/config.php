@@ -11,6 +11,7 @@ include 'functions.php';
 include 'ldap.inc';
 include 'classHeaders.php';
 include 'mimetypes.php';
+require_once('crumb.php');
 
 // Database Settings - Change these to match your database
 $database = 'opendocman_khoa'; // Enter the name of the database here
@@ -59,7 +60,7 @@ global $CONFIG;      $CONFIG = array(
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'root',
+'root_username'  => 'kdng',
 
 // location of file repository
 // this should ideally be outside the Web server root

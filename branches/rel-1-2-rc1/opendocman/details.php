@@ -17,12 +17,14 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 include('config.php');
 draw_header('File Detail');
 draw_menu($_SESSION['uid']);
-@draw_status_bar('File Details',$_REQUEST['last_message']);
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
 	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+	@draw_status_bar('Rev.' . $lrevision_id,$_REQUEST['last_message']);
 }
+else 
+	@draw_status_bar('File Details',$_REQUEST['last_message']);
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -177,7 +179,7 @@ if ($status != 0)
 <?php 
 if($userPermObj->canRead($_REQUEST['id']))
 {?>
-<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id; ?>"><img src="images/view.png" alt="" border="0"></a></td>
+<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
 }		
 if ($status == 0)
@@ -192,7 +194,7 @@ if ($status == 0)
 		// if so, display link for checkout
 ?>
 	
-		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id; ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
+		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
@@ -202,7 +204,7 @@ if ($status == 0)
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
 ?>
-		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/edit.png" alt="" border="0"></a></td>
+		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id'] . '&state=' . ($_REQUEST['state']+1);?>"><img src="images/edit.png" alt="" border="0"></a></td>
 		<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
 <?php
 	}
@@ -210,7 +212,7 @@ if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
 ?>
-<td align="center"><a href="history.php?id=<?php echo $lrequest_id; ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
+<td align="center"><a href="history.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
 
 </tr>
 <!-- inner table ends -->

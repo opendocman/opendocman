@@ -23,10 +23,7 @@ if( !isset($_REQUEST['title']) )
 else 
 { draw_header( $_REQUEST['title'] ); }
 draw_menu($_SESSION['uid']);
-if( !isset($_REQUEST['last_message']) )
-{	draw_status_bar('Document Listing', '');	}
-else 
-{ draw_status_bar('Document Listing', $_REQUEST['last_message']); }
+draw_status_bar('History', @$_REQUEST['last_message']);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
@@ -161,10 +158,8 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	<tr>
 <?php
 	$extra_message = '';
-	if( $current_revision == $revision_id)
-		$extra_message = ' (current)';
 	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
-	{	echo '<td><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '">' . $revision_id . '</a>' . $extra_message; }
+	{	echo '<td><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message; }
 	else
 	{	echo '<td><font size="-1">' . $revision_id . $extra_message; 	}
 ?>

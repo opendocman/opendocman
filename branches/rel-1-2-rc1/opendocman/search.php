@@ -58,7 +58,7 @@ if(!isset($_GET['submit']))
                    <tr>
                     <td valign="top"><b>Search term</b></td>
                     <td><input type="Text" name="keyword" size="50"></td>
-                    <td>Exact Word: <input type="checkbox" name="exact_word"></td>
+                    <td>Exact Phrase: <input type="checkbox" name="exact_phrase"></td>
                     <td>Case Sensitivity <input type="checkbox" name="case_sensitivity"></td>
                    </tr>
                    <tr>
@@ -92,10 +92,10 @@ draw_footer();
 }
 else
 {
-    function search($lwhere, $lkeyword, $lexact_word, $lcase_sensitivity, $lsearch_array)    
+    function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)    
     {
     	$lequate = '=';
-    	if( $lexact_word!='on' )
+    	if( $lexact_phrase!='on' )
     	{	
     		$lkeyword = '%' . $lkeyword . '%';
     		if($lcase_sensitivity!='on')
@@ -174,16 +174,17 @@ else
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $s_getFTime = time();
-    $view_able_files_id = $current_user_permission->getAllowedFileIds();
+    $view_able_files_id = $current_user_permission->getViewableFileIds();
     $e_getFTime = time();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
-    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_word'], @$_GET['case_sensitivity'], $view_able_files_id);
+    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
     //echo 'khoa' . sizeof($search_result);
     $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
 //    $sorted_obj_array = $current_user_permission->convertToFileDataOBJ($search_result);
     //$sorted_obj_array = obj_array_sort_interface($search_result, $_GET['sort_order'], $_GET['sort_by']);
-    list_files($search_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
+	$sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
+    list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
     echo '<BR>';
     list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();

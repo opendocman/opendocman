@@ -36,11 +36,13 @@ if( !defined('function') )
 	// Draw the status bar for each page
 	function draw_status_bar($message, $lastmessage='')
 	{
-	    	echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
+	    if(!isset($_REQUEST['state']))
+	    	$_REQUEST['state']=1;
+		echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
 		if (!isset ($message))
-                    {
-                        $message='Select';
-                    }
+		{
+			$message='Select';
+        }
 		echo '<link rel="stylesheet" type="text/css" href="linkcontrol.css">'."\n";
 		echo '<center>'."\n";
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
@@ -55,14 +57,24 @@ if( !defined('function') )
 		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
 	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
-	    echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
+?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
+		<TD bgcolor="#0000A0" align="left" valign="middle">
+<?php	$crumb = new crumb();
+		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['REQUEST_URI']);	
+		$crumb->printTrail($_REQUEST['state']);
+		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
 	    echo '<b><font size="-2" face="Arial" color="White">';
 		echo 'Last Message: '.$lastmessage;
-	    echo '</td></font></b>'."\n";
-	    echo '</tr>'."\n";
-	    echo '</table>'."\n";
-	    echo '</center>'."\n";
-	    echo "\n".'<!------------------end_draw_status_bar------------------->'."\n";
+	    echo '</td>';
+	    
+?>	    </font></b>
+		</TD>
+	    </tr>
+	    </table>
+	    </center>
+	    
+	    <!------------------end_draw_status_bar------------------->
+	    <?php
 	}
 	
 	function int_array2D_sort($int_array, $sort_order)
@@ -257,6 +269,64 @@ if( !defined('function') )
 			if($li != $larray_len-1)
 			{   $lwhere_or_clause .= ' OR ';  }
 		}
+		if( $sort_by == 'id' )
+		{
+			$lquery = 'SELECT id from data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY id ' . $sort_order;
+		}
+		elseif($sort_by == 'author')
+		{
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+		}
+		elseif($sort_by == 'file_name')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY data.realname ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'department')
+		{
+			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY department.name ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'created_date' )
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+            $lquery .= $lwhere_or_clause . ' ORDER BY data.created ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'modified_on')
+		{
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" AND (';
+			$lquery .= $lwhere_or_clause . ') GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'description')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.description ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'size')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.filesize ' . $sort_order . ', data.id asc';
+		}
+		$time = time(); 
+		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
+		echo "load mysql time: " . (time() - $time);
+		for($li = 0; $li<mysql_num_rows($lresult); $li++)
+			list($array[$li]) = mysql_fetch_row($lresult);
+		return $array;
+	}
+	function my_sort2 ($lquery, $sort_order = 'asc', $sort_by = 'id')
+	{
+		if (strlen($lquery) == 0 )
+			return $lquery;
+		if($sort_order == 'asc')
+			$sort_order = 'asc';
+		else
+			$sort_order = 'desc';
+		$clauses = array();
+		$clauses[0] = substr($lquery, 0, strpos($lquery, 'from'));
+		
 		if( $sort_by == 'id' )
 		{
 			$lquery = 'SELECT id from data WHERE ';
@@ -732,7 +802,8 @@ if( !defined('function') )
                         echo '</TABLE>';
                         return 0;
                 }
-        
+        		if(!isset($_REQUEST['state']))
+        			$_REQUEST['state']=1;
                 while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
 						if($index%2!=0)
@@ -795,7 +866,7 @@ if( !defined('function') )
 <?php
                         }
 ?>                        <TD class="<?php echo $css_td_class; ?>"><?php echo $fid;?><B></TD>
-                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid;?>"><?php echo $realname;?></a></TD>
+                        <TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="details.php?id=<?php echo $fid.'&state=' . ($_REQUEST['state']+1);?>"><?php echo $realname;?></a></TD>
                         <TD class="<?php echo $css_td_class;?>" NOWRAP><?php echo $description;?></TD>
 <?php
                         $read = array($userperms_obj->READ_RIGHT, 'r');

@@ -23,7 +23,8 @@ if(isset($_REQUEST['adduser']))
     }
     else
     {     
-    	if(strcmp(substr($_REQUEST['phonenumber'],0,1), "(") !=0)
+    	$phonenumber = @$_REQUEST['phonenumber'];
+		if(strlen(@$_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), "(") !=0)
     	{
 	    		
 	    	$phonenumber=ereg_replace(' ', '', $_REQUEST['phonenumber']);
@@ -101,7 +102,7 @@ elseif(isset($_REQUEST['updateuser']))
         $query = "UPDATE admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     
-        if(strcmp(substr($_REQUEST['phonenumber'],0,1), '(') !=0)
+        if(strlen($_REQUEST['phonenumber']) != 0 && strcmp(substr($_REQUEST['phonenumber'],0,1), '(') !=0)
 	   	{
 	    	$phonenumber=ereg_replace(' ', '', $_REQUEST['phonenumber']);
 	    	$areacode=substr($phonenumber,0,3);
