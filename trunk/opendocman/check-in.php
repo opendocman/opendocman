@@ -220,8 +220,8 @@ else
 		}
 
 		// clean up and back to main page
-		$message = 'Document successfully checked in';
-		header('Location: out.php?message=' . $message);
+		$last_message = 'Document successfully checked in';
+		header('Location: out.php?last_message=' . $last_message);
 	}
 }
 ?>
