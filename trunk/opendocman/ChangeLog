@@ -1,3 +1,230 @@
+2003-05-06 10:06  logart
+
+	* install/upgrade_11rc2.php: initial import of upgrade script from
+	v1.1rc2 -> 1.1 final
+
+2003-05-06 10:06  logart
+
+	* database.sql, setup.php, install/odm.php, install/upgrade.php:
+	added 1.1rc2 update fixed data table category type
+
+2003-05-06 09:28  logart
+
+	* config.php: removed ldap refs
+
+2003-04-30 15:32  khoang82
+
+	* delete.php: fix POST to REQUEST for generality
+
+2003-04-25 17:49  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	commitchange.php, department.php, details.php, history.php, in.php,
+	index.php, out.php, profile.php, rejects.php, search.php,
+	toBePublished.php, user.php, view.php, view_file.php: add
+	bookmarkable URL feature
+
+2003-04-25 17:09  khoang82
+
+	* add.php, error.php: fix error output message $allowedFile
+
+2003-04-25 15:46  khoang82
+
+	* crumb.php: file crumb.php was initially added on branch
+	rel-1-2-rc1.
+
+2003-04-25 15:46  khoang82
+
+	* User_class.php, admin.php, category.php, commitchange.php,
+	config.php, crumb.php, department.php, details.php, functions.php,
+	history.php, in.php, linkcontrol.css, logout.php, out.php,
+	search.php, user.php: integrating bread crumb class into OpenDocMan
+
+2003-04-23 16:34  logart
+
+	* User_Perms_class.php: fixed bug in 139
+
+2003-04-18 16:11  khoang82
+
+	* functions.php: remove extra spaces in list_files()
+
+2003-04-18 16:10  khoang82
+
+	* error.php: add new error message
+
+2003-04-18 16:09  khoang82
+
+	* delete.php: upgrade list archives mode to use new list_files()
+
+2003-04-18 16:08  khoang82
+
+	* config.php: add new configuration for file expiration
+
+2003-04-18 16:07  khoang82
+
+	* add.php: uncommented header('')
+
+2003-04-18 15:28  khoang82
+
+	* check_exp.php: fix redudent rejects
+
+2003-04-18 15:25  khoang82
+
+	* check_exp.php: file check_exp.php was initially added on branch
+	rel-1-2-rc1.
+
+2003-04-18 15:25  khoang82
+
+	* check_exp.php: cron script to reject expired files
+
+2003-04-16 16:17  khoang82
+
+	* add.php, config.php, out.php: recovered out.php.  Leave major
+	optimization for later alter add.php to just add 1 copy of the
+	file.  (debuging code can add multiple copies of the file)
+
+2003-04-14 10:38  logart
+
+	* functions.php: fixed type with \ replaced " with '
+
+2003-04-11 16:01  khoang82
+
+	* UserPermission_class.php: optimized and remove redundancy
+
+2003-04-11 16:00  khoang82
+
+	* User_Perms_class.php, User_class.php: optimized
+
+2003-04-11 15:58  khoang82
+
+	* toBePublished.php: fixed to use the new list_file()
+
+2003-04-11 15:56  khoang82
+
+	* search.php: uses new search().  Must faster, much more reliable,
+	and much more stable
+
+2003-04-11 15:54  khoang82
+
+	* rejects.php: optimized for speed.  changed to used new
+	list_file()
+
+2003-04-11 15:53  khoang82
+
+	* out.php: optimized for speed.  Not a working version.  Please use
+	earlier verion
+
+2003-04-11 15:52  khoang82
+
+	* functions.php: add getmicrotime() for debug add optimized
+	list_file() for speed
+
+2003-04-11 15:50  khoang82
+
+	* FileData_class.php: add function getFileSize()
+
+2003-04-11 15:49  khoang82
+
+	* Dept_Perms_class.php: remove owner's exclusive file
+	administration from this class
+
+2003-04-11 15:47  khoang82
+
+	* databaseData_class.php: add function
+	convertToFileDataOBJ($fid_array) to the root class so other
+	derrived ones can inherit it.
+
+2003-04-11 15:46  khoang82
+
+	* check-in.php: change uploaded revision to 'current' and change
+	the last revision from 'current' to a numeric one
+
+2003-04-08 08:39  logart
+
+	* check-in.php: changed copy to move_uploaded_file
+
+2003-04-02 18:36  khoang82
+
+	* add.php, admin.php, delete.php, error.php, functions.php,
+	out.php, rejects.php, search.php, toBePublished.php: my_sort
+	function added which reduces sorting time dramatically
+
+2003-03-28 09:37  khoang82
+
+	* FileData_class.php, admin.php, check-out.php, config.php,
+	delete.php, details.php, edit.php, error.php, history.php,
+	mimetypes.php, rejects.php, view_file.php: admin ==> rewording
+	check-out.php ==> allow it to work with archived files config ==>
+	nothing new delete ==> when delete files, delete their revisions as
+	well, add confirmation in view_archives mode, details ==> allow it
+	to work with archive files, block archives from being edit,
+	check-out, or delete edit ==> block user from hacking the url into
+	editing archives error ==> add new error FileData_class.php ==> add
+	isArchived() fucntion history, view_file, rejects ==> allow them to
+	work with archives
+
+2003-03-27 11:00  khoang82
+
+	* delete.php, functions.php: somehow no file-relocating function is
+	provided by php, so fmove() is added to functions.php delete.php
+	now moves files to archive folder when being archieved and move it
+	out into dataDir with unarchived.
+	
+	last_message should be set for all file operations
+
+2003-03-27 10:34  khoang82
+
+	* check-in.php, config.php, history.php, view_file.php: fix folder
+	comlexity in config.php
+
+2003-03-27 10:14  khoang82
+
+	* check-out.php, delete.php, details.php, edit.php, error.php: add
+	new error to error.php saying operation may not be done on revision
+	copy error out when user tries to checkout, delete, edit a revision
+	copy
+
+2003-03-27 09:59  khoang82
+
+	* add.php, check-in.php, config.php, details.php, history.php,
+	view_file.php: revision feature added
+
+2003-03-26 14:36  logart
+
+	* config.php: demo got lost during merge - put back in
+
+2003-03-26 08:45  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php, FormCheck.js,
+	UserPermission_class.php, User_Perms_class.php, User_class.php,
+	add.php, admin.php, check-in.php, commitchange.php, config.php,
+	delete.php, details.php, edit.php, functions.php, out.php,
+	rejects.php, search.php, toBePublished.php, user.php,
+	view_file.php: commiting rel-1-2-rc1 after branching off.  initial
+	imports
+
+2003-03-26 08:43  khoang82
+
+	* images/: exclamation.gif, exclamation_red.gif: add exclamation
+	images
+
+2003-03-26 08:30  logart
+
+	* user.php: fixed typo
+
+2003-03-25 16:17  logart
+
+	* ChangeLog, FormCheck.js, UserPermission_class.php, add.php,
+	check-in.php, commitchange.php, config.php, delete.php, edit.php,
+	functions.php, out.php, setup.php, user.php, view_file.php,
+	docs/README.html, docs/README.txt, images/exclamation.gif,
+	images/exclamation_red.gif, install/upgrade.php,
+	install/upgrade_11rc1.php: merged from rel-1-1-rc1 branch
+
+2003-03-25 15:36  logart
+
+	* ChangeLog: new
+
 2003-03-25 15:34  logart
 
 	* install/upgrade.php: fixed typo added 11rc1
