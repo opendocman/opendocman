@@ -349,7 +349,7 @@ else //submited form
 		} 
 	}	
 	// for non_allowed file types
-	if ($allowedFile != 1) 
+	if (!isset($allowedFile)) 
 	{ 
 		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
 		exit; 
