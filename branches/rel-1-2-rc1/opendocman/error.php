@@ -116,8 +116,13 @@ $message = 'This operation cannot be done on this file';
 break;
 // bad root_username setting
 case 22:
-$message = 'Unable to determin the root username.  Please check your config file';
+$message = 'Unable to determine the root username.  Please check your config file';
 break;
+// Folder not writable
+case 23:
+$message ='Folder Error. Check Last Message in status bar for details'; 
+break;
+
 //default
 default:
 $message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';

@@ -355,6 +355,23 @@ else //submited form
 		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
 		exit; 
 	}
+
+        // Check to make sure the dir is available and writeable        
+        if (!is_dir($GLOBALS['CONFIG']['dataDir']))
+        {
+                $last_message=$GLOBALS['CONFIG']['dataDir'] . ' missing!';
+                header('Location:error.php?ec=23&last_message=' .$last_message);
+                exit;
+        }
+        else
+        {
+                if (!is_writeable($GLOBALS['CONFIG']['dataDir']))
+                {
+                        $last_message='Folder Permissions Error: ' . $GLOBALS['CONFIG']['dataDir'] . ' not writeable!';
+                        header('Location:error.php?ec=23&last_message=' .$last_message);
+                        exit;
+                }
+        }
 	// all checks completed, proceed!
 	// INSERT file info into data table
 	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', 0 )";

@@ -166,9 +166,24 @@ else
 		$lrevision_num = mysql_num_rows($result);
 		// if dir not available, create it
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
-		{	mkdir($GLOBALS['CONFIG']['revisionDir']);	}
+		{	
+                        if (!mkdir($GLOBALS['CONFIG']['revisionDir']))
+                        {
+                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] . ' Failed';
+                                header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
+                                exit;
+                        }
+                }
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
-		{   mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']); }
+		{   
+                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'])) 
+                        {
+                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'] . ' Failed';
+                                header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
+                                exit;
+                        }
+
+                }
 		$lfilename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] .'.dat';
 		//read and close
 		$lfhandler = fopen ($lfilename, "r");
