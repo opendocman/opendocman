@@ -104,13 +104,12 @@ function do_update_10()
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
         include("install/upgrade_10.php");
-        include("install/upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
 {
         echo 'Updating version 1.1rc1<br>';        
-        include("install/upgrade_11rc2.php");
+        include("install/upgrade_11rc1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
         
 }
