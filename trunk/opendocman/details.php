@@ -55,19 +55,30 @@ if ($comment == '')
 { 
 	$comment = 'No author comments available'; 
 }
+
 $reviewer_comments_str = $filedata->getReviewerComments();
 $reviewer_comments_fields = explode(';', $reviewer_comments_str);
+
 for($i = 0; $i< sizeof($reviewer_comments_fields); $i++)
 {
 	$reviewer_comments_fields[$i] = str_replace('"', '&quot;', $reviewer_comments_fields[$i]);
 	$reviewer_comments_fields[$i] = str_replace('\\', '', $reviewer_comments_fields[$i]);
 }
-if(strlen($reviewer_comments_fields[2]) <= strlen('Comments='))
+
+if(isset($reviewer_comments_fields[2]) && strlen($reviewer_comments_fields[2]) <= strlen('Comments='))
+{
 	$reviewer_comments_fields[2] = 'Comments=This file does not meet the requirement.  Please fix it and resubmit for review again.';
-if(strlen($reviewer_comments_fields[1]) <= strlen('Subject='))
+}
+
+if(isset($reviewer_comments_fields[1]) && strlen($reviewer_comments_fields[1]) <= strlen('Subject='))
+{
 	$reviewer_comments_fields[1] = 'Subject=Comments regarding the review for you documentation';
-if(strlen($reviewer_comments_fields[0]) <= strlen('to='))
+}
+
+if(isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) <= strlen('to='))
+{
 	$reviewer_comments_fields[0] = 'To=Author(s)';
+}
 		
 $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 ?>
