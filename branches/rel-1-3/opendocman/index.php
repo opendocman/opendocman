@@ -6,7 +6,10 @@ require('config.php');
 
 if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
-    ?>
+    if($GLOBALS['CONFIG']['SSL_enforced'] == 'On' && !isset($_SERVER['HTTPS']))   header('Location: https://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']);
+	
+	
+	?>
 <!--
 
         index.php - displays a login form

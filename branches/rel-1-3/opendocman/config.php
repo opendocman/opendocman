@@ -104,7 +104,14 @@ The first two options also result in sending email to reviewer
    |       4 | admin       |
    +---------+-------------+
  */
-'owner_default_right' => '3'
+'owner_default_right' => '3',
+
+/* HTTPS enforced login.  If this option is turned on, the login page will only take https connections.  If the user uses http, ODM will redirect itself to a HTTPS connection.  SSL must be enabled with your webserver for this feature to work
+1)On
+2)Off
+*/
+'SSL_enforced' => 'On'
+
 );
 
 // List of allowed file types
