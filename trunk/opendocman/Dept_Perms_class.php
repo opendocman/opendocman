@@ -80,7 +80,8 @@ if( !defined('Dept_Perms_class') )
 	}
 	function canView($data_id)
 	{
-		if(!$this->isForbidden($data_id) or !$this->isPublishable($data_id) )
+		$filedata = new FileData($data_id, $this->connection, $this->database);
+		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
 		{
 			if($this->canDept($data_id, $this->VIEW_RIGHT))
 				return true;
@@ -90,7 +91,8 @@ if( !defined('Dept_Perms_class') )
 	}
 	function canRead($data_id)
 	{
-		if(!$this->isForbidden($data_id))
+		$filedata = new FileData($data_id, $this->connection, $this->database);
+		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
 		{
 			if($this->canDept($data_id, $this->READ_RIGHT) or !$this->isPublishable($data_id) )
 				return true;
@@ -101,7 +103,8 @@ if( !defined('Dept_Perms_class') )
 	}
 	function canWrite($data_id)
 	{
-		if(!$this->isForbidden($data_id) or !$this->isPublishable($data_id) )
+		$filedata = new FileData($data_id, $this->connection, $this->database);
+		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
 		{
 			if($this->canDept($data_id, $this->WRITE_RIGHT))
 				return true;
@@ -112,7 +115,8 @@ if( !defined('Dept_Perms_class') )
 	}
 	function canAdmin($data_id)
 	{
-		if(!$this->isForbidden($data_id) or !$this->isPublishable($data_id) )
+		$filedata = new FileData($data_id, $this->connection, $this->database);
+		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
 		{
 			if($this->canDept($data_id, $this->ADMIN_RIGHT))
 				return true;
@@ -137,8 +141,8 @@ if( !defined('Dept_Perms_class') )
 	}
 	function isPublishable($data_id)
 	{
-		$user_obj = new User($data_id, $this->connection, $this->database);
-		return $user_obj->isPublishable();
+		$file_obj = new FileData($data_id, $this->connection, $this->database);
+		return $file_obj->isPublishable();
 	}
 	function canDept($data_id, $right)
 	{

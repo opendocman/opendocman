@@ -1,7 +1,7 @@
 <?php
 // details.php - display file information 
 // check for session
-//$SESSION_UID=102; $id=61;
+//$SESSION_UID=102; $id=65;
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -15,6 +15,7 @@ if (!isset($id) || $id == "")
 	header('Location:error.php?ec=2');
 	exit;
 }
+
 include('config.php');
 draw_header('File Detail');
 draw_menu($SESSION_UID);
@@ -145,11 +146,11 @@ if ($status != 0)
 <!-- inner table begins -->
 <!-- view option available at all time, place it outside the block -->
 <?php 
-/*if($userPermObj->canRead($id))
-{*/?>
+if($userPermObj->canRead($id))
+{?>
 <td align="center"><a href="view_file.php?id=<?php echo $id; ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
-//}		
+}		
 if ($status == 0)
 {
 	// status = 0 -> file available for checkout

@@ -54,7 +54,7 @@ if( !defined('UserPermission_class') )
 	{	
 		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
 		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
-		$query = 'SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = ' . $this->uid . '  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights>=' . $this->VIEW_RIGHT .  ' and data.publishable = 1)';
+		$query = 'SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = ' . $this->uid . '  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights<' . $this->VIEW_RIGHT .  ' and data.publishable = 1)';
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
 		for($index=0; $index < mysql_num_rows($result); $index++)
 		{

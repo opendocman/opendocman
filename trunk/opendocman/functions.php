@@ -1035,7 +1035,7 @@ if( !defined('function') )
 		while($index < $count)
 		{	
 			list($last_name, $first_name, $id) = mysql_fetch_row($result);
-			echo("\tauthor_array[$index] = new Array(\"$last_name, $first_name\", $id);\n");
+			echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);\n");
 			$index++;
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
@@ -1169,11 +1169,11 @@ if( !defined('function') )
 
 	function removeElements($master_array, $removing_array)
 	{
-		$found = true;
+		$found = false;
 		for($i = 0; $i < sizeof($master_array); $i++)
 		{
-			$found=true;
-			for($j=0;$j < sizeof($removing_arrray); $j++)
+			$found=false;
+			for($j=0;$j < sizeof($removing_array); $j++)
 			{
 				if($master_array[$i] == $removing_array[$j])
 				{	$found=true;break;	}
