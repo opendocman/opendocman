@@ -475,7 +475,10 @@ else
 	}
 	// clean up
 	mysql_freeresult($result);
-	mysql_query('UPDATE data SET publishable = 0 WHERE data.id = ' . $filedata->getId(), $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+	if ($GLOBALS['CONFIG']['authorization'] == 'On')
+	{
+		mysql_query('UPDATE data SET publishable = 0 WHERE data.id = ' . $filedata->getId(), $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+	}
 	$message = urlencode('Document successfully updated');
 	header('Location: out.php?last_message=' . $message);
 }
