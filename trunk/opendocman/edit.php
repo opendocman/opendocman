@@ -10,6 +10,10 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 // edit.php - edit file properties
 
 // check session and $id
+/*$SESSION_UID=102;
+$id=67;
+$submit=true;
+*/
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -264,7 +268,7 @@ if (!isset($submit))
 				$u = sizeof($user_forbidden_array);
 			}
 		}
-		if(!isset($found))
+		if(!$found)
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -287,7 +291,7 @@ if (!isset($submit))
 				$u = sizeof($user_view_array);
 			}
 		}
-		if(!isset($found))
+		if(!$found)
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -311,7 +315,7 @@ if (!isset($submit))
 				$u = sizeof($user_view_array);
 			}
 		}
-		if(!isset($found))
+		if(!$found)
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -335,7 +339,7 @@ if (!isset($submit))
 				$u = sizeof($user_view_array);
 			}
 		}
-		if(!isset($found))
+		if(!$found)
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -358,7 +362,7 @@ if (!isset($submit))
 				$u = sizeof($user_view_array);
 			}
 		}
-		if(!isset($found))
+		if(!$found)
 		{
 			echo '<option VALUE="' . $all_users[$a]->getId() . '">' . $all_users[$a]->getName() . '</option>';
 		}
@@ -421,6 +425,7 @@ else
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
 		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($id, '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		echo $query."<br>";
 		$result = mysql_db_query($database, $query, $connection) or die("Error in query: $query" .mysql_error());;
 	}
 	//UPDATE Department Rights into dept_perms
@@ -437,7 +442,6 @@ else
 	mysql_freeresult($result);
 	$message = 'Document successfully updated';
 	header('Location: out.php?message=' . $message);
-	exit;
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">
