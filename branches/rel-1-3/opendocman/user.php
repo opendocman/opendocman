@@ -676,6 +676,27 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 $last_message="Action Cancelled";
                 header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));
         }
+		elseif( @$_REQUEST['submit'] == 'Modify Pref')
+		{
+			draw_status_bar("Personal Preferences");
+			echo '<BR>';
+			$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+			$array = $user_obj->getPreference();
+			foreach ($USER_PREF as $key => $value)
+			{
+				echo "\n" . $key . ':  ';
+				echo '<SELECT name="' . $key . '">' . "\n";
+				foreach ($value as $key2 => $value2)
+				{
+					if($array[$key] == $value2)
+						echo '<option selected>' . $value[$key2] . '</option>' . "\n";
+					else
+						echo '<option>' . $value[$key2] . '</option>' . "\n";
+				}
+				echo '</SELECT><BR><BR>' . "\n";
+			}
+
+		}
         else 
         {	
         	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));
