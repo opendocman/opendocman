@@ -32,13 +32,13 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['databas
 
 if($user_obj->isReviewer() && sizeof($user_obj->getReviewee()) > 0)
 {
-        echo "<a href='toBePublished.php'> You have ". sizeof($user_obj->getReviewee()). " documents waiting to be reviewed!</a>  <BR>";
+        echo '<img src="images/exclamation.gif"><a href="toBePublished.php"> You have '. sizeof($user_obj->getReviewee()). ' documents waiting to be reviewed!</a>  <BR>';
 }
 
 $rejected_files_obj = $user_obj->getRejectedFiles();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-        echo "<a href='rejects.php'> ". sizeof($rejected_files_obj)." of your documents were rejected!</a> <BR>";
+        echo '<img src="images/exclamation_red.gif"><a href="rejects.php"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
 }
 
 // get a list of documents the user has "view" permission for
