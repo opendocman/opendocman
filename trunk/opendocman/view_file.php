@@ -6,11 +6,13 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+if( !isset ($_REQUEST['last_message']) )
+{	$_REQUEST['last_message']='';	}
 if(!isset($_GET['submit']))
 {
 	draw_header('View File');
 	draw_menu($_SESSION['uid']);
-	@draw_status_bar('File View',$_REQUEST['last_message']);
+	draw_status_bar('File View',$_REQUEST['last_message']);
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
@@ -18,8 +20,12 @@ if(!isset($_GET['submit']))
 	
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
-	list($prefix,$suffix)= split ('[.]', $realname);
-	$mimetype = $mimetypes["$suffix"];
+	list($prefix,$suffix)= split ('.', $realname);
+	echo $suffix;
+	if( !isset($mimetypes["$suffix"]) )
+	{	$mimetype = '';	}
+	else 
+	{	$mimetype = $mimetypes["$suffix"];	}
 	//echo "Realname is $realname<br>";
 	//echo "prefix = $prefix<br>";
 	//echo "suffix = $suffix<br>";
