@@ -11,17 +11,20 @@ $lang['welcome2'] = "Log in to begin using The system's powerful storage, publis
 
 
 //GLOBAL TERMS
+$lang['author'] = "Author";
 $lang['enter'] = "Enter";
 $lang['help'] = "Help";
 $lang['home'] = "Home";
 $lang['password'] = "Password";
 $lang['profile'] = "Profile";
 $lang['username'] = "Username";
+$lang['sincerly'] = "Sincerly";
 
 //Areas
 $lang['area_add_new_file'] = "Add New File";
 $lang['area_add_new_category'] = "Add New Category";
 $lang['area_admin'] = "Administration";
+$lang['area_file_expiration'] = "File Expiration";
 $lang['area_delete_category'] = "Delete Category";
 $lang['area_display_category'] = "Display All Files In Category";
 $lang['area_document_listing'] = "Document Listing";
@@ -40,6 +43,8 @@ $lang['message_no_files_found'] = "No Files Found";
 $lang['message_no_description_available'] = "No description available";
 $lang['message_not_writeable'] = "Not Writeable!";
 $lang['message_please_email'] = "Please email";
+$lang['message_rejected'] = "Rejected";
+$lang['message_rejecting_files'] = "Rejecting files last edited before";
 $lang['message_sorry_demo_mode'] = "Sorry, demo mode only, you can not do that!";
 $lang['message_unable_to_find_file'] = "Unable to find the requested file";
  
@@ -60,6 +65,7 @@ $lang['label_department_authority'] = "Dept. Authority";
 $lang['label_description'] = "Description";
 $lang['label_display'] = "Display";
 $lang['label_empty'] = "Empty";
+$lang['label_filename'] = "Filename";
 $lang['label_file_archive'] = "File Archive";
 $lang['label_file_location'] = "File Location";
 $lang['label_file_maintenance'] = "File Maintenance";
@@ -94,4 +100,10 @@ $lang['button_modify_category'] = "Modify Category";
 $lang['button_update'] = "Update";
 $lang['button_yes'] = "Yes";
 
+//Email
+
+$lang['email_file_was_rejected_expired'] = "Your file has expired. Please update the file as soon as possible. Your file may be inaccessible until you do.";
+$lang['email_file_expired'] = "A File Has Expired";
+$lang['email_revision_days'] = "Maximum number of days before expiration:";
+$lang['email_status_expired'] = "Status: Expired";
 ?>
