@@ -91,7 +91,7 @@ if( !defined('FileData_class') )
 	// return this file's category name
 	function getCategoryName()
 	{	
-		$query = "SELECT name FROM $this->TABLE_CATEGORY.id = $this->category";
+		$query = "SELECT $this->TABLE_CATEGORY.name FROM $this->TABLE_CATEGORY WHERE $this->TABLE_CATEGORY.id = $this->category";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit)
 			list($name) = mysql_fetch_row($result);
