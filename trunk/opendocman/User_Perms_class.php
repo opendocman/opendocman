@@ -136,7 +136,7 @@ if ( !defined('User_Perms_class') )
 		if(mysql_num_rows($result) ==1)
 		{
 			list ($right) = mysql_fetch_row($result);
-			if($right==$FORBIDDEN_RIGHT)
+			if($right==$this->FORBIDDEN_RIGHT)
 				return true;
 			else
 				return false;
