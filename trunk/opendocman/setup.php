@@ -123,7 +123,7 @@ function do_update_11rc2()
 
 function do_update_11()
 {
-        echo 'Updating version 1.1<br>';        
+        echo 'Updating version 1.1 to latest<br>';        
         include("install/upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
