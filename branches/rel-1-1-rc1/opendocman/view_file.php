@@ -1,4 +1,5 @@
 <?php
+session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
@@ -57,9 +58,10 @@ elseif ($_GET['submit'] == 'view')
 	// send headers to browser to initiate file download
 	header('Content-Length: '.filesize($filename));
 	// Pass the mimetype so the browser can open it
+        header ('Cache-control: private');
         header('Content-Type: ' . $_GET['mimetype']);
         header('Content-Disposition: inline; filename=' . $realname);
-        // Apache is sending Last Modified header, so we'll do it, too
+		// Apache is sending Last Modified header, so we'll do it, too
         $modified=filemtime($filename);
         header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
 	readfile($filename);
