@@ -31,7 +31,7 @@ REMARKS: Accounts for email with country appended
 *************************************************/
 var strValue = FormName.Email.value;
 
-var objRegExp  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+var objRegExp  = /^([a-zA-Z0-9_\.\-\&])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
  
   //check for valid email
   if(!objRegExp.test(strValue))
