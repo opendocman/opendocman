@@ -25,11 +25,11 @@ checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $userPermObj = new User_Perms($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
 
-if( !$userPermObj->canView($_REQUEST['id']) )
+/*if( !$userPermObj->canView($_REQUEST['id']) )
 {	
         echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); 
 }
-
+*/
 ?>
 <center>
 <table border="0" cellspacing="4" cellpadding="1">
