@@ -113,6 +113,7 @@ if(!$submit) //un_submitted form
 	}
 ?>
 	</Script>
+	<SCRIPT LANGUAGE="JavaScript" src="functions.js"></script>
 	<!-- file upload formu using ENCTYPE -->
 	<form name="main" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="MAX_FILE_SIZE" value="50000000">
@@ -192,7 +193,7 @@ if(!$submit) //un_submitted form
 	<td>
         <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none">Comment</a>
         </td>
-	<td colspan="3"><textarea tabindex="6" name="comment" rows="4"></textarea></td>
+	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
 	</tr>
 	
 	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
