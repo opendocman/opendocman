@@ -1,3 +1,217 @@
+2003-07-09 11:10  logart
+
+	* config.php: added some comments
+
+2003-07-09 11:06  logart
+
+	* delete.php: fixed typo
+
+2003-07-09 11:04  logart
+
+	* docs/: opendocman-1.html, opendocman-3.html, opendocman-4.html,
+	opendocman-6.html, opendocman-7.html, opendocman.html,
+	opendocman.pdf, opendocman.txt, src/opendocman.lyx: updated
+	documentation
+
+2003-07-09 10:07  logart
+
+	* rejects.php, delete.php: added footer call
+
+2003-07-08 13:23  khoang82
+
+	* secureurl.class.php: fix [ 768007 ] secureurl not working
+
+2003-07-08 13:21  khoang82
+
+	* out.php: fix code indentation and alignment for better
+	readability
+
+2003-07-08 13:19  khoang82
+
+	* functions.php: fix code syntax usage
+
+2003-07-08 13:17  khoang82
+
+	* file_ops.php: fixing [ 767961 ] missing footer on check-out clear
+	admin page
+
+2003-07-08 11:41  logart
+
+	* database.sql, setup.php, install/odm.php: sql formatting issues
+	fixed
+
+2003-07-08 11:18  logart
+
+	* install/upgrade_11.php: seperated sql into seperate statements
+
+2003-07-08 10:33  logart
+
+	* install/: odm.php, upgrade_11.php: added final 1.2rc1 db changes
+
+2003-07-07 14:41  logart
+
+	* category.php, department.php, user.php: added demo check for
+	deletion operations
+
+2003-07-07 14:29  khoang82
+
+	* out.php: fix bugs
+
+2003-07-07 14:28  khoang82
+
+	* out.php: remove debug info
+
+2003-07-07 12:33  khoang82
+
+	* admin.php, category.php, commitchange.php, delete.php,
+	department.php, details.php, file_ops.php, functions.php, out.php,
+	rejects.php, search.php, secureurl.class.php, toBePublished.php,
+	user.php: integrating secureurl.  Fix small bugs
+
+2003-07-02 14:00  logart
+
+	* functions.php: fixed type added fixed length to description
+	column in list_files
+
+2003-06-30 14:36  khoang82
+
+	* functions.php: add secureurl into pagination
+
+2003-06-30 14:21  khoang82
+
+	* functions.php: encode url for list_table
+
+2003-06-30 14:08  khoang82
+
+	* functions.php: Changed out.php to leave out the "comment" column
+
+2003-06-30 13:08  khoang82
+
+	* functions.php: fix JS errors
+
+2003-06-27 13:22  khoang82
+
+	* secureurl.class.php, secureurl.php: add secure url switch to
+	toggle on and off
+
+2003-06-27 13:20  khoang82
+
+	* out.php: secure url
+
+2003-06-27 13:09  khoang82
+
+	* functions.php: globalized $http_server_var
+
+2003-06-27 13:08  khoang82
+
+	* toBePublished.php: big fix using @
+
+2003-06-23 12:56  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, commitchange.php,
+	config.php, department.php, details.php, edit.php, file_ops.php,
+	functions.php, history.php, in.php, out.php, profile.php,
+	rejects.php, search.php, secureurl.php, toBePublished.php,
+	user.php, view.php, view_file.php: add secureurl disabling feature
+	alter $_SERVER['REQUEST_URI'] to $_SERVER['PHP_SELF'] . '?' .
+	$HTTP_SERVER_VARS['QUERY_STRING']for IIS compatibility issue
+
+2003-06-20 14:50  khoang82
+
+	* details.php: We allowed the user to send an email to the owner of
+	the document by clicking on their name.  The "To, subject, and
+	salutation" fields should be dynamically filled.
+
+2003-06-19 15:51  khoang82
+
+	* config.php: secureurl setup
+
+2003-06-19 15:45  khoang82
+
+	* secureurl.class.php, secureurl.php: secureurl codes
+
+2003-06-19 15:43  khoang82
+
+	* admin.php, check-in.php, check-out.php, check_exp.php,
+	UserPermission_class.php, User_Perms_class.php, details.php,
+	edit.php, file_ops.php, history.php, search.php, view.php, out.php:
+	add secureurl feature
+
+2003-06-18 10:19  khoang82
+
+	* help.html: html 4.01 verified
+
+2003-06-18 09:32  khoang82
+
+	* functions.php: fix no file found exit
+
+2003-06-18 09:24  khoang82
+
+	* config.php, functions.php: fix no file found
+
+2003-06-18 09:19  khoang82
+
+	* Dept_Perms_class.php, add.php, check-in.php, config.php, out.php,
+	search.php: branch merge conflict fixes
+
+2003-06-18 08:17  logart
+
+	* config.php: vanilla again
+
+2003-06-17 16:59  logart
+
+	* Dept_Perms_class.php, FileData_class.php,
+	UserPermission_class.php, User_Perms_class.php, add.php, admin.php,
+	check-in.php, commitchange.php, config.php, database.sql, edit.php,
+	error.php, file_ops.php, functions.archive.php, functions.php,
+	out.php, search.php, setup.php, user.php, install/odm.php: merged
+	and conflicts fixed from 1.2rc1
+
+2003-06-17 15:19  khoang82
+
+	* edit.php: remove extra comments
+
+2003-06-17 15:13  khoang82
+
+	* functions.archive.php: file functions.archive.php was initially
+	added on branch rel-1-2-rc1.
+
+2003-06-17 15:13  khoang82
+
+	* functions.archive.php: This file contains functions that are not
+	used in ODM1.2-rc1.
+
+2003-06-17 15:12  khoang82
+
+	* functions.php: Alot of the functions I wrote for previous
+	versions are no longer useful for this version, 1.2rc1.  So I
+	decided to store those functions in the file functions.archive.php.
+	 ODM-1.2rc1 does not need the file functions.archive.php to run. 
+	This file is only for archiving purpose so if we ever need any of
+	these functions in the future, we do not need to redesign them.
+
+2003-06-17 15:06  khoang82
+
+	* edit.php: Fix: [ 694688 ] better permission scheme Resolution:
+	Originally, the permission select boxes in edit.php are to show
+	users who has certain right to the chosen file.  However, when the
+	admin alter anything on this page and submit, there is no way to
+	figure out which of these users where specifically given their
+	rights and which one got theirs through inheriting it.	So the new
+	design for this page will both more straight forward for the user
+	and the programmers.  The permission select boxes are now used to
+	directly specify which user has which right to the file.  Admin
+	needs not to set inheriting rights.  When the admin sets rights to
+	the department, he indirectly set inheriting rights for all users.
+
+2003-06-10 08:24  logart
+
+	* User_class.php: fixed variable typo
+
+2003-06-10 08:03  logart
+
+	* ChangeLog: sjl
+
 2003-06-05 17:17  khoang82
 
 	* check-in.php: not allowing the user to check-in a file if this
