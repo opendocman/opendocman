@@ -172,7 +172,7 @@ if( !defined('function') )
 				$str_array = array();
 				for($i = 0; $i< $obj_array_len; $i++)
 				{
-				   	$full_name_array = $OBJ_array[$i]->getOwnerFullName();           	
+				   	$full_name_array = $obj_array[$i]->getOwnerFullName();           	
 					$str_array[$i] = array($i, $full_name_array[1] . ', ' . $full_name_array[0]);
 				}
 				break;
