@@ -162,6 +162,7 @@ if ( !defined('User_Perms_class') )
 	{
 	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
 	  	return true;
+
 	  $query = "SELECT $this->TABLE_USER_PERMS.rights FROM $this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
 	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
@@ -171,7 +172,7 @@ if ( !defined('User_Perms_class') )
 	  }
 	  if (mysql_num_rows($result) == 0)
 	  {  
-		$query = "SELECT $this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where fid = ' . $data_id . ' AND dept_id = " . $this->user_obj->getDeptId();	
+		$query = "SELECT $this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where fid = '$data_id' AND dept_id = " . $this->user_obj->getDeptId();	
 		$result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 		if(mysql_num_rows($result) == 1)
 	  	{
