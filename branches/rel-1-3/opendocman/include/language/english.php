@@ -15,7 +15,7 @@ $lang['enter'] = "Enter";
 $lang['help'] = "Help";
 $lang['home'] = "Home";
 $lang['password'] = "Password";
-$lang['preferences'] = "Preferences";
+$lang['profile'] = "Profile";
 $lang['username'] = "Username";
 
 //Areas
