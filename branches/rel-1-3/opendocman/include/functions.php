@@ -52,10 +52,14 @@ if( !defined('function') )
 		//echo '<b><font size="-2" face="Arial" color="White">'."\n";
 		//echo $message;
 		//echo '</font></b></td>'."\n";
-		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="out.php" style="text-decoration:none">' . $GLOBALS['lang']['home'] . '</a>'."\n</td>";
-		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">' . $GLOBALS['lang']['profile'] . '</a>'."\n</td>";
+		// Only show real options for logged in users
+		if (isset($_SESSION['uid']))
+		{
+			echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
+			echo '<a class="statusbar" href="out.php" style="text-decoration:none">' . $GLOBALS['lang']['home'] . '</a>'."\n</td>";
+			echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
+			echo '<a class="statusbar" href="profile.php" style="text-decoration:none">' . $GLOBALS['lang']['profile'] . '</a>'."\n</td>";
+		}
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">' . $GLOBALS['lang']['help'] . '</a>'."\n</td>";
 		if(isset($_SESSION['uid']))
