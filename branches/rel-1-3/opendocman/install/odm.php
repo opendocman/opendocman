@@ -66,6 +66,7 @@ CREATE TABLE data (
   publishable tinyint(4) default NULL,
   reviewer smallint(6) unsigned default NULL,
   reviewer_comments varchar(255) default NULL,
+  anonymous tinyint default '0' NULL,
   PRIMARY KEY  (id),
   KEY data_idx (id,owner),
   KEY id (id),
