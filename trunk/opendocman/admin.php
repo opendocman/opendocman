@@ -1,30 +1,25 @@
 <?php
+session_start();
 // admin.php - administration functions for admin users 
 // check for valid session
 // includes
 include('config.php');
-session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!isset($_SESSION['uid']))
 {
 	draw_error('error.php?ec=1');
 	exit;
 }
 // open a connection to the database
-$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
 	draw_error('error.php?ec=4');
 	exit;
 }
-if(!isset($last_message))
-{
-        $last_message='';
-}
-
 draw_header('Admin');
-draw_menu($SESSION_UID);
-draw_status_bar('Admin',$last_message);
+draw_menu($_SESSION['uid']);
+@draw_status_bar('Admin',$_REQUEST['last_message']);
 ?>
 	<center>	
 	<table border="1" cellspacing="5" cellpadding="5" >
