@@ -48,6 +48,7 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         </tr>
         <tr>
         <td colspan="2" align="CENTER"><input type="Submit" name="login" value="<?php echo $GLOBALS['lang']['enter']; ?>"></td>
+		
         </tr>
         </form>
         </table>
@@ -57,6 +58,8 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         <?php echo $GLOBALS['lang']['welcome']; ?>
         <p>
         <?php echo $GLOBALS['lang']['welcome2']; ?>
+		<p>
+		<a href="anonymous.php?mode=showall"><?php echo $GLOBALS['lang']['anonymous_link']; ?></a>
         </td>
         <td width="20%">
         &nbsp;
