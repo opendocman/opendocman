@@ -1,12 +1,4 @@
 <?php
-/*
-All source code copyright and proprietary Melonfire, 2001. All content, brand names and trademarks copyright and proprietary Melonfire, 2001. All rights reserved. Copyright infringement is a violation of law.
-
-This source code is provided with NO WARRANTY WHATSOEVER. It is meant for illustrative purposes only, and is NOT recommended for use in production environments. 
-
-Read more articles like this one at http://www.melonfire.com/community/columns/trog/ and http://www.melonfire.com/
-*/
-
 // edit.php - edit file properties
 
 // check session and $id
