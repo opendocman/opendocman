@@ -13,10 +13,10 @@ include 'mimetypes.php';
 require_once('crumb.php');
 
 // Database Settings - Change these to match your database
-$database = 'opendocman_khoa'; // Enter the name of the database here
-$user = 'vault1'; // Enter the username for the database
-$pass = 'vault1'; // Enter the password for the username
-$hostname = 'musa'; // Enter the hostname that is serving the database
+$database = 'opendocman'; // Enter the name of the database here
+$user = 'opendocman'; // Enter the username for the database
+$pass = 'opendocman'; // Enter the password for the username
+$hostname = 'localhost'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -41,7 +41,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman1.2',
+'base_url' => 'http://www.yourdomainaa.com/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -54,18 +54,18 @@ global $CONFIG;      $CONFIG = array(
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'kdng',
+'root_username'  => 'admin',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/usr/home/httpd/document_repository/', 
+'dataDir' => '/var/www/document_repository/', 
 
-//This var sets the amount of days until each file need to be revise, 
-//assuming that there are 30 days a month for all months.
+//This var sets the amount of days until each file needs to be revised, 
+//assuming that there are 30 days in a month for all months.
 'revision_expiration' => '90',
 
-/* Choose an action option when a file is found expired
+/* Choose an action option when a file is found to be expired
 The first two options also result in sending email to reviewer
  	(1) Remove from file list until renewed
 	(2) Show in file list but non-checkoutable
@@ -75,6 +75,14 @@ The first two options also result in sending email to reviewer
 'file_expired_action' => '1'
 );
 
+// List of allowed file types
+// Pay attention to the "Last Message:" in the status bar if your file is being rejected
+// because of its file type. It should display the proper MIME type there, and you can 
+// then add that string to this list to allow it
+$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+
+// <----- No need to edit below here ---->
+//
 // Set the revision directory. (relative to $dataDir)
 $CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 
@@ -91,9 +99,6 @@ global $allowedFileTypes;
 
 $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
-
-// list of allowed file types
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 // All functions are in functions.php
 }
 ?>
