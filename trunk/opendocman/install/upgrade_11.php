@@ -1,7 +1,6 @@
 <?php
 $result = mysql_query("
 ALTER TABLE `data`
-    ADD filesize bigint(20) NULL DEFAULT NULL AFTER reviewer_comments,
     MODIFY category tinyint(4) unsigned NOT NULL DEFAULT '0',
     MODIFY status smallint(6) NULL DEFAULT NULL,
     ADD INDEX id (id),

@@ -450,8 +450,6 @@ else //submited form
 	else
 		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
-	$lquery = "UPDATE data set data.filesize='" . filesize($GLOBALS['CONFIG']['dataDir'].'/'.$newFileName) . "' WHERE data.id = '$fileId'";
-	mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error() );
 	$message = urlencode('Document successfully added');
 	header('Location: out.php?last_message=' . $message);
 	}

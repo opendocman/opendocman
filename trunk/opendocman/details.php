@@ -23,12 +23,14 @@ if(strchr($_REQUEST['id'], '_') )
 {
 	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
 	@draw_status_bar('Rev.' . $lrevision_id . ' - Details',$_REQUEST['last_message']);
+        $filesize = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . '_' . $lrevision_id . '.dat'); 
 }
 else 
 	@draw_status_bar('File Details',$_REQUEST['last_message']);
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+
 $userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
 $user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
 $secureurl = new phpsecureurl;
@@ -48,7 +50,6 @@ $description = $filedata->getDescription();
 $comment = $filedata->getComment();
 $status = $filedata->getStatus();
 $reviewer = $filedata->getReviewerName();
-$filesize = $filedata->getFileSize();
 // corrections
 if ($description == '') 
 { 
@@ -83,9 +84,18 @@ if(isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) <
 	$reviewer_comments_fields[0] = 'To=Author(s)';
 }
 if($filedata->isArchived())
-{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	}
+{	
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	
+        $filesize = display_filesize($filename);	
+}
 else
-{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	}
+{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	
+
+        if (!isset($filesize))
+        {
+                $filesize = display_filesize($filename);	
+        }
+}
 ?>
 <FORM name="data">
 <INPUT type="hidden" name="to" value="<?php echo substr($reviewer_comments_fields[0], 3) ?>">
@@ -114,9 +124,8 @@ else
 <tr>
 <td>Category: <?php echo $category; ?></td>
 </tr>
-
 <tr>
-<td>File size: <?php echo $filesize; ?> bytes</td>
+<td>File size: <?php echo $filesize; ?></td>
 </tr>
 
 <tr>

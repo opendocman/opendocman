@@ -87,7 +87,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 </tr>
 
 <tr>
-<td>File size: <?php echo filesize($filename); ?> bytes</td>
+<td>File size: <?php echo display_filesize($filename); ?></td>
 </tr>
 
 <tr>

@@ -213,8 +213,6 @@ else
 		// rename and save file
 		$newFileName = $_POST['id'] . '.dat';
 		copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
-		$lquery = 'UPDATE data set data.filesize = ' . filesize($GLOBALS['CONFIG']['dataDir'] . $newFileName) . ' WHERE data.id = ' .  $_POST['id'];
-		mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $lquery. " . mysql_error());
 		//Send email
 		$date = date('D F d Y');
 		$time = date('h:i A');

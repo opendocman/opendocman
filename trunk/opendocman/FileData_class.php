@@ -67,7 +67,7 @@ if( !defined('FileData_class') )
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
 			$this->tablename.created, $this->tablename.description, 
 			$this->tablename.comment, $this->tablename.status, 
-			$this->tablename.department , $this->tablename.filesize
+			$this->tablename.department 
 			FROM $this->tablename WHERE $this->tablename.id = $this->id";
 		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());

@@ -45,7 +45,7 @@ $count = mysql_num_rows($result);
 	<TD align="center"><A href="check-in.php?id=<?php echo $id . '&state=' . ($_REQUEST['state']+1); ?>">Check-In Document</A></TD> 
 	<TD align="center"><?php echo $last_name.', '.$first_name; ?></TD> 
 	<TD align="center"><?php echo fix_date($created); ?></TD> 
-	<TD align="center"><?php display_filesize($filename); ?> </TD> 
+	<TD align="center"><?php echo display_filesize($filename); ?> </TD> 
 	<TD align="justify"><?php echo $description; ?></TD>
 	</TR>
 <?php

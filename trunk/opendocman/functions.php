@@ -112,10 +112,6 @@ if( !defined('function') )
 		{
 			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ', data.id asc';
 		}
-		elseif($sort_by == 'size')
-		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.filesize ' . $sort_order . ', data.id asc';
-		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
@@ -356,15 +352,8 @@ if( !defined('function') )
                         $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid.'Department'.$default_url_post;
                 }
                 echo($str);
-
-                if($sort_by == 'size')
-                {
-                        $str = $url_pre.'Size'.$url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre . $secureurl->encode($link . 'size') . $default_url_mid.'Size'.$default_url_post;
-                }
+                
+                $str = '<TD class="' . $css_td_class . '"><B>Size<B></TD>';
                 echo($str);
 
                 if($sort_by == 'status')
@@ -450,7 +439,10 @@ if( !defined('function') )
                         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
                         $dept_name = $file_obj->getDeptName();
                         $realname = $file_obj->getRealname();
-                        $filesize = $file_obj->getFileSize();
+                        //$filesize = $file_obj->getFileSize();
+                        //Get the file size in bytes.
+                        $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid_array[$index] . '.dat');
+
                         if($showCheckBox=='true')
                         {
 ?>
@@ -725,29 +717,6 @@ if( !defined('function') )
 <?php
 	}		
 	
-	function display_filesize($filename)
-	{
-		$filesize='';
-		$size=filesize($filename);
-		if($size > 1024 && $size < 1048576 )
-		{
-			$filesize=($size/1024);
-			$filesize .=' Kilo-Bytes';
-			echo ($filesize);
-		}
-		else if($size >= 1048576 )
-		{
-			$filesize = ($size / 1048576);
-			$filesize .=' Mega-Bytes';
-			echo ($filesize);
-		}
-		else 
-		{
-			$filesize=$size;
-			$filesize .=' Bytes';
-			echo ($filesize);
-		}
-	}
 	/////////////////////////////////////////////////Debuging function/////////////////////////////////
 	function display_array($array)
 	{
@@ -821,6 +790,49 @@ if( !defined('function') )
 			$return_array[$li] = array($lid, "$llast_name, $lfirst_name", $lusername);
 		}
 		return $return_array;
-	}
+        }
+        function display_filesize($file) 
+        {
+                // Does the file exist?
+                if(is_file($file))
+                {
+
+                        //Setup some common file size measurements.
+                        $kb=1024;
+                        $mb=1048576;
+                        $gb=1073741824;
+                        $tb=1099511627776;
+
+                        //Get the file size in bytes.
+                        $size = filesize($file);
+
+                        //Format file size
+
+                        if($size < $kb) 
+                        {
+                                return $size." B";
+                        }
+                        elseif($size < $mb) 
+                        {
+                                return round($size/$kb,2)." KB";
+                        }
+                        elseif($size < $gb) 
+                        {
+                                return round($size/$mb,2)." MB";
+                        }
+                        elseif($size < $tb) 
+                        {
+                                return round($size/$gb,2)." GB";
+                        }
+                        else 
+                        {
+                                return round($size/$tb,2)." TB";
+                        }
+                }
+                else
+                {
+                        return "X";
+                }
+        }
 }
 ?>
