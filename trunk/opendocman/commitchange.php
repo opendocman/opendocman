@@ -208,13 +208,20 @@ elseif(isset($adddepartment))
 // UPDATE Department
 elseif(isset($updatedepartment))
 {
-        $query = "UPDATE department SET name='" . addslashes($name) ."' where id='$id'";
-		$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
-        // back to main page
-        $last_message = urlencode('Department successfully updated - name=' . $name . '- id=' . $id);
-        header('Location: admin.php?last_message=' . $last_message);
-	
-        mysql_close($connection);
+    //Check to see if this department is already in DB
+	$query = "SELECT department.name from department where department.name=\"" . addslashes($name) . '" and department.id!=' . $id;
+	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+    if(mysql_num_rows($result) != 0)
+    {
+       	header('Location: error.php?ec=3&message=' . $department . ' already exist in the database');
+    	exit;
+    }    
+	$query = "UPDATE department SET name='" . addslashes($name) ."' where id='$id'";
+	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $last_message = urlencode('Department successfully updated - name=' . $name . '- id=' . $id);
+    header('Location: admin.php?last_message=' . $last_message);
+	mysql_close($connection);
 }
 elseif(isset($deletedepartment))
 {
