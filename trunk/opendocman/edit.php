@@ -10,11 +10,11 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 // edit.php - edit file properties
 
 // check session and $id
-$SESSION_UID=102;
-$id=67;
+//$SESSION_UID=102;
+//$id=67;
 //$submit=true;
 
-/*session_start();
+session_start();
 if (!session_is_registered('SESSION_UID'))
 {
   header('Location:error.php?ec=1');
@@ -25,7 +25,7 @@ if (!isset($id) || $id == '')
 {
   header('Location:error.php?ec=2');
   exit;
-}*/
+}
 include('config.php');
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 if (!isset($submit))
@@ -34,6 +34,8 @@ if (!isset($submit))
 	draw_header('File Properties Modification');
 	draw_menu($SESSION_UID);
 	draw_status_bar('Edit Document Properties', $message);
+	$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $connection, $GLOBALS['database']);
+	checkUserPermission($id, $user_perm_obj->ADMIN_RIGHT);
 	$data_id = $id;
 	// includes
 	$query ="SELECT user.department from user where user.id=$SESSION_UID";
@@ -127,7 +129,6 @@ if (!isset($submit))
 //	$query = "SELECT category, realname, description, comment FROM data WHERE id = '$id' AND status = '0' AND owner = '$SESSION_UID'";
 //	$result = mysql_db_query($database, $query, $connection) or die ("Error in query: $query. " . mysql_error());
 	$filedata = new FileData($id, $connection, $database);
-	$filedata->setId($id);
 	// error check
 	if( !$filedata->exists() ) //if (mysql_num_rows($result) <= 0)
 	{
@@ -255,7 +256,7 @@ if (!isset($submit))
 	$filedata->setId( $id );
 	$user_forbidden_array = $filedata->getForbiddenRightUserIds();
 	$found = false;
-	echo '<td><select name="forbidden[]" multiple size=10>' . "\n\t";
+	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -276,7 +277,7 @@ if (!isset($submit))
 ?>
 	</select></td>
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
-	<td><select name="view[]" multiple size = 10>
+	<td><select name="view[]" multiple size = 10 onchange="changeList(this, this.form);">
 <?php
 	$user_view_array = $filedata->getViewRightUserIds();
 	for($a = 0; $a<sizeof($all_users); $a++)
@@ -300,7 +301,7 @@ if (!isset($submit))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
-	<td><select name="read[]" multiple size="10">
+	<td><select name="read[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php 
 	$user_read_array = $filedata->getReadRightUserIds();
 	for($a = 0; $a<sizeof($all_users); $a++)
@@ -324,7 +325,7 @@ if (!isset($submit))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
-	<td><select name="modify[]" multiple size = 10>
+	<td><select name="modify[]" multiple size = 10 onchange="changeList(this, this.form);">
 <?php 
 	$user_write_array = $filedata->getWriteRightUserIds();
 	for($a = 0; $a<sizeof($all_users); $a++)
@@ -348,7 +349,7 @@ if (!isset($submit))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
-	<td><select name="admin[]" multiple size = 10>
+	<td><select name="admin[]" multiple size = 10 onchange="changeList(this, this.form);">
 <?php 
 	$user_admin_array = $filedata->getAdminRightUserIds();
 	for($a = 0; $a<sizeof($all_users); $a++)
@@ -466,17 +467,7 @@ else
     end_Authority = index2;
 
 /////////////////////Defining event-handling functions///////////////////////////////////////////////////////
-    var num_of_authorities = 4;
-    function showData()
-	{
-		alert(frm_main.elements["Information_Systems"].value);
-		alert(frm_main.elements["Test"].value);
-		alert(frm_main.elements["Toxicology"].value);
-	}
-	function test()
-	{
-		alert(frm_main.elements["default_Setting"].value);
-	}
+
 	
 	//loadData(_selectedIndex) load department data array
 	//loadData(_selectedIndes) will only load data at index=_selectedIndex-1 of the array since
@@ -619,5 +610,54 @@ else
 		} 
 				
 	}
+	function changeList(select_list, current_form)
+	{
+		var select_list_array = new Array();
+		select_list_array[0] = current_form['view[]']; 
+		select_list_array[1] = current_form['read[]']; 
+		select_list_array[2] = current_form['modify[]'];
+		select_list_array[3] = current_form['admin[]'];
+		for( var i=0; i < select_list_array.length; i++)
+		{
+			if(select_list_array[i] == select_list)
+			{
+				for(var j=0; j< select_list.options.length; j++)
+				{
+					if(select_list.options[j].selected)
+					{
+						for(var k=0; k < i; k++)
+						{
+							select_list_array[k].options[j].selected=true;	
+						}//end for
+						current_form['forbidden[]'].options[j].selected=false;
+					}//end if
+					else
+					{
+						for(var k=i+1; k < select_list_array.length; k++)
+						{
+							select_list_array[k].options[j].selected=false;
+						}
+					}//end else
+				}//end for	
+			}//end if
+		}//end for
+	}
+	function changeForbiddenList(select_list, current_form)
+	{
+		var select_list_array = new Array();
+		select_list_array[0] = current_form['view[]']; 
+		select_list_array[1] = current_form['read[]']; 
+		select_list_array[2] = current_form['modify[]'];
+		select_list_array[3] = current_form['admin[]'];
+		for(var i=0; i < select_list.options.length; i++)
+		{
+			if(select_list.options[i].selected==true)
+			{
+				for( var j=0; j < select_list_array.length; j++)
+				{
+					select_list_array[j].options[i].selected=false;	
+				}//end for
+			}
+		} //end for
+	}
 </SCRIPT>
-

@@ -1,7 +1,7 @@
 <?php
 // details.php - display file information 
 // check for session
-
+//$SESSION_UID=140; $id=70;
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -21,7 +21,11 @@ draw_menu($SESSION_UID);
 draw_status_bar('File Details',$last_message);
 $connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
 $filedata = new FileData($id, $connection, $database);
+checkUserPermission($id, $filedata->VIEW_RIGHT);
+$user = new User_Perms($SESSION_UID, $connection, $database);
 $userPermObj = new User_Perms($SESSION_UID , $connection, $database);
+if( !$userPermObj->canView($id) )
+{	echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); }
 ?>
 <center>
 <table border="0" cellspacing="4" cellpadding="1">
