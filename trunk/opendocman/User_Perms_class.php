@@ -70,16 +70,16 @@ if ( !defined('User_Perms_class') )
 			
 	}
 
-        function canView($data_id)
+    function canView($data_id)
+    {
+        if(!$this->isForbidden($data_id) or !$this->isPublishable($data_id) )
         {
-                if(!$this->isForbidden($data_id) or !$this->isPublishable($data_id) )
-                {
-                        if($this->canUser($data_id, $this->VIEW_RIGHT) or $this->deptperms_obj->canView($data_id)or $this->canAdmin($data_id))
-                                return true;
-                        else
-                                false;
-                }
+        	if($this->canUser($data_id, $this->VIEW_RIGHT) or $this->deptperms_obj->canView($data_id)or $this->canAdmin($data_id))
+            	return true;
+            else
+                false;
         }
+    }
 
 	function canRead($data_id)
 	{
@@ -115,7 +115,6 @@ if ( !defined('User_Perms_class') )
 			else
 				false;
 		}
-
 	}
 
 	function isForbidden($data_id)
@@ -130,7 +129,6 @@ if ( !defined('User_Perms_class') )
 			else
 				return false;
 		}
-		
 	}
 
 	function canUser($data_id, $right)
@@ -150,7 +148,7 @@ if ( !defined('User_Perms_class') )
 	function getPermission($data_id)
 	{
 	  if($this->root_user == $this->user_obj->getName())
-	              return true;
+	  	return true;
 	  $query = "Select user_perms.rights from user_perms where uid = $this->id and fid = $data_id";
 	  $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
@@ -159,10 +157,18 @@ if ( !defined('User_Perms_class') )
 	    return $permission;
 	  }
 	  if (mysql_num_rows($result) == 0)
-	  {  return 0;	}
+	  {  
+		$query = 'SELECT dept_perms.rights from dept_perms where fid = ' . $data_id . ' AND dept_id = ' . $this->user_obj->getDeptId();	
+		$result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
+		if(mysql_num_rows($result) == 1)
+	  	{
+	    	list($permission) = mysql_fetch_row($result);
+	    	return $permission;
+	  	}
+	  }
 	  else
 	  {  return 'Non-unique error';	}
-        }
     }
+  }
 }
 ?>

@@ -54,6 +54,13 @@ if( !defined('UserPermission_class') )
 	{	
 		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
 		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
+		$query = 'SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = ' . $this->uid . '  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights>=' . $this->VIEW_RIGHT .  ' and data.publishable = 1)';
+		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
+		for($index=0; $index < mysql_num_rows($result); $index++)
+		{
+			list($array[$index][0], $array[$index][1], $array[$index][2]) = mysql_fetch_row($result);
+		}
+		$deptperm_filearray = removeElements($deptperm_filearray, $array); 
 		$published_filearray = $this->user_obj->getPublishedData(1);
 		$result_array = $this->combineArrays($published_filearray, $userperm_filearray);
 		$result_array = $this->combineArrays($result_array, $deptperm_filearray);

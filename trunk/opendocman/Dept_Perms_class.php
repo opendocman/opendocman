@@ -60,8 +60,11 @@ if( !defined('Dept_Perms_class') )
 
 	function loadData_UserPerm($right)
 	{
+		$no_querry = "SELECT user_perms.fid from user_perms where user_perms.rights<$right and user_perms.uid=";
+		
 		//Select fid, owner_id, owner_name of the file that dept-->$id has rights >= $right 
-		$query = "SELECT dept_perms.fid, data.owner, user.username  FROM data, user, dept_perms WHERE (dept_perms.dept_id = $this->id  AND data.id = dept_perms.fid AND user.id = data.owner and dept_perms.rights>=$right and data.publishable = 1)";
+		//$query = "SELECT dept_perms.fid, data.owner, user.username  FROM data, user, dept_perms WHERE (dept_perms.dept_id = $this->id  AND data.id = dept_perms.fid AND user.id = data.owner and dept_perms.rights>=$right and data.publishable = 1)";
+		$query = "SELECT data.id, data.owner, user.username FROM data, user, dept_perms WHERE dept_perms.rights >= $right AND dept_perms.dept_id=$this->id AND data.id=dept_perms.fid AND data.owner=user.id";                                                 
 		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
 		$fileid_array = array();
