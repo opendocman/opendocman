@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>Configurator</title>
+<title>OpenDocMan Upgrade/Installation</title>
 </head>
 
 <body>
@@ -19,11 +19,16 @@ switch(@$_REQUEST['op']) {
     case "commitinstall":
          do_install();
          break;
-
+    // User has version 1.0 and is upgrading
     case "update_10":
          do_update_10();
          break;
-    
+   // User has version 11rc1 and is upgrading 
+/*    case "update_11rc1":
+         do_update_10();
+         do_update_11rc1();
+         break;
+*/
     default:
          print_intro();
          break;
@@ -95,7 +100,10 @@ function print_intro()
 </center>
 <table align="center">
  <tr>
-  <td>Your current version is <?php echo $GLOBALS['CONFIG']['current_version']; ?>:<br><br></td>
+  <td>Your current version is <strong><?php echo $GLOBALS['CONFIG']['current_version']; ?></strong>:<br><br></td>
+ </tr>
+ <tr>
+  <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
  </tr>
  <tr>
   <td>Please choose one from the following:<br><br></td>
