@@ -133,15 +133,15 @@ if(!isset($submit))
 			num_checkedbox = document.table.checkednumber.value;
 			if(document.table.Docflag.value == 1)
 			{
-				comment_window = window.open('<?php echo $PHP_SELF; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 1', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
+				comment_window = window.open('<?php echo $_SERVER['PHP_SELF']; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 1', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
 			}
 			else if(document.table.Docflag.value == 0)
 			{
-				comment_window = window.open('<?php echo $PHP_SELF; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 0', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
+				comment_window = window.open('<?php echo $_SERVER['PHP_SELF']; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 0', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
 			}
 			else
 			{
-				comment_window = window.open('<?php echo $PHP_SELF; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 2', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
+				comment_window = window.open('<?php echo $_SERVER['PHP_SELF']; ?>?submit=comments&num='+ num_checkedbox +'&idfield='+ file +'&number='+ box +'&mode=reviewer 2', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=400');
 			}
 			
 			comment_window.focus();
@@ -223,7 +223,7 @@ if(isset($submit) && $submit =='comments')
 
 	<HEAD><TITLE>Notes to Author(s)</TITLE>
 	<base target="Parent"></HEAD>
-	<FORM name='author_note_form' action='<?php echo $PHP_SELF;?>' onsubmit="closeWindow(1250);" method="POST">
+	<FORM name='author_note_form' action='<?php echo $_SERVER['PHP_SELF'];?>' onsubmit="closeWindow(1250);" method="POST">
 	<TABLE name="author_note_table">
 	<TR>
 	<TD>To:</TD>
@@ -334,7 +334,7 @@ elseif (isset($submit) && $submit == 'Reject')
 			$file_obj->setReviewerComments($reviewer_comments);
 		}
 	$flag=1;
-	header("Location:$PHP_SELF?last_message=File rejection completed successfully");	
+	header("Location:$_SERVER['PHP_SELF']?last_message=File rejection completed successfully");	
 	
 	
 }
