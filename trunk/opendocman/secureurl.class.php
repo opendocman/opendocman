@@ -1,4 +1,4 @@
-<?
+<?php
 /****
 * Titre........... : PHPSecureURL
 * Description..... : Hide URL parameter to secure PHP pages
