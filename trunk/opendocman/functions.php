@@ -107,8 +107,7 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="c
-				urrent" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
 		}
 		elseif($sort_by == 'description')
 		{
