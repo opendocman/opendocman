@@ -62,7 +62,7 @@ if( !defined('UserPermission_class') )
     // One might ask why getViewableFileIds() doesn't return the combined
     // result of User_perm and Dept_Perm classes.  User_Perm_class only know
     // of it self and the same goes with Dept_Perms.  
-	function getViewableFileIds()
+	/*function getViewableFileIds2()
 	{	
 		$array = array();
 		//These 2 below takes half of the execution time for this function
@@ -84,8 +84,33 @@ if( !defined('UserPermission_class') )
 		$total_listing = array_unique( $total_listing);
 		$result_array = array_values($total_listing);
 		return $result_array;
+	}*/
+	function getViewableFileIds()
+	{
+		$array = array();
+		//These 2 below takes half of the execution time for this function
+		$userperm_filearray = ($this->userperm_obj->getCurrentViewOnly());
+		$deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly());
+		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,
+		$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid
+				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid
+				AND $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT
+				AND $this->TABLE_DATA.publishable = 1)";
+		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query .
+				'Error: ' . mysql_error());
+		$len = mysql_num_rows($result);
+		for($index=0; $index < $len; $index++)
+		{
+			list($array[$index]) = mysql_fetch_row($result);
+		}
+		$deptperm_filearray = array_diff($deptperm_filearray, $array);
+		$deptperm_filearray = array_diff($deptperm_filearray, $userperm_filearray);
+		$total_listing = array_merge($userperm_filearray , $deptperm_filearray);
+		//$total_listing = array_unique( $total_listing);
+		//$result_array = array_values($total_listing);
+		return $total_listing;
 	}
-	// return an array of all the Allowed files ( right >= view_right) OBJ 
+// return an array of all the Allowed files ( right >= view_right) OBJ 
 	function getViewableFileOBJs()
 	{	
     	return $this->convertToFileDataOBJ($this->getViewableFileIds());	
