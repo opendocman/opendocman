@@ -171,6 +171,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 		?>
 		</FORM>
 <?php
+draw_footer();
 }
 elseif($_POST['mode']=='Delete file(s)')
 {

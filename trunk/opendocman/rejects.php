@@ -68,7 +68,7 @@ if(!isset($_POST['submit']))
 				</TABLE></FORM>
 
 <?php
-
+        draw_footer();
 }
 elseif($_POST['submit'] == 'Re-Submit For Review')
 {
