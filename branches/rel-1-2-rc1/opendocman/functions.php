@@ -1060,6 +1060,7 @@ if( !defined('function') )
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
+		echo "now Hereer";
 		$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);

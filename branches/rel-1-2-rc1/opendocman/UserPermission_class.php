@@ -66,12 +66,12 @@ if( !defined('UserPermission_class') )
 	{	
 		$array = array();
 		//These 2 below takes half of the execution time for this function
-		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
-		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
-		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA, $this->TABLE_USER, 
+		$userperm_filearray = ($this->userperm_obj->getCurrentViewOnly());
+		$deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly());
+		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA, 
 			$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid 
-			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
-			user.id = $this->TABLE_DATA.owner and $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT 
+			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid 
+			AND $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT 
 			AND $this->TABLE_DATA.publishable = 1)";
 		
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
@@ -80,8 +80,12 @@ if( !defined('UserPermission_class') )
 		{
 			list($array[$index]) = mysql_fetch_row($result);
 		}
+		$time = getmicrotime();
 		$deptperm_filearray = array_diff($deptperm_filearray, $array); 
-		$result_array = array_values( array_unique( array_merge($userperm_filearray, $deptperm_filearray) ) );
+		$total_listing = $userperm_filearray + $deptperm_filearray;
+		$total_listing = array_unique( $total_listing);
+		$result_array = array_values($total_listing);
+		echo "<script language='javascript'>alert(" . (getmicrotime()-$time) . ")</script>";
 		return $result_array;
 	}
 	// return an array of all the Allowed files ( right >= view_right) OBJ 
