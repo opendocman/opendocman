@@ -1,4 +1,4 @@
-<?
+<?php
 // view.php - performs download without updating database
 
 // check for session and $id
@@ -57,12 +57,12 @@ else
                 ?>
                         <p>
 
-                        <form action="<? echo $_SERVER['PHP_SELF']; ?>" method="post">
-                        <input type="hidden" name="id" value="<? echo $id; ?>">
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
                         <input type="submit" name="submit" value="Click here"> to begin downloading the selected document to your local workstation.
                         </form>
                         Once the document has completed downloading, you may <a href="out.php">continue browsing</a> The Vault.
-                        <?	
+                        <?php	
 
                         draw_footer();
 

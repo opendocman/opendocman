@@ -1,4 +1,4 @@
-<?
+<?php
 // in.php - display files checked out to user, offer link to check back in
 
 // check session
@@ -22,7 +22,7 @@ $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) o
 $count = mysql_num_rows($result);
 ?>
 <CENTER>
-<TABLE align="center" width="85%" cellspacing="5" cellpadding="3" border="1"><CAPTION><B><? echo $count; ?> document(s) check out to you </CAPTION>
+<TABLE align="center" width="85%" cellspacing="5" cellpadding="3" border="1"><CAPTION><B><?php echo $count; ?> document(s) check out to you </CAPTION>
 <TR><TR><TR>
 </TR></TR></TR>
 <TR><TD align="center"><B>File Name</TD><TD align="center"><B>Check-In</TD><TD align="center"><B>Owner</TD><TD align="center"><B>Document Creation Date</TD><TD align="center"><B>Document Size</TD><TD align="center"><B>Description</TD></TR>
