@@ -38,7 +38,7 @@ $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_ye
 
 //get root's id
 
-$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision'";
+$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND data.publishable!=-1";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
 $reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
 $user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
