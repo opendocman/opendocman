@@ -441,7 +441,7 @@ else
 	}
 	// clean up
 	mysql_freeresult($result);
-	$message = 'Document successfully updated';
+	$message = urlencode('Document successfully updated');
 	header('Location: out.php?last_message=' . $message);
 }
 ?>
