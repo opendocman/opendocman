@@ -323,7 +323,7 @@ draw_footer();
 }
 else //submited form
 {
-        $result_array = array();
+	$result_array = array();
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -381,7 +381,7 @@ else //submited form
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', 'addslashes(space_to_underscore($dept_name)))', '$id')";
+		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
