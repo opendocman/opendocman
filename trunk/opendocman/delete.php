@@ -9,10 +9,14 @@ if (!session_is_registered('uid'))
 	exit;
 }
 include('config.php');
+
 if( !isset($_REQUEST['caller']) )
-{	$_REQUEST['caller'] = 'out.php';	}
+{
+	$_REQUEST['caller'] = 'out.php';	
+}
+
 $userperm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-if( $_REQUEST['mode'] == 'tmpdel' )
+if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
 {
 	if(!@isset($_REQUEST['num_checkboxes'] ))
 		$_REQUEST['num_checkboxes'] =1;
@@ -20,14 +24,14 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 	//mysql_free_result($result);
 	if( !is_dir($GLOBALS['CONFIG']['archiveDir']) )
 	{
-                // Make sure directory is writeable
-                if(!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775))
-                {
-                        $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
-                        header('Location:error.php?ec=23&last_message=' .$last_message);
-                        exit;
-                }
-        }
+		// Make sure directory is writeable
+		if(!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775))
+		{
+			$last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
+			header('Location:error.php?ec=23&last_message=' .$last_message);
+			exit;
+		}
+	}
 	for($i = 0; $i<$_REQUEST['num_checkboxes']; $i++)
 	{
 		if(@$_REQUEST['id' . $i])
@@ -50,7 +54,7 @@ if( $_REQUEST['mode'] == 'tmpdel' )
 	$last_message = urlencode('Document has been archived');
 	header('Location: out.php?last_message=' . $last_message);
 }
-elseif( $_REQUEST['mode'] == 'pmntdel' )
+elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
 {
 	if( !$userperm_obj->user_obj->isAdmin() )
 	{	header('Location: error.php?ec=4');	exit;	}
@@ -72,14 +76,14 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 				// delete from db
 				$query = "DELETE FROM data WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-			
+
 				// delete from db
 				$query = "DELETE FROM dept_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-			
+
 				$query = "DELETE FROM user_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-			
+
 				$query = "DELETE FROM log WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 				$filename = $id . ".dat";
@@ -108,7 +112,7 @@ elseif( $_REQUEST['mode'] == 'pmntdel' )
 	$last_message = urlencode('Document successfully deleted');
 	header('Location: delete.php?mode=view_del_archive&last_message=' . $last_message);
 }
-elseif( $_REQUEST['mode'] == 'view_del_archive' )
+elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 {
 	//publishable=2 for archive deletion
 	$lquery = "SELECT id FROM data WHERE publishable=2";
@@ -153,25 +157,19 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 	$sorted_array_id = my_sort($array_id, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure?\');">' . "\n";
 
-?>
-		<TABLE border="1"><TR><TD>
-<?php
-		$list_status = list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true);
+	echo '<TABLE border="1"><TR><TD>';
+	$list_status = list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true);
 	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
-		if( $list_status != -1)
-		{
-?>	
-		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit" name="mode" value="Delete file(s)">
-		</TABLE>
-		<input type="hidden" name="caller" value="<?php echo $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];?>">
-		<?
-		}
-		?>
-		</FORM>
-<?php
-draw_footer();
+	if( isset($list_status) && $list_status != -1)
+	{
+		echo '</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit" name="mode" value="Delete file(s)">';
+		echo '</TABLE>';
+		echo '<input type="hidden" name="caller" value="' . $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'] . '">';
+	}
+	echo '</FORM>';
+		draw_footer();
 }
-elseif($_POST['mode']=='Delete file(s)')
+elseif(isset($_POST['mode']) && $_POST['mode']=='Delete file(s)')
 {
 	$url = 'delete.php?mode=pmntdel&';
 	$id = 0;
@@ -185,18 +183,17 @@ elseif($_POST['mode']=='Delete file(s)')
 	$url = substr($url, 0, strlen($url)-1);
 	header('Location:'.$url.'&num_checkboxes='.$_POST['num_checkboxes']);
 }
-elseif($_REQUEST['mode'] == 'Undelete')
+elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Undelete')
 {
-	for($i= 0; $i<$_REQUEST['num_checkboxes']; $i++)
-	{
-		if(isset($_REQUEST["checkbox$i"]))
+		for($i= 0; $i<$_REQUEST['num_checkboxes']; $i++)
 		{
-			$file_obj = new FileData($_REQUEST["checkbox$i"], $GLOBALS['connection'], $GLOBALS['database']);
-			$file_obj->undelete();
-			 fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
+				if(isset($_REQUEST["checkbox$i"]))
+				{
+						$file_obj = new FileData($_REQUEST["checkbox$i"], $GLOBALS['connection'], $GLOBALS['database']);
+						$file_obj->undelete();
+						fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
+				}
 		}
-	}
-	header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('Document has been unarchived'));
+		header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('Document has been unarchived'));
 }
-
 ?>
