@@ -70,7 +70,7 @@ function do_install()
         GRANT ALL ON $GLOBALS[database].* to $GLOBALS[user] identified by '$GLOBALS[pass]';
         ") or die("<br>Could not set GRANT");
 
-        include("install/odm1.1rc1.php");
+        include("install/odm.php");
 
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 } // End Install
@@ -81,6 +81,9 @@ function do_update_10()
         echo 'Updating';        
         mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!"); 
         mysql_select_db($GLOBALS['database']) or die (mysql_error() . "<br><font class=\"pn-failed\">Unable to select database.</font>");
+        
+        // Call each version, starting with th oldest. Upgrade from one to the next until done
+        //include("install/upgrade_09.php");
         include("install/upgrade_10.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 }
