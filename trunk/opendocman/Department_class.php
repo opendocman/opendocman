@@ -1,4 +1,15 @@
 <?php	
+
+	/*	
+	Written By: Nguyen Duy Khoa
+	Last Modified: 02/07/2003
+	Email: knguyen@ksys.serverbox.org
+
+	Department class is an extended class of the abstractive databaseData
+	class.  The only difference is that it provides it's own constructor
+	to handle its own characteristics.  
+	*/
+
 if( !defined('Department_class') )
 {
   define('Department_class', 'true', false);
