@@ -1,7 +1,6 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
@@ -10,7 +9,11 @@ if (!session_is_registered('SESSION_UID'))
 }
 include ('./config.php');
 // includes
-draw_header($title);
+if (!isset($last_message))
+{
+    $last_message='';
+}
+draw_header('File Listing');
 draw_menu($SESSION_UID);
 draw_status_bar('Document Listing', $last_message);
 sort_browser(); 
