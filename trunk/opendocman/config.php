@@ -42,13 +42,14 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
+// No need for trailing "/" here
 'base_url' => 'http://mydomain/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2rc1',
+'current_version' => ' OpenDocMan v1.2',
 
 // The email address of the administrator of this site
 'site_mail' => 'admin@mydomain',
@@ -60,6 +61,7 @@ global $CONFIG;      $CONFIG = array(
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
+// Don't forget the trailing "/" 
 'dataDir' => '/var/www/document_repository/', 
 
 //This var sets the amount of days until each file needs to be revised, 
