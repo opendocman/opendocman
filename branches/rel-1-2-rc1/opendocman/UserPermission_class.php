@@ -80,12 +80,10 @@ if( !defined('UserPermission_class') )
 		{
 			list($array[$index]) = mysql_fetch_row($result);
 		}
-		$time = getmicrotime();
 		$deptperm_filearray = array_diff($deptperm_filearray, $array); 
-		$total_listing = $userperm_filearray + $deptperm_filearray;
+		$total_listing = array_merge($userperm_filearray , $deptperm_filearray);
 		$total_listing = array_unique( $total_listing);
 		$result_array = array_values($total_listing);
-		echo "<script language='javascript'>alert(" . (getmicrotime()-$time) . ")</script>";
 		return $result_array;
 	}
 	// return an array of all the Allowed files ( right >= view_right) OBJ 

@@ -232,7 +232,7 @@ if( !defined('FileData_class') )
 	// return the latest modifying date on the file 
 	function getModifiedDate()
 	{
-		$query = "SELECT $this->TABLE_LOG.modified_on FROM $this->TABLE_LOG WHERE $this->TABLE_LOG.id = '$this->id' ORDER BY $this->TABLE_LOG.modified_on DESC LIMIT 1;";
+		/*$query = "SELECT $this->TABLE_LOG.modified_on FROM $this->TABLE_LOG WHERE $this->TABLE_LOG.id = '$this->id' ORDER BY $this->TABLE_LOG.modified_on DESC LIMIT 1;";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
                 if( mysql_num_rows($result) == $this->result_limit)
                         list($name) = mysql_fetch_row($result);
@@ -240,8 +240,12 @@ if( !defined('FileData_class') )
                 {
                                 $this->error = 'Non unique file id';
                                 return $this->error;
-                }
-                return $name;
+                }*/
+        
+        $query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY log.modified_on DESC limit 1;";
+		$result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
+        list($name) = mysql_fetch_row($result);       
+        return $name;
 	}
 	// return the realname of the file
 	function getRealName()
