@@ -15,13 +15,13 @@ include('config.php');
 
 draw_header('Search');
 draw_menu($SESSION_UID);
-draw_status_bar('Search', $message);
+draw_status_bar('Search', "");
 
 if(!isset($starting_index))
 {
         $starting_index = 0;
 }
-if(!isset($stoping_index)
+if(!isset($stoping_index))
 {
         $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
 }
