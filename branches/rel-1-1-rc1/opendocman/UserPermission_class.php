@@ -174,8 +174,8 @@ if( !defined('UserPermission_class') )
 		$uperm = $this->userperm_obj->getPermission($data_id);
 	    $dperm = $this->deptperm_obj->getPermission($data_id);
 	    $filedata = new FileData($data_id, $this->connection, $this->database);
-	    if( $filedata->isOwner($this->uid) )
-	    {  return $this->ADMIN_RIGHT;	}
+	    //if( $filedata->isOwner($this->uid) )
+	    //{  return $this->ADMIN_RIGHT;	}
 	    if( $uperm>=$this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
 	    {
 	      if($dperm>=$this->deptperm_obj->NONE_RIGHT and $dperm <= $this->deptperm_obj->ADMIN_RIGHT)
