@@ -28,7 +28,8 @@ if (isset($_SESSION['uid']) & isset($_GET['item']))
                 exit;
         }
 }
-
+if(!isset($_REQUEST['caller']))
+{	$_REQUEST['caller'] = 'admin.php';	}
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if($user_obj->isAdmin() == true)
@@ -323,9 +324,8 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
                         <form name="update" action="commitchange.php" method="POST" enctype="multipart/form-data">
+                        <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
                         <?php
-                        // query to get a list of users
-                        echo '<INPUT type="hidden" name="callee" value="'.$_SERVER['PHP_SELF'].'">';
                 $query = "SELECT * FROM user where id='" . $_REQUEST['item'] . "' ORDER BY username";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
@@ -436,7 +436,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
                 <OPTION value='-1'>Choose the department(s)</OPTION>
 <?php
-                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '$item'";
+                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '$_REQUEST[item]'";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
                 $result2 = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -633,5 +633,9 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         {
                 $last_message="Action Cancelled";
                 header('Location:admin.php?last_message='.$last_message);
+        }
+        else 
+        {	
+        	header('Location:admin.php?last_message=' . urlencode('Unrecognizalbe action'));
         }
 ?>
