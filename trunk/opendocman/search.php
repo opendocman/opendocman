@@ -86,7 +86,7 @@ draw_footer();
 }
 else
 {
-sort_browser();
+        sort_browser();
         function OBJs_search_interface($where, $query, $exact_word, $case_sensitivity, $OBJ_array)
         {
                 if($where == 'all')
@@ -115,7 +115,9 @@ sort_browser();
                         $query_array = OBJs_to_strs($where, $query, $exact_word, $case_sensitivity, $OBJ_array);
                         $search_result = str_search($query, $query_array, $exact_word, $case_sensitivity);
                         for($j = 0; $j < sizeof($search_result); $j++)
+                        {
                                 $search_result[$j] = array($search_result[$j], $cases[$i]);
+                        }
                 }	
                 $search_result_len = sizeof($search_result);
                 $sorted_result = array();
@@ -217,7 +219,7 @@ then return_array[index1] = (OBJ1, 'filename_only');
         $view_able_files_obj = $current_user_permission->getAllowedFileOBJs();
         $obj_array_len = sizeof($view_able_files_obj);
         $query_array = array();
-        $search_result = @OBJs_search_interface($_GET['where'], $_GET['keyword'], $_GET['exact_word'], $_GET['case_sensitivity'], $_GET['view_able_files_obj']);
+        $search_result = OBJs_search_interface($_GET['where'], $_GET['keyword'], @$_GET['exact_word'], @$_GET['case_sensitivity'], $view_able_files_obj);
 /*
       if($where == 'all')
           {
@@ -230,9 +232,9 @@ then return_array[index1] = (OBJ1, 'filename_only');
 */
         $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
         $sorted_obj_array = obj_array_sort_interface($search_result, $_GET['sort_order'], $_GET['sort_by']);
-        list_files($sorted_obj_array,  $current_user_permission, $_GET['page_url'],  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
+        list_files($sorted_obj_array,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
         echo '<BR>';
-        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $_GET['page_url'],$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
+        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
 
         draw_footer();
 }
