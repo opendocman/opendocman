@@ -109,7 +109,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 	for($i = 0; $i < mysql_num_rows($lresult); $i++)
 	{	list($array_id[$i]) = mysql_fetch_row($lresult);	}
 	$luserperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id);
+	//$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id);
 	if(!isset($_POST['starting_index']))
 	{
 		        $_POST['starting_index'] = 0;
@@ -141,14 +141,15 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 
 	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-	$sorted_obj_array = obj_array_sort_interface($lfileobj_array, $_POST['sort_order'], $_POST['sort_by']);
+	//$sorted_obj_array = obj_array_sort_interface($lfileobj_array, $_POST['sort_order'], $_POST['sort_by']);
+	$sorted_array_id = my_sort($array_id, $_POST['sort_order'], $_POST['sort_by']);
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure?\');">' . "\n";
 
 ?>
 		<TABLE border="1"><TR><TD>
 <?php
-		list_files($sorted_obj_array, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true);
-	list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url, $_POST['page'], $_POST['sort_by'], $_POST['sort_order']);
+		list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true);
+	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], $page_url, $_POST['page'], $_POST['sort_by'], $_POST['sort_order']);
 ?>
 		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit"
 		name="mode" value="Delete file(s)">
