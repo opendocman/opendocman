@@ -22,8 +22,6 @@ include('config.php');
 // open connection
 if (!isset($_POST['submit']))
 {
-	draw_menu($_SESSION['uid']);
-	@draw_status_bar('Check Document In',$_REQUEST['last_message']);
 	// form not yet submitted, display initial form
 
 	// pre-fill the form with some information so that user knows which file is being updated
@@ -33,7 +31,7 @@ if (!isset($_POST['submit']))
 	// in case script is directly accessed, query above will return 0 rows
 	if (mysql_num_rows($result) <= 0)
 	{
-                $last_message='Failed';
+        $last_message='Failed';
 		header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
 		exit;
 	}
@@ -41,7 +39,8 @@ if (!isset($_POST['submit']))
 	{
 		// get result data
 		list($description, $realname) = mysql_fetch_row($result);
-		
+		draw_menu($_SESSION['uid']);
+		@draw_status_bar('Check Document In',$_REQUEST['last_message']);		
 		// correction
 		if($description == '') 
 		{ 
