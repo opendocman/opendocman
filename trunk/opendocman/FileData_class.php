@@ -73,7 +73,7 @@ if( !defined('FileData_class') )
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
-			while( list($category, $owner, $created_date, $description, $comment, $status, $department, $size) = mysql_fetch_row($result) )
+			while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
 			{
 				$this->category = $category;
 				$this->owner = $owner;
@@ -82,7 +82,6 @@ if( !defined('FileData_class') )
 				$this->comment = $comment;
 				$this->status = $status;
 				$this->department = $department;
-				$this->filesize = $size;
 			}
 		}
 		else
