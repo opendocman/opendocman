@@ -1,5 +1,6 @@
 <?php
 // Exension to MIME-Type mapping, pretty much the same as mime.types from Apache
+$mimetypes=array(); global $mimetypes;
 $mimetypes['ez']  = 'application/andrew-inset';
 $mimetypes['csm'] = 'application/cu-seeme';
 $mimetypes['cu']  = 'application/cu-seeme';
