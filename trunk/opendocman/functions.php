@@ -1186,7 +1186,7 @@ if( !defined('function') )
 	function checkUserPermission($file_id, $permittable_right)
 	{
 		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
-		if($user_perm_obj->getPermission($file_id) < $permittable_right)
+		if(!$user_perm_obj->user_obj->isRoot() && $user_perm_obj->getPermission($file_id) < $permittable_right)
 		{
 			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";
 			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for further assistance.';

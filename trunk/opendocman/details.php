@@ -1,7 +1,6 @@
 <?php
-// details.php - display file information 
-// check for session
-//$SESSION_UID=102; $id=65;
+// details.php - display file information  check for session
+//$SESSION_UID=140; $id=65;
 session_start();
 if (!session_is_registered('SESSION_UID'))
 {
