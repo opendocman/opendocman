@@ -1,3 +1,9 @@
+# MySQL dump 8.16
+#
+# Host: musa    Database: opendocman_khoa
+#--------------------------------------------------------
+# Server version	4.0.12-max-log
+
 #
 # Table structure for table 'admin'
 #
@@ -32,6 +38,7 @@ INSERT INTO category VALUES (2,'Training Manual');
 INSERT INTO category VALUES (3,'Letter');
 INSERT INTO category VALUES (4,'Presentation');
 
+
 #
 # Table structure for table 'data'
 #
@@ -44,20 +51,18 @@ CREATE TABLE data (
   created datetime NOT NULL default '0000-00-00 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) NOT NULL default '',
-  status smallint(6) unsigned default NULL,
+  status smallint(6) default NULL,
   department smallint(6) unsigned default NULL,
   default_rights tinyint(4) default NULL,
   publishable tinyint(4) default NULL,
   reviewer smallint(6) unsigned default NULL,
   reviewer_comments varchar(255) default NULL,
+  filesize bigint(20) default NULL,
   PRIMARY KEY  (id),
-  KEY data_idx (id,owner)
+  KEY data_idx (id,owner),
+  KEY id (id),
+  KEY id_2 (id)
 ) TYPE=MyISAM;
-
-#
-# Dumping data for table 'data'
-#
-
 
 #
 # Table structure for table 'department'
@@ -75,6 +80,7 @@ CREATE TABLE department (
 
 INSERT INTO department VALUES (1,'Information Systems');
 
+
 #
 # Table structure for table 'dept_perms'
 #
@@ -86,6 +92,21 @@ CREATE TABLE dept_perms (
 ) TYPE=MyISAM;
 
 #
+# Table structure for table 'dept_reviewer'
+#
+
+CREATE TABLE dept_reviewer (
+  dept_id smallint(5) unsigned default NULL,
+  user_id smallint(5) unsigned default NULL
+) TYPE=MyISAM;
+
+#
+# Dumping data for table 'dept_reviewer'
+#
+
+INSERT INTO dept_reviewer VALUES (1,1);
+
+#
 # Table structure for table 'log'
 #
 
@@ -93,7 +114,8 @@ CREATE TABLE log (
   id int(10) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
-  note text
+  note text,
+  revision varchar(255) default NULL
 ) TYPE=MyISAM;
 
 #
@@ -136,7 +158,8 @@ CREATE TABLE user (
 # Dumping data for table 'user'
 #
 
-INSERT INTO user VALUES (1,'admin','',1,'','','User','Admin');
+INSERT INTO user VALUES (1,'admin','','1','5555551212','myemail@asdfa.com','User','Admin');
+
 
 #
 # Table structure for table 'user_perms'
@@ -148,5 +171,4 @@ CREATE TABLE user_perms (
   rights tinyint(4) NOT NULL default '0',
   KEY user_perms_idx (fid,uid,rights)
 ) TYPE=MyISAM;
-
 
