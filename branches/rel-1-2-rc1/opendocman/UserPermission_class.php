@@ -65,9 +65,9 @@ if( !defined('UserPermission_class') )
 	function getViewableFileIds()
 	{	
 		$array = array();
+		//These 2 below takes half of the execution time for this function
 		$userperm_filearray = $this->userperm_obj->getCurrentViewOnly();
 		$deptperm_filearray = $this->deptperm_obj->getCurrentViewOnly();
-		
 		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA, $this->TABLE_USER, 
 			$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid 
 			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 

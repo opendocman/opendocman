@@ -54,28 +54,25 @@ if ( !defined('User_Perms_class') )
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
-			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER WHERE 
-				user.id = $this->TABLE_DATA.owner AND $this->TABLE_DATA.publishable = 1 order by $this->TABLE_DATA.id asc";
+			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA WHERE 
+				$this->TABLE_DATA.publishable = 1 order by $this->TABLE_DATA.id asc";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
-			$query = "SELECT $this->TABLE_USER_PERMS.fid, $this->TABLE_DATA.owner, 
-				$this->TABLE_USER.username FROM $this->TABLE_DATA, $this->TABLE_USER, 
+			$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,
 				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
 				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
-				$this->TABLE_USER.id = $this->TABLE_DATA.owner AND $this->TABLE_USER_PERMS.rights>=$right 
-				AND $this->TABLE_DATA.publishable = 1) order by $this->TABLE_DATA.id";
+				$this->TABLE_USER_PERMS.rights>=$right AND $this->TABLE_DATA.publishable = 1) order by $this->TABLE_DATA.id";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
-		$index = 0;
+		$index = -1;
 		$fileid_array = array();
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
 		//$fileid_array[$index][2] ==> username
-		while($index< mysql_num_rows($result) )
+		$llen = mysql_num_rows($result);
+		while($index< $llen )
 		{
-			list($fileid_array[$index] ) = mysql_fetch_row($result);
-			$index++;	
+			list($fileid_array[++$index] ) = mysql_fetch_row($result);	
 		}
 		return $fileid_array;
-			
 	}
 	// return whether if this user can view $data_id
     function canView($data_id)

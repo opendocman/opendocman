@@ -108,15 +108,8 @@ else
     		}
     	}
     	
-    	$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id and (';
+    	$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
     	$larray_len = sizeof($lsearch_array);
-    	for($li = 0; $li < $larray_len; $li++)
-    	{	
-    		$lquery .= 'data.id=' . $lsearch_array[$li];
-    		if($li != $larray_len-1)
-    		{	$lquery .= ' OR ';	}
-    	}
-    	$lquery .= ') AND (';
     	switch($lwhere)
         {
         	// Put all the category for each of the OBJ in the OBJ array into an array
@@ -167,15 +160,15 @@ else
   	 	$llen = mysql_num_rows($lresult);
   	 	while( $lindex < $llen )
   	 	{ 	list($lid_array[$lindex++]) = mysql_fetch_row($lresult);	} 
-  	 	return $lid_array;
+  	 	return array_values( array_intersect($lid_array, $lsearch_array) );
     }
 	
 	$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $s_getFTime = time();
+    $s_getFTime = getmicrotime();
     $view_able_files_id = $current_user_permission->getViewableFileIds();
-    $e_getFTime = time();
+    $e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
@@ -188,7 +181,7 @@ else
     echo '<BR>';
     list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();
-    echo '<br> <b> Load Page Time: ' . (time() - $start_time) . ' </b>';
+    echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
     echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
 }
 ?>
