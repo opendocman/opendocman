@@ -2,7 +2,7 @@
 
 OpenDocMan
 
-version 1.1rc1
+version 1.1rc2
 
 Copyright (C) Stephen Lawrence, 2000 - 2003
 
@@ -79,7 +79,7 @@ link. (ex. http://www.mydomain.com/opendocman/setup.php)
 
   $> mysql -u root -p
 
-  Welcome to the MySQL monitor. 
+  Welcome to the MySQL monitor.  
   Commands end with ; or \g.
 
   Your MySQL connection id is 5525 to server version: 3.22.32
