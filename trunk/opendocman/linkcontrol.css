@@ -1,7 +1,8 @@
 <style type="text/css">
 	a.statusbar:link {color: white}
+	font.statusbar {color: white; text-decoration:none; font-size:70%} 
 	a.statusbar:visited {color: white}
-	a.statusbar:hover {background:white; color: #0000A0; text-decoration: underline; font-weight:bold}
+	a.statusbar:hover {background:white; color: #0000A0; text-decoration: underline; font-weight:normal}
 	a.statusbar:active {color: #FFFFFF}
 	a.statusbar	{color: white; text-decoration:none; font-size:70% }
 </style>

@@ -67,21 +67,19 @@ if( !defined('Dept_Perms_class') )
 	than $right */
 	function loadData_UserPerm($right)
 	{
-		$index = 0;
+		$index = -1;
 		$fileid_array = array();
-		$query = "SELECT $this->TABLE_DATA.id, $this->TABLE_DATA.owner, $this->TABLE_USER.username 
-			FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
+		$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA, $this->TABLE_USER, $this->TABLE_DEPT_PERMS 
 			WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id 
-			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.owner=$this->TABLE_USER.id
-			AND $this->TABLE_DATA.publishable=1";                                                 
+			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.publishable=1 order by $this->TABLE_DATA.id asc";                                                 
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
 		//$fileid_array[$index][2] ==> username
-		while( $index< mysql_num_rows($result) ) 
+		$llen = mysql_num_rows($result);
+		while( $index< $llen ) 
 		{
-			list($fileid_array[$index][0],$fileid_array[$index][1],$fileid_array[$index][2] ) = mysql_fetch_row($result);
-			$index++;	
+			list($fileid_array[++$index] ) = mysql_fetch_row($result);	
 		}
 		return $fileid_array;		
 	}

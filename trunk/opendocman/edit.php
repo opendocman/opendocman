@@ -15,9 +15,13 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 //$submit=true;
 
 session_start();
+if(strchr($_REQUEST['id'], '_') )
+{
+	    header('Location:error.php?ec=20');
+}
 if (!session_is_registered('uid'))
 {
-  header('Location:error.php?ec=1');
+  header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
   exit;
 }
 
@@ -26,9 +30,12 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 	header('Location:error.php?ec=2');
   	exit;
 }
+
+include('config.php');
+$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+if( $filedata->isArchived() ) header('Location:error.php?ec=21');
 if (!isset($_REQUEST['last_message']))
 {	$_REQUEST['last_message'] = '';	}
-include('config.php');
 if (!isset($_REQUEST['submit']))
 // form not yet submitted, display initial form
 {
@@ -145,6 +152,7 @@ if (!isset($_REQUEST['submit']))
 		$realname = $filedata->getName();
 		$description = $filedata->getDescription();
 		$comment = $filedata->getComment();
+		$owner_id = $filedata->getOwner();
 		// display the form
 ?>
 		<p>
@@ -157,7 +165,27 @@ if (!isset($_REQUEST['submit']))
 		<td valign="top">Name</td>
 		<td colspan="3"><b><?php  echo $realname; ?></b></td>
 		</tr>
-			
+		<tr>
+		<td valign="top">Owner</td>
+		<td colspan="3"><b>
+		<select name="users">
+			<?php  
+			$lusers = getAllUsers();
+			for($i = 0; $i < sizeof($lusers); $i++)
+			{
+				if($lusers[$i][0] == $owner_id)
+				{	
+					echo '<option value="' . $lusers[$i][0] . '" selected>' . $lusers[$i][1] . ' - ' . $lusers[$i][2] . '</option>' . "\n";
+				}
+				else
+				{
+					echo '<option value="' . $lusers[$i][0] . '">' . $lusers[$i][1] . ' - ' . $lusers[$i][2] . '</option>' . "\n";
+				}
+			}
+			?>
+		</select>
+		</b></td>
+		</tr>
 		<tr>
 		<td valign="top">Category</td>
 		<td colspan="3"><select name="category">
@@ -253,7 +281,6 @@ if (!isset($_REQUEST['submit']))
 		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
-	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 	$user_forbidden_array = $filedata->getForbiddenRightUserIds();
 	$found = false;
 	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
@@ -396,20 +423,21 @@ else
 	$filedata->setId($_REQUEST['id']);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
-	if (sizeof($_REQUEST['view']) <= 0 or sizeof($_REQUEST['modify'])<= 0 or sizeof($_REQUEST['read'])<= 0 or sizeof ($_REQUEST['admin'])<= 0) { header("Location:error.php?ec=12"); exit; }
+	if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin'])) { header("Location:error.php?ec=12"); exit; }
 	
 	// query to verify
 	$query = "SELECT status FROM data WHERE id = '$_REQUEST[id]' and status = '0'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	
 	if(mysql_num_rows($result) <= 0)
 	{
 		header('Location:error.php?ec=2'); 
 		exit; 
 	}
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "' WHERE id = '$_REQUEST[id]'");
+	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	if(isset($_REQUEST['users']))
+		mysql_query('UPDATE data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
 	
 	// clean out old permissions
 	$query = "DELETE FROM user_perms WHERE fid = '$_REQUEST[id]'";

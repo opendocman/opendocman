@@ -4,8 +4,12 @@
 session_start();
 if (!session_is_registered('uid'))
 {
-	header('Location:error.php?ec=1');
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
+}
+if(strchr($_REQUEST['id'], '_') )
+{
+	    header('Location:error.php?ec=20');
 }
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -19,7 +23,7 @@ the server
 */
 $fileobj = new FileData($_GET['id'], $GLOBALS['connection'], $GLOBALS['database']);
 $fileobj->setId($_GET['id']);
-if ($fileobj->getError() != NULL || $fileobj->getStatus() != 0 )
+if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isArchived())
 {
 	header('Location:error.php?ec=2');
 	exit;

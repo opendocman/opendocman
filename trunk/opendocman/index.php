@@ -33,7 +33,10 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         <center>
         <table border="0" cellspacing="5" cellpadding="5">
         <form action="index.php" method="post">
-        <tr>
+        <?php
+		if(isset($_REQUEST['redirection']))
+			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
+		<tr>
         <td>Username</td>
         <td><input type="Text" name="frmuser" size="15"></td>
         </tr>
@@ -81,7 +84,10 @@ elseif(isset($_POST['login']))
                 // initiate a session
                 $_SESSION['uid'] = $id;
                 // redirect to main page
-                header('Location:out.php');
+                if(isset($_REQUEST['redirection']))
+					header('Location:' . $_REQUEST['redirection']);
+				else
+					header('Location:out.php');
                 mysql_free_result ($result);	
                 // close connection
         }

@@ -35,6 +35,8 @@ if( !defined('FileData_class') )
 	var $read_users;
 	var $write_users;
 	var $admin_users;
+	var $filesize;
+	var	$isLocked;
 	
 	function FileData($id, $connection, $database)
 	{
@@ -65,13 +67,13 @@ if( !defined('FileData_class') )
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
 			$this->tablename.created, $this->tablename.description, 
 			$this->tablename.comment, $this->tablename.status, 
-			$this->tablename.department FROM $this->tablename 
-			WHERE $this->tablename.id = $this->id";
+			$this->tablename.department , $this->tablename.filesize
+			FROM $this->tablename WHERE $this->tablename.id = $this->id";
 		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
-			while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
+			while( list($category, $owner, $created_date, $description, $comment, $status, $department, $size) = mysql_fetch_row($result) )
 			{
 				$this->category = $category;
 				$this->owner = $owner;
@@ -80,11 +82,16 @@ if( !defined('FileData_class') )
 				$this->comment = $comment;
 				$this->status = $status;
 				$this->department = $department;
+				$this->filesize = $size;
 			}
 		}
 		else
 			$this->error = 'Non unique file id';
+		$this->isLocked = $this->status==-1;
 	}
+	//return filesize
+	function getFileSize()
+	{	return $this->filesize;	}
 	// return this file's category id
 	function getCategory()
 	{	return $this->category;		}
@@ -195,6 +202,8 @@ if( !defined('FileData_class') )
 	// return the status of the file
 	function getStatus()
 	{	return $this->status;		}
+	function setStatus($value)
+	{	mysql_query('UPDATE data set status=' . $value . ' where data.id = ' . $this->id) or die(mysql_error());}
 	// return a User OBJ of the person who checked out this file
 	function getCheckerOBJ()
 	{
@@ -307,6 +316,19 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $publishable;
 	}
+	function isArchived()
+	{
+		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
+		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
+		if(mysql_num_rows($result) != 1)
+		{
+			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+			exit;
+		}
+		list($publishable) = mysql_fetch_row($result);
+		mysql_free_result($result);
+		return ($publishable == 2);
+	}
 	// this function sets the publisable field in the data table to $boolean
 	function Publishable($boolean = true)
 	{
@@ -366,6 +388,19 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $comments;
 	}
+	function temp_delete()
+	{
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 2 WHERE $this->TABLE_DATA.id = $this->id";
+		$result = mysql_query($query, $this->connection) or
+			die("Error in query: $query" . mysql_error());
+	}
+	function undelete()
+	{
+		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 0 WHERE $this->TABLE_DATA.id = $this->id";
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+	}
+	function isLocked()
+	{	return $this->isLocked;	}
   }
 }
 ?>

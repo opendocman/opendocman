@@ -5,8 +5,7 @@
 session_start();
 if (!isset($_SESSION['uid']))
 {
-        echo "error";
-	draw_error('error.php?ec=1');
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
 }
 
@@ -189,6 +188,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 	<table border="0" cellspacing="5" cellpadding="5">
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 	<tr>
+	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 	<td><b>Department</b></td>
 	<td colspan=3><select name="item">
 <?php 
@@ -221,8 +221,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
         {
                 $_POST['last_message']='';
         }
+	$dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
 	draw_header('Department Update');
-	draw_status_bar('Update Department',$_POST['last_message']);
+	draw_status_bar('Update Department: ' . $dept_obj->getName(),$_POST['last_message']);
 ?>
 	<center>
 	<table border="1" cellspacing="5" cellpadding="5">
@@ -268,6 +269,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 ?>
 	<center>
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" enctype="multipart/form-data">
+	<INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr>
 	<td><b>Department to modify:</b></td>

@@ -8,6 +8,7 @@ if( !defined('User_class') )
 	var $root_username;
         
         function User($id, $connection, $database)
+
         {
                 $this->root_username = $GLOBALS['CONFIG']['root_username'];
                 $this->field_name = 'username';
@@ -54,11 +55,11 @@ if( !defined('User_class') )
         {
                 $data_published = array();
                 $index = 0;
-                $query = "SELECT data.id, data.owner, user.username FROM data, user WHERE data.owner = $this->id and user.id = data.owner and data.publishable = $publishable";
+                $query = "SELECT data.id FROM data, user WHERE data.owner = $this->id and user.id = data.owner and data.publishable = $publishable";
                 $result = mysql_query($query, $this->connection) or die("Error in query: ". $query .mysql_error());
                 while($index<mysql_num_rows($result))
                 {
-                        list($data_published[$index][0], $data_published[$index][1], $data_published[$index][2]) = mysql_fetch_row($result);
+                        list($data_published[$index]) = mysql_fetch_row($result);
                         $index++;
                 }
                 return $data_published;
@@ -76,9 +77,8 @@ if( !defined('User_class') )
 
                 if(mysql_num_rows($result) !=1 )
                 {
-                        header('Location:error.php?ec=14');
-                        exit;
-                }
+                	return false;
+				}
 
                 list($isadmin) = mysql_fetch_row($result);
                 return $isadmin;
@@ -135,46 +135,70 @@ if( !defined('User_class') )
 		$query = "SELECT * from dept_reviewer where user_id = " . $this->id;
 		$result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
 		if(mysql_num_rows($result) > 0)
-                {
+		{
 			return 1;
-                }
+		}
 		else
-                {
+		{
 			return 0;
-                }
+		}
 	}
-
-        function getReviewee() //return an array of files that need reviewing
-        {
-                if($this->isReviewer())
-                {
-                        $query = "SELECT dept_id FROM dept_reviewer WHERE user_id = ".$this->id;
-                        $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-                        $num_depts = mysql_num_rows($result);
-                        $query = "SELECT id FROM data WHERE (";
-                        for($index = 0; $index < $num_depts; $index++)
-                        {
-                                list($dept) = mysql_fetch_row($result);
-                                if($index != $num_depts -1)
-                                        $query = $query . " data.department = $dept or";
-                                else 
-                                        $query = $query . " data.department = $dept )";
-                        }
-                        $query = $query . " and data.publishable = 0";
-                        mysql_free_result($result);
-                        $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-                        $file_data = array();
-                        $num_files = mysql_num_rows($result);
-                        for($index = 0; $index< $num_files; $index++)
-                        {
-                                list($fid) = mysql_fetch_row($result);
-                                $file_data[$index] = new FileData($fid, $this->connection, $this->database);
-                        }
-                        return $file_data;				
-                }		
-        }
-
-	function getRejectedFiles()
+	function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
+	{
+		$lquery = "SELECT id FROM data WHERE $this->TABLE_DATA.publishable = 0";
+		$lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
+		$lfile_data = array();
+		$lnum_files = mysql_num_rows($lresult);
+		for($lindex = 0; $lindex< $lnum_files; $lindex++)
+		{
+			list($lfid) = mysql_fetch_row($lresult);
+			$lfile_data[$lindex] = $lfid;
+		}
+		return $lfile_data;
+	}
+	function getRevieweeIds() //return an array of files that need reviewing under this person
+	{
+		if($this->isReviewer())
+		{
+			$query = "SELECT dept_id FROM dept_reviewer WHERE user_id = ".$this->id;
+			$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+			$num_depts = mysql_num_rows($result);
+			$query = "SELECT id FROM data WHERE (";
+			for($index = 0; $index < $num_depts; $index++)
+			{
+				list($dept) = mysql_fetch_row($result);
+				if($index != $num_depts -1)
+					$query = $query . " data.department = $dept or";
+				else 
+					$query = $query . " data.department = $dept )";
+			}
+			$query = $query . " and data.publishable = 0";
+			mysql_free_result($result);
+			$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+			$file_data = array();
+			$num_files = mysql_num_rows($result);
+			for($index = 0; $index< $num_files; $index++)
+			{
+				list($fid) = mysql_fetch_row($result);
+				$file_data[$index] = $fid;
+			}
+			return $file_data;				
+		}		
+	}
+	function getAllRejectedFileIds()
+	{
+		$query = "SELECT data.id FROM data WHERE publishable = '-1'";
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$file_data = array();
+		$num_files = mysql_num_rows($result);
+		for($index = 0; $index< $num_files; $index++)
+		{
+			list($fid) = mysql_fetch_row($result);
+			$file_data[$index] = $fid;
+		}
+		return $file_data;
+	}
+	function getRejectedFileIds()
 	{
 		$query = "SELECT data.id FROM data WHERE publishable = '-1' and data.owner = ".$this->id;
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
@@ -183,11 +207,29 @@ if( !defined('User_class') )
 		for($index = 0; $index< $num_files; $index++)
 		{
 			list($fid) = mysql_fetch_row($result);
-			$file_data[$index] = new FileData($fid, $this->connection, $this->database);
+			$file_data[$index] = $fid;
 		}
 		return $file_data;
 	}
-        
+    function getExpiredFileIds()
+    {
+    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lresult = mysql_query($lquery) or die(mysql_error());
+    	$llen = mysql_num_rows($lresult);
+    	$file_data = array();
+    	for($index = 0; $index< $llen; $index++)
+		{
+			list($fid) = mysql_fetch_row($lresult);
+			$file_data[$index] = $fid;
+		}
+		return $file_data;
+    }
+    function getNumExpiredFiles()
+    {
+    	$lquery = 'SELECT data.id FROM data WHERE status=-1 AND owner = "' . $this->id . '"';
+    	$lresult = mysql_query($lquery) or die(mysql_error());
+    	return mysql_num_rows($lresult);
+    }
 	function getEmailAddress()
 	{
 		$query = "SELECT user.Email FROM user WHERE user.id=".$this->id;
