@@ -30,6 +30,7 @@ if(!isset($_REQUEST['mode']) || @$_REQUEST['mode'] == 'showall')
 	$total_hit = sizeof($array_id);
 	list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $_SERVER['PHP_SELF'] . '?mode=showall', $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 	$_SESSION['uid'] = $_SESSION['uid.bak']; session_unregister('uid.bak');
+	draw_footer();
 
 }
 if(@$_REQUEST['mode'] == 'view_file')
