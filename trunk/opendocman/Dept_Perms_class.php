@@ -1,4 +1,13 @@
 <?php 
+/*
+   Written By: Nguyen Duy Khoa
+   Last Modified: 02/07/2003
+   Email: knguyen@ksys.serverbox.org
+   
+   Dept_Perms is designed to handle permission settings
+   of each department.
+ */
+
 if( !defined('Dept_Perms_class') )
 {
   define('Dept_Perms_class', 'true');
@@ -12,6 +21,7 @@ if( !defined('Dept_Perms_class') )
 	var $error;
 	var $chosen_mode;
 	var $connection, $database;
+	var $error_flag = FALSE;
 	
 	var $NONE_RIGHT = 0;
 	var $VIEW_RIGHT = 1;
@@ -57,17 +67,17 @@ if( !defined('Dept_Perms_class') )
 	{	
 		return $this->id;				
 	}
-
+	/* loadData_userPerm($right) return a list of files that 
+	the department that this OBJ represents has authority >=
+	than $right */
 	function loadData_UserPerm($right)
 	{
-		$no_querry = "SELECT user_perms.fid from user_perms where user_perms.rights<$right and user_perms.uid=";
-		
-		//Select fid, owner_id, owner_name of the file that dept-->$id has rights >= $right 
-		//$query = "SELECT dept_perms.fid, data.owner, user.username  FROM data, user, dept_perms WHERE (dept_perms.dept_id = $this->id  AND data.id = dept_perms.fid AND user.id = data.owner and dept_perms.rights>=$right and data.publishable = 1)";
-		$query = "SELECT data.id, data.owner, user.username FROM data, user, dept_perms WHERE dept_perms.rights >= $right AND dept_perms.dept_id=$this->id AND data.id=dept_perms.fid AND data.owner=user.id";                                                 
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
 		$fileid_array = array();
+		$query = "SELECT $this->DATA_TABLE.id, $this->DATA_TABLE.owner, $this->USER_TABLE.username 
+		FROM $this->DATA_TABLE, $this->USER_TABLE, $this->DEPT_PERM_TABLE 
+		WHERE $this->DEPT_PERM_TABLE.rights >= $right AND $this->DEPT_PERM_TABLE.dept_id=$this->id AND $this->DATA_TABLE.id=$this->DEPT_PERM_TABLE.fid AND $this->DATA_TABLE.owner=$this->USER_TABLE.id";                                                 
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
 		//$fileid_array[$index][2] ==> username
@@ -78,34 +88,50 @@ if( !defined('Dept_Perms_class') )
 		}
 		return $fileid_array;		
 	}
+	/* canView($data_id) return a boolean on whether or not this department
+	has view right to the file whose ID is $data_id*/
 	function canView($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
-		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
+		/* check  to see if this department doesn't have a forbidden right or 
+		if this file is publishable*/
+		if(!$this->isForbidden($data_id) and $filedata->isPublishable() )
 		{
+			// return whether or not this deptartment can view the file
 			if($this->canDept($data_id, $this->VIEW_RIGHT))
 				return true;
 			else
 				false;
 		}
+		return false;
 	}
+	/* canRead($data_id) return a boolean on whether or not this department
+	has read right to the file whose ID is $data_id*/
 	function canRead($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
-		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
+		/* check  to see if this department doesn't have a forbidden right or 
+		if this file is publishable*/
+		if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
 		{
+			// return whether or not this deptartment can read the file
 			if($this->canDept($data_id, $this->READ_RIGHT) or !$this->isPublishable($data_id) )
 				return true;
 			else
 				false;
 		}
-
+		return false;
 	}
+	/* canWrite($data_id) return a boolean on whether or not this department
+	has modify right to the file whose ID is $data_id*/
 	function canWrite($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
-		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
+		/* check  to see if this department doesn't have a forbidden right or 
+		if this file is publishable*/
+		if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
 		{
+			// return whether or not this deptartment can modify the file
 			if($this->canDept($data_id, $this->WRITE_RIGHT))
 				return true;
 			else
@@ -113,11 +139,16 @@ if( !defined('Dept_Perms_class') )
 		}
 
 	}
+	/* canAdmin($data_id) return a boolean on whether or not this department
+	has admin right to the file whose ID is $data_id*/
 	function canAdmin($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
-		if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
+		/* check  to see if this department doesn't have a forbidden right or 
+		if this file is publishable*/
+		if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
 		{
+			// return whether or not this deptartment can admin the file
 			if($this->canDept($data_id, $this->ADMIN_RIGHT))
 				return true;
 			else
@@ -125,25 +156,39 @@ if( !defined('Dept_Perms_class') )
 		}
 
 	}
+	/* isForbidden($data_id) return a boolean on whether or not this department
+	has forbidden right to the file whose ID is $data_id
+	EX:
+	$dpobj = new Dept_Perm($dept_id, $connection, $database);
+	if( $dpobj.isForbidden($data_id) != $dpobj->error_code 
+		and $dpobj.isForbidden($data_id) = false )
+	{
+		......
+	} 
+	*/
 	function isForbidden($data_id)
 	{
-		$query = "SELECT dept_perms.rights from dept_perms WHERE dept_perms.dept_id = $this->id and dept_perms.fid = $data_id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query" .mysql_error() );
+		$this->error_flag = true; // reset flag
+		$right = -1;
+		$query = "SELECT $this->database.$this->DEPT_PERM_TABLE.rights from $this->database.$this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.dept_id = $this->id AND $this->DEPT_PERM_TABLE.fid = $data_id";
+		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) ==1)
 		{
 			list ($right) = mysql_fetch_row($result);
-		if($right==$FORBIDDEN_RIGHT)
+			if($right == $this->FORBIDDEN_RIGHT)
 				return true;
 			else
 				return false;
 		}
-		
+		else 
+		{
+			$this->error = "Non-unique database entry found in $this->database.$this->DEPT_PERM_TABLE";
+			$this->error_flag = false;
+			return 0;
+		}	
 	}
-	function isPublishable($data_id)
-	{
-		$file_obj = new FileData($data_id, $this->connection, $this->database);
-		return $file_obj->isPublishable();
-	}
+	// canDept($data_id, $right) return a bool on whether or not this deparment has $right
+	// right on file with data id of $data_id
 	function canDept($data_id, $right)
 	{
 		$query = "Select * from dept_perms where dept_perms.dept_id = $this->id and dept_perms.fid = $data_id and dept_perms.rights>=$right";
@@ -156,6 +201,8 @@ if( !defined('Dept_Perms_class') )
 			default : $this->error = 'non-unique uid: $this->id'; break;
 		}
 	}
+	// return the numeric permission setting of this department for the file with
+	// ID nuber ob $data_id
 	function getPermission($data_id)
 	{
 	  $query = "Select dept_perms.rights from dept_perms where dept_id = $this->id and fid = $data_id";
