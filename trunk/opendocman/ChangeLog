@@ -1,3 +1,97 @@
+2004-02-25 09:35  logart
+
+	* toBePublished.php (1.18): fixed short tags added braces to if's
+
+2004-02-25 09:34  logart
+
+	* profile.php (1.8): case change on php tag
+
+2004-02-25 09:34  logart
+
+	* delete.php (1.13): cleaned up braces added isset's
+
+2004-02-25 09:10  logart
+
+	* add.php (1.19), edit.php (1.21): added Joe Jeskiewicz fix to
+	  spTo_
+
+2004-02-25 08:57  logart
+
+	* edit.php (1.20): added an isset for forbidden array to keep
+	  notices from showing in source code when no forbidden are
+	  selected
+
+2004-02-24 15:35  logart
+
+	* functions.php (1.39): fixed <? tags that were causeing $ in
+	  functions.php error
+
+2004-02-24 15:35  logart
+
+	* images/companylogo.gif (1.2): changed logo to opendocman logo
+
+2004-01-17 09:14  logart
+
+	* config.php (1.23): update version string
+
+2004-01-17 09:07  logart
+
+	* setup.php (1.22): fixed a problem where the GRANT statement would
+	  only grant to (username) instead of (username@roothost), thus
+	  preventing connections from @localhost
+
+2004-01-17 08:46  logart
+
+	* functions.php (1.38): removed extra } at end of functions.php -
+	  http://sourceforge.net/forum/forum.php?thread_id=1004142&forum_id=236529
+
+2004-01-07 10:48  logart
+
+	* install/upgrade_12rc1.php (1.2): removed ; because SF was
+	  chocking on it
+
+2004-01-07 10:47  logart
+
+	* index.php (1.11): re-ordered if's because SF demo site was
+	  chocking
+
+2004-01-07 09:34  logart
+
+	* config.php (1.22): cleaned up some global assignments to use
+	  $GLOBALS['var']='val' instead of $var='val';global $var;
+
+2004-01-07 09:32  logart
+
+	* functions.php (1.37): cleaned up the code a bit by replacing
+	  <td><?php echo ...  ;?></td> with	  echo '<td>blah</td>';
+
+2004-01-07 09:30  logart
+
+	* secureurl.class.php (1.5): fixed short tag
+
+2004-01-07 09:29  logart
+
+	* setup.php (1.21): added config.php includes to each sub-function
+	  because including it at the top of the file causes a
+	  no-connection error since the database only exists if it is an
+	  update, not a new install.
+
+	  fixed type for 1.2rc1 upgrade where it's case statement was
+	  odm_11 instead.
+
+2004-01-07 09:24  logart
+
+	* install/odm.php (1.11): removed semicolons from statements as
+	  they seem to cause problems
+
+2003-11-12 10:29  logart
+
+	* config.php (1.21): changed version to 1.2rc2
+
+2003-11-10 10:54  logart
+
+	* ChangeLog (1.14), docs/src/opendocman.lyx (1.4): comment changes
+
 2003-10-15 16:16  logart
 
 	* setup.php (1.20), install/upgrade.php (1.5),
@@ -1580,7 +1674,7 @@
 	  logout.php (1.1), mimetypes.php (1.1), profile.php (1.1),
 	  rejects.php (1.1), search.php (1.1), toBePublished.php (1.1),
 	  user.php (1.1), userinfo.php (1.1), view.php (1.1), view_file.php
-	  (1.1): Initial revision
+	  (1.1), images/companylogo.gif (1.1): Initial revision
 
 2002-12-19 15:27  logart
 
@@ -1599,9 +1693,9 @@
 	  images/icon_sort_za.gif (1.1.1.1), images/logout.jpg (1.1.1.1),
 	  images/logout.png (1.1.1.1), images/logout_logo.gif (1.1.1.1),
 	  images/na.jpg (1.1.1.1), images/revision.png (1.1.1.1),
-	  images/revision.xcf (1.1.1.1), images/companylogo.gif (1.1.1.1),
-	  images/logo.gif (1.1.1.1), images/search.png (1.1.1.1),
-	  images/search.xcf (1.1.1.1), images/setting.png (1.1.1.1),
-	  images/txt.png (1.1.1.1), images/view.png (1.1.1.1),
-	  images/view.xcf (1.1.1.1): sjl Initial Import
+	  images/revision.xcf (1.1.1.1), images/logo.gif (1.1.1.1),
+	  images/search.png (1.1.1.1), images/search.xcf (1.1.1.1),
+	  images/setting.png (1.1.1.1), images/txt.png (1.1.1.1),
+	  images/view.png (1.1.1.1), images/view.xcf (1.1.1.1): sjl Initial
+	  Import
 
