@@ -131,7 +131,7 @@ if (!isset($_REQUEST['submit']))
 //	$result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
 	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
 	// error check
-	if( !$filedata->exists() ) //if (mysql_num_rows($result) <= 0)
+	if( !$filedata->exists() ) 
 	{
 		header('Location:error.php?ec=2');
 		exit;
