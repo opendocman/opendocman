@@ -434,7 +434,7 @@ else //submited form
 	$lquery = 'UPDATE data set data.filesize=' . filesize($GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName) . ' WHERE data.id = ' . $fileId;
 	mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error() );
 	$message = urlencode('Document successfully added');
-	//header('Location: out.php?last_message=' . $message);
+	header('Location: out.php?last_message=' . $message);
 	}
 }
 ?>
