@@ -10,7 +10,7 @@ header('Location:error.php?ec=1');
 exit;
 }
 
-if (!isset($id) || $id == '')
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
 header('Location:error.php?ec=2');
 exit;
@@ -18,11 +18,17 @@ exit;
 
 // includes
 include('config.php');
-draw_header($title);
+if( !isset($_REQUEST['title']) )
+{	draw_header('');	}
+else 
+{ draw_header( $_REQUEST['title'] ); }
 draw_menu($_SESSION['uid']);
-draw_status_bar('Document Listing', $last_message);
+if( !isset($_REQUEST['last_message']) )
+{	draw_status_bar('Document Listing', '');	}
+else 
+{ draw_status_bar('Document Listing', $_REQUEST['last_message']); }
 
-$datafile = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
+$datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 // verify
 if ($datafile->getError() != NULL)
 {
@@ -51,7 +57,7 @@ if ($comments == '')
     { 
         $comment = 'No author comments available'; 
     }
-$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 ?>
 <center>
 <table border="0" width="400" cellspacing="4" cellpadding="1">
@@ -117,7 +123,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	</tr>
 <?php
 	// query to obtain a list of modifications
-	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
+	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// iterate through resultset
