@@ -64,6 +64,7 @@ if(@$_GET['submit'] == 'view_checkedout')
 		echo "\n" . '</form>';
 	}
 	list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $lpage_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
+	draw_footer();
 }
 elseif (@$_POST['submit'] == 'Clear Status')
 {
