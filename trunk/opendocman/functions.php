@@ -24,25 +24,25 @@ if( !defined('function') )
 	function space_to_underscore($string)
 	{
 	    $string_len = strlen($string);
-	    $index = 0;
-	    while( $index< $string_len )
-	        {
-	            if($string[$index] == ' ')
-	                $string[$index]= '_';
-	                $index++;
-	        }
-	    return $string;
+		$index = 0;
+		while( $index< $string_len )
+		{
+			if($string[$index] == ' ')
+				$string[$index]= '_';
+			$index++;
+		}
+		return $string;
 	}
 	// Draw the status bar for each page
 	function draw_status_bar($message, $lastmessage='')
 	{
-	    if(!isset($_REQUEST['state']))
-	    	$_REQUEST['state']=1;
+		if(!isset($_REQUEST['state']))
+			$_REQUEST['state']=1;
 		echo "\n".'<!------------------begin_draw_status_bar------------------->'."\n";
 		if (!isset ($message))
 		{
 			$message='Select';
-        }
+		}
 		echo '<link rel="stylesheet" type="text/css" href="linkcontrol.css">'."\n";
 		echo '<center>'."\n";
 		echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
@@ -53,29 +53,29 @@ if( !defined('function') )
 		//echo '</font></b></td>'."\n";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="out.php" style="text-decoration:none">Home</a>'."\n</td>";
-	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
+		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
-	    	echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
+		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
 		echo '<a class="statusbar" href="help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
-?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
-		<TD bgcolor="#0000A0" align="left" valign="middle">
-<?php	$crumb = new crumb();
+		?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
+			<TD bgcolor="#0000A0" align="left" valign="middle">
+			<?php	$crumb = new crumb();
 		global $HTTP_SERVER_VARS;
 		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']);	
 		$crumb->printTrail($_REQUEST['state']);
 		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
-	    echo '<b><font size="-2" face="Arial" color="White">';
+		echo '<b><font size="-2" face="Arial" color="White">';
 		echo 'Last Message: '.$lastmessage;
-	    echo '</td>';
-	    
-?>	    </font></b>
-		</TD>
-	    </tr>
-	    </table>
-	    </center>
-	    
-	    <!------------------end_draw_status_bar------------------->
-	    <?php
+		echo '</td>';
+
+		?>	    </font></b>
+			</TD>
+			</tr>
+			</table>
+			</center>
+
+			<!------------------end_draw_status_bar------------------->
+			<?php
 	}
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
@@ -90,7 +90,7 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
 		}
 		elseif($sort_by == 'file_name')
 		{
@@ -102,22 +102,26 @@ if( !defined('function') )
 		}
 		elseif($sort_by == 'created_date' )
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data
+				.id asc';
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="c
+				urrent" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
 		}
 		elseif($sort_by == 'description')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ',
+			data.id asc';
 		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
 			list($array[$li]) = mysql_fetch_row($lresult);
-		return	array_values( array_intersect($array, $id_array) ); 
+		return  array_values( array_intersect($array, $id_array) );
 	}
+
 	// This function draws the menu screen
         function draw_menu($uid='')
         {
@@ -532,54 +536,76 @@ if( !defined('function') )
                 return $num_checkboxes;	
         }
 
-        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
-        {
-				$secureurl = new phpsecureurl;
-				if($total_hit<$page_limit)
-                {
-                        return 0;
-                }
+		function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
+		{
+			//enable secure URL
 
-                echo '<center>Result Page:&nbsp;&nbsp;';
-                $num_pages = ceil($total_hit/($page_limit));
-          		$shown_pages = 0;
-          		if($num_pages > $link_limit )
-          		{	$shown_pages = $link_limit;	}
-          		else { $shown_pages = $num_pages; }
-                $index_result = 0;
-                
-                if( $current_page > 0 )
-                {
-                     echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)).'">Prev</a>&nbsp; &nbsp;';
-                }
-                
-				if($current_page >= $link_limit/2)
-                {	$i = $current_page - $link_limit/2; 	}
-				else if($current_page < $link_limit/2)
-				{	$i = 0;	}
-				else
-				{	$i = $current_page;	}
-				if( $current_page + ceil($link_limit/2) > $num_pages)
-					$last_page = $num_pages;
-				else
-					$last_page =  $current_page + ceil($link_limit/2);
-				for(; $i < $last_page; $i++)
-				{       
-					if($current_page== $i)
-					{
-						echo $i . '&nbsp;&nbsp;';
-					}
-					else
-					{
-						echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i") . "\">$i</a>&nbsp; &nbsp;"; 
-					}
-					$index_result = $index_result + $page_limit;
-				}
-                if( $current_page < $num_pages-1 )
-                {
-                        echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)).'">Next</a>&nbsp; &nbsp;';
-                }
-        }
+			//if the number of listing item is less than the configed number of item per page
+			//no pagination needed
+			if($total_hit<$page_limit)  return 0;
+			echo '<center>Result Page:&nbsp;&nbsp;';
+
+			//calculate number of pages for the number of hits on
+			$num_pages = ceil($total_hit/($page_limit));
+
+			//init
+			$shown_pages = 0;
+			$index_result = 0;
+
+			// if there are more pages than the configed number of link allowed per page
+			// show all upto $link_limit
+			if($num_pages > $link_limit )   $shown_pages = $link_limit;
+
+			// if the number is the same or less than, show all
+			else { $shown_pages = $num_pages; }
+
+			// suppose $current_page=2, $page_limit=15, then this will give a link to print
+			// starting_index=15 and stopping_index=29.  That will be the Prev. link.
+			// Page 0: 0-14, Page 1: 15-29, Page 2: 30-44
+			if( $current_page > 0 )
+			{
+				echo "<a href=\"$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1).'">Prev</a>&nbsp; &nbsp;';
+			}
+
+			/* Suppose $link_limit is 20 and $current_page is 12.  Then $i=12 - 10=2.
+			   See for loop below to see what $i is. */
+			if($current_page >= $link_limit/2)
+			{   $i = $current_page - $link_limit/2;     }
+			/* Suppose $current_page is 8.  Then $i = 0*/
+			else if($current_page < $link_limit/2)
+			{   $i = 0; }
+
+			// Suppose the admin define $link_limit = 20.  That means there are only 20 links available
+			// on the navigator.  Ten of them is for moving backward and the other 10 is for moving forward
+			// Suppose there are only 200 pages and $current_page is at 198.  Then the last page is the 200,
+			// the max number of pages.
+			if( $current_page + ceil($link_limit/2) > $num_pages)   $last_page = $num_pages;
+
+			/* If not, the last page will be the current page + 10*/
+			else    $last_page =  $current_page + ceil($link_limit/2);
+			/*Suppose $i=2, $link_limit is 20, $current_page is 12, and $last_page=12+10=22
+			  So why do I set $i?  Since $current_page=12, then the for loop will start at link 2 - 12 - 22,
+			  where 12 is right in the middle.  Every time the user move forward, the window of 20 links,
+			  10 on the left and 10 on the right, will move.*/
+			for(; $i < $last_page; $i++)
+			{
+				/* There is no need to have the current page be a link.  The user only needs link
+				   to move forward or backward. */
+				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+
+				/* Generate link */
+				else    echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=" . ($
+					i*$page_limit) . "&stoping_index=".(($i+1)*$page_limit-1)."&page=$i" . "\">$i</a>&nbsp;
+				&nbsp;";
+				$index_result = $index_result + $page_limit;
+			}
+
+			//Generate Next link
+			if( $current_page < $num_pages-1 )
+			{
+				echo '<a href="' . "$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1).'">Next</a>&nbsp; &nbsp;';
+			}
+		}
 
 	function sort_browser()
 	{
