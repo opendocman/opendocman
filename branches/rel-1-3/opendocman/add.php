@@ -173,34 +173,37 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_department_authority']; ?></a></td>
 	<!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
 	<TD>
-<?php
-      	$query = "SELECT RightId, Description FROM rights order by RightId";
-      	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
-      	while(list($RightId, $Description) = mysql_fetch_row($result))
-      	{	
-      		echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
-		}     
+	<?php
+	$query = "SELECT RightId, Description FROM rights order by RightId";
+$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
+while(list($RightId, $Description) = mysql_fetch_row($result))
+{	
+	echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
+}     
 ?>
-	</TD>
-	</TR>
-	<tr>
-	<td>
-        <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_description']; ?></a>
-        </td>
-	<td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
-	</tr>
-	
-	<tr>
-	<td>
-        <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_comment']; ?></a>
-        </td>
-	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
-	</tr>
+</TD>
+</TR>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_description']; ?></a>
+</td>
+<td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
+</tr>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_comment']; ?></a>
+</td>
+<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
+</tr>
+<tr>
+<td>
+<a class="body" href="help.html#Add_File_-_Anonymous" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['anonymous']; ?></a></td>
+<td><INPUT name="anonymous" type="checkbox"></td>
+</tr>
+<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
+<tr nowrap>
 
-	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
-	<tr nowrap>
-		
-		<td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
+<td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
 			</TR>
 			<TR>
 			<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_forbidden']; ?></a></td>
@@ -374,9 +377,13 @@ else //submited form
                         exit;
                 }
         }
-	// all checks completed, proceed!
-	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
+		// all checks completed, proceed!
+		// INSERT file info into data table
+		$anonymous = 0;
+		if(@$_REQUEST['anonymous'] == 'on')
+			$anonymous =1;
+
+	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable, anonymous) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable, " . $anonymous . ')';
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 

@@ -61,7 +61,7 @@ if( !defined('function') )
 		if(isset($_SESSION['uid']))
 		{
 			echo '<td bgcolor="#0000A0" align="left" valign="middle" width="' . (strlen($GLOBALS['lang']['Public'] . ' ' . $GLOBALS['lang']['View'])*5.5) . '">'."\n";
-			echo '<a class="statusbar" href="anonymous.php" style="text-decoration:none">' . $GLOBALS['lang']['Public'] . ' ' . $GLOBALS['lang']['View'] . '</a>'."\n</td>";
+			echo '<a class="statusbar" href="anonymous.php?last_message=' . $GLOBALS['lang']['message_anonymous_view'] . '" style="text-decoration:none">' . $GLOBALS['lang']['Public'] . ' ' . $GLOBALS['lang']['View'] . '</a>'."\n</td>";
 		}
 		else
 		{

@@ -13,10 +13,10 @@ include 'include/mimetypes.php';
 include 'include/crumb.php';
 
 // Database Settings - Change these to match your database
-$database = 'opendocman'; // Enter the name of the database here
-$user = 'opendocman'; // Enter the username for the database
-$pass = 'opendocman'; // Enter the password for the username
-$hostname = 'localhost'; // Enter the hostname that is serving the database
+$database = 'opendocman_khoa'; // Enter the name of the database here
+$user = 'vault1'; // Enter the username for the database
+$pass = 'vault1'; // Enter the password for the username
+$hostname = 'musa'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -33,7 +33,7 @@ global $CONFIG;      $CONFIG = array(
 'authen' => 'mysql',
 
 // Set the number of files that show up on each page
-'page_limit' => '15',
+'page_limit' => '100',
 
 // Set the number of page links that show up on each page
 'num_page_limit' => '10', 
@@ -42,7 +42,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://mydomain/opendocman',
+'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman/',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -51,16 +51,16 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.3rc1',
 
 // The email address of the administrator of this site
-'site_mail' => 'admin@mydomain',
+'site_mail' => 'knguyen@sphinx.ucdavis.edu',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'admin',
+'root_username'  => 'kdng',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/var/www/document_repository/', 
+'dataDir' => '/usr/home/httpd/document_repository/', 
 
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
@@ -84,12 +84,12 @@ The first two options also result in sending email to reviewer
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'On',
+'secureurl' => 'Off',
 
 // Set the default language (english, spanish).
 // Local users may override this setting
 // check include/language folder for languages available
-'language' => 'english',
+'language' => 'english', 
 
 /* Author's default right to his/her right.  Below is the list from the right table.
    If yours is any different, please use your own ODM.right table's values
@@ -103,7 +103,7 @@ The first two options also result in sending email to reviewer
    |       3 | write       |
    |       4 | admin       |
    +---------+-------------+
- */
+   */
 'owner_default_right' => '3',
 
 /* HTTPS enforced login.  If this option is turned on, the login page will only take https connections.  If the user uses http, ODM will redirect itself to a HTTPS connection.  SSL must be enabled with your webserver for this feature to work
@@ -139,7 +139,7 @@ global $pass;
 global $connection;
 global $allowedFileTypes; 
 
-$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
+$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!  " . mysql_error());
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 // All functions are in functions.php
 require_once 'secureurl.class.php';

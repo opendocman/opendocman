@@ -50,7 +50,7 @@ $lang['message_rejected'] = "Rejected";
 $lang['message_rejecting_files'] = "Rejecting files last edited before";
 $lang['message_sorry_demo_mode'] = "Sorry, demo mode only, you can not do that!";
 $lang['message_unable_to_find_file'] = "Unable to find the requested file";
- 
+$lang['message_anonymous_view'] = 'You have been switched to anonymous view mode';
 // Labels
 $lang['label_add'] = "Add";
 $lang['label_admin'] = "Admin";

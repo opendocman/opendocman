@@ -143,6 +143,9 @@ if (!isset($_REQUEST['submit']))
 		$realname = $filedata->getName();
 		$description = $filedata->getDescription();
 		$comment = $filedata->getComment();
+		$anonymous = '';
+		if( $filedata->isAnonymous())
+			$anonymous = 'checked';
 		$owner_id = $filedata->getOwner();
 		// display the form
 ?>
@@ -248,6 +251,10 @@ if (!isset($_REQUEST['submit']))
 	<tr>
 	<td valign="top">Comment</td>
 	<td colspan="3"><textarea name="comment" rows="4"><?php  echo $comment; ?></textarea></td>
+	</tr>
+	<tr>
+	<td>Anonymous</td>
+	<td><input type="checkbox" name="anonymous" <?php echo $anonymous; ?> ></td>
 	</tr>
 	</table>
 	<table border="1" cellspacing="0" cellpadding="3">
@@ -439,8 +446,11 @@ else
 		header('Location:error.php?ec=2'); 
 		exit; 
 	}
+	$anonymous = 0;
+	if(@$_REQUEST['anonymous'] == 'on')
+		$anonymous =1;
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
+	mysql_escape_string($query = "UPDATE data SET anonymous = $anonymous, category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(isset($_REQUEST['users']))
 		mysql_query('UPDATE data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());

@@ -83,6 +83,7 @@ if( !defined('FileData_class') )
 				$this->comment = $comment;
 				$this->status = $status;
 				$this->department = $department;
+				$this->anonymous = $anonymous;
 			}
 		}
 		else
