@@ -137,6 +137,15 @@ function print_intro()
   <td><a href="setup.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
  </tr>
 </table>
+<hr>
+<table>
+ <tr>
+  <td><a href="docs/opendocman.html" target="#main" >Installation Instructions (html)</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="docs/opendocman.pdf" target="#main" >Installation Instructions (pdf)</a><br><br></td>
+ </tr>
+</table>
 <?php
 }
 

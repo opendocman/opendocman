@@ -32,9 +32,6 @@ flags 10
 \end_inset 
 
 
-\layout Author
-
-Stephen Lawrence
 \layout Date
 
 May 6th, 2003
@@ -60,6 +57,66 @@ OpenDocMan is a full featured Web-based document management system designed
 Introduction
 \layout Subsection
 
+Features
+\layout Enumerate
+
+Automatic Installation - Automatically install the application or upgrade
+ your current version
+\layout Enumerate
+
+Check-in and Check-out files - This provides file locking so that no two
+ persons can update the same file at the same time
+\layout Enumerate
+
+Search Engine - Keyword search helps locate documents quickly
+\layout Enumerate
+
+Multiple Users, Departments, and Categories - The system allows for an unlimited
+ number of these elements
+\layout Enumerate
+
+File Moderation - Allows for departmental 
+\begin_inset Quotes eld
+\end_inset 
+
+reviewers
+\begin_inset Quotes erd
+\end_inset 
+
+ to authorize or decline files for publication to the repository
+\layout Enumerate
+
+Email Notification - The system has a built in email notification system
+ for file authorization process
+\layout Enumerate
+
+Fine Grained Access - Ability to control read/write/admin/forbidden permissions
+ for individual files based on users or groups or both.
+\layout Enumerate
+
+File History - Provides a history of actions taken upon a file
+\layout Enumerate
+
+Admin and Root users - Each installation can have any number of 
+\begin_inset Quotes eld
+\end_inset 
+
+admin
+\begin_inset Quotes erd
+\end_inset 
+
+ users, who can create users, categories, etc..
+ One 
+\begin_inset Quotes eld
+\end_inset 
+
+root
+\begin_inset Quotes erd
+\end_inset 
+
+ user can do all.
+\layout Subsection
+
 Requirements
 \layout Itemize
 
@@ -73,6 +130,9 @@ MySQL Server 3.22+ (http://www.mysql.com/)
 PHP 4+ compiled with MySQL-Support (http://www.php.net/)
 \layout Section
 
+Installation and Updating
+\layout Subsection
+
 Update Procedure
 \layout Standard
 
@@ -82,14 +142,18 @@ To update your current version to the latest release:
 Rename your current opendocman folder.
 \layout Enumerate
 
-Unarchive opendocman and edit the config.php (Look at your old config.php
- file for some of the needed settings).
+Unarchive opendocman into a new folder
 \layout Enumerate
 
-Load the setup.php page and click on the appropriate upgrade link.
- (ex.
- http://www.mydomain.com/opendocman/setup.php)
-\layout Section
+Edit the config.php in your new folder (Look at your old config.php file for
+ some settings that can be transferred over from the old config to the new).
+\layout Enumerate
+
+Load the setup.php page (ex.
+ http://www.mydomain.com/opendocman/setup.php) and click on the appropriate
+ upgrade link.
+ Refer to your old config.php to see what version you were using before.
+\layout Subsection
 
 New Installation
 \layout Enumerate
@@ -193,6 +257,110 @@ Add departments, categories, users, etc.
 Enjoy!
 \layout Section
 
+Configuration
+\layout Subsection
+
+config.php
+\layout Standard
+
+Most of the configuration for OpenDocMan is controlled by a file name config.php.
+ Below are some of the configurable options in that file:
+\layout Itemize
+
+$database - The name of the database used (ex.
+ opendocman)
+\layout Itemize
+
+$user - The user that has update/insert/delete permissions on above database
+\layout Itemize
+
+$pass - Password for above user
+\layout Itemize
+
+$hostname - The hostname of the database server (ex.
+ db1.mydomain.com)
+\layout Itemize
+
+demo - This setting is for a demo installation, where random people will
+ be all loggging in as the same username/password like 'demo/demo'.
+\layout Itemize
+
+authen - Future setting to control other authentication methods.
+ Currently only MySQL and web-based kerberos authentication is supported.
+\layout Itemize
+
+page_limit - Set the number of files that show up on each page
+\layout Itemize
+
+displayable_len - Set the maximum displayable length of text field in file
+ list
+\layout Itemize
+
+base_url - Set this to the url of the site (no ending slash)
+\layout Itemize
+
+title - This is the browser window title and be anything you want (ex.
+ Mycomany Document Managment System)
+\layout Itemize
+
+current_version - This is the program version for window title (This should
+ be set to the current version of the program)
+\layout Itemize
+
+site_mail - The email address of the administrator of this site.
+ Users will be told to contact this person if they encounter errors.
+\layout Itemize
+
+root_username - This variable sets the root username.
+ It must be set to one of the current users of opendocman.
+ The root user will be able to access all files and have authority for everythin
+g.
+ (ex.
+ jsmith)
+\layout Itemize
+
+dataDir - Location of file repository.
+ This should ideally be outside the Web server root.
+ Make sure the server has permissions to read/write files in this folder!
+\layout Itemize
+
+$allowedFileTypes - This is a list of file types that will be allowed to
+ be added to the repository.
+ This may need some tweeking depending on what types of files your users
+ have.
+\layout Subsection
+
+Administration Editor
+\layout Standard
+
+When a user is set up as an 
+\begin_inset Quotes eld
+\end_inset 
+
+admin
+\begin_inset Quotes erd
+\end_inset 
+
+, they will see an admin menu in the upper right while they are logged in.
+ There are options for User, Category, and Department management under this
+ menu item.
+\layout Section
+
+Tutorial
+\layout Subsection
+
+Adding a file
+\layout Subsection
+
+Adding a user
+\layout Subsection
+
+Authorizing a file
+\layout Subsection
+
+Checking out a file
+\layout Section
+
 Credits
 \layout Author
 
@@ -235,8 +403,8 @@ For updates:
 \begin_deeper 
 \layout Enumerate
 
-The user will be shown their current version (which comes from config.php),
- and they would then click on the appropriate upgrade link.
+The user will need to find their current version (which comes from their
+ old config.php), and they would then click on the appropriate upgrade link.
  For example, if their version number is 1.0, they would click on the "Upgrade
  from 1.0" link.
  This will apply all necessary database changes to their current database.

@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
  <META NAME="GENERATOR" CONTENT="SGML-Tools 1.0.9">
- <TITLE>: Update Procedure</TITLE>
+ <TITLE>: Installation and Updating</TITLE>
  <LINK HREF="opendocman-3.html" REL=next>
  <LINK HREF="opendocman-1.html" REL=previous>
  <LINK HREF="opendocman.html#toc2" REL=contents>
@@ -12,16 +12,80 @@
 <A HREF="opendocman-1.html">Previous</A>
 <A HREF="opendocman.html#toc2">Contents</A>
 <HR>
-<H2><A NAME="s2">2. Update Procedure</A></H2>
+<H2><A NAME="s2">2. Installation and Updating</A></H2>
+
+<H2><A NAME="ss2.1">2.1 Update Procedure</A>
+</H2>
 
 <P>To update your current version to the latest release:
 <P>
 <OL>
 <LI>Rename your current opendocman folder.</LI>
-<LI>Unarchive opendocman and edit the config.php (Look at your old
-config.php file for some of the needed settings).</LI>
-<LI>Load the setup.php page and click on the appropriate upgrade
-link. (ex. http://www.mydomain.com/opendocman/setup.php)</LI>
+<LI>Unarchive opendocman into a new folder</LI>
+<LI>Edit the config.php in your new folder (Look at your old config.php
+file for some settings that can be transferred over from the old
+config to the new).</LI>
+<LI>Load the setup.php page (ex. http://www.mydomain.com/opendocman/setup.php)
+and click on the appropriate upgrade link. Refer to your old config.php
+to see what version you were using before.</LI>
+</OL>
+<H2><A NAME="ss2.2">2.2 New Installation</A>
+</H2>
+
+<P>
+<OL>
+<LI>Untar files into any dir in your webserver documents dir (ex.
+/var/www)</LI>
+<LI>Edit config.php
+<OL>
+<LI>All parameters are commented and should be self explanatory.
+Change any that apply, especially the database parameters.</LI>
+</OL>
+</LI>
+<LI>If you DO have database creation permissions to your MySQL database
+then you can use the automatic setup script (preferred method).
+<OL>
+<LI>Load the setup.php page and click on the new install link. (ex.
+http://www.mydomain.com/opendocman/setup.php)</LI>
+<LI>Enter the username and password of a user that has database creation
+permissions for the database configured in config.php</LI>
+<LI>Skip step 4 and move on to step 5</LI>
+</OL>
+</LI>
+<LI>If you DO NOT have database creation permissions, be advised
+that you should be carefull in doing things manually
+<OL>
+<LI>NOTE: The entries below are just examples.</LI>
+<LI>create a MySQL-database and MySQL-User for opendocman
+<PRE>
+$&gt; mysql -u root -p
+Welcome to the MySQL monitor. Commands end with ; or \g.
+Your MySQL connection id is 5525 to server version: 3.22.32
+Type 'help' for help.
+mysql&gt; create database opendocman;
+mysql&gt; grant select,insert,update,delete,create on opendocman.* to opendocman@localhost identified by 'opendocman';
+mysql&gt; flush privileges;
+mysql&gt; exit;
+$&gt; mysql -u opendocman -p opendocman &lt; database.sql
+  
+</PRE>
+</LI>
+</OL>
+</LI>
+<LI>Make a directory for the files to be stored that is accessible
+to the web server but not available by browsing
+<PRE>
+$&gt;mkdir /usr/local/opendocman/data
+ 
+</PRE>
+</LI>
+<LI>Point your favorite webbrowser to the opendocman folder: ex.
+&quot;http://www.mydomain.com/opendocman&quot;</LI>
+<LI>Login as &quot;admin&quot; (without password). After that, go
+to &quot;admin-&gt;users-&gt;update-&gt;admin&quot; and set your
+admin password.</LI>
+<LI>Add departments, categories, users, etc.</LI>
+<LI>Enjoy!</LI>
 </OL>
 <HR>
 <A HREF="opendocman-3.html">Next</A>

@@ -2,8 +2,6 @@
 
 
 
-Stephen Lawrence
-
 May 6th, 2003
 
 Abstract
@@ -20,17 +18,59 @@ documentation in a centralized repository.
 Table of Contents
 
 1 Introduction
-    1.1 Requirements
-2 Update Procedure
-3 New Installation
-4 Credits
-5 Automated Installation and Upgrade Notes (For Developers)
+    1.1 Features
+    1.2 Requirements
+2 Installation and Updating
+    2.1 Update Procedure
+    2.2 New Installation
+3 Configuration
+    3.1 config.php
+    3.2 Administration Editor
+4 Tutorial
+    4.1 Adding a file
+    4.2 Adding a user
+    4.3 Authorizing a file
+    4.4 Checking out a file
+5 Credits
+6 Automated Installation and Upgrade Notes (For Developers)
 
 
 
 1 Introduction
 
-1.1 Requirements
+1.1 Features
+
+1. Automatic Installation - Automatically install the application
+  or upgrade your current version
+
+2. Check-in and Check-out files - This provides file locking
+  so that no two persons can update the same file at the
+  same time
+
+3. Search Engine - Keyword search helps locate documents quickly
+
+4. Multiple Users, Departments, and Categories - The system
+  allows for an unlimited number of these elements
+
+5. File Moderation - Allows for departmental "reviewers"
+  to authorize or decline files for publication to the repository
+
+6. Email Notification - The system has a built in email notification
+  system for file authorization process
+
+7. Fine Grained Access - Ability to control read/write/admin/forbidden
+  permissions for individual files based on users or groups
+  or both.
+
+8. File History - Provides a history of actions taken upon
+  a file
+
+9. Admin and Root users - Each installation can have any number
+  of "admin" users, who can create users,
+  categories, etc.. One "root"
+  user can do all.
+
+1.2 Requirements
 
 * Apache Webserver 1.3.x (or any other webserver, that supports
   PHP) (http://www.apache.org/)
@@ -39,19 +79,25 @@ Table of Contents
 
 * PHP 4+ compiled with MySQL-Support (http://www.php.net/)
 
-2 Update Procedure
+2 Installation and Updating
+
+2.1 Update Procedure
 
 To update your current version to the latest release:
 
 1. Rename your current opendocman folder.
 
-2. Unarchive opendocman and edit the config.php (Look at your
-  old config.php file for some of the needed settings).
+2. Unarchive opendocman into a new folder
 
-3. Load the setup.php page and click on the appropriate upgrade
-  link. (ex. http://www.mydomain.com/opendocman/setup.php)
+3. Edit the config.php in your new folder (Look at your old
+  config.php file for some settings that can be transferred
+  over from the old config to the new).
 
-3 New Installation
+4. Load the setup.php page (ex. http://www.mydomain.com/opendocman/setup.php)
+  and click on the appropriate upgrade link. Refer to your
+  old config.php to see what version you were using before.
+
+2.2 New Installation
 
 1. Untar files into any dir in your webserver documents dir
   (ex. /var/www)
@@ -116,7 +162,82 @@ To update your current version to the latest release:
 
 9. Enjoy!
 
-4 Credits
+3 Configuration
+
+3.1 config.php
+
+Most of the configuration for OpenDocMan is controlled by
+a file name config.php. Below are some of the configurable
+options in that file:
+
+* $database - The name of the database used (ex. opendocman)
+
+* $user - The user that has update/insert/delete permissions
+  on above database
+
+* $pass - Password for above user
+
+* $hostname - The hostname of the database server (ex. db1.mydomain.com)
+
+* demo - This setting is for a demo installation, where random
+  people will be all loggging in as the same username/password
+  like 'demo/demo'.
+
+* authen - Future setting to control other authentication
+  methods. Currently only MySQL and web-based kerberos authentication
+  is supported.
+
+* page_limit - Set the number of files that show up on each
+  page
+
+* displayable_len - Set the maximum displayable length of
+  text field in file list
+
+* base_url - Set this to the url of the site (no ending slash)
+
+* title - This is the browser window title and be anything
+  you want (ex. Mycomany Document Managment System)
+
+* current_version - This is the program version for window
+  title (This should be set to the current version of the
+  program)
+
+* site_mail - The email address of the administrator of this
+  site. Users will be told to contact this person if they
+  encounter errors.
+
+* root_username - This variable sets the root username. It
+  must be set to one of the current users of opendocman.
+  The root user will be able to access all files and have
+  authority for everything. (ex. jsmith)
+
+* dataDir - Location of file repository. This should ideally
+  be outside the Web server root. Make sure the server has
+  permissions to read/write files in this folder!
+
+* $allowedFileTypes - This is a list of file types that will
+  be allowed to be added to the repository. This may need
+  some tweeking depending on what types of files your users
+  have.
+
+3.2 Administration Editor
+
+When a user is set up as an "admin",
+they will see an admin menu in the upper right while they
+are logged in. There are options for User, Category, and
+Department management under this menu item.
+
+4 Tutorial
+
+4.1 Adding a file
+
+4.2 Adding a user
+
+4.3 Authorizing a file
+
+4.4 Checking out a file
+
+5 Credits
 
 Stephen Lawrence Jr. - Project Lead/Programmer
 
@@ -124,7 +245,7 @@ Khoa Nguyen - PHP and Javascript Programming
 
 Originally inspired by an article called cracking the vault.
 
-5 Automated Installation and Upgrade Notes (For Developers)
+6 Automated Installation and Upgrade Notes (For Developers)
 
 There is a new folder named "install" which contains files
 use by the new script called setup.php. This is an automated
@@ -145,12 +266,12 @@ for users:
 
 3. For updates:
 
-  (a) The user will be shown their current version (which comes
-    from config.php), and they would then click on the appropriate
-    upgrade link. For example, if their version number is
-    1.0, they would click on the "Upgrade from 1.0" link.
-    This will apply all necessary database changes to their
-    current database.
+  (a) The user will need to find their current version (which
+    comes from their old config.php), and they would then
+    click on the appropriate upgrade link. For example,
+    if their version number is 1.0, they would click on
+    the "Upgrade from 1.0" link. This will apply all necessary
+    database changes to their current database.
 
 For developers, when there is a new version release, a few
 new files need to be created and a current files modified.
