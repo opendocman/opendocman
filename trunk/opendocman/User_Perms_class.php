@@ -36,19 +36,26 @@ if ( !defined('User_Perms_class') )
 		$this->user_obj = new User($id, $connection, $database);
 		$this->deptperms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection, $database);
 	}
+	// return an array of user whose permission is >= view_right
 	function getCurrentViewOnly()
 	{	return $this->loadData_UserPerm($this->VIEW_RIGHT);	}
+	// return an array of user whose permission is >= none_right
 	function getCurrentNoneRight()
 	{	return $this->loadData_UserPerm($this->NONE_RIGHT);	}
+	// return an array of user whose permission is >= read_right
 	function getCurrentReadRight()
 	{	return $this->loadData_UserPerm($this->READ_RIGHT);	}
+	// return an array of user whose permission is >= write_right
 	function getCurrentWriteRight()
 	{	return $this->loadData_UserPerm($this->WRITE_RIGHT);	}
+	// return an array of user whose permission is >= admin_right
 	function getCurrentAdminRight()
 	{	return $this->loadData_UserPerm($this->ADMIN_RIGHT);	}
 	function getId()
 	{	return $this->id;				}
-
+	// All of the function above provides an abstraction for loadData_UserPerm($right)
+	// If you user doesn't want to or doens't know the numeric value for permission,
+	// use the function above.  LoadData_UserPerm($right) can be invoke directly.
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
@@ -69,7 +76,7 @@ if ( !defined('User_Perms_class') )
 		return $fileid_array;
 			
 	}
-
+	// return whether if this user can view $data_id
     function canView($data_id)
     {
         $filedata = new FileData($data_id, $this->connection, $this->database);
@@ -81,7 +88,7 @@ if ( !defined('User_Perms_class') )
                 false;
         }
     }
-
+	// return whether if this user can read $data_id
 	function canRead($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
@@ -94,7 +101,7 @@ if ( !defined('User_Perms_class') )
 		}
 
 	}
-
+	// return whether if this user can modify $data_id
 	function canWrite($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
@@ -107,7 +114,7 @@ if ( !defined('User_Perms_class') )
 		}
 
 	}
-
+	// return whether if this user can admin $data_id
 	function canAdmin($data_id)
 	{
 		$filedata = new FileData($data_id, $this->connection, $this->database);
@@ -119,7 +126,7 @@ if ( !defined('User_Perms_class') )
 				false;
 		}
 	}
-
+	// return whether if this user is forbidden to have acc
 	function isForbidden($data_id)
 	{
 		$query = "SELECT user_perms.rights from user_perms WHERE user_perms.uid = $this->id";
@@ -133,7 +140,8 @@ if ( !defined('User_Perms_class') )
 				return false;
 		}
 	}
-
+	// this all the canRead, canView, ... function provide an abstraction for this fucntion.
+	// users may invoke this function if they are familiar of the numeric permision values 
 	function canUser($data_id, $right)
 	{
 		if($this->user_obj->isRoot())
@@ -147,7 +155,7 @@ if ( !defined('User_Perms_class') )
 			default : $this->error = "non-unique uid: $this->id"; break;
 		}		
 	}
-
+	// return this user's permission on the file $data_id
 	function getPermission($data_id)
 	{
 	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
