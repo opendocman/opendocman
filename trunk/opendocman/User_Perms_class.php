@@ -150,7 +150,7 @@ if ( !defined('User_Perms_class') )
 
 	function getPermission($data_id)
 	{
-	  if($this->root_user == $this->user_obj->getName())
+	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
 	  	return true;
 	  $query = "Select user_perms.rights from user_perms where uid = $this->id and fid = $data_id";
 	  $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: .$query" . mysql_error() );
