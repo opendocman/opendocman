@@ -1,4 +1,4 @@
-<?php include("config.php"); ?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -47,6 +47,10 @@ Please complete the following form to create your new database
    <td>
     <input type="text" name="rootname"> Mysql Root User <br>
     <input type="password" name="rootpass"> Mysql Root Password <br>
+    <input type="text" name="roothost"> Mysql Hostname <br>
+    <input type="text" name="database"> New Database Name <br>
+    <input type="text" name="username"> New Database User Name<br>
+    <input type="password" name="password"> New Database Password<br>
     <input type="submit" name="op" value="commitinstall"><br>
    </td>
   </tr>
@@ -61,22 +65,20 @@ function do_install()
         echo 'installing...<br>';
 
 
-        mysql_connect($GLOBALS['hostname'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
+        mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
 
         // Create database
         $result = mysql_query("
-        CREATE DATABASE $GLOBALS[database];
+        CREATE DATABASE $_REQUEST[database];
         ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
-        mysql_select_db($GLOBALS['database']) or die (mysql_error() . "<br><font class=\"pn-failed\">Unable to select database.</font>");
+        mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
         // Grant privs
-        $result = mysql_query("
-        GRANT ALL ON $GLOBALS[database].* to $GLOBALS[user] identified by '$GLOBALS[pass]';
-        ") or die("<br>Could not set GRANT");
+        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_REQUEST[username] identified by '$_REQUEST[password]';") or die("<br>Could not set GRANT");
 
         include("install/odm.php");
-
+        include("config.php");
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 } // End Install
 
@@ -100,7 +102,7 @@ function print_intro()
 </center>
 <table align="center">
  <tr>
-  <td>Your current version is <strong><?php echo $GLOBALS['CONFIG']['current_version']; ?></strong>:<br><br></td>
+  <td>Your current version is <strong><?php echo @$GLOBALS['CONFIG']['current_version']; ?></strong>:<br><br></td>
  </tr>
  <tr>
   <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
