@@ -28,7 +28,6 @@ if( !defined('function') )
 	        }
 	    return $string;
 	}
-	
 	// Draw the status bar for each page
 	function draw_status_bar($message, $lastmessage)
 	{
@@ -908,7 +907,7 @@ if( !defined('function') )
 		</tr>
 		
 		<tr>
-		<td><font size="-1"><? echo $fileobj_array[$index]->getDescription(); ?></font></td>
+		<td><font size="-1"><?php echo $fileobj_array[$index]->getDescription(); ?></font></td>
 		</tr>
 		
 		<tr>
@@ -1157,20 +1156,47 @@ if( !defined('function') )
                 }
 	}
 
-        function makeRandomPassword() {
-                $salt = 'abchefghjkmnpqrstuvw3456789';
-                srand((double)microtime()*1000000); 
-                $i = 0;
-                while ($i <= 7) 
-                {
-                        $num = rand() % 33;
-                        $tmp = substr($salt, $num, 1);
-                        $pass = $pass . $tmp;
-                        $i++;
-                }
+    function makeRandomPassword() 
+    {
+	    $salt = 'abchefghjkmnpqrstuvw3456789';
+	    srand((double)microtime()*1000000); 
+	    $i = 0;
+	    while ($i <= 7) 
+	    {
+	            $num = rand() % 33;
+	            $tmp = substr($salt, $num, 1);
+	            $pass = $pass . $tmp;
+	            $i++;
+	    }
+    return $pass;	
+	}
 
-                return $pass;
-        } 
-	
+	function removeElements($master_array, $removing_array)
+	{
+		$found = true;
+		for($i = 0; $i < sizeof($master_array); $i++)
+		{
+			$found=true;
+			for($j=0;$j < sizeof($removing_arrray); $j++)
+			{
+				if($master_array[$i] == $removing_array[$j])
+				{	$found=true;break;	}
+			}
+			if(!$found)
+			{	$result_array[sizeof($result_array)] = $master_array[$i];	}
+		}
+		return $result_array;
+	}
+	function checkUserPermission($file_id, $permittable_right)
+	{
+		$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']);
+		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $connection, $GLOBALS['database']);
+		if($user_perm_obj->getPermission($file_id) < $permittable_right)
+		{
+			echo 'Error: OpenDocMan is not able to the requested file.' . "\n";
+			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for farther assistent.';
+			exit();
+		}
+	}
 }
 ?>
