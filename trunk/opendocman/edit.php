@@ -29,7 +29,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 if (!isset($_REQUEST['last_message']))
 {	$_REQUEST['last_message'] = '';	}
 include('config.php');
-if (!isset($submit))
+if (!isset($_REQUEST['submit']))
 // form not yet submitted, display initial form
 {
 	draw_header('File Properties Modification');
@@ -151,7 +151,7 @@ if (!isset($submit))
 		<center>
 		<table border="0" cellspacing="5" cellpadding="5">
 		<form name=main action="<?php  echo $_SERVER['PHP_SELF']; ?>" method="POST">
-		<input type="hidden" name="id" value="<?php  echo $id; ?>">
+		<input type="hidden" name="id" value="<?php  echo $_REQUEST['id']; ?>">
 	
 		<tr>
 		<td valign="top">Name</td>
@@ -194,7 +194,7 @@ if (!isset($submit))
         //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
         while(list($dept_id, $name) = mysql_fetch_row($result))
         {
-		  $id+=2;
+		  //$id+=2;
 		  echo '	<option value="' . $dept_id . '" name="' . $name . '">' . $name . '</option> ' . "\n";  
         }
 		mysql_free_result ($result);
@@ -370,9 +370,6 @@ if (!isset($submit))
 		}
 	}
 
-	//clean up	
-	//mysql_free_result ($result);
-	mysql_free_result ($result2);
 ?>
 	</select></td>
 	</tr>
@@ -395,14 +392,14 @@ if (!isset($submit))
 else
 {
 	// form submitted, process data
-	$filedata = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
-	$filedata->setId($id);
+	$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+	$filedata->setId($_REQUEST['id']);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
-	if (sizeof($view) <= 0 or sizeof($modify)<= 0 or sizeof($read)<= 0 or sizeof ($admin)<= 0) { header("Location:error.php?ec=12"); exit; }
+	if (sizeof($_REQUEST['view']) <= 0 or sizeof($_REQUEST['modify'])<= 0 or sizeof($_REQUEST['read'])<= 0 or sizeof ($_REQUEST['admin'])<= 0) { header("Location:error.php?ec=12"); exit; }
 	
 	// query to verify
-	$query = "SELECT status FROM data WHERE id = '$id' and status = '0'";
+	$query = "SELECT status FROM data WHERE id = '$_REQUEST[id]' and status = '0'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	if(mysql_num_rows($result) <= 0)
@@ -411,21 +408,25 @@ else
 		exit; 
 	}
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($category) . "', description='" . addslashes($description)."', comment='" . addslashes($comment)."', default_rights='" . addslashes($default_Setting) . "' WHERE id = '$id'");
+	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "' WHERE id = '$_REQUEST[id]'");
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// clean out old permissions
-	$query = "DELETE FROM user_perms WHERE fid = '$id'";
+	$query = "DELETE FROM user_perms WHERE fid = '$_REQUEST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-
-	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $modify, $filedata->WRITE_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $read, $filedata->READ_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $view, $filedata->VIEW_RIGHT);
-	$result_array = advanceCombineArrays($result_array, 'NULL', $forbidden, $filedata->FORBIDDEN_RIGHT);
+	$result_array = array();// init;
+	if( isset( $_REQUEST['admin'] ) && isset ($_REQUEST['modify']) )
+	{	$result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);	}
+	if( isset( $_REQUEST['read'] ) )
+	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);	}
+	if( isset( $_REQUEST['view'] ) )
+	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);	}
+	if( isset( $_REQUEST['forbidden'] ) )
+	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);	}
 	//display_array2D($result_array);
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
-		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($id, '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($_REQUEST[id], '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		//echo $query."<br>";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
@@ -435,7 +436,7 @@ else
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 		$string=addslashes(space_to_underscore($dept_name));
-		$query = "UPDATE dept_perms SET rights =\"".$$string."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
+		$query = "UPDATE dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// clean up
