@@ -110,7 +110,7 @@ if( !defined('Dept_Perms_class') )
 		if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
 		{
 			// return whether or not this deptartment can read the file
-			if($this->canDept($data_id, $this->READ_RIGHT) or !$this->isPublishable($data_id) )
+			if($this->canDept($data_id, $this->READ_RIGHT) or !$filedata->isPublishable($data_id) )
 				return true;
 			else
 				false;
@@ -165,7 +165,7 @@ if( !defined('Dept_Perms_class') )
 	{
 		$this->error_flag = true; // reset flag
 		$right = -1;
-		$query = "SELECT $this->database.$this->TABLE_DEPT_PERMs.rights FROM $this->database.$this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id AND $this->TABLE_DEPT_PERMS.fid = $data_id";
+		$query = "SELECT $this->database.$this->TABLE_DEPT_PERMS.rights FROM $this->database.$this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id AND $this->TABLE_DEPT_PERMS.fid = $data_id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) == 1)
 		{
@@ -186,7 +186,7 @@ if( !defined('Dept_Perms_class') )
 	// right on file with data id of $data_id
 	function canDept($data_id, $right)
 	{
-		$query = "SELECT * FROM $this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.id = $this->id and $this->DEPT_PERM_TABLE.fid = $data_id AND $this->DEPT_PERM_TABLE.rights >= $right";
+		$query = "SELECT * FROM $this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and $this->TABLE_DEPT_PERMS.fid = $data_id AND $this->TABLE_DEPT_PERMS.rights >= $right";
 		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		
 		switch(mysql_num_rows($result) )
