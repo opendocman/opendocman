@@ -1,6 +1,3 @@
-
-readme
-
 ###########################################################################
 # OpenDocMan                                                              #
 # version 1.0                                                             #
@@ -37,6 +34,8 @@ readme
 
 - PHP 4+ compiled with MySQL-Support
   (http://www.php.net/)
+  
+*NOTE!!: register_globals=On needs to be set
 
 ###########################################################################
 # UPDATE                                                                  #
@@ -52,8 +51,6 @@ No update at this time, first release.
   (i.e.: /var/www/opendocman)
 
 - create a MySQL-database and MySQL-User for opendocman
-   -> database username
-   -> database password
 
   $> mysql -u root -p
   
@@ -65,11 +62,11 @@ No update at this time, first release.
 
   mysql> create database opendocman;
   mysql> grant select,insert,update,delete,create on opendocman.* to opendocman@localhost identified by 'opendocman';
-  mysql> flush all privileges;
+  mysql> flush privileges;
   mysql> exit
 
 - create MySQL-Tables
-  $> mysql -u  -p opendocman < database.sql
+  $> mysql -u opendocman -p opendocman < database.sql
 
 - make a directory for the files to be stored that is accessible to the web server
   $>mkdir /var/www/opendocman/data
@@ -93,5 +90,13 @@ No update at this time, first release.
 
 #                                                                         #
 ###########################################################################
+# Developers
+###########################################################################
+#                                                                         #
 
+Developers:
 
+Stephen Lawrence Jr.
+Khoa Nguyen
+
+Originally inspired by an article called cracking the vault.
