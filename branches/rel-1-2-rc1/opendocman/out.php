@@ -1,7 +1,7 @@
 <?php
 // out.php - display a list/ of all available documents that user has permission to view (with file status)
 // check to ensure valid session, else redirect
-//$_SESSION['uid']=140; $sort_by = 'author';
+$_SESSION['uid']=140; $sort_by = 'author';
 $start_time = time();
 session_start();
 
@@ -61,7 +61,7 @@ if(!isset($_GET['sort_by']))
 
 if(!isset($_GET['sort_order']))
 {
-	$_GET['sort_order'] = 'a-z';
+	$_GET['sort_order'] = 'asc';
 }
 
 if(!isset($_GET['page']))
@@ -74,12 +74,16 @@ $page_url = $_SERVER['PHP_SELF'] . '?submit=true';
 list($user_department)=mysql_fetch_row($result);
 $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $start_P = time();
-$file_obj_array = $user_perms->getAllowedFileOBJs();
+$file_obj_array = $user_perms->getAllowedFileIds();
 $end_P = time();
 $count = sizeof($file_obj_array);
-
-$sorted_obj_array = obj_array_sort_interface($file_obj_array, $_GET['sort_order'], $_GET['sort_by']);
+$lsort_b = time();
+$sorted_id_array = my_sort($file_obj_array, $_GET['sort_order'], $_GET['sort_by']);
+$lsort_e = time();
+$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
+$llist_b = time();
 list_files($sorted_obj_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
+$llist_e = time();
 // clean up
 	
 	echo '</table>';
@@ -91,4 +95,6 @@ list_files($sorted_obj_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataD
 	draw_footer();	
 echo '<br> <b> Load Page Time: ' . (time() - $start_time) . ' </b>';
 echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
+echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
+echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	
 ?>

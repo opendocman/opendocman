@@ -23,7 +23,7 @@ draw_menu($_SESSION['uid']);
 ?>
 	<center>	
 	<table border="1" cellspacing="5" cellpadding="5" >
-	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font><th bgcolor ="#83a9f7"><font color="#FFFFFF">File Operations</th></font>
+	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">File Operations</th></font>'; ?>
 	  <tr>
 	   <td>
 	    <table border="0">

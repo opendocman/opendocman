@@ -127,7 +127,7 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 
 	if(!isset($_POST['sort_order']))
 	{
-		        $_POST['sort_order'] = 'a-z';
+		        $_POST['sort_order'] = 'asc';
 	}
 
 	if(!isset($_POST['page']))

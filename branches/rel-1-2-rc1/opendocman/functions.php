@@ -100,7 +100,7 @@ if( !defined('function') )
 		$start_time = time();
 		switch($sort_order)
 		{
-			case 'a-z':
+			case 'asc':
 				$str_array_len = sizeof($str_array);
 				$sorted_array = array();
 				$current_index = 0;
@@ -122,7 +122,7 @@ if( !defined('function') )
 				}
 				
 				break;
-			case 'z-a':
+			case 'desc':
 				$str_array_len = sizeof($str_array);
 				$sorted_array = array();
 				$current_index = 0;
@@ -241,7 +241,66 @@ if( !defined('function') )
 		}
 		return $obj_sorted_array;
 	} 
-	
+	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
+	{
+		if($sort_order == 'asc')
+			$sort_order = 'asc';
+		else
+			$sort_order = 'desc';
+		$lwhere_or_clause = '';
+		$larray_len = sizeof($id_array);
+		for($li = 0; $li < $larray_len; $li++)
+		{
+			$lwhere_or_clause .= 'data.id=' . $id_array[$li];
+			if($li != $larray_len-1)
+			{   $lwhere_or_clause .= ' OR ';  }
+		}
+		if( $sort_by == 'id' )
+		{
+			$lquery = 'SELECT id from data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY id ' . $sort_order;
+		}
+		elseif($sort_by == 'author')
+		{
+			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+		}
+		elseif($sort_by == 'file_name')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+			$lquery .= $lwhere_or_clause . ' ORDER BY data.realname ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'department')
+		{
+			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id AND (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY department.name ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'created_date' )
+		{
+			$lquery = 'SELECT data.id FROM data WHERE ';
+            $lquery .= $lwhere_or_clause . ' ORDER BY data.created ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'modified_on')
+		{
+			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" AND (';
+			$lquery .= $lwhere_or_clause . ') GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'description')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.description ' . $sort_order . ', data.id asc';
+		}
+		elseif($sort_by == 'size')
+		{
+			$lquery = 'SELECT data.id FROM data WHERE  (';
+			$lquery .= $lwhere_or_clause . ') ORDER BY data.filesize ' . $sort_order . ', data.id asc';
+		}
+		
+		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
+		for($li = 0; $li<mysql_num_rows($lresult); $li++)
+			list($array[$li]) = mysql_fetch_row($lresult);
+		return $array;
+	}
 	// This function draws the menu screen
         function draw_menu($uid='')
         {
@@ -508,26 +567,26 @@ if( !defined('function') )
                 email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
         }
 
-        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'a-z', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
+        function list_files($fileobj_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
                 echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
                 $count = sizeof($fileobj_array);
                 $css_td_class = "'listtable'";
-                if($sort_order == 'a-z')
+                if($sort_order == 'asc')
                 {
                         $sort_img = 'images/icon_sort_az.gif';
-                        $next_sort = 'z-a';
+                        $next_sort = 'desc';
                 }
-                else if($sort_order == 'z-a')
+                else if($sort_order == 'desc')
                 {
                         $sort_img = 'images/icon_sort_za.gif';
-                        $next_sort = 'a-z';
+                        $next_sort = 'asc';
                 }
                 else 
                 {
                         $sort_img ='images/icon_sort_null';
-                        $next_sort = 'a-z';
+                        $next_sort = 'asc';
                 }		
 
                 echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
@@ -537,7 +596,7 @@ if( !defined('function') )
                 $index = $starting_index;
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by . '">';
                 $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=a-z&sort_by=";
+                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"$page_url"."&sort_order=asc&sort_by=";
                 $default_url_mid = '">';
                 $default_url_post = "<B></TD>";
                 echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
@@ -669,7 +728,7 @@ if( !defined('function') )
                 }
                 while($index<sizeof($fileobj_array) and $index>=$starting_index and $index<=$stoping_index)
                 {
-                        if($index%2!=0)
+						if($index%2!=0)
                         {
                                 $tr_bgcolor = $odd_row_color;
                         }
@@ -703,7 +762,6 @@ if( !defined('function') )
                         { 
                                 $description = 'No description available';
                         }
-
                         // set filename for filesize() call below
                         $filename = $dataDir . $fileobj_array[$index]->getId() . '.dat';
                         $fid = $fileobj_array[$index]->getId();
@@ -825,7 +883,7 @@ if( !defined('function') )
                 return $num_checkboxes;	
         }
 
-        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'a-z')
+        function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
         {
                 if($total_hit<$page_limit)
                 {
@@ -923,8 +981,8 @@ if( !defined('function') )
 			if(category_item_option == 'choose_an_author')
 				exit();
 			order_array = new Array();
-				order_array[0] = new Array('Ascending', 0, 'a-z');
-				order_array[1] = new Array('Descending', 1, 'z-a');
+				order_array[0] = new Array('Ascending', 0, 'asc');
+				order_array[1] = new Array('Descending', 1, 'desc');
 			options_array = document.forms['browser_sort'].elements['category_item_order'].options;
 			
 			options_array[0] = new Option('Choose an Order');

@@ -37,7 +37,7 @@ if(!isset($_GET['sort_by']))
 
 if(!isset($_GET['sort_order']))
 {
-    $_GET['sort_order'] = 'a-z';
+    $_GET['sort_order'] = 'asc';
 }
 if(!isset($_GET['page']))
 {

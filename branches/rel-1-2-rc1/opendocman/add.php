@@ -323,6 +323,8 @@ draw_footer();
 }
 else //submited form
 {
+	for($khoa = 0; $khoa<2; $khoa++)
+	{
 	$result_array = array();
 	//get user's department
 	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
@@ -340,6 +342,7 @@ else //submited form
 		exit; 
 	}
 	// check file type.  refer to config.php to see which file types are allowed
+	$allowedFile = 0;
 	foreach($allowedFileTypes as $this)
 	{
 		if ($_FILES['file']['type'] == $this) 
@@ -368,7 +371,7 @@ else //submited form
 	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 0)";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
@@ -415,15 +418,20 @@ else //submited form
 	// use id to generate a file name
 	// save uploaded file with new name
 	$newFileName = $fileId . '.dat';
+	
+	if($khoa==0){
 	if (!is_uploaded_file ($_FILES['file']['tmp_name']))
 	{
 		header('Location: error.php?ec=18');
 		exit;
 	}
-	move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+		move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);}
+	else
+		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
 	$message = urlencode('Document successfully added');
-	header('Location: out.php?last_message=' . $message);
+	//header('Location: out.php?last_message=' . $message);
+	}
 }
 ?>
 <SCRIPT LANGUAGE="JavaScript">

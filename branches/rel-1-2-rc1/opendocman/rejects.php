@@ -24,7 +24,7 @@ if(!isset($_REQUEST['sort_by']))
 
 if(!isset($_REQUEST['sort_order']))
 {
-        $_REQUEST['sort_order'] = 'a-z';
+        $_REQUEST['sort_order'] = 'asc';
 }
 
 if(!isset($_REQUEST['page']))
