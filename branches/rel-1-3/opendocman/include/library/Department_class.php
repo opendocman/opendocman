@@ -12,9 +12,15 @@
 
 if( !defined('Department_class') )
 {
-  define('Department_class', 'true', false);
-  class Department extends databaseData
-  {
+	define('Department_class', 'true', false);
+	class Department extends databaseData
+	{
+		/**
+		  \publicsection
+		 @param INT     id
+		 @param INT     connection
+		 @param STRING  database
+		 */
 	function Department($id, $connection, $database)
 	{
 		$this->field_name = 'name';

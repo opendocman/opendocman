@@ -24,6 +24,7 @@ if( !defined('FileData_class') )
   
   class FileData extends databaseData
   {
+	/**\privatesection*/
 	var $category;
 	var $owner;
 	var $created_date;
@@ -38,7 +39,7 @@ if( !defined('FileData_class') )
 	var $filesize;
 	var	$isLocked;
 	var $anonymous;
-	
+	/**\publicsection*/	
 	function FileData($id, $connection, $database)
 	{
 		$this->field_name = 'realname';
@@ -49,7 +50,10 @@ if( !defined('FileData_class') )
 		
 		$this->loadData();
 	}
-	// exists() return a boolean whether this file exists
+	/** 
+		Returns a boolean whether this file exists
+		@returns BOOL
+		*/
 	function exists()
 	{
 	    $query = "SELECT * FROM $this->tablename WHERE $this->tablename.id = $this->id";
@@ -61,8 +65,10 @@ if( !defined('FileData_class') )
 	      default: $this->error = 'Non-unique'; return $this->error; break;
 	    }
 	}
-	/* loadData() is a more complex version of base class's loadData. 
-	This function load up all the fields in data table.*/
+	/** loadData() is a more complex version of base class's loadData. 
+	This function load up all the fields in data table.
+		@returns VOID
+	*/
 	function loadData()
 	{
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
@@ -90,13 +96,28 @@ if( !defined('FileData_class') )
 			$this->error = 'Non unique file id';
 		$this->isLocked = $this->status==-1;
 	}
-	//return filesize
+	/** 
+		Return database version of the filesize.  Originally ODM has the filesize recorded
+	into the database.  Since the filesize only changes when the user upload a new file, so it
+	made sense to have the filesize be somewhat constant.  As ODM DB grows larger, it becomes
+	more practical to move the filesize look up duty to the OS of the server.  Even though ODM no
+	longer uses this function, we still want to keep it around in case we ever need to swing 
+	back to the original idea.  For those with relatively small ODM DB and a busy HTTP server, 
+	DB filesize will be better for you.
+	@returns INT
+	*/
 	function getFileSize()
 	{	return $this->filesize;	}
-	// return this file's category id
+	
+	/** Returns this file's category id.  This function is much more useful to programmer than getCategoryName()
+	@returns ID
+	*/
 	function getCategory()
 	{	return $this->category;		}
-	// return this file's category name
+	
+	/** Returns this file's category name. This function is more useful to ODM users and administrators than getFileSize()
+	@returns STRING
+	*/
 	function getCategoryName()
 	{	
 		$query = "SELECT $this->TABLE_CATEGORY.name FROM $this->TABLE_CATEGORY WHERE $this->TABLE_CATEGORY.id = $this->category";
@@ -110,50 +131,73 @@ if( !defined('FileData_class') )
 		}
 		return $name;
 	}
-	// return a boolean on whether the user ID $uid is the owner of this file	
+	/** Returns a BOOL on whether the user ID $uid is the owner of this file
+	@param INT uid
+	@returns BOOL
+	*/
 	function isOwner($uid)
 	{	return ($this->getOwner()==$uid);	}
-	// return whether this file can by anonymously viewed
+	
+	/** Returns whether this file can by anonymously viewed
+	@returns VOID
+	*/
 	function isAnonymous()
 	{	return $this->anonymous;	}
-	// return the ID of the owner of this file
+	
+	/** Returns the ID of the owner of this file
+	@returns INT id
+	*/
 	function getOwner()
 	{	return $this->owner;		}
-	// return the username of the owner
+	/** Returns the username of the owner
+	@returns STRING
+	*/
 	function getOwnerName()
 	{	
 		$user_obj = new User($this->owner, $this->connection, $this->database);
 		return $user_obj->getName();
 	}
-	// return owner's full name in an array where index=0 corresponds to the last name
-	// and index=1 corresponds to the first name
+	/** return owner's full name in an array where index=0 corresponds to the last name
+		and index=1 corresponds to the first name
+		@returns STRING[]
+	*/
 	function getOwnerFullName()
 	{	
 		$user_obj = new User($this->owner, $this->connection, $this->database);
 		return $user_obj->getFullName();
 	}
-	// return the owner's dept ID.  Often, this is also the department of the file.
-	// if the owner changes his/her department after he/she changes department, then
-	// the file's department will not be the same as it's owner's.
+	/** return the owner's dept ID.  Often, this is also the department of the file.
+		if the owner changes his/her department after he/she changes department, then
+		the file's department will not be the same as it's owner's.
+		@returns INT
+	*/
 	function getOwnerDeptId()
 	{
 		$user_obj = new User($this->getOwner(), $this->connection, $this->database);
 		return $user_obj->getDeptId();
 	}
-	// This function serve the same purpose as getOwnerDeptId() except that it returns
-	// the department name instead of department id
+	/** This function serve the same purpose as getOwnerDeptId() except that it returns
+		the department name instead of department id
+		@returns STRING
+	*/
 	function getOwnerDeptName()
 	{
 		$user_obj = new User($this->getOwner(), $this->connection, $this->database);
 		return $user_obj->getDeptName();
 	}
-	// return file description
+	/** Returns file description
+	@returns STRING
+	*/
 	function getDescription()
 	{	return $this->description;	}
-	// return file commnents
+	/** Returns file commnents
+	@returns STRING
+	*/
 	function getComment()
 	{	return $this->comment;		}
-	// return an aray of the user id of all the people who has $right right to this file
+	/** return an aray of the user id of all the people who has $right right to this file
+	  @returns STRING
+	 */
 	function getUserIds($right)
 	{
 	  $result_array = array();
@@ -203,21 +247,39 @@ if( !defined('FileData_class') )
 	  mysql_free_result($d_result);
 	  return $result_array;
 	}
-	// return the status of the file
+	/** Return the status of the file
+	    @returns STRING
+	*/
 	function getStatus()
 	{	return $this->status;		}
+	/** Set the status of the file
+		0 --> Free, unlocked, checkout-able
+		+Z (Positive integer number) --> This file is check out to the person whom this ID belongs to
+		-Z (Negative integer number) --> This file is currently locked and cannot be checked out.
+		@param +/- INT
+		@returns VOID
+	*/	
 	function setStatus($value)
 	{	mysql_query('UPDATE data set status=' . $value . ' where data.id = ' . $this->id) or die(mysql_error());}
-	// return a User OBJ of the person who checked out this file
+	/** 
+		Returns a User OBJ of the person who checked out this file
+		@returns USER_OBJ	
+	*/
 	function getCheckerOBJ()
 	{
 		$user = new User($this->status, $this->connection, $this->database);
 		return $user;
 	}
-	// return the deparment ID of the file
+	/** 
+		Returns the deparment ID of the file
+		@returns INT
+	*/
 	function getDepartment()
 	{	return $this->department;	}
-	// return the name of the deparment of the file
+	/** 
+		Returns the name of the deparment of the file
+		@returns STRING
+	*/
 	function getDeptName()
 	{
 		$query ="SELECT $this->TABLE_DEPARTMENT.name FROM $this->TABLE_DEPARTMENT WHERE $this->TABLE_DEPARTMENT.id = ".$this->getDepartment().';';
@@ -230,10 +292,14 @@ if( !defined('FileData_class') )
 		list($dept) = mysql_fetch_row($result);
 		return $dept;
 	}
-	// return the date that the file was created on
+	/**	Returns the date that the file was created on
+		@returns STRING
+	*/
 	function getCreatedDate()
 	{	return $this->created_date;	}
-	// return the latest modifying date on the file 
+	/** Returns the latest modifying date on the file
+		@returns STRING
+	*/
 	function getModifiedDate()
 	{
 		/*$query = "SELECT $this->TABLE_LOG.modified_on FROM $this->TABLE_LOG WHERE $this->TABLE_LOG.id = '$this->id' ORDER BY $this->TABLE_LOG.modified_on DESC LIMIT 1;";
@@ -251,27 +317,39 @@ if( !defined('FileData_class') )
         list($name) = mysql_fetch_row($result);       
         return $name;
 	}
-	// return the realname of the file
+	/** Returns the realname of the file
+		@returns STRING
+	*/
 	function getRealName()
 	{	return databaseData::getName();	}
-	/* getViewRightUserIds(), getReadRightUserIds(), getWriteRightUserIds(), 
-	getAdminRightUserIds(), getNoneRightUserIds(), provide interfaces to 
-	getUserIds($right).*/
+	/** Returns ID of users who have "VIEW_RIGHT" or more
+		@returns INT[]
+	*/
 	function getViewRightUserIds()
 	{	return $this->getUserIds($this->VIEW_RIGHT);  }	  
-	
+	/** Returns ID of users who have "READ_RIGHT" or more
+	        @returns INT[]
+			    */
 	function getReadRightUserIds()
 	{	return $this->getUserIds($this->READ_RIGHT);  }
-	
+	/** Returns ID of users who have "WRIT_RIGHT" or more
+	        @returns INT[]
+			    */
 	function getWriteRightUserIds()
 	{	return $this->getUserIds($this->WRITE_RIGHT);  }
-	
+	/** Returns ID of users who have "ADMIN_RIGHT" or more
+	        @returns INT[]
+			    */
 	function getAdminRightUserIds()
 	{	return $this->getUserIds($this->ADMIN_RIGHT);  }
-	
+	/** Returns ID of users who have "NONE_RIGHT" or more
+	        @returns INT[]
+			    */
 	function getNoneRightUserIds()
 	{	return $this->getUserIds($this->NONE_RIGHT);  }
-	// return an array of user id who are forbidden to this file
+	/** Returns ID of users who have "NONE_RIGHT" or more
+	        @returns INT[]
+			    */
 	function getForbiddenRightUserIds()
 	{
 	
@@ -297,10 +375,11 @@ if( !defined('FileData_class') )
 	  mysql_free_result($u_result);
 	  mysql_free_result($d_result);
 	  return $result_array;
-
-	
 	}
-	// convert a an array of user id into an array of user object
+	/** Converts an array of user ID's into an array of user object
+		@param INT[]
+		@returns USER_OBJ[]
+	*/
 	function toUserOBJs($uid_array)
 	{
 	  $UserOBJ_array = array();
@@ -310,7 +389,9 @@ if( !defined('FileData_class') )
 	  }
 	  return $UserOBJ_array;
 	}
-	// return a boolean on whether or not this file is publisable
+	/** Returns a boolean on whether or not this file is publisable
+		@returns BOOL
+	*/
 	function isPublishable()
 	{
 		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
@@ -324,6 +405,10 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $publishable;
 	}
+	/**
+		Returns whether or not a file is archived
+		@returns BOOL
+	*/
 	function isArchived()
 	{
 		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
@@ -337,13 +422,18 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return ($publishable == 2);
 	}
-	// this function sets the publisable field in the data table to $boolean
+	/** This function sets the publisable field in the data table to $boolean
+		@param BOOL boolean
+		@returns VOID
+	*/
 	function Publishable($boolean = true)
 	{
 		$query = "UPDATE $this->TABLE_DATA SET publishable ='$boolean', $this->TABLE_DATA.reviewer = '$this->id' WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
-	// return the user id of the reviewer
+	/** Returns the user id of the reviewer
+		@returns INT
+	*/
 	function getReviewerID()
 	{
 		$query = "SELECT $this->TABLE_DATA.reviewer FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id = '$this->id'";
@@ -358,7 +448,9 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $reviewer;
 	}
-	// return the username of the reviewer
+	/** Returns the username of the reviewer
+		@returns STRING
+	*/
 	function getReviewerName()
 	{
 		$reviewer_id = $this->getReviewerID();
@@ -368,12 +460,17 @@ if( !defined('FileData_class') )
 			return $user_obj->getName();
 		}
   	}
-  	// return a user object for the reviewer 
+  	/** Returns a user object for the reviewer
+		@returns USER_OBJ
+	*/
   	function getReviewerOBJ()
   	{
   		return (new User($this->getReviewerID(), $this->connection, $this->database));
   	}
-  	// set $comments into the reviewer comment field in the DB
+  	/** Sets $comments into the reviewer comment field in the DB
+		@param STRING comments
+		@returns VOID
+	*/
 	function setReviewerComments($comments)
 	{
         $comments=addslashes($comments);
@@ -381,7 +478,9 @@ if( !defined('FileData_class') )
 		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
-	// return the reviewer's comment toward this file
+	/** Returns the reviewer's comment toward this file
+		@returns STRING
+	*/
 	function getReviewerComments()
 	{
 		$query = "SELECT $this->TABLE_DATA.reviewer_comments FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id='$this->id'";
@@ -396,17 +495,26 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $comments;
 	}
+	/** Archive this file
+		@returns VOID
+	*/
 	function temp_delete()
 	{
 		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 2 WHERE $this->TABLE_DATA.id = $this->id";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 	}
+	/** Unarchive this file
+		@returns VOID
+	*/
 	function undelete()
 	{
 		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 0 WHERE $this->TABLE_DATA.id = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
+	/** Returns whether if this file is locked
+		@returns BOOL
+	*/
 	function isLocked()
 	{	return $this->isLocked;	}
   }

@@ -20,7 +20,16 @@ if( !defined('function') )
 		else
 		{	return 0;	}
 	}
-
+	function getAllDeptID()
+	{
+		$query= "SELECT id from department ORDER BY department.id";
+		$result = mysql_query($query);
+		$llen = mysql_num_rows($result);
+		$result_array = array();
+		for($i = 0; $i<$llen; $i++)
+			list($result_array[$i]) = mysql_fetch_row($result);
+		return $result_array;
+	}
 	// Return a copy of $string where all the spaces are converted into underscores
 	/*function space_to_underscore($string)
 	  {
