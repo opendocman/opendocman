@@ -1,3 +1,666 @@
+2003-03-05 15:00  logart
+
+	* setup.php: added comments
+
+2003-03-05 13:45  logart
+
+	* docs/php_coding_standard.html: moved from root folder
+
+2003-03-05 13:45  logart
+
+	* php_coding_standard.html: moved to docs folder
+
+2003-03-05 13:45  logart
+
+	* docs/developers.txt: initial import of developer documentation
+
+2003-03-05 13:41  logart
+
+	* setup.php: changed include to odm.php
+
+2003-03-05 13:41  logart
+
+	* install/: odm.php, odm1.1rc1.php: renamed file to odm.php
+
+2003-03-05 13:15  logart
+
+	* setup.php: initial import of installation script
+
+2003-03-05 13:14  logart
+
+	* database.sql: fixed column types (tinyint to smallint, etc.)
+
+2003-03-05 13:08  logart
+
+	* docs/: README.html, README.txt: initial import
+
+2003-03-05 13:07  logart
+
+	* TODO: replaced with sourceforge
+
+2003-03-05 13:06  logart
+
+	* README: [no log message]
+
+2003-03-05 13:04  logart
+
+	* BUGS: not needed anymore
+
+2003-03-05 13:02  logart
+
+	* README: replaced by README.txt
+
+2003-03-05 11:01  logart
+
+	* install/: odm1.1rc1.php, upgrade.php, upgrade_10.php: initial
+	import of installation scripts
+
+2003-03-04 08:44  logart
+
+	* config.php: vanilla
+
+2003-03-04 08:36  logart
+
+	* userinfo.php: removed
+
+2003-03-03 13:49  khoang82
+
+	* view_file.php: '.' in single or double quotations does not have
+	any meaning other than being an asci char.  No escape char
+	required. 
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/view_file.php,v retrieving
+	revision 1.7 diff -r1.7 view_file.php 25c25 <	   
+	list($prefix,$suffix)= split ("\.", $realname); ---
+	>	list($prefix , $suffix)= split (".", $realname);
+
+2003-03-03 13:46  khoang82
+
+	* user.php: check for var before use
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/user.php,v retrieving
+	revision 1.12 diff -r1.12 user.php 319c319,322 <		
+	draw_status_bar("Update User",$_POST['last_message']); ---
+	>		  if( isset( $_POST['last_message'] ) )
+	>				{	draw_status_bar("Update
+	User",$_POST['last_message']);	}
+	>				else
+	>				{	draw_status_bar("Update
+	User",'');	}
+
+2003-03-03 13:41  khoang82
+
+	* search.php: Fix bad array offset
+	
+	Index: search.php
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/search.php,v retrieving
+	revision 1.11 diff -r1.11 search.php 40d39 < 152c151,153 <	   
+	       $obj_array_len = sizeof($OBJ_array); ---
+	>		  if( sizeof( $OBJ_array ) == 0 )
+	>					return $OBJ_array;
+	>				$obj_array_len =
+	sizeof($OBJ_array);
+
+2003-02-27 15:55  khoang82
+
+	* commitchange.php: fix bad indexing problem
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/commitchange.php,v
+	retrieving revision 1.13 diff -r1.13 commitchange.php
+	119,123c119,128 <	$query.= 'department="' .
+	addslashes($_REQUEST['department']) . '",'; <	    $query.=
+	'phone="' . addslashes($_REQUEST['phonenumber']) . '",'; <	
+	$query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,'; <	   
+	 $query.= 'last_name="' . addslashes($_REQUEST['last_name']) .
+	'",'; <       $query.= 'first_name="' .
+	addslashes($_REQUEST['first_name']) . '" '; ---
+	>	if( isset( $_REQUEST['department'] ) )
+	>	{	$query.= 'department="' .
+	addslashes($_REQUEST['department']) . '",';   }
+	>	if( isset( $_REQUEST['phonenumber'] ) )
+	>	{	$query.= 'phone="' .
+	addslashes($_REQUEST['phonenumber']) . '",';	   }
+	>	if( isset( $_REQUEST['Email'] ) )
+	>	{	$query.= 'Email="' . addslashes($_REQUEST['Email'])
+	. '" ,';    }
+	>	if( isset( $_REQUEST['last_name'] ) )
+	>	{	$query.= 'last_name="' .
+	addslashes($_REQUEST['last_name']) . '",';     }
+	>	if( isset( $_REQUEST['first_name'] ) )
+	>	{	$query.= 'first_name="' .
+	addslashes($_REQUEST['first_name']) . '" ';   }
+
+2003-02-27 15:33  logart
+
+	* department.php, commitchange.php, user.php: globalization
+
+2003-02-27 15:29  logart
+
+	* add.php: globalization changes
+
+2003-02-27 15:28  khoang82
+
+	* edit.php: send last_message to out.php instead of message
+
+2003-02-27 15:20  khoang82
+
+	* functions.php: fix offset prob <		
+	if(sizeof($obj_array)<=1 and $obj_array[0]==null) ---
+	>		if(sizeof($obj_array)<=1 and !isset($obj_array) )
+	660c660 <		  if($fileobj_array[0] == null) ---
+	>		  if(!isset($fileobj_array))
+
+2003-02-27 14:01  khoang82
+
+	* UserPermission_class.php: add comments
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/UserPermission_class.php,v
+	retrieving revision 1.11 diff -r1.11 UserPermission_class.php
+	53a54,56
+	>     // One might ask why getViewableFileIds() doesn't return the
+	combined
+	>     // result of User_perm and Dept_Perm classes. 
+	User_Perm_class only know
+	>     // of it self and the same goes with Dept_Perms.
+
+2003-02-27 13:59  khoang82
+
+	* FileData_class.php: fix undefine vars
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/FileData_class.php,v
+	retrieving revision 1.10 diff -r1.10 FileData_class.php 150c150,151
+	<	  $non_prev_user_query = "SELECT uid FROM
+	$this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right";
+	---
+	>	  //query for user who has right less than $right
+	>	  $non_prev_user_query = "SELECT uid FROM
+	$this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right";
+	153a155
+	>	  // result of $non_prev_user_query query.  Look above for
+	more information.
+	155a158,159
+	>	  $not_u_uid = array();// array of user_id that are
+	forbidden on the file
+	>	  $d_uid = array();// init for array of dept_id;
+
+2003-02-27 13:58  khoang82
+
+	* edit.php: globalized vars fixes:
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/edit.php,v retrieving
+	revision 1.11 diff -r1.11 edit.php 32c32 < if (!isset($submit)) ---
+	> if (!isset($_REQUEST['submit']))
+	154c154 <		<input type="hidden" name="id" value="<?php
+	 echo $id; ?>"> ---
+	>		<input type="hidden" name="id" value="<?php  echo
+	$_REQUEST['id']; ?>">
+	197c197 <		  $id+=2; ---
+	>		  //$id+=2;
+	373,375d372 <	    //clean up <       //mysql_free_result
+	($result); <	   mysql_free_result ($result2); 398,399c395,396 < 
+	     $filedata = new FileData($id, $GLOBALS['connection'],
+	$GLOBALS['database']); <       $filedata->setId($id); ---
+	>	$filedata = new FileData($_REQUEST['id'],
+	$GLOBALS['connection'], $GLOBALS['database']);
+	>	$filedata->setId($_REQUEST['id']);
+	402c399 <	if (sizeof($view) <= 0 or sizeof($modify)<= 0 or
+	sizeof($read)<= 0 or sizeof ($admin)<= 0) {
+	header("Location:error.php?ec=12"); exit; } ---
+	>	if (sizeof($_REQUEST['view']) <= 0 or
+	sizeof($_REQUEST['modify'])<= 0 or sizeof($_REQUEST['read'])<= 0 or
+	sizeof ($_REQUEST['admin'])<= 0) {
+	header("Location:error.php?ec=12"); exit; }
+	405c402 <	$query = "SELECT status FROM data WHERE id = '$id'
+	and status = '0'"; ---
+	>	$query = "SELECT status FROM data WHERE id =
+	'$_REQUEST[id]' and status = '0'";
+	414c411 <	mysql_escape_string($query = "UPDATE data SET
+	category='" . addslashes($category) . "', description='" .
+	addslashes($description)."', comment='" . addslashes($comment)."',
+	default_rights='" . addslashes($default_Setting) . "' WHERE id =
+	'$id'"); ---
+	>	mysql_escape_string($query = "UPDATE data SET category='" .
+	addslashes($_REQUEST['category']) . "', description='" .
+	addslashes($_REQUEST['description'])."', comment='" .
+	addslashes($_REQUEST['comment'])."', default_rights='" .
+	addslashes($_REQUEST['default_Setting']) . "' WHERE id =
+	'$_REQUEST[id]'");
+	418c415 <	$query = "DELETE FROM user_perms WHERE fid =
+	'$id'"; ---
+	>	$query = "DELETE FROM user_perms WHERE fid =
+	'$_REQUEST[id]'";
+	420,424c417,425 < <	  $result_array =
+	advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $modify,
+	$filedata->WRITE_RIGHT); <	 $result_array =
+	advanceCombineArrays($result_array, 'NULL', $read,
+	$filedata->READ_RIGHT); <	$result_array =
+	advanceCombineArrays($result_array, 'NULL', $view,
+	$filedata->VIEW_RIGHT); <	$result_array =
+	advanceCombineArrays($result_array, 'NULL', $forbidden,
+	$filedata->FORBIDDEN_RIGHT); ---
+	>	$result_array = array();// init;
+	>	if( isset( $_REQUEST['admin'] ) && isset
+	($_REQUEST['modify']) )
+	>	{	$result_array =
+	advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT,
+	$_REQUEST['modify'], $filedata->WRITE_RIGHT)}>	     if( isset(
+	$_REQUEST['read'] ) )
+	>	{	$result_array = advanceCombineArrays($result_array,
+	'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);  }
+	>	if( isset( $_REQUEST['view'] ) )
+	>	{	$result_array = advanceCombineArrays($result_array,
+	'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);  }
+	>	if( isset( $_REQUEST['forbidden'] ) )
+	>	{	$result_array = advanceCombineArrays($result_array,
+	'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);	   
+	}
+	428c429 <		$query = "INSERT INTO user_perms (fid, uid,
+	rights) VALUES($id, '".$result_array[$i][0]."','".
+	$result_array[$i][1]."')"; ---
+	>		$query = "INSERT INTO user_perms (fid, uid, rights)
+	VALUES($_REQUEST[id], '".$result_array[$i][0]."','".
+	$result_array[$i][1]."')";
+	438c439 <		$query = "UPDATE dept_perms SET rights
+	=\"".$$string."\" where fid=".$filedata->getId()." and
+	dept_perms.dept_id =$id"; ---
+	>		$query = "UPDATE dept_perms SET rights
+	=\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and
+	dept_perms.dept_id =$id";
+
+2003-02-26 08:02  logart
+
+	* category.php: globalized
+
+2003-02-26 07:52  logart
+
+	* mimetypes.php: globalized
+
+2003-02-25 08:27  logart
+
+	* view_file.php: fixed bug in split code. Missing backslashe for
+	period
+
+2003-02-24 16:14  khoang82
+
+	* functions.php, Dept_Perms_class.php, FileData_class.php: fix
+	publishable setting
+
+2003-02-24 16:14  khoang82
+
+	* toBePublished.php: fix review/reject pop-up
+
+2003-02-21 17:14  khoang82
+
+	* user.php:
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/user.php,v retrieving
+	revision 1.10 diff -r1.10 user.php 31c31,32 < ---
+	> if(!isset($_REQUEST['caller']))
+	> {	$_REQUEST['caller'] = 'admin.php';	}
+	325a327
+	>			  <INPUT type="hidden" name="caller"
+	value="<?php echo $_REQUEST['caller']; ?>">
+	327,328d328 <			      // query to get a list of
+	users < 			echo '<INPUT type="hidden"
+	name="callee" value="'.$_SERVER['PHP_SELF'].'">'; 439c439 <	   
+		$query = "SELECT dept_id, user_id FROM dept_reviewer where
+	user_id = '$item'"; ---
+	>		  $query = "SELECT dept_id, user_id FROM
+	dept_reviewer where user_id = '$_REQUEST[item]'";
+	635a636,639
+	>	  }
+	>	  else
+	>	  {
+		>		header('Location:admin.php?last_message=' .
+	urlencode('Unrecognizalbe action'));
+
+2003-02-21 17:12  khoang82
+
+	* profile.php:
+	===================================================================
+	RCS file: /cvsroot/opendocman/opendocman/profile.php,v retrieving
+	revision 1.4 diff -r1.4 profile.php 18c18 < <tr><td><center><a
+	href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid'];
+	?>&callee=<?php echo $_SERVER['PHP_SELF']; ?>">Change Personal
+	Info</a><center></td></tr> ---
+	> <tr><td><center><a href="user.php?submit=Modify+User&item=<?php
+	echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF'];
+	?>">Change Personal Info</a><center></td></tr>
+
+2003-02-21 17:11  khoang82
+
+	* commitchange.php: CS file:
+	/cvsroot/opendocman/opendocman/commitchange.php,v retrieving
+	revision 1.11 diff -r1.11 commitchange.php 37c37 <	  $query =
+	"INSERT INTO user (id, username, password, department, phone,
+	Email,last_name, first_name) VALUES('', '".
+	addslashes($_POST['username'])."', password('".
+	addslashes($_POST['password']) ."'), '" .
+	addslashes($_POST['department'])."' ,'" . addslashes($phonenumber)
+	. "','". addslashes($_POST['Email'])."', '" .
+	addslashes($_POST['last_name']) . "', '" . addslashes($first_name)
+	. '\' )'; ---
+	>	 $query = "INSERT INTO user (id, username, password,
+	department, phone, Email,last_name, first_name) VALUES('', '".
+	addslashes($_POST['username'])."', password('".
+	addslashes($_POST['password']) ."'), '" .
+	addslashes($_POST['department'])."' ,'" . addslashes($phonenumber)
+	. "','". addslashes($_POST['Email'])."', '" .
+	addslashes($_POST['last_name']) . "', '" .
+	addslashes($_REQUEST['first_name']) . '\' )';
+	91c91 <       if(!isset($_POST['callee']) || $_POST['callee'] ==
+	'') ---
+	>	if(!isset($_POST['caller']) || $_POST['caller'] == '')
+	93c93 < 	      $callee='admin.php'; ---
+	>		$caller='admin.php';
+	130a131
+	>		$depts_rev = $_POST['department_review'];
+	133c134 <			 
+	$dept_rev=$_POST['department_review'][$i]; ---
+	>	      $dept_rev=$depts_rev[$i];
+	138a140,141
+	>	if(!isset($_REQUEST['caller']))
+	>	{	$_REQUEST['caller'] = 'admin.php';	}
+	140c143 <     header('Location: ' . $_POST['callee'] .
+	'?last_message=' . $last_message); ---
+	>     header('Location: ' . $_REQUEST['caller'] . '?last_message='
+	. $last_message);
+
+2003-02-21 16:03  khoang82
+
+	* view_file.php: RCS file:
+	/cvsroot/opendocman/opendocman/view_file.php,v retrieving revision
+	1.5 diff -r1.5 view_file.php 8a9,10
+	> if( !isset ($_REQUEST['last_message']) )
+	> {	$_REQUEST['last_message']='';	}
+	13c15 <       @draw_status_bar('File
+	View',$_REQUEST['last_message']); ---
+	>	draw_status_bar('File View',$_REQUEST['last_message']);
+	21,22c23,28 <	    list($prefix,$suffix)= split ('[.]',
+	$realname); <	    $mimetype = $mimetypes["$suffix"]; ---
+	>	list($prefix,$suffix)= split ('.', $realname);
+	>	echo $suffix;
+	>	if( !isset($mimetypes["$suffix"]) )
+	>	{	$mimetype = ''; }
+	>	else
+	>	{	$mimetype = $mimetypes["$suffix"];	}
+
+2003-02-21 16:02  khoang82
+
+	* history.php: RCS file:
+	/cvsroot/opendocman/opendocman/history.php,v retrieving revision
+	1.6 diff -r1.6 history.php 13c13 < if (!isset($id) || $id == '')
+	---
+	> if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+	21c21,24 < draw_header($title); ---
+	> if( !isset($_REQUEST['title']) )
+	> {	draw_header('');	}
+	> else
+	> { draw_header( $_REQUEST['title'] ); }
+	23c26,29 < draw_status_bar('Document Listing', $last_message); ---
+	> if( !isset($_REQUEST['last_message']) )
+	> {	draw_status_bar('Document Listing', '');	}
+	> else
+	> { draw_status_bar('Document Listing', $_REQUEST['last_message']);
+	}
+	25c31 < $datafile = new FileData($id, $GLOBALS['connection'],
+	$GLOBALS['database']); ---
+	> $datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'],
+	$GLOBALS['database']);
+	54c60 < $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+	---
+	> $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] .
+	'.dat';
+	120c126 <	$query = "SELECT user.last_name, user.first_name,
+	log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND
+	user.username = log.modified_by ORDER BY log.modified_on DESC"; ---
+	>	$query = "SELECT user.last_name, user.first_name,
+	log.modified_on, log.note FROM log, user WHERE log.id =
+	'$_REQUEST[id]' AND user.username = log.modified_by ORDER BY
+	log.modified_on DESC";
+
+2003-02-21 16:01  khoang82
+
+	* edit.php: RCS file: /cvsroot/opendocman/opendocman/edit.php,v
+	retrieving revision 1.10 diff -r1.10 edit.php 24c24 < if
+	(!isset($id) || $id == '') ---
+	> if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+	26,27c26,27 <	header('Location:error.php?ec=2'); <   exit; ---
+	>	header('Location:error.php?ec=2');
+	>	exit;
+	28a29,30
+	> if (!isset($_REQUEST['last_message']))
+	> {	$_REQUEST['last_message'] = ''; }
+	35c37 <       draw_status_bar('Edit Document Properties',
+	$message); ---
+	>	draw_status_bar('Edit Document Properties',
+	$_REQUEST['last_message']);
+	37,38c39,40 <	    checkUserPermission($id,
+	$user_perm_obj->ADMIN_RIGHT); <       $data_id = $id; ---
+	>	checkUserPermission($_REQUEST['id'],
+	$user_perm_obj->ADMIN_RIGHT);
+	>	$data_id = $_REQUEST['id'];
+	49c51 <       $query = "SELECT default_rights from data where
+	data.id = $id"; ---
+	>	$query = "SELECT default_rights from data where data.id =
+	$data_id";
+	112c114 <	$query = "SELECT name, dept_id, rights FROM
+	department, dept_perms	WHERE department.id = dept_perms.dept_id
+	and dept_perms.fid = $id ORDER by name"; ---
+	>	$query = "SELECT name, dept_id, rights FROM department,
+	dept_perms  WHERE department.id = dept_perms.dept_id and
+	dept_perms.fid = $data_id ORDER by name";
+	130c132 <	$filedata = new FileData($id,
+	$GLOBALS['connection'], $GLOBALS['database']); ---
+	>	$filedata = new FileData($data_id, $GLOBALS['connection'],
+	$GLOBALS['database']);
+	254,255c256 <	    $filedata = new FileData($id,
+	$GLOBALS['connection'], $GLOBALS['database']); <      
+	$filedata->setId( $id ); ---
+	>	$filedata = new FileData($data_id, $GLOBALS['connection'],
+	$GLOBALS['database']);
+
+2003-02-21 15:59  khoang82
+
+	* details.php: RCS file:
+	/cvsroot/opendocman/opendocman/details.php,v retrieving revision
+	1.11 diff -r1.11 details.php 28c28 < if(
+	!$userPermObj->canView($_REQUEST['id']) ) ---
+	> /*if( !$userPermObj->canView($_REQUEST['id']) )
+	32c32 < ---
+	> */
+
+2003-02-21 15:59  khoang82
+
+	* check-in.php: RCS file:
+	/cvsroot/opendocman/opendocman/check-in.php,v retrieving revision
+	1.7 diff -r1.7 check-in.php 144,145c144,145 <			   
+	$allowedFile = 1; <			  break; ---
+	>			$allowedFile = 1;
+	>		    break;
+	147,152c147,150 <		  else <		 {	<  
+	    <			    $allowedFile = 0;	    <		   
+		break;	<		  }	---	>	  else	>  
+	      { 	    >		  $allowedFile = 0;		   
+	>	  }		157c155 		<		 
+	$last_message='Failed'; 	      ---	      >        
+	$last_message='Failed';
+
+2003-02-21 15:58  khoang82
+
+	* User_Perms_class.php: CS file:
+	/cvsroot/opendocman/opendocman/User_Perms_class.php,v retrieving
+	revision 1.8 diff -r1.8 User_Perms_class.php 164a165
+	>
+	174c175 <		$query = "SELECT
+	$this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where
+	fid = ' . $data_id . ' AND dept_id = " .
+	$this->user_obj->getDeptId(); ---
+	>		$query = "SELECT $this->TABLE_DEPT_PERMS.rights
+	from $this->TABLE_DEPT_PERMS where fid = '$data_id' AND dept_id = "
+	. $this->user_obj->getDeptId();
+
+2003-02-21 15:57  khoang82
+
+	* FileData_class.php: RCS file:
+	/cvsroot/opendocman/opendocman/FileData_class.php,v retrieving
+	revision 1.8 diff -r1.8 FileData_class.php 166c166 <		  
+	$d_query .= " and $TABLE->TABLE_USER.id != " . $not_u_uid[$i]; ---
+	>		$d_query .= " and $this->TABLE_USER.id != " .
+	$not_u_uid[$i];
+	263c263,264 < ---
+	>	  $d_uid = array();
+	>	  $u_uid = array();
+	269c270 <	  $result_array =
+	databaseData::combineArrays($owner_uid, $u_uid); ---
+	>	  $result_array = databaseData::combineArrays(array(),
+	$u_uid);
+
+2003-02-21 15:55  khoang82
+
+	* Dept_Perms_class.php: RCS file:
+	/cvsroot/opendocman/opendocman/Dept_Perms_class.php,v retrieving
+	revision 1.6 diff -r1.6 Dept_Perms_class.php 113c113 <		   
+		 if($this->canDept($data_id, $this->READ_RIGHT) or
+	!$this->isPublishable($data_id) ) ---
+	>			if($this->canDept($data_id,
+	$this->READ_RIGHT) or !$filedata->isPublishable($data_id) )
+	168c168 <		$query = "SELECT
+	$this->database.$this->TABLE_DEPT_PERMs.rights FROM
+	$this->database.$this->TABLE_DEPT_PERMS WHERE
+	$this->TABLE_DEPT_PERMS.dept_id = $this->id AND
+	$this->TABLE_DEPT_PERMS.fid = $data_id"; ---
+	>		$query = "SELECT
+	$this->database.$this->TABLE_DEPT_PERMS.rights FROM
+	$this->database.$this->TABLE_DEPT_PERMS WHERE
+	$this->TABLE_DEPT_PERMS.dept_id = $this->id AND
+	$this->TABLE_DEPT_PERMS.fid = $data_id";
+	189c189 <		$query = "SELECT * FROM
+	$this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.id = $this->id
+	and $this->DEPT_PERM_TABLE.fid = $data_id AND
+	$this->DEPT_PERM_TABLE.rights >= $right"; ---
+	>		$query = "SELECT * FROM $this->TABLE_DEPT_PERMS
+	WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and
+	$this->TABLE_DEPT_PERMS.fid = $data_id AND
+	$this->TABLE_DEPT_PERMS.rights >= $right";
+
+2003-02-21 13:23  khoang82
+
+	* search.php: fix line 119 to append description to each search
+	result
+
+2003-02-21 11:38  logart
+
+	* search.php: fixed undefined var $cases in 119
+
+2003-02-18 14:09  logart
+
+	* details.php: added isset's
+
+2003-02-18 13:57  logart
+
+	* add.php: turned off error rep for status_bar
+
+2003-02-18 13:52  logart
+
+	* search.php: fixed some locals that were set to _GET
+
+2003-02-18 11:42  logart
+
+	* FileData_class.php: fixed error in sql statement
+
+2003-02-14 16:49  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	UserPermission_class.php, User_Perms_class.php,
+	databaseData_class.php: fixed mysql_db_query to mysql_query
+
+2003-02-14 14:44  logart
+
+	* ldap.inc: initial import
+
+2003-02-13 16:41  logart
+
+	* ChangeLog, Dept_Perms_class.php, FileData_class.php,
+	User_Perms_class.php, User_class.php, add.php, category.php,
+	check-in.php, check-out.php, commitchange.php, config.php,
+	delete.php, department.php, details.php, edit.php, error.php,
+	functions.php, history.php, in.php, index.php, rejects.php,
+	search.php, toBePublished.php, user.php, userinfo.php: first round
+	of globalization
+
+2003-02-13 16:24  khoang82
+
+	* User_Perms_class.php: New documentation added
+
+2003-02-13 16:07  logart
+
+	* databaseData_class.php: fixed typo
+
+2003-02-13 16:02  khoang82
+
+	* UserPermission_class.php: New documentation added.  Code clean up
+
+2003-02-13 15:02  khoang82
+
+	* out.php: < $result = mysql_query($query) or die ("Error in
+	Query".mysql_error()); ---
+	> $result = mysql_query($query) or die ("Error in
+	Query:$query".mysql_error());
+
+2003-02-13 15:01  khoang82
+
+	* User_Perms_class.php: 153c153 <	  if($this->root_user ==
+	$this->user_obj->getName()) ---
+	>	  if($GLOBALS['CONFIG']['root_username'] ==
+	$this->user_obj->getName())
+	
+	localized root_username
+
+2003-02-13 14:48  khoang82
+
+	* FileData_class.php: New documentation added.	New organization
+	for class member functions and variables
+
+2003-02-13 14:46  khoang82
+
+	* Dept_Perms_class.php: New documentation is added.  Class member
+	functions are organized and cleaned up.
+
+2003-02-13 14:44  khoang82
+
+	* databaseData_class.php: a new level of abstraction has been added
+	to this foundation class.  Unlike before, this class's DB
+	information such as database name, and table names can now be
+	configured.  All derived classes inherit this feature.	One big
+	drawback is the readability every query has been dramatically
+	reduced.
+
+2003-02-13 10:59  logart
+
+	* view.php: globalized vars
+
+2003-02-12 10:12  logart
+
+	* view_file.php: globalized vars
+
+2003-02-12 10:10  logart
+
+	* logout.php: changed uid session var
+
+2003-02-12 10:09  logart
+
+	* profile.php: globalized vars
+
+2003-02-12 10:05  logart
+
+	* admin.php: globalize vars
+
+2003-02-12 10:03  logart
+
+	* out.php: globalized variables
+
 2003-02-07 14:40  khoang82
 
 	* UserPermission_class.php, functions.php: fix var
