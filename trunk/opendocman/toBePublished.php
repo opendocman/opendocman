@@ -407,7 +407,7 @@ elseif (isset($submit) && $submit == 'Authorize')
                                 
                                 email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
                         }
-                        if(sizeof($send_to_users) > 0)
+                        if(sizeof($send_to_users) > 0 && $send_to_users[0]!= 0)
                         {
                                 $mail_subject=$file_obj->getName().' added to repository';
 
