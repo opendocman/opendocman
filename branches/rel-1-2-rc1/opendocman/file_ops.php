@@ -5,11 +5,11 @@ session_start();
 //$_GET['submit'] = 'view_checkedout';
 //echo $_POST['submit'];
 /*if (!session_is_registered('uid'))
-{
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
-	exit;
-}
-*/
+  {
+  header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+  exit;
+  }
+ */
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -20,26 +20,26 @@ if(!$user_obj->isRoot())
 $flag = 0;
 if(!isset($_GET['starting_index']))
 {
-	    $_GET['starting_index'] = 0;
+	$_GET['starting_index'] = 0;
 }
 
 if(!isset($_GET['stoping_index']))
 {
-	    $_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit'];
+	$_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit'];
 }
 
 if(!isset($_GET['sort_by']))
 {
-	    $_GET['sort_by'] = 'id';
+	$_GET['sort_by'] = 'id';
 }
 
 if(!isset($_GET['sort_order']))
 {
-	    $_GET['sort_order'] = 'asc';
+	$_GET['sort_order'] = 'asc';
 }
 if(!isset($_GET['page']))
 {
-	    $_GET['page'] = 0;
+	$_GET['page'] = 0;
 }
 if($_GET['submit'] == 'view_checkedout')
 {

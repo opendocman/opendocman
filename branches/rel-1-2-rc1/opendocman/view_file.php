@@ -10,12 +10,12 @@ include('config.php');
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
-	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
-		$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+	$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 if( !isset ($_REQUEST['last_message']) )
 {	
-        $_REQUEST['last_message']='';	
+	$_REQUEST['last_message']='';	
 }
 if(!isset($_GET['submit']))
 {
@@ -26,7 +26,7 @@ if(!isset($_GET['submit']))
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
 	$realname = $file_obj->getName();
-	
+
 	// Get the suffix of the file so we can look it up
 	// in the $mimetypes array
 	$suffix = '';
@@ -34,12 +34,12 @@ if(!isset($_GET['submit']))
 		list($prefix , $suffix)= split ("\.", $realname);
 	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
 	{	
-                $lmimetype = $GLOBALS['mimetypes']['default'];	
-        }
+		$lmimetype = $GLOBALS['mimetypes']['default'];	
+	}
 	else 
 	{	
-                $lmimetype = $GLOBALS['mimetypes']["$suffix"];	
-        }
+		$lmimetype = $GLOBALS['mimetypes']["$suffix"];	
+	}
 	//echo "Realname is $realname<br>";
 	//echo "prefix = $prefix<br>";
 	//echo "suffix = $suffix<br>";
@@ -53,7 +53,7 @@ if(!isset($_GET['submit']))
 	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
 	echo '</form>';
 
-    draw_footer();
+	draw_footer();
 }
 elseif ($_GET['submit'] == 'view')
 {
@@ -72,12 +72,12 @@ elseif ($_GET['submit'] == 'view')
 	// send headers to browser to initiate file download
 	header('Content-Length: '.filesize($filename));
 	// Pass the mimetype so the browser can open it
-        header ('Cache-control: private');
-        header('Content-Type: ' . $_GET['mimetype']);
-        header('Content-Disposition: inline; filename=' . $realname);
-		// Apache is sending Last Modified header, so we'll do it, too
-        $modified=filemtime($filename);
-        header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
+	header ('Cache-control: private');
+	header('Content-Type: ' . $_GET['mimetype']);
+	header('Content-Disposition: inline; filename=' . $realname);
+	// Apache is sending Last Modified header, so we'll do it, too
+	$modified=filemtime($filename);
+	header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
 	readfile($filename);
 }
 elseif ($_GET['submit'] == 'Download')
@@ -102,7 +102,7 @@ elseif ($_GET['submit'] == 'Download')
 }
 else
 {
-echo 'Nothing to do ';
-echo 'submit is ' . $_GET['submit'];
+	echo 'Nothing to do ';
+	echo 'submit is ' . $_GET['submit'];
 }
 ?>

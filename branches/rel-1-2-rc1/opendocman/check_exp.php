@@ -5,7 +5,7 @@ session_start();
 
 if (!isset($_REQUEST['last_message']))
 {
-	    $_REQUEST['last_message']='';
+	$_REQUEST['last_message']='';
 }
 
 // includes
@@ -36,14 +36,14 @@ $lexp_days = $lremainder -  $lexp_months*30;
 // calculate oldest non-expired date
 if($lcurrent_day < $lexp_days)
 {
-	    --$lcurrent_month;
-		    $lcurrent_day += 30;
+	--$lcurrent_month;
+	$lcurrent_day += 30;
 }
 $lok_day = $lcurrent_day - $lexp_days;
 if($lcurrent_month < $lexp_months)
 {
-	    --$lcurrent_year;
-		    $lcurrent_month += 12;
+	--$lcurrent_year;
+	$lcurrent_month += 12;
 }
 $lok_month = $lcurrent_month - $lexp_months;
 $lok_year = $lcurrent_year - $lexp_years;

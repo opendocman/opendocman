@@ -5,15 +5,15 @@
 session_start();
 if (!isset($_SESSION['uid']))
 {
-		header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
-		exit;
+	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
+	exit;
 }
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-        $last_message='Failed';
-        header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
-        exit;
+	$last_message='Failed';
+	header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
+	exit;
 }
 
 // includes
@@ -27,11 +27,11 @@ if (!isset($_POST['submit']))
 	// pre-fill the form with some information so that user knows which file is being updated
 	$query = "SELECT description, realname from data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	
+
 	// in case script is directly accessed, query above will return 0 rows
 	if (mysql_num_rows($result) <= 0)
 	{
-        $last_message='Failed';
+		$last_message='Failed';
 		header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
 		exit;
 	}
@@ -46,59 +46,59 @@ if (!isset($_POST['submit']))
 		{ 
 			$description = 'No description available';
 		}
-	
+
 		// clean up
 		mysql_free_result($result);
 		// start displaying form
 		?>
-		
-		<table border="0" cellspacing="5" cellpadding="5">
-		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-		<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-		<tr>
-		<td><b>Document</b></td>
-		<td><b><?php echo $realname; ?></b></td>
-		</tr>
-		
-		<tr>
-		<td><b>Description</b></td>
-		<td><?php echo $description; ?></td>
-		</tr>
-	
-		<tr>
-		<td><b>Location</b></td>
-		<td><input name="file" type="file"></td>
-		</tr>
-		
-		<tr>
-		<td>Note (for revision log)</td>
-		<td><textarea name="note"></textarea></td>
-		</tr>
-		
-		
+
+			<table border="0" cellspacing="5" cellpadding="5">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
 			<tr>
-		<td colspan="4" align="center"><input type="Submit" name="submit" value="Check  Document In"></td>
-		</tr>
-		</form>
-		</table>
-		</center>
-<?php
-		draw_footer();
-?>
-		<SCRIPT language="JAVASCRIPT">
-		function check(select, send_dept, send_all)
-		{
-			if(send_dept.checked || select.options[select.selectedIndex].value != "0")
-				send_all.disabled = true;
-			else
+			<td><b>Document</b></td>
+			<td><b><?php echo $realname; ?></b></td>
+			</tr>
+
+			<tr>
+			<td><b>Description</b></td>
+			<td><?php echo $description; ?></td>
+			</tr>
+
+			<tr>
+			<td><b>Location</b></td>
+			<td><input name="file" type="file"></td>
+			</tr>
+
+			<tr>
+			<td>Note (for revision log)</td>
+			<td><textarea name="note"></textarea></td>
+			</tr>
+
+
+			<tr>
+			<td colspan="4" align="center"><input type="Submit" name="submit" value="Check  Document In"></td>
+			</tr>
+			</form>
+			</table>
+			</center>
+			<?php
+			draw_footer();
+		?>
+			<SCRIPT language="JAVASCRIPT">
+			function check(select, send_dept, send_all)
 			{
-				send_all.disabled = false;
-				for(var i = 1; i < select.options.length; i++)
-					select.options[i].selected = false;
+				if(send_dept.checked || select.options[select.selectedIndex].value != "0")
+					send_all.disabled = true;
+				else
+				{
+					send_all.disabled = false;
+					for(var i = 1; i < select.options.length; i++)
+						select.options[i].selected = false;
+				}
 			}
-		}
 		</SCRIPT>
-<?php
+			<?php
 	}//end else
 }//end if (!$submit)
 else
@@ -166,23 +166,23 @@ else
 		// if dir not available, create it
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
 		{	
-                        if (!mkdir($GLOBALS['CONFIG']['revisionDir']))
-                        {
-                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] . ' Failed';
-                                header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
-                                exit;
-                        }
-                }
+			if (!mkdir($GLOBALS['CONFIG']['revisionDir']))
+			{
+				$last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] . ' Failed';
+				header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
+				exit;
+			}
+		}
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
 		{   
-                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'])) 
-                        {
-                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'] . ' Failed';
-                                header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
-                                exit;
-                        }
+			if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'])) 
+			{
+				$last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'] . ' Failed';
+				header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
+				exit;
+			}
 
-                }
+		}
 		$lfilename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] .'.dat';
 		//read and close
 		$lfhandler = fopen ($lfilename, "r");

@@ -5,8 +5,8 @@
 session_start();
 if (!session_is_registered('uid'))
 {
-header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
-exit;
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+	exit;
 }
 // includes
 include('config.php');
@@ -29,27 +29,27 @@ $count = mysql_num_rows($result);
 
 
 <?php
-	// iterate through resultset
-	while(list($id, $last_name, $first_name, $realname, $created, $description, $status) = mysql_fetch_row($result))
-	{
+// iterate through resultset
+while(list($id, $last_name, $first_name, $realname, $created, $description, $status) = mysql_fetch_row($result))
+{
 	// correction
 	if ($description == '') 
-        {
-            $description = 'No information available'; 
-        }
+	{
+		$description = 'No information available'; 
+	}
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 	// display list
-?>
-	<TR valign="middle">
-	<TD align="center"><?php echo $realname; ?></TD> 
-	<TD align="center"><A href="check-in.php?id=<?php echo $id . '&state=' . ($_REQUEST['state']+1); ?>">Check-In Document</A></TD> 
-	<TD align="center"><?php echo $last_name.', '.$first_name; ?></TD> 
-	<TD align="center"><?php echo fix_date($created); ?></TD> 
-	<TD align="center"><?php display_filesize($filename); ?> </TD> 
-	<TD align="justify"><?php echo $description; ?></TD>
-	</TR>
-<?php
-	}
+	?>
+		<TR valign="middle">
+		<TD align="center"><?php echo $realname; ?></TD> 
+		<TD align="center"><A href="check-in.php?id=<?php echo $id . '&state=' . ($_REQUEST['state']+1); ?>">Check-In Document</A></TD> 
+		<TD align="center"><?php echo $last_name.', '.$first_name; ?></TD> 
+		<TD align="center"><?php echo fix_date($created); ?></TD> 
+		<TD align="center"><?php display_filesize($filename); ?> </TD> 
+		<TD align="justify"><?php echo $description; ?></TD>
+		</TR>
+		<?php
+}
 ?>
 
 <?php
@@ -57,11 +57,11 @@ $count = mysql_num_rows($result);
 mysql_free_result ($result);
 ?>
 </table>
-	<form action="out.php">
-	<input type="submit" value="Back">
-	</form>
+<form action="out.php">
+<input type="submit" value="Back">
+</form>
 </center>
 
 <?php 
-	draw_footer();
+draw_footer();
 ?>

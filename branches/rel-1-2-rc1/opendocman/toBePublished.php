@@ -235,28 +235,28 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 		<base target="Parent"></HEAD>
 		<FORM name="author_note_form" action="
 		<?php
-			if(@$_REQUEST['mode']=='root')
-				echo $_SERVER['PHP_SELF'] . '?mode=root' . '" onsubmit="closeWindow(1250);" method="POST">';
-			else
-				echo $_SERVER['PHP_SELF'];?>" onsubmit="closeWindow(1250);" method="POST">
-		<TABLE name="author_note_table">
-		<TR>
-		<TD>To:</TD>
-		<TD><INPUT type="text" name="to" value="Author(s)" size='15' <?php echo $access_mode; ?>></TD>
-		</TR><TR>
-		<TD>Subject</TD>
-		<TD><INPUT type="text" name="subject" size=50 value="" size='30'<?php echo $access_mode; ?>></TD></TR>
-		</TABLE>
-		<BR>&nbsp&nbsp<TEXTAREA name="comments" cols=45 rows=7 size='220'<?php echo $access_mode; ?>></TEXTAREA>
+		if(@$_REQUEST['mode']=='root')
+			echo $_SERVER['PHP_SELF'] . '?mode=root' . '" onsubmit="closeWindow(1250);" method="POST">';
+		else
+			echo $_SERVER['PHP_SELF'];?>" onsubmit="closeWindow(1250);" method="POST">
+				<TABLE name="author_note_table">
+				<TR>
+				<TD>To:</TD>
+				<TD><INPUT type="text" name="to" value="Author(s)" size='15' <?php echo $access_mode; ?>></TD>
+				</TR><TR>
+				<TD>Subject</TD>
+				<TD><INPUT type="text" name="subject" size=50 value="" size='30'<?php echo $access_mode; ?>></TD></TR>
+				</TABLE>
+				<BR>&nbsp&nbsp<TEXTAREA name="comments" cols=45 rows=7 size='220'<?php echo $access_mode; ?>></TEXTAREA>
 
 
 
-		<TR><input type="hidden" name="num_checkboxes" value="<?php echo $_REQUEST['num']; ?>"></TR>
-		<?php
-		foreach ($boxes as $key=>$value)
-		{
-			echo '<TR><INPUT type="hidden" name="' . $value .'" value="' . $filenums[$key] . '"></TR>';
-		}
+				<TR><input type="hidden" name="num_checkboxes" value="<?php echo $_REQUEST['num']; ?>"></TR>
+				<?php
+				foreach ($boxes as $key=>$value)
+				{
+					echo '<TR><INPUT type="hidden" name="' . $value .'" value="' . $filenums[$key] . '"></TR>';
+				}
 	if($mode == 'reviewer')
 	{
 		?>

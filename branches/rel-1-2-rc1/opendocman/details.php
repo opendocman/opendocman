@@ -24,7 +24,7 @@ if(strchr($_REQUEST['id'], '_') )
 	@draw_status_bar('Rev.' . $lrevision_id . ' - Details',$_REQUEST['last_message']);
 }
 else 
-	@draw_status_bar('File Details',$_REQUEST['last_message']);
+@draw_status_bar('File Details',$_REQUEST['last_message']);
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -94,15 +94,15 @@ else
 // display red or green icon depending on file status
 if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
 { 
-?> 
-	<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">
-<?php 
+	?> 
+		<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">
+		<?php 
 } 
 else 
 { 
-?>
-	<img src="images/file_locked.png" alt="" border="0" align="absmiddle"> 
-<?php 
+	?>
+		<img src="images/file_locked.png" alt="" border="0" align="absmiddle"> 
+		<?php 
 } 
 ?> 
 &nbsp;&nbsp;<font size="+1"><?php echo $realname; ?></font></td>
@@ -153,18 +153,18 @@ if($filedata->isPublishable() ==-1 )
 }
 ?></td>
 </tr>
-<?php
+	<?php
 if ($status > 0)
 {
 	// status != 0 -> file checked out to another user. status = uid of the check-out person
 	// query to find out who...
 	$checkout_person_obj = $filedata->getCheckerOBJ();
-	
-?>
-<tr>
-<td>Currently checked out to: <?php echo $checkout_person_obj->getName(); ?></td>
-</tr>
-<?php
+
+	?>
+		<tr>
+		<td>Currently checked out to: <?php echo $checkout_person_obj->getName(); ?></td>
+		</tr>
+		<?php
 }
 ?>
 
@@ -178,8 +178,8 @@ if ($status > 0)
 <?php 
 if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->VIEW_RIGHT)
 {?>
-<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/view.png" alt="" border="0"></a></td>
-<?php
+	<td align="center"><a href="view_file.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>"><img src="images/view.png" alt="" border="0"></a></td>
+		<?php
 }		
 if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
@@ -191,20 +191,20 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
 	{
 		// if so, display link for checkout
-?>
-		<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
-<?php
+		?>
+			<td align="center"><a href="check-out.php?id=<?php echo $lrequest_id . '&state=' . ($_REQUEST['state']+1); ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
+			<?php
 	}
 	mysql_free_result($result2);
-	
+
 	if ($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id)  && !$filedata->isArchived())
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
-?>
-		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id'] . '&state=' . ($_REQUEST['state']+1);?>"><img src="images/edit.png" alt="" border="0"></a></td>
-		<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
-<?php
+		?>
+			<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id'] . '&state=' . ($_REQUEST['state']+1);?>"><img src="images/edit.png" alt="" border="0"></a></td>
+			<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
+			<?php
 	}
 }//end if ($status == 0)
 // ability to view revision history is always available 
@@ -224,28 +224,28 @@ draw_footer();
 ?>
 
 <SCRIPT LANGUAGE="JAVASCRIPT">
-	var message_window;
-	var mesg_window_frm;
-	function my_delete()
-	{
-		if(window.confirm("Are you sure?"))
-		{	window.location = "delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>";	}
-	}
-	function sendFields()
-	{
-		mesg_window_frm = message_window.document.author_note_form;
-		mesg_window_frm.to.value = document.data.to.value;
-		mesg_window_frm.subject.value = document.data.subject.value;
-		mesg_window_frm.comments.value = document.data.comments.value;
-	}
-	function showMessage()
-	{
-		message_window = window.open('toBePublished.php?submit=comments', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
-		message_window.focus();
-		setTimeout("sendFields();", 500);
-	}
+var message_window;
+var mesg_window_frm;
+function my_delete()
+{
+	if(window.confirm("Are you sure?"))
+	{	window.location = "delete.php?mode=tmpdel&id0=<?php echo $_REQUEST['id']; ?>";	}
+}
+function sendFields()
+{
+	mesg_window_frm = message_window.document.author_note_form;
+	mesg_window_frm.to.value = document.data.to.value;
+	mesg_window_frm.subject.value = document.data.subject.value;
+	mesg_window_frm.comments.value = document.data.comments.value;
+}
+function showMessage()
+{
+	message_window = window.open('toBePublished.php?submit=comments', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
+	message_window.focus();
+	setTimeout("sendFields();", 500);
+}
 </SCRIPT>
-	
+
 <?php
 // clean up
 ?>
