@@ -80,6 +80,8 @@ elseif ($_GET['submit'] == 'view')
 	//exit;
 	//echo "ID is $_REQUEST['id']";
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
+    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
 	$realname = $file_obj->getName();
 	if( isset($lrevision_id) )
 	{	$filename = $lrevision_dir . $lrequest_id . ".dat";
@@ -102,6 +104,8 @@ elseif ($_GET['submit'] == 'view')
 elseif ($_GET['submit'] == 'Download')
 {
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
+    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
 	$realname = $file_obj->getName();
 	if( isset($lrevision_id) )
 	{   $filename = $lrevision_dir . $lrequest_id . ".dat";
