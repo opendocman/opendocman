@@ -10,6 +10,7 @@
 <img src="images/logo.gif"><br>
 <?php
 
+        include ('config.php');
 switch(@$_REQUEST['op']) {
     
     case "install":
@@ -84,8 +85,6 @@ function do_install()
 function do_update_10()
 {
         echo 'Updating';        
-        mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!"); 
-        mysql_select_db($GLOBALS['database']) or die (mysql_error() . "<br><font class=\"pn-failed\">Unable to select database.</font>");
         
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
