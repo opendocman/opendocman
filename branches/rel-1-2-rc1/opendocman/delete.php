@@ -110,51 +110,52 @@ elseif( $_REQUEST['mode'] == 'view_del_archive' )
 	{	list($array_id[$i]) = mysql_fetch_row($lresult);	}
 	$luserperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	//$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id);
-	if(!isset($_POST['starting_index']))
+	if(!isset($_REQUEST['starting_index']))
 	{
-		        $_POST['starting_index'] = 0;
+		$_REQUEST['starting_index'] = 0;
 	}
 
-	if(!isset($_POST['stoping_index']))
+	if(!isset($_REQUEST['stoping_index']))
 	{
-		        $_POST['stoping_index'] = $_POST['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
+		$_REQUEST['stoping_index'] = $_REQUEST['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
 	}
 
-	if(!isset($_POST['sort_by']))
+	if(!isset($_REQUEST['sort_by']))
 	{
-		        $_POST['sort_by'] = 'id';
+		$_REQUEST['sort_by'] = 'id';
 	}
 
-	if(!isset($_POST['sort_order']))
+	if(!isset($_REQUEST['sort_order']))
 	{
-		        $_POST['sort_order'] = 'asc';
+		$_REQUEST['sort_order'] = 'asc';
 	}
 
-	if(!isset($_POST['page']))
+	if(!isset($_REQUEST['page']))
 	{
-		        $_POST['page'] = 0;
+		$_REQUEST['page'] = 0;
 	}
 	draw_menu($_SESSION['uid']);
 	draw_header('Rejected Files');
-	@draw_status_bar('Rejected Document Listing', $_REQUEST['last_message']);
-	$page_url = $_SERVER['PHP_SELF'] . '?';
+	@draw_status_bar('Del/Undel', $_REQUEST['last_message']);
+	$page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
 
 	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	$userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	//$sorted_obj_array = obj_array_sort_interface($lfileobj_array, $_POST['sort_order'], $_POST['sort_by']);
-	$sorted_array_id = my_sort($array_id, $_POST['sort_order'], $_POST['sort_by']);
+	$sorted_array_id = my_sort($array_id, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="return window.confirm(\'Are you sure?\');">' . "\n";
 
 ?>
 		<TABLE border="1"><TR><TD>
 <?php
-		list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_POST['sort_order'],  $_POST['sort_by'], $_POST['starting_index'], $_POST['stoping_index'], true);
-	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], $page_url, $_POST['page'], $_POST['sort_by'], $_POST['sort_order']);
+		list_files($sorted_array_id, $userperms, $page_url, $GLOBALS['CONFIG']['archiveDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true);
+	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
 ?>
 		</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit"
 		name="mode" value="Delete file(s)">
-		</TABLE></FORM>
-
+		</TABLE>
+		<input type="hidden" name="caller" value="<?php echo $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];?>">
+		</FORM>
 <?php
 }
 elseif($_POST['mode']=='Delete file(s)')
@@ -171,7 +172,7 @@ elseif($_POST['mode']=='Delete file(s)')
 	$url = substr($url, 0, strlen($url)-1);
 	header('Location:'.$url.'&num_checkboxes='.$_POST['num_checkboxes']);
 }
-elseif($_REQUEST['mode'] = 'Undelete')
+elseif($_REQUEST['mode'] == 'Undelete')
 {
 	for($i= 0; $i<$_REQUEST['num_checkboxes']; $i++)
 	{
@@ -182,7 +183,7 @@ elseif($_REQUEST['mode'] = 'Undelete')
 			 fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
 		}
 	}
-	header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode('Document has been unarchived'));
+	header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('Document has been unarchived'));
 }
 
 ?>

@@ -55,8 +55,12 @@ if(!isset($_REQUEST['submit']))
 	draw_status_bar('Document Listing for Review',  $_REQUEST['last_message']);
 	$page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 	$userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+	$lpage_url = $_SERVER['PHP_SELF'] . '?';
 	if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
+	{
 		$id_array = $user_obj->getAllRevieweeIds();
+		$lpage_url .= 'mode=' . $_REQUEST['mode'];
+	}
 	else
 		$id_array = $user_obj->getRevieweeIds();
 	$sorted_id_array = my_sort($id_array, $_GET['sort_order'], $_GET['sort_by']);
@@ -64,7 +68,7 @@ if(!isset($_REQUEST['submit']))
 	$flag=0;
 	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">'. "\n";
 	echo '<TABLE border="1"><TR><TD>';
-	list_files($sorted_id_array, $userpermission, 'toBePublished.php?', $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], true);
+	list_files($sorted_id_array, $userpermission, $lpage_url, $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], true);
 	list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 	?>
 		</TD>
@@ -229,7 +233,12 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 
 		<HEAD><TITLE>Notes to Author(s)</TITLE>
 		<base target="Parent"></HEAD>
-		<FORM name='author_note_form' action='<?php echo $_SERVER['PHP_SELF'];?>' onsubmit="closeWindow(1250);" method="POST">
+		<FORM name='author_note_form' action='
+		<?php echo "in $_REQUEST[mode]";
+			if(@$_REQUEST['mode']=='root')
+				echo $_SERVER['PHP_SELF'] . '?mode=root' . '\' onsubmit="closeWindow(1250);" method="POST">';
+			else
+				echo $_SERVER['PHP_SELF'];?>' onsubmit="closeWindow(1250);" method="POST">
 		<TABLE name="author_note_table">
 		<TR>
 		<TD>To:</TD>
