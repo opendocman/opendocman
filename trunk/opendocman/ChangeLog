@@ -1,3 +1,229 @@
+2003-06-05 17:17  khoang82
+
+	* check-in.php: not allowing the user to check-in a file if this
+	file had not been checked out
+
+2003-06-05 16:59  khoang82
+
+	* file_ops.php: file file_ops.php was initially added on branch
+	rel-1-2-rc1.
+
+2003-06-05 16:59  khoang82
+
+	* error.php, file_ops.php: file_ops.php are operations for root
+	user.  error.php error messages are now in bigger red font
+
+2003-06-05 16:48  khoang82
+
+	* admin.php, commitchange.php, functions.php: add feature where
+	root can clear check out status of a checked out file
+
+2003-06-05 16:47  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php,
+	UserPermission_class.php, User_Perms_class.php: optimize ODM
+
+2003-06-04 15:35  khoang82
+
+	* commitchange.php: from now on ODM will not enforce phonenumber
+	format
+
+2003-05-30 08:56  logart
+
+	* setup.php: removed some duplicate code from the merge
+
+2003-05-30 08:34  logart
+
+	* install/odm.php: added version comment
+
+2003-05-30 08:32  logart
+
+	* config.php: cleaned up settings, added remarks, moved filetypes
+	up
+
+2003-05-29 18:06  khoang82
+
+	* Dept_Perms_class.php, UserPermission_class.php, add.php,
+	functions.php, out.php, search.php: fix minor bugs
+
+2003-05-28 17:18  khoang82
+
+	* add.php, check-in.php, check_exp.php, config.php, crumb.php,
+	delete.php, error.php, functions.php, out.php, setup.php, user.php,
+	view_file.php: 1.2-rc1 merge
+
+2003-05-28 16:44  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php, User_Perms_class.php,
+	User_class.php, details.php, edit.php, mimetypes.php,
+	toBePublished.php, UserPermission_class.php: 1.2-rc1 merge
+
+2003-05-28 16:40  khoang82
+
+	* history.php, in.php, index.php, linkcontrol.css, logout.php,
+	admin.php, category.php, check-out.php, commitchange.php,
+	department.php: 1.2-rc1 merge
+
+2003-05-28 16:40  khoang82
+
+	* databaseData_class.php, profile.php, rejects.php, search.php,
+	view.php: 1.2-rc1 code merge
+
+2003-05-28 16:21  khoang82
+
+	* details.php: fix bread crums output
+
+2003-05-28 12:35  logart
+
+	* setup.php: text added
+
+2003-05-28 11:54  logart
+
+	* config.php: increased version #
+
+2003-05-28 11:50  logart
+
+	* install/odm.php: upgraded to 1.2rc1 level
+
+2003-05-28 11:39  logart
+
+	* database.sql: added DROP TABLE syntax
+
+2003-05-28 11:33  logart
+
+	* install/upgrade.php: added 1.1 upgrade
+
+2003-05-28 11:29  logart
+
+	* database.sql: added 1.2rc1 database structure
+
+2003-05-28 11:25  logart
+
+	* install/upgrade_11.php: Initial import
+
+2003-05-28 10:50  logart
+
+	* setup.php: added 1.1-Final upgrades
+
+2003-05-22 18:29  khoang82
+
+	* FileData_class.php, UserPermission_class.php, User_class.php,
+	details.php, functions.php, out.php, search.php: new codes to allow
+	user to update their expired files
+
+2003-05-14 19:44  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php, functions.php,
+	search.php, UserPermission_class.php: upgrade search and security
+	engine for optimized speed
+
+2003-05-14 16:55  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	commitchange.php, department.php, details.php, edit.php,
+	history.php, in.php, out.php, profile.php, rejects.php, search.php,
+	toBePublished.php, user.php, view.php, view_file.php: enforce
+	urlencode() on url redirection
+
+2003-05-09 11:55  logart
+
+	* install/odm.php: fixed missing create statement for admin table
+
+2003-05-09 11:55  logart
+
+	* setup.php: missing 1.1 upgrade link
+
+2003-05-09 11:54  logart
+
+	* delete.php: fixed directory perms issue
+
+2003-05-09 11:54  logart
+
+	* add.php, check-in.php, error.php: fixed problem with directory
+	missing or not writeable
+
+2003-05-09 09:52  logart
+
+	* add.php: fixed error in UPDATE query
+
+2003-05-09 09:46  logart
+
+	* add.php: re-aligned the permissions selects
+
+2003-05-09 09:40  logart
+
+	* linkcontrol.css: removed bold from hover because it was causing
+	the cells to resize
+
+2003-05-09 08:44  logart
+
+	* setup.php: removed extra includes in functions
+
+2003-05-09 08:41  logart
+
+	* setup.php: added all updates up to 1.1
+
+2003-05-09 08:37  logart
+
+	* install/upgrade_11.php: file upgrade_11.php was initially added
+	on branch rel-1-2-rc1.
+
+2003-05-09 08:37  logart
+
+	* install/upgrade_11.php: Initial Import
+
+2003-05-09 08:36  logart
+
+	* install/odm.php: 1.2rc1 schema
+
+2003-05-09 08:22  logart
+
+	* database.sql: applied changes in opendocman_khoa to this file
+
+2003-05-08 16:43  khoang82
+
+	* commitchange.php: comment out phonenumber formating
+
+2003-05-08 16:38  khoang82
+
+	* functions.php: drop left message in drawstatus()
+
+2003-05-08 16:33  khoang82
+
+	* admin.php, check-out.php, check_exp.php, config.php, details.php,
+	rejects.php, toBePublished.php: add optionals for file expiration
+
+2003-05-08 16:32  khoang82
+
+	* FileData_class.php: add setStatus()
+
+2003-05-07 16:57  khoang82
+
+	* delete.php, toBePublished.php: fix undefined index
+
+2003-05-07 16:57  khoang82
+
+	* rejects.php: fixed inconsistent root_mode
+
+2003-05-07 16:56  khoang82
+
+	* functions.php: add				array getAllUser()
+	where array =  return a 2D array of users.   >	     array[0][0] =
+	id   >	     array[0][1] = "LastName, FirstName"   >	  
+	array[0][2] = "username"
+
+2003-05-07 16:54  khoang82
+
+	* edit.php: add change ownership functionality
+
+2003-05-06 16:27  logart
+
+	* config.php: fixed typo
+
+2003-05-06 16:22  logart
+
+	* ChangeLog: Documentationo changes
+
 2003-05-06 16:22  logart
 
 	* setup.php, docs/opendocman-1.html, docs/opendocman-2.html,
