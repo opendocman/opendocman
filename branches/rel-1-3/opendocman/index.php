@@ -15,7 +15,6 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         index.php - displays a login form
 
         -->
-
         <html>
         <head>
         <TITLE><?php echo $GLOBALS['CONFIG']['title']; ?></TITLE>
