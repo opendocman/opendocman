@@ -461,7 +461,7 @@ if($submit == 'adduser')
                                     $r = sizeof($department_reviewer);
                             }
                     }
-                    if( !isset($found) )
+                    if( !$found )
                    	{
                    		echo("<option VALUE=\"" .$all_department[$d][0] ."\">" .$all_department[$d][1] ."</option>\n");
                    	}
