@@ -21,9 +21,9 @@ if(!isset($_POST['submit'])) //un_submitted form
         {
                 $_REQUEST['last_message']='';
         }
-	draw_header('Add New File');
+	draw_header($GLOBALS['lang']['area_add_new_file']);
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Add new document', $_REQUEST['last_message']);
+	draw_status_bar($GLOBALS['lang']['area_add_new_file'], $_REQUEST['last_message']);
 	echo '<body bgcolor="white">';
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
@@ -120,14 +120,14 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<input type="hidden" name="MAX_FILE_SIZE" value="50000000">
 	<tr>
 	<td>
-	<a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none">File Location</a>
+	<a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_file_location']; ?></a>
 	</td>
 	<td colspan=3><input tabindex="0" name="file" type="file">
 	</td>
 	</tr>
 	<tr>
 	<td>
-	<a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none">Category</a>
+	<a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_category']; ?></a>
 	</td>
 	<td colspan=3><select tabindex=2 name="category" >
 <?php
@@ -146,12 +146,12 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<!-- Set Department rights on the file -->
         <TR>
 	<TD>
-	<a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none">Department</a>
+	<a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_department']; ?></a>
 	</TD>
      		<TD COLSPAN=3><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
-				<option value=0> Select a Department</option>
-				<option value=1> Default Setting for Unset Department</option>
-				<option value=2> All Departments</option>
+				<option value=0> <?php echo $GLOBALS['lang']['label_select_a_department']; ?></option>
+				<option value=1> <?php echo $GLOBALS['lang']['label_default_for_unset']; ?></option>
+				<option value=2> <?php echo $GLOBALS['lang']['label_all_departments']; ?></option>
 <?php
 	//////Populate department drop down list/////////////////
    	$query = "SELECT id, name FROM department ORDER BY name";
@@ -170,7 +170,7 @@ if(!isset($_POST['submit'])) //un_submitted form
     </TR>
     <TR>
 	<!-- Loading Authority radio_button group -->
-	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none">Authority</a></td>
+	<TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_department_authority']; ?></a></td>
 	<!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
 	<TD>
 <?php
@@ -185,28 +185,28 @@ if(!isset($_POST['submit'])) //un_submitted form
 	</TR>
 	<tr>
 	<td>
-        <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none">Description</a>
+        <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_description']; ?></a>
         </td>
 	<td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
 	</tr>
 	
 	<tr>
 	<td>
-        <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none">Comment</a>
+        <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_comment']; ?></a>
         </td>
 	<td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
 	</tr>
 
 	<TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
 	<tr nowrap>
-	  <td colspan="2" NOWRAP><b>Specific Permissions Settings</b></td>
+	  <td colspan="5" align="center" NOWRAP><b><?php echo $GLOBALS['lang']['label_specific_permissions']; ?></b></td>
 	</TR>
 	<TR>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none">Forbidden</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none">View</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none">Read</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none">Modify</a></td>
-	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none">Admin</a></td>
+	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_forbidden']; ?></a></td>
+	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_view']; ?></a></td>
+	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_read']; ?></a></td>
+	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_modify']; ?></a></td>
+	<td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo $GLOBALS['lang']['label_admin']; ?></a></td>
 	</tr>
 	<tr>
 	<td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
@@ -298,7 +298,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	</TR>
 	</TABLE>
 	<tr>
-	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="Add Document"></td>
+	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="<?php echo $GLOBALS['lang']['button_add_document']; ?>"></td>
 	</tr>
 <?php	
 		$query = "SELECT name, id FROM department ORDER BY name";
@@ -371,7 +371,7 @@ else //submited form
         {
                 if (!is_writeable($GLOBALS['CONFIG']['dataDir']))
                 {
-                        $last_message='Folder Permissions Error: ' . $GLOBALS['CONFIG']['dataDir'] . ' not writeable!';
+                        $last_message=$GLOBALS['lang']['message_folder_perms_error'] . ' ' . $GLOBALS['CONFIG']['dataDir'] . ' ' . $GLOBALS['lang']['message_not_writeable'];
                         header('Location:error.php?ec=23&last_message=' .$last_message);
                         exit;
                 }
@@ -390,7 +390,7 @@ else //submited form
 	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
+	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', '" . $GLOBALS['lang']['message_initial_import'] . "', '" . $GLOBALS['lang']['message_current'] . "')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
@@ -450,7 +450,7 @@ else //submited form
 	else
 		copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 	// back to main page
-	$message = urlencode('Document successfully added');
+	$message = urlencode($GLOBALS['lang']['message_document_added']);
 	header('Location: out.php?last_message=' . $message);
 	}
 }
