@@ -541,7 +541,8 @@ if( !defined('function') )
 
         function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
         {
-                if($total_hit<$page_limit)
+                $secureurl = new phpsecureurl;
+				if($total_hit<$page_limit)
                 {
                         return 0;
                 }
@@ -556,7 +557,7 @@ if( !defined('function') )
                 
                 if( $current_page > 0 )
                 {
-                     echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)."'>Prev</a>&nbsp; &nbsp;";
+                     echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page-1))."&stoping_index=".($current_page*$page_limit-1)."&page=".($current_page-1)).'">Prev</a>&nbsp; &nbsp;';
                 }
                 
 				if($current_page >= $link_limit/2)
@@ -577,13 +578,13 @@ if( !defined('function') )
 					}
 					else
 					{
-						echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i'>$i</a>&nbsp; &nbsp;"; 
+						echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=$index_result&stoping_index=".($index_result+$page_limit-1)."&page=$i") . "\">$i</a>&nbsp; &nbsp;"; 
 					}
 					$index_result = $index_result + $page_limit;
 				}
                 if( $current_page < $num_pages-1 )
                 {
-                        echo "<a href='$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)."'>Next</a>&nbsp; &nbsp;";
+                        echo '<a href="' . $secureurl->encode("$page_url&sort_by=$sort_by&sort_order=$sort_order&starting_index=".($page_limit*($current_page+1))."&stoping_index=".(($current_page+2)*$page_limit-1)."&page=".($current_page+1)).'">Next</a>&nbsp; &nbsp;';
                 }
         }
 
