@@ -170,7 +170,7 @@ else
 		// if dir not available, create it
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
 		{	
-                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0700))
+                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775))
                         {
                                 $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] . ' Failed';
                                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
@@ -179,7 +179,7 @@ else
                 }
 		if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
 		{   
-                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'], 0700)) 
+                        if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'], 0775)) 
                         {
                                 $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'] . ' Failed';
                                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));

@@ -33,6 +33,6 @@ $result = mysql_query("
 ALTER TABLE `user_perms`
     ADD INDEX fid (fid),
     ADD INDEX uid (uid),
-    ADD INDEX rights (rights);
+    ADD INDEX rights (rights)
 ") or die("<br>Could not update user_perms" . mysql_error());
 ?>
