@@ -36,7 +36,7 @@ if( !defined('FileData_class') )
 	function exists()
 	{
 	    $query = "SELECT * from data where data.id = $this->id";
-	    $result = mysql_db_query($this->database, $query, $this->connection);
+	    $result = mysql_query($query, $this->connection);
 	    switch(mysql_num_rows($result))
 	    {
 	      case 1: return true; break;
@@ -49,7 +49,7 @@ if( !defined('FileData_class') )
 	function loadData()
 	{
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, $this->tablename.created, $this->tablename.description, $this->tablename.comment, $this->tablename.status, $this->tablename.department FROM data where data.id = $this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
 		{
 			while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
@@ -73,7 +73,7 @@ if( !defined('FileData_class') )
 	function getCategoryName()
 	{	
 		$query = 'SELECT name from category where id = ' . $this->category;
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit)
 			list($name) = mysql_fetch_row($result);
 		else 
@@ -129,8 +129,8 @@ if( !defined('FileData_class') )
 	  $owner_query = "SELECT owner from data where id = $this->id";
 	  $u_query = "SELECT uid from user_perms where fid = $this->id and rights>=$right";
 	  $non_prev_user_query = "SELECT uid from user_perms where fid = $this->id and rights <$right";
-	  $owner_result = mysql_db_query($this->database, $owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
-	  $u_result = mysql_db_query($this->database, $u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
+	  $owner_result = mysql_query($owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
+	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
 	  $non_prev_u_reslt = mysql_query($non_prev_user_query, $this->connection) or die("Error in query: " .$non_prev_user_query . mysql_error() );  
 	  for($i = 0; $i<mysql_num_rows($non_prev_u_reslt); $i++)
 	  	list($not_u_uid[$i]) = mysql_fetch_row($non_prev_u_reslt);
@@ -139,7 +139,7 @@ if( !defined('FileData_class') )
 	  {
 		$d_query .= ' and user.id != ' . $not_u_uid[$i];
 	  }
-	  $d_result = mysql_db_query($this->database, $d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
+	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
 	  if(sizeof($owner_result) != 1)
 	  {
 	    echo 'Error in DB, multiple ownership';
@@ -175,7 +175,7 @@ if( !defined('FileData_class') )
 	function getDeptName()
 	{
 		$query ='SELECT department.name from department where department.id = '.$this->getDepartment().';';
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
 			echo('ERROR: Multiple database entries exist in department table.');
@@ -191,7 +191,7 @@ if( !defined('FileData_class') )
 	function getModifiedDate()
 	{
 		$query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY modified_on DESC LIMIT 1;";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
                 if( mysql_num_rows($result) == $this->result_limit)
                         list($name) = mysql_fetch_row($result);
                 else
@@ -227,8 +227,8 @@ if( !defined('FileData_class') )
 	
 	  $u_query = "SELECT uid from user_perms where fid = $this->id and rights = $this->FORBIDDEN_RIGHT";
 	  $d_query = "SELECT user.id, dept_perms.dept_id from dept_perms, user where fid = $this->id and user.department = dept_perms.dept_id and dept_perms.rights = $this->FORBIDDEN_RIGHT";
-	  $u_result = mysql_db_query($this->database, $u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
-	  $d_result = mysql_db_query($this->database, $d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
+	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
+	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
 	  
 	  for($i = 0; $i<mysql_num_rows($u_result); $i++)
 	    list($u_uid[$i]) = mysql_fetch_row($u_result);
@@ -258,7 +258,7 @@ if( !defined('FileData_class') )
 	function isPublishable()
 	{
 		$query = "SELECT publishable from data where id = '$this->id'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die('Error in query'. mysql_error());
+		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
 			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
@@ -272,13 +272,13 @@ if( !defined('FileData_class') )
 	function Publishable($boolean = true)
 	{
 		$query = "UPDATE data SET publishable ='$boolean', data.reviewer = '$this->id' WHERE id = '$this->id'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
 	// return the user id of the reviewer
 	function getReviewerID()
 	{
 		$query = "SELECT data.reviewer from data where data.id = '$this->id'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$num_hits = mysql_num_rows($result);
 		if($num_hits != 1)
 		{
@@ -309,14 +309,14 @@ if( !defined('FileData_class') )
 	{
                 $comments=addslashes($comments);
 		$query = "UPDATE data set data.reviewer_comments='$comments' where data.id='$this->id'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or
+		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
 	// return the reviewer's comment toward this file
 	function getReviewerComments()
 	{
 		$query = "SELECT data.reviewer_comments FROM data WHERE data.id='$this->id'";
-		$result = mysql_db_query($this->database, $query, $this->connection) or
+		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{

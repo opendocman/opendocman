@@ -10,12 +10,12 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 // edit.php - edit file properties
 
 // check session and $id
-//$SESSION_UID=102;
+//$_SESSION['uid']=102;
 //$id=67;
 //$submit=true;
 
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
   header('Location:error.php?ec=1');
   exit;
@@ -31,15 +31,15 @@ if (!isset($submit))
 // form not yet submitted, display initial form
 {
 	draw_header('File Properties Modification');
-	draw_menu($SESSION_UID);
+	draw_menu($_SESSION['uid']);
 	draw_status_bar('Edit Document Properties', $message);
-	$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
+	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	checkUserPermission($id, $user_perm_obj->ADMIN_RIGHT);
 	$data_id = $id;
 	// includes
-	$query ="SELECT user.department from user where user.id=$SESSION_UID";
+	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
 	//echo($GLOBALS['database']); echo($query); echo($connection);
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
 	  header('Location:error.php?ec=14');
@@ -47,7 +47,7 @@ if (!isset($submit))
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
 	$query = "SELECT default_rights from data where data.id = $id";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
 		header('Location: error.php?ec=14&message=Error locating file id '. $filedata->getId());
@@ -110,7 +110,7 @@ if (!isset($submit))
 	departments[default_Setting_pos] = default_Setting;
 <?php
 	$query = "SELECT name, dept_id, rights FROM department, dept_perms  WHERE department.id = dept_perms.dept_id and dept_perms.fid = $id ORDER by name";
-	$result = mysql_db_query ($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
   	while( list($dept_name, $dept_id, $rights) = mysql_fetch_row($result) )
@@ -125,8 +125,8 @@ if (!isset($submit))
 
 	
 	// query to obtain current properties and rights 
-//	$query = "SELECT category, realname, description, comment FROM data WHERE id = '$id' AND status = '0' AND owner = '$SESSION_UID'";
-//	$result = mysql_db_query($GLOBALS['database'], $query, $connection) or die ("Error in query: $query. " . mysql_error());
+//	$query = "SELECT category, realname, description, comment FROM data WHERE id = '$id' AND status = '0' AND owner = '$_SESSION[uid]'";
+//	$result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
 	$filedata = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
 	// error check
 	if( !$filedata->exists() ) //if (mysql_num_rows($result) <= 0)
@@ -162,7 +162,7 @@ if (!isset($submit))
 <?php
 		// query for category list
 		$query = "SELECT id, name FROM category ORDER BY name";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($ID, $CATEGORY) = mysql_fetch_row($result))
 		{
 			$str = '<option value="' . $ID . '"';
@@ -188,7 +188,7 @@ if (!isset($submit))
 <?php
 		// query to get a list of department 
 		$query = "SELECT id, name FROM department ORDER BY name";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
         while(list($dept_id, $name) = mysql_fetch_row($result))
         {
@@ -204,14 +204,14 @@ if (!isset($submit))
 		<TD>Authority: </TD> <TD>  	
 <?php
       	$query = "SELECT RightId, Description FROM rights order by RightId";
-      	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
+      	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{
       		echo $Description . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
       	}
      
 	$query = "SELECT department.name, dept_perms.dept_id, dept_perms.rights FROM dept_perms, department where dept_perms.dept_id = department.id and fid = ".$filedata->getId()." ORDER BY name";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while( list($dept_name, $dept_id, $rights) = mysql_fetch_row($result) )
 	{
 	      echo "\n\t" . '<input type="hidden" name="' . space_to_underscore($dept_name) . '" value=' . $rights . '>';
@@ -243,7 +243,7 @@ if (!isset($submit))
 	$id = $data_id;
 	// GET ALL USERS
 	$query = "SELECT id from user order by username";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ( "Error in query(forbidden): " .$query . mysql_error() );
+	$result = mysql_query($query, $GLOBALS['connection']) or die ( "Error in query(forbidden): " .$query . mysql_error() );
 	$all_users = array();
 	for($i = 0; $i<mysql_num_rows($result); $i++)
 	{
@@ -402,7 +402,7 @@ else
 	
 	// query to verify
 	$query = "SELECT status FROM data WHERE id = '$id' and status = '0'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	if(mysql_num_rows($result) <= 0)
 	{
@@ -411,11 +411,11 @@ else
 	}
 	// update db with new information	
 	mysql_escape_string($query = "UPDATE data SET category='" . addslashes($category) . "', description='" . addslashes($description)."', comment='" . addslashes($comment)."', default_rights='" . addslashes($default_Setting) . "' WHERE id = '$id'");
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// clean out old permissions
 	$query = "DELETE FROM user_perms WHERE fid = '$id'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $modify, $filedata->WRITE_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $read, $filedata->READ_RIGHT);
@@ -426,16 +426,16 @@ else
 	{
 		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES($id, '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		//echo $query."<br>";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
+		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
 	//UPDATE Department Rights into dept_perms
 	$query = "SELECT name, id FROM department ORDER BY name";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 		$string=addslashes(space_to_underscore($dept_name));
 		$query = "UPDATE dept_perms SET rights =\"".$$string."\" where fid=".$filedata->getId()." and dept_perms.dept_id =$id";
-		$result2 = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// clean up
 	mysql_freeresult($result);

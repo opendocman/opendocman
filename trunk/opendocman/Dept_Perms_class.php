@@ -192,7 +192,7 @@ if( !defined('Dept_Perms_class') )
 	function canDept($data_id, $right)
 	{
 		$query = "Select * from dept_perms where dept_perms.dept_id = $this->id and dept_perms.fid = $data_id and dept_perms.rights>=$right";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
+		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		
 		switch(mysql_num_rows($result) )
 		{
@@ -206,7 +206,7 @@ if( !defined('Dept_Perms_class') )
 	function getPermission($data_id)
 	{
 	  $query = "Select dept_perms.rights from dept_perms where dept_id = $this->id and fid = $data_id";
-	  $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: .$query" . mysql_error() );
+	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {
 	    list($permission) = mysql_fetch_row($result);

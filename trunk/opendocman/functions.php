@@ -233,12 +233,13 @@ if( !defined('function') )
 	} 
 	
 	// This function draws the menu screen
-        function draw_menu($uid)
+        function draw_menu($uid='')
         {
             echo "\n".'<!------------------begin_draw_menu------------------->'."\n";
+            echo "\n".'<!------------------UID is ' . $uid . '------------------->'."\n";
             if($uid != NULL)
             {
-            	$current_user_obj = new User($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
+            	$current_user_obj = new User($uid, $GLOBALS['connection'], $GLOBALS['database']);
             }
             echo '<table width="100%" cellspacing="0" cellpadding="0">'."\n";
             echo '<tr>'."\n";
@@ -466,7 +467,7 @@ if( !defined('function') )
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
                 $query = "SELECT Email from user";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
                         mail($mail_to, $mail_subject, $mail_body, $mail_header);
@@ -476,7 +477,7 @@ if( !defined('function') )
         function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
         {
                 $query = 'SELECT Email from user where user.department = '.$dept_id;
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
                         mail($mail_to, $mail_subject, $mail_body, $mail_header);
@@ -928,7 +929,7 @@ if( !defined('function') )
 				// not 0 -> implies file is checked out to another user
 				// run a query to find out user's name
 				//$query2 = "SELECT username FROM user WHERE id = '$result[$index]->getStatus()'";
-				//$result2 = mysql_db_query($GLOBALS['database'], $query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
+				//$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2 . " . mysql_error());
 				$user = $fileobj_array[$index]->getCheckerOBJ();
 				$username = $user->getName();
 				//list($username) = mysql_fetch_row($result2);
@@ -1028,7 +1029,7 @@ if( !defined('function') )
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
 		$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
+		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("author_array = new Array();\n");
@@ -1040,7 +1041,7 @@ if( !defined('function') )
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
 		$query = "SELECT name, id FROM department ORDER BY name ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
+		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("department_array = new Array();\n");
@@ -1052,7 +1053,7 @@ if( !defined('function') )
 		}
 		///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
 		$query = "SELECT name, id FROM category ORDER BY name ASC";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
+		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
 		echo("category_array = new Array();\n");
@@ -1154,6 +1155,7 @@ if( !defined('function') )
 
     function makeRandomPassword() 
     {
+            $pass='';
 	    $salt = 'abchefghjkmnpqrstuvw3456789';
 	    srand((double)microtime()*1000000); 
 	    $i = 0;
@@ -1186,7 +1188,7 @@ if( !defined('function') )
 	}
 	function checkUserPermission($file_id, $permittable_right)
 	{
-		$user_perm_obj = new User_Perms($GLOBALS['SESSION_UID'], $GLOBALS['connection'], $GLOBALS['database']);
+		$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 		if(!$user_perm_obj->user_obj->isRoot() && $user_perm_obj->getPermission($file_id) < $permittable_right)
 		{
 			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";

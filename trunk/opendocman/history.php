@@ -4,7 +4,7 @@
 
 // check session and $id
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 header('Location:error.php?ec=1');
 exit;
@@ -19,7 +19,7 @@ exit;
 // includes
 include('config.php');
 draw_header($title);
-draw_menu($SESSION_UID);
+draw_menu($_SESSION['uid']);
 draw_status_bar('Document Listing', $last_message);
 
 $datafile = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
@@ -118,7 +118,7 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 <?php
 	// query to obtain a list of modifications
 	$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// iterate through resultset
 	while(list($last_name, $first_name, $modified_on, $note) = mysql_fetch_row($result))

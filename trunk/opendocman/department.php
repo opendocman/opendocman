@@ -3,7 +3,7 @@
 // department.php - Administer Departments
 // check for valid session 
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 	draw_error('error.php?ec=1');
 	exit;
@@ -14,7 +14,7 @@ include('config.php');
 // open a connection to the database
 if(isset($submit) and $submit != 'Cancel')
 {
-	draw_menu($SESSION_UID);
+	draw_menu($_SESSION['uid']);
 }
 
 if($submit=='add')
@@ -26,7 +26,7 @@ if($submit=='add')
         draw_status_bar('Add New Department', $last_message);
 	draw_header('Add New Department');
 	// Check to see if user is admin
-	$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	if(!$user_obj->isAdmin())        
 	{
 		draw_error('error.php?ec=4');
@@ -75,7 +75,7 @@ elseif($submit =='delete')
 	echo '<center>'; 
 	echo '<table border="0">';
 	$query = "SELECT id, name FROM department where id='$item'";
-    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($id, $name) = mysql_fetch_row($result))
     {
         echo '<tr><td>Id # :</td><td>' . $id . '</td></tr>';
@@ -113,7 +113,7 @@ draw_status_bar('Choose Department to Delete', $last_message);
         <td colspan="3"><select name="item">
 <?php
 	$query = 'SELECT id, name FROM department ORDER BY name';
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($id, $name) = mysql_fetch_row($result))
     {
         $str = '<option value="' . $id . '"';
@@ -146,7 +146,7 @@ elseif($submit == 'showitem')
     echo '<center>';
 	//select name
 	$query = "SELECT name,id FROM department where id='$item'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo '<table name="main" cellspacing="15" border="0">';
     echo '<th>ID</th><th>Dept. Name</th>';
 	list($department) = mysql_fetch_row($result);
@@ -159,7 +159,7 @@ elseif($submit == 'showitem')
 <?php
     // Display all users assigned to this department
     $query = "SELECT department.id, user.first_name, user.last_name FROM department, user where department.id='$item' and user.department='$item'";
-    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($id, $first_name, $last_name) = mysql_fetch_row($result))
 	{	
         echo '<tr><td colspan="2">'.$first_name.' '.$last_name.'</td></tr>';
@@ -192,7 +192,7 @@ elseif($submit == 'showpick')
 	<td colspan=3><select name="item">
 <?php 
 	$query = 'SELECT id, name FROM department ORDER BY name';
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 		echo "<option value=\"$id\">$name</option>";
@@ -230,7 +230,7 @@ elseif($submit == 'modify')
 <?php
 	// query to get a list of users
 	$query = "SELECT id, name FROM department where id='$item'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 ?>		<tr>
@@ -272,7 +272,7 @@ elseif($submit == 'updatepick')
 <?php
 	// query to get a list of users
 	$query = "SELECT id, name FROM department ORDER BY name";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 	while(list($id, $name) = mysql_fetch_row($result))
 	{

@@ -8,14 +8,15 @@ if( !defined('config') )
 
 // database parameters
 include 'functions.php';
+include 'ldap.inc';
 include 'classHeaders.php';
 include 'mimetypes.php';
 
 // Database Settings - Change these to match your database
-$database = 'root';
-$user = '';
-$pass = '';
-$hostname = '';
+$database = 'vault';
+$user = 'vault1';
+$pass = 'vault1';
+$hostname = 'musa.davis.cvdls';
 
 
 global $CONFIG;      $CONFIG = array(
@@ -26,6 +27,13 @@ global $CONFIG;      $CONFIG = array(
 //'authen' => 'kerbauth',
 'authen' => 'mysql',
 
+//Should we use ldap for user info lookup?
+'ldaplookup' => 'true',
+
+//LDAP server (only needed if using ldaplookup
+'ldap_server' => 'ldap.ucdavis.edu',
+'ldap_basedn' => 'ou=University of California Davis,o=University of California,c=US',
+
 // Set the number of files that show up on each page
 'page_limit' => '10',
 
@@ -33,7 +41,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://www.foo.com/opendocman',
+'base_url' => 'http://cahfs.ucdavis.edu/~slawrence/cvs/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -42,16 +50,16 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.0  ',
 
 // The email address of the administrator of this site
-'site_mail' => 'unixadmin@mydomainxaname.com',
+'site_mail' => 'slawrence@ucdavis.edu',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'admin',
+'root_username'  => 'logart',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/var/www/document_repository/'
+'dataDir' => '/usr/home/httpd/document_repository/'
 );
 
 //global $site_mail; 
@@ -60,8 +68,10 @@ global $database;
 global $user;
 global $pass;
 global $connection;
+global $allowedFileTypes; 
 
-$connection = mysql_connect($hostname, $user, $pass) or die ("Unable to connect!");
+$connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
+$db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
 // list of allowed file types
 $allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');

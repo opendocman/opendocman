@@ -1,11 +1,11 @@
 <?php
+session_start();
 // user.php - Administer Users
 // check for valid session
 // if changes are to be made on other account, then $item will contain
 // the other account's id number. 
 
-session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!isset($_SESSION['uid']))
 {
         header('Location:error.php?ec=1');
         exit;
@@ -16,36 +16,41 @@ include('config.php');
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
-$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
-if($SESSION_UID != $item && $user_obj->isAdmin() != true )
+
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+
+// Make sure the item and uid are set, then check to make sure they are the same and they have admin privs, otherwise, user is not able to modify another users' info
+if (isset($_SESSION['uid']) & isset($_GET['item']))
 {
-        header('Location:error.php?ec=4');
-        exit;
+        if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
+        {
+                header('Location:error.php?ec=4');
+                exit;
+        }
 }
+
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if($user_obj->isAdmin() == true)
         $mode = 'enabled';
         else 
         $mode = 'disabled';
-        if($mode == 'disabled' && $item != $SESSION_UID)
+        if($mode == 'disabled' && $_GET['item'] != $_SESSION['uid'])
 {
         header('Location:error.php?ec=4');
         exit;
 }
 ////////////////////////////////////////////////////////////////////////////
-if(isset($submit) and $submit != 'Cancel')
+if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 {
         draw_header('Admin users');
-        draw_menu($SESSION_UID);
+        draw_menu($_SESSION['uid']);
 }
 
-
 // open a connection to the database
-
-if($submit == 'adduser')
+if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 {
-        draw_status_bar('Add New User', $message);
+        @draw_status_bar('Add New User', $_POST['last_message']);
         // Check to see if user is admin
         ?>
                 <SCRIPT LANGUAGE="JavaScript1.2" src="FormCheck.js"></script>			   
@@ -89,7 +94,7 @@ if($submit == 'adduser')
                 <?php			
                 // query to get a list of departments
                 $query = "SELECT id, name FROM department ORDER BY name";
-        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         while(list($id, $name) = mysql_fetch_row($result))
         {
@@ -115,8 +120,8 @@ if($submit == 'adduser')
                 <TD>
                 <SELECT name='department_review[]' multiple>
                 <?php 
-                $query = "SELECT department.id, department.name FROM department ORDER BY name";
-        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+        $query = "SELECT department.id, department.name FROM department ORDER BY name";
+        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
         echo '<OPTION SELECTED>Select the department(s)</OPTION>';
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
         {
@@ -142,20 +147,20 @@ if($submit == 'adduser')
                        
 	 draw_footer();
 }
-        elseif($submit == 'Delete User')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete User')
         {
                 $delete='';
-                draw_status_bar('Delete User', $message);
+                @draw_status_bar('Delete User', $_POST['last_message']);
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="commitchange.php?id=<?php echo $item;?> " method="POST" enctype="multipart/form-data">
+                        <form action="commitchange.php?id=<?php echo $_POST['item'];?> " method="POST" enctype="multipart/form-data">
                         <tr>
                         <td valign="top">Are you sure you want to delete 
 
                         <?php
-                        $query = 'SELECT id, first_name, last_name FROM user WHERE id=' . $item .'';
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        $query = 'SELECT id, first_name, last_name FROM user WHERE id=' . $_POST['item'] .'';
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $first_name, $last_name) = mysql_fetch_row($result))
                 {
                         echo $first_name.' '.$last_name;
@@ -171,7 +176,7 @@ if($submit == 'adduser')
                         </form>
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
                         <td colspan="4" align="center">
-                        <input type="Submit" name="submit" value="No, Cancel">
+                        <input type="Submit" name="submit" value="Cancel">
                         </td>
                         </form>
                         </tr>
@@ -181,10 +186,10 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-        elseif($submit == 'deletepick')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick')
         {
                 $deletepick='';
-                draw_status_bar('Choose User to Delete', $message);
+                @draw_status_bar('Choose User to Delete', $_POST['last_message']);
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -195,7 +200,7 @@ if($submit == 'adduser')
                         <select name="item">
                         <?php
                         $query = "SELECT id,username, last_name, first_name FROM user ORDER BY last_name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username,$last_name, $first_name) = mysql_fetch_row($result))
                 {
                         echo '<option value=' . $id . '>' . $last_name . ', ' . $first_name . ' - ' . $username . '</option>';
@@ -223,18 +228,18 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-        elseif($submit == 'Show User')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User')
         {
                 // query to show item
-                draw_status_bar("Display Item Information", $message);
+                @draw_status_bar("Display Item Information", $_POST['last_message']);
                 ?>
                         <center>
                         <table border=0>
                         <th>User Information</th>
                         <?php
-                        $user_obj = new User($item, $GLOBALS['connection'], $GLOBALS['database']);
+                        $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
                 $full_name = $user_obj->getFullName();
-                echo "<tr><td>ID#:</td><td>$item</td></tr>";
+                echo '<tr><td>ID#:</td><td>' . $_POST['item'] . '</td></tr>';
                 echo "<TR><TD>First Name</TD><TD>".$full_name[0]."</TD></TR>";
                 echo "<TR><TD>Last Name</TD><TD>".$full_name[1]."</TD></TR>";
                 echo "<tr><td>username:</td><td>".$user_obj->getName()."</td></tr>";
@@ -265,9 +270,9 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-        elseif($submit == 'showpick')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick')
         {
-                draw_status_bar('Choose User to View', $message);
+                @draw_status_bar('Choose User to View', $_POST['last_message']);
 
                 $showpick='';
                 ?>
@@ -280,7 +285,7 @@ if($submit == 'adduser')
                         <select name="item">
                         <?php
                         $query = 'SELECT id, username, first_name, last_name FROM user ORDER BY last_name';
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
                 while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
                 {
                         echo '<option value="' . $id . '">' . $last_name . ',' . $first_name . ' - ' . $username . '</option>';
@@ -303,10 +308,10 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-        elseif($submit == 'Modify User')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User')
         {
-        		$user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
-                draw_status_bar("Update User",$message);
+        		$user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                @draw_status_bar("Update User",$_POST['last_message']);
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
@@ -320,9 +325,9 @@ if($submit == 'adduser')
                         <form name="update" action="commitchange.php" method="POST" enctype="multipart/form-data">
                         <?php
                         // query to get a list of users
-                        echo '<INPUT type="hidden" name="callee" value="'.$callee.'">';
-                $query = "SELECT * FROM user where id='$item' ORDER BY username";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        echo '<INPUT type="hidden" name="callee" value="'.$_SERVER['PHP_SELF'].'">';
+                $query = "SELECT * FROM user where id='" . $_REQUEST['item'] . "' ORDER BY username";
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
                 echo '<tr>';
                 echo '<td><B>User ID: </td><td colspan=4>'.$id.'</td>';
@@ -375,7 +380,7 @@ if($submit == 'adduser')
 <?php
                 // query to get a list of departments
                 $query = "SELECT department.id, department.name FROM department ORDER BY department.name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $userdepartment = $user_obj->getDeptID();
                 while(list($id, $name) = mysql_fetch_row($result))
                 {
@@ -399,7 +404,7 @@ if($submit == 'adduser')
                 <td colspan=1>
 <?php
                 // query to get a list of departments
-                $user_obj = new User($item, $GLOBALS['connection'], $GLOBALS['database']);
+                $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
                 //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
@@ -431,10 +436,10 @@ if($submit == 'adduser')
                 <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
                 <OPTION value='-1'>Choose the department(s)</OPTION>
 <?php
-                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = $item";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '$item'";
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
-                $result2 = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result2 = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $hits = mysql_num_rows($result);
                 //for dept that this user is reviewing for
                 for($i = 0; $i< $hits; $i++)
@@ -507,13 +512,13 @@ if($submit == 'adduser')
                           draw_footer();
         }
 
-        elseif($submit == 'updatepick')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')
         {
-                draw_status_bar('Modify User',$message);
+                @draw_status_bar('Modify User',$_POST['$last_message']);
 
                 // Check to see if user is admin
-                $query = "SELECT admin FROM admin WHERE id = '$SESSION_UID' and admin = '1'";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $query = "SELECT admin FROM admin WHERE id = '" . $_SESSION['uid'] . "' and admin = '1'";
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 if(mysql_num_rows($result) <= 0)
                 {
                         header('Location:error.php?ec=4');
@@ -530,7 +535,7 @@ if($submit == 'adduser')
 
                         // query to get a list of users
                         $query = "SELECT id, username, first_name, last_name FROM user ORDER BY last_name";
-                $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 
                 while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
@@ -560,10 +565,10 @@ if($submit == 'adduser')
                         <?php
                         draw_footer();
         }
-        elseif($submit == 'change_password_pick')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick')
         {
-                draw_status_bar('Change password', $last_message);
-                $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+                @draw_status_bar('Change password', $_POST['last_message']);
+                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $submit_message = 'Changing password';
 ?>
                         <br>
@@ -595,10 +600,10 @@ if($submit == 'adduser')
                         </form>
 <?php
         }
-        elseif($submit == 'change_personal_info_pick')
+        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick')
         {
-                draw_status_bar('Change password', $last_message);
-                $user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+                @draw_status_bar('Change password', $_POST['last_message']);
+                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
 ?>
@@ -624,5 +629,9 @@ if($submit == 'adduser')
                                 </form>
 <?php
         }
-        elseif ($submit == 'Cancel')
+        elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
+        {
+                $last_message="Action Cancelled";
                 header('Location:admin.php?last_message='.$last_message);
+        }
+?>

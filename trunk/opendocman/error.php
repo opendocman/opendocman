@@ -11,17 +11,20 @@ Read more articles like this one at http://www.melonfire.com/community/columns/t
 
 // includes
 include('config.php');
-//session_start();
-//if (!session_is_registered("SESSION_UID"))
-//{
-//header("Location:error.php?ec=1");
-//exit;
-//}
+session_start();
 draw_header('Error');
-draw_menu($SESSION_UID);
-draw_status_bar('Error', $message);
+if (!session_is_registered('uid'))
+{
+        draw_menu();
+}
+else
+{
+        draw_menu($_SESSION['uid']);
+}
 
-switch ($ec)
+@draw_status_bar('Error', $_REQUEST['last_message']);
+
+switch ($_REQUEST['ec'])
 {
 // login failure
 case 0:
@@ -50,7 +53,7 @@ break;
 
 // Category exists
 case 5:
-$message = 'Category '.$category.' already exists! <a href=out.php>Back</a>';
+$message = 'Category '.$_REQUEST['category'].' already exists! <a href=out.php>Back</a>';
 break;
 
 // Input Field Blank
@@ -72,15 +75,15 @@ break;
 // illegal file type
 case 13:
 $message = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types:<br><ul align=left>';
-
-	foreach($allowedFileTypes as $this)
+echo "_File array is " . array_values($_FILES['file']);
+	foreach($GLOBALS['allowedFileTypes'] as $this)
 	{
 		$message .= '<li>'.$this;
 	}
 $message .= '</ul>';
 break;
 case 14:
-$message = 'Non-unique account.  Please contact '.$site_mail.' for help.';
+$message = 'Non-unique account.  Please contact '.$GLOBALS['CONFIG']['site_mail'].' for help.';
 break;
 case 15:
 $message = 'Error: wrong file!  Please check in the right file.';
@@ -104,4 +107,5 @@ break;
 }
 echo($message);
 //echo 'Please try to <a href="'.$GLOBALS['CONFIG']['base_url'].'">Log-in</a> again.';
+draw_footer();
 ?>

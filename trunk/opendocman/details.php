@@ -1,15 +1,15 @@
 <?php
 // details.php - display file information  check for session
-//$SESSION_UID=140; $id=65;
+//$_SESSION['uid']=140; $_REQUEST['id']=65;
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 	header('Location:error.php?ec=1');
 	exit;
 }
 
-// in case this file is accessed directly - check for $id
-if (!isset($id) || $id == "")
+// in case this file is accessed directly - check for $_REQUEST['id']
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 {
 	header('Location:error.php?ec=2');
 	exit;
@@ -17,14 +17,19 @@ if (!isset($id) || $id == "")
 
 include('config.php');
 draw_header('File Detail');
-draw_menu($SESSION_UID);
-draw_status_bar('File Details',$last_message);
-$filedata = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
-checkUserPermission($id, $filedata->VIEW_RIGHT);
-$user = new User_Perms($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
-$userPermObj = new User_Perms($SESSION_UID , $GLOBALS['connection'], $GLOBALS['database']);
-if( !$userPermObj->canView($id) )
-{	echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); }
+draw_menu($_SESSION['uid']);
+@draw_status_bar('File Details',$_REQUEST['last_message']);
+
+$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
+$user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$userPermObj = new User_Perms($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
+
+if( !$userPermObj->canView($_REQUEST['id']) )
+{	
+        echo 'Unable to find file requested.  Please contact the site admin mailto:' . $GLOBALS['CONFIG']['site_mail'] .' for help'; exit(); 
+}
+
 ?>
 <center>
 <table border="0" cellspacing="4" cellpadding="1">
@@ -39,7 +44,7 @@ $created = $filedata->getCreatedDate();
 $description = $filedata->getDescription();
 $comment = $filedata->getComment();
 $status = $filedata->getStatus();
-$userRights = $userPermObj->canWrite($id);
+$userRights = $userPermObj->canWrite($_REQUEST['id']);
 $reviewer = $filedata->getReviewerName();
 // corrections
 if ($description == '') 
@@ -64,7 +69,7 @@ if(strlen($reviewer_comments_fields[1]) <= strlen('Subject='))
 if(strlen($reviewer_comments_fields[0]) <= strlen('to='))
 	$reviewer_comments_fields[0] = 'To=Author(s)';
 		
-$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 ?>
 <FORM name="data">
 <INPUT type="hidden" name="to" value="<?php echo substr($reviewer_comments_fields[0], 3) ?>">
@@ -145,42 +150,42 @@ if ($status != 0)
 <!-- inner table begins -->
 <!-- view option available at all time, place it outside the block -->
 <?php 
-if($userPermObj->canRead($id))
+if($userPermObj->canRead($_REQUEST['id']))
 {?>
-<td align="center"><a href="view_file.php?id=<?php echo $id; ?>"><img src="images/view.png" alt="" border="0"></a></td>
+<td align="center"><a href="view_file.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/view.png" alt="" border="0"></a></td>
 <?php
 }		
 if ($status == 0)
 {
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
-	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$id' AND user_perms.uid = '$SESSION_UID' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
-	$result2 = mysql_db_query($GLOBALS['database'], $query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
-	$user_perms = new UserPermission($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
-	if($user_perms->getAuthority($id)>=$user_perms->WRITE_RIGHT)
+	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$_REQUEST[id]' AND user_perms.uid = '$_SESSION[uid]' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
+	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
+	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT)
 	{
 		// if so, display link for checkout
 ?>
 	
-		<td align="center"><a href="check-out.php?id=<?php echo $id; ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
+		<td align="center"><a href="check-out.php?id=<?php echo $_REQUEST['id']; ?>&access_right=modify"><img src="images/check-out.png" alt="" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
 	
-	if ($userPermObj->canAdmin($id) == 1)
+	if ($userPermObj->canAdmin($_REQUEST['id']) == 1)
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
 ?>
-		<td align="center"><a href="edit.php?id=<?php echo $id; ?>"><img src="images/edit.png" alt="" border="0"></a></td>
-		<td align="center"><a href="delete.php?id0=<?php echo $id; ?>"><img src="images/delete.png" alt="Delete" border="0"></a></td>
+		<td align="center"><a href="edit.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/edit.png" alt="" border="0"></a></td>
+		<td align="center"><a href="delete.php?id0=<?php echo $_REQUEST['id']; ?>"><img src="images/delete.png" alt="Delete" border="0"></a></td>
 <?php
 	}
 }//end if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
 ?>
-<td align="center"><a href="history.php?id=<?php echo $id; ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
+<td align="center"><a href="history.php?id=<?php echo $_REQUEST['id']; ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
 
 </tr>
 <!-- inner table ends -->

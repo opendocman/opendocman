@@ -1,13 +1,13 @@
 <?php
 // check-out.php - performs checkout and updates database
-// check for session and $id
+// check for session and $_REQUEST['id']
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 	header('Location:error.php?ec=1');
 	exit;
 }
-if (!isset($id) || $id == '')
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
 	header('Location:error.php?ec=2');
 	exit;
@@ -17,17 +17,17 @@ include('config.php');
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
 the server
 */
-$fileobj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
-$fileobj->setId($id);
+$fileobj = new FileData($_GET['id'], $GLOBALS['connection'], $GLOBALS['database']);
+$fileobj->setId($_GET['id']);
 if ($fileobj->getError() != NULL || $fileobj->getStatus() != 0 )
 {
 	header('Location:error.php?ec=2');
 	exit;
 }
-if (!isset($submit))
+if (!isset($_GET['submit']))
 {
 	draw_header('Checkout');
-	draw_menu($SESSION_UID);
+	draw_menu($_SESSION['uid']);
 	draw_status_bar('Check Out Document');
 	// form not yet submitted
 	// display information on how to initiate download
@@ -37,8 +37,8 @@ if (!isset($submit))
 	<p>
 	
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="get">
-	<input type="hidden" name="id" value="<?php echo $id; ?>">
-	<input type="hidden" name="access_right" value="<?php echo $HTTP_GET_VARS['access_right'];?>">
+	<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+	<input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
 	<input type="submit" name="submit" value="Click here"> to check out the selected document and begin downloading it to your local workstation.
 	</form>
 	Once the document has completed downloading, you may <a href="out.php">continue browsing</a> The Vault.
@@ -49,15 +49,15 @@ draw_footer();
 else
 {
 	$realname = $fileobj->getName();
-	if($access_right == 'modify')
+	if($_GET['access_right'] == 'modify')
 	{	
 		// since this user has checked it out and will modify it
 		// update db to reflect new status
-		$query = "UPDATE data SET status = '$SESSION_UID' WHERE id = '$id'";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$query = "UPDATE data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	}
 	// calculate filename
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+	$filename = $GLOBALS['CONFIG']['dataDir'] . $_GET['id'] . '.dat';
 		
 	// send headers to browser to initiate file download
 	header ('Content-Type: application/octet-stream'); 

@@ -2,7 +2,7 @@
 // category.php - Administer Categories
 // check for valid session 
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 	draw_error('error.php?ec=1');
 	exit;
@@ -12,7 +12,7 @@ include('config.php');
 
 if(isset($submit) and $submit != 'Cancel')
 {
-	draw_menu($SESSION_UID);
+	draw_menu($_SESSION['uid']);
 }
 
 if($submit == 'add')
@@ -24,7 +24,7 @@ if($submit == 'add')
 		draw_header('Add New Category');
 		draw_status_bar('Add New Category', $last_message);
 		// Check to see if user is admin
-		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+		$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 		if(!$user_obj->isAdmin())        
 		{
 				draw_error('error.php?ec=4');
@@ -60,7 +60,7 @@ elseif($submit == 'delete')
 	echo '<center>'; 
 	echo '<table border=0>';
 	$query = 'SELECT id, name FROM category where id="' . $item . '"';
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 		echo '<tr><td>Id # :</td><td>' . $id . '</td></tr>';
@@ -99,7 +99,7 @@ elseif($submit == 'deletepick')
 				<td colspan=3><select name="item">
 <?php
 	$query = 'SELECT id, name FROM category ORDER BY name';
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 		$str = '<option value="' . $id . '"';
@@ -131,7 +131,7 @@ elseif($submit == 'Show Category')
 	echo '<center>';
 	// Select name
 	$query = "SELECT category.name FROM category where category.id='$item'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	echo('<table name="main" cellspacing="15" border="0">');
 	list($category) = mysql_fetch_row($result);
 	echo '<th>Name</th><th>ID</th>';
@@ -168,7 +168,7 @@ elseif($submit == 'showpick')
 			<td colspan="3"><select name="item">
 <?php
 			$query = 'SELECT id, name FROM category ORDER BY name';
-			$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+			$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($id, $name) = mysql_fetch_row($result))
 		{
 				echo '<option value="' . $id . '">' . $name . '</option>';
@@ -207,7 +207,7 @@ elseif($submit == 'Update')
 <?php
 	// query to get a list of users
 	$query = "SELECT id, name FROM category where id='$item'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 		echo '<tr>';
@@ -248,7 +248,7 @@ elseif($submit == 'updatepick')
 <?php
 	// query to get a list of users
 	$query = "SELECT id, name FROM category ORDER BY name";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result))
 	{
 		echo '<option value="'.$id.'">'.$name.'</option>';

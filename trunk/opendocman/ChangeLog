@@ -1,3 +1,279 @@
+2003-02-07 14:40  khoang82
+
+	* UserPermission_class.php, functions.php: fix var
+
+2003-02-07 14:28  khoang82
+
+	* Department_class.php: Documentation added
+
+2003-02-07 14:12  khoang82
+
+	* databaseData_class.php: Documentations added
+
+2003-02-03 16:28  logart
+
+	* user.php: globals fix
+
+2003-02-03 16:27  logart
+
+	* toBePublished.php: fixed PHP_SELF
+
+2003-02-03 15:13  khoang82
+
+	* user.php: wrong usage of isset()
+
+2003-02-03 15:03  khoang82
+
+	* edit.php: fixed error: unable to set modify permission to users
+
+2003-02-03 14:59  khoang82
+
+	* details.php, functions.php: fix checkPermission() to allow root
+	user to bypass
+
+2003-02-03 14:47  khoang82
+
+	* Dept_Perms_class.php, UserPermission_class.php, details.php,
+	functions.php, out.php: Introduce a more strictly defined
+	interpretation of the permission setting
+
+2003-02-03 14:44  khoang82
+
+	* add.php: Added new features onto the permission setting
+	interface.  User friendly
+
+2003-02-03 14:30  logart
+
+	* in.php, view.php: fixed <?
+
+2003-01-31 17:42  khoang82
+
+	* User_Perms_class.php, details.php, functions.php,
+	toBePublished.php: Fixing permission setting bugs.  Still not
+	working yet
+
+2003-01-31 16:24  khoang82
+
+	* details.php, toBePublished.php: disable emailing option for owner
+	when they are viewing their rejection message.
+
+2003-01-31 16:14  khoang82
+
+	* functions.php, out.php: Fixed sort_by='author' bug
+
+2003-01-31 14:02  logart
+
+	* functions.php: added default '' to status_bar last_message
+
+2003-01-31 14:01  logart
+
+	* check-out.php: removed last_message - not needed
+
+2003-01-31 13:57  logart
+
+	* department.php: cleaned up last_message's
+
+2003-01-31 13:51  logart
+
+	* functions.php: Added '' around parms for list_files changed some
+	issets to check for 'true/false' fixed <? fixed typos in error
+	message
+
+2003-01-31 13:47  logart
+
+	* history.php: fixed <?
+
+2003-01-31 13:45  logart
+
+	* out.php: added missing parm to list_files call
+
+2003-01-31 13:40  logart
+
+	* toBePublished.php: fixed <?
+
+2003-01-31 13:18  khoang82
+
+	* user.php: globalized $connection and $database
+
+2003-01-31 13:16  khoang82
+
+	* user.php: globalized $connection
+
+2003-01-30 16:16  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	commitchange.php, delete.php, department.php, details.php,
+	edit.php, functions.php, history.php, in.php, index.php, out.php,
+	rejects.php, search.php, toBePublished.php, view.php,
+	view_file.php: globalized $hostname
+
+2003-01-30 14:48  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	commitchange.php, delete.php, department.php, details.php,
+	edit.php, functions.php, history.php, in.php, index.php, out.php,
+	rejects.php, search.php, toBePublished.php, view.php,
+	view_file.php: fixed all pages to use globlized mysql connection in
+	config.php instead of local one
+
+2003-01-27 15:07  khoang82
+
+	* edit.php, details.php: new checks are applied so user cannot hack
+	into other files by change the URL
+
+2003-01-27 15:03  khoang82
+
+	* functions.php: New function added that enforce permission setting
+	on file.
+
+2003-01-27 15:00  khoang82
+
+	* databaseData_class.php, classHeaders.php: Fixed wrong usage of
+	isset()
+
+2003-01-27 14:59  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php,
+	UserPermission_class.php: Fix logical bug in permission lookup
+
+2003-01-24 13:31  khoang82
+
+	* FileData_class.php: Fixed logical bugs in permission table
+	analysis
+
+2003-01-23 15:26  khoang82
+
+	* edit.php: fixed right setting problem.  Permission logic errors
+	have not been fixed in this version
+
+2003-01-23 14:17  khoang82
+
+	* edit.php: fix highlighting problems
+
+2003-01-23 12:28  khoang82
+
+	* search.php: Remove debug echo's
+
+2003-01-23 09:20  logart
+
+	* UserPermission_class.php: fixed typo
+
+2003-01-22 13:22  logart
+
+	* error.php, index.php: fixes for kerb authenticated user but no
+	local account
+
+2003-01-17 16:48  khoang82
+
+	* commitchange.php: [ 660114 ] New Department - duplicate name If
+	you try to add a department that already exists,  your are returned
+	a blank page, but part of the  department is created.
+	
+	Fixed so that update department will reject identical names.
+
+2003-01-17 14:49  khoang82
+
+	* UserPermission_class.php, functions.php, search.php: redefine
+	search and sort to work with full name instead of username
+
+2003-01-16 14:39  khoang82
+
+	* out.php: Fixed isset() so the files will be listed correctly in
+	out.php
+
+2003-01-16 14:05  khoang82
+
+	* toBePublished.php: fixed bug.  Before, when authorizing file
+	without send email, opendocman crashed.  Now fixed
+
+2003-01-16 13:44  khoang82
+
+	* functions.php: One of the isset() was used incorrectly
+
+2003-01-14 15:12  logart
+
+	* check-in.php: changed $message to $last_message
+
+2003-01-14 15:09  logart
+
+	* category.php: added isset's
+
+2003-01-14 15:09  logart
+
+	* admin.php: added isset to last_message
+
+2003-01-14 15:08  logart
+
+	* index.php: globalized  variables
+
+2003-01-14 15:04  logart
+
+	* logout.php: fixed <?
+
+2003-01-14 15:00  logart
+
+	* out.php: added isset to last_message check
+
+2003-01-14 14:59  logart
+
+	* search.php: fixed missing )
+
+2003-01-14 14:56  logart
+
+	* toBePublished.php: sjl added isset to if's
+
+2003-01-13 10:53  logart
+
+	* UserPermission_class.php: sjl fixed typos
+
+2003-01-13 10:39  logart
+
+	* FileData_class.php, UserPermission_class.php, add.php,
+	category.php, check-in.php, check-out.php, classHeaders.php,
+	commitchange.php, databaseData_class.php, delete.php,
+	department.php, details.php, edit.php, functions.php, history.php,
+	index.php, out.php, rejects.php, search.php, toBePublished.php,
+	user.php, view.php, view_file.php: sjl fixed references to
+	if($value) by changing them to if(isset($value)) for compatability
+	with high error reporting turned on.
+
+2003-01-10 13:47  khoang82
+
+	* functions.js: clear debuging print out
+
+2003-01-10 13:45  khoang82
+
+	* functions.js, add.php: functions.js has function that enforce the
+	length of a string add.php uses functions.js to enforce
+	data.comment's length
+
+2003-01-06 13:57  khoang82
+
+	* commitchange.php, department.php: Duplicate in new department
+	name fixed
+
+2003-01-06 09:54  logart
+
+	* commitchange.php: changed a hardcoded URL to base_url global
+
+2003-01-06 09:54  logart
+
+	* database.sql: Added a default admin entry for user #1
+
+2003-01-06 09:51  logart
+
+	* UserPermission_class.php, User_Perms_class.php: <? fix
+
+2003-01-06 09:49  logart
+
+	* FileData_class.php: <? fix
+	
+	changed hardcoded email to site_email global
+
+2003-01-06 09:43  logart
+
+	* ChangeLog: sjl Initial Import
+
 2003-01-06 09:03  logart
 
 	* config.php: sjl fixed some filetypes that were not working, like

@@ -1,6 +1,7 @@
 <?php
 // Report all PHP errors (bitwise 63 may be used in PHP 3)
 // includes
+session_start();
 include('config.php');
 
 if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
@@ -65,75 +66,69 @@ if(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 }
 elseif(isset($_POST['login']))
 {
-$user=$GLOBALS['user'];
-$pass=$GLOBALS['pass'];
 
-$frmuser=$_POST['frmuser'];
-$frmpass=$_POST['frmpass'];
-
-    // check login and password
-    // connect and execute query
-    $query = "SELECT id, username, password from user WHERE username = '$frmuser' AND password = PASSWORD('$frmpass')";
-    $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    // if row exists - login/pass is correct
-    if (mysql_num_rows($result) == 1)
-    {
-        // initiate a session
-        session_start();
-        // register the user's ID
-        session_register('SESSION_UID');
-        list($id, $username, $password) = mysql_fetch_row($result);
-        global $SESSION_UID;
-        $SESSION_UID = $id;
-        // redirect to main page
-        header('Location:out.php');
-        mysql_free_result ($result);	
-        // close connection
-    }
-    else
-        // login/pass check failed
-    {
-        mysql_free_result ($result);	
-        // redirect to error page
-        header('Location: error.php?ec=0');
-    }
+        $frmuser = $_POST['frmuser'];
+        $frmpass = $_POST['frmpass'];
+        // check login and password
+        // connect and execute query
+        $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
+        $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+        // if row exists - login/pass is correct
+        if (mysql_num_rows($result) == 1)
+        {
+                // register the user's ID
+                list($id, $username, $password) = mysql_fetch_row($result);
+                // initiate a session
+                $_SESSION['uid'] = $id;
+                // redirect to main page
+                header('Location:out.php');
+                mysql_free_result ($result);	
+                // close connection
+        }
+        else
+                // login/pass check failed
+        {
+                mysql_free_result ($result);	
+                // redirect to error page
+                header('Location: error.php?ec=0');
+        }
 
 }
 elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
 {
 
-    // check login and password
-    // connect and execute query
-    if (!isset($_COOKIE['AuthUser']))
-    {
-        header('Location: https://secureweb.ucdavis.edu:443/cgi-auth/sendback?'.$GLOBALS['CONFIG']['base_url']);
-    }
-    else
-    {
-        list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
-        //// query to get id num from username
-        $query = "SELECT id FROM user WHERE username='$userid'";
-        $result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ('Error in query: '.$query . mysql_error());
-        // if row exists then the user has an account
-        if (mysql_num_rows($result) == 1)
+        // check login and password
+        // connect and execute query
+        if (!isset($_COOKIE['AuthUser']))
         {
-            // initiate a session
-            session_start();
-            // register the user's ID
-            session_register('SESSION_UID');
-            list($id) = mysql_fetch_row($result);
-            $SESSION_UID = $id;
-            // redirect to main page
-            header('Location:out.php');
-            mysql_free_result ($result);	
-            // close connection
+                header('Location: https://secureweb.ucdavis.edu:443/cgi-auth/sendback?'.$GLOBALS['CONFIG']['base_url']);
         }
-        // User passed auth, but does not have an account
-        else 
+        else
         {
-             header('Location:error.php?ec=19');
+                list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
+                //// query to get id num from username
+                $query = "SELECT id FROM user WHERE username='$userid'";
+                $result = mysql_query($query) or die ('Error in query: '.$query . mysql_error());
+                // if row exists then the user has an account
+                if (mysql_num_rows($result) == 1)
+                {
+                        // initiate a session
+                        session_start();
+                        // register the user's ID
+                        session_register('uid');
+                        list($id) = mysql_fetch_row($result);
+                        $_SESSION['uid'] = $id;
+                        // redirect to main page
+                        header('Location:out.php');
+                        mysql_free_result ($result);	
+                        // close connection
+                }
+                // User passed auth, but does not have an account
+                else 
+                {
+                        header('Location:error.php?ec=19');
+                }
         }
-    }
 }
 else
 {

@@ -1,45 +1,41 @@
 <?php
-/*
-All source code copyright and proprietary Melonfire, 2001. All content, brand names and trademarks copyright and proprietary Melonfire, 2001. All rights reserved. Copyright infringement is a violation of law.
-
-This source code is provided with NO WARRANTY WHATSOEVER. It is meant for illustrative purposes only, and is NOT recommended for use in production environments. 
-
-Read more articles like this one at http://www.melonfire.com/community/columns/trog/ and http://www.melonfire.com/
-*/
-
 // check-in.php - uploads a new version of a file
 
 // check for valid session and $id
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!isset($_SESSION['uid']))
 {
-header('Location:error.php?ec=1');
-exit;
+        $last_message='Failed';
+        header('Location:error.php?ec=1&last_message=' . urlencode($last_message));
+        exit;
 }
 
-if (!isset($id) || $id == '')
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-header('Location:error.php?ec=2');
-exit;
+        $last_message='Failed';
+        header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
+        exit;
 }
 
 // includes
 include('config.php');
 
 // open connection
-if (!isset($submit))
+if (!isset($_POST['submit']))
 {
-	draw_menu($SESSION_UID);
+	draw_menu($_SESSION['uid']);
+	@draw_status_bar('Check Document In',$_REQUEST['last_message']);
 	// form not yet submitted, display initial form
 
 	// pre-fill the form with some information so that user knows which file is being updated
-	$query = "SELECT description, realname from data WHERE id = '$id' AND status = '$SESSION_UID'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$query = "SELECT description, realname from data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
+	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// in case script is directly accessed, query above will return 0 rows
 	if (mysql_num_rows($result) <= 0)
 	{
-		header('Location:error.php?ec=2');
+                $last_message='Failed';
+		header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
 		exit;
 	}
 	else
@@ -57,19 +53,10 @@ if (!isset($submit))
 		mysql_free_result($result);
 		// start displaying form
 		?>
-		<table width="100%" border="0" cellspacing="0" cellpadding="3">
-		<tr>
-		<td bgcolor="#0000A0">
-		<b><font face="Arial" color="White">Document Check In</font></b>
-		</td>
-		</tr>
-		</table>
-		
-		<p>
 		
 		<table border="0" cellspacing="5" cellpadding="5">
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-		<input type="hidden" name="id" value="<?php echo $id; ?>">
+		<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
 		<tr>
 		<td><b>Document</b></td>
 		<td><b><?php echo $realname; ?></b></td>
@@ -100,8 +87,6 @@ if (!isset($submit))
 <?php
 		draw_footer();
 ?>
-		</body>
-		</html>
 		<SCRIPT language="JAVASCRIPT">
 		function check(select, send_dept, send_all)
 		{
@@ -123,62 +108,82 @@ else
 // form has been submitted, process data
 	
 	// checks
-	$query = "select realname from data where data.id = '$id'";
-	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
-	if(mysql_num_rows($result) != 1)
-	{	header('Location:error.php?ec=16'); exit;	}
-	list($realname) = mysql_fetch_row($result);
-	if($HTTP_POST_FILES['file']['name'] != $realname)
-    { header('Location:error.php?ec=15'); exit;	}
+	$query = "select realname from data where data.id = '$_POST[id]'";
+	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
 	
-    // no file!
-	if ($file_size <= 0)
+        // 
+        if(mysql_num_rows($result) != 1)
+	{	
+                $last_message='Failed';
+                header('Location:error.php?ec=16&last_message=' . urlencode($last_message)); 
+                exit;	
+        }
+	
+        list($realname) = mysql_fetch_row($result);
+	
+        if($_FILES['file']['name'] != $realname)
+        {
+                $last_message='Failed';
+                header('Location:error.php?ec=15&last_message=' . urlencode($last_message)); 
+                exit;	
+        }
+	
+        // no file!
+	if ($_FILES['file']['size'] <= 0)
 	{ 
-		header('Location:error.php?ec=11');
+                $last_message='Failed';
+		header('Location:error.php?ec=11&last_message=' . urlencode($last_message));
 		exit;
 	}
 	
 	// check file type
-	foreach($allowedFileTypes as $this)
+	foreach($GLOBALS['allowedFileTypes'] as $this)
 	{
-		if ($file_type == $this) 
+		if ($_FILES['file']['type'] == $this) 
 		{ 
-		$allowedFile = 1;
-		break; 
+		        $allowedFile = 1;
+		        break; 
 		} 
+                else
+                {       
+                        
+		        $allowedFile = 0;
+		        break; 
+                }
 	}
 	// illegal file type!
 	if ($allowedFile != 1) 
 	{ 
-		header('Location:error.php?ec=13'); 
+                $last_message='Failed';
+		header('Location:error.php?ec=13&last_message=' . urlencode($last_message)); 
 		exit; 
 	}
 	
 	// query to ensure that user has modify rights
-	$fileobj = new FileData($id, $GLOBALS['connection'], $GLOBALS['database']);
-	if($fileobj->getError() == '' and $fileobj->getStatus() == $SESSION_UID)
+	$fileobj = new FileData($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+	if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
 	{
 		// all OK, proceed!
-  		$query = "SELECT username FROM user WHERE id='$SESSION_UID'";
-    	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+  		$query = "SELECT username FROM user WHERE id='$_SESSION[uid]'";
+    	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		list($username) = mysql_fetch_row($result);
 				
 	 	// update revision log
-		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($note) ."')";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$query = "INSERT INTO log (id, modified_on, modified_by, note) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."')";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 		// update file status
-		$query = "UPDATE data SET status = '0', publishable='0' WHERE id='$id'";
-		$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$query = "UPDATE data SET status = '0', publishable='0' WHERE id='$_POST[id]'";
+		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 		// rename and save file
-		$newFileName = $id . '.dat';
-		copy($file, $GLOBALS['CONFIG']['dataDir'] . $newFileName);
+		$newFileName = $_POST['id'] . '.dat';
+		copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
 		
 		//Send email
 		$date = date('D F d Y');
 		$time = date('h:i A');
-		$user_obj = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+		$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 		$get_full_name = $user_obj->getFullName();
 		$full_name = $get_full_name[0].' '.$get_full_name[1];
 		$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
@@ -204,7 +209,7 @@ else
                         email_dept($mail_from, $dept_id, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
 		}
 
-		if(sizeof($send_to_users) > 0)
+		if(isset($send_to_users) && sizeof($send_to_users) > 0)
 		{
                         $mail_body='Filename: '. $fileobj->getName(). "\n\n";
                         $mail_body.='Date: ' . $date . "\n\n";

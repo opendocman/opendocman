@@ -3,7 +3,7 @@
 
 // check session
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
 header('Location:error.php?ec=1');
 exit;
@@ -11,12 +11,12 @@ exit;
 // includes
 include('config.php');
 draw_header('Check-in');
-draw_menu($SESSION_UID);
-draw_status_bar('Documents Currently Checked Out To You', $last_message); 
+draw_menu($_SESSION['uid']);
+@draw_status_bar('Documents Currently Checked Out To You', $_POST['last_message']); 
 
 // query to get list of documents checked out to this user
-$query = "SELECT data.id, user.last_name, user.first_name, realname, created, description, status FROM data,user WHERE status = '$SESSION_UID' AND data.owner = user.id";
-$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+$query = "SELECT data.id, user.last_name, user.first_name, realname, created, description, status FROM data,user WHERE status = '$_SESSION[uid]' AND data.owner = user.id";
+$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 // how many records?
 $count = mysql_num_rows($result);

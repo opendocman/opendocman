@@ -22,7 +22,7 @@ if( !defined('User_class') )
         function getDeptName()
         {
                 $query = "SELECT department.name FROM department, user WHERE user.id = $this->id and user.department=department.id";
-                $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query" .mysql_error() );
+                $result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
                 if(mysql_num_rows($result)==1)
                 {
                         list($department) = mysql_fetch_row($result);
@@ -38,7 +38,7 @@ if( !defined('User_class') )
         function getDeptId()
 	{
 		$query = "SELECT user.department FROM user WHERE user.id = $this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query" .mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		
 		if(mysql_num_rows($result)==1)
 		{
@@ -55,7 +55,7 @@ if( !defined('User_class') )
                 $data_published = array();
                 $index = 0;
                 $query = "SELECT data.id, data.owner, user.username FROM data, user WHERE data.owner = $this->id and user.id = data.owner and data.publishable = $publishable";
-                $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: ". $query .mysql_error());
+                $result = mysql_query($query, $this->connection) or die("Error in query: ". $query .mysql_error());
                 while($index<mysql_num_rows($result))
                 {
                         list($data_published[$index][0], $data_published[$index][1], $data_published[$index][2]) = mysql_fetch_row($result);
@@ -72,7 +72,7 @@ if( !defined('User_class') )
                 }
 
                 $query = "SELECT admin.admin FROM admin WHERE admin.id = $this->id";
-                $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+                $result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 
                 if(mysql_num_rows($result) !=1 )
                 {
@@ -92,7 +92,7 @@ if( !defined('User_class') )
 	function getPassword()
 	{
 		$query = "SELECT $this->tablename.password FROM $this->tablename WHERE $this->tablename.id=$this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		if(mysql_num_rows($result) !=1 )
 		{
 			header('Location:error.php?ec=14');
@@ -108,14 +108,14 @@ if( !defined('User_class') )
 	function changePassword($non_encrypted_password)
 	{
 		$query = "UPDATE $this->tablename SET $this->tablename.password=password('". addslashes($non_encrypted_password) ."') WHERE $this->tablename.id=$this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		return true;
 	}
 
 	function validatePassword($non_encrypted_password)
 	{
 		$query = "SELECT $this->tablename.username FROM $this->tablename WHERE $this->tablename.id=$this->id and password= password('". addslashes($non_encrypted_password) ."')";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		if(mysql_num_rows($result) == 1)
                 {
 		        return true;
@@ -126,14 +126,14 @@ if( !defined('User_class') )
 	function changeName($new_name)
 	{
 		$query = "UPDATE $this->tablename SET $this->tablename.username='$new_name' WHERE $this->tablename.id=$this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		return true;
 	}
 
 	function isReviewer()
 	{
 		$query = "SELECT * from dept_reviewer where user_id = " . $this->id;
-		$result = mysql_db_query($this->database, $query, $this->connection) or die('Error in query: '. $query . mysql_error());
+		$result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
 		if(mysql_num_rows($result) > 0)
                 {
 			return 1;
@@ -149,7 +149,7 @@ if( !defined('User_class') )
                 if($this->isReviewer())
                 {
                         $query = "SELECT dept_id FROM dept_reviewer WHERE user_id = ".$this->id;
-                        $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+                        $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
                         $num_depts = mysql_num_rows($result);
                         $query = "SELECT id FROM data WHERE (";
                         for($index = 0; $index < $num_depts; $index++)
@@ -162,7 +162,7 @@ if( !defined('User_class') )
                         }
                         $query = $query . " and data.publishable = 0";
                         mysql_free_result($result);
-                        $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+                        $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
                         $file_data = array();
                         $num_files = mysql_num_rows($result);
                         for($index = 0; $index< $num_files; $index++)
@@ -177,7 +177,7 @@ if( !defined('User_class') )
 	function getRejectedFiles()
 	{
 		$query = "SELECT data.id FROM data WHERE publishable = '-1' and data.owner = ".$this->id;
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$file_data = array();
 		$num_files = mysql_num_rows($result);
 		for($index = 0; $index< $num_files; $index++)
@@ -191,7 +191,7 @@ if( !defined('User_class') )
 	function getEmailAddress()
 	{
 		$query = "SELECT user.Email FROM user WHERE user.id=".$this->id;
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) > 1)
 		{
 			echo('Non-unique key DB error');
@@ -205,7 +205,7 @@ if( !defined('User_class') )
 	function getPhoneNumber()        
 	{
 		$query = "SELECT user.phone FROM user WHERE user.id=".$this->id; 
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) > 1)
 		{
 			echo('Non-unique key DB error');
@@ -219,7 +219,7 @@ if( !defined('User_class') )
 	function getFullName()//Return full name array where array[0]=firstname and array[1]=lastname        
 	{
 		$query = "SELECT user.first_name, user.last_name FROM user WHERE user.id=".$this->id;
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error()); 
+		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error()); 
 		if(mysql_num_rows($result) > 1)
 		{
 			echo('Non-unique key DB error');

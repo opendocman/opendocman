@@ -1,11 +1,11 @@
 <?php
 /*$where='all';
   $keyword='Nguyen Khoa';
-  $SESSION_UID=102;
+  $_SESSION['uid']=102;
   $submit='submit';
 */
 session_start();
-if (!session_is_registered('SESSION_UID'))
+if (!session_is_registered('uid'))
 {
         header('Location:error.php?ec=1');
         exit;
@@ -14,33 +14,33 @@ if (!session_is_registered('SESSION_UID'))
 include('config.php');
 
 draw_header('Search');
-draw_menu($SESSION_UID);
+draw_menu($_SESSION['uid']);
 draw_status_bar('Search', "");
 
-if(!isset($starting_index))
+if(!isset($_GET['starting_index']))
 {
-        $starting_index = 0;
+        $_GET['starting_index'] = 0;
 }
-if(!isset($stoping_index))
+if(!isset($_GET['stoping_index']))
 {
-        $stoping_index = $starting_index+$GLOBALS['CONFIG']['page_limit']-1;
+        $_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
 }
-if(!isset($sort_by))
+if(!isset($_GET['sort_by']))
 {
-        $sort_by = 'id';
+        $_GET['sort_by'] = 'id';
 }
-if(!isset($sort_order))
+if(!isset($_GET['sort_order']))
 {
-        $sort_order = 'a-z';
+        $_GET['sort_order'] = 'a-z';
 }
-if(!isset($page))
+if(!isset($_GET['page']))
 {
-        $page = 0;
+        $_GET['page'] = 0;
 }
 
 echo '<body bgcolor="white">';
 
-if(!isset($submit))
+if(!isset($_GET['submit']))
 {
         ?>
                 <center>
@@ -86,10 +86,7 @@ draw_footer();
 }
 else
 {
-        sort_browser();
-        /*
-
-         */
+sort_browser();
         function OBJs_search_interface($where, $query, $exact_word, $case_sensitivity, $OBJ_array)
         {
                 if($where == 'all')
@@ -131,9 +128,10 @@ else
                         }
                 }
                 return $sorted_result;
+        // End function OBJs_search_interface
         }
 
-        /*
+/*
            OBJ_array_search search for the string query in the where field of every data obj.
 Ex: $where='category_only', $query='test', $exact_word=true, $case_sensitivity=true, $OBJ_array
 OBJ_array_search would put all the categories of the all the element in the OBJ_array into an array;
@@ -211,28 +209,31 @@ then return_array[index1] = (OBJ1, 'filename_only');
                         default : break;
                 }
                 return $query_array;
-        }
-        $current_user = new User($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
-        $user_perms = new User_Perms($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
-        $current_user_permission = new UserPermission($SESSION_UID, $GLOBALS['connection'], $GLOBALS['database']);
+        }// End function OBJs_to_strs
+
+        $current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+        $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+        $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
         $view_able_files_obj = $current_user_permission->getAllowedFileOBJs();
         $obj_array_len = sizeof($view_able_files_obj);
         $query_array = array();
-        $search_result = OBJs_search_interface($where, $keyword, $exact_word, $case_sensitivity, $view_able_files_obj);
-        /*if($where == 'all')
+        $search_result = @OBJs_search_interface($_GET['where'], $_GET['keyword'], $_GET['exact_word'], $_GET['case_sensitivity'], $_GET['view_able_files_obj']);
+/*
+      if($where == 'all')
           {
           $array_len = sizeof($search_result);
           for($i = 0; $i<$array_len; $i++)
           {
           $search_result[$i] = $search_result[$i][0];
           }
-          }*/
-        $page_url = $_SERVER['PHP_SELF'].'?keyword='.$keyword.'&where='.$where.'&submit='.$submit;
-        $sorted_obj_array = obj_array_sort_interface($search_result, $sort_order, $sort_by);
-        list_files($sorted_obj_array,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $sort_order, $sort_by, $starting_index, $stoping_index);
+          }
+*/
+        $page_url = $_SERVER['PHP_SELF'].'?keyword='.$_GET['keyword'].'&where='.$_GET['where'].'&submit='.$_GET['submit'];
+        $sorted_obj_array = obj_array_sort_interface($search_result, $_GET['sort_order'], $_GET['sort_by']);
+        list_files($sorted_obj_array,  $current_user_permission, $_GET['page_url'],  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
         echo '<BR>';
-        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $page_url,$page, $sort_by, $sort_order );
+        list_nav_generator(sizeof($sorted_obj_array), $GLOBALS['CONFIG']['page_limit'], $_GET['page_url'],$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
 
         draw_footer();
 }
-
+?>

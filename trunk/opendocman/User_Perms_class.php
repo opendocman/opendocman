@@ -62,7 +62,7 @@ if ( !defined('User_Perms_class') )
 			$query = "SELECT data.id, data.owner, user.username FROM data, user WHERE user.id = data.owner and data.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
 			$query = "SELECT user_perms.fid, data.owner, user.username  FROM data, user, user_perms WHERE (user_perms.uid = $this->id  AND data.id = user_perms.fid AND user.id = data.owner and user_perms.rights>=$right and data.publishable = 1)";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in querying: $query" .mysql_error());
+		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
 		$fileid_array = array();
 		//$fileid_array[$index][0] ==> fid
@@ -130,7 +130,7 @@ if ( !defined('User_Perms_class') )
 	function isForbidden($data_id)
 	{
 		$query = "SELECT user_perms.rights from user_perms WHERE user_perms.uid = $this->id";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query" .mysql_error() );
+		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) ==1)
 		{
 			list ($right) = mysql_fetch_row($result);
@@ -147,7 +147,7 @@ if ( !defined('User_Perms_class') )
 		if($this->user_obj->isRoot())
 			return true;
 		$query = "Select * from user_perms where user_perms.uid = $this->id and user_perms.fid = $data_id and user_perms.rights>=$right";
-		$result = mysql_db_query($this->database, $query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
+		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		switch(mysql_num_rows($result) )
 		{
 			case 1: return true; break;
@@ -161,7 +161,7 @@ if ( !defined('User_Perms_class') )
 	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
 	  	return true;
 	  $query = "Select user_perms.rights from user_perms where uid = $this->id and fid = $data_id";
-	  $result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: .$query" . mysql_error() );
+	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {
 	    list($permission) = mysql_fetch_row($result);
