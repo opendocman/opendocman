@@ -77,7 +77,7 @@ $file_obj_array = $user_perms->getAllowedFileOBJs();
 $count = sizeof($file_obj_array);
 
 $sorted_obj_array = obj_array_sort_interface($file_obj_array, $sort_order, $sort_by);
-list_files($sorted_obj_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $sort_order,  $sort_by, $starting_index, $stoping_index, 0);
+list_files($sorted_obj_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $sort_order,  $sort_by, $starting_index, $stoping_index, 'false','false');
 // clean up
 	
 	echo '</table>';
