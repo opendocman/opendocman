@@ -311,15 +311,28 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User')
         {
-        	$user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
-                if (!isset($_REQUEST['last_message']))
+                // If demo mode, don't allow them to update the demo account
+                if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        $_REQUEST['last_message']='';
+                        @draw_status_bar("Update User",$_POST['last_message']);
+                        echo 'Sorry, demo mode only, you can\'t do that';
                 }
-                if( isset( $_POST['last_message'] ) )
-				{	draw_status_bar("Update User",$_POST['last_message']);	}
-				else
-				{	draw_status_bar("Update User",'');	}
+                else
+        	{
+                        // Begin Not Demo Mode
+                        $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+                        if (!isset($_REQUEST['last_message']))
+                        {
+                                $_REQUEST['last_message']='';
+                        }
+                        if( isset( $_POST['last_message'] ) )
+			{	
+                                draw_status_bar("Update User",$_POST['last_message']);	
+                        }
+			else
+			{
+                                draw_status_bar("Update User",'');	
+                        }
                 ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
@@ -516,6 +529,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         	}
                         	</SCRIPT>
                         	<?php
+                } // End Not Demo mode
                           draw_footer();
         }
 
