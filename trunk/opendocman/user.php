@@ -148,9 +148,18 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 <?php
                        
 	 draw_footer();
-}
+        }
+        // DELETE USER
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete User')
         {
+                // If demo mode, don't allow them to update the demo account
+                if (@$GLOBALS['CONFIG']['demo'] == 'true')
+                {
+                        @draw_status_bar('Delete User ' ,$_POST['last_message']);
+                        echo 'Sorry, demo mode only, you can\'t do that';
+                        draw_footer();
+                        exit;
+                }
                 $delete='';
                 $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
                 @draw_status_bar('Delete ' . $user_obj->getName(), $_POST['last_message']);
@@ -189,6 +198,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <?php
                         draw_footer();
         }
+        // CHOOSE THE USER TO DELETE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick')
         {
                 $deletepick='';
@@ -232,6 +242,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <?php
                         draw_footer();
         }
+        // SHOW THE USER INFO
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User')
         {
                 // query to show item
@@ -275,6 +286,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <?php
                         draw_footer();
         }
+        // CHOOSE USER TO DISPLAY INFO FOR
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick')
         {
                 @draw_status_bar('Choose User to View', $_POST['last_message']);
@@ -314,6 +326,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <?php
                         draw_footer();
         }
+        // MODIFY USER
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User')
         {
                 // If demo mode, don't allow them to update the demo account
@@ -530,7 +543,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 } // End Not Demo mode
                           draw_footer();
         }
-
+        // CHOOSE USER TO UPDATE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')
         {
                 @draw_status_bar('Modify User',$_POST['$last_message']);
@@ -590,6 +603,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 @draw_status_bar('Change password', $_POST['last_message']);
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $submit_message = 'Changing password';
+
 ?>
                         <br>
                                 <script LANGUAGE="JavaScript">
@@ -626,6 +640,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
+                // If demo mode, don't allow them to update the demo account
+                if (@$GLOBALS['CONFIG']['demo'] == 'true')
+                {
+                        @draw_status_bar('Change Personal Info ' ,$_POST['last_message']);
+                        echo 'Sorry, demo mode only, you can\'t do that';
+                        draw_footer();
+                        exit;
+                }
 ?>
                 <br>
                                 <script LANGUAGE="JavaScript">

@@ -53,6 +53,14 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
+        // If demo mode, don't allow them to update the demo account
+        if (@$GLOBALS['CONFIG']['demo'] == 'true')
+        {
+                @draw_status_bar('Delete Category ' ,$_POST['last_message']);
+                echo 'Sorry, demo mode only, you can\'t do that';
+                draw_footer();
+                exit;
+        }
 	$delete='';
         if (!isset($_REQUEST['last_message']))
         {       

@@ -64,6 +64,14 @@ draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='delete')
 {
+        // If demo mode, don't allow them to update the demo account
+        if (@$GLOBALS['CONFIG']['demo'] == 'true')
+        {
+                @draw_status_bar('Delete Department ' ,$_POST['last_message']);
+                echo 'Sorry, demo mode only, you can\'t do that';
+                draw_footer();
+                exit;
+        }
         if (!isset($_POST['last_message']))
         {
                 $_POST['last_message']='';
