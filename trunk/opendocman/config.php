@@ -23,7 +23,8 @@ global $CONFIG;      $CONFIG = array(
 'debug' => '0',
 
 // This setting is for a demo installation, where random people will be
-// all loggging in as the same username/password like 'demo/demo'.
+// all loggging in as the same username/password like 'demo/demo'. This will
+// keep users from removing files, users, etc.
 'demo' => 'false', 
 
 // This is useful if you have a web-based kerberos authenticatio site
@@ -34,7 +35,7 @@ global $CONFIG;      $CONFIG = array(
 // Set the number of files that show up on each page
 'page_limit' => '15',
 
-// Set the number of page links that show up on each age
+// Set the number of page links that show up on each page
 'num_page_limit' => '10', 
 
 // Set the maximum displayable length of text field
@@ -80,7 +81,7 @@ The first two options also result in sending email to reviewer
 //When set to Off, all newly added or checked back in documents will immediately go public
 'authorization' => 'On',
 
-//Authorization control: On or Off (case sensitive)
+//Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
 'secureurl' => 'On'
