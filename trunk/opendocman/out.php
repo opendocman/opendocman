@@ -22,18 +22,19 @@ require_once 'config.php';
 draw_header('File Listing');
 draw_menu($_SESSION['uid']);
 draw_status_bar('Document Listing', @$_REQUEST['last_message']);
-sort_browser(); 
+sort_browser();
+$secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 
 if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
-	        echo '<img src="images/exclamation.gif"><a href="toBePublished.php?state=1"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
+	        echo '<img src="images/exclamation.gif"><a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
 }
 
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-	echo '<img src="images/exclamation_red.gif"><a href="rejects.php?state=1"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
+	echo '<img src="images/exclamation_red.gif"><a href="' . $secureurl_obj->encode('rejects.php?state=1') . '"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
 }
 $llen = $user_obj->getNumExpiredFiles();
 if($llen > 0)
