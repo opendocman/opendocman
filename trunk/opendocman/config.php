@@ -31,15 +31,6 @@ global $CONFIG;      $CONFIG = array(
 //'authen' => 'kerbauth',
 'authen' => 'mysql',
 
-// Not Working
-//Should we use ldap for user info lookup?
-// 'ldaplookup' => 'false',
-
-// Not Working
-//LDAP server (only needed if using ldaplookup
-//'ldap_server' => 'ldap.ucdavis.edu',
-//'ldap_basedn' => 'ou=University of California Davis,o=University of California,c=US',
-
 // Set the number of files that show up on each page
 'page_limit' => '10',
 
@@ -53,7 +44,7 @@ global $CONFIG;      $CONFIG = array(
 'title' => 'Document Repository',
 
 // This is the program version for window title
-'current_version' => ' OpenDocMan v1.1rc2  ',
+'current_version' => ' OpenDocMan v1.1',
 
 // The email address of the administrator of this site
 'site_mail' => 'admin@yourdomainaa.com',
@@ -80,7 +71,7 @@ $connection = mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pa
 $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
 // list of allowed file types
-$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+$allowedFileTypes = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
 // All functions are in functions.php
 }
 ?>
