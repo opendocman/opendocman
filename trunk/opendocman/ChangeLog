@@ -1,3 +1,16 @@
+2003-07-18 10:59  khoang82
+
+	* User_Perms_class.php: fix no listing
+
+2003-07-18 08:58  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php, out.php, search.php:
+	remove timestamp
+
+2003-07-17 08:19  logart
+
+	* ChangeLog: [no log message]
+
 2003-07-14 13:55  khoang82
 
 	* UserPermission_class.php: code clean up for
