@@ -89,7 +89,7 @@ if(!isset($_REQUEST['submit']))
 		<INPUT type="hidden" name="checkedboxes" value="">
 		<INPUT type="hidden" name="checkednumber" value=0>
 		<INPUT type="hidden" name="fileid" value="">
-		<?
+		<?php
 		}
 		?>
 		</TABLE>
@@ -238,12 +238,17 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 
 		<HEAD><TITLE>Notes to Author(s)</TITLE>
 		<base target="Parent"></HEAD>
-		<FORM name="author_note_form" action="
-		<?php
+		<FORM name="author_note_form"
+<?php
 			if(@$_REQUEST['mode']=='root')
-				echo $_SERVER['PHP_SELF'] . '?mode=root' . '" onsubmit="closeWindow(1250);" method="POST">';
+			{
+				echo ' action="' . $_SERVER['PHP_SELF'] . '?mode=root' . '" onsubmit="closeWindow(1250);" method="POST">';
+			}
 			else
-				echo $_SERVER['PHP_SELF'];?>" onsubmit="closeWindow(1250);" method="POST">
+			{
+				echo ' action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1250);" method="POST">';
+			}
+?>
 		<TABLE name="author_note_table">
 		<TR>
 		<TD>To:</TD>
@@ -448,6 +453,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 	header('Location:' . $_SERVER['PHP_SELF'] . '?last_message=File authorization completed successfully');
 	?>
 		<BODY onload="closeifdown();"></BODY>
-		<?php	
+<?php	
 }
 ?>
