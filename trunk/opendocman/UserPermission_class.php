@@ -33,6 +33,7 @@ if( !defined('UserPermission_class') )
 		$this->WRITE_RIGHT = $this->userperm_obj->WRITE_RIGHT;
 		$this->ADMIN_RIGHT = $this->userperm_obj->ADMIN_RIGHT;
 	}
+	// return an array of all the Allowed files ( right >= view_right) ID 
 	function getAllowedFileIds()
 	{
 		$viewable_array = $this->getViewableFileIds();
@@ -44,12 +45,12 @@ if( !defined('UserPermission_class') )
 		$result_array = $this->combinearrays($result_array, $viewable_array);
 		return $result_array;
 	}
-
+	// return an array of all the Allowed files ( right >= view_right) object 
 	function getAllowedFileOBJs()
 	{	
                 return $this->convertToFileDataOBJ( $this->getAllowedFileIds() );	
-        }
-        
+    }
+    // // return an array of all the Allowed files ( right >= view_right) ID     
 	function getViewableFileIds()
 	{	
 		$array = array();
@@ -67,12 +68,12 @@ if( !defined('UserPermission_class') )
 		$result_array = $this->combineArrays($result_array, $deptperm_filearray);
 		return $result_array;
 	}
-	
+	// return an array of all the Allowed files ( right >= view_right) OBJ 
 	function getViewableFileOBJs()
 	{	
-                return $this->convertToFileDataOBJ($this->getViewableFileIds());	
-        }
-	
+    	return $this->convertToFileDataOBJ($this->getViewableFileIds());	
+    }
+	// return an array of all the Allowed files ( right >= read_right) ID 
 	function getReadableFileIds()
 	{
 		$userperm_filearray = $this->userperm_obj->getCurrentReadRight();
@@ -82,12 +83,12 @@ if( !defined('UserPermission_class') )
 		$result_array = $this->combineArrays($result_array, $deptperm_filearray);
 		return $result_array;
 	}
-
+	//// return an array of all the Allowed files ( right >= read_right) OBJ 
 	function getReadableFileOBJs()
 	{	
-                return $this->convertToFileDataOBJ($this->getReadableFileIds());	
-        }
-	
+    	return $this->convertToFileDataOBJ($this->getReadableFileIds());	
+    }
+	// return an array of all the Allowed files ( right >= write_right) ID 
 	function getWriteableFileIds()
 	{
 		$userperm_filearray = $this->userperm_obj->getCurrentWriteRight();
@@ -97,12 +98,12 @@ if( !defined('UserPermission_class') )
 		$result_array = $this->combineArrays($result_array, $deptperm_filearray);
 		return $result_array;
 	}
-
+	// return an array of all the Allowed files ( right >= write_right) ID 
 	function getWriteableFileOBJs()
 	{	
-                return $this->convertToFileDataOBJ($this->getWriteableFileIds());	
-        }
-	
+        return $this->convertToFileDataOBJ($this->getWriteableFileIds());	
+    }
+	// return an array of all the Allowed files ( right >= admin_right) ID  
 	function getAdminableFileIds()
 	{
 		$userperm_filearray = $this->userperm_obj->getCurrentAdminRight();
@@ -112,15 +113,15 @@ if( !defined('UserPermission_class') )
 		$result_array = $this->combineArrays($result_array, $deptperm_filearray);
 		return $result_array;
 	}
-
+	// return an array of all the Allowed files ( right >= admin_right) OBJ 
 	function getAdminableFileOBJs()
 	{	
-                return $this->convertToFileDataOBJ($this->getAdminableFileIds());	
-        }
-
+        return $this->convertToFileDataOBJ($this->getAdminableFileIds());	
+    }
+	
 	function combineArrays($high_priority_array, $low_priority_array)
 	{
-		$found = false;
+		/*$found = false;
 		$result_array = array();
 		$result_array = $high_priority_array;
 		$result_array_index = sizeof($high_priority_array);
@@ -139,11 +140,13 @@ if( !defined('UserPermission_class') )
 				$result_array[$result_array_index++] = $low_priority_array[$l];
 			}
 			$found = false;
-		}
-		return $result_array;
+		}*/
+		//return $result_array;
+		return databaseData::combineArrays($high_priority_array, $low_priority_array);
 	}
-	
-        function convertToFileDataOBJ($fid_array)
+	// convert an array of file id into an array of file Obj correspondent to 
+	// the ids in the id array.
+    function convertToFileDataOBJ($fid_array)
 	{
 		$filedata_array = array();
 		for($i = 0; $i<sizeof($fid_array); $i++)
@@ -152,7 +155,8 @@ if( !defined('UserPermission_class') )
 		}
 		return $filedata_array;
 	}
-  
+  	// return the authority that this user have on file data_id
+  	// by combining and prioritizing user and deparment right
     function getAuthority($data_id)
 	{
 	    if($this->user_obj->isRoot())
