@@ -89,8 +89,22 @@ The first two options also result in sending email to reviewer
 // Set the default language (english, spanish).
 // Local users may override this setting
 // check include/language folder for languages available
-'language' => 'english'
+'language' => 'english',
 
+/* Author's default right to his/her right.  Below is the list from the right table.
+   If yours is any different, please use your own ODM.right table's values
+   +---------+-------------+
+   | RightId | Description |
+   +---------+-------------+
+   |       0 | none        |
+   |       1 | view        |
+   |      -1 | forbidden   |
+   |       2 | read        |
+   |       3 | write       |
+   |       4 | admin       |
+   +---------+-------------+
+ */
+'owner_default_right' => '3'
 );
 
 // List of allowed file types
