@@ -122,13 +122,16 @@ break;
 case 23:
 $message ='Folder Error. Check Last Message in status bar for details'; 
 break;
-
+// Non root user trying to access root operations
+case 24:
+$message ='This page requires root clearance level.';
+break;
 //default
 default:
 $message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
 break;
 }
-echo($message);
+echo('<font size="4" color="#fc0202">' . $message . '</font>');
 //echo 'Please try to <a href="'.$GLOBALS['CONFIG']['base_url'].'">Log-in</a> again.';
 draw_footer();
 ?>
