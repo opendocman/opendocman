@@ -141,7 +141,7 @@ function validate(FormName){
 function validatemod(FormName)
 {
 	
-	if(validatePhone(FormName) && validateEmail(FormName) && validatePassword(FormName))
+	if(/*validatePhone(FormName) && */validateEmail(FormName) && validatePassword(FormName))
 	{
 		if(isEmpty(FormName))
 		{
