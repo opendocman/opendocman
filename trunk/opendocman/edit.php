@@ -417,7 +417,7 @@ else
 	$query = "DELETE FROM user_perms WHERE fid = '$id'";
 	$result = mysql_db_query($GLOBALS['database'], $query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $write, $filedata->WRITE_RIGHT);
+	$result_array = advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $modify, $filedata->WRITE_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $read, $filedata->READ_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $view, $filedata->VIEW_RIGHT);
 	$result_array = advanceCombineArrays($result_array, 'NULL', $forbidden, $filedata->FORBIDDEN_RIGHT);
