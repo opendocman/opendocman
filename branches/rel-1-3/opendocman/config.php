@@ -13,10 +13,10 @@ include 'include/mimetypes.php';
 include 'include/crumb.php';
 
 // Database Settings - Change these to match your database
-$database = 'opendocman_khoa'; // Enter the name of the database here
-$user = 'vault1'; // Enter the username for the database
-$pass = 'vault1'; // Enter the password for the username
-$hostname = 'musa'; // Enter the hostname that is serving the database
+$database = 'opendocman'; // Enter the name of the database here
+$user = 'opendocman'; // Enter the username for the database
+$pass = 'opendocman'; // Enter the password for the username
+$hostname = 'localhost'; // Enter the hostname that is serving the database
 
 
 global $CONFIG;      $CONFIG = array(
@@ -42,7 +42,7 @@ global $CONFIG;      $CONFIG = array(
 'displayable_len' => '15',
 
 // Set this to the url of the site
-'base_url' => 'http://cahfs.ucdavis.edu/~knguyen/cvs/opendocman/',
+'base_url' => 'http://mydomain/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -51,16 +51,17 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.3rc1',
 
 // The email address of the administrator of this site
-'site_mail' => 'knguyen@sphinx.ucdavis.edu',
+'site_mail' => 'admin@mydomain',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'kdng',
+'root_username'  => 'admin',
 
 // location of file repository
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
-'dataDir' => '/usr/home/httpd/document_repository/', 
+// Make sure to put an ending / !!
+'dataDir' => '/var/www/document_repository/', 
 
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
@@ -84,7 +85,7 @@ The first two options also result in sending email to reviewer
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'Off',
+'secureurl' => 'On',
 
 // Set the default language (english, spanish).
 // Local users may override this setting
@@ -110,7 +111,7 @@ The first two options also result in sending email to reviewer
 1)On
 2)Off
 */
-'SSL_enforced' => 'On'
+'SSL_enforced' => 'Off'
 
 );
 
