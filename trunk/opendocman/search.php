@@ -189,12 +189,12 @@ else
 	$current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $s_getFTime = getmicrotime();
+    //$s_getFTime = getmicrotime();
     if($_REQUEST['where'] == 'author_locked_files')
     {	$view_able_files_id = $current_user->getExpiredFileIds();}
     else
     {	$view_able_files_id = $current_user_permission->getViewableFileIds();}
-    $e_getFTime = getmicrotime();
+    //$e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
@@ -207,7 +207,7 @@ else
     echo '<BR>';
     list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();
-    echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
-    echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
+    //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
+    //echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
 }
 ?>

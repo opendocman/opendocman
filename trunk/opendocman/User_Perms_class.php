@@ -61,7 +61,7 @@ if ( !defined('User_Perms_class') )
 				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
 				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
 				$this->TABLE_USER_PERMS.rights>=$right AND $this->TABLE_DATA.publishable = 1)";
-		$start = getmicrotime();
+		//$start = getmicrotime();
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = -1;
 		$fileid_array = array();

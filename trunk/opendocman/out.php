@@ -3,7 +3,7 @@
 // check to ensure valid session, else redirect
 session_start();
 //$_SESSION['uid']=102; $sort_by = 'author';
-$start_time = time();
+//$start_time = time();
 if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
@@ -24,7 +24,6 @@ if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
 	echo '<img src="images/exclamation.gif"><a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
 }
-
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
@@ -62,21 +61,21 @@ if(!isset($_GET['page']))
 {
 	$_GET['page'] = 0;
 }
-
 //set values
 $page_url = $_SERVER['PHP_SELF'] . '?submit=true';
 $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-$start_P = getmicrotime();
+//$start_P = getmicrotime();
 $file_id_array = $user_perms->getViewableFileIds();
-$end_P = getmicrotime();
+//$end_P = getmicrotime();
+
 $count = sizeof($file_id_array);
-$lsort_b = getmicrotime();
+//$lsort_b = getmicrotime();
 $sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']);
-$lsort_e = getmicrotime();
+//$lsort_e = getmicrotime();
 //$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
-$llist_b = getmicrotime();
+//$llist_b = getmicrotime();
 list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
-$llist_e = getmicrotime();
+//$llist_e = getmicrotime();
 // clean up
 
 echo '</table>';
@@ -86,8 +85,8 @@ $total_hit = sizeof($file_id_array);
 list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
 echo '</center>';
 draw_footer();	
-echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
-echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
-echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
-echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	
+//echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
+//echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
+//echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
+//echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	
 ?>
