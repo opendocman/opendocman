@@ -520,7 +520,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                        			{
                        				set_password.value = true;
                        			}
-                       			esle
+                       			else
                        			{
                        				set_password.value = false;
                        			}
