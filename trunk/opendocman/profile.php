@@ -15,7 +15,7 @@ draw_menu($_SESSION['uid']);
 <br><br>
 <INPUT type="hidden" name="callee" value="<?php echo $_SERVER['PHP_SELF']; ?>">
 <table name="list" align="center", border="1">
-<tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&callee=<?php echo $_SERVER['PHP_SELF']; ?>">Change Personal Info</a><center></td></tr>
+<tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF']; ?>">Change Personal Info</a><center></td></tr>
 </table>
 </center>
 <?php
