@@ -30,13 +30,9 @@ if( !defined('FileData_class') )
 		$this->result_limit = 1;  //EVERY FILE IS LISTED UNIQUELY ON THE DATABASE DATA;
 		$this->tablename = 'data';
 		databaseData::databaseData($id, $connection, $database);
-	}
-	
-	function setId($id)
-	{
-		databaseData::setId($id);  //setId will query for a corespondent name
 		$this->loadData();
 	}
+	// exists() return a boolean whether this file exists
 	function exists()
 	{
 	    $query = "SELECT * from data where data.id = $this->id";
@@ -48,12 +44,8 @@ if( !defined('FileData_class') )
 	      default: $this->error = 'Non-unique'; return $this->error; break;
 	    }
 	}
-	function setName($name)
-	{
-		databaseData::setName($name); //setName will query for a corespondent Id if and only if Names are unique
-		$this->loadData();
-	}
-
+	/* loadData() is a more complex version of base class's loadData. 
+	This function load up all the fields in data table.*/
 	function loadData()
 	{
 		$query = "SELECT $this->tablename.category,$this->tablename.owner, $this->tablename.created, $this->tablename.description, $this->tablename.comment, $this->tablename.status, $this->tablename.department FROM data where data.id = $this->id";
@@ -74,9 +66,10 @@ if( !defined('FileData_class') )
 		else
 			$this->error = 'Non unique file id';
 	}
-
+	// return this file's category id
 	function getCategory()
 	{	return $this->category;		}
+	// return this file's category name
 	function getCategoryName()
 	{	
 		$query = 'SELECT name from category where id = ' . $this->category;
@@ -90,36 +83,47 @@ if( !defined('FileData_class') )
 		}
 		return $name;
 	}
-		
+	// return a boolean on whether the user ID $uid is the owner of this file	
 	function isOwner($uid)
 	{	return ($this->getOwner()==$uid);	}
+	// return the ID of the owner of this file
 	function getOwner()
 	{	return $this->owner;		}
+	// return the username of the owner
 	function getOwnerName()
 	{	
 		$user_obj = new User($this->owner, $this->connection, $this->database);
 		return $user_obj->getName();
 	}
+	// return owner's full name in an array where index=0 corresponds to the last name
+	// and index=1 corresponds to the first name
 	function getOwnerFullName()
 	{	
 		$user_obj = new User($this->owner, $this->connection, $this->database);
 		return $user_obj->getFullName();
 	}
+	// return the owner's dept ID.  Often, this is also the department of the file.
+	// if the owner changes his/her department after he/she changes department, then
+	// the file's department will not be the same as it's owner's.
 	function getOwnerDeptId()
 	{
 		$user_obj = new User($this->getOwner(), $this->connection, $this->database);
 		return $user_obj->getDeptId();
 	}
+	// This function serve the same purpose as getOwnerDeptId() except that it returns
+	// the department name instead of department id
 	function getOwnerDeptName()
 	{
 		$user_obj = new User($this->getOwner(), $this->connection, $this->database);
 		return $user_obj->getDeptName();
 	}
+	// return file description
 	function getDescription()
 	{	return $this->description;	}
-	
+	// return file commnents
 	function getComment()
 	{	return $this->comment;		}
+	// return an aray of the user id of all the people who has $right right to this file
 	function getUserIds($right)
 	{
 	  $owner_query = "SELECT owner from data where id = $this->id";
@@ -155,17 +159,19 @@ if( !defined('FileData_class') )
 	  mysql_free_result($d_result);
 	  return $result_array;
 	}
-
+	// return the status of the file
 	function getStatus()
 	{	return $this->status;		}
-	
+	// return a User OBJ of the person who checked out this file
 	function getCheckerOBJ()
 	{
 		$user = new User($this->status, $this->connection, $this->database);
 		return $user;
 	}
+	// return the deparment ID of the file
 	function getDepartment()
 	{	return $this->department;	}
+	// return the name of the deparment of the file
 	function getDeptName()
 	{
 		$query ='SELECT department.name from department where department.id = '.$this->getDepartment().';';
@@ -178,9 +184,10 @@ if( !defined('FileData_class') )
 		list($dept) = mysql_fetch_row($result);
 		return $dept;
 	}
-
+	// return the date that the file was created on
 	function getCreatedDate()
 	{	return $this->created_date;	}
+	// return the latest modifying date on the file 
 	function getModifiedDate()
 	{
 		$query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY modified_on DESC LIMIT 1;";
@@ -194,21 +201,27 @@ if( !defined('FileData_class') )
                 }
                 return $name;
 	}
-
-
-
+	// return the realname of the file
 	function getRealName()
 	{	return databaseData::getName();	}
+	/* getViewRightUserIds(), getReadRightUserIds(), getWriteRightUserIds(), 
+	getAdminRightUserIds(), getNoneRightUserIds(), provide interfaces to 
+	getUserIds($right).*/
 	function getViewRightUserIds()
 	{	return $this->getUserIds($this->VIEW_RIGHT);  }	  
+	
 	function getReadRightUserIds()
 	{	return $this->getUserIds($this->READ_RIGHT);  }
+	
 	function getWriteRightUserIds()
 	{	return $this->getUserIds($this->WRITE_RIGHT);  }
+	
 	function getAdminRightUserIds()
 	{	return $this->getUserIds($this->ADMIN_RIGHT);  }
+	
 	function getNoneRightUserIds()
 	{	return $this->getUserIds($this->NONE_RIGHT);  }
+	// return an array of user id who are forbidden to this file
 	function getForbiddenRightUserIds()
 	{
 	
@@ -231,6 +244,7 @@ if( !defined('FileData_class') )
 
 	
 	}
+	// convert a an array of user id into an array of user object
 	function toUserOBJs($uid_array)
 	{
 	  $UserOBJ_array = array();
@@ -240,6 +254,7 @@ if( !defined('FileData_class') )
 	  }
 	  return $UserOBJ_array;
 	}
+	// return a boolean on whether or not this file is publisable
 	function isPublishable()
 	{
 		$query = "SELECT publishable from data where id = '$this->id'";
@@ -253,11 +268,13 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $publishable;
 	}
+	// this function sets the publisable field in the data table to $boolean
 	function Publishable($boolean = true)
 	{
 		$query = "UPDATE data SET publishable ='$boolean', data.reviewer = '$this->id' WHERE id = '$this->id'";
 		$result = mysql_db_query($this->database, $query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
+	// return the user id of the reviewer
 	function getReviewerID()
 	{
 		$query = "SELECT data.reviewer from data where data.id = '$this->id'";
@@ -272,6 +289,7 @@ if( !defined('FileData_class') )
 		mysql_free_result($result);
 		return $reviewer;
 	}
+	// return the username of the reviewer
 	function getReviewerName()
 	{
 		$reviewer_id = $this->getReviewerID();
@@ -281,6 +299,12 @@ if( !defined('FileData_class') )
 			return $user_obj->getName();
 		}
   	}
+  	// return a user object for the reviewer 
+  	function getReviewerOBJ()
+  	{
+  		return (new User($this->getReviewerID(), $this->connection, $this->database));
+  	}
+  	// set $comments into the reviewer comment field in the DB
 	function setReviewerComments($comments)
 	{
                 $comments=addslashes($comments);
@@ -288,6 +312,7 @@ if( !defined('FileData_class') )
 		$result = mysql_db_query($this->database, $query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
+	// return the reviewer's comment toward this file
 	function getReviewerComments()
 	{
 		$query = "SELECT data.reviewer_comments FROM data WHERE data.id='$this->id'";
