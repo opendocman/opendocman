@@ -73,7 +73,7 @@ function do_install()
         mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
         // Grant privs
-        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_REQUEST[username]@$_REQUEST[roothost] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT");
+        $result = mysql_query("GRANT ALL ON $_REQUEST[database].* to $_REQUEST[username] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT");
 
         include("install/odm.php");
         include("config.php");
@@ -99,9 +99,6 @@ function print_intro()
 <h3>Welcome to the OpenDocMan Configuration Tool</h3>
 </center>
 <table align="center">
- <tr>
-  <td>Your current version is <strong><?php echo @$GLOBALS['CONFIG']['current_version']; ?></strong>:<br><br></td>
- </tr>
  <tr>
   <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
  </tr>
