@@ -48,7 +48,7 @@ if(isset($_REQUEST['adduser']))
 			for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
 			{
                                 $dept_rev=$_REQUEST['department_review'][$i];
-				$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
+				$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
 			   	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 			}
 	   }
@@ -128,13 +128,13 @@ elseif(isset($_REQUEST['updateuser']))
 	if(isset($_REQUEST['reviewer']))
 	{
 		//Remove all entry for $id
-		$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer where user_id = $_REQUEST[id]";
+		$query = "DELETE FROM " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer where user_id = '$_REQUEST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 		$depts_rev = $_REQUEST['department_review'];
 		for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
 		{
             $dept_rev=$depts_rev[$i];
-			$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer (dept_id, user_id) values('$dept_rev', $_REQUEST[id])";
+			$query = "INSERT INTO " . $GLOBALS['CONFIG']['table_prefix'] . "dept_reviewer (dept_id, user_id) values('$dept_rev', '$_REQUEST[id]')";
 			$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 		}
 	}
