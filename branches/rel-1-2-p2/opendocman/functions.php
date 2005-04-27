@@ -312,6 +312,8 @@ if( !defined('function') )
                 }
                 echo($str);
 
+                echo ('<th>View</th>');
+
                 if($sort_by == 'file_name')
                 {
                         $str = $url_pre.'File Name'.$url_post;
@@ -476,7 +478,18 @@ if( !defined('function') )
 				echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
 			}
 				echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
+
+            if ($userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->READ_RIGHT)
+            {
+                echo "<td class=\"$css_td_class\" NOWRAP><a class=\"listtable\" target=\"_blank\" href=\"" .  $secureurl->encode("view_file.php?submit=view&id=$fid&mimetype=text/html") . "\"><img border=0 width=\"45\" height=\"45\" src=\"{$GLOBALS['CONFIG']['base_url']}/images/view.png\" title=\"View\" alt=\"View\"></a></td>";
+            }
+            else 
+            {
+                echo "<td class=\"$css_td_class\" NOWRAP>&nbsp;</td>";
+            }
 ?>
+
+
 				<TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
 <?php
                         	echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';							
