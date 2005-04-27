@@ -356,17 +356,9 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 }
                 else
                 {
-                    // Check to see if user is admin
-                    $query = "SELECT admin FROM admin WHERE id = '" . $_SESSION['uid'] . "' and admin = '1'";
-                    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                    if(mysql_num_rows($result) <= 0)
-                    {
-                        header('Location:' . $secureurl->encode('error.php?ec=4'));
-                        exit;
-                    }
-
                     // Begin Not Demo Mode
                     $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+
                     if (!isset($_REQUEST['last_message']))
                     {
                         $_REQUEST['last_message']='';
