@@ -100,7 +100,7 @@ if(!isset($_GET['submit']))
 		</center>
 
 		<?php
-		echo '<br><b>Load Time: ' . time() - $start_time;
+		//echo '<br><b>Load Time: ' . time() - $start_time;
 	draw_footer();
 
 }
@@ -110,11 +110,11 @@ else
 	{
 		$lequate = '=';
 		$l_remain ='';
-		if( $lexact_phrase=!'on' )
+		if( $lexact_phrase != 'on' )
 		{	
 			$lkeyword = '%' . $lkeyword . '%';
 		}
-		if($lcase_sensitivity!='on')
+		if($lcase_sensitivity != 'on')
 		{		
 			$lequate = ' LIKE ';
 		}
@@ -122,6 +122,9 @@ else
 		{
 			$lequate = ' REGEXP BINARY';
 		}
+
+        $lkeyword = addslashes($lkeyword);
+
 		$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
 				$larray_len = sizeof($lsearch_array);
 				switch($lwhere)
