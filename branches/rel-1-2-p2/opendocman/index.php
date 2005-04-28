@@ -159,6 +159,17 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         <tr>
         <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
         </tr>
+        <?php
+        if($GLOBALS['CONFIG']['allow_signup'] == 'On')
+        {
+?>
+        <tr>
+            <td colspan="2"><a href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/signup.php">Sign-up for an account</a>
+        </tr>
+<?php
+}
+?>
+
         </form>
         </table>
         </center>
