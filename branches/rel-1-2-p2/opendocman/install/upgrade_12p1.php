@@ -1,6 +1,6 @@
 <?php
 /*
-upgrade_12rc1.php - Database upgrades for users upgrading from 1.2rc1
+upgrade_12p1.php - Database upgrades for users upgrading from 1.2p1
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
@@ -18,8 +18,5 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-$result = mysql_query("
-ALTER IGNORE TABLE data
-    DROP filesize
-");
+echo 'No database updates from 1.2p1 to 1.2p2';
 ?>
