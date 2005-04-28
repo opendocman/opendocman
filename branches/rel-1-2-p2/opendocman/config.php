@@ -101,7 +101,11 @@ The first two options also result in sending email to reviewer
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'On'
+'secureurl' => 'On',
+
+// should we display document listings in the normal way or in a tree view
+// this must be 'ON' to change the display
+'treeview' => 'On'
 
 );
 

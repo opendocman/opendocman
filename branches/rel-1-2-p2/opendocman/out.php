@@ -31,10 +31,16 @@ if (!isset($_SESSION['uid']))
 // includes
 global $state; $state = 1;
 require_once 'config.php';
+if($GLOBALS['CONFIG']['treeview'] == "On"){
+   require_once 'treeview.php';
+}
+
 draw_header('File Listing');
 draw_menu($_SESSION['uid']);
 draw_status_bar('Document Listing', @$_REQUEST['last_message']);
-sort_browser();
+if($GLOBALS['CONFIG']['treeview'] != "On"){
+   sort_browser();
+}
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 
@@ -92,7 +98,11 @@ $sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']
 //$lsort_e = getmicrotime();
 //$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
 //$llist_b = getmicrotime();
-list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
+if($GLOBALS['CONFIG']['treeview'] != "On"){
+   list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
+}else{
+   show_tree($sorted_id_array, $_GET['starting_index'], $_GET['stoping_index']);
+}
 //$llist_e = getmicrotime();
 // clean up
 
@@ -100,7 +110,9 @@ echo '</table>';
 echo '<br>';
 $limit=$GLOBALS['CONFIG']['page_limit'];
 $total_hit = sizeof($file_id_array);
-list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
+if($GLOBALS['CONFIG']['treeview'] != "On"){
+   list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
+}
 echo '</center>';
 draw_footer();	
 //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
