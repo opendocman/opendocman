@@ -1,3 +1,185 @@
+2005-04-28 11:36  logart
+
+	* treeview.php: fixed bug when no files listed
+
+2005-04-28 11:35  logart
+
+	* out.php: fixed bug when no files listed fixed missing
+	  forward/back links
+
+2005-04-28 11:11  logart
+
+	* class.tree/class.tree.php: fixed some typos created by copy/paste
+
+2005-04-28 11:10  logart
+
+	* setup.php: changed some text
+
+2005-04-28 11:09  logart
+
+	* install/upgrade_12p1.php: fixed bug # [ 1120379 ] Error in Query:
+	  INSERT INTO max records limit in db?
+
+2005-04-28 10:43  logart
+
+	* install/odm.php, database.sql: fixed bug # [ 1120379 ] Error in
+	  Query: INSERT INTO max records limit in db?
+
+2005-04-27 22:40  logart
+
+	* department.php: fixed bug [ 1114071 ] Cancel button in dept.
+	  maint screen is broken
+
+2005-04-27 22:30  logart
+
+	* setup.php, install/odm.php, install/upgrade.php,
+	  install/upgrade_12p1.php, install/upgrade_12rc1.php: fixed bug [
+	  1080904 ] setup is missing the upgrade from 1.2x
+
+2005-04-27 22:29  logart
+
+	* config.php: updated to v1.2p2
+
+2005-04-27 21:50  logart
+
+	* config.php: added signup page option
+
+2005-04-27 21:37  logart
+
+	* index.php: added signup link from patch [ 955024 ] Login Page
+	  Signup
+
+2005-04-27 21:36  logart
+
+	* signup.php: initial import from patch [ 955024 ] Login Page
+	  Signup
+
+2005-04-27 20:43  logart
+
+	* treeview.php: fixed missing fileid
+
+2005-04-27 20:37  logart
+
+	* config.php, out.php, treeview.php, class.tree/class.tree.php,
+	  class.tree/ftiens4.js, class.tree/ua.js,
+	  class.tree/ftv2/ftv2blank.gif, class.tree/ftv2/ftv2doc.gif,
+	  class.tree/ftv2/ftv2folderclosed.gif,
+	  class.tree/ftv2/ftv2folderopen.gif,
+	  class.tree/ftv2/ftv2lastnode.gif, class.tree/ftv2/ftv2link.gif,
+	  class.tree/ftv2/ftv2mlastnode.gif, class.tree/ftv2/ftv2mnode.gif,
+	  class.tree/ftv2/ftv2node.gif, class.tree/ftv2/ftv2plastnode.gif,
+	  class.tree/ftv2/ftv2pnode.gif, class.tree/ftv2/ftv2vertline.gif:
+	  added patch [ 931891 ] Change the display of documents to a tree
+	  view
+
+2005-04-27 20:34  logart
+
+	* index.php: fixed missing brace
+
+2005-04-27 19:07  logart
+
+	* index.php: applied patch [ 1163776 ] Check password against
+	  NIS/YP
+
+2005-04-27 19:00  logart
+
+	* commitchange.php: applied patch [ 1160981 ] fix: Normal user
+	  update password 1.2p1 applied patch [ 1113224 ] sytax error in
+	  MySQL statments
+
+2005-04-27 16:53  logart
+
+	* search.php: applied patch [ 1118889 ] fixes to search.php
+
+2005-04-27 16:51  logart
+
+	* user.php: added patch [ 1160981 ] fix: Normal user update
+	  password 1.2p1
+
+2005-04-27 14:12  logart
+
+	* functions.php: added patch # 1114195 - add functionality for
+	  "one-click" view
+
+2005-04-08 12:52  logart
+
+	* details.php: applied SF patch # 1114195 -  jonathanwminer
+
+2005-04-08 12:45  logart
+
+	* commitchange.php: applied patch from SF patch #1113224 -
+	  jonathanwminer
+
+2005-02-04 09:30  logart
+
+	* install/upgrade_12p1.php, install/odm.php, install/upgrade.php,
+	  setup.php: added 1.2p1 upgrade
+
+2005-02-04 09:30  logart
+
+	* install/upgrade_12p1.php: file upgrade_12p1.php was added on
+	  branch rel-1-2-p2 on 2005-04-28 05:30:26 +0000
+
+2005-02-04 09:09  logart
+
+	* setup.php: fixed issue # [ 1116314 ] Access denied during fresh
+	  install
+
+2004-12-22 13:45  logart
+
+	* admin.php, anonymous.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, commitchange.php, config.php,
+	  crumb.php, database.sql, delete.php, department.php, details.php,
+	  edit.php, file_ops.php, history.php, in.php, index.php, out.php,
+	  profile.php, search.php, setup.php, toBePublished.php, user.php,
+	  view_file.php, install/odm.php: merge from rel-1-3
+
+2004-12-22 13:36  logart
+
+	* add.php: 1.3.0 merge
+
+2004-12-07 16:36  logart
+
+	* add.php, anonymous.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, commitchange.php, delete.php,
+	  department.php, details.php, edit.php, file_ops.php, history.php,
+	  in.php, index.php, profile.php, search.php, setup.php,
+	  toBePublished.php, user.php, install/odm.php: Updated for
+	  table_prefix.wq
+
+2004-12-07 14:07  logart
+
+	* images/companylogo.gif: odm image
+
+2004-12-07 14:05  logart
+
+	* config.php: changed version changed to example.com add underscore
+	  to table prefix
+
+2004-12-07 14:01  logart
+
+	* database.sql: added anon
+
+2004-12-07 14:00  logart
+
+	* install/upgrade_12rc1.php: intial import
+
+2004-12-07 13:59  logart
+
+	* setup.php: added 1.2x upgrade
+
+2004-12-07 13:58  logart
+
+	* install/odm.php: added anonymous column
+
+2004-10-18 12:48  logart
+
+	* config.php: new version 1.2p1
+
+2004-10-18 12:34  logart
+
+	* ChangeLog: 1.2p1 release
+
 2004-10-12 22:52  logart
 
 	* view_file.php: applied patch #[ 1014553 ] MIME decoding problem -
@@ -61,8 +243,8 @@
 
 2004-08-05 23:01  logart
 
-	* index.php, include/library/functions.php: added login usernam
-	  field validation added long php tags
+	* index.php: added login usernam field validation added long php
+	  tags
 
 2004-08-05 22:58  logart
 
@@ -187,11 +369,6 @@
 	* view_file.php: Fixed bug ID#909399: View file does not open in
 	  new window
 
-2004-03-05 07:45  logart
-
-	* include/library/Dept_Perms_class.php: fixed missing ?> at bottom
-	  of page
-
 2004-02-25 10:20  logart
 
 	* ChangeLog: changes up to 2/25/2004
@@ -291,11 +468,6 @@
 
 	* ChangeLog, docs/src/opendocman.lyx: comment changes
 
-2003-10-20 13:46  khoang82
-
-	* include/library/: Department_class.php, Dept_Perms_class.php,
-	  FileData_class.php, functions.php: New commnets added
-
 2003-10-15 16:16  logart
 
 	* setup.php, install/upgrade.php, install/upgrade_12rc1.php: added
@@ -305,98 +477,13 @@
 
 	* ChangeLog: release 1.2 Final
 
-2003-10-15 14:19  khoang82
-
-	* docs/API/html/: Department__class_8php.html,
-	  Dept__Perms__class_8php.html, FileData__class_8php.html,
-	  UserPermission__class_8php.html, User__Perms__class_8php.html,
-	  User__class_8php.html, annotated.html,
-	  classDepartment-members.html, classDepartment.html,
-	  classDept__Perms-members.html, classDept__Perms.html,
-	  classFileData-members.html, classFileData.html,
-	  classHeaders_8php.html, classUser-members.html, classUser.html,
-	  classUserPermission-members.html, classUserPermission.html,
-	  classUser__Perms-members.html, classUser__Perms.html,
-	  classcrumb-members.html, classcrumb.html,
-	  classdatabaseData-members.html, classdatabaseData.html,
-	  classphpsecureurl-members.html, classphpsecureurl.html,
-	  crumb_8php.html, databaseData__class_8php.html, files.html,
-	  functions.html, functions_8php.html, functions_func.html,
-	  functions_vars.html, globals.html, globals_func.html,
-	  globals_vars.html, hierarchy.html, index.html,
-	  secureurl_8class_8php.html, secureurl_8php.html: new docs added
-	  for Dept_Perms
-
-2003-10-15 14:18  khoang82
-
-	* docs/API/: doc_config, doc_footer: added customized footer.
-	  modify configuration file to use footer
-
 2003-10-15 14:15  logart
 
 	* config.php: v1.2 release
 
-2003-10-13 16:49  khoang82
-
-	* docs/API/html/: Department__class_8php.html,
-	  Dept__Perms__class_8php.html, FileData__class_8php.html,
-	  UserPermission__class_8php.html, User__Perms__class_8php.html,
-	  User__class_8php.html, annotated.html,
-	  classDepartment-members.html, classDepartment.html,
-	  classDept__Perms-members.html, classDept__Perms.html,
-	  classFileData-members.html, classFileData.html,
-	  classHeaders_8php.html, classUser-members.html, classUser.html,
-	  classUserPermission-members.html, classUserPermission.html,
-	  classUser__Perms-members.html, classUser__Perms.html,
-	  classcrumb-members.html, classcrumb.html,
-	  classdatabaseData-members.html, classdatabaseData.html,
-	  classphpsecureurl-members.html, classphpsecureurl.html,
-	  crumb_8php.html, databaseData__class_8php.html, files.html,
-	  functions.html, functions_8php.html, functions_func.html,
-	  functions_vars.html, globals.html, globals_func.html,
-	  globals_vars.html, hierarchy.html, index.html,
-	  secureurl_8class_8php.html, secureurl_8php.html: update
-
-2003-10-13 16:49  khoang82
-
-	* include/library/: crumb.php, databaseData_class.php: add comments
-
-2003-10-13 15:01  khoang82
-
-	* docs/API/doc_config: add doxygen configuration file
-
-2003-10-13 14:58  khoang82
-
-	* docs/API/html/: Department__class_8php.html,
-	  Dept__Perms__class_8php.html, FileData__class_8php.html,
-	  UserPermission__class_8php.html, User__Perms__class_8php.html,
-	  User__class_8php.html, annotated.html,
-	  classDepartment-members.html, classDepartment.html,
-	  classDepartment.png, classDept__Perms-members.html,
-	  classDept__Perms.html, classDept__Perms.png,
-	  classFileData-members.html, classFileData.html,
-	  classFileData.png, classHeaders_8php.html,
-	  classUser-members.html, classUser.html, classUser.png,
-	  classUserPermission-members.html, classUserPermission.html,
-	  classUserPermission.png, classUser__Perms-members.html,
-	  classUser__Perms.html, classUser__Perms.png,
-	  classcrumb-members.html, classcrumb.html,
-	  classdatabaseData-members.html, classdatabaseData.html,
-	  classdatabaseData.png, classphpsecureurl-members.html,
-	  classphpsecureurl.html, crumb_8php.html,
-	  databaseData__class_8php.html, doxygen.css, doxygen.png,
-	  files.html, functions.html, functions_8php.html,
-	  functions_func.html, functions_vars.html, globals.html,
-	  globals_func.html, globals_vars.html, hierarchy.html, index.html,
-	  secureurl_8class_8php.html, secureurl_8php.html: Add API docs
-
 2003-10-09 15:03  khoang82
 
 	* anonymous.php: fix undefine error
-
-2003-10-09 15:02  khoang82
-
-	* include/library/functions.php: fix output of anonymous page
 
 2003-10-08 14:41  khoang82
 
@@ -409,41 +496,9 @@
 	  databaseData_class.php, secureurl.class.php, secureurl.php:
 	  remove these files from root dir
 
-2003-10-08 14:34  khoang82
-
-	* include/library/: Department_class.php, Dept_Perms_class.php,
-	  FileData_class.php, UserPermission_class.php,
-	  User_Perms_class.php, User_class.php, databaseData_class.php,
-	  secureurl.class.php, secureurl.php: moving all of these files
-	  into include/library
-
-2003-10-08 14:28  khoang82
-
-	* include/: user_pref_config.inc, user_pref_config.php: rename this
-	  file
-
-2003-10-08 14:27  khoang82
-
-	* include/: mimetypes.inc, mimetypes.php: rename files
-
-2003-10-08 14:24  khoang82
-
-	* include/library/: classHeaders.php, crumb.php, functions.php:
-	  move these into include/librabry
-
-2003-10-08 14:22  khoang82
-
-	* include/: classHeaders.php, crumb.php, functions.php: mv them off
-	  the include folder
-
 2003-10-08 13:48  khoang82
 
 	* config.php: add configurable table_prefix field
-
-2003-10-06 08:31  logart
-
-	* include/functions.php: only show user menu items if logged in,
-	  not in anonymous mode.
 
 2003-10-06 08:31  logart
 
@@ -455,14 +510,8 @@
 
 2003-09-23 17:09  khoang82
 
-	* FileData_class.php, add.php, anonymous.php, config.php, edit.php,
-	  include/functions.php, include/language/english.php: complete
-	  anonymous browsing feature
-
-2003-09-23 15:08  khoang82
-
-	* include/: functions.php, language/english.php: allow user to
-	  switch between ODM and anonymous ODM
+	* FileData_class.php, add.php, anonymous.php, config.php, edit.php:
+	  complete anonymous browsing feature
 
 2003-09-23 14:19  khoang82
 
@@ -474,14 +523,9 @@
 
 	* index.php: add anonymous link for user
 
-2003-09-23 11:43  khoang82
-
-	* include/language/english.php: add anonymous link entry
-
 2003-09-22 09:07  khoang82
 
-	* anonymous.php, search.php, include/functions.php,
-	  include/language/english.php: interna anonymous page.  Give it
+	* anonymous.php, search.php: interna anonymous page.  Give it
 	  sort_browser() and pagination
 
 2003-09-22 09:05  khoang82
@@ -489,20 +533,9 @@
 	* toBePublished.php: fix last item selected being authorized
 	  instead of reject
 
-2003-09-19 14:39  logart
-
-	* include/language/: README, spanish.php, sync.sh: added sync.sh to
-	  help with keeping language files synced up Added README Added
-	  Spanish translation (Author:	Pablo Luis Zorzoli
-	  <pablozorzoli@yahoo.com.ar>)
-
 2003-09-19 09:13  logart
 
 	* check_exp.php: added internationalizations
-
-2003-09-19 09:12  logart
-
-	* include/language/english.php: added language
 
 2003-09-19 09:10  khoang82
 
@@ -513,10 +546,6 @@
 	* anonymous.php: anonymous page for public view.  driven by
 	  anonymous field in ODM.data.anonymous
 
-2003-09-18 16:51  khoang82
-
-	* include/functions.php: add anonymous features
-
 2003-09-18 15:39  khoang82
 
 	* view_file.php: remove unneccessayr comments
@@ -524,14 +553,6 @@
 2003-09-18 15:39  khoang82
 
 	* FileData_class.php: adding feature for anonymous logon
-
-2003-09-18 15:34  khoang82
-
-	* include/language/english.php: fix a word
-
-2003-09-18 15:29  khoang82
-
-	* include/user_pref_config.php: new settings for user_pref
 
 2003-09-18 15:27  khoang82
 
@@ -544,11 +565,6 @@
 2003-09-18 15:26  khoang82
 
 	* index.php: removing extra space
-
-2003-09-18 15:24  khoang82
-
-	* include/functions.php: remove space_to_underscore() with
-	  str_replace()
 
 2003-09-18 15:15  khoang82
 
@@ -640,11 +656,6 @@
 
 	* admin.php: disable check_exp in admin if authorization is not on
 
-2003-09-16 11:16  khoang82
-
-	* include/user_pref_config.php: setting for personal preference for
-	  ODM
-
 2003-09-16 10:38  khoang82
 
 	* toBePublished.php: fixed SF ticket [ 799747 ] authorisation email
@@ -675,15 +686,6 @@
 	* config.php: add a setting to allow the webmaster set the default
 	  right that every author will have when commiting a file
 
-2003-09-15 13:49  khoang82
-
-	* include/functions.php: fix broken sort by author
-
-2003-09-12 13:38  khoang82
-
-	* include/functions.php: fix list_file() to work with archived
-	  files on filesize
-
 2003-09-12 13:38  khoang82
 
 	* config.php: fix archivefolder var
@@ -696,21 +698,9 @@
 
 	* search.php: fix 717817 Search by Department Broken
 
-2003-09-12 11:58  khoang82
-
-	* include/functions.php: fix pagination nav.
-
 2003-08-26 10:17  logart
 
 	* FormCheck.js: added & to email regexp as per RFC
-
-2003-07-23 11:56  logart
-
-	* include/functions.php: renamed lang var
-
-2003-07-23 11:56  logart
-
-	* include/language/english.php: added admin and category words
 
 2003-07-23 11:51  logart
 
@@ -728,20 +718,10 @@
 
 	* index.php: internat
 
-2003-07-23 09:15  logart
-
-	* include/language/english.php: added stuff for functions.php
-
 2003-07-23 09:14  logart
 
 	* classHeaders.php, crumb.php, functions.php, mimetypes.php:
 	  relocated to include/
-
-2003-07-23 09:14  logart
-
-	* include/: classHeaders.php, crumb.php, functions.php,
-	  mimetypes.php: moved these files to the include folder
-	  internationalization complete for functions.php
 
 2003-07-22 15:44  logart
 
@@ -749,9 +729,7 @@
 
 2003-07-22 15:23  logart
 
-	* config.php, index.php, include/language/english.php,
-	  include/language/spanish.php: New Feature: Internationalization
-	  Support
+	* config.php, index.php: New Feature: Internationalization Support
 
 2003-07-22 15:17  logart
 
