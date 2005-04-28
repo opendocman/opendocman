@@ -198,7 +198,7 @@ function do_update_12rc1()
 
 function do_update_12p1()
 {
-        echo 'Updating version 1.2p1<br>';        
+        echo 'Updating from version 1.2p1 to 1.2p2<br>';        
         include("config.php");
         include("install/upgrade_12p1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
