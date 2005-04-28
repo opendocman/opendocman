@@ -108,7 +108,7 @@ basefrm = <?php echo "\"$this->tree_basefrm\""; ?>;
 			return ($jsvn);
 		}		
 
-		function add_document ($t_parent, $t_text, $t_url, $t_frame, $t_img = "") 
+		function add_document ($t_parent='', $t_text='', $t_url='', $t_frame='', $t_img = "") 
 		{ 
 			if (!strlen($t_img)) $t_img = $this->tree_ftv2doc;
 			echo "insDoc($t_parent, gLnk ($t_parent, \"$t_text\", ";
