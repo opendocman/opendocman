@@ -257,16 +257,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
     <?php
     draw_footer();
 }
-elseif (isset($_POST['submit']) and $_POST['submit'] == 'Cancel')
+elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {
-    
-    $_POST['last_message'] ="Action Cancelled";
-    header('Location:' . $secureurl->encode('admin.php'));
+    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode('Action Cancelled')));
 }
 else
 {
-    $_POST['last_message'] ="Unrecognizable action";
-    header('Location:' . $secureurl->encode('admin.php'));
+    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode('Unrecognizalbe action')));
 }
 
 ?>
