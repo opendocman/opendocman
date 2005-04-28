@@ -8,7 +8,7 @@
 #
 
 CREATE TABLE admin (
-  id smallint(5) unsigned default NULL,
+  id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM;
 
@@ -23,7 +23,7 @@ INSERT INTO admin VALUES (1,1);
 #
 
 CREATE TABLE category (
-  id smallint(5) unsigned NOT NULL auto_increment,
+  id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
@@ -42,18 +42,18 @@ INSERT INTO category VALUES (4,'Presentation');
 #
 
 CREATE TABLE data (
-  id smallint(5) unsigned NOT NULL auto_increment,
+  id int(11) unsigned NOT NULL auto_increment,
   category tinyint(4) unsigned NOT NULL default '0',
-  owner smallint(6) unsigned default NULL,
+  owner int(11) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) NOT NULL default '',
   status smallint(6) default NULL,
-  department smallint(6) unsigned default NULL,
+  department int(11) unsigned default NULL,
   default_rights tinyint(4) default NULL,
   publishable tinyint(4) default NULL,
-  reviewer smallint(6) unsigned default NULL,
+  reviewer int(11) unsigned default NULL,
   reviewer_comments varchar(255) default NULL,
   PRIMARY KEY  (id),
   KEY data_idx (id,owner),
@@ -72,7 +72,7 @@ CREATE TABLE data (
 #
 
 CREATE TABLE department (
-  id smallint(5) unsigned NOT NULL auto_increment,
+  id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
@@ -88,8 +88,8 @@ INSERT INTO department VALUES (1,'Information Systems');
 #
 
 CREATE TABLE dept_perms (
-  fid smallint(5) unsigned default NULL,
-  dept_id smallint(5) unsigned default NULL,
+  fid int(11) unsigned default NULL,
+  dept_id int(11) unsigned default NULL,
   rights tinyint(4) NOT NULL default '0',
   KEY rights (rights),
   KEY dept_id (dept_id),
@@ -106,8 +106,8 @@ CREATE TABLE dept_perms (
 #
 
 CREATE TABLE dept_reviewer (
-  dept_id smallint(5) unsigned default NULL,
-  user_id smallint(5) unsigned default NULL
+  dept_id int(11) unsigned default NULL,
+  user_id int(11) unsigned default NULL
 ) TYPE=MyISAM;
 
 #
@@ -121,7 +121,7 @@ INSERT INTO dept_reviewer VALUES (1,1);
 #
 
 CREATE TABLE log (
-  id int(10) unsigned NOT NULL default '0',
+  id int(11) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
   note text,
@@ -160,10 +160,10 @@ INSERT INTO rights VALUES (4,'admin');
 #
 
 CREATE TABLE user (
-  id smallint(5) unsigned NOT NULL auto_increment,
+  id int(11) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
   password varchar(50) NOT NULL default '',
-  department smallint(5) unsigned default NULL,
+  department int(11) unsigned default NULL,
   phone varchar(20) default NULL,
   Email varchar(50) default NULL,
   last_name varchar(255) default NULL,
@@ -182,8 +182,8 @@ INSERT INTO user VALUES (1,'admin','',1,'5555551212','admin@example.com','User',
 #
 
 CREATE TABLE user_perms (
-  fid smallint(5) unsigned default NULL,
-  uid smallint(5) unsigned NOT NULL default '0',
+  fid int(11) unsigned default NULL,
+  uid int(11) unsigned NOT NULL default '0',
   rights tinyint(4) NOT NULL default '0',
   KEY user_perms_idx (fid,uid,rights),
   KEY fid (fid),
