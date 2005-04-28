@@ -50,9 +50,11 @@ if(isset($_POST['login']))
         // if MySQL login fails, check NIS/YP data
         if (mysql_num_rows($result) == 0)
         {
-            if (strcmp($cryptpw, $pwent[1]) == 0) {
-            $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
-            $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+            if (strcmp($cryptpw,$pwent[1]) == 0) 
+            {
+                $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
+                $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+            }
         }
         // if row exists - login/pass is correct
         if (mysql_num_rows($result) == 1)
@@ -177,10 +179,8 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 <?php
         draw_footer();
 }
-
 else
 {
         echo 'Check your config';
 }
-
 ?>
