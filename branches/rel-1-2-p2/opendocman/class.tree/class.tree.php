@@ -39,8 +39,7 @@
 			$this->startallopen = $saaval;
 		}
 
-		function open_tree ($t_text, $t_url, $t_frame="", 
-				    $t_gbase="ftv2")
+		function open_tree ($t_text, $t_url, $t_frame="",$t_gbase="ftv2")
 		{
 			$this->tree_gbase = $t_gbase;
 			$this->tree_ftv2folderclosed = "$this->tree_gbase/ftv2folderclosed.gif";
@@ -84,19 +83,17 @@ ftv2pnode = <?php echo "\"$tree_ftv2pnode\""; ?>;
 ftv2vertline = <?php echo "\"$tree_ftv2vertline\""; ?>;
 basefrm = <?php echo "\"$this->tree_basefrm\""; ?>;
 </script>
-<script src=<?php	echo "\"$this->tree_path/ua.js\""; ?> type="text/javascript">
-</script>
+<script src=<?php	echo "\"$this->tree_path/ua.js\""; ?> type="text/javascript"></script>
 <script src=<?php	echo "\"$this->tree_path/ftiens4.js\""; ?> type="text/javascript"></script>
 <script type="text/javascript">
-<?php			echo "\n";
-
+<?php			
+            echo "\n";
 			$jsvn = "foldersTree";
 			echo "$jsvn = gFld(\"$t_text\", \"\", \"$this->tree_ftv2folderopen\", \"$this->tree_ftv2folderclosed\");\n";
 			return ($jsvn);
 		}
 
-		function add_folder ($t_parent, $t_text, $t_url, $t_frame,
-				     $t_imgopen = "", $t_imgclosed = "") 
+		function add_folder ($t_parent, $t_text, $t_url, $t_frame,$t_imgopen = "", $t_imgclosed = "") 
 		{  
 			$jsvn = "aux".$this->tree_count;
 			$this->tree_count++;
