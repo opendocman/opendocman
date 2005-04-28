@@ -20,6 +20,7 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
     while($index<sizeof($fileid_array) and $index>=$starting_index and index<=$stoping_index)
     {
         $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
+        $fileid = $file_obj->id;
         $realname = $file_obj->getRealname();
         $description = $file_obj->getDescription();
         $modified_date = fix_date($file_obj->getModifiedDate());
