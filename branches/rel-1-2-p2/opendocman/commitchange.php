@@ -35,7 +35,7 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['databas
 if (!$user_obj->isAdmin())
 {
     // must be admin unless you are editing yourself.
-    if (isset($_REQUEST['submit']) && $_REQUEST['submit'] != 'modify user')
+    if (isset($_REQUEST['submit']) && $_REQUEST['submit'] != 'Update User')
     {
         header('Location:' . $secureurl->encode('error.php?ec=4'));
         exit;
@@ -84,7 +84,7 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
            for($i = 0; $i<sizeof($_POST['department_review']); $i++)
            {
                $dept_rev=$_POST['department_review'][$i];
-               $query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
+               $query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
            }
        }
@@ -122,7 +122,7 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
 }
 elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 {
-//echo "id=$_POST[id], $_SESSION[uid], " . $user_obj->isAdmin();
+//echo "id=$_POST[id], $_SESSION[uid], " . $user_obj->isAdmin();exit;
     // Check to make sue they are either the user being modified or an admin
     if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin()){
            header('Location:' . $secureurl->encode('error.php?ec=4'));
@@ -203,7 +203,7 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
             for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
             {
                 $dept_rev=$depts_rev[$i];
-                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', $id)";
+                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '$id')";
                 $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
             }
         }
@@ -258,7 +258,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
         } 
 
 		//Check to see if this department is already in DB
-		$query = "SELECT department.name from department where department.name=\"" . addslashes($_POST['department']) . '"';
+		$query = "SELECT department.name from department where department.name='" . addslashes($_POST['department']) . "'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         if(mysql_num_rows($result) != 0)
         {
