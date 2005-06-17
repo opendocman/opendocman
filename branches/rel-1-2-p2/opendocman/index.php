@@ -40,7 +40,10 @@ if(isset($_POST['login']))
 
     // Check for NIS/YP data
     $pwent = @split(":",`ypmatch $frmuser passwd`);
-    $cryptpw = crypt($frmpass,substr($pwent[1],0,2));
+    if(isset($pwent))
+    {
+        $cryptpw = @crypt($frmpass,substr($pwent[1],0,2));
+    }
  
     // check login and password
         // connect and execute query
