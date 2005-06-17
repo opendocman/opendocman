@@ -1,3 +1,33 @@
+2005-06-17 09:01  logart
+
+	* index.php: added an isset to nis fix
+
+2005-06-17 08:40  logart
+
+	* index.php: fixed problem when no NIS installed
+
+2005-06-17 08:37  logart
+
+	* search.php: fixed issue #[ 1012449 ] 'browse by' error
+
+2005-04-28 12:38  logart
+
+	* install/upgrade_12p1.php: removed ; and COMMENTS from sql
+	  statements because sourceforge site was failing during upgrade
+
+2005-04-28 12:37  logart
+
+	* class.tree/class.tree.php: added default '' args to add_file
+	  function
+
+2005-04-28 11:47  logart
+
+	* treeview.php: added gpl notice
+
+2005-04-28 11:37  logart
+
+	* ChangeLog: [no log message]
+
 2005-04-28 11:36  logart
 
 	* treeview.php: fixed bug when no files listed
