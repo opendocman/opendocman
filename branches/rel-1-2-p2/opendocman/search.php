@@ -183,7 +183,8 @@ else
 				default : break;
 				}
 				$lquery .= ') ORDER BY data.id ASC';
-				$lresult = mysql_query($lquery) or die("Error in query: $lquery" . mysql_error() );
+				$lresult = mysql_query($lquery);
+
 				$lindex = 0;//echo '----' . $lquery;
 				$lid_array = array();
 				$llen = mysql_num_rows($lresult);
