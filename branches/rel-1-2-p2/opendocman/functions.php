@@ -481,7 +481,7 @@ if( !defined('function') )
 
             if ($userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->READ_RIGHT)
             {
-                echo "<td class=\"$css_td_class\" NOWRAP><a class=\"listtable\" target=\"_blank\" href=\"" .  $secureurl->encode("view_file.php?submit=view&id=$fid&mimetype=text/html") . "\"><img border=0 width=\"45\" height=\"45\" src=\"{$GLOBALS['CONFIG']['base_url']}/images/view.png\" title=\"View\" alt=\"View\"></a></td>";
+                echo "<td class=\"$css_td_class\" NOWRAP><a class=\"listtable\" target=\"\" href=\"" .  $secureurl->encode("view_file.php?id=$fid&state=3") . "\"><img border=0 width=\"45\" height=\"45\" src=\"{$GLOBALS['CONFIG']['base_url']}/images/view.png\" title=\"View\" alt=\"View\"></a></td>";
             }
             else 
             {
