@@ -90,7 +90,6 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
        }
 	   
 	   // mail user telling him/her that his/her account has been created.
-       	$user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
        	$new_user_obj = new User($userid, $GLOBALS['connection'], $GLOBALS['database']);
        	$date = date('D F d Y');
 		$time = date('h:i A');
@@ -138,8 +137,6 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 	{
 		$_POST['caller'] = 'admin.php';
     }
-
-    $user_obj = new User($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 
     // UPDATE admin info
     $query = "UPDATE admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
@@ -199,11 +196,10 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
             or die("Error in query: $query". mysql_error());
         if(isset($_REQUEST['reviewer']))
         {
-            $depts_rev = addslashes($_REQUEST['department_review']);
-            for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
+            $depts_rev = $_REQUEST['department_review'];
+            foreach($depts_rev as $dept)
             {
-                $dept_rev=$depts_rev[$i];
-                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '$id')";
+                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('" . addslashes($dept) . "', '$id')";
                 $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
             }
         }
