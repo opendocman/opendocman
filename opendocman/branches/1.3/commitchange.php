@@ -22,7 +22,7 @@ session_start();
 // check for valid session
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
 	exit;
 }
 include('config.php');
@@ -194,21 +194,19 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 //
     if ($user_obj->isAdmin())
     {
-        $query = "DELETE FROM dept_reviewer WHERE user_id = '$_POST[$id]'";
+        $query = "DELETE FROM dept_reviewer WHERE user_id = '{$_POST['id']}'";
         $result = mysql_query($query, $GLOBALS['connection'])
             or die("Error in query: $query". mysql_error());
         if(isset($_REQUEST['reviewer']))
         {
-            $depts_rev = addslashes($_REQUEST['department_review']);
             for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
             {
-                $dept_rev=$depts_rev[$i];
-                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '$id')";
+                $dept_rev = addslashes($_REQUEST['department_review'][$i]);
+                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '{$_POST['id']}')";
                 $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
             }
         }
     }
-
 	// back to main page
 	if(!isset($_POST['caller']))
 	{	
@@ -229,7 +227,7 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
     
         // form has been submitted -> process data
         // DELETE admin info
-        $query = "DELETE FROM admin WHERE id = '$_POST[id]'";
+        $query = "DELETE FROM admin WHERE id = '{$_POST['id']}'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // DELETE user info
