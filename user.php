@@ -26,7 +26,7 @@ session_start();
 
 if (!isset($_SESSION['uid']))
 {
-        header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
+        header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
 		exit;
 }
 
@@ -134,12 +134,12 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 </tr>
                 <TR>
         <TD><B>Reviewer?</B></TD>
-                <TD><INPUT type='checkbox' name='reviewer' value='1'></TD>
+                <TD><INPUT type="checkbox" name="reviewer" value="1"></TD>
                 </TR>
                 <TR>
                 <TD></TD>
                 <TD>
-                <SELECT name='department_review[]' multiple>
+                <SELECT name="department_review[]" multiple />
                 <?php 
         $query = "SELECT department.id, department.name FROM department ORDER BY name";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
@@ -478,7 +478,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <TR>
                 <TD><B>Reviewer</B></TD>
 <?php
-                echo '<TD><INPUT type="checkbox" '.$checked.' name="reviewer" '.$mode.'></TD></TR>'."\n";
+                echo '<TD><INPUT type="checkbox" value="1" '.$checked.' name="reviewer" '.$mode.'></TD></TR>'."\n";
 ?>
                 </td>
                 </tr>
@@ -487,7 +487,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <SELECT name='department_review[]' multiple <?php echo $mode; ?>>
                 <OPTION value='-1'>Choose the department(s)</OPTION>
 <?php
-                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '$_REQUEST[item]'";
+                $query = "SELECT dept_id, user_id FROM dept_reviewer where user_id = '{$_REQUEST['item']}'";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 $query = "SELECT department.id, department.name FROM department ORDER BY name";
                 $result2 = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -508,14 +508,17 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 for($d= 0; $d<sizeof($all_department); $d++)
                 {
                     $found = false;
-                    for($r = 0; $r<sizeof($department_reviewer); $r++)
+                    if(isset($department_reviewer))
                     {
+                        for($r = 0; $r<sizeof($department_reviewer); $r++)
+                        {
                             if($all_department[$d][0] == $department_reviewer[$r][0])
                             {
                                     echo("<option value=\"" . $all_department[$d][0] ."\" selected> " . $all_department[$d][1] ."</option>\n");
                                     $found = true;
                                     $r = sizeof($department_reviewer);
                             }
+                        }
                     }
                     if( !$found )
                    	{
