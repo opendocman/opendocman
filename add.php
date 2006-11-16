@@ -372,14 +372,14 @@ else //submited form
         
 	// check file type.  refer to config.php to see which file types are allowed
 	$allowedFile = 0;
-	foreach($allowedFileTypes as $this)
+	foreach($allowedFileTypes as $thistype)
 	{
-		if ($_FILES['file']['type'] == $this) 
-		{ 
-		$allowedFile = 1;
-		break; 
-		} 
-	}	
+        if ($_FILES['file']['type'] == $thistype) 
+        { 
+            $allowedFile = 1;
+            break; 
+        } 
+    }	
 	// for non_allowed file types
 	if (!isset($allowedFile)) 
 	{ 
