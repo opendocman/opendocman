@@ -26,9 +26,9 @@ if( !defined('config') )
 // config.php - useful variables/functions
 
 // Database Settings - Change these to match your database
-$GLOBALS['database'] = 'odm_dev'; // Enter the name of the database here
-$GLOBALS['user'] = 'odm_dev'; // Enter the username for the database
-$GLOBALS['pass'] = 'odm_dev'; // Enter the password for the username
+$GLOBALS['database'] = 'opendocman'; // Enter the name of the database here
+$GLOBALS['user'] = 'opendocman'; // Enter the username for the database
+$GLOBALS['pass'] = 'opendocman'; // Enter the password for the username
 $GLOBALS['hostname'] = 'localhost'; // Enter the hostname that is serving the database
 
 global $CONFIG;      $CONFIG = array(
@@ -55,7 +55,7 @@ global $CONFIG;      $CONFIG = array(
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'http://localhost/~logart/svn/odm_dev',
+'base_url' => 'http://www.example.com/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -64,7 +64,7 @@ global $CONFIG;      $CONFIG = array(
 'current_version' => ' OpenDocMan v1.2p3',
 
 // The email address of the administrator of this site
-'site_mail' => 'logart@localhost',
+'site_mail' => 'root@localhost',
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
@@ -74,7 +74,7 @@ global $CONFIG;      $CONFIG = array(
 // this should ideally be outside the Web server root
 // make sure the server has permissions to read/write files!
 // Don't forget the trailing "/" 
-'dataDir' => '/home/logart/document_repository/odm_dev/',
+'dataDir' => '/var/www/document_repository/',
 
 // Set the maximum file upload size
 'max_filesize' => '5000000',
