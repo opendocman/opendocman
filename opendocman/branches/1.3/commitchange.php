@@ -199,11 +199,14 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
             or die("Error in query: $query". mysql_error());
         if(isset($_REQUEST['reviewer']))
         {
-            for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
+            if(isset($_REQUEST['department_review']))
             {
-                $dept_rev = addslashes($_REQUEST['department_review'][$i]);
-                $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '{$_POST['id']}')";
-                $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+                for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
+                {
+                    $dept_rev = addslashes($_REQUEST['department_review'][$i]);
+                    $query = "INSERT INTO dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '{$_POST['id']}')";
+                    $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+                }
             }
         }
     }
