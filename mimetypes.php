@@ -179,5 +179,16 @@ $mimetypes['avi'] = 'video/x-msvideo';
 $mimetypes['movie'] = 'video/x-sgi-movie';
 $mimetypes['ice'] = 'x-conference/x-cooltalk';
 $mimetypes['qdf'] = 'application/octet-stream';
+$mimetypes['odt'] = 'application/vnd.oasis.opendocument.text';
+$mimetypes['odp'] = 'application/vnd.oasis.opendocument.presentation';
+$mimetypes['ods'] = 'application/vnd.oasis.opendocument.spreadsheet';
+$mimetypes['sxw'] = 'application/vnd.sun.xml.writer';
+$mimetypes['sxc'] = 'application/vnd.sun.xml.calc';
+$mimetypes['sxd'] = 'application/vnd.sun.xml.draw';
+$mimetypes['sxi'] = 'application/vnd.sun.xml.impress';
+$mimetypes['sxm'] = 'application/vnd.sun.xml.math';
+$mimetypes['ott'] = 'application/vnd.oasis.opendocument.text-template';
+$mimetypes['odg'] = 'application/vnd.oasis.opendocument.graphics';
+$mimetypes['odc'] = 'application/vnd.oasis.opendocument.chart';
 $mimetypes['default'] = '';
 ?>
