@@ -48,7 +48,7 @@ if(isset($_POST['login']))
     $pwent = @split(":",`ypmatch $frmuser passwd`);
     if(isset($pwent))
     {
-        $cryptpw = @crypt($frmpass,substr($pwent[1],0,2));
+        $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
     }
  
     // check login and password
