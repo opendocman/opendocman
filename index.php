@@ -23,6 +23,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 require('config.php');
 
+if (!isset($_REQUEST['last_message']))
+{
+    $_REQUEST['last_message']='';
+}
+
+echo $_REQUEST['last_message'];
 if(isset($_POST['login']))
 {
     if(!valid_username($_POST['frmuser']))
@@ -157,7 +163,14 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         </tr>
         <tr>
         <td>Password</td>
-        <td><input type="password" name="frmpass" size="15"></td>
+        <td><input type="password" name="frmpass" size="15">
+        <?php
+        if($GLOBALS['CONFIG']['allow_password_reset'] == 'On')
+        {
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php">Forgot your password?</a>';
+        }
+?>
+        </td>
         </tr>
         <tr>
         <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
