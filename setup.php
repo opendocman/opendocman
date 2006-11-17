@@ -216,7 +216,7 @@ function do_update_12p1()
 
 function do_update_12p3()
 {
-        echo 'Updating from version 1.2p3 to 1.3<br>';        
+        echo 'Updating from version 1.2p3 to 1.2.4<br>';        
         include("config.php");
         include("install/upgrade_12p3.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
@@ -237,7 +237,7 @@ function print_intro()
   <td>Please choose one from the following based on your current version (look in your config.php for your version):<br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=install">New Installation of OpenDocMan v1.3 (Will wipe any current data!)</a><br><br></td>
+  <td><a href="setup.php?op=install">New Installation of OpenDocMan v1.2.4 (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
   <td><a href="setup.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
