@@ -47,6 +47,7 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          do_update_12rc1();
          do_update_12p1();
+         do_update_12p3();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
@@ -55,6 +56,7 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          do_update_12rc1();
          do_update_12p1();
+         do_update_12p3();
          break;
 
    // User has version 11rc2 and is upgrading 
@@ -63,6 +65,7 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          do_update_12rc1();
          do_update_12p1();
+         do_update_12p3();
          break;
 
    // User has version 11 and is upgrading 
@@ -70,19 +73,26 @@ switch(@$_REQUEST['op']) {
          do_update_11();
          do_update_12rc1();
          do_update_12p1();
+         do_update_12p3();
          break;
 
    // User has version 12rc1 and is upgrading 
    case "update_12rc1":
          do_update_12rc1();
          do_update_12p1();
+         do_update_12p3();
          break;
 
    // User has version 12p1 and is upgrading 
    case "update_12p1":
          do_update_12p1();
+         do_update_12p3();
          break;
 
+   // User has version 12p3 and is upgrading 
+   case "update_12p3":
+         do_update_12p3();
+         break;
 
     default:
          print_intro();
@@ -204,6 +214,14 @@ function do_update_12p1()
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
+function do_update_12p3()
+{
+        echo 'Updating from version 1.2p3 to 1.3<br>';        
+        include("config.php");
+        include("install/upgrade_12p3.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
+
 
 
 function print_intro()
@@ -219,7 +237,7 @@ function print_intro()
   <td>Please choose one from the following based on your current version (look in your config.php for your version):<br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=install">New Installation of OpenDocMan v1.2p2 (Will wipe any current data!)</a><br><br></td>
+  <td><a href="setup.php?op=install">New Installation of OpenDocMan v1.3 (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
   <td><a href="setup.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
@@ -238,6 +256,9 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="setup.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="setup.php?op=update_12p3">Upgrade from version 1.2p3</a><br><br></td>
  </tr>
 </table>
 <hr>

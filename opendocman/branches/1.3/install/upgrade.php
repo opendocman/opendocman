@@ -56,12 +56,20 @@ function do_upgrade12rc1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
     include("install/upgrade_12rc1.php");
 }
 
-/*** This function calls the upgrade from odm 1.2rc1 ***/
+/*** This function calls the upgrade from odm 1.2p1 ***/
 function do_upgrade12p1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_12p1.php");
+}
+
+/*** This function calls the upgrade from odm 1.2p3 ***/
+function do_upgrade12p3 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+    global $dbconn;
+    mysql_connect($dbhost, $dbuname, $dbpass);
+    mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
+    include("install/upgrade_12p3.php");
 }
 
 ?>

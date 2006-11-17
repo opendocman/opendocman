@@ -213,6 +213,7 @@ CREATE TABLE user (
   Email varchar(50) default NULL,
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
+  pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
 ") or die("<br>Could not create user table");
