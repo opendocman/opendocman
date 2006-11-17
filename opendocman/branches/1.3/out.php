@@ -24,7 +24,7 @@ session_start();
 //$start_time = time();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
+	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
 	exit;
 }
 
@@ -98,17 +98,29 @@ $sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']
 //$lsort_e = getmicrotime();
 //$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
 //$llist_b = getmicrotime();
-echo '<table>';
-    echo '<tr><td>';
-   list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
-$limit=$GLOBALS['CONFIG']['page_limit'];
-$total_hit = sizeof($file_id_array);
-   list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
-echo '</center>';
 
-//$llist_e = getmicrotime();
-// clean up
-echo '</td></tr>';
+// Patch by jonathanwminer
+if($GLOBALS['CONFIG']['treeview'] == "On")
+{
+   $_GET['starting_index'] = 0;
+   $_GET['stoping_index'] = sizeof($sorted_id_array);
+}
+
+if($GLOBALS['CONFIG']['treeview'] != 'On')
+{
+    echo '<table>';
+    echo '<tr><td>';
+    list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
+    $limit=$GLOBALS['CONFIG']['page_limit'];
+    $total_hit = sizeof($file_id_array);
+    list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
+    echo '</center>';
+
+    //$llist_e = getmicrotime();
+    // clean up
+    echo '</td></tr>';
+}
+
 if($GLOBALS['CONFIG']['treeview'] == 'On')
 {
     echo '<tr><td>';
