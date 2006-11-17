@@ -59,7 +59,7 @@ if(isset($_POST['login']))
         // if MySQL login fails, check NIS/YP data
         if (mysql_num_rows($result) == 0)
         {
-            if (isset($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
+            if (isset($pwent) && is_array($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
             {
                 $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
                 $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
