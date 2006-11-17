@@ -21,7 +21,7 @@
 
 include_once('config.php');
 
-if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'Yes')
+if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'On')
 {
     echo 'Sorry, your are not allowed to do that';
     exit;
