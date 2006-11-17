@@ -22,15 +22,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require_once ('class.tree/class.tree.php');
 
 function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
-    global $tree;
-    global $root;
-    if(!$tree){
+    if(!isset($GLOBALS['tree'])){
         //echo "defining in browser\n";
-        $tree = new Tree();
-        $root  = $tree->open_tree("Directory", $_SERVER['PHP_SELF']);
+        $GLOBALS['tree'] = new Tree();
+        $GLOBALS['root']  = $GLOBALS['tree']->open_tree("Directory", $_SERVER['PHP_SELF']);
     }
 
-    $TreeCategory = $_GET['TreeCategory'];
+    //$TreeCategory = $_GET['TreeCategory'];
     $index = 0;
 
     if(isset($fileid_array['0']))
@@ -43,16 +41,16 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
             $description = $file_obj->getDescription();
             $modified_date = fix_date($file_obj->getModifiedDate());
             $category = $file_obj->getCategoryName();
-            if(!$folders[$category])
+            if(!isset($folders[$category]))
             {
-                $folders[$category] = $tree->add_folder($root, "$category",$_SERVER['PHP_SELF'], "ftv2/ftv2folderclosed.gif", "ftv2/ftv2folderopen.gif");
+                $folders[$category] = $GLOBALS['tree']->add_folder($GLOBALS['root'], "$category",$_SERVER['PHP_SELF'], "ftv2/ftv2folderclosed.gif", "ftv2/ftv2folderopen.gif");
             }
 
-            $tree->add_document($folders[$category], "$realname", "details.php?id=$fileid&state=2");
+            $GLOBALS['tree']->add_document($folders[$category], "$realname", "details.php?id=$fileid&state=2");
             $index++;
         }
 
-        $tree->close_tree ( );
+        $GLOBALS['tree']->close_tree ( );
     }
 }
 ?>
