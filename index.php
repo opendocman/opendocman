@@ -44,13 +44,7 @@ if(isset($_POST['login']))
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
 
-    // Check for NIS/YP data
-    $pwent = @split(":",`ypmatch $frmuser passwd`);
-    if(isset($pwent))
-    {
-        $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
-    }
- 
+
     // check login and password
         // connect and execute query
         $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
@@ -59,6 +53,12 @@ if(isset($_POST['login']))
         // if MySQL login fails, check NIS/YP data
         if (mysql_num_rows($result) == 0)
         {
+            // Check for NIS/YP data
+            $pwent = @split(":",`ypmatch $frmuser passwd`);
+            if(isset($pwent))
+            {
+                $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
+            }
             if (isset($pwent) && is_array($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
             {
                 $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
