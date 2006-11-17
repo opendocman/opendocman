@@ -25,7 +25,7 @@ ob_end_clean();		//Make sure there are no garbage in buffer.
 ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
 if (!session_is_registered('uid'))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING'] ) );
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
 	exit;
 }
 include_once('config.php');
