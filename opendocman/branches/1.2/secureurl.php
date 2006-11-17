@@ -29,6 +29,6 @@ elseif(isset($_GET['aku']))
  $secureurl = new phpsecureurl;	
  $secureurl->decode();
  //echo 'dkakdkdk'.$_REQUEST['id'];
- //echo("Location:$_SERVER[SCRIPT_NAME]?" . $HTTP_SERVER_VARS['QUERY_STRING']); exit;
+ //echo("Location:$_SERVER[SCRIPT_NAME]?" . $_SERVER['QUERY_STRING']); exit;
 }
 ?>
