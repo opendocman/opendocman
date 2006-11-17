@@ -85,8 +85,7 @@ if( !defined('function') )
 		?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
 			<TD bgcolor="#0000A0" align="left" valign="middle">
 			<?php	$crumb = new crumb();
-		global $HTTP_SERVER_VARS;
-		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']);	
+		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);	
 		$crumb->printTrail($_REQUEST['state']);
 		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
 		echo '<b><font size="-2" face="Arial" color="White">';
@@ -157,12 +156,12 @@ if( !defined('function') )
             }
             echo '<table width="100%" cellspacing="0" cellpadding="0">'."\n";
             echo '<tr>'."\n";
-            echo '<td align="left"><a href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/companylogo.gif" alt="'.$GLOBALS['CONFIG']['title'].'" border="0"></a></td>'."\n";
+            echo '<td align="left"><a href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/companylogo.gif" title="'.$GLOBALS['CONFIG']['title'].'" alt="'.$GLOBALS['CONFIG']['title'].'" border="0"></a></td>'."\n";
             echo '<td align="right" nowrap>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/in.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/check-in.png" alt="Check In" border=0></a>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/search.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/search.png" alt="Search" border=0></a>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/add.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/add.png" alt="Add" border="0"></a>'."\n";
-            if($uid != NULL && $current_user_obj->isAdmin())
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/in.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/check-in.png" title="Check In" alt="Check In" border=0></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/search.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/search.png" title="Search" alt="Search" border=0></a>'."\n";
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/add.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/add.png" title="Add" alt="Add" border="0"></a>'."\n";
+           if($uid != NULL && $current_user_obj->isAdmin())
             {
                 echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/admin.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/setting.png" alt="Administration" border="0"></a>'."\n";
             }
@@ -479,15 +478,25 @@ if( !defined('function') )
 			}
 				echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
 
-            if ($userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->READ_RIGHT)
-            {
-                echo "<td class=\"$css_td_class\" NOWRAP><a class=\"listtable\" target=\"_blank\" href=\"" .  $secureurl->encode("view_file.php?submit=view&id=$fid&mimetype=text/html") . "\"><img border=0 width=\"45\" height=\"45\" src=\"{$GLOBALS['CONFIG']['base_url']}/images/view.png\" title=\"View\" alt=\"View\"></a></td>";
-            }
-            else 
-            {
-                echo "<td class=\"$css_td_class\" NOWRAP>&nbsp;</td>";
-            }
-?>
+                if ($userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->READ_RIGHT)
+                {
+                    $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
+                    if( !isset($GLOBALS['mimetypes']["$suffix"]) )
+                    {
+                        $lmimetype = $GLOBALS['mimetypes']['default'];
+                    }
+                    else
+                    {
+                        $lmimetype = $GLOBALS['mimetypes']["$suffix"];
+                    }
+
+                    echo '<td class="' . $css_td_class . '" NOWRAP><a class="listtable" target="_blank" href="view_file.php?submit=view&id=' . urlencode($fid).'&mimetype='.urlencode("$lmimetype") . '"><img border=0 width="45" height="45" src="' . $GLOBALS['CONFIG']['base_url'] . '/images/view.png" title="View"alt="View"></a></td>';
+                }
+                else 
+                {
+                    echo "<td class=\"$css_td_class\" NOWRAP>&nbsp;</td>";
+                }
+                ?>
 
 
 				<TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>

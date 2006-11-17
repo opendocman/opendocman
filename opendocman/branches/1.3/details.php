@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 if (!session_is_registered('uid'))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $HTTP_SERVER_VARS['QUERY_STRING']) );
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
 	exit;
 }
 include('config.php');
@@ -211,7 +211,7 @@ if ($status > 0)
 <?php 
 if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->READ_RIGHT)
 {?>
-<td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" alt="" border="0"></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" title="View" alt="View" border="0"></a></td>
 <?php
 }		
 if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
@@ -225,7 +225,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	{
 		// if so, display link for checkout
 ?>
-		<td align="center"><a href="<?php echo $secureurl->encode("check-out.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1) . '&access_right=modify');?>"><img src="images/check-out.png" alt="" border="0"></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("check-out.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1) . '&access_right=modify');?>"><img src="images/check-out.png" title="Check Out" alt="Check Out" border="0"></a></td>
 <?php
 	}
 	mysql_free_result($result2);
@@ -235,15 +235,15 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 
 ?>
-		<td align="center"><a href="<?php echo $secureurl->encode("edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state']+1));?>"><img src="images/edit.png" alt="" border="0"></a></td>
-		<td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" alt="Delete" border="0"></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state']+1));?>"><img src="images/edit.png" title="Edit" alt="Edit" border="0"></a></td>
+       <td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" title="Delete" alt="Delete" border="0"></a></td>
 <?php
 	}
 }//end if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
 ?>
-<td align="center"><a href="<?php echo $secureurl->encode("history.php?id=$lrequest_id&state=" . ($_REQUEST['state']+1)); ?>"><img src="images/revision.png" alt="" border="0"><br></a></td>
+<td align="center"><a href="<?php echo $secureurl->encode("history.php?id=$lrequest_id&state=" . ($_REQUEST['state']+1)); ?>"><img src="images/revision.png" title="History" alt="History" border="0"><br></a></td>
 
 </tr>
 <!-- inner table ends -->
