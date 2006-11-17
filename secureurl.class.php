@@ -82,7 +82,7 @@ class phpsecureurl{
 
 //**************** decode and change global variables
 	function decode (){ // methode to unhide
-			global $HTTP_SERVER_VARS;$HTTP_SERVER_VARS['QUERY_STRING'] = '';
+			$_SERVER['QUERY_STRING'] = '';
 		
 		if(isset($_REQUEST[$this->var_name])){ 
 			$this->decode_url=base64_decode($_REQUEST[$this->var_name]); 
@@ -90,7 +90,7 @@ class phpsecureurl{
 			foreach($tbl as $k=>$v){
 				$_REQUEST[$k]=$v;
 				$_GET[$k]=$v;
-				$HTTP_SERVER_VARS['QUERY_STRING'] .= "$k=$v&";
+				$_SERVER['QUERY_STRING'] .= "$k=$v&";
 				global $$k; 
 				$$k=$v;
 			}
