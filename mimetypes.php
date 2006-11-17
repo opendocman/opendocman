@@ -178,5 +178,6 @@ $mimetypes['mov'] = 'video/quicktime';
 $mimetypes['avi'] = 'video/x-msvideo';
 $mimetypes['movie'] = 'video/x-sgi-movie';
 $mimetypes['ice'] = 'x-conference/x-cooltalk';
+$mimetypes['qdf'] = 'application/octet-stream';
 $mimetypes['default'] = '';
 ?>
