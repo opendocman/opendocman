@@ -61,7 +61,7 @@ global $CONFIG;      $CONFIG = array(
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2p3',
+'current_version' => ' OpenDocMan v1.3',
 
 // The email address of the administrator of this site
 'site_mail' => 'root@localhost',
@@ -104,11 +104,14 @@ The first two options also result in sending email to reviewer
 'secureurl' => 'On',
 
 // should we display document listings in the normal way or in a tree view
-// this must be 'ON' to change the display
+// this must be 'On' to change the display
 'treeview' => 'On',
 
 // should we display the signup link?
-'allow_signup' => 'On'
+'allow_signup' => 'On',
+
+ // should we allow users to reset their forgotten password?
+'allow_password_reset' => 'On'
 
 );
 
