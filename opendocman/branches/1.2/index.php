@@ -29,6 +29,7 @@ if (!isset($_REQUEST['last_message']))
 }
 
 echo $_REQUEST['last_message'];
+
 if(isset($_POST['login']))
 {
     if(!valid_username($_POST['frmuser']))
@@ -36,57 +37,43 @@ if(isset($_POST['login']))
         echo "<font color=red>The username or password was invalid. Please try again.</font>";
         exit;
     }
+
     if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
     {
         echo "<font color=red>There is a problem with your dataDir. Check to make sure it exists and is writeable</font>";
         exit;
     }
+
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
 
-
     // check login and password
-        // connect and execute query
-        $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
-        $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+    // connect and execute query
+    $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
+    $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
 
-        // if MySQL login fails, check NIS/YP data
-        if (mysql_num_rows($result) == 0)
-        {
-            // Check for NIS/YP data
-            $pwent = @split(":",`ypmatch $frmuser passwd`);
-            if(isset($pwent))
-            {
-                $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
-            }
-            if (isset($pwent) && is_array($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
-            {
-                $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
-                $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
-            }
-        }
-        // if row exists - login/pass is correct
-        if (mysql_num_rows($result) == 1)
-        {
-                // register the user's ID
-                list($id, $username, $password) = mysql_fetch_row($result);
-                // initiate a session
-                $_SESSION['uid'] = $id;
-                // redirect to main page
-                if(isset($_REQUEST['redirection']))
-					header('Location:' . $_REQUEST['redirection']);
-				else
-					header('Location:out.php');
-                mysql_free_result ($result);	
-                // close connection
-        }
+    // if row exists - login/pass is correct
+    if (mysql_num_rows($result) == 1)
+    {
+        // register the user's ID
+        list($id, $username, $password) = mysql_fetch_row($result);
+        // initiate a session
+        $_SESSION['uid'] = $id;
+        // redirect to main page
+        if(isset($_REQUEST['redirection']))
+            header('Location:' . $_REQUEST['redirection']);
         else
-                // login/pass check failed
-        {
-                mysql_free_result ($result);	
-                // redirect to error page
-                header('Location: error.php?ec=0');
-        }
+            header('Location:out.php');
+        mysql_free_result ($result);	
+        // close connection
+    }
+    else
+        // login/pass check failed
+    {
+        mysql_free_result ($result);	
+        // redirect to error page
+        header('Location: error.php?ec=0');
+    }
 
 }
 elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
@@ -125,7 +112,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
                 }
         }
 }
-elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
+elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLOBALS['CONFIG']['authen'] == 'nis')
 {
     ?>
 <!--
