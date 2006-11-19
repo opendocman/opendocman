@@ -157,9 +157,9 @@ else
 	}
 
 	// check file type
-	foreach($GLOBALS['allowedFileTypes'] as $this)
+	foreach($GLOBALS['allowedFileTypes'] as $thistype)
 	{
-		if ($_FILES['file']['type'] == $this) 
+		if ($_FILES['file']['type'] == $thistype) 
 		{ 
 			$allowedFile = 1;
 			break; 
