@@ -105,7 +105,7 @@ The first two options also result in sending email to reviewer
 
 // should we display document listings in the normal way or in a tree view
 // this must be 'On' to change the display
-'treeview' => 'On',
+'treeview' => 'Off',
 
 // should we display the signup link?
 'allow_signup' => 'On',
