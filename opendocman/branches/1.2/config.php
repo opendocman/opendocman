@@ -61,7 +61,7 @@ global $CONFIG;      $CONFIG = array(
 'title' => 'Document Repository',
 
 // This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2.4',
+'current_version' => ' OpenDocMan v1.2.5',
 
 // The email address of the administrator of this site
 'site_mail' => 'root@localhost',
@@ -119,7 +119,7 @@ The first two options also result in sending email to reviewer
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
 // because of its file type. It should display the proper MIME type there, and you can 
 // then add that string to this list to allow it
-$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed');
+$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif');
 
 // <----- No need to edit below here ---->
 //
