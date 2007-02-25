@@ -1,8 +1,4 @@
-
-
-
-
-July 9th, 2003
+February 23rd, 2007
 
 Abstract
 
@@ -119,8 +115,6 @@ centralized repository.
 
 * PHP 4+ compiled with MySQL-Support (http://www.php.net/)
 
-* Linux
-
 1.2.1 Partially Tested
 
 * Microsoft IIS Server
@@ -141,14 +135,13 @@ To update your current version to the latest release:
   config.php file for some settings that can be transferred
   over from the old config to the new).
 
-4. Load the setup.php page (ex. http://www.mydomain.com/opendocman/setup.php)
+4. Load the setup.php page (ex. http://www.example.com/opendocman/setup.php)
   and click on the appropriate upgrade link. Refer to your
   old config.php to see what version you were using before.
 
 2.2 New Installation
 
-1. Untar files into any dir in your webserver documents dir
-  (ex. /var/www)
+1. Untar/Unzip files into any dir in your webserver documents dir
 
 2. Edit config.php
 
@@ -268,7 +261,8 @@ options in that file:
 * authorization [On, Off] - Turn file moderation on or off.
 
 * secureurl [On,Off] - Hide the URL contents from prying
-  eyes
+
+* treeview [On,Off] - Use treeview mode instead of file list mode
 
 * dataDir - Location of file repository. This should ideally
   be outside the Web server root. Make sure the server has
