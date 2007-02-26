@@ -1,7 +1,7 @@
 <?php
 /*
 commitchange.php - provides database commits for various admin tasks
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2007  Stephen Lawrence, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+include('udf_functions.php');
 $secureurl = new phpsecureurl;
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -367,7 +368,32 @@ elseif(isset($_REQUEST['updatecategory']))
         $_REQUEST['last_message'] = urlencode('Category ' . $_REQUEST['name'] . ' successfully updated');
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
+elseif(@$_REQUEST['submit']=='Add User Defined Field')
+{
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
 
+	udf_functions_add_udf();
+
+        $_REQUEST['last_message'] = urlencode('User Defined Field ' . $_REQUEST['display_name'] . ' successfully added');
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+}
+elseif(isset($_REQUEST['deleteudf']))
+{
+        // Make sure they are an admin
+        if (!$user_obj->isAdmin()){
+            header('Location:' . $secureurl->encode('error.php?ec=4'));
+            exit;
+        } 
+	udf_functions_delete_udf();
+
+        // back to main page
+        $_REQUEST['last_message'] = urlencode('User Defined Field (' . $_REQUEST['id'] . ') successfully deleted');
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+}
 else
 {
 	echo 'Nothing to do';

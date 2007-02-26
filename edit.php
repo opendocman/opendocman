@@ -1,7 +1,7 @@
 <?php
 /*
 edit.php - edit file properties
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007  Stephen Lawrence, Khoa Nguyen, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 session_start();
 include('config.php');
+include('udf_functions.php');
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -218,6 +219,9 @@ if (!isset($_REQUEST['submit']))
 ?>
 		</select></td>
 		</tr>
+<?php
+		udf_edit_file_form();
+?>
 		<!-- Select Department to own file -->
         <TR>
 	    <TD><B>Department</B></TD>
@@ -470,6 +474,8 @@ else
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(isset($_REQUEST['users']))
 		mysql_query('UPDATE data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
+
+	udf_edit_file_update();
 	
 	// clean out old permissions
 	$query = "DELETE FROM user_perms WHERE fid = '$_REQUEST[id]'";
