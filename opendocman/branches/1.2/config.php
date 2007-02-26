@@ -71,9 +71,12 @@ global $CONFIG;      $CONFIG = array(
 'root_username'  => 'admin',
 
 // location of file repository
-// this should ideally be outside the Web server root
-// make sure the server has permissions to read/write files!
-// Don't forget the trailing "/" 
+// This should ideally be outside the Web server root. 
+// Make sure the server has permissions to read/write files to this folder!
+
+// Uncomment this one for Windows - Don't forget the trailing backslash "\" 
+//'dataDir' => 'c:\document_repository\',
+// Uncomment this one for Linux - Don't forget the trailing slash "/"
 'dataDir' => '/var/www/document_repository/',
 
 // Set the maximum file upload size
@@ -119,7 +122,7 @@ The first two options also result in sending email to reviewer
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
 // because of its file type. It should display the proper MIME type there, and you can 
 // then add that string to this list to allow it
-$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif');
+$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint');
 
 // <----- No need to edit below here ---->
 //
