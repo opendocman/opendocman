@@ -144,7 +144,6 @@ default:
 $message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
 break;
 }
-echo('<font size="4" color="#fc0202">' . $message . '</font>');
-//echo 'Please try to <a href="'.$GLOBALS['CONFIG']['base_url'].'">Log-in</a> again.';
+echo('<img src="images/exclamation_red.gif"> <font size="4" color="red">' . $message . '</font>');
 draw_footer();
 ?>

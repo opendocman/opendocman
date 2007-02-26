@@ -78,7 +78,7 @@ else
 			<input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
 			<input type="submit" name="submit" value="Click here"> to begin downloading the selected document to your local workstation.
 			</form>
-			Once the document has completed downloading, you may <a href="out.php">continue browsing</a> The Vault.
+			Once the document has completed downloading, you may <a href="out.php">continue browsing</a>.
 			<?php	
 
 			draw_footer();

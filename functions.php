@@ -89,12 +89,14 @@ if( !defined('function') )
 			<TD bgcolor="#0000A0" align="left" valign="middle">
 			<?php	$crumb = new crumb();
 		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);	
-		$crumb->printTrail($_REQUEST['state']);
+        $crumb->printTrail($_REQUEST['state']);
 		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
-		echo '<b><font size="-2" face="Arial" color="White">';
-		echo 'Last Message: '.$lastmessage;
-		echo '</td>';
-
+        if ( $lastmessage != "" )
+        {
+            echo '<b><font size="-2" face="Arial" color="White">';
+            echo 'Last Message: '.$lastmessage;
+            echo '</td>';
+        }
 		?>	    </font></b>
 			</TD>
 			</tr>
@@ -263,10 +265,10 @@ if( !defined('function') )
         {
            $secureurl= new phpsecureurl;
         	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
-				{
-					echo'<B><font size="10">No files found</font></B>' . "\n";
-					return -1;
-				}
+            {
+                echo'<img src="images/exclamation.gif"> No files found' . "\n";
+                return -1;
+            }
 				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
                 $count = sizeof($fileid_array);
@@ -533,11 +535,12 @@ if( !defined('function') )
                         {
                                 $rights[$i][1] = '-';
                         }
-			echo '<TD class="' . $css_td_class . '" NOWRAP>';
+			            echo '<TD class="' . $css_td_class . '" NOWRAP>';
 
-                        for($i = 0; $i<sizeof($rights); $i++)
+                        echo $rights[0][1];
+                        for($i = 1; $i<sizeof($rights); $i++)
                         {
-                                echo $rights[$i][1] . '|';
+                                echo '|' . $rights[$i][1];
                         }
 ?>                      </TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
@@ -638,11 +641,16 @@ if( !defined('function') )
 			{
 				/* There is no need to have the current page be a link.  The user only needs link
 				   to move forward or backward. */
-				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+				//if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+                $d = $i + 1;
+                if($current_page== $i)  
+                {
+                    echo $d . '&nbsp;&nbsp;';
+                }
 
 				/* Generate link */
 				else    
-					echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($i*$page_limit) . '&stoping_index=' . (($i+1)*$page_limit-1) . '&page=' . $i . '">' . $i . '</a>&nbsp;&nbsp;';
+                    echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($i*$page_limit) . '&stoping_index=' . (($i+1)*$page_limit-1) . '&page=' . $i . '">' . $d . '</a>&nbsp;&nbsp;';
 				$index_result = $index_result + $page_limit;
 			}
 
@@ -651,6 +659,7 @@ if( !defined('function') )
 			{
 				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page+1)) . '&stoping_index=' . (($current_page+2)*$page_limit-1) . '&page=' . ($current_page+1) . '">Next</a>&nbsp; &nbsp;';
 			}
+             echo '</center>';
 		}
 
 	function sort_browser()
@@ -688,7 +697,7 @@ if( !defined('function') )
 					break;
 			}
 			category_option = select_box.options[select_box.selectedIndex].value;
-			options_array[0] = new Option('Choose a(n) ' + category_option);
+			options_array[0] = new Option('Choose ' + category_option);
 			options_array[0].id= 0;
 			options_array[0].value = 'choose_an_author';
 			
@@ -767,7 +776,7 @@ if( !defined('function') )
 		echo '</script>'."\n";
 ?>
 		<form name="browser_sort">
-			<table name="browser" border="1" cellspacing="1">
+			<table name="browser" border="0" cellspacing="1">
 			<tr><td>Browse by:</td>
 				<td NOWRAP ROWSPAN="0">
 					<select name='category' onChange='loadItem(this)' width='0' size='1'>
