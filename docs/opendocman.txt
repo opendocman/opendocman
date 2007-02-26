@@ -131,7 +131,7 @@ To update your current version to the latest release:
 
 2. Unarchive opendocman into a new folder
 
-3. Edit the config.php in your new folder (Look at your old
+3. Copy the local_config.php.sample in your new folder (Look at your old
   config.php file for some settings that can be transferred
   over from the old config to the new).
 

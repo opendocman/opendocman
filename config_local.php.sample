@@ -1,0 +1,38 @@
+<?php
+/*
+config_local.php - OpenDocMan local config file
+Copyright (C) 2007  Stephen Lawrence, Jon Miner
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+// Local Settings
+//
+// Copy config_local.php.sample to config_local.php, then add
+// all your local settings. It will not be overwritten by future
+// OpenDocMan installations.
+//
+// See config.php for possible CONFIG variables, and their default values
+
+//Example:
+//$GLOBALS['database'] = 'opendocman'; // Enter the name of the database here
+//$GLOBALS['user'] = 'opendocman'; // Enter the username for the database
+//$GLOBALS['pass'] = 'opendocman'; // Enter the password for the username
+//$GLOBALS['hostname'] = 'localhost'; // Enter the hostname that is serving the database
+
+//$GLOBALS['CONFIG']['base_url'] = 'XXXX';
+//$GLOBALS['CONFIG']['dataDir'] = 'XXXX';
+//$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint');
+?>
