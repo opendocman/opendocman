@@ -1,7 +1,7 @@
 <?php
 /*
 functions.php - various utility functions
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007 Stephen Lawrence, Khoa Nguyen, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ include_once'mimetypes.php';
 require_once('crumb.php');
 require_once 'secureurl.class.php';
 include_once 'secureurl.php';
+include('udf_functions.php');
 
 if( !defined('function') )
 {
@@ -675,6 +676,9 @@ if( !defined('function') )
 				case 'category':
 					info_Array = category_array;
 					break;
+<?php
+	udf_functions_java_menu();
+?>
 				default : 
 					order_array = document.forms['browser_sort'].elements['category_item_order'].options;
 					info_Array = new Array();
@@ -721,7 +725,7 @@ if( !defined('function') )
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
-		$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
+		$query = "SELECT last_name, first_name, id FROM user ORDER BY last_name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -756,6 +760,7 @@ if( !defined('function') )
 			echo("\tcategory_array[$index] = new Array(\"$category\", $id);\n");
 			$index++;
 		}
+		udf_functions_java_array();
 		///////////////////////////////////////////////////////////////////////
 		echo '</script>'."\n";
 ?>
@@ -768,6 +773,9 @@ if( !defined('function') )
 						<option id='1' value='author'>Author</option>
 						<option id='2' value='department'>Department</option>
 						<option id='3' value='category'>File Category</option>
+<?php
+	udf_functions_java_options(4);
+?>
 					</select>
 				</td>
 				<td>

@@ -1,7 +1,7 @@
 <?php
 /*
 search.php - main search logic
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007  Stephen Lawrence, Khoa Nguyen, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ if (!session_is_registered('uid'))
 	exit;
 }
 include('config.php');
+include('udf_functions.php');
 
 /*$_GET['where']='department_only';
   $_GET['keyword']='Information Systems';
@@ -84,6 +85,10 @@ if(!isset($_GET['submit']))
 		<option value="descriptions_only">Descriptions only</option>
 		<option value="filenames_only">Filenames only</option>
 		<option value="comments_only">Comments only</option>
+		<option value="file_id_only">File ID only</option>
+<?php
+		udf_functions_search_options();
+?>
 		<option value="all" selected>All</option>
 		</select></td>
 		</tr>
@@ -125,7 +130,8 @@ else
 
         $lkeyword = addslashes($lkeyword);
 
-		$lquery = 'SELECT data.id FROM data, user, department, category WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
+		$lquery_pre = 'SELECT data.id FROM data, user, department, category';
+		$lquery = ' WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
 				$larray_len = sizeof($lsearch_array);
 				switch($lwhere)
 				{
@@ -170,22 +176,30 @@ else
 				// Put all the comments for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the comments array are synchronized.
 				case 'comments_only':
-				$lquery .= 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
-				break;
-				case 'all':
-				$lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+                $lquery .= 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                break;
+                case 'file_id_only':
+                $lquery .= 'data.id' . $lequate . '\'' . $lkeyword . '\'';
+                break;
+                case 'all':
+                $lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
 					'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
 					'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
 					'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
 					'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
 					'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
-				default : break;
+
+				default :
+				  list($lquery_pre,$lquery) = udf_functions_search($lwhere,$lquery_pre,$lquery,$lequate,$lkeyword);
+				break;
+				
 				}
 				$lquery .= ') ORDER BY data.id ASC';
-				$lresult = mysql_query($lquery);
+//echo $lquery_pre.$lquery;
+				$lresult = mysql_query($lquery_pre.$lquery);
 
-				$lindex = 0;//echo '----' . $lquery;
+				$lindex = 0;
 				$lid_array = array();
 				$llen = mysql_num_rows($lresult);
 				while( $lindex < $llen )

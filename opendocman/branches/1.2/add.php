@@ -1,7 +1,7 @@
 <?php
 /*
 add.php - adds files to the repository
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2007  Stephen Lawrence, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+include('udf_functions.php');
 // connect to DB
 if(!isset($_POST['submit'])) //un_submitted form
 {
@@ -161,6 +162,9 @@ if(!isset($_POST['submit'])) //un_submitted form
 	</select>
 	</td>
 	</tr>
+<?php
+	udf_add_file_form();
+?>
 	<!-- Set Department rights on the file -->
         <TR>
 	<TD>
@@ -410,6 +414,8 @@ else //submited form
 	
 	// get id from INSERT operation 
 	$fileId = mysql_insert_id($GLOBALS['connection']);
+
+	udf_add_file_insert($fileId);
 	
 	//Find out the owners' username to add to log
 	$query = "SELECT username from user where id='$_SESSION[uid]'";

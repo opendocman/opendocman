@@ -1,7 +1,7 @@
 <?php
 /*
 details.php - display file information  check for session
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007  Stephen Lawrence, Khoa Nguyen, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ if (!session_is_registered('uid'))
 	exit;
 }
 include('config.php');
+include('udf_functions.php');
 
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
@@ -142,6 +143,9 @@ else
 <tr>
 <td>Category: <?php echo $category; ?></td>
 </tr>
+<?php
+	udf_details_display($lrequest_id);
+?>
 <tr>
 <td>File size: <?php echo $filesize; ?></td>
 </tr>
