@@ -2,6 +2,7 @@
 /*
 config.php - OpenDocMan main config file
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -59,9 +60,6 @@ global $CONFIG;      $CONFIG = array(
 
 // This is the browser window title
 'title' => 'Document Repository',
-
-// This is the program version for window title (This should be set to the current version of the program)
-'current_version' => ' OpenDocMan v1.2.5',
 
 // The email address of the administrator of this site
 'site_mail' => 'root@localhost',
@@ -126,6 +124,7 @@ $GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'ap
 
 // <----- No need to edit below here ---->
 //
+
 // Set the revision directory. (relative to $dataDir)
 $CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';
 
