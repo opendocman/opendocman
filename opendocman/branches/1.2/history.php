@@ -81,10 +81,10 @@ else
 {	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	}
 ?>
 <center>
-<table border="0" width="400" cellspacing="4" cellpadding="1">
+<table border="0" width=80% cellspacing="4" cellpadding="1">
 
 <tr>
-<td>
+<td align="right">
 <?php
 // check file status, display appropriate icon
 if ($status == 0) 
@@ -95,35 +95,36 @@ else
     { 
         echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
     }
-echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
+echo '</td>';
+echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 ?>
 </tr>
 
 <tr>
-<td>Category: <?php echo $category; ?></td>
+<th valign=top align=right>Category: </th><td><?php echo $category; ?></td>
 </tr>
 
 <tr>
-<td>File size: <?php echo display_filesize($filename); ?></td>
+<th valign=top align=right>File&nbsp;size:</th><td> <?php echo display_filesize($filename); ?></td>
 </tr>
 
 <tr>
-<td>Created on: <?php echo fix_date($created); ?></td>
+<th valign=top align=right>Creation&nbsp;Date:</th><td> <?php echo fix_date($created); ?></td>
 </tr>
 
 <tr>
-<td>Owned by: <?php echo $owner; ?></td>
+<th valign=top align=right>Owner:</th><td> <?php echo $owner; ?></td>
 </tr>
 
 <tr>
-<td>Description of contents: <?php echo $description; ?></td>
+<th valign=top align=right>Description:</th><td> <?php echo $description; ?></td>
 </tr>
 
 <tr>
-<td>Author comment: <?php echo $comments; ?></td>
+<th valign=top align=right>Comment:</th><td> <?php echo $comments; ?></td>
 </tr>
 <tr>
-<td>Revision: 
+<th valign=top align=right>Revision: </th><td>
 <?php 
 	if(isset($lrevision_id))
 	{
@@ -135,25 +136,24 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	else echo 'latest'; ?>
 </td>
 </tr>
-<tr>
-<td>&nbsp;</td>
-</tr>
 
 <!-- history table -->
 <tr>
-<td>
-<img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">&nbsp;&nbsp;Revision History
+<td align="right">
+<img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">
+</td>
+<td>History</td>
 </td>
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan="2" align="center">
 	<table border="0" cellspacing="5" cellpadding="5">
-	<tr>
-	<td><font size="-1"><b>Revision Number</b></font>
-	<td><font size="-1"><b>Modified on</b></font>
-	<td><font size="-1"><b>By</b></font>
-	<td><font size="-1"><b>Note</b></font>	</td>
+	<tr bgcolor="#83a9f7">
+	<th><font size=-1>Version</font></th>
+	<th><font size=-1>Modification Date</font></th>
+	<th><font size=-1>By</font></th>
+	<th><font size=-1>Note</font></th>
 	</tr>
 <?php
 	// query to obtain a list of modifications
@@ -171,12 +171,17 @@ echo '&nbsp;&nbsp;<font size="+1">'.$realname.'</font></td>';
 	// iterate through resultset
 	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
 	{
-?>
-	<tr>
-<?php
+
+	if ( isset($bgcolor) && $bgcolor == "#FCFCFC" )
+          $bgcolor="#E3E7F9";
+        else
+          $bgcolor="#FCFCFC";
+
+	echo '<tr bgcolor=' . $bgcolor . '>';
+
 	$extra_message = '';
 	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
-	{	echo '<td><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message; }
+	{	echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message; }
 	else
 	{	echo '<td><font size="-1">' . $revision_id . $extra_message; 	}
 ?>

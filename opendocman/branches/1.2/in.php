@@ -38,15 +38,24 @@ $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $
 
 // how many records?
 $count = mysql_num_rows($result);
-?>
-<CENTER>
-<TABLE align="center" width="85%" cellspacing="5" cellpadding="3" border="1"><CAPTION><B><?php echo $count; ?> document(s) check out to you </CAPTION>
-<TR><TR><TR>
-</TR></TR></TR>
-<TR><TD align="center"><B>File Name</TD><TD align="center"><B>Check-In</TD><TD align="center"><B>Owner</TD><TD align="center"><B>Document Creation Date</TD><TD align="center"><B>Document Size</TD><TD align="center"><B>Description</TD></TR>
+if ($count == 0)
+	echo '<img src="images/exclamation.gif"> No documents checked out to you';
+else
+{
+	echo '<table cellspacing="5" cellpadding="3" border="1"><caption><B>'.$count.' document';
+	if ($count != 1)
+		echo 's';
+	echo ' checked out to you</CAPTION>';
+	echo '<TR bgcolor="#83a9f7">';
+        echo '<TD align="center"><B>Check-In</TD>';
+        echo '<TD align="center"><B>File Name</TD>';
+        echo '<TD align="center"><B>Description</TD>';
+        echo '<TD align="center"><B>Created Date</TD>';
+        echo '<TD align="center"><B>Owner</TD>';
+        echo '<TD align="center"><B>Size</TD>';
+        echo '</TR>';
 
-
-<?php
+        $row_color = "#FCFCFC";
 	// iterate through resultset
 	while(list($id, $last_name, $first_name, $realname, $created, $description, $status) = mysql_fetch_row($result))
 	{
@@ -57,29 +66,27 @@ $count = mysql_num_rows($result);
         }
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 	// display list
-?>
-	<TR valign="middle">
-	<TD align="center"><?php echo $realname; ?></TD> 
-	<TD align="center"><A href="check-in.php?id=<?php echo $id . '&state=' . ($_REQUEST['state']+1); ?>">Check-In Document</A></TD> 
-	<TD align="center"><?php echo $last_name.', '.$first_name; ?></TD> 
-	<TD align="center"><?php echo fix_date($created); ?></TD> 
-	<TD align="center"><?php echo display_filesize($filename); ?> </TD> 
-	<TD align="justify"><?php echo $description; ?></TD>
-	</TR>
-<?php
+
+	echo '<TR valign="middle" bgcolor="' . $row_color . '">';
+	echo '<TD align="center"><A href="check-in.php?id=' . $id . '&state=' . ($_REQUEST['state']+1) . '"><img src="images/check-in.png" border=0 width=45 height=45></A></TD>';
+	echo '<TD align="center">' . $realname . '</TD>';
+	echo '<TD align="justify">' . $description . '</TD>';
+	echo '<TD align="center">' . fix_date($created) . '</TD> ';
+	echo '<TD align="center">' . $last_name . ', ' . $first_name . '</TD> ';
+	echo '<TD align="center">' . display_filesize($filename) . '</TD> ';
+	echo '</TR>';
+
+        if ( $row_color == "#FCFCFC" )
+          $row_color = "#E3E7F9";
+        else
+          $row_color = "#FCFCFC";
 	}
-?>
 
-<?php
-// clean up
-mysql_free_result ($result);
-?>
-</table>
-	<form action="out.php">
-	<input type="submit" value="Back">
-	</form>
-</center>
+	// clean up
+	mysql_free_result ($result);
 
-<?php 
-	draw_footer();
+	echo '</table>';
+}
+
+draw_footer();
 ?>

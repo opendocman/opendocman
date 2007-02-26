@@ -56,7 +56,7 @@ $secureurl = new phpsecureurl;
 
 ?>
 <center>
-<table border="0" width="400" cellspacing="4" cellpadding="1">
+<table border="0" width=80% cellspacing="4" cellpadding="1">
 <?php
 // display details
 $ownerId = $filedata->getOwner();
@@ -122,7 +122,7 @@ else
 <INPUT type="hidden" name="comments" value="<?php echo substr($reviewer_comments_fields[2], 9) ?>">
 </FORM>
 <tr>
-<td>
+<td align="right">
 <?php 
 // display red or green icon depending on file status
 if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
@@ -138,44 +138,46 @@ else
 <?php 
 } 
 ?> 
-&nbsp;&nbsp;<font size="+1"><?php echo $realname; ?></font></td>
+</td>
+<td align="left"><font size="+1"><?php echo $realname; ?></font></td>
 </tr>
 <tr>
-<td>Category: <?php echo $category; ?></td>
+<th valign=top align=right>Category:</th><td><?php echo $category; ?></td>
 </tr>
 <?php
 	udf_details_display($lrequest_id);
 ?>
 <tr>
-<td>File size: <?php echo $filesize; ?></td>
+
+</tr>
+<th valign=top align=right>File&nbsp;size:</th><td> <?php echo $filesize; ?></td>
+
+<tr>
+<th valign=top align=right>Creation&nbsp;Date:</th><td> <?php echo fix_date($created); ?></td>
 </tr>
 
 <tr>
-<td>Created on: <?php echo fix_date($created); ?></td>
-</tr>
-
-<tr>
-<td>Owner: 
+<th valign=top align=right>Owner:</th><td>
 <?php echo ' <A href="mailto:' . $user_obj->getEmailAddress() . ' ?Subject=Regarding%20your%20document:  ' . $realname . ' &Body=Hello%20 ' . $owner_fullname[0] . '"> ' . $owner . '</A> ';?></td>
 </tr>
 
 <tr>
-<td>Description of contents: <?php echo $description; ?></td>
+<th valign=top align=right>Description:</th><td> <?php echo $description; ?></td>
 </tr>
 
 <tr>
-<td>Author comment: <?php echo $comment; ?></td>
+<th valign=top align=right>Comment:</th><td> <?php echo $comment; ?></td>
 </tr>
 
 <tr>
-<td>Revision:
-	<?php
+<th valign=top align=right>Revision:</th><td>
+    <?php
 if(isset($lrevision_id))
 {
-	if( $lrevision_id == 0)
-		echo 'original revision';
-	else
-		echo $lrevision_id;
+    if( $lrevision_id == 0)
+        echo 'original revision';
+    else
+        echo $lrevision_id;
 }
 else echo 'latest'; ?>
 </td>
@@ -184,30 +186,34 @@ else echo 'latest'; ?>
 
 if($filedata->isPublishable() ==-1 )
 {
-	echo('<tr><td>Reviewer:'); 
-	echo $reviewer;
-	echo(" (<A HREF='javascript:showMessage()'>reviewer's comments regarding the rejection</A>)");
+    echo('<tr><th valign=top align=right>Reviewer:</th><td>');
+    echo $reviewer;
+    echo(" (<A HREF='javascript:showMessage()'>reviewer's comments regarding the rejection</A>)");
 }
 ?></td>
 </tr>
-<?php
+    <?php
 if ($status > 0)
 {
-	// status != 0 -> file checked out to another user. status = uid of the check-out person
-	// query to find out who...
-	$checkout_person_obj = $filedata->getCheckerOBJ();
-	
-?>
-<tr>
-<td>Currently checked out to: <?php echo $checkout_person_obj->getName(); ?></td>
-</tr>
-<?php
+    // status != 0 -> file checked out to another user. status = uid of the check-out person
+    // query to find out who...
+    $checkout_person_obj = $filedata->getCheckerOBJ();
+
+    ?>
+        <tr>
+        <th valign=top align=right>Checked out to:</th><td>
+        <?php 
+        $fullname = $checkout_person_obj->getFullName();
+    echo ' <A href="mailto:' . $checkout_person_obj->getEmailAddress() . ' ?Subject=Regarding%20your%20checked-out%20document:  ' . $realname . ' &Body=Hello%20 ' . $fullname[0] . '"> ' . $fullname[1] . ', ' . $fullname[0] . '</A> ';
+    ?></td>
+        </tr>
+        <?php
 }
 ?>
 
 <!-- available actions -->
 <tr>
-<td>
+<td colspan="2" align="center">
 <table border="0" cellspacing="5" cellpadding="5">
 <tr>
 <!-- inner table begins -->

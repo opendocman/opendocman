@@ -139,9 +139,12 @@ function udf_details_display($fileId)
     if ( $row[1] == 1 || $row[1] == 2) {
       $query = 'SELECT value FROM data, ' . $row[2] . ' WHERE data.id = ' . $fileId . ' AND data.' . $row[2] . ' = ' . $row[2] . '.id';
       $subresult = mysql_query($query);
-      $subrow = mysql_fetch_row($subresult);
-      echo '<tr><td>' . $row[0] . ': ' . $subrow[0] . '<td></tr>';
-      mysql_free_result($subresult);
+      if($subresult)
+      {   
+          $subrow = mysql_fetch_row($subresult);
+          echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+          mysql_free_result($subresult);
+      }
     }
   }
   mysql_free_result($result);

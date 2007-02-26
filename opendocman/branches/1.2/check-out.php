@@ -63,7 +63,7 @@ if (!isset($_GET['submit']))
 	<input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
 	<input type="submit" name="submit" value="Click here"> to check out the selected document and begin downloading it to your local workstation.
 	</form>
-	Once the document has completed downloading, you may <a href="out.php">continue browsing</a> The Vault.
+	Once the document has completed downloading, you may <a href="out.php">continue browsing</a>.
 <?php
 draw_footer();
 }
