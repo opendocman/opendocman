@@ -83,7 +83,7 @@ break;
 
 // illegal file type
 case 13:
-$message = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types:<br><ul align=left>';
+$message = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types or add the missing MIMETYPE to config.php->allowedFileTypes:<br><ul align=left>';
 //echo "_File array is " . array_values($_FILES['file']);
 	foreach($GLOBALS['allowedFileTypes'] as $thistype)
 	{
