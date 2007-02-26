@@ -1,4 +1,26 @@
 <?php
+/*
+add.php - adds files to the repository
+Copyright (C) 2002-2007  Stephen Lawrence, Jon Miner
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
+
+// You can add signup_header.html and signup_footer.html files to display on this page automatically
+
 include('config.php');
 if($GLOBALS['CONFIG']['allow_signup'] == 'On')
 {
@@ -118,6 +140,10 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         <html>
         <head><title>Sign Up</title></head>
         <body>
+<?php
+    if (is_readable("signup_header.html"))
+      include("signup_header.html");
+?>
         <center><font size=6>Sign Up</font></center>
         <br><SCRIPT LANGUAGE="JavaScript1.2" src="FormCheck.js"></script>			   
 
@@ -179,6 +205,11 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         </tr>
         </table>
         </center>
+<?php
+   if (is_readable("signup_footer.html"))
+    include("signup_footer.html");
+?>
+
         </body>
         </html>
         <?php
