@@ -387,7 +387,7 @@ else //submited form
 	// for non_allowed file types
 	if (!isset($allowedFile)) 
 	{ 
-		header('Location:error.php?ec=13&last_message=Filetype is ' . $_FILES['file']['type']); 
+		header('Location:error.php?ec=13&last_message=MIMETYPE+failed+' . $_FILES['file']['type']); 
 		exit; 
 	}
 
