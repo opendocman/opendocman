@@ -2,6 +2,7 @@
 /*
 mimetypes.php -  Exension to MIME-Type mapping, pretty much the same as mime.types from Apache
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2007 Stephen Lawrence, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,9 +17,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+ */
 
+// Read default MIME Types from System
 $mimetypes=array(); global $mimetypes;
+if (is_file("/etc/mime.types")) 
+{
+    $handle = fopen("/etc/mime.types","r");
+    while (!feof($handle)) {
+        $inline = fgets($handle,1024);
+        $line = strtr($inline,"\t"," ");
+        if ( $line != "\n" && strncmp($line,"#",1) != 0 ) {
+            $mimetype = strtok($line," ");
+            while (($ext = strtok(" ")) != "" ) {
+                $mimetypes[$ext] = $mimetype;
+            }
+        }
+    }
+    fclose($handle);
+    $mimetypes['default'] = '';
+}
+else
+{
+// OpenDocMan defaults
 $mimetypes['ez']  = 'application/andrew-inset';
 $mimetypes['csm'] = 'application/cu-seeme';
 $mimetypes['cu']  = 'application/cu-seeme';
@@ -191,4 +212,5 @@ $mimetypes['ott'] = 'application/vnd.oasis.opendocument.text-template';
 $mimetypes['odg'] = 'application/vnd.oasis.opendocument.graphics';
 $mimetypes['odc'] = 'application/vnd.oasis.opendocument.chart';
 $mimetypes['default'] = '';
+}
 ?>
