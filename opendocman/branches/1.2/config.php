@@ -118,8 +118,10 @@ The first two options also result in sending email to reviewer
 'allow_signup' => 'On',
 
  // should we allow users to reset their forgotten password?
-'allow_password_reset' => 'On'
+'allow_password_reset' => 'On',
 
+ // Which theme to use?
+'theme' => 'default'
 );
 
 // List of allowed file types
