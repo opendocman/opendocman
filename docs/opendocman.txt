@@ -264,6 +264,9 @@ options in that file:
 
 * treeview [On,Off] - Use treeview mode instead of file list mode
 
+* theme [default="default"] - which theme to use? Themes are
+  located in templates/ folder. Look at default for example.
+
 * dataDir - Location of file repository. This should ideally
   be outside the Web server root. Make sure the server has
   permissions to read/write files in this folder!
