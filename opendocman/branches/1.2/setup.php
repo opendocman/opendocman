@@ -245,18 +245,36 @@ function do_update_124()
 
 function print_intro()
 {
+
+    include_once('version.php');
 ?>
 <h3>Welcome to the OpenDocMan Configuration Tool</h3>
 </center>
+<hr>
+<table>
+ <tr>
+  <td><a href="docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
+ </tr>
+</table>
+
 <table align="center">
  <tr>
   <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
  </tr>
  <tr>
-  <td>Please choose one from the following based on your current version (look in your config.php for your version):<br><br></td>
+  <?php
+        if(!isset($GLOBALS['CONFIG']['current_version']))
+        {
+            echo '<td>Please choose one from the following based on your current version (look in your config.php for your version prior to 1.2.5):<br><br></td>';
+        }
+        else
+        {
+            echo 'Your current version is: ' . $GLOBALS['CONFIG']['current_version'];
+        }
+?>
  </tr>
  <tr>
-  <td><a href="setup.php?op=install">New Installation of OpenDocMan v1.2.4 (Will wipe any current data!)</a><br><br></td>
+  <td><a href="setup.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
   <td><a href="setup.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
@@ -281,12 +299,6 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="setup.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
- </tr>
-</table>
-<hr>
-<table>
- <tr>
-  <td><a href="docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
  </tr>
 </table>
 <?php
