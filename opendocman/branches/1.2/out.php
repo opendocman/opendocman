@@ -119,12 +119,10 @@ if($GLOBALS['CONFIG']['treeview'] != 'On')
     $limit=$GLOBALS['CONFIG']['page_limit'];
     $total_hit = sizeof($file_id_array);
     list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
-    echo '</center>';
 
     //$llist_e = getmicrotime();
     // clean up
     echo '</td></tr></table>';
-    list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 
 }
 
