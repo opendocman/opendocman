@@ -1,0 +1,2736 @@
+2005-06-17 09:01  logart
+
+	* index.php: added an isset to nis fix
+
+2005-06-17 08:40  logart
+
+	* index.php: fixed problem when no NIS installed
+
+2005-06-17 08:37  logart
+
+	* search.php: fixed issue #[ 1012449 ] 'browse by' error
+
+2005-04-28 12:38  logart
+
+	* install/upgrade_12p1.php: removed ; and COMMENTS from sql
+	  statements because sourceforge site was failing during upgrade
+
+2005-04-28 12:37  logart
+
+	* class.tree/class.tree.php: added default '' args to add_file
+	  function
+
+2005-04-28 11:47  logart
+
+	* treeview.php: added gpl notice
+
+2005-04-28 11:37  logart
+
+	* ChangeLog: [no log message]
+
+2005-04-28 11:36  logart
+
+	* treeview.php: fixed bug when no files listed
+
+2005-04-28 11:35  logart
+
+	* out.php: fixed bug when no files listed fixed missing
+	  forward/back links
+
+2005-04-28 11:11  logart
+
+	* class.tree/class.tree.php: fixed some typos created by copy/paste
+
+2005-04-28 11:10  logart
+
+	* setup.php: changed some text
+
+2005-04-28 11:09  logart
+
+	* install/upgrade_12p1.php: fixed bug # [ 1120379 ] Error in Query:
+	  INSERT INTO max records limit in db?
+
+2005-04-28 10:43  logart
+
+	* install/odm.php, database.sql: fixed bug # [ 1120379 ] Error in
+	  Query: INSERT INTO max records limit in db?
+
+2005-04-27 22:40  logart
+
+	* department.php: fixed bug [ 1114071 ] Cancel button in dept.
+	  maint screen is broken
+
+2005-04-27 22:30  logart
+
+	* setup.php, install/odm.php, install/upgrade.php,
+	  install/upgrade_12p1.php, install/upgrade_12rc1.php: fixed bug [
+	  1080904 ] setup is missing the upgrade from 1.2x
+
+2005-04-27 22:29  logart
+
+	* config.php: updated to v1.2p2
+
+2005-04-27 21:50  logart
+
+	* config.php: added signup page option
+
+2005-04-27 21:37  logart
+
+	* index.php: added signup link from patch [ 955024 ] Login Page
+	  Signup
+
+2005-04-27 21:36  logart
+
+	* signup.php: initial import from patch [ 955024 ] Login Page
+	  Signup
+
+2005-04-27 20:43  logart
+
+	* treeview.php: fixed missing fileid
+
+2005-04-27 20:37  logart
+
+	* config.php, out.php, treeview.php, class.tree/class.tree.php,
+	  class.tree/ftiens4.js, class.tree/ua.js,
+	  class.tree/ftv2/ftv2blank.gif, class.tree/ftv2/ftv2doc.gif,
+	  class.tree/ftv2/ftv2folderclosed.gif,
+	  class.tree/ftv2/ftv2folderopen.gif,
+	  class.tree/ftv2/ftv2lastnode.gif, class.tree/ftv2/ftv2link.gif,
+	  class.tree/ftv2/ftv2mlastnode.gif, class.tree/ftv2/ftv2mnode.gif,
+	  class.tree/ftv2/ftv2node.gif, class.tree/ftv2/ftv2plastnode.gif,
+	  class.tree/ftv2/ftv2pnode.gif, class.tree/ftv2/ftv2vertline.gif:
+	  added patch [ 931891 ] Change the display of documents to a tree
+	  view
+
+2005-04-27 20:34  logart
+
+	* index.php: fixed missing brace
+
+2005-04-27 19:07  logart
+
+	* index.php: applied patch [ 1163776 ] Check password against
+	  NIS/YP
+
+2005-04-27 19:00  logart
+
+	* commitchange.php: applied patch [ 1160981 ] fix: Normal user
+	  update password 1.2p1 applied patch [ 1113224 ] sytax error in
+	  MySQL statments
+
+2005-04-27 16:53  logart
+
+	* search.php: applied patch [ 1118889 ] fixes to search.php
+
+2005-04-27 16:51  logart
+
+	* user.php: added patch [ 1160981 ] fix: Normal user update
+	  password 1.2p1
+
+2005-04-27 14:12  logart
+
+	* functions.php: added patch # 1114195 - add functionality for
+	  "one-click" view
+
+2005-04-08 12:52  logart
+
+	* details.php: applied SF patch # 1114195 -  jonathanwminer
+
+2005-04-08 12:45  logart
+
+	* commitchange.php: applied patch from SF patch #1113224 -
+	  jonathanwminer
+
+2005-02-04 09:30  logart
+
+	* install/upgrade_12p1.php, install/odm.php, install/upgrade.php,
+	  setup.php: added 1.2p1 upgrade
+
+2005-02-04 09:30  logart
+
+	* install/upgrade_12p1.php: file upgrade_12p1.php was added on
+	  branch rel-1-2-p2 on 2005-04-28 05:30:26 +0000
+
+2005-02-04 09:09  logart
+
+	* setup.php: fixed issue # [ 1116314 ] Access denied during fresh
+	  install
+
+2004-12-22 13:45  logart
+
+	* admin.php, anonymous.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, commitchange.php, config.php,
+	  crumb.php, database.sql, delete.php, department.php, details.php,
+	  edit.php, file_ops.php, history.php, in.php, index.php, out.php,
+	  profile.php, search.php, setup.php, toBePublished.php, user.php,
+	  view_file.php, install/odm.php: merge from rel-1-3
+
+2004-12-22 13:36  logart
+
+	* add.php: 1.3.0 merge
+
+2004-12-07 16:36  logart
+
+	* add.php, anonymous.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, commitchange.php, delete.php,
+	  department.php, details.php, edit.php, file_ops.php, history.php,
+	  in.php, index.php, profile.php, search.php, setup.php,
+	  toBePublished.php, user.php, install/odm.php: Updated for
+	  table_prefix.wq
+
+2004-12-07 14:07  logart
+
+	* images/companylogo.gif: odm image
+
+2004-12-07 14:05  logart
+
+	* config.php: changed version changed to example.com add underscore
+	  to table prefix
+
+2004-12-07 14:01  logart
+
+	* database.sql: added anon
+
+2004-12-07 14:00  logart
+
+	* install/upgrade_12rc1.php: intial import
+
+2004-12-07 13:59  logart
+
+	* setup.php: added 1.2x upgrade
+
+2004-12-07 13:58  logart
+
+	* install/odm.php: added anonymous column
+
+2004-10-18 12:48  logart
+
+	* config.php: new version 1.2p1
+
+2004-10-18 12:34  logart
+
+	* ChangeLog: 1.2p1 release
+
+2004-10-12 22:52  logart
+
+	* view_file.php: applied patch #[ 1014553 ] MIME decoding problem -
+	  blackwes
+
+2004-10-12 22:31  logart
+
+	* check-out.php, view_file.php: fixed bug #[ 999102 ] mozilla
+	  download error
+
+2004-10-12 22:24  logart
+
+	* error.php, add.php, config.php: fixed bug # [ 1000887 ] There is
+	  no warning message when a file is too big
+
+2004-10-12 22:08  logart
+
+	* functions.php: fixed bug [ 1003626 ] draw statusbar and menu
+
+2004-10-12 21:59  logart
+
+	* config.php, functions.php: fixed bug [ 1003629 ] config.php
+	  mis-nomer
+
+2004-10-12 21:49  logart
+
+	* search.php: fixed bug#[ 1006450 ] filtering docs with browse by
+
+2004-10-12 20:54  logart
+
+	* index.php: fixed bug #[ 1043583 ] index should check for missing
+	  dirs
+
+2004-10-12 20:01  logart
+
+	* toBePublished.php: fixed bug #[ 1028268 ] mail not sent on reject
+	  - Chad B.
+
+2004-10-12 19:34  logart
+
+	* commitchange.php: fixed bug when updating user
+
+2004-08-05 23:21  logart
+
+	* category.php, department.php: fixed bug where non-admin could
+	  edit items - c. bloomquist
+
+2004-08-05 23:17  logart
+
+	* category.php, department.php: fixed bug # 1000380  - category and
+	  department security fixes - c. bloomquist
+
+2004-08-05 23:07  logart
+
+	* check_exp.php: fixed bug about no footer
+
+2004-08-05 23:07  logart
+
+	* check_exp.php: fixed bug #1003648- no footer on check_exp.php -
+	  c. bloomquist
+
+2004-08-05 23:01  logart
+
+	* index.php: added login usernam field validation added long php
+	  tags
+
+2004-08-05 22:58  logart
+
+	* functions.php, index.php: fixed bug #999791 - username login
+	  field validation
+
+2004-08-05 22:48  logart
+
+	* view_file.php: fixed spaces in filename bug fixed view file perms
+	  check bug - c. bloomquist
+
+2004-08-05 22:46  logart
+
+	* view_file.php: Fixed bug #999780 - added perm check to
+	  view/downloading files - C. Bloomquist
+
+2004-08-02 13:37  logart
+
+	* commitchange.php: initial addition of updateuser admin logic -
+	  needs testing
+
+2004-08-02 13:26  logart
+
+	* commitchange.php: Added admin logic - thanks Chad changed submit
+	  checks to POST with new verbose action values as the keys changed
+	  all _REQUEST vars to appropriate _POST/_GET vars for security and
+	  integrity reformatted some if's
+
+2004-08-02 13:22  logart
+
+	* department.php: moved cancel logic to end added admin check for
+	  bug #1000380 - thanks chad changed _REQUEST vars to proper GET or
+	  POST removed defunct delete logic changed submit buttons to be
+	  named submit and have value = verbose action
+
+2004-08-02 13:17  logart
+
+	* user.php: changed post submit buttons to all be named submit,
+	  with the action as the value
+
+2004-08-02 13:15  logart
+
+	* admin.php: added comments
+
+2004-08-02 12:22  logart
+
+	* secureurl.php: added closing ?>
+
+2004-07-30 12:55  logart
+
+	* view_file.php: fixed bug# 999102 submitted by Chad Blomquist -
+	  spaces in filenames fails download in mozilla
+
+2004-07-26 12:28  logart
+
+	* commitchange.php: applied security checks for each action
+
+2004-07-25 18:00  logart
+
+	* ChangeLog: updated
+
+2004-07-25 17:55  logart
+
+	* install/odm.php, database.sql: changed admin email to RFC
+	  compliant example.com
+
+2004-07-25 17:50  logart
+
+	* config.php: vanilla changed default URL to RFC proper example.com
+
+2004-07-25 17:45  logart
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  FormCheck.js, UserPermission_class.php, User_Perms_class.php,
+	  User_class.php, add.php, admin.php, category.php, check-in.php,
+	  check-out.php, check_exp.php, classHeaders.php, commitchange.php,
+	  config.php, databaseData_class.php, delete.php, department.php,
+	  details.php, edit.php, error.php, file_ops.php,
+	  functions.archive.php, functions.php, help.html, history.php,
+	  in.php, index.php, ldap.inc, linkcontrol.css, logout.php,
+	  mimetypes.php, out.php, personal_info.php, profile.php,
+	  rejects.php, search.php, secureurl.php, setup.php,
+	  toBePublished.php, user.php, view.php, view_file.php,
+	  docs/developers.txt, docs/opendocman-5.html, docs/opendocman.txt,
+	  docs/src/opendocman.lyx, install/odm.php, install/upgrade.php,
+	  install/upgrade_10.php, install/upgrade_11.php,
+	  install/upgrade_11rc1.php, install/upgrade_11rc2.php,
+	  install/upgrade_12rc1.php: added copyright to all files added
+	  Khoa Nguyen to copyright notices where appropriate
+
+2004-07-25 08:46  logart
+
+	* ChangeLog: preparing for 1.2 release
+
+2004-07-24 18:37  logart
+
+	* commitchange.php: fixed security vulnerability where commitchange
+	  was not checking to make sure users were authorized to make the
+	  requested changes
+
+2004-07-01 00:59  logart
+
+	* functions.php: fixed bug ID#982733: modified_on column sort error
+	  in out.php
+
+2004-07-01 00:28  logart
+
+	* details.php: Fixed bug ID#917813: View only was able to read
+
+2004-06-30 23:57  logart
+
+	* view_file.php: Fixed bug ID#909399: view file does not open new
+	  window
+
+2004-06-30 23:53  logart
+
+	* setup.php: Added smart defaults for database connection form
+	  Added more feedback during installation steps
+
+2004-06-30 23:51  logart
+
+	* view_file.php: Fixed bug ID#909399: View file does not open in
+	  new window
+
+2004-02-25 10:20  logart
+
+	* ChangeLog: changes up to 2/25/2004
+
+2004-02-25 10:18  logart
+
+	* config.php: updated version to 1.2
+
+2004-02-25 09:35  logart
+
+	* toBePublished.php: fixed short tags added braces to if's
+
+2004-02-25 09:34  logart
+
+	* profile.php: case change on php tag
+
+2004-02-25 09:34  logart
+
+	* delete.php: cleaned up braces added isset's
+
+2004-02-25 09:10  logart
+
+	* add.php, edit.php: added Joe Jeskiewicz fix to spTo_
+
+2004-02-25 08:57  logart
+
+	* edit.php: added an isset for forbidden array to keep notices from
+	  showing in source code when no forbidden are selected
+
+2004-02-24 15:35  logart
+
+	* functions.php: fixed <? tags that were causeing $ in
+	  functions.php error
+
+2004-02-24 15:35  logart
+
+	* images/companylogo.gif: changed logo to opendocman logo
+
+2004-01-17 09:14  logart
+
+	* config.php: update version string
+
+2004-01-17 09:07  logart
+
+	* setup.php: fixed a problem where the GRANT statement would only
+	  grant to (username) instead of (username@roothost), thus
+	  preventing connections from @localhost
+
+2004-01-17 08:46  logart
+
+	* functions.php: removed extra } at end of functions.php -
+	  http://sourceforge.net/forum/forum.php?thread_id=1004142&forum_id=236529
+
+2004-01-07 10:48  logart
+
+	* install/upgrade_12rc1.php: removed ; because SF was chocking on
+	  it
+
+2004-01-07 10:47  logart
+
+	* index.php: re-ordered if's because SF demo site was chocking
+
+2004-01-07 09:34  logart
+
+	* config.php: cleaned up some global assignments to use
+	  $GLOBALS['var']='val' instead of $var='val';global $var;
+
+2004-01-07 09:32  logart
+
+	* functions.php: cleaned up the code a bit by replacing <td><?php
+	  echo ...  ;?></td> with	echo '<td>blah</td>';
+
+2004-01-07 09:30  logart
+
+	* secureurl.class.php: fixed short tag
+
+2004-01-07 09:29  logart
+
+	* setup.php: added config.php includes to each sub-function because
+	  including it at the top of the file causes a no-connection error
+	  since the database only exists if it is an update, not a new
+	  install.
+
+	  fixed type for 1.2rc1 upgrade where it's case statement was
+	  odm_11 instead.
+
+2004-01-07 09:24  logart
+
+	* install/odm.php: removed semicolons from statements as they seem
+	  to cause problems
+
+2003-11-12 10:29  logart
+
+	* config.php: changed version to 1.2rc2
+
+2003-11-10 10:54  logart
+
+	* ChangeLog, docs/src/opendocman.lyx: comment changes
+
+2003-10-15 16:16  logart
+
+	* setup.php, install/upgrade.php, install/upgrade_12rc1.php: added
+	  1.2rc1 upgrade to install/upgrade scripts
+
+2003-10-15 14:21  logart
+
+	* ChangeLog: release 1.2 Final
+
+2003-10-15 14:15  logart
+
+	* config.php: v1.2 release
+
+2003-10-09 15:03  khoang82
+
+	* anonymous.php: fix undefine error
+
+2003-10-08 14:41  khoang82
+
+	* config.php: fix includes to use the include/library/ dir
+
+2003-10-08 14:35  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  databaseData_class.php, secureurl.class.php, secureurl.php:
+	  remove these files from root dir
+
+2003-10-08 13:48  khoang82
+
+	* config.php: add configurable table_prefix field
+
+2003-10-06 08:31  logart
+
+	* anonymous.php: added footer call
+
+2003-10-06 08:22  logart
+
+	* config.php: vanilla again
+
+2003-09-23 17:09  khoang82
+
+	* FileData_class.php, add.php, anonymous.php, config.php, edit.php:
+	  complete anonymous browsing feature
+
+2003-09-23 14:19  khoang82
+
+	* anonymous.php: switchable from normal mode to anonymous mode
+	  without login and out.  Still need to provide links for user to
+	  do so instead of remember the link
+
+2003-09-23 11:44  khoang82
+
+	* index.php: add anonymous link for user
+
+2003-09-22 09:07  khoang82
+
+	* anonymous.php, search.php: interna anonymous page.  Give it
+	  sort_browser() and pagination
+
+2003-09-22 09:05  khoang82
+
+	* toBePublished.php: fix last item selected being authorized
+	  instead of reject
+
+2003-09-19 09:13  logart
+
+	* check_exp.php: added internationalizations
+
+2003-09-19 09:10  khoang82
+
+	* toBePublished.php: fix reject goes to out.php
+
+2003-09-18 16:52  khoang82
+
+	* anonymous.php: anonymous page for public view.  driven by
+	  anonymous field in ODM.data.anonymous
+
+2003-09-18 15:39  khoang82
+
+	* view_file.php: remove unneccessayr comments
+
+2003-09-18 15:39  khoang82
+
+	* FileData_class.php: adding feature for anonymous logon
+
+2003-09-18 15:27  khoang82
+
+	* user.php: adding user pref page
+
+2003-09-18 15:26  khoang82
+
+	* profile.php: add profile modifying page
+
+2003-09-18 15:26  khoang82
+
+	* index.php: removing extra space
+
+2003-09-18 15:15  khoang82
+
+	* add.php, edit.php: use str_replace
+
+2003-09-18 14:57  khoang82
+
+	* User_class.php: Pref
+
+2003-09-18 10:37  khoang82
+
+	* toBePublished.php: fixed SF [ 789337 ] Email to department on
+	  multiple files
+
+2003-09-18 10:07  khoang82
+
+	* out.php: turn on statistic report
+
+2003-09-18 10:06  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php: code optimization
+
+2003-09-18 10:03  khoang82
+
+	* config.php, index.php: feature [ 781555 ] SSL ODM.
+
+2003-09-17 14:25  khoang82
+
+	* functions.php: fix bugs
+
+2003-09-17 14:19  khoang82
+
+	* functions.php, search.php: fix search, mysort, and pagination
+
+2003-09-17 11:51  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  add.php, admin.php, category.php, check-in.php, check-out.php,
+	  check_exp.php, classHeaders.php, commitchange.php, crumb.php,
+	  databaseData_class.php, delete.php, department.php, details.php,
+	  edit.php, error.php, file_ops.php, functions.php, history.php,
+	  in.php, index.php, logout.php, out.php, personal_info.php,
+	  rejects.php, search.php, setup.php, toBePublished.php, user.php,
+	  view.php, view_file.php: re-allign the code for better
+	  readability
+
+2003-09-17 11:13  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, details.php, edit.php, history.php,
+	  profile.php, toBePublished.php, user.php, view.php,
+	  view_file.php: resolve IIS problem toward REQUEST_URI
+
+2003-09-17 11:06  khoang82
+
+	* out.php: resolve IIS issues of REQUEST_URI
+
+2003-09-17 11:05  khoang82
+
+	* toBePublished.php: remove irrelevant space
+
+2003-09-17 10:58  khoang82
+
+	* functions.php: fix pagination
+
+2003-09-17 10:50  khoang82
+
+	* functions.php: fix my_sort() 1.2
+
+2003-09-17 10:47  khoang82
+
+	* search.php: fix search for 1.2
+
+2003-09-17 10:38  khoang82
+
+	* config.php: vanilla config.php
+
+2003-09-17 09:51  logart
+
+	* setup.php: format changes
+
+2003-09-16 13:50  khoang82
+
+	* check_exp.php: if authorization is not turned on, disable this
+	  script
+
+2003-09-16 13:47  khoang82
+
+	* admin.php: disable check_exp in admin if authorization is not on
+
+2003-09-16 10:38  khoang82
+
+	* toBePublished.php: fixed SF ticket [ 799747 ] authorisation email
+	  contents
+
+2003-09-16 09:56  khoang82
+
+	* search.php: fix search bugs
+
+2003-09-16 09:26  khoang82
+
+	* edit.php: if file moderation feature is disabled, there is no
+	  need for moderation for edit.php
+
+2003-09-16 09:16  khoang82
+
+	* edit.php: any file property being alter will need moderation from
+	  now on.
+
+2003-09-15 16:29  khoang82
+
+	* UserPermission_class.php, User_class.php, add.php, details.php,
+	  edit.php: giving reviewer automatic and non revokable admin right
+	  for the files they are responsible for
+
+2003-09-15 16:25  khoang82
+
+	* config.php: add a setting to allow the webmaster set the default
+	  right that every author will have when commiting a file
+
+2003-09-12 13:38  khoang82
+
+	* config.php: fix archivefolder var
+
+2003-09-12 13:27  khoang82
+
+	* config.php: include in the include folder
+
+2003-09-12 11:59  khoang82
+
+	* search.php: fix 717817 Search by Department Broken
+
+2003-08-26 10:17  logart
+
+	* FormCheck.js: added & to email regexp as per RFC
+
+2003-07-23 11:51  logart
+
+	* admin.php, category.php: internat
+
+2003-07-23 09:47  logart
+
+	* add.php: internat
+
+2003-07-23 09:16  logart
+
+	* out.php: renamed lang var
+
+2003-07-23 09:15  logart
+
+	* index.php: internat
+
+2003-07-23 09:14  logart
+
+	* classHeaders.php, crumb.php, functions.php, mimetypes.php:
+	  relocated to include/
+
+2003-07-22 15:44  logart
+
+	* config.php: updated version num
+
+2003-07-22 15:23  logart
+
+	* config.php, index.php: New Feature: Internationalization Support
+
+2003-07-22 15:17  logart
+
+	* check-in.php, delete.php, install/upgrade_11.php: Same changes as
+	  1.2 branch
+
+2003-07-22 15:16  logart
+
+	* check-in.php, delete.php, install/upgrade_11.php: bug fixes for
+	  permissions on folder creation removed ; from upgrade script
+
+2003-07-21 14:42  logart
+
+	* check-in.php, delete.php: mkdir expecting two args in some
+	  versions
+
+2003-07-21 10:31  logart
+
+	* ChangeLog: added new version
+
+2003-07-21 10:19  logart
+
+	* ChangeLog: rel-1.2rc1 package
+
+2003-07-18 10:59  khoang82
+
+	* User_Perms_class.php: fix no listing
+
+2003-07-18 08:58  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php, out.php, search.php:
+	  remove timestamp
+
+2003-07-17 08:19  logart
+
+	* ChangeLog: [no log message]
+
+2003-07-14 13:55  khoang82
+
+	* UserPermission_class.php: code clean up for
+	  UserPermission_class.php
+
+2003-07-14 12:40  khoang82
+
+	* check_exp.php: add iteration listing
+
+2003-07-14 12:38  khoang82
+
+	* FileData_class.php: remove filesize db lookup
+
+2003-07-10 14:49  logart
+
+	* index.php: require config.php
+
+2003-07-10 13:00  logart
+
+	* FileData_class.php, add.php, check-in.php, database.sql,
+	  details.php, functions.php, history.php, in.php, install/odm.php,
+	  install/upgrade_11.php: changed filesize functions to use actual
+	  filesystem filesize instead of writing the size to the database.
+
+2003-07-09 14:18  logart
+
+	* ChangeLog: release 1.2rc1
+
+2003-07-09 11:10  logart
+
+	* config.php: added some comments
+
+2003-07-09 11:06  logart
+
+	* delete.php: fixed typo
+
+2003-07-09 11:04  logart
+
+	* docs/: opendocman-1.html, opendocman-3.html, opendocman-4.html,
+	  opendocman-6.html, opendocman-7.html, opendocman.html,
+	  opendocman.pdf, opendocman.txt, src/opendocman.lyx: updated
+	  documentation
+
+2003-07-09 10:07  logart
+
+	* rejects.php, delete.php: added footer call
+
+2003-07-08 13:23  khoang82
+
+	* secureurl.class.php: fix [ 768007 ] secureurl not working
+
+2003-07-08 13:21  khoang82
+
+	* out.php: fix code indentation and alignment for better
+	  readability
+
+2003-07-08 13:19  khoang82
+
+	* functions.php: fix code syntax usage
+
+2003-07-08 13:17  khoang82
+
+	* file_ops.php: fixing [ 767961 ] missing footer on check-out clear
+	  admin page
+
+2003-07-08 11:41  logart
+
+	* database.sql, setup.php, install/odm.php: sql formatting issues
+	  fixed
+
+2003-07-08 11:18  logart
+
+	* install/upgrade_11.php: seperated sql into seperate statements
+
+2003-07-08 10:33  logart
+
+	* install/: odm.php, upgrade_11.php: added final 1.2rc1 db changes
+
+2003-07-07 14:41  logart
+
+	* category.php, department.php, user.php: added demo check for
+	  deletion operations
+
+2003-07-07 14:29  khoang82
+
+	* out.php: fix bugs
+
+2003-07-07 14:28  khoang82
+
+	* out.php: remove debug info
+
+2003-07-07 12:33  khoang82
+
+	* admin.php, category.php, commitchange.php, delete.php,
+	  department.php, details.php, file_ops.php, functions.php,
+	  out.php, rejects.php, search.php, secureurl.class.php,
+	  toBePublished.php, user.php: integrating secureurl.  Fix small
+	  bugs
+
+2003-07-02 14:00  logart
+
+	* functions.php: fixed type added fixed length to description
+	  column in list_files
+
+2003-06-30 14:36  khoang82
+
+	* functions.php: add secureurl into pagination
+
+2003-06-30 14:21  khoang82
+
+	* functions.php: encode url for list_table
+
+2003-06-30 14:08  khoang82
+
+	* functions.php: Changed out.php to leave out the "comment" column
+
+2003-06-30 13:08  khoang82
+
+	* functions.php: fix JS errors
+
+2003-06-27 13:22  khoang82
+
+	* secureurl.class.php, secureurl.php: add secure url switch to
+	  toggle on and off
+
+2003-06-27 13:20  khoang82
+
+	* out.php: secure url
+
+2003-06-27 13:09  khoang82
+
+	* functions.php: globalized $http_server_var
+
+2003-06-27 13:08  khoang82
+
+	* toBePublished.php: big fix using @
+
+2003-06-23 12:56  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, commitchange.php,
+	  config.php, department.php, details.php, edit.php, file_ops.php,
+	  functions.php, history.php, in.php, out.php, profile.php,
+	  rejects.php, search.php, secureurl.php, toBePublished.php,
+	  user.php, view.php, view_file.php: add secureurl disabling
+	  feature alter $_SERVER['REQUEST_URI'] to $_SERVER['PHP_SELF'] .
+	  '?' . $HTTP_SERVER_VARS['QUERY_STRING']for IIS compatibility
+	  issue
+
+2003-06-20 14:50  khoang82
+
+	* details.php: We allowed the user to send an email to the owner of
+	  the document by clicking on their name.  The "To, subject, and
+	  salutation" fields should be dynamically filled.
+
+2003-06-19 15:51  khoang82
+
+	* config.php: secureurl setup
+
+2003-06-19 15:45  khoang82
+
+	* secureurl.class.php, secureurl.php: secureurl codes
+
+2003-06-19 15:43  khoang82
+
+	* admin.php, check-in.php, check-out.php, check_exp.php,
+	  UserPermission_class.php, User_Perms_class.php, details.php,
+	  edit.php, file_ops.php, history.php, search.php, view.php,
+	  out.php: add secureurl feature
+
+2003-06-18 10:19  khoang82
+
+	* help.html: html 4.01 verified
+
+2003-06-18 09:32  khoang82
+
+	* functions.php: fix no file found exit
+
+2003-06-18 09:24  khoang82
+
+	* config.php, functions.php: fix no file found
+
+2003-06-18 09:19  khoang82
+
+	* Dept_Perms_class.php, add.php, check-in.php, config.php, out.php,
+	  search.php: branch merge conflict fixes
+
+2003-06-18 08:17  logart
+
+	* config.php: vanilla again
+
+2003-06-17 16:59  logart
+
+	* Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php, add.php,
+	  admin.php, check-in.php, commitchange.php, config.php,
+	  database.sql, edit.php, error.php, file_ops.php,
+	  functions.archive.php, functions.php, out.php, search.php,
+	  setup.php, user.php, install/odm.php: merged and conflicts fixed
+	  from 1.2rc1
+
+2003-06-17 15:19  khoang82
+
+	* edit.php: remove extra comments
+
+2003-06-17 15:13  khoang82
+
+	* functions.archive.php: This file contains functions that are not
+	  used in ODM1.2-rc1.
+
+2003-06-17 15:12  khoang82
+
+	* functions.php: Alot of the functions I wrote for previous
+	  versions are no longer useful for this version, 1.2rc1.  So I
+	  decided to store those functions in the file
+	  functions.archive.php.  ODM-1.2rc1 does not need the file
+	  functions.archive.php to run.  This file is only for archiving
+	  purpose so if we ever need any of these functions in the future,
+	  we do not need to redesign them.
+
+2003-06-17 15:06  khoang82
+
+	* edit.php: Fix: [ 694688 ] better permission scheme Resolution:
+	  Originally, the permission select boxes in edit.php are to show
+	  users who has certain right to the chosen file.  However, when
+	  the admin alter anything on this page and submit, there is no way
+	  to figure out which of these users where specifically given their
+	  rights and which one got theirs through inheriting it.  So the
+	  new design for this page will both more straight forward for the
+	  user and the programmers.  The permission select boxes are now
+	  used to directly specify which user has which right to the file.
+	  Admin needs not to set inheriting rights.  When the admin sets
+	  rights to the department, he indirectly set inheriting rights for
+	  all users.
+
+2003-06-10 08:24  logart
+
+	* User_class.php: fixed variable typo
+
+2003-06-10 08:03  logart
+
+	* ChangeLog: sjl
+
+2003-06-05 17:17  khoang82
+
+	* check-in.php: not allowing the user to check-in a file if this
+	  file had not been checked out
+
+2003-06-05 16:59  khoang82
+
+	* error.php, file_ops.php: file_ops.php are operations for root
+	  user.  error.php error messages are now in bigger red font
+
+2003-06-05 16:48  khoang82
+
+	* admin.php, commitchange.php, functions.php: add feature where
+	  root can clear check out status of a checked out file
+
+2003-06-05 16:47  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php: optimize ODM
+
+2003-06-04 15:35  khoang82
+
+	* commitchange.php: from now on ODM will not enforce phonenumber
+	  format
+
+2003-05-30 08:56  logart
+
+	* setup.php: removed some duplicate code from the merge
+
+2003-05-30 08:34  logart
+
+	* install/odm.php: added version comment
+
+2003-05-30 08:32  logart
+
+	* config.php: cleaned up settings, added remarks, moved filetypes
+	  up
+
+2003-05-29 18:06  khoang82
+
+	* Dept_Perms_class.php, UserPermission_class.php, add.php,
+	  functions.php, out.php, search.php: fix minor bugs
+
+2003-05-28 17:18  khoang82
+
+	* add.php, check-in.php, check_exp.php, config.php, crumb.php,
+	  delete.php, error.php, functions.php, out.php, setup.php,
+	  user.php, view_file.php: 1.2-rc1 merge
+
+2003-05-28 16:44  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php, User_Perms_class.php,
+	  User_class.php, details.php, edit.php, mimetypes.php,
+	  toBePublished.php, UserPermission_class.php: 1.2-rc1 merge
+
+2003-05-28 16:40  khoang82
+
+	* history.php, in.php, index.php, linkcontrol.css, logout.php,
+	  admin.php, category.php, check-out.php, commitchange.php,
+	  department.php: 1.2-rc1 merge
+
+2003-05-28 16:40  khoang82
+
+	* databaseData_class.php, profile.php, rejects.php, search.php,
+	  view.php: 1.2-rc1 code merge
+
+2003-05-28 16:21  khoang82
+
+	* details.php: fix bread crums output
+
+2003-05-28 12:35  logart
+
+	* setup.php: text added
+
+2003-05-28 11:54  logart
+
+	* config.php: increased version #
+
+2003-05-28 11:50  logart
+
+	* install/odm.php: upgraded to 1.2rc1 level
+
+2003-05-28 11:39  logart
+
+	* database.sql: added DROP TABLE syntax
+
+2003-05-28 11:33  logart
+
+	* install/upgrade.php: added 1.1 upgrade
+
+2003-05-28 11:29  logart
+
+	* database.sql: added 1.2rc1 database structure
+
+2003-05-28 11:25  logart
+
+	* install/upgrade_11.php: Initial import
+
+2003-05-28 10:50  logart
+
+	* setup.php: added 1.1-Final upgrades
+
+2003-05-22 18:29  khoang82
+
+	* FileData_class.php, UserPermission_class.php, User_class.php,
+	  details.php, functions.php, out.php, search.php: new codes to
+	  allow user to update their expired files
+
+2003-05-14 19:44  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php, functions.php,
+	  search.php, UserPermission_class.php: upgrade search and security
+	  engine for optimized speed
+
+2003-05-14 16:55  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, department.php, details.php, edit.php,
+	  history.php, in.php, out.php, profile.php, rejects.php,
+	  search.php, toBePublished.php, user.php, view.php, view_file.php:
+	  enforce urlencode() on url redirection
+
+2003-05-09 11:55  logart
+
+	* install/odm.php: fixed missing create statement for admin table
+
+2003-05-09 11:55  logart
+
+	* setup.php: missing 1.1 upgrade link
+
+2003-05-09 11:54  logart
+
+	* delete.php: fixed directory perms issue
+
+2003-05-09 11:54  logart
+
+	* add.php, check-in.php, error.php: fixed problem with directory
+	  missing or not writeable
+
+2003-05-09 09:52  logart
+
+	* add.php: fixed error in UPDATE query
+
+2003-05-09 09:46  logart
+
+	* add.php: re-aligned the permissions selects
+
+2003-05-09 09:40  logart
+
+	* linkcontrol.css: removed bold from hover because it was causing
+	  the cells to resize
+
+2003-05-09 08:44  logart
+
+	* setup.php: removed extra includes in functions
+
+2003-05-09 08:41  logart
+
+	* setup.php: added all updates up to 1.1
+
+2003-05-09 08:37  logart
+
+	* install/upgrade_11.php: Initial Import
+
+2003-05-09 08:36  logart
+
+	* install/odm.php: 1.2rc1 schema
+
+2003-05-09 08:22  logart
+
+	* database.sql: applied changes in opendocman_khoa to this file
+
+2003-05-08 16:43  khoang82
+
+	* commitchange.php: comment out phonenumber formating
+
+2003-05-08 16:38  khoang82
+
+	* functions.php: drop left message in drawstatus()
+
+2003-05-08 16:33  khoang82
+
+	* admin.php, check-out.php, check_exp.php, config.php, details.php,
+	  rejects.php, toBePublished.php: add optionals for file expiration
+
+2003-05-08 16:32  khoang82
+
+	* FileData_class.php: add setStatus()
+
+2003-05-07 16:57  khoang82
+
+	* delete.php, toBePublished.php: fix undefined index
+
+2003-05-07 16:57  khoang82
+
+	* rejects.php: fixed inconsistent root_mode
+
+2003-05-07 16:56  khoang82
+
+	* functions.php: add				array getAllUser()
+	  where array =  return a 2D array of users.   >       array[0][0]
+	  = id	 >	 array[0][1] = "LastName, FirstName"   >
+	  array[0][2] = "username"
+
+2003-05-07 16:54  khoang82
+
+	* edit.php: add change ownership functionality
+
+2003-05-06 16:27  logart
+
+	* config.php: fixed typo
+
+2003-05-06 16:22  logart
+
+	* ChangeLog: Documentationo changes
+
+2003-05-06 16:22  logart
+
+	* setup.php, docs/opendocman-1.html, docs/opendocman-2.html,
+	  docs/opendocman-3.html, docs/opendocman-4.html,
+	  docs/opendocman-5.html, docs/opendocman-6.html,
+	  docs/opendocman.html, docs/opendocman.pdf, docs/opendocman.txt,
+	  docs/src/opendocman.lyx, images/logo.eps: added dev notes and
+	  configuration to documentation added links to documentation in
+	  setup script
+
+2003-05-06 16:19  logart
+
+	* config.php: moved filetypes to better location removed ldap.inc
+	  call
+
+2003-05-06 15:40  logart
+
+	* docs/opendocman.pdf: Initial import of PDF manual
+
+2003-05-06 15:38  logart
+
+	* docs/: README.html, README.txt, opendocman-1.html,
+	  opendocman-2.html, opendocman-3.html, opendocman-4.html,
+	  opendocman-5.html, opendocman.html, opendocman.txt,
+	  src/opendocman.lyx: improved documentation  - Added html/text
+	  formats
+
+2003-05-06 10:07  logart
+
+	* ChangeLog: release 1.1 final
+
+2003-05-06 10:06  logart
+
+	* install/upgrade_11rc2.php: initial import of upgrade script from
+	  v1.1rc2 -> 1.1 final
+
+2003-05-06 10:06  logart
+
+	* database.sql, setup.php, install/odm.php, install/upgrade.php:
+	  added 1.1rc2 update fixed data table category type
+
+2003-05-06 09:28  logart
+
+	* config.php: removed ldap refs
+
+2003-04-30 15:32  khoang82
+
+	* delete.php: fix POST to REQUEST for generality
+
+2003-04-25 17:49  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, department.php, details.php, history.php,
+	  in.php, index.php, out.php, profile.php, rejects.php, search.php,
+	  toBePublished.php, user.php, view.php, view_file.php: add
+	  bookmarkable URL feature
+
+2003-04-25 17:09  khoang82
+
+	* add.php, error.php: fix error output message $allowedFile
+
+2003-04-25 15:46  khoang82
+
+	* User_class.php, admin.php, category.php, commitchange.php,
+	  config.php, crumb.php, department.php, details.php,
+	  functions.php, history.php, in.php, linkcontrol.css, logout.php,
+	  out.php, search.php, user.php: integrating bread crumb class into
+	  OpenDocMan
+
+2003-04-23 16:34  logart
+
+	* User_Perms_class.php: fixed bug in 139
+
+2003-04-18 16:11  khoang82
+
+	* functions.php: remove extra spaces in list_files()
+
+2003-04-18 16:10  khoang82
+
+	* error.php: add new error message
+
+2003-04-18 16:09  khoang82
+
+	* delete.php: upgrade list archives mode to use new list_files()
+
+2003-04-18 16:08  khoang82
+
+	* config.php: add new configuration for file expiration
+
+2003-04-18 16:07  khoang82
+
+	* add.php: uncommented header('')
+
+2003-04-18 15:28  khoang82
+
+	* check_exp.php: fix redudent rejects
+
+2003-04-18 15:25  khoang82
+
+	* check_exp.php: cron script to reject expired files
+
+2003-04-16 16:17  khoang82
+
+	* add.php, config.php, out.php: recovered out.php.  Leave major
+	  optimization for later alter add.php to just add 1 copy of the
+	  file.  (debuging code can add multiple copies of the file)
+
+2003-04-14 10:38  logart
+
+	* functions.php: fixed type with \ replaced " with '
+
+2003-04-11 16:01  khoang82
+
+	* UserPermission_class.php: optimized and remove redundancy
+
+2003-04-11 16:00  khoang82
+
+	* User_Perms_class.php, User_class.php: optimized
+
+2003-04-11 15:58  khoang82
+
+	* toBePublished.php: fixed to use the new list_file()
+
+2003-04-11 15:56  khoang82
+
+	* search.php: uses new search().  Must faster, much more reliable,
+	  and much more stable
+
+2003-04-11 15:54  khoang82
+
+	* rejects.php: optimized for speed.  changed to used new
+	  list_file()
+
+2003-04-11 15:53  khoang82
+
+	* out.php: optimized for speed.  Not a working version.  Please use
+	  earlier verion
+
+2003-04-11 15:52  khoang82
+
+	* functions.php: add getmicrotime() for debug add optimized
+	  list_file() for speed
+
+2003-04-11 15:50  khoang82
+
+	* FileData_class.php: add function getFileSize()
+
+2003-04-11 15:49  khoang82
+
+	* Dept_Perms_class.php: remove owner's exclusive file
+	  administration from this class
+
+2003-04-11 15:47  khoang82
+
+	* databaseData_class.php: add function
+	  convertToFileDataOBJ($fid_array) to the root class so other
+	  derrived ones can inherit it.
+
+2003-04-11 15:46  khoang82
+
+	* check-in.php: change uploaded revision to 'current' and change
+	  the last revision from 'current' to a numeric one
+
+2003-04-08 08:39  logart
+
+	* check-in.php: changed copy to move_uploaded_file
+
+2003-04-02 18:36  khoang82
+
+	* add.php, admin.php, delete.php, error.php, functions.php,
+	  out.php, rejects.php, search.php, toBePublished.php: my_sort
+	  function added which reduces sorting time dramatically
+
+2003-03-28 09:37  khoang82
+
+	* FileData_class.php, admin.php, check-out.php, config.php,
+	  delete.php, details.php, edit.php, error.php, history.php,
+	  mimetypes.php, rejects.php, view_file.php: admin ==> rewording
+	  check-out.php ==> allow it to work with archived files config ==>
+	  nothing new delete ==> when delete files, delete their revisions
+	  as well, add confirmation in view_archives mode, details ==>
+	  allow it to work with archive files, block archives from being
+	  edit, check-out, or delete edit ==> block user from hacking the
+	  url into editing archives error ==> add new error
+	  FileData_class.php ==> add isArchived() fucntion history,
+	  view_file, rejects ==> allow them to work with archives
+
+2003-03-27 11:00  khoang82
+
+	* delete.php, functions.php: somehow no file-relocating function is
+	  provided by php, so fmove() is added to functions.php delete.php
+	  now moves files to archive folder when being archieved and move
+	  it out into dataDir with unarchived.
+
+	  last_message should be set for all file operations
+
+2003-03-27 10:34  khoang82
+
+	* check-in.php, config.php, history.php, view_file.php: fix folder
+	  comlexity in config.php
+
+2003-03-27 10:14  khoang82
+
+	* check-out.php, delete.php, details.php, edit.php, error.php: add
+	  new error to error.php saying operation may not be done on
+	  revision copy error out when user tries to checkout, delete, edit
+	  a revision copy
+
+2003-03-27 09:59  khoang82
+
+	* add.php, check-in.php, config.php, details.php, history.php,
+	  view_file.php: revision feature added
+
+2003-03-26 14:36  logart
+
+	* config.php: demo got lost during merge - put back in
+
+2003-03-26 08:45  khoang82
+
+	* Dept_Perms_class.php, FileData_class.php, FormCheck.js,
+	  UserPermission_class.php, User_Perms_class.php, User_class.php,
+	  add.php, admin.php, check-in.php, commitchange.php, config.php,
+	  delete.php, details.php, edit.php, functions.php, out.php,
+	  rejects.php, search.php, toBePublished.php, user.php,
+	  view_file.php: commiting rel-1-2-rc1 after branching off.
+	  initial imports
+
+2003-03-26 08:43  khoang82
+
+	* images/: exclamation.gif, exclamation_red.gif: add exclamation
+	  images
+
+2003-03-26 08:30  logart
+
+	* user.php: fixed typo
+
+2003-03-25 16:17  logart
+
+	* ChangeLog, FormCheck.js, UserPermission_class.php, add.php,
+	  check-in.php, commitchange.php, config.php, delete.php, edit.php,
+	  functions.php, out.php, setup.php, user.php, view_file.php,
+	  docs/README.html, docs/README.txt, images/exclamation.gif,
+	  images/exclamation_red.gif, install/upgrade.php,
+	  install/upgrade_11rc1.php: merged from rel-1-1-rc1 branch
+
+2003-03-25 15:36  logart
+
+	* ChangeLog: new
+
+2003-03-25 15:34  logart
+
+	* install/upgrade.php: fixed typo added 11rc1
+
+2003-03-25 15:34  logart
+
+	* setup.php: added 11rc1
+
+2003-03-25 15:33  logart
+
+	* install/upgrade_11rc1.php: initial import
+
+2003-03-25 10:03  khoang82
+
+	* delete.php: make this script $register_globals off compatible
+
+2003-03-24 10:14  khoang82
+
+	* FormCheck.js: phonenumber validation has been removed
+
+2003-03-24 10:04  khoang82
+
+	* view_file.php: fix https viewing and downloading problem
+
+2003-03-19 13:52  logart
+
+	* config.php: updated version removed specifics from config
+
+2003-03-19 13:50  logart
+
+	* docs/: README.html, README.txt: updated ver #
+
+2003-03-19 11:54  logart
+
+	* out.php, images/exclamation.gif, images/exclamation_red.gif:
+	  added yellow ! for new notice added red ! for rejected notice
+
+2003-03-18 07:44  logart
+
+	* view_file.php: added backslash thanks Huy
+
+2003-03-17 17:11  logart
+
+	* check-in.php: fixed urlencoding on last_message
+
+2003-03-17 15:49  logart
+
+	* edit.php: fixed $uid var
+
+2003-03-14 14:21  khoang82
+
+	* add.php: init status to 0 where upload new file
+
+2003-03-14 14:20  khoang82
+
+	* UserPermission_class.php: add revokable admin right of file owner
+
+2003-03-13 16:20  khoang82
+
+	* functions.php: fix urlencode for sort_browser.  Resolving
+	  bug-702377
+
+2003-03-12 13:20  logart
+
+	* user.php: added demo logic to Modify user
+
+2003-03-12 13:06  logart
+
+	* config.php: added a demo mode setting
+
+2003-03-12 11:52  logart
+
+	* setup.php, commitchange.php: fixed username issues from bug
+	  #702453
+
+2003-03-12 09:11  logart
+
+	* edit.php: added urlencode to message
+
+2003-03-11 14:06  logart
+
+	* ChangeLog: updated to 1.1rc1
+
+2003-03-11 13:57  logart
+
+	* setup.php: added include
+
+2003-03-11 11:57  logart
+
+	* database.sql, install/odm.php: added dept_reviewer
+
+2003-03-11 11:37  logart
+
+	* setup.php: removed hostname
+
+2003-03-11 10:19  logart
+
+	* setup.php: removed ''
+
+2003-03-11 10:11  logart
+
+	* setup.php: added roothost to grant
+
+2003-03-11 09:49  logart
+
+	* setup.php, install/odm.php, install/upgrade_10.php: removed ;
+	  causing problems with 3.23 of mysql
+
+2003-03-07 16:23  logart
+
+	* setup.php: fixed config.php problems added username,password,new
+	  database form fields
+
+2003-03-07 13:21  khoang82
+
+	* details.php: fixing permission display
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/details.php,v retrieving
+	  revision 1.13 diff -r1.13 details.php 94c94 < if ($status == 0)
+	  ---
+	  > if ($status == 0  && $user->canWrite($_REQUEST['id']))
+
+2003-03-06 16:56  khoang82
+
+	* edit.php: remove old comments
+
+2003-03-06 16:34  khoang82
+
+	* details.php: Fix Bugs item #679855, long comments problem
+
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/details.php,v retrieving
+	  revision 1.12 diff -r1.12 details.php 35c35 < <table border="0"
+	  cellspacing="4" cellpadding="1"> ---
+	  > <table border="0" width="400" cellspacing="4" cellpadding="1">
+
+2003-03-06 16:32  khoang82
+
+	* add.php: fix undefined $dept_name RCS file:
+	  /cvsroot/opendocman/opendocman/add.php,v retrieving revision 1.10
+	  diff -r1.10 add.php 326c326 < 	$result_array = array();
+	  ---
+	  >	  $result_array = array();
+	  384c384 <		  $query = "INSERT INTO dept_perms (fid,
+	  rights, dept_id) VALUES('$fileId',
+	  'addslashes(space_to_underscore($dept_name)))', '$id')"; ---
+	  >		  $query = "INSERT INTO dept_perms (fid, rights,
+	  dept_id) VALUES('$fileId', '" .
+	  addslashes($_REQUEST[space_to_underscore($dept_name)]) . "',
+	  '$id')";
+
+2003-03-06 16:30  khoang82
+
+	* FileData_class.php: fix 0 offset Index: FileData_class.php
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/FileData_class.php,v
+	  retrieving revision 1.11 diff -r1.11 FileData_class.php 147a148
+	  >	    $result_array = array();
+	  184,185c185,188 <	    $result_array =
+	  databaseData::combineArrays($owner_uid, $u_uid); <
+	  $result_array = databaseData::combineArrays($result_array,
+	  $d_uid); ---
+	  >	    if( isset($owner_uid) && isset($u_uid) )
+	  >	    {	    $result_array =
+	  databaseData::combineArrays($owner_uid, $u_uid);	}
+	  >	    if( isset($result_array) && isset($d_uid) )
+	  >	    {	    $result_array =
+	  databaseData::combineArrays($result_array, $d_uid);	}
+
+2003-03-05 15:02  logart
+
+	* ChangeLog: updated
+
+2003-03-05 15:00  logart
+
+	* setup.php: added comments
+
+2003-03-05 13:45  logart
+
+	* docs/php_coding_standard.html: moved from root folder
+
+2003-03-05 13:45  logart
+
+	* php_coding_standard.html: moved to docs folder
+
+2003-03-05 13:45  logart
+
+	* docs/developers.txt: initial import of developer documentation
+
+2003-03-05 13:41  logart
+
+	* setup.php: changed include to odm.php
+
+2003-03-05 13:41  logart
+
+	* install/: odm.php, odm1.1rc1.php: renamed file to odm.php
+
+2003-03-05 13:15  logart
+
+	* setup.php: initial import of installation script
+
+2003-03-05 13:14  logart
+
+	* database.sql: fixed column types (tinyint to smallint, etc.)
+
+2003-03-05 13:08  logart
+
+	* docs/: README.html, README.txt: initial import
+
+2003-03-05 13:07  logart
+
+	* TODO: replaced with sourceforge
+
+2003-03-05 13:06  logart
+
+	* README: [no log message]
+
+2003-03-05 13:04  logart
+
+	* BUGS: not needed anymore
+
+2003-03-05 13:02  logart
+
+	* README: replaced by README.txt
+
+2003-03-05 11:01  logart
+
+	* install/: odm1.1rc1.php, upgrade.php, upgrade_10.php: initial
+	  import of installation scripts
+
+2003-03-04 08:44  logart
+
+	* config.php: vanilla
+
+2003-03-04 08:36  logart
+
+	* userinfo.php: removed
+
+2003-03-03 13:49  khoang82
+
+	* view_file.php: '.' in single or double quotations does not have
+	  any meaning other than being an asci char.  No escape char
+	  required.
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/view_file.php,v
+	  retrieving revision 1.7 diff -r1.7 view_file.php 25c25 <
+	  list($prefix,$suffix)= split ("\.", $realname); ---
+	  >	  list($prefix , $suffix)= split (".", $realname);
+
+2003-03-03 13:46  khoang82
+
+	* user.php: check for var before use
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/user.php,v retrieving
+	  revision 1.12 diff -r1.12 user.php 319c319,322 <
+	  draw_status_bar("Update User",$_POST['last_message']); ---
+	  >		    if( isset( $_POST['last_message'] ) )
+	  >				  {	  draw_status_bar("Update
+	  User",$_POST['last_message']);  }
+	  >				  else
+	  >				  {	  draw_status_bar("Update
+	  User",'');	  }
+
+2003-03-03 13:41  khoang82
+
+	* search.php: Fix bad array offset
+
+	  Index: search.php
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/search.php,v retrieving
+	  revision 1.11 diff -r1.11 search.php 40d39 < 152c151,153 <
+		   $obj_array_len = sizeof($OBJ_array); ---
+	  >		    if( sizeof( $OBJ_array ) == 0 )
+	  >					  return $OBJ_array;
+	  >				  $obj_array_len =
+	  sizeof($OBJ_array);
+
+2003-02-27 15:55  khoang82
+
+	* commitchange.php: fix bad indexing problem
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/commitchange.php,v
+	  retrieving revision 1.13 diff -r1.13 commitchange.php
+	  119,123c119,128 <	  $query.= 'department="' .
+	  addslashes($_REQUEST['department']) . '",'; <       $query.=
+	  'phone="' . addslashes($_REQUEST['phonenumber']) . '",'; <
+	  $query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,'; <
+	  $query.= 'last_name="' . addslashes($_REQUEST['last_name']) .
+	  '",'; <	$query.= 'first_name="' .
+	  addslashes($_REQUEST['first_name']) . '" '; ---
+	  >	  if( isset( $_REQUEST['department'] ) )
+	  >	  {	  $query.= 'department="' .
+	  addslashes($_REQUEST['department']) . '",';	}
+	  >	  if( isset( $_REQUEST['phonenumber'] ) )
+	  >	  {	  $query.= 'phone="' .
+	  addslashes($_REQUEST['phonenumber']) . '",';	     }
+	  >	  if( isset( $_REQUEST['Email'] ) )
+	  >	  {	  $query.= 'Email="' .
+	  addslashes($_REQUEST['Email']) . '" ,';    }
+	  >	  if( isset( $_REQUEST['last_name'] ) )
+	  >	  {	  $query.= 'last_name="' .
+	  addslashes($_REQUEST['last_name']) . '",';	 }
+	  >	  if( isset( $_REQUEST['first_name'] ) )
+	  >	  {	  $query.= 'first_name="' .
+	  addslashes($_REQUEST['first_name']) . '" ';	}
+
+2003-02-27 15:33  logart
+
+	* department.php, commitchange.php, user.php: globalization
+
+2003-02-27 15:29  logart
+
+	* add.php: globalization changes
+
+2003-02-27 15:28  khoang82
+
+	* edit.php: send last_message to out.php instead of message
+
+2003-02-27 15:20  khoang82
+
+	* functions.php: fix offset prob <
+	  if(sizeof($obj_array)<=1 and $obj_array[0]==null) ---
+	  >		  if(sizeof($obj_array)<=1 and !isset($obj_array) )
+	  660c660 <		    if($fileobj_array[0] == null) ---
+	  >		    if(!isset($fileobj_array))
+
+2003-02-27 14:01  khoang82
+
+	* UserPermission_class.php: add comments
+	  ===================================================================
+	  RCS file:
+	  /cvsroot/opendocman/opendocman/UserPermission_class.php,v
+	  retrieving revision 1.11 diff -r1.11 UserPermission_class.php
+	  53a54,56
+	  >	// One might ask why getViewableFileIds() doesn't return
+	  the combined
+	  >	// result of User_perm and Dept_Perm classes.
+	  User_Perm_class only know
+	  >	// of it self and the same goes with Dept_Perms.
+
+2003-02-27 13:59  khoang82
+
+	* FileData_class.php: fix undefine vars
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/FileData_class.php,v
+	  retrieving revision 1.10 diff -r1.10 FileData_class.php
+	  150c150,151 < 	$non_prev_user_query = "SELECT uid FROM
+	  $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights <
+	  $right"; ---
+	  >	    //query for user who has right less than $right
+	  >	    $non_prev_user_query = "SELECT uid FROM
+	  $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights <
+	  $right";
+	  153a155
+	  >	    // result of $non_prev_user_query query.  Look above
+	  for more information.
+	  155a158,159
+	  >	    $not_u_uid = array();// array of user_id that are
+	  forbidden on the file
+	  >	    $d_uid = array();// init for array of dept_id;
+
+2003-02-27 13:58  khoang82
+
+	* edit.php: globalized vars fixes:
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/edit.php,v retrieving
+	  revision 1.11 diff -r1.11 edit.php 32c32 < if (!isset($submit))
+	  ---
+	  > if (!isset($_REQUEST['submit']))
+	  154c154 <		  <input type="hidden" name="id"
+	  value="<?php	echo $id; ?>"> ---
+	  >		  <input type="hidden" name="id" value="<?php  echo
+	  $_REQUEST['id']; ?>">
+	  197c197 <		    $id+=2; ---
+	  >		    //$id+=2;
+	  373,375d372 <       //clean up <	 //mysql_free_result
+	  ($result); <	     mysql_free_result ($result2); 398,399c395,396
+	  <	  $filedata = new FileData($id, $GLOBALS['connection'],
+	  $GLOBALS['database']); <	 $filedata->setId($id); ---
+	  >	  $filedata = new FileData($_REQUEST['id'],
+	  $GLOBALS['connection'], $GLOBALS['database']);
+	  >	  $filedata->setId($_REQUEST['id']);
+	  402c399 <	  if (sizeof($view) <= 0 or sizeof($modify)<= 0 or
+	  sizeof($read)<= 0 or sizeof ($admin)<= 0) {
+	  header("Location:error.php?ec=12"); exit; } ---
+	  >	  if (sizeof($_REQUEST['view']) <= 0 or
+	  sizeof($_REQUEST['modify'])<= 0 or sizeof($_REQUEST['read'])<= 0
+	  or sizeof ($_REQUEST['admin'])<= 0) {
+	  header("Location:error.php?ec=12"); exit; }
+	  405c402 <	  $query = "SELECT status FROM data WHERE id =
+	  '$id' and status = '0'"; ---
+	  >	  $query = "SELECT status FROM data WHERE id =
+	  '$_REQUEST[id]' and status = '0'";
+	  414c411 <	  mysql_escape_string($query = "UPDATE data SET
+	  category='" . addslashes($category) . "', description='" .
+	  addslashes($description)."', comment='" .
+	  addslashes($comment)."', default_rights='" .
+	  addslashes($default_Setting) . "' WHERE id = '$id'"); ---
+	  >	  mysql_escape_string($query = "UPDATE data SET category='"
+	  . addslashes($_REQUEST['category']) . "', description='" .
+	  addslashes($_REQUEST['description'])."', comment='" .
+	  addslashes($_REQUEST['comment'])."', default_rights='" .
+	  addslashes($_REQUEST['default_Setting']) . "' WHERE id =
+	  '$_REQUEST[id]'");
+	  418c415 <	  $query = "DELETE FROM user_perms WHERE fid =
+	  '$id'"; ---
+	  >	  $query = "DELETE FROM user_perms WHERE fid =
+	  '$_REQUEST[id]'";
+	  420,424c417,425 < <	    $result_array =
+	  advanceCombineArrays($admin, $filedata->ADMIN_RIGHT, $modify,
+	  $filedata->WRITE_RIGHT); <	   $result_array =
+	  advanceCombineArrays($result_array, 'NULL', $read,
+	  $filedata->READ_RIGHT); <	  $result_array =
+	  advanceCombineArrays($result_array, 'NULL', $view,
+	  $filedata->VIEW_RIGHT); <	  $result_array =
+	  advanceCombineArrays($result_array, 'NULL', $forbidden,
+	  $filedata->FORBIDDEN_RIGHT); ---
+	  >	  $result_array = array();// init;
+	  >	  if( isset( $_REQUEST['admin'] ) && isset
+	  ($_REQUEST['modify']) )
+	  >	  {	  $result_array =
+	  advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT,
+	  $_REQUEST['modify'], $filedata->WRITE_RIGHT)}>       if( isset(
+	  $_REQUEST['read'] ) )
+	  >	  {	  $result_array =
+	  advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'],
+	  $filedata->READ_RIGHT);  }
+	  >	  if( isset( $_REQUEST['view'] ) )
+	  >	  {	  $result_array =
+	  advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'],
+	  $filedata->VIEW_RIGHT);  }
+	  >	  if( isset( $_REQUEST['forbidden'] ) )
+	  >	  {	  $result_array =
+	  advanceCombineArrays($result_array, 'NULL',
+	  $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);	      }
+	  428c429 <		  $query = "INSERT INTO user_perms (fid,
+	  uid, rights) VALUES($id, '".$result_array[$i][0]."','".
+	  $result_array[$i][1]."')"; ---
+	  >		  $query = "INSERT INTO user_perms (fid, uid,
+	  rights) VALUES($_REQUEST[id], '".$result_array[$i][0]."','".
+	  $result_array[$i][1]."')";
+	  438c439 <		  $query = "UPDATE dept_perms SET rights
+	  =\"".$$string."\" where fid=".$filedata->getId()." and
+	  dept_perms.dept_id =$id"; ---
+	  >		  $query = "UPDATE dept_perms SET rights
+	  =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and
+	  dept_perms.dept_id =$id";
+
+2003-02-26 08:02  logart
+
+	* category.php: globalized
+
+2003-02-26 07:52  logart
+
+	* mimetypes.php: globalized
+
+2003-02-25 08:27  logart
+
+	* view_file.php: fixed bug in split code. Missing backslashe for
+	  period
+
+2003-02-24 16:14  khoang82
+
+	* functions.php, Dept_Perms_class.php, FileData_class.php: fix
+	  publishable setting
+
+2003-02-24 16:14  khoang82
+
+	* toBePublished.php: fix review/reject pop-up
+
+2003-02-21 17:14  khoang82
+
+	* user.php:
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/user.php,v retrieving
+	  revision 1.10 diff -r1.10 user.php 31c31,32 < ---
+	  > if(!isset($_REQUEST['caller']))
+	  > {	  $_REQUEST['caller'] = 'admin.php';	  }
+	  325a327
+	  >			    <INPUT type="hidden" name="caller"
+	  value="<?php echo $_REQUEST['caller']; ?>">
+	  327,328d328 < 			// query to get a list of
+	  users <			  echo '<INPUT type="hidden"
+	  name="callee" value="'.$_SERVER['PHP_SELF'].'">'; 439c439 <
+		    $query = "SELECT dept_id, user_id FROM dept_reviewer
+	  where user_id = '$item'"; ---
+	  >		    $query = "SELECT dept_id, user_id FROM
+	  dept_reviewer where user_id = '$_REQUEST[item]'";
+	  635a636,639
+	  >	    }
+	  >	    else
+	  >	    {
+		  >		  header('Location:admin.php?last_message='
+	  . urlencode('Unrecognizalbe action'));
+
+2003-02-21 17:12  khoang82
+
+	* profile.php:
+	  ===================================================================
+	  RCS file: /cvsroot/opendocman/opendocman/profile.php,v retrieving
+	  revision 1.4 diff -r1.4 profile.php 18c18 < <tr><td><center><a
+	  href="user.php?submit=Modify+User&item=<?php echo
+	  $_SESSION['uid']; ?>&callee=<?php echo $_SERVER['PHP_SELF'];
+	  ?>">Change Personal Info</a><center></td></tr> ---
+	  > <tr><td><center><a href="user.php?submit=Modify+User&item=<?php
+	  echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF'];
+	  ?>">Change Personal Info</a><center></td></tr>
+
+2003-02-21 17:11  khoang82
+
+	* commitchange.php: CS file:
+	  /cvsroot/opendocman/opendocman/commitchange.php,v retrieving
+	  revision 1.11 diff -r1.11 commitchange.php 37c37 <	    $query
+	  = "INSERT INTO user (id, username, password, department, phone,
+	  Email,last_name, first_name) VALUES('', '".
+	  addslashes($_POST['username'])."', password('".
+	  addslashes($_POST['password']) ."'), '" .
+	  addslashes($_POST['department'])."' ,'" .
+	  addslashes($phonenumber) . "','". addslashes($_POST['Email'])."',
+	  '" . addslashes($_POST['last_name']) . "', '" .
+	  addslashes($first_name) . '\' )'; ---
+	  >	   $query = "INSERT INTO user (id, username, password,
+	  department, phone, Email,last_name, first_name) VALUES('', '".
+	  addslashes($_POST['username'])."', password('".
+	  addslashes($_POST['password']) ."'), '" .
+	  addslashes($_POST['department'])."' ,'" .
+	  addslashes($phonenumber) . "','". addslashes($_POST['Email'])."',
+	  '" . addslashes($_POST['last_name']) . "', '" .
+	  addslashes($_REQUEST['first_name']) . '\' )';
+	  91c91 <	if(!isset($_POST['callee']) || $_POST['callee'] ==
+	  '') ---
+	  >	  if(!isset($_POST['caller']) || $_POST['caller'] == '')
+	  93c93 <		$callee='admin.php'; ---
+	  >		  $caller='admin.php';
+	  130a131
+	  >		  $depts_rev = $_POST['department_review'];
+	  133c134 <
+	  $dept_rev=$_POST['department_review'][$i]; ---
+	  >		$dept_rev=$depts_rev[$i];
+	  138a140,141
+	  >	  if(!isset($_REQUEST['caller']))
+	  >	  {	  $_REQUEST['caller'] = 'admin.php';	  }
+	  140c143 <	header('Location: ' . $_POST['callee'] .
+	  '?last_message=' . $last_message); ---
+	  >	header('Location: ' . $_REQUEST['caller'] .
+	  '?last_message=' . $last_message);
+
+2003-02-21 16:03  khoang82
+
+	* view_file.php: RCS file:
+	  /cvsroot/opendocman/opendocman/view_file.php,v retrieving
+	  revision 1.5 diff -r1.5 view_file.php 8a9,10
+	  > if( !isset ($_REQUEST['last_message']) )
+	  > {	  $_REQUEST['last_message']='';   }
+	  13c15 <	@draw_status_bar('File
+	  View',$_REQUEST['last_message']); ---
+	  >	  draw_status_bar('File View',$_REQUEST['last_message']);
+	  21,22c23,28 <       list($prefix,$suffix)= split ('[.]',
+	  $realname); <       $mimetype = $mimetypes["$suffix"]; ---
+	  >	  list($prefix,$suffix)= split ('.', $realname);
+	  >	  echo $suffix;
+	  >	  if( !isset($mimetypes["$suffix"]) )
+	  >	  {	  $mimetype = ''; }
+	  >	  else
+	  >	  {	  $mimetype = $mimetypes["$suffix"];	  }
+
+2003-02-21 16:02  khoang82
+
+	* history.php: RCS file:
+	  /cvsroot/opendocman/opendocman/history.php,v retrieving revision
+	  1.6 diff -r1.6 history.php 13c13 < if (!isset($id) || $id == '')
+	  ---
+	  > if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+	  21c21,24 < draw_header($title); ---
+	  > if( !isset($_REQUEST['title']) )
+	  > {	  draw_header('');	  }
+	  > else
+	  > { draw_header( $_REQUEST['title'] ); }
+	  23c26,29 < draw_status_bar('Document Listing', $last_message);
+	  ---
+	  > if( !isset($_REQUEST['last_message']) )
+	  > {	  draw_status_bar('Document Listing', '');	  }
+	  > else
+	  > { draw_status_bar('Document Listing',
+	  $_REQUEST['last_message']); }
+	  25c31 < $datafile = new FileData($id, $GLOBALS['connection'],
+	  $GLOBALS['database']); ---
+	  > $datafile = new FileData($_REQUEST['id'],
+	  $GLOBALS['connection'], $GLOBALS['database']);
+	  54c60 < $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+	  ---
+	  > $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] .
+	  '.dat';
+	  120c126 <	  $query = "SELECT user.last_name, user.first_name,
+	  log.modified_on, log.note FROM log, user WHERE log.id = '$id' AND
+	  user.username = log.modified_by ORDER BY log.modified_on DESC";
+	  ---
+	  >	  $query = "SELECT user.last_name, user.first_name,
+	  log.modified_on, log.note FROM log, user WHERE log.id =
+	  '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY
+	  log.modified_on DESC";
+
+2003-02-21 16:01  khoang82
+
+	* edit.php: RCS file: /cvsroot/opendocman/opendocman/edit.php,v
+	  retrieving revision 1.10 diff -r1.10 edit.php 24c24 < if
+	  (!isset($id) || $id == '') ---
+	  > if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+	  26,27c26,27 <   header('Location:error.php?ec=2'); <	 exit; ---
+	  >	  header('Location:error.php?ec=2');
+	  >	  exit;
+	  28a29,30
+	  > if (!isset($_REQUEST['last_message']))
+	  > {	  $_REQUEST['last_message'] = ''; }
+	  35c37 <	draw_status_bar('Edit Document Properties',
+	  $message); ---
+	  >	  draw_status_bar('Edit Document Properties',
+	  $_REQUEST['last_message']);
+	  37,38c39,40 <       checkUserPermission($id,
+	  $user_perm_obj->ADMIN_RIGHT); <	$data_id = $id; ---
+	  >	  checkUserPermission($_REQUEST['id'],
+	  $user_perm_obj->ADMIN_RIGHT);
+	  >	  $data_id = $_REQUEST['id'];
+	  49c51 <	$query = "SELECT default_rights from data where
+	  data.id = $id"; ---
+	  >	  $query = "SELECT default_rights from data where data.id =
+	  $data_id";
+	  112c114 <	  $query = "SELECT name, dept_id, rights FROM
+	  department, dept_perms  WHERE department.id = dept_perms.dept_id
+	  and dept_perms.fid = $id ORDER by name"; ---
+	  >	  $query = "SELECT name, dept_id, rights FROM department,
+	  dept_perms  WHERE department.id = dept_perms.dept_id and
+	  dept_perms.fid = $data_id ORDER by name";
+	  130c132 <	  $filedata = new FileData($id,
+	  $GLOBALS['connection'], $GLOBALS['database']); ---
+	  >	  $filedata = new FileData($data_id,
+	  $GLOBALS['connection'], $GLOBALS['database']);
+	  254,255c256 <       $filedata = new FileData($id,
+	  $GLOBALS['connection'], $GLOBALS['database']); <
+	  $filedata->setId( $id ); ---
+	  >	  $filedata = new FileData($data_id,
+	  $GLOBALS['connection'], $GLOBALS['database']);
+
+2003-02-21 15:59  khoang82
+
+	* details.php: RCS file:
+	  /cvsroot/opendocman/opendocman/details.php,v retrieving revision
+	  1.11 diff -r1.11 details.php 28c28 < if(
+	  !$userPermObj->canView($_REQUEST['id']) ) ---
+	  > /*if( !$userPermObj->canView($_REQUEST['id']) )
+	  32c32 < ---
+	  > */
+
+2003-02-21 15:59  khoang82
+
+	* check-in.php: RCS file:
+	  /cvsroot/opendocman/opendocman/check-in.php,v retrieving revision
+	  1.7 diff -r1.7 check-in.php 144,145c144,145 <
+	  $allowedFile = 1; < 		      break; ---
+	  >			  $allowedFile = 1;
+	  >		      break;
+	  147,152c147,150 <		    else <		   {	  <
+		<			$allowedFile = 0;	<
+		      break;  < 		}     ---     >
+	  else	>	  {		>	      $allowedFile = 0;
+		      > 	}	      157c155		      <
+		      $last_message='Failed';		    ---
+	  >	    $last_message='Failed';
+
+2003-02-21 15:58  khoang82
+
+	* User_Perms_class.php: CS file:
+	  /cvsroot/opendocman/opendocman/User_Perms_class.php,v retrieving
+	  revision 1.8 diff -r1.8 User_Perms_class.php 164a165
+	  >
+	  174c175 <		  $query = "SELECT
+	  $this->TABLE_DEPT_PERMS.rights from $this->TABLE_DEPT_PERMS where
+	  fid = ' . $data_id . ' AND dept_id = " .
+	  $this->user_obj->getDeptId(); ---
+	  >		  $query = "SELECT $this->TABLE_DEPT_PERMS.rights
+	  from $this->TABLE_DEPT_PERMS where fid = '$data_id' AND dept_id =
+	  " . $this->user_obj->getDeptId();
+
+2003-02-21 15:57  khoang82
+
+	* FileData_class.php: RCS file:
+	  /cvsroot/opendocman/opendocman/FileData_class.php,v retrieving
+	  revision 1.8 diff -r1.8 FileData_class.php 166c166 <
+	  $d_query .= " and $TABLE->TABLE_USER.id != " . $not_u_uid[$i];
+	  ---
+	  >		  $d_query .= " and $this->TABLE_USER.id != " .
+	  $not_u_uid[$i];
+	  263c263,264 < ---
+	  >	    $d_uid = array();
+	  >	    $u_uid = array();
+	  269c270 <	    $result_array =
+	  databaseData::combineArrays($owner_uid, $u_uid); ---
+	  >	    $result_array = databaseData::combineArrays(array(),
+	  $u_uid);
+
+2003-02-21 15:55  khoang82
+
+	* Dept_Perms_class.php: RCS file:
+	  /cvsroot/opendocman/opendocman/Dept_Perms_class.php,v retrieving
+	  revision 1.6 diff -r1.6 Dept_Perms_class.php 113c113 <
+		     if($this->canDept($data_id, $this->READ_RIGHT) or
+	  !$this->isPublishable($data_id) ) ---
+	  >			  if($this->canDept($data_id,
+	  $this->READ_RIGHT) or !$filedata->isPublishable($data_id) )
+	  168c168 <		  $query = "SELECT
+	  $this->database.$this->TABLE_DEPT_PERMs.rights FROM
+	  $this->database.$this->TABLE_DEPT_PERMS WHERE
+	  $this->TABLE_DEPT_PERMS.dept_id = $this->id AND
+	  $this->TABLE_DEPT_PERMS.fid = $data_id"; ---
+	  >		  $query = "SELECT
+	  $this->database.$this->TABLE_DEPT_PERMS.rights FROM
+	  $this->database.$this->TABLE_DEPT_PERMS WHERE
+	  $this->TABLE_DEPT_PERMS.dept_id = $this->id AND
+	  $this->TABLE_DEPT_PERMS.fid = $data_id";
+	  189c189 <		  $query = "SELECT * FROM
+	  $this->DEPT_PERM_TABLE WHERE $this->DEPT_PERM_TABLE.id =
+	  $this->id and $this->DEPT_PERM_TABLE.fid = $data_id AND
+	  $this->DEPT_PERM_TABLE.rights >= $right"; ---
+	  >		  $query = "SELECT * FROM $this->TABLE_DEPT_PERMS
+	  WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and
+	  $this->TABLE_DEPT_PERMS.fid = $data_id AND
+	  $this->TABLE_DEPT_PERMS.rights >= $right";
+
+2003-02-21 13:23  khoang82
+
+	* search.php: fix line 119 to append description to each search
+	  result
+
+2003-02-21 11:38  logart
+
+	* search.php: fixed undefined var $cases in 119
+
+2003-02-18 14:09  logart
+
+	* details.php: added isset's
+
+2003-02-18 13:57  logart
+
+	* add.php: turned off error rep for status_bar
+
+2003-02-18 13:52  logart
+
+	* search.php: fixed some locals that were set to _GET
+
+2003-02-18 11:42  logart
+
+	* FileData_class.php: fixed error in sql statement
+
+2003-02-14 16:49  khoang82
+
+	* Department_class.php, Dept_Perms_class.php, FileData_class.php,
+	  UserPermission_class.php, User_Perms_class.php,
+	  databaseData_class.php: fixed mysql_db_query to mysql_query
+
+2003-02-14 14:44  logart
+
+	* ldap.inc: initial import
+
+2003-02-13 16:41  logart
+
+	* ChangeLog, Dept_Perms_class.php, FileData_class.php,
+	  User_Perms_class.php, User_class.php, add.php, category.php,
+	  check-in.php, check-out.php, commitchange.php, config.php,
+	  delete.php, department.php, details.php, edit.php, error.php,
+	  functions.php, history.php, in.php, index.php, rejects.php,
+	  search.php, toBePublished.php, user.php, userinfo.php: first
+	  round of globalization
+
+2003-02-13 16:24  khoang82
+
+	* User_Perms_class.php: New documentation added
+
+2003-02-13 16:07  logart
+
+	* databaseData_class.php: fixed typo
+
+2003-02-13 16:02  khoang82
+
+	* UserPermission_class.php: New documentation added.  Code clean up
+
+2003-02-13 15:02  khoang82
+
+	* out.php: < $result = mysql_query($query) or die ("Error in
+	  Query".mysql_error()); ---
+	  > $result = mysql_query($query) or die ("Error in
+	  Query:$query".mysql_error());
+
+2003-02-13 15:01  khoang82
+
+	* User_Perms_class.php: 153c153 <	  if($this->root_user ==
+	  $this->user_obj->getName()) ---
+	  >	    if($GLOBALS['CONFIG']['root_username'] ==
+	  $this->user_obj->getName())
+
+	  localized root_username
+
+2003-02-13 14:48  khoang82
+
+	* FileData_class.php: New documentation added.	New organization
+	  for class member functions and variables
+
+2003-02-13 14:46  khoang82
+
+	* Dept_Perms_class.php: New documentation is added.  Class member
+	  functions are organized and cleaned up.
+
+2003-02-13 14:44  khoang82
+
+	* databaseData_class.php: a new level of abstraction has been added
+	  to this foundation class.  Unlike before, this class's DB
+	  information such as database name, and table names can now be
+	  configured.  All derived classes inherit this feature.  One big
+	  drawback is the readability every query has been dramatically
+	  reduced.
+
+2003-02-13 10:59  logart
+
+	* view.php: globalized vars
+
+2003-02-12 10:12  logart
+
+	* view_file.php: globalized vars
+
+2003-02-12 10:10  logart
+
+	* logout.php: changed uid session var
+
+2003-02-12 10:09  logart
+
+	* profile.php: globalized vars
+
+2003-02-12 10:05  logart
+
+	* admin.php: globalize vars
+
+2003-02-12 10:03  logart
+
+	* out.php: globalized variables
+
+2003-02-07 14:40  khoang82
+
+	* UserPermission_class.php, functions.php: fix var
+
+2003-02-07 14:28  khoang82
+
+	* Department_class.php: Documentation added
+
+2003-02-07 14:12  khoang82
+
+	* databaseData_class.php: Documentations added
+
+2003-02-03 16:28  logart
+
+	* user.php: globals fix
+
+2003-02-03 16:27  logart
+
+	* toBePublished.php: fixed PHP_SELF
+
+2003-02-03 15:13  khoang82
+
+	* user.php: wrong usage of isset()
+
+2003-02-03 15:03  khoang82
+
+	* edit.php: fixed error: unable to set modify permission to users
+
+2003-02-03 14:59  khoang82
+
+	* details.php, functions.php: fix checkPermission() to allow root
+	  user to bypass
+
+2003-02-03 14:47  khoang82
+
+	* Dept_Perms_class.php, UserPermission_class.php, details.php,
+	  functions.php, out.php: Introduce a more strictly defined
+	  interpretation of the permission setting
+
+2003-02-03 14:44  khoang82
+
+	* add.php: Added new features onto the permission setting
+	  interface.  User friendly
+
+2003-02-03 14:30  logart
+
+	* in.php, view.php: fixed <?
+
+2003-01-31 17:42  khoang82
+
+	* User_Perms_class.php, details.php, functions.php,
+	  toBePublished.php: Fixing permission setting bugs.  Still not
+	  working yet
+
+2003-01-31 16:24  khoang82
+
+	* details.php, toBePublished.php: disable emailing option for owner
+	  when they are viewing their rejection message.
+
+2003-01-31 16:14  khoang82
+
+	* functions.php, out.php: Fixed sort_by='author' bug
+
+2003-01-31 14:02  logart
+
+	* functions.php: added default '' to status_bar last_message
+
+2003-01-31 14:01  logart
+
+	* check-out.php: removed last_message - not needed
+
+2003-01-31 13:57  logart
+
+	* department.php: cleaned up last_message's
+
+2003-01-31 13:51  logart
+
+	* functions.php: Added '' around parms for list_files changed some
+	  issets to check for 'true/false' fixed <? fixed typos in error
+	  message
+
+2003-01-31 13:47  logart
+
+	* history.php: fixed <?
+
+2003-01-31 13:45  logart
+
+	* out.php: added missing parm to list_files call
+
+2003-01-31 13:40  logart
+
+	* toBePublished.php: fixed <?
+
+2003-01-31 13:18  khoang82
+
+	* user.php: globalized $connection and $database
+
+2003-01-31 13:16  khoang82
+
+	* user.php: globalized $connection
+
+2003-01-30 16:16  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, delete.php, department.php, details.php,
+	  edit.php, functions.php, history.php, in.php, index.php, out.php,
+	  rejects.php, search.php, toBePublished.php, view.php,
+	  view_file.php: globalized $hostname
+
+2003-01-30 14:48  khoang82
+
+	* add.php, admin.php, category.php, check-in.php, check-out.php,
+	  commitchange.php, delete.php, department.php, details.php,
+	  edit.php, functions.php, history.php, in.php, index.php, out.php,
+	  rejects.php, search.php, toBePublished.php, view.php,
+	  view_file.php: fixed all pages to use globlized mysql connection
+	  in config.php instead of local one
+
+2003-01-27 15:07  khoang82
+
+	* edit.php, details.php: new checks are applied so user cannot hack
+	  into other files by change the URL
+
+2003-01-27 15:03  khoang82
+
+	* functions.php: New function added that enforce permission setting
+	  on file.
+
+2003-01-27 15:00  khoang82
+
+	* databaseData_class.php, classHeaders.php: Fixed wrong usage of
+	  isset()
+
+2003-01-27 14:59  khoang82
+
+	* Dept_Perms_class.php, User_Perms_class.php,
+	  UserPermission_class.php: Fix logical bug in permission lookup
+
+2003-01-24 13:31  khoang82
+
+	* FileData_class.php: Fixed logical bugs in permission table
+	  analysis
+
+2003-01-23 15:26  khoang82
+
+	* edit.php: fixed right setting problem.  Permission logic errors
+	  have not been fixed in this version
+
+2003-01-23 14:17  khoang82
+
+	* edit.php: fix highlighting problems
+
+2003-01-23 12:28  khoang82
+
+	* search.php: Remove debug echo's
+
+2003-01-23 09:20  logart
+
+	* UserPermission_class.php: fixed typo
+
+2003-01-22 13:22  logart
+
+	* error.php, index.php: fixes for kerb authenticated user but no
+	  local account
+
+2003-01-17 16:48  khoang82
+
+	* commitchange.php: [ 660114 ] New Department - duplicate name If
+	  you try to add a department that already exists,  your are
+	  returned a blank page, but part of the  department is created.
+
+	  Fixed so that update department will reject identical names.
+
+2003-01-17 14:49  khoang82
+
+	* UserPermission_class.php, functions.php, search.php: redefine
+	  search and sort to work with full name instead of username
+
+2003-01-16 14:39  khoang82
+
+	* out.php: Fixed isset() so the files will be listed correctly in
+	  out.php
+
+2003-01-16 14:05  khoang82
+
+	* toBePublished.php: fixed bug.  Before, when authorizing file
+	  without send email, opendocman crashed.  Now fixed
+
+2003-01-16 13:44  khoang82
+
+	* functions.php: One of the isset() was used incorrectly
+
+2003-01-14 15:12  logart
+
+	* check-in.php: changed $message to $last_message
+
+2003-01-14 15:09  logart
+
+	* category.php: added isset's
+
+2003-01-14 15:09  logart
+
+	* admin.php: added isset to last_message
+
+2003-01-14 15:08  logart
+
+	* index.php: globalized  variables
+
+2003-01-14 15:04  logart
+
+	* logout.php: fixed <?
+
+2003-01-14 15:00  logart
+
+	* out.php: added isset to last_message check
+
+2003-01-14 14:59  logart
+
+	* search.php: fixed missing )
+
+2003-01-14 14:56  logart
+
+	* toBePublished.php: sjl added isset to if's
+
+2003-01-13 10:53  logart
+
+	* UserPermission_class.php: sjl fixed typos
+
+2003-01-13 10:39  logart
+
+	* FileData_class.php, UserPermission_class.php, add.php,
+	  category.php, check-in.php, check-out.php, classHeaders.php,
+	  commitchange.php, databaseData_class.php, delete.php,
+	  department.php, details.php, edit.php, functions.php,
+	  history.php, index.php, out.php, rejects.php, search.php,
+	  toBePublished.php, user.php, view.php, view_file.php: sjl fixed
+	  references to if($value) by changing them to if(isset($value))
+	  for compatability with high error reporting turned on.
+
+2003-01-10 13:47  khoang82
+
+	* functions.js: clear debuging print out
+
+2003-01-10 13:45  khoang82
+
+	* functions.js, add.php: functions.js has function that enforce the
+	  length of a string add.php uses functions.js to enforce
+	  data.comment's length
+
+2003-01-06 13:57  khoang82
+
+	* commitchange.php, department.php: Duplicate in new department
+	  name fixed
+
+2003-01-06 09:54  logart
+
+	* commitchange.php: changed a hardcoded URL to base_url global
+
+2003-01-06 09:54  logart
+
+	* database.sql: Added a default admin entry for user #1
+
+2003-01-06 09:51  logart
+
+	* UserPermission_class.php, User_Perms_class.php: <? fix
+
+2003-01-06 09:49  logart
+
+	* FileData_class.php: <? fix
+
+	  changed hardcoded email to site_email global
+
+2003-01-06 09:43  logart
+
+	* ChangeLog: sjl Initial Import
+
+2003-01-06 09:03  logart
+
+	* config.php: sjl fixed some filetypes that were not working, like
+	  pdf,powerpoint, etc.	globalized $connection
+
+2003-01-05 08:38  logart
+
+	* index.php: sjl changed opening <? to <?php
+
+2002-12-23 11:24  logart
+
+	* README: sjl added developer info added register_globals comment
+
+2002-12-20 15:50  khoang82
+
+	* check-in.php, edit.php: addslashes into all the them.  fix mixed
+	  quotation problem in edit.php
+
+2002-12-20 15:40  khoang82
+
+	* add.php: add addslashes() into add.php
+
+2002-12-20 14:58  khoang82
+
+	* commitchange.php: add addslashes to add department
+
+2002-12-20 14:54  khoang82
+
+	* commitchange.php: add addslashes() to updateuser
+
+2002-12-20 14:50  khoang82
+
+	* commitchange.php: add addslashes() to adduser
+
+2002-12-20 14:49  khoang82
+
+	* user.php: fix validation on adduser
+
+2002-12-20 14:39  khoang82
+
+	* profile.php, user.php: profile.php: delete change password field
+	  user.php: changed to handle unchanged password field
+
+2002-12-20 10:40  khoang82
+
+	* functions.php, out.php, toBePublished.php: functions.php:	fix
+	  sorting algorithm in sort_by='department' to sort by the file's
+	  dept not it's owner toBePublished.php:      fix sorting.
+
+2002-12-20 10:09  khoang82
+
+	* profile.php, user.php: fixed reviewer's setting in adduser and
+	  updateuser.  fixed profile.php to send correct parameters
+
+2002-12-19 15:27  logart
+
+	* BUGS, COPYING, Department_class.php, Dept_Perms_class.php,
+	  FileData_class.php, FormCheck.js, TODO, UserPermission_class.php,
+	  User_Perms_class.php, add.php, admin.php, category.php,
+	  check-in.php, check-out.php, LICENSE, README, classHeaders.php,
+	  commitchange.php, config.php, database.sql,
+	  databaseData_class.php, delete.php, department.php, details.php,
+	  edit.php, error.php, history.php, in.php, index.php,
+	  linkcontrol.css, out.php, overlib.js, overlib_mini.js,
+	  personal_info.php, php_coding_standard.html, User_class.php,
+	  functions.php, help.html, logout.php, mimetypes.php, profile.php,
+	  rejects.php, search.php, toBePublished.php, user.php,
+	  userinfo.php, view.php, view_file.php, images/a.jpg,
+	  images/add.png, images/admin.gif, images/blue_left.gif,
+	  images/check-in.png, images/check-in_dev.xcf,
+	  images/check-out.png, images/check-out.xcf, images/delete.png,
+	  images/detete.xcf, images/edit.png, images/edit.xcf,
+	  images/file_locked.png, images/file_locked.xcf,
+	  images/file_unlocked.png, images/file_unlocked.xcf,
+	  images/icon_sort_az.gif, images/icon_sort_null.gif,
+	  images/icon_sort_za.gif, images/logout.jpg, images/logout.png,
+	  images/logout_logo.gif, images/na.jpg, images/revision.png,
+	  images/revision.xcf, images/companylogo.gif, images/logo.gif,
+	  images/search.png, images/search.xcf, images/setting.png,
+	  images/txt.png, images/view.png, images/view.xcf: Initial
+	  revision
+
+2002-12-19 15:27  logart
+
+	* BUGS, COPYING, Department_class.php, Dept_Perms_class.php,
+	  FileData_class.php, FormCheck.js, TODO, UserPermission_class.php,
+	  User_Perms_class.php, add.php, admin.php, category.php,
+	  check-in.php, check-out.php, LICENSE, README, classHeaders.php,
+	  commitchange.php, config.php, database.sql,
+	  databaseData_class.php, delete.php, department.php, details.php,
+	  edit.php, error.php, history.php, in.php, index.php,
+	  linkcontrol.css, out.php, overlib.js, overlib_mini.js,
+	  personal_info.php, php_coding_standard.html, User_class.php,
+	  functions.php, help.html, logout.php, mimetypes.php, profile.php,
+	  rejects.php, search.php, toBePublished.php, user.php,
+	  userinfo.php, view.php, view_file.php, images/a.jpg,
+	  images/add.png, images/admin.gif, images/blue_left.gif,
+	  images/check-in.png, images/check-in_dev.xcf,
+	  images/check-out.png, images/check-out.xcf, images/delete.png,
+	  images/detete.xcf, images/edit.png, images/edit.xcf,
+	  images/file_locked.png, images/file_locked.xcf,
+	  images/file_unlocked.png, images/file_unlocked.xcf,
+	  images/icon_sort_az.gif, images/icon_sort_null.gif,
+	  images/icon_sort_za.gif, images/logout.jpg, images/logout.png,
+	  images/logout_logo.gif, images/na.jpg, images/revision.png,
+	  images/revision.xcf, images/companylogo.gif, images/logo.gif,
+	  images/search.png, images/search.xcf, images/setting.png,
+	  images/txt.png, images/view.png, images/view.xcf: sjl Initial
+	  Import
+
