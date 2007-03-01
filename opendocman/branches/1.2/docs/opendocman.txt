@@ -264,8 +264,11 @@ options in that file:
 
 * treeview [On,Off] - Use treeview mode instead of file list mode
 
-* theme [default="default"] - which theme to use? Themes are
-  located in templates/ folder. Look at default for example.
+* theme [default="default"] - which theme to use? Smarty-based
+  themes are located in templates/ folder. Look at default for example.
+  To add a new one just create a new theme folder in templates/ 
+  with the header.tpl and footer.tpl files. Global variables are 
+  added to smarty as $g_VARIABLENAME.
 
 * dataDir - Location of file repository. This should ideally
   be outside the Web server root. Make sure the server has
