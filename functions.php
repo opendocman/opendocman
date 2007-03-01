@@ -20,12 +20,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 //require_once ('config.php');
 
-include_once 'version.php';
-include_once'classHeaders.php';
-include_once'mimetypes.php';
+include_once('version.php');
+
+require_once('includes/smarty/Smarty.class.php');
+$GLOBALS['smarty'] = new Smarty();
+$GLOBALS['smarty']->template_dir = 'templates/' . $GLOBALS['CONFIG']['theme'] .'/';
+
+/**** SET g_ vars from Global Config arr ***/
+foreach($GLOBALS['CONFIG'] as $key => $value)
+{
+    $GLOBALS['smarty']->assign('g_' . $key,$value);
+}
+
+include_once('classHeaders.php');
+include_once('mimetypes.php');
 require_once('crumb.php');
-require_once 'secureurl.class.php';
-include_once 'secureurl.php';
+require_once('secureurl.class.php');
+include_once('secureurl.php');
 include('udf_functions.php');
 
 if( !defined('function') )
@@ -178,6 +189,9 @@ if( !defined('function') )
         }
 	function draw_header($page_title)
 	{
+        $GLOBALS['smarty']->assign('page_title', $page_title);
+        $GLOBALS['smarty']->display('header.tpl');
+/*
 		if (!isset($page_title))
 		{
 			$page_title='Main';
@@ -206,6 +220,7 @@ if( !defined('function') )
 		echo '	</HEAD>'."\n";
 		echo '  	<body bgcolor="white">'."\n";
 		echo '<!----------------------------End drawing header----------------------------->'."\n";
+*/
 	}
 
 	function draw_error($message)
@@ -215,6 +230,8 @@ if( !defined('function') )
 	
 	function draw_footer()
 	{
+        $GLOBALS['smarty']->display('footer.tpl');
+/*
 		echo "\n".'<!-------------------------------begin_draw_footer------------------------------>'."\n";
 		echo '<hr>'."\n";
 		echo ' <h5>'.$GLOBALS['CONFIG']['current_version'].'<BR>';
@@ -222,6 +239,7 @@ if( !defined('function') )
 		echo ' </body>'."\n";
 		echo '</html>'."\n";
 		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
+*/
 	}
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
