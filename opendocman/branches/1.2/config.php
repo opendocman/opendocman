@@ -139,6 +139,11 @@ if (is_file('config_local.php'))
 {
     include('config_local.php');
 }
+elseif (is_file('../config_local.php'))
+{
+    include('../config_local.php');
+}
+
 
 // Set the revision directory. (relative to $dataDir)
 $CONFIG['revisionDir'] = $GLOBALS['CONFIG']['dataDir'] . 'revisionDir/';

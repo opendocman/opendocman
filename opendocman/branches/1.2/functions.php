@@ -188,7 +188,12 @@ if( !defined('function') )
             echo "\n".'<!------------------end_draw_menu------------------->'."\n";
         }
 	function draw_header($page_title)
-	{
+    {
+        if(is_dir('install'))
+        {
+            echo  '<span style="color: red;">Security Notice: You should remove the "install" folder before proceeding</span>';
+        }
+
         $GLOBALS['smarty']->assign('page_title', $page_title);
         $GLOBALS['smarty']->display('header.tpl');
 /*
