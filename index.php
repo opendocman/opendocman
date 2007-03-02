@@ -114,6 +114,11 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
 }
 elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLOBALS['CONFIG']['authen'] == 'nis')
 {
+    if(is_dir('install'))
+    {
+        $install_msg = '<span style="color: red;">Security Notice: You should remove the "install" folder before proceeding</span>';
+    }
+    
     ?>
 <!--
 
@@ -138,6 +143,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLO
         <table border="0" cellspacing="5" cellpadding="5">
         <tr>
         <td valign="top">
+        <?php echo $install_msg; ?>
         <center>
         <table border="0" cellspacing="5" cellpadding="5">
         <form action="index.php" method="post">

@@ -135,7 +135,8 @@ To update your current version to the latest release:
   config.php file for some settings that can be transferred
   over from the old config to the new).
 
-4. Load the setup.php page (ex. http://www.example.com/opendocman/setup.php)
+4. Load the installation page in your web browser at /install/ 
+  ( ex. http://www.example.com/opendocman/install/ )
   and click on the appropriate upgrade link. Refer to your
   old config.php to see what version you were using before.
 
@@ -149,11 +150,12 @@ To update your current version to the latest release:
     Change any that apply, especially the database parameters.
 
 3. If you DO have database creation permissions to your MySQL
-  database then you can use the automatic setup script (preferred
+  database then you can use the automatic installation script (preferred
   method).
 
-  (a) Load the setup.php page and click on the new install
-    link. (ex. http://www.mydomain.com/opendocman/setup.php)
+  (a) Load the installation page in your web browser at /install/ 
+    (ex. http://www.example.com/opendocman/install ) and click on the 
+    new install link. 
 
   (b) Enter the username and password of a user that has database
     creation permissions for the database configured in
@@ -341,11 +343,11 @@ Originally inspired by an article called cracking the vault.
 6 Automated Installation and Upgrade Notes (For Developers)
 
 There is a new folder named "install" which contains files
-use by the new script called setup.php. This is an automated
+use by the installation scrip. This is an automated
 web-based update/installation script. Here is how it works
 for users:
 
-1. The user loads setup.php into their browser. They can either
+1. The user loads /install/index.php into their browser. They can either
   select the new installation link, or one of the upgrade
   links.
 

@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 <body>
 <center>
-<img src="images/logo.gif"><br>
+<img src="../images/logo.gif"><br>
 <?php
 
 
@@ -138,7 +138,17 @@ Please complete the following form to create your new database
 
 function do_install()
 {
-        echo 'installing...<br>';
+        echo 'Checking that templates_c folder is writeable... ';
+        if(!is_writeable('../templates_c'))
+        {
+            echo 'Not writeable - Fix and go <a href="javascript: history.back()">Back</a>';
+            exit;
+        }
+        else
+        {
+            echo 'OK';
+        }
+       echo '<br />installing...<br>';
 
 
         mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
@@ -168,8 +178,8 @@ function do_install()
         FLUSH PRIVILEGES
         ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
-        include("install/odm.php");
-        include("config.php");
+        include("odm.php");
+        include("../config.php");
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 } // End Install
 
@@ -180,15 +190,15 @@ function do_update_10()
         
         // Call each version, starting with th oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
-        include("config.php");
-        include("install/upgrade_10.php");
+        include("../config.php");
+        include("upgrade_10.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 function do_update_11rc1()
 {
         echo 'Updating version 1.1rc1<br>';        
-        include("config.php");
-        include("install/upgrade_11rc1.php");
+        include("../config.php");
+        include("upgrade_11rc1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
         
 }
@@ -196,48 +206,48 @@ function do_update_11rc1()
 function do_update_11rc2()
 {
         echo 'Updating version 1.1rc2<br>';        
-        include("config.php");
-        include("install/upgrade_11rc2.php");
+        include("../config.php");
+        include("upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function do_update_11()
 {
         echo 'Updating version 1.1<br>';        
-        include("config.php");
-        include("install/upgrade_11.php");
+        include("../config.php");
+        include("upgrade_11.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function do_update_12rc1()
 {
         echo 'Updating version 1.2rc1<br>';        
-        include("config.php");
-        include("install/upgrade_12rc1.php");
+        include("../config.php");
+        include("upgrade_12rc1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function do_update_12p1()
 {
         echo 'Updating from version 1.2p1 to 1.2p2<br>';        
-        include("config.php");
-        include("install/upgrade_12p1.php");
+        include("../config.php");
+        include("upgrade_12p1.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function do_update_12p3()
 {
         echo 'Updating from version 1.2p3 to 1.2.4<br>';        
-        include("config.php");
-        include("install/upgrade_12p3.php");
+        include("../config.php");
+        include("upgrade_12p3.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
 function do_update_124()
 {
         echo 'Updating from version 1.24 to 1.2.5<br>';        
-        include("config.php");
-        include("install/upgrade_124.php");
+        include("../config.php");
+        include("upgrade_124.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
@@ -246,14 +256,14 @@ function do_update_124()
 function print_intro()
 {
 
-    include_once('version.php');
+    include_once('../version.php');
 ?>
 <h3>Welcome to the OpenDocMan Configuration Tool</h3>
 </center>
 <hr>
 <table>
  <tr>
-  <td><a href="docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
+  <td><a href="../docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
  </tr>
 </table>
 
@@ -274,31 +284,31 @@ function print_intro()
 ?>
  </tr>
  <tr>
-  <td><a href="setup.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+  <td><a href="index.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
+  <td><a href="index.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
+  <td><a href="index.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
+  <td><a href="index.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
+  <td><a href="index.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_12rc1">Upgrade from version 1.2rc(x)</a><br><br></td>
+  <td><a href="index.php?op=update_12rc1">Upgrade from version 1.2rc(x)</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
+  <td><a href="index.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_12p3">Upgrade from version 1.2p3</a><br><br></td>
+  <td><a href="index.php?op=update_12p3">Upgrade from version 1.2p3</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="setup.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
+  <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
  </tr>
 </table>
 <?php
