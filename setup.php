@@ -138,7 +138,29 @@ Please complete the following form to create your new database
 
 function do_install()
 {
-        echo 'installing...<br>';
+        include_once('config.php');
+        echo 'Checking that templates_c folder is writeable... ';
+        if(!is_writeable('templates_c'))
+        {
+            echo 'Not writeable - Fix and go <a href="javascript: history.back()">Back</a>';
+            exit;
+        }
+        else
+        {
+            echo 'OK';
+        }
+        echo '<br />Checking that dataDir is writeable... ';
+        if(!is_writeable($GLOBALS['CONFIG']['dataDir']))
+        {
+            echo 'Not writeable - Fix and go <a href="javascript: history.back()">Back</a>';
+            exit;
+        }
+        else
+        {
+            echo 'OK';
+        }
+
+        echo '<br />installing...<br>';
 
 
         mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
