@@ -2,6 +2,7 @@
 /*
 mimetypes.php -  Exension to MIME-Type mapping, pretty much the same as mime.types from Apache
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2007 Stephen Lawrence, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,9 +17,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+ */
 
+// Read default MIME Types from System
 $mimetypes=array(); global $mimetypes;
+if (is_file("/etc/mime.types")) 
+{
+    $handle = fopen("/etc/mime.types","r");
+    while (!feof($handle)) {
+        $inline = fgets($handle,1024);
+        $line = strtr($inline,"\t"," ");
+        if ( $line != "\n" && strncmp($line,"#",1) != 0 ) {
+            $mimetype = strtok($line," ");
+            while (($ext = strtok(" ")) != "" ) {
+                $mimetypes[$ext] = $mimetype;
+            }
+        }
+    }
+    fclose($handle);
+    $mimetypes['default'] = '';
+}
+else
+{
+// OpenDocMan defaults
 $mimetypes['ez']  = 'application/andrew-inset';
 $mimetypes['csm'] = 'application/cu-seeme';
 $mimetypes['cu']  = 'application/cu-seeme';
@@ -190,5 +211,38 @@ $mimetypes['sxm'] = 'application/vnd.sun.xml.math';
 $mimetypes['ott'] = 'application/vnd.oasis.opendocument.text-template';
 $mimetypes['odg'] = 'application/vnd.oasis.opendocument.graphics';
 $mimetypes['odc'] = 'application/vnd.oasis.opendocument.chart';
+// http://framework.openoffice.org/documentation/mimetypes/mimetypes.html
+$mimetypes['odb'] = 'application/vnd.oasis.opendocument.database';
+$mimetypes['odc'] = 'application/vnd.oasis.opendocument.chart';
+$mimetypes['odf'] = 'application/vnd.oasis.opendocument.formula';
+$mimetypes['odg'] = 'application/vnd.oasis.opendocument.graphics';
+$mimetypes['odi'] = 'application/vnd.oasis.opendocument.image';
+$mimetypes['odm'] = 'application/vnd.oasis.opendocument.text-master';
+$mimetypes['odp'] = 'application/vnd.oasis.opendocument.presentation';
+$mimetypes['ods'] = 'application/vnd.oasis.opendocument.spreadsheet';
+$mimetypes['odt'] = 'application/vnd.oasis.opendocument.text';
+$mimetypes['otg'] = 'application/vnd.oasis.opendocument.graphics-template';
+$mimetypes['oth'] = 'application/vnd.oasis.opendocument.text-web';
+$mimetypes['otp'] = 'application/vnd.oasis.opendocument.presentation-template';
+$mimetypes['ots'] = 'application/vnd.oasis.opendocument.spreadsheet-template';
+$mimetypes['ott'] = 'application/vnd.oasis.opendocument.text-template';
+$mimetypes['sda'] = 'application/vnd.stardivision.draw';
+$mimetypes['sdc'] = 'application/vnd.stardivision.calc';
+$mimetypes['sdd'] = 'application/vnd.stardivision.impress';
+$mimetypes['sdw'] = 'application/vnd.stardivision.writer';
+$mimetypes['sgl'] = 'application/vnd.stardivision.writer-global';
+$mimetypes['smf'] = 'application/vnd.stardivision.math';
+$mimetypes['stc'] = 'application/vnd.sun.xml.calc.template';
+$mimetypes['std'] = 'application/vnd.sun.xml.draw.template';
+$mimetypes['sti'] = 'application/vnd.sun.xml.impress.template';
+$mimetypes['stw'] = 'application/vnd.sun.xml.writer.template';
+$mimetypes['sxc'] = 'application/vnd.sun.xml.calc';
+$mimetypes['sxd'] = 'application/vnd.sun.xml.draw';
+$mimetypes['sxg'] = 'application/vnd.sun.xml.writer.global';
+$mimetypes['sxi'] = 'application/vnd.sun.xml.impress';
+$mimetypes['sxm'] = 'application/vnd.sun.xml.math';
+$mimetypes['sxw'] = 'application/vnd.sun.xml.writer';
+
 $mimetypes['default'] = '';
+}
 ?>

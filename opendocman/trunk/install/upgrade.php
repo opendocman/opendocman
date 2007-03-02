@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade.php - Main upgrade controller
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -71,5 +71,14 @@ function do_upgrade12p3 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) 
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_12p3.php");
 }
+
+/*** This function calls the upgrade from odm 1.2.4 ***/
+function do_upgrade124 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+    global $dbconn;
+    mysql_connect($dbhost, $dbuname, $dbpass);
+    mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
+    include("install/upgrade_124.php");
+}
+
 
 ?>

@@ -1,8 +1,4 @@
-
-
-
-
-July 9th, 2003
+February 23rd, 2007
 
 Abstract
 
@@ -119,8 +115,6 @@ centralized repository.
 
 * PHP 4+ compiled with MySQL-Support (http://www.php.net/)
 
-* Linux
-
 1.2.1 Partially Tested
 
 * Microsoft IIS Server
@@ -137,18 +131,18 @@ To update your current version to the latest release:
 
 2. Unarchive opendocman into a new folder
 
-3. Edit the config.php in your new folder (Look at your old
+3. Copy the local_config.php.sample in your new folder (Look at your old
   config.php file for some settings that can be transferred
   over from the old config to the new).
 
-4. Load the setup.php page (ex. http://www.mydomain.com/opendocman/setup.php)
+4. Load the installation page in your web browser at /install/ 
+  ( ex. http://www.example.com/opendocman/install/ )
   and click on the appropriate upgrade link. Refer to your
   old config.php to see what version you were using before.
 
 2.2 New Installation
 
-1. Untar files into any dir in your webserver documents dir
-  (ex. /var/www)
+1. Untar/Unzip files into any dir in your webserver documents dir
 
 2. Edit config.php
 
@@ -156,11 +150,12 @@ To update your current version to the latest release:
     Change any that apply, especially the database parameters.
 
 3. If you DO have database creation permissions to your MySQL
-  database then you can use the automatic setup script (preferred
+  database then you can use the automatic installation script (preferred
   method).
 
-  (a) Load the setup.php page and click on the new install
-    link. (ex. http://www.mydomain.com/opendocman/setup.php)
+  (a) Load the installation page in your web browser at /install/ 
+    (ex. http://www.example.com/opendocman/install ) and click on the 
+    new install link. 
 
   (b) Enter the username and password of a user that has database
     creation permissions for the database configured in
@@ -268,7 +263,14 @@ options in that file:
 * authorization [On, Off] - Turn file moderation on or off.
 
 * secureurl [On,Off] - Hide the URL contents from prying
-  eyes
+
+* treeview [On,Off] - Use treeview mode instead of file list mode
+
+* theme [default="default"] - which theme to use? Smarty-based
+  themes are located in templates/ folder. Look at default for example.
+  To add a new one just create a new theme folder in templates/ 
+  with the header.tpl and footer.tpl files. Global variables are 
+  added to smarty as $g_VARIABLENAME.
 
 * dataDir - Location of file repository. This should ideally
   be outside the Web server root. Make sure the server has
@@ -341,11 +343,11 @@ Originally inspired by an article called cracking the vault.
 6 Automated Installation and Upgrade Notes (For Developers)
 
 There is a new folder named "install" which contains files
-use by the new script called setup.php. This is an automated
+use by the installation scrip. This is an automated
 web-based update/installation script. Here is how it works
 for users:
 
-1. The user loads setup.php into their browser. They can either
+1. The user loads /install/index.php into their browser. They can either
   select the new installation link, or one of the upgrade
   links.
 

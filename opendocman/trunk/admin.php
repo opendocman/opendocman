@@ -1,7 +1,7 @@
 <?php
 /*
 admin.php - provides admin interface
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2007 Stephen Lawrence, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ if (!isset($_SESSION['uid']))
 	exit;
 }
 include('config.php');
+include('udf_functions.php');
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 $secureurl = new phpsecureurl;
@@ -44,6 +45,11 @@ draw_menu($_SESSION['uid']);
 	<center>	
 	<table border="1" cellspacing="5" cellpadding="5" >
 	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF">Users</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Departments</th><th bgcolor ="#83a9f7"><font color="#FFFFFF">Categories</th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">File Operations</th></font>'; ?>
+<?php
+ 	if($user_obj->isRoot())
+	  udf_admin_header();
+?>
+	  </tr>
 	  <tr>
 	   <td>
 <!-- User Admin -->
@@ -124,6 +130,9 @@ if ( $user_obj->isRoot()	)
 		 </tr>
 	   </table>
 	  </td>
+<?php
+	udf_admin_menu($secureurl);
+?>
 <?php
 }
 ?>

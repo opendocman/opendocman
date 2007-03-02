@@ -46,12 +46,17 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['databas
 
 if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
-	echo '<img src="images/exclamation.gif"><a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '"> You have '. sizeof($user_obj->getRevieweeIds()). ' documents waiting to be reviewed!</a>  <BR>';
+    echo '<img src="images/exclamation.gif"> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">You have '. sizeof($user_obj->getRevieweeIds()). ' document';
+    if (sizeof($user_obj->getRevieweeIds()) != 1)
+    {
+        echo 's';
+    }
+    echo ' waiting to be reviewed!</a>  <BR>';
 }
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-	echo '<img src="images/exclamation_red.gif"><a href="' . $secureurl_obj->encode('rejects.php?state=1') . '"> '. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
+    echo '<img src="images/exclamation_red.gif"> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
 }
 $llen = $user_obj->getNumExpiredFiles();
 if($llen > 0)
@@ -108,32 +113,26 @@ if($GLOBALS['CONFIG']['treeview'] == "On")
 
 if($GLOBALS['CONFIG']['treeview'] != 'On')
 {
-    echo '<table>';
+    echo '<table border="0">';
     echo '<tr><td>';
     list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
     $limit=$GLOBALS['CONFIG']['page_limit'];
     $total_hit = sizeof($file_id_array);
     list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
-    echo '</center>';
 
     //$llist_e = getmicrotime();
     // clean up
-    echo '</td></tr>';
+    echo '</td></tr></table>';
+
 }
 
 if($GLOBALS['CONFIG']['treeview'] == 'On')
 {
-    echo '<tr><td>';
     if(is_array($sorted_id_array) && $sorted_id_array[0] != '')
     {
         show_tree($sorted_id_array, $_GET['starting_index'], $_GET['stoping_index']);
     }
-    echo '</td></tr>';
 }
-echo '</table>';
-
-echo '</table>';
-echo '<br>';
 draw_footer();	
 //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
 //echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	

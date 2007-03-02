@@ -240,4 +240,12 @@ CREATE TABLE IF NOT EXISTS user_perms (
 ) TYPE=MyISAM
 ") or die("<br>Could not create user_perms table");
 
+$result = mysql_query("
+CREATE TABLE IF NOT EXISTS udf (
+    id  int auto_increment unique,
+    table_name varchar(16),
+    display_name varchar(16),
+    field_type int
+) TYPE=MyISAM
+") or die("<br>Could not create udf table");
 ?>

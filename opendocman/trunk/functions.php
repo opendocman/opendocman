@@ -1,7 +1,7 @@
 <?php
 /*
 functions.php - various utility functions
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007 Stephen Lawrence, Khoa Nguyen, Jon Miner
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,11 +19,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 //require_once ('config.php');
-include_once'classHeaders.php';
-include_once'mimetypes.php';
+
+include_once('version.php');
+
+require_once('includes/smarty/Smarty.class.php');
+$GLOBALS['smarty'] = new Smarty();
+$GLOBALS['smarty']->template_dir = 'templates/' . $GLOBALS['CONFIG']['theme'] .'/';
+
+/**** SET g_ vars from Global Config arr ***/
+foreach($GLOBALS['CONFIG'] as $key => $value)
+{
+    $GLOBALS['smarty']->assign('g_' . $key,$value);
+}
+
+include_once('classHeaders.php');
+include_once('mimetypes.php');
 require_once('crumb.php');
-require_once 'secureurl.class.php';
-include_once 'secureurl.php';
+require_once('secureurl.class.php');
+include_once('secureurl.php');
+include('udf_functions.php');
 
 if( !defined('function') )
 {
@@ -86,12 +100,14 @@ if( !defined('function') )
 			<TD bgcolor="#0000A0" align="left" valign="middle">
 			<?php	$crumb = new crumb();
 		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);	
-		$crumb->printTrail($_REQUEST['state']);
+        $crumb->printTrail($_REQUEST['state']);
 		echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
-		echo '<b><font size="-2" face="Arial" color="White">';
-		echo 'Last Message: '.$lastmessage;
-		echo '</td>';
-
+        if ( $lastmessage != "" )
+        {
+            echo '<b><font size="-2" face="Arial" color="White">';
+            echo 'Last Message: '.$lastmessage;
+            echo '</td>';
+        }
 		?>	    </font></b>
 			</TD>
 			</tr>
@@ -172,7 +188,15 @@ if( !defined('function') )
             echo "\n".'<!------------------end_draw_menu------------------->'."\n";
         }
 	function draw_header($page_title)
-	{
+    {
+        if(is_dir('install'))
+        {
+            echo  '<span style="color: red;">Security Notice: You should remove the "install" folder before proceeding</span>';
+        }
+
+        $GLOBALS['smarty']->assign('page_title', $page_title);
+        $GLOBALS['smarty']->display('header.tpl');
+/*
 		if (!isset($page_title))
 		{
 			$page_title='Main';
@@ -201,6 +225,7 @@ if( !defined('function') )
 		echo '	</HEAD>'."\n";
 		echo '  	<body bgcolor="white">'."\n";
 		echo '<!----------------------------End drawing header----------------------------->'."\n";
+*/
 	}
 
 	function draw_error($message)
@@ -210,6 +235,8 @@ if( !defined('function') )
 	
 	function draw_footer()
 	{
+        $GLOBALS['smarty']->display('footer.tpl');
+/*
 		echo "\n".'<!-------------------------------begin_draw_footer------------------------------>'."\n";
 		echo '<hr>'."\n";
 		echo ' <h5>'.$GLOBALS['CONFIG']['current_version'].'<BR>';
@@ -217,6 +244,7 @@ if( !defined('function') )
 		echo ' </body>'."\n";
 		echo '</html>'."\n";
 		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
+*/
 	}
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
@@ -260,10 +288,10 @@ if( !defined('function') )
         {
            $secureurl= new phpsecureurl;
         	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
-				{
-					echo'<B><font size="10">No files found</font></B>' . "\n";
-					return -1;
-				}
+            {
+                echo'<img src="images/exclamation.gif"> No files found' . "\n";
+                return -1;
+            }
 				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
                 $checkbox_index = 0;
                 $count = sizeof($fileid_array);
@@ -530,11 +558,12 @@ if( !defined('function') )
                         {
                                 $rights[$i][1] = '-';
                         }
-			echo '<TD class="' . $css_td_class . '" NOWRAP>';
+			            echo '<TD class="' . $css_td_class . '" NOWRAP>';
 
-                        for($i = 0; $i<sizeof($rights); $i++)
+                        echo $rights[0][1];
+                        for($i = 1; $i<sizeof($rights); $i++)
                         {
-                                echo $rights[$i][1] . '|';
+                                echo '|' . $rights[$i][1];
                         }
 ?>                      </TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
@@ -635,11 +664,16 @@ if( !defined('function') )
 			{
 				/* There is no need to have the current page be a link.  The user only needs link
 				   to move forward or backward. */
-				if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+				//if($current_page== $i)  echo $i . '&nbsp;&nbsp;';
+                $d = $i + 1;
+                if($current_page== $i)  
+                {
+                    echo $d . '&nbsp;&nbsp;';
+                }
 
 				/* Generate link */
 				else    
-					echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($i*$page_limit) . '&stoping_index=' . (($i+1)*$page_limit-1) . '&page=' . $i . '">' . $i . '</a>&nbsp;&nbsp;';
+                    echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($i*$page_limit) . '&stoping_index=' . (($i+1)*$page_limit-1) . '&page=' . $i . '">' . $d . '</a>&nbsp;&nbsp;';
 				$index_result = $index_result + $page_limit;
 			}
 
@@ -648,6 +682,7 @@ if( !defined('function') )
 			{
 				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page+1)) . '&stoping_index=' . (($current_page+2)*$page_limit-1) . '&page=' . ($current_page+1) . '">Next</a>&nbsp; &nbsp;';
 			}
+             echo '</center>';
 		}
 
 	function sort_browser()
@@ -675,6 +710,9 @@ if( !defined('function') )
 				case 'category':
 					info_Array = category_array;
 					break;
+<?php
+	udf_functions_java_menu();
+?>
 				default : 
 					order_array = document.forms['browser_sort'].elements['category_item_order'].options;
 					info_Array = new Array();
@@ -682,7 +720,7 @@ if( !defined('function') )
 					break;
 			}
 			category_option = select_box.options[select_box.selectedIndex].value;
-			options_array[0] = new Option('Choose a(n) ' + category_option);
+			options_array[0] = new Option('Choose ' + category_option);
 			options_array[0].id= 0;
 			options_array[0].value = 'choose_an_author';
 			
@@ -721,7 +759,7 @@ if( !defined('function') )
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
-		$query = "SELECT last_name, first_name, id FROM user ORDER BY username ASC";
+		$query = "SELECT last_name, first_name, id FROM user ORDER BY last_name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -756,11 +794,12 @@ if( !defined('function') )
 			echo("\tcategory_array[$index] = new Array(\"$category\", $id);\n");
 			$index++;
 		}
+		udf_functions_java_array();
 		///////////////////////////////////////////////////////////////////////
 		echo '</script>'."\n";
 ?>
 		<form name="browser_sort">
-			<table name="browser" border="1" cellspacing="1">
+			<table name="browser" border="0" cellspacing="1">
 			<tr><td>Browse by:</td>
 				<td NOWRAP ROWSPAN="0">
 					<select name='category' onChange='loadItem(this)' width='0' size='1'>
@@ -768,6 +807,9 @@ if( !defined('function') )
 						<option id='1' value='author'>Author</option>
 						<option id='2' value='department'>Department</option>
 						<option id='3' value='category'>File Category</option>
+<?php
+	udf_functions_java_options(4);
+?>
 					</select>
 				</td>
 				<td>
