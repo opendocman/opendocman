@@ -197,3 +197,23 @@ CREATE TABLE user_perms (
 #
 
 
+# New User Defined Fields Table
+#
+# field_type describes what type of UDF this is. At the momment
+# the valid values are:
+#
+#   1 = Drop down style list
+#   2 = Radio Buttons
+#
+# table_name names the database table where the allow values are listed
+#
+# display_name is the label shown to the user
+
+CREATE TABLE udf
+(
+    id  int(11) auto_increment unique,
+    table_name  varchar(16),
+    display_name    varchar(16),
+    field_type  int
+) TYPE=MyISAM;
+

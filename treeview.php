@@ -40,13 +40,14 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
             $realname = $file_obj->getRealname();
             $description = $file_obj->getDescription();
             $modified_date = fix_date($file_obj->getModifiedDate());
+            $created_date = fix_date($file_obj->getCreatedDate());
             $category = $file_obj->getCategoryName();
             if(!isset($folders[$category]))
             {
                 $folders[$category] = $GLOBALS['tree']->add_folder($GLOBALS['root'], "$category",$_SERVER['PHP_SELF'], "ftv2/ftv2folderclosed.gif", "ftv2/ftv2folderopen.gif");
             }
 
-            $GLOBALS['tree']->add_document($folders[$category], "$realname", "details.php?id=$fileid&state=2");
+            $GLOBALS['tree']->add_document($folders[$category], "<strong>$realname</strong>&nbsp;-&nbsp;Created on: $created_date&nbsp;-&nbsp;Modified on: $modified_date", "details.php?id=$fileid&state=2");
             $index++;
         }
 

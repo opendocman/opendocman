@@ -172,7 +172,7 @@ else
 	// illegal file type!
 	if ($allowedFile != 1) 
 	{ 
-		$last_message='Failed';
+		$last_message='MIMETYPE: ' . $_FILES['file']['type'] . ' Failed';
 		header('Location:error.php?ec=13&last_message=' . urlencode($last_message)); 
 		exit; 
 	}
