@@ -1,6 +1,6 @@
 <?php
 /*
-upgrade_125.php - Database upgrades for users upgrading from 1.2.4
+upgrade_124.php - Database upgrades for users upgrading from 1.2.4
 Copyright (C) 2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 echo 'Creating udf table<br />';
 $result = mysql_query("
-CREATE TABLE udf
+CREATE TABLE IF NOT EXISTS udf
 (
     id  int(11) auto_increment unique,
     table_name  varchar(16),
