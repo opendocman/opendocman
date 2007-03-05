@@ -116,7 +116,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLO
 {
     if(is_dir('install'))
     {
-        $install_msg = '<span style="color: red;">Security Notice: You should remove the "install" folder before proceeding</span>';
+        $install_msg = '<span style="color: red;">Security Notice: If you already installed/updated then you should remove the "install" folder before proceeding</span>';
     }
     
     ?>
