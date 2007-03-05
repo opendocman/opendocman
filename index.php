@@ -47,10 +47,31 @@ if(isset($_POST['login']))
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
 
+    // Check for NIS/YP data
+    if ( $GLOBALS['CONFIG']['try_nis'] == "On")
+    {
+        $pwent = @split(":",`ypmatch $frmuser passwd`);
+        if(isset($pwent))
+            $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
+    }
+
     // check login and password
     // connect and execute query
     $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
     $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+
+    // if MySQL login fails, check NIS/YP data
+    if ( $GLOBALS['CONFIG']['try_nis'] == "On")
+    {
+        if (mysql_num_rows($result) == 0)
+        {
+          if (isset($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
+          {
+            $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
+            $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+          }
+        }
+    }
 
     // if row exists - login/pass is correct
     if (mysql_num_rows($result) == 1)
@@ -112,7 +133,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
                 }
         }
 }
-elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLOBALS['CONFIG']['authen'] == 'nis')
+elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
     if(is_dir('install'))
     {
@@ -186,7 +207,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql' || $GLO
         <td valign="top">
         Welcome to OpenDocMan.
         <p>
-        Log in to begin using The system's powerful storage, publishing and revision control features.
+        Log in to begin using the system's powerful storage, publishing and revision control features.
         </td>
         <td width="20%">
         &nbsp;
