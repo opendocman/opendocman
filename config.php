@@ -117,8 +117,11 @@ The first two options also result in sending email to reviewer
 // should we display the signup link?
 'allow_signup' => 'On',
 
- // should we allow users to reset their forgotten password?
-'allow_password_reset' => 'On',
+// should we allow users to reset their forgotten password?
+'allow_password_reset' => 'Off',
+
+// Attempt NIS password lookups?
+'try_nis' => 'Off',
 
  // Which theme to use?
 'theme' => 'default'
