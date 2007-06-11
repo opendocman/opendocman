@@ -57,7 +57,7 @@ if(isset($_POST['login']))
 
     // check login and password
     // connect and execute query
-    $query = "SELECT id, username, password FROM user WHERE username = '$frmuser' AND password = password('$frmpass')";
+    $query = "SELECT id, username, password FROM odm_user WHERE username = '$frmuser' AND password = password('$frmpass')";
     $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
 
     // if MySQL login fails, check NIS/YP data
@@ -67,7 +67,7 @@ if(isset($_POST['login']))
         {
           if (isset($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
           {
-            $query = "SELECT id, username, password FROM user WHERE username = '$frmuser'";
+            $query = "SELECT id, username, password FROM odm_user WHERE username = '$frmuser'";
             $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
           }
         }
@@ -110,7 +110,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
         {
                 list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
                 //// query to get id num from username
-                $query = "SELECT id FROM user WHERE username='$userid'";
+                $query = "SELECT id FROM odm_user WHERE username='$userid'";
                 $result = mysql_query($query) or die ('Error in query: '.$query . mysql_error());
                 // if row exists then the user has an account
                 if (mysql_num_rows($result) == 1)

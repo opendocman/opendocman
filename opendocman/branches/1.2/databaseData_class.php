@@ -24,16 +24,16 @@ if( !defined("databaseData_class") );
 
    class databaseData   //DO NOT INSTANTIATE THIS ABSTRACT CLASS
    {
-      	var $TABLE_ADMIN = 'admin';
-      	var $TABLE_CATEGORY = 'category';
-      	var $TABLE_DATA = 'data';
-      	var $TABLE_DEPARTMENT = 'department';
-      	var $TABLE_DEPT_PERMS = 'dept_perms';
-      	var $TABLE_DEPT_REVIEWER = 'dept_reviewer';
-      	var $TABLE_LOG = 'log';
-      	var $TABLE_RIGHTS = 'rights';
-      	var $TABLE_USER = 'user';
-      	var $TABLE_USER_PERMS = 'user_perms';
+      	var $TABLE_ADMIN = 'odm_admin';
+      	var $TABLE_CATEGORY = 'odm_category';
+      	var $TABLE_DATA = 'odm_data';
+      	var $TABLE_DEPARTMENT = 'odm_department';
+      	var $TABLE_DEPT_PERMS = 'odm_dept_perms';
+      	var $TABLE_DEPT_REVIEWER = 'odm_dept_reviewer';
+      	var $TABLE_LOG = 'odm_log';
+      	var $TABLE_RIGHTS = 'odm_rights';
+      	var $TABLE_USER = 'odm_user';
+      	var $TABLE_USER_PERMS = 'odm_user_perms';
       	var $FORBIDDEN_RIGHT = -1;
 		var $NONE_RIGHT = 0;
 		var $VIEW_RIGHT = 1;

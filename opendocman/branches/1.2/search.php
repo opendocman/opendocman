@@ -130,64 +130,64 @@ else
 
         $lkeyword = addslashes($lkeyword);
 
-		$lquery_pre = 'SELECT data.id FROM data, user, department, category';
-		$lquery = ' WHERE data.owner = user.id AND data.department=department.id AND data.category = category.id AND (';
+		$lquery_pre = 'SELECT odm_data.id FROM odm_data, odm_user, odm_department, odm_category';
+		$lquery = ' WHERE odm_data.owner = odm_user.id AND odm_data.department=odm_department.id AND odm_data.category = odm_category.id AND (';
 				$larray_len = sizeof($lsearch_array);
 				switch($lwhere)
 				{
 				// Put all the category for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the category array are synchronized.
 				case 'author_locked_files':
-				$lquery .= 'data.status' . $lequate  . '\'' . $lkeyword . '\' AND data.owner=\'' . $_SESSION['uid'] . '\'';
+				$lquery .= 'odm_data.status' . $lequate  . '\'' . $lkeyword . '\' AND odm_data.owner=\'' . $_SESSION['uid'] . '\'';
 				break;
 
 				// Put all the category for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the category array are synchronized.
 				case 'category_only':
-				$lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= 'odm_category.name' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the author name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the author name array are synchronized.
 				case 'author_only':
 				if( $lexact_phrase=='on' )
 				{ 
-				$lquery .= 'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . 'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
+				$lquery .= 'odm_user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . 'odm_user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
 				}
 				else
 				{
-					$lquery .= 'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+					$lquery .= 'odm_user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'odm_user.last_name' . $lequate . '\'' . $lkeyword . '\'';
 				}
 				break;
 				// Put all the department name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
 				case 'department_only':
-				$lquery .= 'department.name' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= 'odm_department.name' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the description for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the description array are synchronized.
 				case 'descriptions_only':
-				$lquery .= 'data.description' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= 'odm_data.description' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the file name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the file name array are synchronized.
 				case 'filenames_only':
-				$lquery .= 'data.realname= \'' . $lkeyword . '\'';
+				$lquery .= 'odm_data.realname= \'' . $lkeyword . '\'';
 				break;
 				// Put all the comments for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the comments array are synchronized.
 				case 'comments_only':
-                $lquery .= 'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= 'odm_data.comment' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 case 'file_id_only':
-                $lquery .= 'data.id' . $lequate . '\'' . $lkeyword . '\'';
+                $lquery .= 'odm_data.id' . $lequate . '\'' . $lkeyword . '\'';
                 break;
                 case 'all':
-                $lquery .= 'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= 'odm_category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					'odm_user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'odm_user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					'odm_department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					'odm_data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					'odm_data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					'odm_data.comment' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 
 				default :
@@ -195,7 +195,7 @@ else
 				break;
 				
 				}
-				$lquery .= ') ORDER BY data.id ASC';
+				$lquery .= ') ORDER BY odm_data.id ASC';
 //echo $lquery_pre.$lquery;
 				$lresult = mysql_query($lquery_pre.$lquery);
 

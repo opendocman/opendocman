@@ -4,44 +4,44 @@
 # Server version	4.0.12-max-log
 
 #
-# Table structure for table 'admin'
+# Table structure for table 'odm_admin'
 #
 
-CREATE TABLE admin (
+CREATE TABLE odm_admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'admin'
+# Dumping data for table 'odm_admin'
 #
 
-INSERT INTO admin VALUES (1,1);
+INSERT INTO odm_admin VALUES (1,1);
 
 #
-# Table structure for table 'category'
+# Table structure for table 'odm_category'
 #
 
-CREATE TABLE category (
+CREATE TABLE odm_category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'category'
+# Dumping data for table 'odm_category'
 #
 
-INSERT INTO category VALUES (1,'SOP');
-INSERT INTO category VALUES (2,'Training Manual');
-INSERT INTO category VALUES (3,'Letter');
-INSERT INTO category VALUES (4,'Presentation');
+INSERT INTO odm_category VALUES (1,'SOP');
+INSERT INTO odm_category VALUES (2,'Training Manual');
+INSERT INTO odm_category VALUES (3,'Letter');
+INSERT INTO odm_category VALUES (4,'Presentation');
 
 #
-# Table structure for table 'data'
+# Table structure for table 'odm_data'
 #
 
-CREATE TABLE data (
+CREATE TABLE odm_data (
   id int(11) unsigned NOT NULL auto_increment,
   category tinyint(4) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
@@ -64,30 +64,30 @@ CREATE TABLE data (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'data'
+# Dumping data for table 'odm_data'
 #
 
 #
-# Table structure for table 'department'
+# Table structure for table 'odm_department'
 #
 
-CREATE TABLE department (
+CREATE TABLE odm_department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'department'
+# Dumping data for table 'odm_department'
 #
 
-INSERT INTO department VALUES (1,'Information Systems');
+INSERT INTO odm_department VALUES (1,'Information Systems');
 
 #
-# Table structure for table 'dept_perms'
+# Table structure for table 'odm_dept_perms'
 #
 
-CREATE TABLE dept_perms (
+CREATE TABLE odm_dept_perms (
   fid int(11) unsigned default NULL,
   dept_id int(11) unsigned default NULL,
   rights tinyint(4) NOT NULL default '0',
@@ -97,30 +97,30 @@ CREATE TABLE dept_perms (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'dept_perms'
+# Dumping data for table 'odm_dept_perms'
 #
 
 
 #
-# Table structure for table 'dept_reviewer'
+# Table structure for table 'odm_dept_reviewer'
 #
 
-CREATE TABLE dept_reviewer (
+CREATE TABLE odm_dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'dept_reviewer'
+# Dumping data for table 'odm_dept_reviewer'
 #
 
-INSERT INTO dept_reviewer VALUES (1,1);
+INSERT INTO odm_dept_reviewer VALUES (1,1);
 
 #
-# Table structure for table 'log'
+# Table structure for table 'odm_log'
 #
 
-CREATE TABLE log (
+CREATE TABLE odm_log (
   id int(11) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
@@ -131,35 +131,35 @@ CREATE TABLE log (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'log'
+# Dumping data for table 'odm_log'
 #
 
 
 #
-# Table structure for table 'rights'
+# Table structure for table 'odm_rights'
 #
 
-CREATE TABLE rights (
+CREATE TABLE odm_rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'rights'
+# Dumping data for table 'odm_rights'
 #
 
-INSERT INTO rights VALUES (0,'none');
-INSERT INTO rights VALUES (1,'view');
-INSERT INTO rights VALUES (-1,'forbidden');
-INSERT INTO rights VALUES (2,'read');
-INSERT INTO rights VALUES (3,'write');
-INSERT INTO rights VALUES (4,'admin');
+INSERT INTO odm_rights VALUES (0,'none');
+INSERT INTO odm_rights VALUES (1,'view');
+INSERT INTO odm_rights VALUES (-1,'forbidden');
+INSERT INTO odm_rights VALUES (2,'read');
+INSERT INTO odm_rights VALUES (3,'write');
+INSERT INTO odm_rights VALUES (4,'admin');
 
 #
-# Table structure for table 'user'
+# Table structure for table 'odm_user'
 #
 
-CREATE TABLE user (
+CREATE TABLE odm_user (
   id int(11) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
   password varchar(50) NOT NULL default '',
@@ -173,16 +173,16 @@ CREATE TABLE user (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'user'
+# Dumping data for table 'odm_user'
 #
 
-INSERT INTO user VALUES (1,'admin','',1,'5555551212','admin@example.com','User','Admin','');
+INSERT INTO odm_user VALUES (1,'admin','',1,'5555551212','admin@example.com','User','Admin','');
 
 #
-# Table structure for table 'user_perms'
+# Table structure for table 'odm_user_perms'
 #
 
-CREATE TABLE user_perms (
+CREATE TABLE odm_user_perms (
   fid int(11) unsigned default NULL,
   uid int(11) unsigned NOT NULL default '0',
   rights tinyint(4) NOT NULL default '0',
@@ -193,7 +193,7 @@ CREATE TABLE user_perms (
 ) TYPE=MyISAM;
 
 #
-# Dumping data for table 'user_perms'
+# Dumping data for table 'odm_user_perms'
 #
 
 
@@ -209,7 +209,7 @@ CREATE TABLE user_perms (
 #
 # display_name is the label shown to the user
 
-CREATE TABLE udf
+CREATE TABLE odm_udf
 (
     id  int(11) auto_increment unique,
     table_name  varchar(16),

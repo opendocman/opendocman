@@ -126,33 +126,33 @@ if( !defined('function') )
 		$lwhere_or_clause = '';
 		if( $sort_by == 'id' )
 		{
-			$lquery = 'SELECT id from data ORDER BY id ' . $sort_order;
+			$lquery = 'SELECT id FROM odm_data ORDER BY id ' . $sort_order;
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT data.id FROM data, user WHERE data.owner = user.id ORDER BY user.last_name ' . $sort_order . ' , user.first_name ' . $sort_order  . ', data.id asc';
+			$lquery = 'SELECT odm_data.id FROM odm_data, odm_user WHERE odm_data.owner = odm_user.id ORDER BY odm_user.last_name ' . $sort_order . ' , odm_user.first_name ' . $sort_order  . ', odm_data.id asc';
 		}
 		elseif($sort_by == 'file_name')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.realname ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.realname ' . $sort_order . ', odm_data.id asc';
 		}
 		elseif($sort_by == 'department')
 		{
-			$lquery = 'SELECT data.id FROM data, department WHERE data.department = department.id ORDER BY department.name ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT odm_data.id FROM odm_data, odm_department WHERE odm_data.department = odm_department.id ORDER BY odm_department.name ' . $sort_order . ', odm_data.id asc';
 		}
 		elseif($sort_by == 'created_date' )
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.created ' . $sort_order . ', data
+			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.created ' . $sort_order . ', odm_data
 				.id asc';
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT data.id FROM log, data WHERE data.id = log.id AND log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', data.id asc';
+			$lquery = 'SELECT odm_data.id FROM odm_log, odm_data WHERE odm_data.id = odm_log.id AND odm_log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', odm_data.id asc';
 		}
 		elseif($sort_by == 'description')
 		{
-			$lquery = 'SELECT data.id FROM data ORDER BY data.description ' . $sort_order . ',
-			data.id asc';
+			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.description ' . $sort_order . ',
+			odm_data.id asc';
 		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
@@ -248,7 +248,7 @@ if( !defined('function') )
 	}
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
-                $query = "SELECT Email from user";
+                $query = "SELECT Email FROM odm_user";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
@@ -258,7 +258,7 @@ if( !defined('function') )
         }
         function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
         {
-                $query = 'SELECT Email from user where user.department = '.$dept_id;
+                $query = 'SELECT Email FROM odm_user WHERE department = '.$dept_id;
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
@@ -759,7 +759,7 @@ if( !defined('function') )
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
-		$query = "SELECT last_name, first_name, id FROM user ORDER BY last_name ASC";
+		$query = "SELECT last_name, first_name, id FROM odm_user ORDER BY last_name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -771,7 +771,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
-		$query = "SELECT name, id FROM department ORDER BY name ASC";
+		$query = "SELECT name, id FROM odm_department ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -783,7 +783,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
-		$query = "SELECT name, id FROM category ORDER BY name ASC";
+		$query = "SELECT name, id FROM odm_category ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -891,7 +891,7 @@ if( !defined('function') )
 	*/
 	function getAllUsers()
 	{
-		$lquery = 'SELECT id, last_name, first_name, username FROM user';
+		$lquery = 'SELECT id, last_name, first_name, username FROM odm_user';
 		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
 		$llen = mysql_num_rows($lresult);
 		$return_array = array();
