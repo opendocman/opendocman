@@ -42,18 +42,18 @@ if ($count == 0)
 	echo '<img src="images/exclamation.gif"> No documents checked out to you';
 else
 {
-	echo '<table cellspacing="5" cellpadding="3" border="1"><caption><B>'.$count.' document';
+    echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1"><caption><b>'.$count.' document';
 	if ($count != 1)
 		echo 's';
-	echo ' checked out to you</CAPTION>';
-	echo '<TR bgcolor="#83a9f7">';
-        echo '<TD align="center"><B>Check-In</TD>';
-        echo '<TD align="center"><B>File Name</TD>';
-        echo '<TD align="center"><B>Description</TD>';
-        echo '<TD align="center"><B>Created Date</TD>';
-        echo '<TD align="center"><B>Owner</TD>';
-        echo '<TD align="center"><B>Size</TD>';
-        echo '</TR>';
+	echo ' checked out to you</caption>';
+	echo '<tr bgcolor="#83a9f7">';
+        echo '<td class="listtable"><b>Check-In</td>';
+        echo '<td class="listtable"><b>File Name</td>';
+        echo '<td class="listtable"><b>Description</td>';
+        echo '<td class="listtable"><b>Created Date</td>';
+        echo '<td class="listtable"><b>Owner</td>';
+        echo '<td class="listtable"><b>Size</td>';
+        echo '</tr>';
 
         $row_color = "#FCFCFC";
 	// iterate through resultset
@@ -66,15 +66,16 @@ else
         }
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 	// display list
+    $highlighted_color = '#bdf9b6';
 
-	echo '<TR valign="middle" bgcolor="' . $row_color . '">';
-	echo '<TD align="center"><A href="check-in.php?id=' . $id . '&state=' . ($_REQUEST['state']+1) . '"><img src="images/check-in.png" border=0 width=45 height=45></A></TD>';
-	echo '<TD align="center">' . $realname . '</TD>';
-	echo '<TD align="justify">' . $description . '</TD>';
-	echo '<TD align="center">' . fix_date($created) . '</TD> ';
-	echo '<TD align="center">' . $last_name . ', ' . $first_name . '</TD> ';
-	echo '<TD align="center">' . display_filesize($filename) . '</TD> ';
-	echo '</TR>';
+    echo '<tr valign="middle" bgcolor="' . $row_color . '" onmouseover="this.style.backgroundColor=\'' . $highlighted_color . '\';" onmouseout="this.style.backgroundColor=\'' . $row_color . '\';">';
+    echo '<td class="listtable"><a href="check-in.php?id=' . $id . '&amp;state=' . ($_REQUEST['state']+1) . '"><img src="images/check-in.png" border="0" width="45" height="45" alt="check in" /></a></td>';
+    echo '<td class="listtable">' . $realname . '</td>';
+    echo '<td class="listtable">' . $description . '</td>';
+    echo '<td class="listtable">' . fix_date($created) . '</td> ';
+    echo '<td class="listtable">' . $last_name . ', ' . $first_name . '</td> ';
+    echo '<td class="listtable">' . display_filesize($filename) . '</td> ';
+	echo '</tr>';
 
         if ( $row_color == "#FCFCFC" )
           $row_color = "#E3E7F9";
