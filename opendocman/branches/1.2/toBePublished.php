@@ -85,8 +85,8 @@ if(!isset($_REQUEST['submit']))
 	$sorted_id_array = my_sort($id_array, $_GET['sort_order'], $_GET['sort_by']);
 	//$sorted_obj_array = $user_obj->convertToFileDataOBJ($sorted_id_array);
 	$flag=0;
-	echo '<FORM name="table" method="POST" action="' . $_SERVER['PHP_SELF'] . '">'. "\n";
-	echo '<TABLE border="1"><TR><TD>';
+	echo '<form name="table" method="post" action="' . $_SERVER['PHP_SELF'] . '">'. "\n";
+	echo '<table border="0" width="100%"><tr><td>';
 	$list_status = list_files($sorted_id_array, $userpermission, $lpage_url, $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], true);
 	list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 	if( $list_status != -1 )
