@@ -83,26 +83,33 @@ else
 
 			draw_footer();
 
-	}
-	// form submitted - begin download
-	else
-	{
-		//list($id, $realname) = mysql_fetch_row($result);
-		$id = $filedata->getId();
-		$realname = $filedata->getName();
-		//mysql_free_result($result);
+    }
+    // form submitted - begin download
+    else
+    {
+        //list($id, $realname) = mysql_fetch_row($result);
+        $id = $filedata->getId();
+        $realname = $filedata->getName();
+        //mysql_free_result($result);
 
-		// get the filename
-		$filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
+        // get the filename
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
 
-		// send headers to browser to initiate file download
-		header ('Content-Type: application/octet-stream'); 
-		header ('Content-Disposition: attachment; filename='.$realname); 
-		readfile($filename); 
+        if ( file_exists($filename) )
+        {
+            // send headers to browser to initiate file download
+            header ('Content-Type: application/octet-stream'); 
+            header ('Content-Disposition: attachment; filename='.$realname); 
+            readfile($filename); 
+        }
+        else
+        {
+            echo 'File not readable...';
+        }
 
-		ob_end_flush();		//Flush buffer;
-		ob_end_clean();		//Clean up
-	}
+        ob_end_flush();		//Flush buffer;
+        ob_end_clean();		//Clean up
+    }
 }
 // clean up
 ?>
