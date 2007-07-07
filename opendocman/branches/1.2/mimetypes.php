@@ -29,7 +29,7 @@ if (is_file("/etc/mime.types"))
         $line = strtr($inline,"\t"," ");
         if ( $line != "\n" && strncmp($line,"#",1) != 0 ) {
             $mimetype = strtok($line," ");
-            while (($ext = strtok(" ")) != "" ) {
+            while (($ext = rtrim(strtok(" "))) != "" ) {
                 $mimetypes[$ext] = $mimetype;
             }
         }
