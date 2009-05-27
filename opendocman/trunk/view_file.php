@@ -80,56 +80,82 @@ if(!isset($_GET['submit']))
 }
 elseif ($_GET['submit'] == 'view')
 {
-	//echo "mimetype = $mimetype<br>";
-	//exit;
-	//echo "ID is $_REQUEST['id']";
-	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    //echo "mimetype = $mimetype<br>";
+    //exit;
+    //echo "ID is $_REQUEST['id']";
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
-	$realname = $file_obj->getName();
-	if( isset($lrevision_id) )
-	{	$filename = $lrevision_dir . $lrequest_id . ".dat";
-	}
-	elseif( $file_obj->isArchived() )
-	{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
-	else
-	{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	}
-	// send headers to browser to initiate file download
-	header('Content-Length: '.filesize($filename));
-	// Pass the mimetype so the browser can open it
+    $realname = $file_obj->getName();
+    if( isset($lrevision_id) )
+    {	
+        $filename = $lrevision_dir . $lrequest_id . ".dat";
+    }
+    elseif( $file_obj->isArchived() )
+    {	
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   
+    }
+    else
+    {	
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	
+    }
+
+    if ( file_exists($filename) )
+    {
+        // send headers to browser to initiate file download
+        header('Content-Length: '.filesize($filename));
+        // Pass the mimetype so the browser can open it
         header ('Cache-control: private');
         header('Content-Type: ' . $_GET['mimetype']);
         header('Content-Disposition: inline; filename="' . $realname . '"');
-		// Apache is sending Last Modified header, so we'll do it, too
+        // Apache is sending Last Modified header, so we'll do it, too
         $modified=filemtime($filename);
         header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
-	readfile($filename);
+        readfile($filename);
+    }
+    else
+    {
+        echo 'File does not exist...';
+    }
 }
 elseif ($_GET['submit'] == 'Download')
 {
-	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
-	$realname = $file_obj->getName();
-	if( isset($lrevision_id) )
-	{   $filename = $lrevision_dir . $lrequest_id . ".dat";
-	}
-	elseif( $file_obj->isArchived() )
-	{   $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   }
-	else
-	{   $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   }
-	// send headers to browser to initiate file download
-	header('Cache-control: private');
-	header ('Content-Type: application/octet-stream');
-	header ('Content-Disposition: attachment; filename="' . $realname . '"');
-	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	header('Pragma: public');
-	readfile($filename);
+    $realname = $file_obj->getName();
+    if( isset($lrevision_id) )
+    {   
+        $filename = $lrevision_dir . $lrequest_id . ".dat";
+    }
+    elseif( $file_obj->isArchived() )
+    {   
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   
+    }
+    else
+    {   
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   
+    }
+
+    if (file_exists($filename))
+    {
+        // send headers to browser to initiate file download
+        header('Cache-control: private');
+        header ('Content-Type: application/octet-stream');
+        header ('Content-Disposition: attachment; filename="' . $realname . '"');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        readfile($filename);
+    }
+    else
+    {
+        echo 'File does not exist...';
+    }
 
 }
 else
 {
-echo 'Nothing to do ';
-echo 'submit is ' . $_GET['submit'];
+    echo 'Nothing to do ';
+    echo 'submit is ' . $_GET['submit'];
 }
 ?>

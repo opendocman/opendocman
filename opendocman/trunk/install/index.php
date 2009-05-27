@@ -1,7 +1,7 @@
 <?php
 /*
 setup.php - Automated setup/upgrade script. Remove after installation
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
@@ -59,6 +60,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
 
    // User has version 11rc2 and is upgrading 
@@ -69,6 +71,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
 
    // User has version 11 and is upgrading 
@@ -78,6 +81,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
 
    // User has version 12rc1 and is upgrading 
@@ -86,6 +90,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
 
    // User has version 12p1 and is upgrading 
@@ -93,16 +98,25 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
 
    // User has version 12p3 and is upgrading 
    case "update_12p3":
          do_update_12p3();
          do_update_124();
+         do_update_125();
          break;
+
    // User has version 124 and is upgrading 
    case "update_124":
          do_update_124();
+         do_update_125();
+         break;
+
+   // User has version 125 and is upgrading 
+   case "update_125":
+         do_update_125();
          break;
 
     default:
@@ -178,8 +192,8 @@ function do_install()
         FLUSH PRIVILEGES
         ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
-        include("odm.php");
         include("../config.php");
+        include("odm.php");
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 } // End Install
 
@@ -245,13 +259,19 @@ function do_update_12p3()
 
 function do_update_124()
 {
-        echo 'Updating from version 1.24 to 1.2.5<br>';        
+        echo 'Updating from version 1.2.4 to 1.2.5<br>';        
         include("../config.php");
         include("upgrade_124.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
-
+function do_update_125()
+{
+        echo 'Updating from version 1.2.5 to 1.2.6<br>';        
+        include("../config.php");
+        include("upgrade_125.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
 
 function print_intro()
 {
@@ -278,28 +298,31 @@ function print_intro()
   <td><a href="index.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
+  <td><a href="index.php?op=update_125">Upgrade from version 1.2.5</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_12rc1">Upgrade from version 1.2rc(x)</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
+  <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=update_12p3">Upgrade from version 1.2p3</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
+  <td><a href="index.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="index.php?op=update_12rc1">Upgrade from version 1.2rc(x)</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="index.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="index.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="index.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
+ </tr>
+ <tr>
+  <td><a href="index.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
  </tr>
 </table>
 <?php
@@ -308,3 +331,4 @@ function print_intro()
 ?>
 </body>
 </html>
+>>>>>>> .merge-right.r621

@@ -2,6 +2,7 @@
 /*
 check-out.php - performs checkout and updates database
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -67,26 +68,33 @@ if (!isset($_GET['submit']))
 <?php
 draw_footer();
 }
-	// form submitted - download
+// form submitted - download
 else
 {
-	$realname = $fileobj->getName();
-	if($_GET['access_right'] == 'modify')
-	{	
-		// since this user has checked it out and will modify it
-		// update db to reflect new status
-		$query = "UPDATE data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	}
-	// calculate filename
-	$filename = $GLOBALS['CONFIG']['dataDir'] . $_GET['id'] . '.dat';
-		
-	// send headers to browser to initiate file download
-	header ('Content-Type: application/octet-stream'); 
-	header ('Content-Disposition: attachment; filename="' . $realname . '"'); 
-	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	header('Pragma: public');
-	readfile($filename); 
-	}
+    $realname = $fileobj->getName();
+    if($_GET['access_right'] == 'modify')
+    {	
+        // since this user has checked it out and will modify it
+        // update db to reflect new status
+        $query = "UPDATE odm_data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    }
+    // calculate filename
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $_GET['id'] . '.dat';
+
+    if (file_exists($filename))
+    {
+        // send headers to browser to initiate file download
+        header ('Content-Type: application/octet-stream'); 
+        header ('Content-Disposition: attachment; filename="' . $realname . '"'); 
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: public');
+        readfile($filename); 
+    }
+    else
+    {
+        echo 'File does not exist...';
+    }
+}
 // clean up
 ?>

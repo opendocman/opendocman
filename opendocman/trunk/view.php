@@ -41,7 +41,7 @@ if (!isset($id) || $id == '')
 // verify again that user has view rights
 
 /*
-   $query = "SELECT id, realname FROM data, perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
+   $query = "SELECT id, realname FROM odm_data, odm_perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
    $result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
  */
 //if (mysql_num_rows($result) <= 0)
@@ -83,26 +83,33 @@ else
 
 			draw_footer();
 
-	}
-	// form submitted - begin download
-	else
-	{
-		//list($id, $realname) = mysql_fetch_row($result);
-		$id = $filedata->getId();
-		$realname = $filedata->getName();
-		//mysql_free_result($result);
+    }
+    // form submitted - begin download
+    else
+    {
+        //list($id, $realname) = mysql_fetch_row($result);
+        $id = $filedata->getId();
+        $realname = $filedata->getName();
+        //mysql_free_result($result);
 
-		// get the filename
-		$filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
+        // get the filename
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
 
-		// send headers to browser to initiate file download
-		header ('Content-Type: application/octet-stream'); 
-		header ('Content-Disposition: attachment; filename='.$realname); 
-		readfile($filename); 
+        if ( file_exists($filename) )
+        {
+            // send headers to browser to initiate file download
+            header ('Content-Type: application/octet-stream'); 
+            header ('Content-Disposition: attachment; filename='.$realname); 
+            readfile($filename); 
+        }
+        else
+        {
+            echo 'File not readable...';
+        }
 
-		ob_end_flush();		//Flush buffer;
-		ob_end_clean();		//Clean up
-	}
+        ob_end_flush();		//Flush buffer;
+        ob_end_clean();		//Clean up
+    }
 }
 // clean up
 ?>

@@ -221,7 +221,7 @@ if( !defined('FileData_class') )
 	function getStatus()
 	{	return $this->status;		}
 	function setStatus($value)
-	{	mysql_query('UPDATE data set status=' . $value . ' where data.id = ' . $this->id) or die(mysql_error());}
+	{	mysql_query("UPDATE $this->TABLE_DATA set status=$value where id = $this->id") or die(mysql_error());}
 	// return a User OBJ of the person who checked out this file
 	function getCheckerOBJ()
 	{
@@ -234,7 +234,7 @@ if( !defined('FileData_class') )
 	// return the name of the deparment of the file
 	function getDeptName()
 	{
-		$query ="SELECT $this->TABLE_DEPARTMENT.name FROM $this->TABLE_DEPARTMENT WHERE $this->TABLE_DEPARTMENT.id = ".$this->getDepartment().';';
+		$query ="SELECT name FROM $this->TABLE_DEPARTMENT WHERE id = ".$this->getDepartment().';';
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
@@ -260,7 +260,7 @@ if( !defined('FileData_class') )
                                 return $this->error;
                 }*/
         
-        $query = "SELECT log.modified_on FROM log WHERE log.id = '$this->id' ORDER BY log.modified_on DESC limit 1;";
+        $query = "SELECT modified_on FROM $this->TABLE_LOG WHERE id = '$this->id' ORDER BY modified_on DESC limit 1;";
 		$result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
         list($name) = mysql_fetch_row($result);       
         return $name;
@@ -360,7 +360,7 @@ if( !defined('FileData_class') )
 	// return the user id of the reviewer
 	function getReviewerID()
 	{
-		$query = "SELECT $this->TABLE_DATA.reviewer FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id = '$this->id'";
+		$query = "SELECT reviewer FROM $this->TABLE_DATA WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$num_hits = mysql_num_rows($result);
 		if($num_hits != 1)
@@ -391,14 +391,14 @@ if( !defined('FileData_class') )
 	function setReviewerComments($comments)
 	{
         $comments=addslashes($comments);
-		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.reviewer_comments='$comments' WHERE $this->TABLE_DATA.id='$this->id'";
+		$query = "UPDATE $this->TABLE_DATA SET reviewer_comments='$comments' WHERE id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
 	// return the reviewer's comment toward this file
 	function getReviewerComments()
 	{
-		$query = "SELECT $this->TABLE_DATA.reviewer_comments FROM $this->TABLE_DATA WHERE $this->TABLE_DATA.id='$this->id'";
+		$query = "SELECT reviewer_comments FROM $this->TABLE_DATA WHERE id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) != 1)
@@ -412,13 +412,13 @@ if( !defined('FileData_class') )
 	}
 	function temp_delete()
 	{
-		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 2 WHERE $this->TABLE_DATA.id = $this->id";
+		$query = "UPDATE $this->TABLE_DATA SET publishable = 2 WHERE id = $this->id";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 	}
 	function undelete()
 	{
-		$query = "UPDATE $this->TABLE_DATA SET $this->TABLE_DATA.publishable = 0 WHERE $this->TABLE_DATA.id = $this->id";
+		$query = "UPDATE $this->TABLE_DATA SET publishable = 0 WHERE id = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
 	function isLocked()
