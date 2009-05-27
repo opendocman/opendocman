@@ -228,7 +228,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
-	$query2 = "SELECT status FROM data, user_perms WHERE user_perms.fid = '$_REQUEST[id]' AND user_perms.uid = '$_SESSION[uid]' AND user_perms.rights = '2' AND data.status = '0' AND data.id = user_perms.fid";
+	$query2 = "SELECT status FROM odm_data, odm_user_perms WHERE odm_user_perms.fid = '$_REQUEST[id]' AND odm_user_perms.uid = '$_SESSION[uid]' AND odm_user_perms.rights = '2' AND odm_data.status = '0' AND odm_data.id = odm_user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())

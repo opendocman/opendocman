@@ -46,7 +46,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	echo '<body bgcolor="white">';
 	echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
 	//////////////////////////Get Current User's department id///////////////////
-	$query ="SELECT user.department from user where user.id='$_SESSION[uid]'";
+	$query ="SELECT department FROM odm_user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1) /////////////If somehow this user belongs to many departments, then error out.
 	{
@@ -55,7 +55,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	}
 	list($current_user_dept) = mysql_fetch_row($result);
 	//Get a list of department names and id to populate javascript obj//
-	$query = "SELECT name, id FROM department ORDER by name";
+	$query = "SELECT name, id FROM odm_department ORDER by name";
 	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$dept_data = $result;
 	$index = 0;
@@ -151,7 +151,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td colspan=3><select tabindex=2 name="category" >
 <?php
 	/////////////// Populate category drop down list//////////////
-	$query = "SELECT id, name FROM category ORDER BY name";
+	$query = "SELECT id, name FROM odm_category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($id, $name) = mysql_fetch_row($result)) 
 	{ 
@@ -176,7 +176,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 				<option value=2> All Departments</option>
 <?php
 	//////Populate department drop down list/////////////////
-   	$query = "SELECT id, name FROM department ORDER BY name";
+   	$query = "SELECT id, name FROM odm_department ORDER BY name";
    	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
   	while(list($id, $name) = mysql_fetch_row($result))
@@ -196,7 +196,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
 	<TD>
 <?php
-      	$query = "SELECT RightId, Description FROM rights order by RightId";
+      	$query = "SELECT RightId, Description FROM odm_rights order by RightId";
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{	
@@ -235,7 +235,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 <?php
 	
 	// query to get a list of available users
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$query = "SELECT id, last_name, first_name FROM odm_user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -251,7 +251,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php 
 		////////////////////View//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$query = "SELECT id, last_name, first_name FROM odm_user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -268,7 +268,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
-	$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+	$query = "SELECT id, last_name, first_name FROM odm_user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -286,7 +286,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$query = "SELECT id, last_name, first_name FROM odm_user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -303,7 +303,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
 <?php
 	////////////////////Read//////////////////////////
-		$query = "SELECT id, last_name, first_name FROM user ORDER BY last_name";
+		$query = "SELECT id, last_name, first_name FROM odm_user ORDER BY last_name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		//////////////////Forbidden////////////////////
 		while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
@@ -323,7 +323,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	<td colspan="4" align="center"><input tabindex=7 type="Submit" name="submit" value="Add Document"></td>
 	</tr>
 <?php	
-		$query = "SELECT name, id FROM department ORDER BY name";
+		$query = "SELECT name, id FROM odm_department ORDER BY name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
 		{		
@@ -351,7 +351,7 @@ else //submited form
 			$lpublishable= '1';
 	$result_array = array();
 	//get user's department
-	$query ="SELECT user.department from user where user.id=$_SESSION[uid]";
+	$query ="SELECT department FROM odm_user where id=$_SESSION[uid]";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
@@ -409,7 +409,7 @@ else //submited form
         }
 	// all checks completed, proceed!
 	// INSERT file info into data table
-	$query = "INSERT INTO data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
+	$query = "INSERT INTO odm_data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 	// get id from INSERT operation 
@@ -418,22 +418,22 @@ else //submited form
 	udf_add_file_insert($fileId);
 	
 	//Find out the owners' username to add to log
-	$query = "SELECT username from user where id='$_SESSION[uid]'";
+	$query = "SELECT username FROM odm_user where id='$_SESSION[uid]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	list($username) = mysql_fetch_row($result);
 	
 	// Add a log entry
-	$query = "INSERT INTO log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
+	$query = "INSERT INTO odm_log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	
 
 	//Insert Department Rights into dept_perms
-	$query = "SELECT name, id FROM department ORDER BY name";
+	$query = "SELECT name, id FROM odm_department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 	//echo "Dept is $dept_name";
-		$query = "INSERT INTO dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
+		$query = "INSERT INTO odm_dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// Search for simular names in the two array (merge the array.  repetitions are deleted)
@@ -463,7 +463,7 @@ else //submited form
 	// INSERT user permissions - view
         for($i = 0; $i<sizeof($result_array); $i++)
 	{
-		$query = "INSERT INTO user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		$query = "INSERT INTO odm_user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
 

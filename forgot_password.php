@@ -41,7 +41,7 @@ if (isset($_POST['password']) && strlen($_POST['password']) && isset($_POST['use
     $user_id = $_POST['user_id']+0;
 
     // reset the password
-    $query = "UPDATE user SET password = PASSWORD('" . trim($_POST['password']) . "'), pw_reset_code = NULL WHERE id = " . $user_id . " AND username = '" . $username . "'";
+    $query = "UPDATE odm_user SET password = PASSWORD('" . trim($_POST['password']) . "'), pw_reset_code = NULL WHERE id = " . $user_id . " AND username = '" . $username . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
     $redirect = 'index.php?last_message=' . urlencode('Your password has been changed.  Please log in to view documents.');
@@ -55,7 +55,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
     $code = trim($_GET['code']);
 
     // make sure we have a match
-    $query = "SELECT id FROM user WHERE username = '" . $username . "' AND pw_reset_code = '" . $code . "'";
+    $query = "SELECT id FROM odm_user WHERE username = '" . $username . "' AND pw_reset_code = '" . $code . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
     if (!mysql_num_rows($result)) 
@@ -126,7 +126,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
     $username = trim($_POST['username']);
 
     // find them in the database
-    $query = "SELECT id, Email FROM user WHERE username = '" . $username . "'";
+    $query = "SELECT id, Email FROM odm_user WHERE username = '" . $username . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
     // send them back if we didn't find the username
@@ -156,7 +156,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
         $reset_code = md5($randstring);
 
         // add the reset code to the database for this user
-        $query = "UPDATE user SET pw_reset_code = '" . $reset_code . "' WHERE id = " . $user_id;
+        $query = "UPDATE odm_user SET pw_reset_code = '" . $reset_code . "' WHERE id = " . $user_id;
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
         // generate the link

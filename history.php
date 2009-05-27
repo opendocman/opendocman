@@ -160,11 +160,11 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 	
 	if( isset($lrevision_id) )
 	{
-		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by AND log.revision <= $lrevision_id ORDER BY log.modified_on DESC";
+		$query = "SELECT odm_user.last_name, odm_user.first_name, odm_log.modified_on, odm_log.note, odm_log.revision FROM odm_log, odm_user WHERE odm_log.id = '$_REQUEST[id]' AND odm_user.username = odm_log.modified_by AND odm_log.revision <= $lrevision_id ORDER BY odm_log.modified_on DESC";
 	}
 	else
 	{
-		$query = "SELECT user.last_name, user.first_name, log.modified_on, log.note, log.revision FROM log, user WHERE log.id = '$_REQUEST[id]' AND user.username = log.modified_by ORDER BY log.modified_on DESC";
+		$query = "SELECT odm_user.last_name, odm_user.first_name, odm_log.modified_on, odm_log.note, odm_log.revision FROM odm_log, odm_user WHERE odm_log.id = '$_REQUEST[id]' AND odm_user.username = odm_log.modified_by ORDER BY odm_log.modified_on DESC";
 	}
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$current_revision = mysql_num_rows($result) - 1;

@@ -33,7 +33,7 @@ draw_menu(@$_SESSION['uid']);
 draw_status_bar('Check Expirations', $_REQUEST['last_message']);
 
 // Look up user
-$lquery = 'SELECT user.id FROM user where user.username="' . $GLOBALS['CONFIG']['root_username'] . '"';
+$lquery = 'SELECT id FROM odm_user where username="' . $GLOBALS['CONFIG']['root_username'] . '"';
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
 if(mysql_num_rows($lresult) != 1)
 {	header('location:error.php?ec=22');	}
@@ -69,7 +69,7 @@ $lok_year = $lcurrent_year - $lexp_years;
 $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_year));
 
 //get expired file
-$lquery = "SELECT data.id, data.reviewer_comments FROM data, log WHERE data.id = log.id AND log.revision='current' AND modified_on<'$lexpired_revision' AND (data.publishable!=-1 and data.status!=-1)";
+$lquery = "SELECT odm_data.id, odm_data.reviewer_comments FROM odm_data, odm_log WHERE odm_data.id = odm_log.id AND odm_log.revision='current' AND modified_on<'$lexpired_revision' AND (odm_data.publishable!=-1 and odm_data.status!=-1)";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
 echo 'Rejecting files last edited before ' . $lexpired_revision . '<br>';
 echo 'Rejecting ' . mysql_num_rows($lresult) . ' file(s)<br>';
