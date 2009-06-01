@@ -2,7 +2,7 @@
 /*
 config.php - OpenDocMan main config file
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2007  Stephen Lawrence
+Copyright (C) 2005-2009  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,6 +39,16 @@ $GLOBALS['pass'] = 'opendocman'; // Enter the password for the username
 $GLOBALS['hostname'] = 'localhost'; // Enter the hostname that is serving the database
 
 global $CONFIG;      $CONFIG = array(
+/**
+ * Prefix to append to each table name in the database (ex. odm_ would make the tables 
+ * named "odm_users", "odm_data" etc. Leave this set to the default if you want to keep 
+ * it the way it was. If you do change this to a different value, make sure it is either 
+ * a clean-install, or you manually go through and re-name the database tables to match.
+ * @DEFAULT 'odm_'
+ * @ARG String
+ */
+'db_prefix' => 'odm_',
+
 'debug' => '0',
 
 // This setting is for a demo installation, where random people will be
