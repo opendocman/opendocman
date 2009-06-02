@@ -2,7 +2,7 @@
 /*
 functions.php - various utility functions
 Copyright (C) 2002-2007 Stephen Lawrence, Khoa Nguyen, Jon Miner
-
+Copyright (C) 2008-2009 Stephen Lawrence
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -38,7 +38,7 @@ require_once('crumb.php');
 require_once('secureurl.class.php');
 include_once('secureurl.php');
 include('udf_functions.php');
-
+require_once('includes/sanitize.inc.php');
 if( !defined('function') )
 {
   	define('function', 'true', false);
@@ -126,33 +126,35 @@ if( !defined('function') )
 		$lwhere_or_clause = '';
 		if( $sort_by == 'id' )
 		{
-			$lquery = 'SELECT id FROM odm_data ORDER BY id ' . $sort_order;
+			$lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data ORDER BY id $sort_order";
 		}
 		elseif($sort_by == 'author')
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_data, odm_user WHERE odm_data.owner = odm_user.id ORDER BY odm_user.last_name ' . $sort_order . ' , odm_user.first_name ' . $sort_order  . ', odm_data.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id 
+						FROM {$GLOBALS['CONFIG']['db_prefix']}data,{$GLOBALS['CONFIG']['db_prefix']}user 
+						WHERE {$GLOBALS['CONFIG']['db_prefix']}data.owner = {$GLOBALS['CONFIG']['db_prefix']}user.id 
+						ORDER BY {$GLOBALS['CONFIG']['db_prefix']}user.last_name $sort_order, {$GLOBALS['CONFIG']['db_prefix']}user.first_name $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
 		}
 		elseif($sort_by == 'file_name')
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.realname ' . $sort_order . ', odm_data.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.realname $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
 		}
 		elseif($sort_by == 'department')
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_data, odm_department WHERE odm_data.department = odm_department.id ORDER BY odm_department.name ' . $sort_order . ', odm_data.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}department WHERE {$GLOBALS['CONFIG']['db_prefix']}data.department = {$GLOBALS['CONFIG']['db_prefix']}department.id ORDER BY {$GLOBALS['CONFIG']['db_prefix']}department.name $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
+			
 		}
 		elseif($sort_by == 'created_date' )
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.created ' . $sort_order . ', odm_data
-				.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.created $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
 		}
 		elseif($sort_by == 'modified_on')
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_log, odm_data WHERE odm_data.id = odm_log.id AND odm_log.revision="current" GROUP BY id ORDER BY modified_on ' . $sort_order . ', odm_data.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}data WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}log.id AND {$GLOBALS['CONFIG']['db_prefix']}log.revision=\"current\" GROUP BY id ORDER BY modified_on $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
 		}
 		elseif($sort_by == 'description')
 		{
-			$lquery = 'SELECT odm_data.id FROM odm_data ORDER BY odm_data.description ' . $sort_order . ',
-			odm_data.id asc';
+			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.description $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
 		}
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
@@ -248,7 +250,7 @@ if( !defined('function') )
 	}
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
-                $query = "SELECT Email FROM odm_user";
+                $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
@@ -258,7 +260,7 @@ if( !defined('function') )
         }
         function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
         {
-                $query = 'SELECT Email FROM odm_user WHERE department = '.$dept_id;
+                $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
                 while( list($mail_to) = mysql_fetch_row($result) )
                 {
@@ -759,7 +761,7 @@ if( !defined('function') )
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
-		$query = "SELECT last_name, first_name, id FROM odm_user ORDER BY last_name ASC";
+		$query = "SELECT last_name, first_name, id FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -771,7 +773,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR DEPARTMENT//////////////////////////
-		$query = "SELECT name, id FROM odm_department ORDER BY name ASC";
+		$query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -783,7 +785,7 @@ if( !defined('function') )
 			$index++;
 		}
 		///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
-		$query = "SELECT name, id FROM odm_category ORDER BY name ASC";
+		$query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name ASC";
 		$result = mysql_query($query, $GLOBALS['connection']) or die('Error in query'. mysql_error());
 		$count = mysql_num_rows($result);
 		$index = 0;
@@ -891,7 +893,7 @@ if( !defined('function') )
 	*/
 	function getAllUsers()
 	{
-		$lquery = 'SELECT id, last_name, first_name, username FROM odm_user';
+		$lquery = "SELECT id, last_name, first_name, username FROM {$GLOBALS['CONFIG']['db_prefix']}user";
 		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
 		$llen = mysql_num_rows($lresult);
 		$return_array = array();
