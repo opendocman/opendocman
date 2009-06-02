@@ -228,7 +228,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
 	// status = 0 -> file available for checkout
 	// check if user has modify rights
-	$query2 = "SELECT status FROM odm_data, odm_user_perms WHERE odm_user_perms.fid = '$_REQUEST[id]' AND odm_user_perms.uid = '$_SESSION[uid]' AND odm_user_perms.rights = '2' AND odm_data.status = '0' AND odm_data.id = odm_user_perms.fid";
+	$query2 = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid = '$_REQUEST[id]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.uid = '$_SESSION[uid]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights = '2' AND {$GLOBALS['CONFIG']['db_prefix']}data.status = '0' AND {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
@@ -271,8 +271,9 @@ draw_footer();
 	var mesg_window_frm;
 	function my_delete()
 	{
-		if(window.confirm("Are you sure?"))
-		{	window.location = "<?php echo $secureurl->encode('delete.php?mode=tmpdel&id0=' . $_REQUEST['id']); ?>";	}
+		if(window.confirm("Are you sure?")) {	
+		window.location = "<?php echo $secureurl->encode('delete.php?mode=tmpdel&id0=' . $_REQUEST['id']); ?>";	
+		}
 	}
 	function sendFields()
 	{

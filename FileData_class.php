@@ -70,7 +70,7 @@ if( !defined('FileData_class') )
 	// exists() return a boolean whether this file exists
 	function exists()
 	{
-	    $query = "SELECT * FROM $this->tablename WHERE $this->tablename.id = $this->id";
+	    $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.id = $this->id";
 	    $result = mysql_query($query, $this->connection);
 	    switch(mysql_num_rows($result))
 	    {
@@ -83,11 +83,11 @@ if( !defined('FileData_class') )
 	This function load up all the fields in data table.*/
 	function loadData()
 	{
-		$query = "SELECT $this->tablename.category,$this->tablename.owner, 
-			$this->tablename.created, $this->tablename.description, 
-			$this->tablename.comment, $this->tablename.status, 
-			$this->tablename.department 
-			FROM $this->tablename WHERE $this->tablename.id = $this->id";
+		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.category,{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.owner, 
+			{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.created, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.description, 
+			{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.comment, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.status, 
+			{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.department 
+			FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.id = $this->id";
 		
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit )
@@ -116,7 +116,7 @@ if( !defined('FileData_class') )
 	// return this file's category name
 	function getCategoryName()
 	{	
-		$query = "SELECT $this->TABLE_CATEGORY.name FROM $this->TABLE_CATEGORY WHERE $this->TABLE_CATEGORY.id = $this->category";
+		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_CATEGORY.name FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_CATEGORY WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_CATEGORY.id = $this->category";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if( mysql_num_rows($result) == $this->result_limit)
 			list($name) = mysql_fetch_row($result);
@@ -171,10 +171,10 @@ if( !defined('FileData_class') )
 	function getUserIds($right)
 	{
 	  $result_array = array();
-	  $owner_query = "SELECT owner FROM $this->tablename WHERE id = $this->id";
-	  $u_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id and rights >= $right";
+	  $owner_query = "SELECT owner FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE id = $this->id";
+	  $u_query = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE fid = $this->id and rights >= $right";
 	  //query for user who has right less than $right
-	  $non_prev_user_query = "SELECT uid FROM $this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right"; 
+	  $non_prev_user_query = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE fid = $this->id AND rights < $right"; 
 	  
 	  $owner_result = mysql_query($owner_query, $this->connection) or die("Error in query: ".$owner_query . mysql_error() );
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
@@ -186,14 +186,14 @@ if( !defined('FileData_class') )
 	  for($i = 0; $i<mysql_num_rows($non_prev_u_reslt); $i++)
 	  	list($not_u_uid[$i]) = mysql_fetch_row($non_prev_u_reslt);
 	  
-	  $d_query = "SELECT $this->TABLE_USER.id, $this->TABLE_DEPT_PERMS.dept_id 
-	  	FROM $this->TABLE_DEPT_PERMS, $this->TABLE_USER WHERE fid = $this->id AND 
-	  	$this->TABLE_USER.department = $this->TABLE_DEPT_PERMS.dept_id and 
-	  	$this->TABLE_DEPT_PERMS.rights >= $right";
+	  $d_query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.id, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id 
+	  	FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER WHERE fid = $this->id AND 
+	  	{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.department = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id and 
+	  	{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right";
 	  
 	  for($i=0; $i<sizeof($not_u_uid); $i++)
 	  {
-		$d_query .= " and $this->TABLE_USER.id != " . $not_u_uid[$i];
+		$d_query .= " and {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.id != " . $not_u_uid[$i];
 	  }
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );	
 	  if(sizeof($owner_result) != 1)
@@ -221,7 +221,7 @@ if( !defined('FileData_class') )
 	function getStatus()
 	{	return $this->status;		}
 	function setStatus($value)
-	{	mysql_query("UPDATE $this->TABLE_DATA set status=$value where id = $this->id") or die(mysql_error());}
+	{	mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA set status=$value where id = $this->id") or die(mysql_error());}
 	// return a User OBJ of the person who checked out this file
 	function getCheckerOBJ()
 	{
@@ -234,7 +234,7 @@ if( !defined('FileData_class') )
 	// return the name of the deparment of the file
 	function getDeptName()
 	{
-		$query ="SELECT name FROM $this->TABLE_DEPARTMENT WHERE id = ".$this->getDepartment().';';
+		$query ="SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPARTMENT WHERE id = ".$this->getDepartment().';';
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
@@ -250,7 +250,7 @@ if( !defined('FileData_class') )
 	// return the latest modifying date on the file 
 	function getModifiedDate()
 	{
-		/*$query = "SELECT $this->TABLE_LOG.modified_on FROM $this->TABLE_LOG WHERE $this->TABLE_LOG.id = '$this->id' ORDER BY $this->TABLE_LOG.modified_on DESC LIMIT 1;";
+		/*$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG.modified_on FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG.id = '$this->id' ORDER BY {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG.modified_on DESC LIMIT 1;";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
                 if( mysql_num_rows($result) == $this->result_limit)
                         list($name) = mysql_fetch_row($result);
@@ -260,7 +260,7 @@ if( !defined('FileData_class') )
                                 return $this->error;
                 }*/
         
-        $query = "SELECT modified_on FROM $this->TABLE_LOG WHERE id = '$this->id' ORDER BY modified_on DESC limit 1;";
+        $query = "SELECT modified_on FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG WHERE id = '$this->id' ORDER BY modified_on DESC limit 1;";
 		$result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
         list($name) = mysql_fetch_row($result);       
         return $name;
@@ -289,12 +289,15 @@ if( !defined('FileData_class') )
 	function getForbiddenRightUserIds()
 	{
 	
-	  $u_query = "SELECT $this->TABLE_USER_PERMS.uid FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.fid = $this->id and $this->TABLE_USER_PERMS.rights = $this->FORBIDDEN_RIGHT";
-	  $d_query = "SELECT $this->TABLE_USER.id, $this->TABLE_DEPT_PERMS.dept_id 
-	  	FROM $this->TABLE_DEPT_PERMS, $this->TABLE_USER WHERE 
-	  	$this->TABLE_DEPT_PERMS.fid = $this->id and 
-	  	$this->TABLE_USER.department = $this->TABLE_DEPT_PERMS.dept_id 
-	  	AND $this->TABLE_DEPT_PERMS.rights = $this->FORBIDDEN_RIGHT";
+	  $u_query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS 
+	  				WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid = $this->id 
+					AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights = $this->FORBIDDEN_RIGHT";
+					
+	  $d_query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.id, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id 
+	  				FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER 
+					WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $this->id 
+					AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.department = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id 
+	  				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights = $this->FORBIDDEN_RIGHT";
 	  
 	  $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
 	  $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
@@ -327,11 +330,11 @@ if( !defined('FileData_class') )
 	// return a boolean on whether or not this file is publisable
 	function isPublishable()
 	{
-		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
+		$query = "SELECT publishable FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
-			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+			echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
 			exit;
 		}
 		list($publishable) = mysql_fetch_row($result);
@@ -340,11 +343,11 @@ if( !defined('FileData_class') )
 	}
 	function isArchived()
 	{
-		$query = "SELECT publishable FROM $this->TABLE_DATA WHERE id = '$this->id'";
+		$query = "SELECT publishable FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die('Error in query'. mysql_error());
 		if(mysql_num_rows($result) != 1)
 		{
-			echo('DB error.  Unable to locate file id ' . $this->id . ' in table data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+			echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
 			exit;
 		}
 		list($publishable) = mysql_fetch_row($result);
@@ -354,13 +357,13 @@ if( !defined('FileData_class') )
 	// this function sets the publisable field in the data table to $boolean
 	function Publishable($boolean = true)
 	{
-		$query = "UPDATE $this->TABLE_DATA SET publishable ='$boolean', $this->TABLE_DATA.reviewer = '$this->id' WHERE id = '$this->id'";
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET publishable ='$boolean', {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.reviewer = '$this->id' WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
 	// return the user id of the reviewer
 	function getReviewerID()
 	{
-		$query = "SELECT reviewer FROM $this->TABLE_DATA WHERE id = '$this->id'";
+		$query = "SELECT reviewer FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE id = '$this->id'";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 		$num_hits = mysql_num_rows($result);
 		if($num_hits != 1)
@@ -391,14 +394,14 @@ if( !defined('FileData_class') )
 	function setReviewerComments($comments)
 	{
         $comments=addslashes($comments);
-		$query = "UPDATE $this->TABLE_DATA SET reviewer_comments='$comments' WHERE id='$this->id'";
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET reviewer_comments='$comments' WHERE id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 		die("Error in query: $query" . mysql_error());
 	}
 	// return the reviewer's comment toward this file
 	function getReviewerComments()
 	{
-		$query = "SELECT reviewer_comments FROM $this->TABLE_DATA WHERE id='$this->id'";
+		$query = "SELECT reviewer_comments FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE id='$this->id'";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 		if(mysql_num_rows($result) != 1)
@@ -412,13 +415,13 @@ if( !defined('FileData_class') )
 	}
 	function temp_delete()
 	{
-		$query = "UPDATE $this->TABLE_DATA SET publishable = 2 WHERE id = $this->id";
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET publishable = 2 WHERE id = $this->id";
 		$result = mysql_query($query, $this->connection) or
 			die("Error in query: $query" . mysql_error());
 	}
 	function undelete()
 	{
-		$query = "UPDATE $this->TABLE_DATA SET publishable = 0 WHERE id = $this->id";
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET publishable = 0 WHERE id = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
 	}
 	function isLocked()

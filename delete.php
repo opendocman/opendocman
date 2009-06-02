@@ -91,17 +91,17 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
 			if($userperm_obj->canAdmin($id))
 			{
 				// delete from db
-				$query = "DELETE FROM odm_data WHERE id = '$id'";
+				$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 				// delete from db
-				$query = "DELETE FROM odm_dept_perms WHERE fid = '$id'";
+				$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-				$query = "DELETE FROM odm_user_perms WHERE fid = '$id'";
+				$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-				$query = "DELETE FROM odm_log WHERE id = '$id'";
+				$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
 				$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 				$filename = $id . ".dat";
 				unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
@@ -132,7 +132,7 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
 elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 {
 	//publishable=2 for archive deletion
-	$lquery = "SELECT id FROM odm_data WHERE publishable=2";
+	$lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";
 	$lresult = mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$array_id = array();
 	for($i = 0; $i < mysql_num_rows($lresult); $i++)

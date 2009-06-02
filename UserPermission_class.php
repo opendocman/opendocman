@@ -110,11 +110,11 @@ if( !defined('UserPermission_class') )
 		//These 2 below takes half of the execution time for this function
 		$userperm_filearray = ($this->userperm_obj->getCurrentViewOnly());
 		$deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly());
-		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,
-		$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid
-				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid
-				AND $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT
-				AND $this->TABLE_DATA.publishable = 1)";
+		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA,
+				{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE ({$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->uid
+				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid
+				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT
+				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1)";
 		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query .
 				'Error: ' . mysql_error());
 		$len = mysql_num_rows($result);

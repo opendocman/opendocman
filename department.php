@@ -96,7 +96,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
  	draw_status_bar('Display Item Information', $_POST['last_message']);
     echo '<center>';
 	//select name
-	$query = "SELECT name,id FROM odm_department where id='$_POST[item]'";
+	$query = "SELECT name,id FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_POST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo '<table name="main" cellspacing="15" border="0">';
     echo '<th>ID</th><th>Dept. Name</th>';
@@ -109,7 +109,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
     </tr>
 <?php
     // Display all users assigned to this department
-    $query = "SELECT odm_department.id, odm_user.first_name, odm_user.last_name FROM odm_department, odm_user where odm_department.id='$_POST[item]' and odm_user.department='$_POST[item]'";
+    $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}department.id, {$GLOBALS['CONFIG']['db_prefix']}user.first_name, {$GLOBALS['CONFIG']['db_prefix']}user.last_name FROM {$GLOBALS['CONFIG']['db_prefix']}department, {$GLOBALS['CONFIG']['db_prefix']}user where {$GLOBALS['CONFIG']['db_prefix']}department.id='$_POST[item]' and {$GLOBALS['CONFIG']['db_prefix']}user.department='$_POST[item]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lfirst_name, $llast_name) = mysql_fetch_row($result))
 	{	
@@ -144,7 +144,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 	<td><b>Department</b></td>
 	<td colspan=3><select name="item">
 <?php 
-	$query = 'SELECT id, name FROM odm_department ORDER BY name';
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -184,7 +184,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 	  <tr>
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM odm_department where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_REQUEST[item]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -230,7 +230,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	<td colspan="3"><select name="item">
 <?php
 	// query to get a list of departments
-	$query = "SELECT id, name FROM odm_department ORDER BY name";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 	while(list($lid, $lname) = mysql_fetch_row($result))
