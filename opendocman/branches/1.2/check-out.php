@@ -76,7 +76,7 @@ else
     {	
         // since this user has checked it out and will modify it
         // update db to reflect new status
-        $query = "UPDATE odm_data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     }
     // calculate filename

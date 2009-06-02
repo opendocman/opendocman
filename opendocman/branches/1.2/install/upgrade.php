@@ -89,5 +89,4 @@ function do_upgrade125 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
 }
 
 
-
 ?>

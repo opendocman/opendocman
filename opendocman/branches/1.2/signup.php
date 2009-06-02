@@ -29,7 +29,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
     if(isset($_REQUEST['adduser']))
     {
         // Check to make sure user does not already exist
-        $query = "SELECT username FROM user WHERE username = '" . addslashes($_POST['username']) . '\'';
+        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '" . addslashes($_POST['username']) . '\'';
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // If the above statement returns more than 0 rows, the user exists, so display error
@@ -42,7 +42,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         {     
             $phonenumber = @$_REQUEST['phonenumber'];
             // INSERT into user
-            $query = "INSERT INTO user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
             // INSERT into admin
             $userid = mysql_insert_id($GLOBALS['connection']);
@@ -50,14 +50,14 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
             {
                 $_REQUEST['admin']='';
             }
-            $query = "INSERT INTO admin (id, admin) VALUES('$userid', '$_REQUEST[admin]')";
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_REQUEST[admin]')";
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
             if(isset($_REQUEST['reviewer']))
             {
                 for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
                 {
                     $dept_rev=$_REQUEST['department_review'][$i];
-                    $query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
+                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
                     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
                 }
             }
@@ -93,10 +93,10 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         $user_obj = new User($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 
         // UPDATE admin info
-        $query = "UPDATE admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // UPDATE into user
-        $query = "UPDATE user SET username='". addslashes($_POST['username']) ."',";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
         if (!empty($_REQUEST['password']))
         {
             $query .= "password = password('". addslashes($_REQUEST['password']) ."'), ";
@@ -115,18 +115,18 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // UPDATE into dept_reviewer
-        $query = "DELETE FROM dept_reviewer where user_id = '$_REQUEST[id]'";
+        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = '$_REQUEST[id]'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
         if(isset($_REQUEST['reviewer']))
         {
             //Remove all entry for $id
-            $query = "DELETE FROM dept_reviewer where user_id = $_REQUEST[id]";
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = $_REQUEST[id]";
             $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
             $depts_rev = $_REQUEST['department_review'];
             for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
             {
                 $dept_rev=$depts_rev[$i];
-                $query = "INSERT INTO dept_reviewer (dept_id, user_id) values('$dept_rev', $_REQUEST[id])";
+                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', $_REQUEST[id])";
                 $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
             }
         }
@@ -185,7 +185,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         <select name="department">
         <?php			
         // query to get a list of departments
-        $query = "SELECT id, name FROM department ORDER BY name";
+        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
     while(list($id, $name) = mysql_fetch_row($result))

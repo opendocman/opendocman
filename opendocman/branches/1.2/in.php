@@ -33,7 +33,18 @@ draw_menu($_SESSION['uid']);
 @draw_status_bar('Documents Currently Checked Out To You', $_POST['last_message']); 
 
 // query to get list of documents checked out to this user
-$query = "SELECT odm_data.id, odm_user.last_name, odm_user.first_name, realname, created, description, status FROM odm_data, odm_user WHERE status = '$_SESSION[uid]' AND odm_data.owner = odm_user.id";
+$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id, 
+				{$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
+				{$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
+				realname, 
+				created, 
+				description, 
+				status 
+				FROM {$GLOBALS['CONFIG']['db_prefix']}data, 
+				{$GLOBALS['CONFIG']['db_prefix']}user 
+				WHERE status = '{$_SESSION['uid']}' 
+				AND {$GLOBALS['CONFIG']['db_prefix']}data.owner = {$GLOBALS['CONFIG']['db_prefix']}user.id";
+				
 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
 // how many records?
