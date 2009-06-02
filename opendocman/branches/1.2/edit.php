@@ -228,7 +228,7 @@ if (!isset($_REQUEST['submit']))
      	<TD COLSPAN="3"><SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
 		<option value="0"> Select a Department</option>
 		<option value="1"> Default Setting for Unset Department</option>
-		<option value="2"> All Departments</option>
+		<option value="2"> Set All Departments The Same</option>
 <?php
 		// query to get a list of department 
 		$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
@@ -460,7 +460,7 @@ else
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
 	if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin'])) { header("Location:error.php?ec=12"); exit; }
-	
+
 	// query to verify
 	$query = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$_REQUEST[id]' and status = '0'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -473,10 +473,11 @@ else
 	mysql_escape_string($query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(isset($_REQUEST['users']))
+	{
 		mysql_query('UPDATE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
-
+	}
 	udf_edit_file_update();
-	
+
 	// clean out old permissions
 	$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$_REQUEST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -504,8 +505,10 @@ else
 	{
 		$string=addslashes(space_to_underscore($dept_name));
 		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id =$id";
+		echo $query;
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
+	exit;
 	// clean up
 	mysql_freeresult($result);
 	$message = urlencode('Document successfully updated');
