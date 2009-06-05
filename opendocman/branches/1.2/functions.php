@@ -610,6 +610,17 @@ if( !defined('function') )
                 
                 return $num_checkboxes;	
         }
+        /**
+         * list_nav_generator - Create pageination links
+         * @return string
+         * @param object $total_hit
+         * @param object $page_limit
+         * @param object $link_limit
+         * @param object $page_url
+         * @param object $current_page[optional]
+         * @param object $sort_by[optional]
+         * @param object $sort_order[optional]
+         */
 
 		function list_nav_generator($total_hit, $page_limit, $link_limit, $page_url, $current_page = 0, $sort_by = 'id', $sort_order = 'asc')
 		{
@@ -757,7 +768,7 @@ if( !defined('function') )
 
 		function load(select_box)
 		{
-			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + category_item_option + "&exact_phrase=on";
+			window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option) + "&exact_phrase=on";
 		}
 <?php
 		///////////////////////////////FOR AUTHOR///////////////////////////////////////////
