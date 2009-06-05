@@ -236,11 +236,17 @@ if( !defined('FileData_class') )
 	{
 		$query ="SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPARTMENT WHERE id = ".$this->getDepartment().';';
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
-		if(mysql_num_rows($result) != 1)
-		{
-			echo('ERROR: Multiple database entries exist in department table.');
-			exit;
-		}
+        if (mysql_num_rows($result) == 0) {
+            echo('ERROR: No database entry exists in department table for ID = '.$this->getDepartment().'.');
+            return "ERROR";
+            //exit;
+        }
+        if (mysql_num_rows($result) > 1) {
+            echo('ERROR: Multiple database entries exist in department table for ID = '.$this->getDepartment().'.');
+            return "ERROR";
+            //exit;
+        }
+
 		list($dept) = mysql_fetch_row($result);
 		return $dept;
 	}
