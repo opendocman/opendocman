@@ -33,6 +33,7 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
 
     if(isset($fileid_array['0']))
     {
+    	$secureurl_obj = new phpsecureurl;
         while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
         {
             $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
@@ -47,7 +48,7 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
                 $folders[$category] = $GLOBALS['tree']->add_folder($GLOBALS['root'], "$category",$_SERVER['PHP_SELF'], "ftv2/ftv2folderclosed.gif", "ftv2/ftv2folderopen.gif");
             }
 
-            $GLOBALS['tree']->add_document($folders[$category], "<strong>$realname</strong>&nbsp;-&nbsp;Created on: $created_date&nbsp;-&nbsp;Modified on: $modified_date", "details.php?id=$fileid&state=2");
+            $GLOBALS['tree']->add_document($folders[$category], "<strong>$realname</strong>&nbsp;-&nbsp;Created on: $created_date&nbsp;-&nbsp;Modified on: $modified_date", $secureurl_obj->encode("details.php?id=$fileid&state=2"));
             $index++;
         }
 
