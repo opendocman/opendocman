@@ -1,7 +1,7 @@
 <?php
 /*
 odm.php - main file for creating a fresh installation
-Copyright (C) 2002-2007  Stephen Lawrence
+Copyright (C) 2002-2009  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
