@@ -28,8 +28,6 @@ if (!isset($_REQUEST['last_message']))
     $_REQUEST['last_message']='';
 }
 
-echo $_REQUEST['last_message'];
-
 if(isset($_POST['login']))
 {
     if(!valid_username($_POST['frmuser']))

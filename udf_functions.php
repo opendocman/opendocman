@@ -216,12 +216,14 @@ function udf_functions_java_options($id)
 
 function udf_functions_add_udf()
 {
+    $table_name = str_replace(' ', '', $_REQUEST['table_name']);
+
   if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2) {
-    $query = 'INSERT udf (id,table_name,display_name,field_type) VALUES (1,"'.$_REQUEST['table_name'].'","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
+    $query = 'INSERT into udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
     mysql_query($query);
-    $query = 'ALTER TABLE data ADD COLUMN '.$_REQUEST['table_name'].' int AFTER category';
+    $query = 'ALTER TABLE data ADD COLUMN '.$table_name.' int AFTER category';
     mysql_query($query);
-    $query = 'CREATE TABLE '.$_REQUEST['table_name'].'( id int auto_increment unique, value varchar(16) )';
+    $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
     mysql_query($query);
   }
 
