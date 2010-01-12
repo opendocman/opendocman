@@ -22,7 +22,7 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ));
+	header('Location:index.php?redirection=view_file.php?' . sanitize($_SERVER['QUERY_STRING'] ));
 	exit;
 }
 include('config.php');
@@ -42,7 +42,7 @@ if(!isset($_GET['submit']))
 {
 	draw_header('View File');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('File View',$_REQUEST['last_message']);
+	draw_status_bar('File View',sanitize($_REQUEST['last_message']));
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
@@ -69,7 +69,7 @@ if(!isset($_GET['submit']))
 	//echo "prefix = $prefix<br>";
 	//echo "suffix = $suffix<br>";
 	//echo "mime:$lmimetype";	
-	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
+	echo '<form action="view_file.php" name="view_file_form" method="get">';
 	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
 	echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
 	echo '<BR>';
