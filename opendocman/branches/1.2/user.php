@@ -24,14 +24,14 @@ session_start();
 // if changes are to be made on other account, then $item will contain
 // the other account's id number. 
 
+include('config.php');
 if (!isset($_SESSION['uid']))
 {
-        header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
+        header('Location:index.php?redirection=user.php?' . sanitize($_SERVER['QUERY_STRING'])  );
 		exit;
 }
 
 // includes
-include('config.php');
 $secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
@@ -68,10 +68,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
         draw_menu($_SESSION['uid']);
 }
 
-// open a connection to the database
+if (!isset($_REQUEST['last_message']))
+{
+    $_REQUEST['last_message']='';
+}
+
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 {
-        @draw_status_bar('Add New User', $_POST['last_message']);
+        @draw_status_bar('Add New User', $_REQUEST['last_message']);
         // Check to see if user is admin
         ?>
                 <SCRIPT LANGUAGE="JavaScript1.2" src="FormCheck.js"></script>			   
@@ -156,7 +160,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 <td></td>
 <td columnspan=3 align="center"><input type="Submit" name="submit" onClick="return validatemod(add_user);" value="Add User">
 </form>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+<form action="user.php">
 <input type="Submit" name="cancel" value="Cancel">
 </form>
 </td>
@@ -174,14 +178,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar('Delete User ' ,$_POST['last_message']);
+                        @draw_status_bar('Delete User ' ,$_REQUEST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                         draw_footer();
                         exit;
                 }
                 $delete='';
                 $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
-                @draw_status_bar('Delete ' . $user_obj->getName(), $_POST['last_message']);
+                @draw_status_bar('Delete ' . $user_obj->getName(), $_REQUEST['last_message']);
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -205,7 +209,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <input type="Submit" name="submit" value="Delete User">
                         </td>
                         </form>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="user.php" method="POST" enctype="multipart/form-data">
                         <td colspan="4" align="center">
                         <input type="Submit" name="submit" value="Cancel">
                         </td>
@@ -221,11 +225,11 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick')
         {
                 $deletepick='';
-                @draw_status_bar('Choose User to Delete', $_POST['last_message']);
+                @draw_status_bar('Choose User to Delete', $_REQUEST['last_message']);
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
+                        <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
                         <tr>
                         <td><b>User</b></td>
@@ -250,7 +254,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         </form>
                         </td>
                         <td>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                        <form action="user.php">
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
@@ -266,7 +270,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         {
                 // query to show item
                 $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
-                @draw_status_bar('Show User: ' . $user_obj->getName(), $_POST['last_message']);
+                draw_status_bar('Show User: ' . $user_obj->getName(), $_REQUEST['last_message']);
                 ?>
                         <center>
                         <table border=0>
@@ -308,13 +312,13 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         // CHOOSE USER TO DISPLAY INFO FOR
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick')
         {
-                @draw_status_bar('Choose User to View', $_POST['last_message']);
+                @draw_status_bar('Choose User to View', $_REQUEST['last_message']);
 
                 $showpick='';
                 ?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>" />
                         <tr>
                         <td><b>User</b></td>
@@ -351,7 +355,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar('Update User ' ,$_POST['last_message']);
+                        @draw_status_bar('Update User ' ,$_REQUEST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                 }
                 else
@@ -362,7 +366,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                     {
                         $_REQUEST['last_message']='';
                     }
-                    @draw_status_bar('Update User: ' . $user_obj->getName() ,$_POST['last_message']);	
+                    @draw_status_bar('Update User: ' . $user_obj->getName() ,$_REQUEST['last_message']);	
                     ?>
                         <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
                         function redirect(url_location)
@@ -534,7 +538,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         <INPUT type="hidden" name="set_password" value="0">
                         <input type="Submit" name="submit"  onClick="return verify(this.form, password, conf_password, set_password);" value="Update User">
                         </form>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" >
+                        <form action="user.php" >
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
@@ -568,7 +572,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         // CHOOSE USER TO UPDATE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')
         {
-                @draw_status_bar('Modify User',$_POST['$last_message']);
+                @draw_status_bar('Modify User',$_REQUEST['$last_message']);
 
                 // Check to see if user is admin
                 $query = "SELECT admin FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_SESSION['uid']}' and admin = '1'";
@@ -580,7 +584,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 }
                 ?>
                         <center>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>" />
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
@@ -609,7 +613,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         </td>
                         </form>
                         <td colspan="4" align="center">
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                        <form action="user.php">
                         <input type="Submit" name="submit" value="Cancel">
                         </form>
                         </td>
@@ -622,7 +626,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick')
         {
-                @draw_status_bar('Change password', $_POST['last_message']);
+                @draw_status_bar('Change password', $_REQUEST['last_message']);
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $submit_message = 'Changing password';
 
@@ -658,14 +662,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick')
         {
-                @draw_status_bar('Change password', $_POST['last_message']);
+                @draw_status_bar('Change password', $_REQUEST['last_message']);
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar('Change Personal Info ' ,$_POST['last_message']);
+                        @draw_status_bar('Change Personal Info ' ,$_REQUEST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                         draw_footer();
                         exit;

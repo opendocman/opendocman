@@ -32,9 +32,6 @@ if (isset($_REQUEST['redirection'])) {
     $_REQUEST['redirection'] = $filt->doTreatment($_REQUEST['redirection'], 'XSS');
 }
 
-
-echo $_REQUEST['last_message'];
-
 if(isset($_POST['login']))
 {
     if(!valid_username($_POST['frmuser']))
