@@ -169,5 +169,10 @@ $db = mysql_select_db($GLOBALS['database'], $GLOBALS['connection']);
 
 // All functions and includes are in functions.php
 include_once('functions.php');
+
+$_GET = sanitize($_GET);
+$_REQUEST = sanitize($_REQUEST);
+$_POST = sanitize($_POST);
+$_SERVER = sanitize($_SERVER);
 }
 ?>
