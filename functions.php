@@ -981,12 +981,12 @@ $search = array(
     return $output;
 }
 
-function sanitize($input) {
+function sanitizeme($input) {
     if (is_array($input)) 
     {
         foreach($input as $var=>$val) 
         {
-            $output[$var] = sanitize($val);
+            $output[$var] = sanitizeme($val);
         }
     } 
     else 
