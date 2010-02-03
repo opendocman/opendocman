@@ -38,7 +38,7 @@ require_once('crumb.php');
 require_once('secureurl.class.php');
 include_once('secureurl.php');
 include('udf_functions.php');
-require_once('includes/sanitize.inc.php');
+//require_once('includes/sanitize.inc.php');
 if( !defined('function') )
 {
   	define('function', 'true', false);
