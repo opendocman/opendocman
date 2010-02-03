@@ -80,9 +80,9 @@ if( !defined('Dept_Perms_class') )
 		//$s1 = getmicrotime();
 		$index = -1;
 		$fileid_array = array();
-		$query = "SELECT $this->TABLE_DEPT_PERMS.fid FROM $this->TABLE_DATA, $this->TABLE_DEPT_PERMS 
-			WHERE $this->TABLE_DEPT_PERMS.rights >= $right AND $this->TABLE_DEPT_PERMS.dept_id=$this->id 
-			AND $this->TABLE_DATA.id=$this->TABLE_DEPT_PERMS.fid AND $this->TABLE_DATA.publishable=1";
+		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS 
+			WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id=$this->id 
+			AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id={$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable=1";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		//$fileid_array[$index][0] ==> fid
 		//$fileid_array[$index][1] ==> owner
@@ -176,7 +176,7 @@ if( !defined('Dept_Perms_class') )
 	{
 		$this->error_flag = true; // reset flag
 		$right = -1;
-		$query = "SELECT $this->database.$this->TABLE_DEPT_PERMS.rights FROM $this->database.$this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id AND $this->TABLE_DEPT_PERMS.fid = $data_id";
+		$query = "SELECT $this->database.{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights FROM $this->database.{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) == 1)
 		{
@@ -197,7 +197,7 @@ if( !defined('Dept_Perms_class') )
 	// right on file with data id of $data_id
 	function canDept($data_id, $right)
 	{
-		$query = "SELECT * FROM $this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and $this->TABLE_DEPT_PERMS.fid = $data_id AND $this->TABLE_DEPT_PERMS.rights >= $right";
+		$query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id and {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right";
 		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		
 		switch(mysql_num_rows($result) )
@@ -211,7 +211,7 @@ if( !defined('Dept_Perms_class') )
 	// ID nuber ob $data_id
 	function getPermission($data_id)
 	{
-	  $query = "SELECT $this->TABLE_DEPT_PERMS.rights FROM $this->TABLE_DEPT_PERMS WHERE $this->TABLE_DEPT_PERMS.dept_id = $this->id and $this->TABLE_DEPT_PERMS.fid = $data_id";
+	  $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id and {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id";
 	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {

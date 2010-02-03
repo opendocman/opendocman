@@ -1,7 +1,7 @@
 <?php
 /*
 odm.php - main file for creating a fresh installation
-Copyright (C) 2002-2007  Stephen Lawrence
+Copyright (C) 2002-2009  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,57 +21,57 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // For ODM fresh install
 // Admin table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_admin
-") or die("<br>Could not create odm_admin table" .  mysql_error());
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}admin
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table" .  mysql_error());
 
 $result = mysql_query("
-CREATE TABLE odm_admin (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_admin table" .  mysql_error());
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table" .  mysql_error());
 
 // Admin user
 $result = mysql_query("
-INSERT INTO odm_admin VALUES (1,1)
-") or die("<br>Could not create odm_admin user");
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin VALUES (1,1)
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin user");
 
 // Category table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_category
-") or die("<br>Could not create odm_category table" .  mysql_error());
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}category
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table" .  mysql_error());
 
 $result = mysql_query("
-CREATE TABLE odm_category (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_category table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table");
 
 $result = mysql_query("
-INSERT INTO odm_category VALUES (1,'SOP')
-") or die("<br>Could not create odm_category");
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (1,'SOP')
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
 
 $result = mysql_query("
- INSERT INTO odm_category VALUES (2,'Training Manual')
-") or die("<br>Could not create odm_category");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (2,'Training Manual')
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
 
 $result = mysql_query("
- INSERT INTO odm_category VALUES (3,'Letter')
-") or die("<br>Could not create odm_category");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (3,'Letter')
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
 
 $result = mysql_query("
- INSERT INTO odm_category VALUES (4,'Presentation')
-") or die("<br>Could not create odm_category");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (4,'Presentation')
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
 
 // Data table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_data
-") or die("<br>Could not create odm_data table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}data
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table");
 
 $result = mysql_query("
-CREATE TABLE odm_data (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}data (
   id int(11) unsigned NOT NULL auto_increment,
   category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
@@ -92,32 +92,32 @@ CREATE TABLE odm_data (
   KEY publishable (publishable),
   KEY description (description)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_data table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table");
 
 // Department Table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_department
-") or die("<br>Could not create odm_department table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}department
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table");
 
 $result = mysql_query("
-CREATE TABLE odm_department (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_department table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table");
 
 $result = mysql_query("
-INSERT INTO odm_department VALUES (1,'Information Systems')
-") or die("<br>Could not odm_add department");
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department VALUES (1,'Information Systems')
+") or die("<br>Could not {$GLOBALS['CONFIG']['db_prefix']}add department");
 
 // Department Permissions table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_dept_perms
-") or die("<br>Could not create odm_dept_perms table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}dept_perms
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table");
 
 $result = mysql_query("
-CREATE TABLE odm_dept_perms (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_perms (
   fid int(11) unsigned default NULL,
   dept_id int(11) unsigned default NULL,
   rights tinyint(4) NOT NULL default '0',
@@ -125,32 +125,32 @@ CREATE TABLE odm_dept_perms (
   KEY dept_id (dept_id),
   KEY fid (fid)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_dept_perms table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table");
 
 // Department Reviewer table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_dept_reviewer
-") or die("<br>Could not create odm_dept_reviewer table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
 
 $result = mysql_query("
-CREATE TABLE odm_dept_reviewer (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_dept_reviewer table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
 
 // data for table 'dept_reviewer'
 $result = mysql_query("
-INSERT INTO odm_dept_reviewer VALUES (1,1)
-") or die("<br>Could add to odm_dept_reviewer table");
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer VALUES (1,1)
+") or die("<br>Could add to {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
 
 // Log table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_log
-") or die("<br>Could not create odm_log table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}log
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table");
 
 $result = mysql_query("
-CREATE TABLE odm_log (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}log (
   id int(11) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
@@ -159,52 +159,52 @@ CREATE TABLE odm_log (
   KEY id (id),
   KEY modified_on (modified_on)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_log table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table");
 
 // Rights table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_rights
-") or die("<br>Could not create odm_rights table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}rights
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table");
 
 $result = mysql_query("
-CREATE TABLE odm_rights (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_rights table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table");
 
 // Rights values
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (0,'none')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (0,'none')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (1,'view')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (1,'view')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (-1,'forbidden')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (-1,'forbidden')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (2,'read')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (2,'read')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (3,'write')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (3,'write')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 $result = mysql_query("
- INSERT INTO odm_rights VALUES (4,'admin')
-") or die("<br>Could not add odm_rights entry");
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (4,'admin')
+") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
 
 // User table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_user
-") or die("<br>Could not create odm_user table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}user
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table");
 
 $result = mysql_query("
-CREATE TABLE odm_user (
+CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}user (
   id int(11) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
   password varchar(50) NOT NULL default '',
@@ -216,20 +216,20 @@ CREATE TABLE odm_user (
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_user table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table");
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO odm_user VALUES (1,'admin','','1','5555551212','admin@example.com','User','Admin','')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user VALUES (1,'admin','','1','5555551212','admin@example.com','User','Admin','')
 ") or die("<br>Could not add user");
 
 // User permissions table
 $result = mysql_query("
-DROP TABLE IF EXISTS odm_user_perms
-") or die("<br>Could not create odm_user_perms table");
+DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table");
 
 $result = mysql_query("
-CREATE TABLE IF NOT EXISTS odm_user_perms (
+CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms (
   fid int(11) unsigned default NULL,
   uid int(11) unsigned NOT NULL default '0',
   rights tinyint(4) NOT NULL default '0',
@@ -238,14 +238,28 @@ CREATE TABLE IF NOT EXISTS odm_user_perms (
   KEY uid (uid),
   KEY rights (rights)
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_user_perms table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table");
 
 $result = mysql_query("
-CREATE TABLE IF NOT EXISTS odm_udf (
+CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}udf (
     id  int auto_increment unique,
     table_name varchar(16),
     display_name varchar(16),
     field_type int
 ) TYPE=MyISAM
-") or die("<br>Could not create odm_udf table");
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}udf table");
+
+$result = mysql_query("
+CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
+(
+    id  int(11) auto_increment unique,
+    sys_name  varchar(16),
+    sys_value    varchar(255)
+) TYPE=MyISAM
+") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}odmsys table");
+
+// Create version number in db
+$result = mysql_query("
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES ('','version','1.2.6')
+") or die("<br>Could insert new version into db user");
 ?>

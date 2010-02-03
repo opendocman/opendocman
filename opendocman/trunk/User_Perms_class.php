@@ -73,13 +73,13 @@ if ( !defined('User_Perms_class') )
 	function loadData_UserPerm($right)
 	{
 		if($this->user_obj->isRoot())
-			$query = "SELECT $this->TABLE_DATA.id FROM $this->TABLE_DATA WHERE 
-				$this->TABLE_DATA.publishable = 1";
+			$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE 
+				{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1";
 		else //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right 
-			$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA,
-				$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->id 
-				AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid AND 
-				$this->TABLE_USER_PERMS.rights>=$right AND $this->TABLE_DATA.publishable = 1)";
+			$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA,
+				{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE ({$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id 
+				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid AND 
+				{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights>=$right AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1)";
 		//$start = getmicrotime();
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
 		$index = 0;
@@ -147,7 +147,7 @@ if ( !defined('User_Perms_class') )
 	// return whether if this user is forbidden to have acc
 	function isForbidden($data_id)
 	{
-		$query = "SELECT $this->TABLE_USER_PERMS.rights FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.uid = $this->id";
+		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
 		if(mysql_num_rows($result) ==1)
 		{
@@ -164,7 +164,7 @@ if ( !defined('User_Perms_class') )
 	{
 		if($this->user_obj->isRoot())
 			return true;
-		$query = "SELECT * FROM $this->TABLE_USER_PERMS WHERE $this->TABLE_USER_PERMS.uid = $this->id AND $this->TABLE_USER_PERMS.fid = $data_id AND $this->TABLE_USER_PERMS.rights>=$right";
+		$query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid = $data_id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights>=$right";
 		$result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 		switch(mysql_num_rows($result) )
 		{
@@ -179,7 +179,7 @@ if ( !defined('User_Perms_class') )
 	  if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
 	  	return true;
 
-	  $query = "SELECT $this->TABLE_USER_PERMS.rights FROM $this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
+	  $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
 	  $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
 	  if(mysql_num_rows($result) == 1)
 	  {

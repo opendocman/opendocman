@@ -41,7 +41,7 @@ if (!isset($id) || $id == '')
 // verify again that user has view rights
 
 /*
-   $query = "SELECT id, realname FROM odm_data, odm_perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
+   $query = "SELECT id, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
    $result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
  */
 //if (mysql_num_rows($result) <= 0)

@@ -24,16 +24,17 @@ if( !defined("databaseData_class") );
 
    class databaseData   //DO NOT INSTANTIATE THIS ABSTRACT CLASS
    {
-      	var $TABLE_ADMIN = 'odm_admin';
-      	var $TABLE_CATEGORY = 'odm_category';
-      	var $TABLE_DATA = 'odm_data';
-      	var $TABLE_DEPARTMENT = 'odm_department';
-      	var $TABLE_DEPT_PERMS = 'odm_dept_perms';
-      	var $TABLE_DEPT_REVIEWER = 'odm_dept_reviewer';
-      	var $TABLE_LOG = 'odm_log';
-      	var $TABLE_RIGHTS = 'odm_rights';
-      	var $TABLE_USER = 'odm_user';
-      	var $TABLE_USER_PERMS = 'odm_user_perms';
+   		var $DB_PREFIX;
+      	var $TABLE_ADMIN = 'admin';
+      	var $TABLE_CATEGORY = 'category';
+      	var $TABLE_DATA = 'data';
+      	var $TABLE_DEPARTMENT = 'department';
+      	var $TABLE_DEPT_PERMS = 'dept_perms';
+      	var $TABLE_DEPT_REVIEWER = 'dept_reviewer';
+      	var $TABLE_LOG = 'log';
+      	var $TABLE_RIGHTS = 'rights';
+      	var $TABLE_USER = 'user';
+      	var $TABLE_USER_PERMS = 'user_perms';
       	var $FORBIDDEN_RIGHT = -1;
 		var $NONE_RIGHT = 0;
 		var $VIEW_RIGHT = 1;
@@ -59,7 +60,7 @@ if( !defined("databaseData_class") );
 	}
 	function setTableName($tablename)
 	{	
-		$this->tablename = $tablename;	
+		$this->tablename = "$tablename";	
 	}
 	function setId($id)
 	{
@@ -88,7 +89,7 @@ if( !defined("databaseData_class") );
 	
 	function findId()
 	{
-		$query = "SELECT {$this->database}.{$this->tablename}.$this->field_id FROM {$this->database}.{$this->tablename} WHERE {$this->database}.{$this->tablename}.$this->field_name='$this->name'";
+		$query = "SELECT {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}{$this->tablename}.$this->field_id FROM {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}{$this->tablename} WHERE {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}{$this->tablename}.$this->field_name='$this->name'";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
 
 		if( mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')
@@ -106,12 +107,13 @@ if( !defined("databaseData_class") );
 		}
 		return $id;
 	}
+	
 	/* logic in findName() is simular to findId().  Please look at findId()'s 
 	comments if you need help with this function */
 	function findName()
 	{
 		$name = '';
-		$query = "SELECT {$this->database}.$this->tablename.$this->field_name FROM {$this->database}.$this->tablename WHERE {$this->database}.{$this->tablename}.$this->field_id = $this->id";
+		$query = "SELECT {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.$this->field_name FROM {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$this->database}.{$GLOBALS['CONFIG']['db_prefix']}{$this->tablename}.$this->field_id = $this->id";
 		$result = mysql_query($query, $this->connection) or die ("Error in query: " .$query . mysql_error());
 		
 		if(mysql_num_rows($result) > $this->result_limit AND result_limit != 'UNLIMITED')

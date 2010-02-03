@@ -22,10 +22,12 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ));
+	header('Location:index.php?redirection=view_file.php?' . sanitize($_SERVER['QUERY_STRING'] ));
 	exit;
 }
 include('config.php');
+$secureurl_obj = New phpsecureurl();
+
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
@@ -40,7 +42,7 @@ if(!isset($_GET['submit']))
 {
 	draw_header('View File');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('File View',$_REQUEST['last_message']);
+	draw_status_bar('File View',sanitize($_REQUEST['last_message']));
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
@@ -67,8 +69,9 @@ if(!isset($_GET['submit']))
 	//echo "prefix = $prefix<br>";
 	//echo "suffix = $suffix<br>";
 	//echo "mime:$lmimetype";	
-	echo '<form action="'.$_SERVER['PHP_SELF'].'" name="view_file_form" method="get">';
+	echo '<form action="view_file.php" name="view_file_form" method="get">';
 	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
+	echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
 	echo 'To view your file in a new window <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
@@ -141,7 +144,7 @@ elseif ($_GET['submit'] == 'Download')
     {
         // send headers to browser to initiate file download
         header('Cache-control: private');
-        header ('Content-Type: application/octet-stream');
+		header ('Content-Type: '.$_GET['mimetype']);
         header ('Content-Disposition: attachment; filename="' . $realname . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
