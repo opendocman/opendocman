@@ -29,10 +29,14 @@ if (!isset($_SESSION['uid']))
 }
 
 // includes
-global $state; $state = 1;
+$GLOBALS['state'] = 1;
 require_once 'config.php';
 if($GLOBALS['CONFIG']['treeview'] == "On"){
    require_once 'treeview.php';
+}
+
+if (isset($_REQUEST['last_message'])) {
+    $last_message = sanitize_system_string($_REQUEST['last_message']);
 }
 
 draw_header('File Listing');

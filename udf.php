@@ -102,7 +102,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
     // query to show item
     echo '<center>'; 
     echo '<table border=0>';
-    $query = 'SELECT table_name, display_name FROM odm_udf where table_name="' . $_REQUEST['item'] . '"';
+    $query = "SELECT table_name, display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['item']}'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lname) = mysql_fetch_row($result))
     {
@@ -144,7 +144,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 				<td><b>User Defined Field</b></td>
 				<td colspan=3><select name="item">
 <?php
-	$query = 'SELECT table_name,display_name FROM odm_udf ORDER BY id';
+	$query = "SELECT table_name,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -180,7 +180,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
     draw_status_bar('Display Item Information', $_REQUEST['last_message']);
     echo '<center>';
     // Select name
-    $query = "SELECT name FROM odm_category where id='$_REQUEST[item]'";
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo('<table name="main" cellspacing="15" border="0">');
     list($lcategory) = mysql_fetch_row($result);
@@ -218,7 +218,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 			<td><b>User Defined Field</b></td>
 			<td colspan="3"><select name="item">
 <?php
-    $query = 'SELECT id, name FROM odm_category ORDER BY name';
+    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($lid, $lname) = mysql_fetch_row($result))
     {
@@ -257,7 +257,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM odm_category where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -299,7 +299,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 				<td colspan="3"><select name="item">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM odm_category ORDER BY name";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -332,7 +332,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 {
     draw_header('Edit User Defined Field');
     draw_status_bar('Edit User Defined Field',@$_REQUEST['last_message']);
-    $query = 'SELECT table_name,field_type,display_name FROM odm_udf WHERE table_name = "'.$_REQUEST['udf'].'"';
+    $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name = '{$_REQUEST['udf']}'";
     $result = mysql_query($query);
     $row = mysql_fetch_row($result);
     $display_name = $row[2];
@@ -341,7 +341,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
     if ( $field_type == 1 ) {
         // Do Updates
         if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "" ) {
-            $query = 'UPDATE odm_udf SET display_name="'.$_REQUEST['display_name'].'" WHERE table_name = "'.$_REQUEST['udf'].'"';
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";
             mysql_query($query);
             $display_name = $_REQUEST['display_name'];
         }

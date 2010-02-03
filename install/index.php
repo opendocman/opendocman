@@ -292,7 +292,7 @@ function print_intro()
   <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
  </tr>
  <tr>
-    <td>Please choose one from the following based on your current version (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
+    <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
@@ -331,4 +331,3 @@ function print_intro()
 ?>
 </body>
 </html>
->>>>>>> .merge-right.r621

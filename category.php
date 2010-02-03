@@ -90,7 +90,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 	// query to show item
 	echo '<center>'; 
 	echo '<table border=0>';
-	$query = 'SELECT id, name FROM odm_category where id="' . $_REQUEST['item'] . '"';
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id={$_REQUEST['item']}";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -131,7 +131,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 				<td><b>Category</b></td>
 				<td colspan=3><select name="item">
 <?php
-	$query = 'SELECT id, name FROM odm_category ORDER BY name';
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -167,7 +167,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 	draw_status_bar('Display Item Information', $_REQUEST['last_message']);
 	echo '<center>';
 	// Select name
-	$query = "SELECT name FROM odm_category where id='$_REQUEST[item]'";
+	$query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	echo('<table name="main" cellspacing="15" border="0">');
 	list($lcategory) = mysql_fetch_row($result);
@@ -205,7 +205,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 			<td><b>Category</b></td>
 			<td colspan="3"><select name="item">
 <?php
-			$query = 'SELECT id, name FROM odm_category ORDER BY name';
+			$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
 			$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		while(list($lid, $lname) = mysql_fetch_row($result))
 		{
@@ -244,7 +244,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM odm_category where id='$_REQUEST[item]'";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
@@ -286,7 +286,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 				<td colspan="3"><select name="item">
 <?php
 	// query to get a list of users
-	$query = "SELECT id, name FROM odm_category ORDER BY name";
+	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{

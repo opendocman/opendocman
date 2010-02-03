@@ -27,7 +27,7 @@ if ( !defined('udf_functions') )
 
 function udf_add_file_form()
 {
-  $query = "SELECT table_name,field_type,display_name FROM odm_udf ORDER by id";
+  $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER by id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     echo '<tr><td>';
@@ -62,12 +62,12 @@ function udf_add_file_form()
 
 function udf_add_file_insert($fileId)
 {
-  $query = "SELECT table_name,field_type FROM odm_udf ORDER BY id";
+  $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 || $row[1] == 2) {
       if ( $_REQUEST[$row[0]] != "" ) {
-        $query = 'UPDATE data SET '.$row[0].' = '.$_REQUEST[$row[0]].' WHERE id = '.$fileId;
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET '{$row['0']}' = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
         mysql_query($query);
       }
     }
@@ -77,7 +77,7 @@ function udf_add_file_insert($fileId)
 
 function udf_edit_file_form()
 {
-  $query = 'SELECT display_name,field_type,table_name FROM odm_udf ORDER BY id';
+  $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 || $row[1] == 2) {
@@ -85,7 +85,7 @@ function udf_edit_file_form()
       if ( $row[1] == 1 )
         echo '<select name="'.$row[2].'">';
 
-      $query = 'SELECT ' . $row[2] . ' FROM odm_data WHERE id = '.$_REQUEST['id'];
+      $query = "SELECT {$row['2']} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
       $subresult = mysql_query($query);
       $subrow = mysql_fetch_row($subresult);
       $sel = $subrow[0];
@@ -118,12 +118,12 @@ function udf_edit_file_form()
 
 function udf_edit_file_update()
 {
-  $query = 'SELECT display_name,field_type,table_name FROM odm_udf ORDER BY id';
+  $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 || $row[1] == 2) {
       if ( $_REQUEST[$row[2]] != "" ) {
-        $query = 'UPDATE data SET '.$row[2].'="'.$_REQUEST[$row[2]].'" WHERE id = '.$_REQUEST['id'];
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET {$row['2']}={$_REQUEST[$row['2']]} WHERE id = {$_REQUEST['id']}";
         $subresult = mysql_query($query);
       }
     }
@@ -133,11 +133,11 @@ function udf_edit_file_update()
 
 function udf_details_display($fileId)
 {
-  $query = 'SELECT display_name,field_type,table_name FROM odm_udf ORDER BY id';
+  $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 || $row[1] == 2) {
-      $query = 'SELECT value FROM odm_data, ' . $row[2] . ' WHERE odm_data.id = ' . $fileId . ' AND odm_data.' . $row[2] . ' = ' . $row[2] . '.id';
+      $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
       $subresult = mysql_query($query);
       if($subresult)
       {   
@@ -161,7 +161,7 @@ function udf_admin_menu($secureurl)
   echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=add&state=' . ($_REQUEST['state']+1)).'">Add</a></b></td></tr>';
   echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1)).'">Delete</a></b></td></tr>';
   echo '<tr><td><hr></td></tr>';
-  $query = 'SELECT table_name,field_type,display_name FROM odm_udf ORDER BY id';
+  $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1)).'">'.$row[2].'</a></b></td></tr>';
@@ -172,7 +172,7 @@ function udf_admin_menu($secureurl)
 
 function udf_functions_java_menu()
 {
-  $query = 'SELECT table_name,field_type,display_name FROM odm_udf order by id';
+  $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf order by id";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 || $row[1] == 2 ) {
@@ -186,7 +186,7 @@ function udf_functions_java_menu()
 
 function udf_functions_java_array()
 {
-  $query = "SELECT table_name,field_type FROM odm_udf ORDER BY id";
+  $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     $query = "SELECT id,value FROM ".$row[0];
@@ -203,7 +203,7 @@ function udf_functions_java_array()
 
 function udf_functions_java_options($id)
 {
-  $query = 'SELECT table_name,field_type,display_name FROM odm_udf order by id';
+  $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf order by id";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_row($result)) {
     if ( $row[1] == 1 ) {
@@ -216,12 +216,14 @@ function udf_functions_java_options($id)
 
 function udf_functions_add_udf()
 {
+    $table_name = str_replace(' ', '', $_REQUEST['table_name']);
+
   if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2) {
-    $query = 'INSERT udf (id,table_name,display_name,field_type) VALUES (1,"'.$_REQUEST['table_name'].'","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
+    $query = 'INSERT into udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
     mysql_query($query);
-    $query = 'ALTER TABLE data ADD COLUMN '.$_REQUEST['table_name'].' int AFTER category';
+    $query = 'ALTER TABLE data ADD COLUMN '.$table_name.' int AFTER category';
     mysql_query($query);
-    $query = 'CREATE TABLE '.$_REQUEST['table_name'].'( id int auto_increment unique, value varchar(16) )';
+    $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
     mysql_query($query);
   }
 
@@ -229,19 +231,19 @@ function udf_functions_add_udf()
 
 function udf_functions_delete_udf()
 {
-  $query = 'DELETE FROM odm_udf where table_name="'.$_REQUEST['id'].'"';
+  $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['id']}'";
   mysql_query($query);
 
   $query = 'DROP TABLE '.$_REQUEST['id'];
   mysql_query($query);
 
-  $query = 'ALTER TABLE data DROP COLUMN '.$_REQUEST['id'];
+  $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN '{$_REQUEST['id']}'";
   mysql_query($query);
 }
 
 function udf_functions_search_options()
 {
-  $query = 'SELECT table_name,field_type,display_name FROM odm_udf ORDER BY id';
+  $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
   while ($row = mysql_fetch_row($result)) {
     echo '<option value="'.$row[2].'_only">'.$row[2].' only</option>';
@@ -254,13 +256,13 @@ function udf_functions_search($lwhere,$lquery_pre,$lquery,$lequate,$lkeyword)
   $tmp = $lwhere;
   $dn = strtok($tmp,"_");
 
-  $query = "SELECT table_name FROM odm_udf WHERE display_name = \"" . $dn . "\"";
+  $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
   $result = mysql_query($query);
   $row = mysql_fetch_row($result);
 
   $lquery_pre .= ', '.$row[0];
   $lquery .= $row[0].'.value' . $lequate  . '\'' . $lkeyword . '\'';
-  $lquery .= ' AND data.'.$row[0].' = '.$row[0].'.id';
+  $lquery .= ' AND '.$GLOBALS['CONFIG']['db_prefix'].'data.'.$row[0].' = '.$row[0].'.id';
   mysql_free_result($result);
 
   return array($lquery_pre,$lquery);

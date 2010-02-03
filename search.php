@@ -130,64 +130,66 @@ else
 
         $lkeyword = addslashes($lkeyword);
 
-		$lquery_pre = 'SELECT odm_data.id FROM odm_data, odm_user, odm_department, odm_category';
-		$lquery = ' WHERE odm_data.owner = odm_user.id AND odm_data.department=odm_department.id AND odm_data.category = odm_category.id AND (';
+		$lquery_pre = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user, {$GLOBALS['CONFIG']['db_prefix']}department, {$GLOBALS['CONFIG']['db_prefix']}category";
+		$lquery = " WHERE {$GLOBALS['CONFIG']['db_prefix']}data.owner = {$GLOBALS['CONFIG']['db_prefix']}user.id 
+					AND {$GLOBALS['CONFIG']['db_prefix']}data.department={$GLOBALS['CONFIG']['db_prefix']}department.id 
+					AND {$GLOBALS['CONFIG']['db_prefix']}data.category = {$GLOBALS['CONFIG']['db_prefix']}category.id AND (";
 				$larray_len = sizeof($lsearch_array);
 				switch($lwhere)
 				{
 				// Put all the category for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the category array are synchronized.
 				case 'author_locked_files':
-				$lquery .= 'odm_data.status' . $lequate  . '\'' . $lkeyword . '\' AND odm_data.owner=\'' . $_SESSION['uid'] . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.status' . $lequate  . '\'' . $lkeyword . '\' AND '.$GLOBALS['CONFIG']['db_prefix'].'data.owner=\'' . $_SESSION['uid'] . '\'';
 				break;
 
 				// Put all the category for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the category array are synchronized.
 				case 'category_only':
-				$lquery .= 'odm_category.name' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'category.name' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the author name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the author name array are synchronized.
 				case 'author_only':
 				if( $lexact_phrase=='on' )
 				{ 
-				$lquery .= 'odm_user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . 'odm_user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
 				}
 				else
 				{
-					$lquery .= 'odm_user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'odm_user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+					$lquery .= $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
 				}
 				break;
 				// Put all the department name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
 				case 'department_only':
-				$lquery .= 'odm_department.name' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'department.name' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the description for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the description array are synchronized.
 				case 'descriptions_only':
-				$lquery .= 'odm_data.description' . $lequate  . '\'' . $lkeyword . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.description' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the file name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the file name array are synchronized.
 				case 'filenames_only':
-				$lquery .= 'odm_data.realname= \'' . $lkeyword . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.realname= \'' . $lkeyword . '\'';
 				break;
 				// Put all the comments for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the comments array are synchronized.
 				case 'comments_only':
-                $lquery .= 'odm_data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
                 case 'file_id_only':
-                $lquery .= 'odm_data.id' . $lequate . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.id' . $lequate . '\'' . $lkeyword . '\'';
                 break;
                 case 'all':
-                $lquery .= 'odm_category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'odm_user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 'odm_user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'odm_department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'odm_data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'odm_data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
-					'odm_data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					$GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					$GLOBALS['CONFIG']['db_prefix'].'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					$GLOBALS['CONFIG']['db_prefix'].'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					$GLOBALS['CONFIG']['db_prefix'].'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' . 
+					$GLOBALS['CONFIG']['db_prefix'].'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
 				break;
 
 				default :
@@ -195,7 +197,7 @@ else
 				break;
 				
 				}
-				$lquery .= ') ORDER BY odm_data.id ASC';
+				$lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";
 //echo $lquery_pre.$lquery;
 				$lresult = mysql_query($lquery_pre.$lquery);
 
