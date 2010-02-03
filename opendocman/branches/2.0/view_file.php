@@ -22,7 +22,7 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=view_file.php?' . sanitize($_SERVER['QUERY_STRING'] ));
+	header('Location:index.php?redirection=view_file.php?' . sanitizeme($_SERVER['QUERY_STRING'] ));
 	exit;
 }
 include('config.php');

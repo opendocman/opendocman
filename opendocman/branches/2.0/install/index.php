@@ -33,11 +33,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 switch(@$_REQUEST['op']) {
     
     case "install":
-         get_info();
+    	 do_install();
          break;
 
     case "commitinstall":
-         do_install();
+
          break;
     // User has version 1.0 and is upgrading
     case "update_10":
@@ -124,32 +124,6 @@ switch(@$_REQUEST['op']) {
          break;
 }
 
-
-
-
-function get_info()
-{
-?>
-Please complete the following form to create your new database
-<form name="newinstall" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
- <table align="center">
-  <tr>
-   <td>
-    <input type="text" name="rootname" value="root"> Mysql Root User <br>
-    <input type="password" name="rootpass"> Mysql Root Password <br>
-    <input type="text" name="roothost" value="localhost"> Mysql Hostname <br>
-    <input type="text" name="database" value="opendocman"> New Database Name <br>
-    <input type="text" name="username" value="opendocman"> New Database User Name<br>
-    <input type="password" name="password"> New Database Password<br>
-    <input type="submit" name="op" value="commitinstall"><br>
-   </td>
-  </tr>
- </table>
-</form>
-    
-<?php
-}
-
 function do_install()
 {
         echo 'Checking that templates_c folder is writeable... ';
@@ -165,44 +139,32 @@ function do_install()
        echo '<br />installing...<br>';
 
 
-        mysql_connect($_REQUEST['roothost'], $_REQUEST['rootname'], $_REQUEST['rootpass']) or die ("Unable to connect!");
+        include_once("../config.php");
+        
+        mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 
         // Create database
-        $result = mysql_query("
-        DROP DATABASE IF EXISTS $_REQUEST[database]
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        $result = mysql_query("DROP DATABASE IF EXISTS {$GLOBALS['database']}") 
+        	or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
-        $result = mysql_query("
-        CREATE DATABASE $_REQUEST[database]
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
+        $result = mysql_query("CREATE DATABASE {$GLOBALS['database']}") 
+        	or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
-        echo 'Database Created<br>';
+        echo 'Database Created<br />';
 
-        mysql_select_db($_REQUEST['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
+        mysql_select_db($GLOBALS['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
 
-        echo 'Database Selected<br>';
+        echo 'Database Selected<br />';
 
-        // Grant privs
-        $result = mysql_query("
-	GRANT ALL ON $_REQUEST[database].* to $_POST[username]@$_POST[roothost] identified by '$_REQUEST[password]'") or die("<br>Could not set GRANT;
-");
-        echo 'Grant is set<br>';
-
-        $result = mysql_query("
-        FLUSH PRIVILEGES
-        ") or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
-        include("../config.php");
-        include("odm.php");
+        include_once("odm.php");
         echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
 } // End Install
-
 
 function do_update_10()
 {
         echo 'Updating version 1.0<br>';        
         
-        // Call each version, starting with th oldest. Upgrade from one to the next until done
+        // Call each version, starting with the oldest. Upgrade from one to the next until done
         //include("install/upgrade_09.php");
         include("../config.php");
         include("upgrade_10.php");
@@ -295,7 +257,7 @@ function print_intro()
     <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=install">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+  <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=update_125">Upgrade from version 1.2.5</a><br><br></td>
