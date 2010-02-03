@@ -27,7 +27,7 @@ session_start();
 include('config.php');
 if (!isset($_SESSION['uid']))
 {
-        header('Location:index.php?redirection=user.php?' . sanitize($_SERVER['QUERY_STRING'])  );
+        header('Location:index.php?redirection=user.php?' . sanitizeme($_SERVER['QUERY_STRING'])  );
 		exit;
 }
 
