@@ -36,7 +36,7 @@ if($GLOBALS['CONFIG']['treeview'] == "On"){
 }
 
 if (isset($_REQUEST['last_message'])) {
-    $last_message = sanitize_system_string($_REQUEST['last_message']);
+    $last_message = sanitizeme($_REQUEST['last_message']);
 }
 
 draw_header('File Listing');
