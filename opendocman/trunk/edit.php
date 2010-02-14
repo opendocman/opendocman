@@ -139,7 +139,9 @@ if (!isset($_REQUEST['submit']))
   	    $index++;
   	}
   //These are abstractive departments.  There are no discrete info in the database
-  echo '</Script>' . "\n";
+?>
+</Script>
+<?php
 
 // open a connection
 
@@ -505,10 +507,8 @@ else
 	{
 		$string=addslashes(space_to_underscore($dept_name));
 		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id =$id";
-		echo $query;
 		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
-	exit;
 	// clean up
 	mysql_freeresult($result);
 	$message = urlencode('Document successfully updated');
