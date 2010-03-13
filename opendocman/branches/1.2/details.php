@@ -44,8 +44,10 @@ if(strchr($_REQUEST['id'], '_') )
 	@draw_status_bar('Rev.' . $lrevision_id . ' - Details',$_REQUEST['last_message']);
         $filesize = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . '_' . $lrevision_id . '.dat'); 
 }
-else 
+else
+{
 	@draw_status_bar('File Details',$_REQUEST['last_message']);
+}
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -92,15 +94,27 @@ if(isset($reviewer_comments_fields[2]) && strlen($reviewer_comments_fields[2]) <
 {
 	$reviewer_comments_fields[2] = 'Comments=This file does not meet the requirement.  Please fix it and resubmit for review again.';
 }
+else
+{
+    $reviewer_comments_fields[2] = '';
+}
 
 if(isset($reviewer_comments_fields[1]) && strlen($reviewer_comments_fields[1]) <= strlen('Subject='))
 {
 	$reviewer_comments_fields[1] = 'Subject=Comments regarding the review for you documentation';
 }
+else
+{
+    $reviewer_comments_fields[1] = '';
+}
 
 if(isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) <= strlen('to='))
 {
 	$reviewer_comments_fields[0] = 'To=Author(s)';
+}
+else
+{
+    $reviewer_comments_fields[0] = '';
 }
 if($filedata->isArchived())
 {	
@@ -266,7 +280,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 draw_footer();
 ?>
 
-<SCRIPT LANGUAGE="JAVASCRIPT">
+<script language="text/javascript">
 	var message_window;
 	var mesg_window_frm;
 	function my_delete()
@@ -288,7 +302,7 @@ draw_footer();
 		message_window.focus();
 		setTimeout("sendFields();", 500);
 	}
-</SCRIPT>
+</script>
 	
 <?php
 // clean up
