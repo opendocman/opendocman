@@ -93,7 +93,7 @@ if(isset($_POST['login']))
     else
         // login/pass check failed
     {
-        mysql_free_result ($result);	
+        mysql_free_result ($result);
         // redirect to error page
         header('Location: error.php?ec=0');
     }
@@ -140,6 +140,10 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
     if(is_dir('install'))
     {
         $install_msg = '<span style="color: red;">Security Notice: If you already installed/updated then you should remove the "install" folder before proceeding</span>';
+    }
+    else
+    {
+        $install_msg = '';
     }
     
     ?>
