@@ -72,7 +72,7 @@ global $CONFIG;      $CONFIG = array(
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'http://www.example.com/opendocman',
+'base_url' => 'http://localhost/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -88,9 +88,10 @@ global $CONFIG;      $CONFIG = array(
 // This should ideally be outside the Web server root. 
 // Make sure the server has permissions to read/write files to this folder!
 
-// Uncomment this one for Windows - Don't forget the trailing backslash "\" 
-//'dataDir' => 'c:\document_repository\',
-// Uncomment this one for Linux - Don't forget the trailing slash "/"
+// Uncomment this one for WINDOWS - Don't forget the trailing backslash "/"
+//'dataDir' => 'c:/document_repository/',
+
+// Uncomment this one for LINUX - Don't forget the trailing slash "/"
 'dataDir' => '/var/www/document_repository/',
 
 // Set the maximum file upload size
