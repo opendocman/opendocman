@@ -219,8 +219,8 @@ else
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		list($username) = mysql_fetch_row($result);
 		// update revision log
-		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='($lrevision_num - 1)' WHERE id = {$_POST['id']} and revision = 'current'";
-		mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($lrevision_num) - 1)) . "' WHERE id = {$_POST['id']} and revision = 'current'";
+                mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
