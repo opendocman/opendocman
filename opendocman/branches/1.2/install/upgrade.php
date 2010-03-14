@@ -88,5 +88,11 @@ function do_upgrade125 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
     include("install/upgrade_125.php");
 }
 
-
+/*** This function calls the upgrade from odm 1.2.5.6 ***/
+function do_upgrade1256 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+    global $dbconn;
+    mysql_connect($dbhost, $dbuname, $dbpass);
+    mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
+    include("install/upgrade_1256.php");
+}
 ?>
