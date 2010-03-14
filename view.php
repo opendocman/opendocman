@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 ob_end_clean();		//Make sure there are no garbage in buffer.
 ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
 	exit;

@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for session and $_REQUEST['id']
 session_start();
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
 	exit;
