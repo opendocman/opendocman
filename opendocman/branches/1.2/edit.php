@@ -31,7 +31,7 @@ if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
 }
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
   header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
   exit;
@@ -276,6 +276,8 @@ if (!isset($_REQUEST['submit']))
 	</tr>
 	</table>
 	<table border="1" cellspacing="0" cellpadding="3">
+            <tr><td colspan="5">Use Shift-Click and Ctrl-Click To Add New Perms</td></tr>
+
 	<tr>
 	<td valign="top"><b><i>Forbidden</i> rights</b></td>
 	<td valign="top"><b><i>View</i> rights</b></td>
