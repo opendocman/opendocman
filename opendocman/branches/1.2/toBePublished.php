@@ -23,7 +23,7 @@ include('config.php');
 //$_SESSION['uid'] = 102;
 
 session_start();
-if (!session_is_registered('uid'))
+if (!isset ($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
 	exit;
@@ -99,7 +99,7 @@ if(!isset($_REQUEST['submit']))
 		<CENTER>
 		<INPUT type="button" name="submit" value="Authorize" onClick="checkedBoxesNumber(); authcomment()">
 		<INPUT type="button" name="submit" value="Reject" onClick="checkedBoxesNumber(); rejectcomment()">
-		<INPUT type="hidden" name="subject" value="Comments regarding the review for you documentation">
+		<INPUT type="hidden" name="subject" value="Comments regarding the review of the document">
 		<INPUT type="hidden" name="comments" value="">
 		<INPUT type="hidden" name="to" value="Author(s)">
 		<INPUT type="hidden" name="isopen" value=0>
