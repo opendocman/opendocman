@@ -27,5 +27,23 @@ while(list($id,$revision) = mysql_fetch_row($result)) {
     $rev_right = rtrim($rev_array[1], ")");
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision=" . intval($rev_left-$rev_right) . " WHERE id='$id' AND revision='$revision'";
     $result2 = mysql_query($query);
-};
+}
+
+echo 'Updating db version...<br />';
+$result = mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.5.7' WHERE sys_name='version'")
+or die("<br>Could not update version number" . mysql_error());
+
+echo 'Updating UDF Table Names...<br />';
+$query = "SELECT table_name from {$GLOBALS['CONFIG']['db_prefix']}udf";
+$result = mysql_query($query) or die("<br>Could not select UDF table names" . mysql_error());
+while(list($table_name) = mysql_fetch_row($result)) {
+    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data CHANGE $table_name {$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name int(11)";
+    $result1 = mysql_query($query) or die ("<br>Could not change UDF table names from data table" . mysql_error());
+
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET table_name = '{$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name' WHERE table_name = '$table_name'";
+    $result2 = mysql_query($query) or die ("<br>Could not update UDF table names in udf table " . mysql_error());
+
+    $query = "ALTER TABLE $table_name RENAME {$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name";
+    $result3 = mysql_query($query) or die("<br>Could rename table " . mysql_error());
+}
 ?>
