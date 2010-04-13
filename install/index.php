@@ -50,6 +50,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
    // User has version 11rc1 and is upgrading 
    case "update_11rc1":
@@ -61,6 +62,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 11rc2 and is upgrading 
@@ -72,6 +74,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 11 and is upgrading 
@@ -82,6 +85,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 12rc1 and is upgrading 
@@ -91,6 +95,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 12p1 and is upgrading 
@@ -99,6 +104,7 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 12p3 and is upgrading 
@@ -106,17 +112,25 @@ switch(@$_REQUEST['op']) {
          do_update_12p3();
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 124 and is upgrading 
    case "update_124":
          do_update_124();
          do_update_125();
+         do_update_1256();
          break;
 
    // User has version 125 and is upgrading 
    case "update_125":
          do_update_125();
+         do_update_1256();
+         break;
+
+   // User has version 1256 and is upgrading
+   case "update_1256":
+         do_update_1256();
          break;
 
     default:
@@ -235,6 +249,13 @@ function do_update_125()
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
 
+function do_update_1256()
+{
+        echo 'Updating from version 1.2.5.6 to 1.2.5.7<br>';
+        include("../config.php");
+        include("upgrade_1256.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
 function print_intro()
 {
 
@@ -251,13 +272,16 @@ function print_intro()
 
 <table align="center">
  <tr>
-  <td><strong>Please BACKUP all data before proceeding!</strong><br><br></td>
+  <td><strong>Please BACKUP all data and files before proceeding!</strong><br><br></td>
  </tr>
  <tr>
     <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+ </tr>
+  <tr>
+  <td><a href="index.php?op=update_1256">Upgrade from version 1.2.5.6</a><br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=update_125">Upgrade from version 1.2.5</a><br><br></td>

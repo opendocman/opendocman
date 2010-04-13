@@ -81,7 +81,7 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 <?php
 	draw_footer();
 }
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
+elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
 {
     // If demo mode, don't allow them to update the demo account
     if (@$GLOBALS['CONFIG']['demo'] == 'true')
@@ -386,6 +386,12 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         echo '</table>';
         echo '<input type=submit value=Update></form>';
     }
+    draw_footer();
+}
+else
+{
+    draw_header('UDF');
+    draw_status_bar('Delete User Defined Field','Nothing to do');
     draw_footer();
 }
 ?>

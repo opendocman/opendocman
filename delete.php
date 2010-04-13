@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check sessio
 session_start();
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
 	header('Location:error.php?ec=1');
 	exit;

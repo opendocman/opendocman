@@ -72,7 +72,7 @@ global $CONFIG;      $CONFIG = array(
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'http://www.example.com/opendocman',
+'base_url' => 'http://localhost/opendocman',
 
 // This is the browser window title
 'title' => 'Document Repository',
@@ -88,9 +88,10 @@ global $CONFIG;      $CONFIG = array(
 // This should ideally be outside the Web server root. 
 // Make sure the server has permissions to read/write files to this folder!
 
-// Uncomment this one for Windows - Don't forget the trailing backslash "\" 
-//'dataDir' => 'c:\document_repository\',
-// Uncomment this one for Linux - Don't forget the trailing slash "/"
+// Uncomment this one for WINDOWS - Don't forget the trailing backslash "/"
+//'dataDir' => 'c:/document_repository/',
+
+// Uncomment this one for LINUX - Don't forget the trailing slash "/"
 'dataDir' => '/var/www/document_repository/',
 
 // Set the maximum file upload size
@@ -141,7 +142,7 @@ The first two options also result in sending email to reviewer
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
 // because of its file type. It should display the proper MIME type there, and you can 
 // then add that string to this list to allow it
-$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint');
+$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint','application/vnd.ms-excel');
 
 // <----- No need to edit below here ---->
 //
