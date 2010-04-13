@@ -22,13 +22,13 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=view_file.php?' . sanitizeme($_SERVER['QUERY_STRING'] ));
+	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
 	exit;
 }
 include('config.php');
 $secureurl_obj = New phpsecureurl();
 
-$lrequest_id = $_REQUEST['id']; //save an original copy of id
+    $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
 	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
@@ -42,7 +42,7 @@ if(!isset($_GET['submit']))
 {
 	draw_header('View File');
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('File View',sanitizeme($_REQUEST['last_message']));
+	draw_status_bar('File View',$_REQUEST['last_message']);
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();

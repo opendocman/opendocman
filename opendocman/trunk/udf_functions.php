@@ -2,7 +2,7 @@
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence, Jonathan Miner
-
+Copyright (C) 2008-2010 Stephen Lawrence
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -216,12 +216,12 @@ function udf_functions_java_options($id)
 
 function udf_functions_add_udf()
 {
-    $table_name = str_replace(' ', '', $_REQUEST['table_name']);
+    $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
 
   if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2) {
-    $query = 'INSERT into udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
+    $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
     mysql_query($query);
-    $query = 'ALTER TABLE data ADD COLUMN '.$table_name.' int AFTER category';
+    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN '.$table_name.' int AFTER category';
     mysql_query($query);
     $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
     mysql_query($query);
@@ -237,8 +237,8 @@ function udf_functions_delete_udf()
   $query = 'DROP TABLE '.$_REQUEST['id'];
   mysql_query($query);
 
-  $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN '{$_REQUEST['id']}'";
-  mysql_query($query);
+  $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$_REQUEST['id']}";
+  $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 }
 
 function udf_functions_search_options()

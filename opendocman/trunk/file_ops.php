@@ -24,7 +24,7 @@ session_start();
 //$_SESSION['uid'] = 102;
 //$_GET['submit'] = 'view_checkedout';
 //echo $_POST['submit'];
-if (!session_is_registered('uid'))
+if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
 	exit;
