@@ -276,11 +276,9 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 </tr>
 </table>
 </center>
-<?php
-draw_footer();
-?>
 
-<script language="text/javascript">
+
+<script type="text/javascript">
 	var message_window;
 	var mesg_window_frm;
 	function my_delete()
@@ -306,4 +304,7 @@ draw_footer();
 	
 <?php
 // clean up
+?>
+<?php
+draw_footer();
 ?>
