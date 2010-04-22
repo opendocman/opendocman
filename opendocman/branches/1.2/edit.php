@@ -75,7 +75,7 @@ if (!isset($_REQUEST['submit']))
 	}
 	list($default_rights) = mysql_fetch_row($result);
 ?>
-	<Script Language="JavaScript">
+	<script type="text/javascript">
 	 //define a class like structure to hold multiple data
     		function Department(name, id, rights)
     		{
@@ -140,7 +140,7 @@ if (!isset($_REQUEST['submit']))
   	}
   //These are abstractive departments.  There are no discrete info in the database
 ?>
-</Script>
+</script>
 <?php
 
 // open a connection
@@ -517,7 +517,7 @@ else
 	header('Location: out.php?last_message=' . $message);
 }
 ?>
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript">
 	var index = 0;
     var index2 = 0;
 	var begin_Authority;
@@ -736,4 +736,7 @@ else
 			}
 		} //end for
 	}
-</SCRIPT>
+</script>
+<?php
+draw_footer();
+?>
