@@ -97,8 +97,8 @@ if( !defined('FileData_class') )
 				$this->category = $category;
 				$this->owner = $owner;
 				$this->created_date = $created_date;
-				$this->description = $description;
-				$this->comment = $comment;
+				$this->description = stripslashes($description);
+				$this->comment = stripslashes($comment);
 				$this->status = $status;
 				$this->department = $department;
 			}

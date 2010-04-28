@@ -5,8 +5,8 @@ Copyright (C) 2007  Stephen Lawrence, Jonathan Miner
 Copyright (C) 2008-2010 Stephen Lawrence
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -217,15 +217,28 @@ function udf_functions_java_options($id)
 function udf_functions_add_udf()
 {
     $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
-
-  if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2) {
-    $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
-    mysql_query($query);
-    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN '.$table_name.' int AFTER category';
-    mysql_query($query);
-    $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
-    mysql_query($query);
-  }
+// Check for duplicate table name
+    $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name='$table_name'";
+    $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
+    echo mysql_num_rows($result);
+    if (mysql_numrows($result) == "0")
+    {
+        if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
+        {
+            $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
+            mysql_query($query);
+            $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN '.$table_name.' int AFTER category';
+            mysql_query($query);
+            $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
+            mysql_query($query);
+        }
+    }
+    else
+    {
+        $secureurl = new phpsecureurl;
+        header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Duplicate+Table+Name'));
+        exit;
+    }
 
 }
 

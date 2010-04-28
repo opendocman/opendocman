@@ -1,12 +1,14 @@
 <?php
 /*
 upgrade_125.php - Database upgrades for users upgrading from 1.2.5
+through 1.2.5.2
+
 Copyright (C) 2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,47 +23,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 echo 'Renaming Table Names to include dbprefix...<br />';
 
 $result = mysql_query("
-ALTER TABLE  odm_admin RENAME AS {$GLOBALS['CONFIG']['db_prefix']}admin
+ALTER TABLE  admin RENAME AS {$GLOBALS['CONFIG']['db_prefix']}admin
 ") or die("<br>Could not rename admin table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_category RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}category
+ALTER TABLE category RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}category
 ") or die("<br>Could not rename category table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_data RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}data
+ALTER TABLE data RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}data
 ") or die("<br>Could not rename data table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_department RENAME AS {$GLOBALS['CONFIG']['db_prefix']}department
+ALTER TABLE department RENAME AS {$GLOBALS['CONFIG']['db_prefix']}department
 ") or die("<br>Could not rename department table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE  odm_dept_perms RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}dept_perms
+ALTER TABLE  dept_perms RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}dept_perms
 ") or die("<br>Could not rename dept_perms table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE  odm_dept_reviewer RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer
+ALTER TABLE  dept_reviewer RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer
 ") or die("<br>Could not rename dept_reviewer table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_log RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}log
+ALTER TABLE  log RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}log
 ") or die("<br>Could not rename log table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_rights RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}rights
+ALTER TABLE rights RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}rights
 ") or die("<br>Could not rename rights table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_user RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}user
+ALTER TABLE user RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}user
 ") or die("<br>Could not rename user table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_user_perms RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}user_perms
+ALTER TABLE user_perms RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}user_perms
 ") or die("<br>Could not rename user_perms table" . mysql_error());
 
 $result = mysql_query("
-ALTER TABLE odm_udf RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}udf
+ALTER TABLE udf RENAME AS  {$GLOBALS['CONFIG']['db_prefix']}udf
 ") or die("<br>Could not rename udf table" . mysql_error());
 
 echo 'Creating odmsys table<br />';

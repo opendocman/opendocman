@@ -589,7 +589,7 @@ if( !defined('function') )
                 ?><INPUT type="hidden" name="num_checkboxes" value="<?php echo $checkbox_index;?>">
                 </HD6>
                 </TABLE>
-                <Script Language="javascript">
+                <script type="text/javascript">
                 function selectAll(ctrl_checkbox)
                 {
                         elements = document.forms[0].elements;
@@ -701,7 +701,7 @@ if( !defined('function') )
 	function sort_browser()
 	{
 ?>
-		<SCRIPT language="javascript">
+		<script type="text/javascript">
 		var category_option = '';
 		var category_item_option = '';
 		
