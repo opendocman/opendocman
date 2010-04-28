@@ -145,7 +145,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
       include("signup_header.html");
 ?>
         <center><font size=6>Sign Up</font></center>
-        <br><SCRIPT LANGUAGE="JavaScript1.2" src="FormCheck.js"></script>			   
+        <br><script type="text/javascript" src="FormCheck.js"></script>
 
         <center>
         <table border="0" cellspacing="5" cellpadding="5">

@@ -78,7 +78,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         @draw_status_bar('Add New User', $_REQUEST['last_message']);
         // Check to see if user is admin
         ?>
-                <SCRIPT LANGUAGE="JavaScript1.2" src="FormCheck.js"></script>			   
+                <script type="text/javascript" src="FormCheck.js"></script>
 
                 <center>
                 <table border="0" cellspacing="5" cellpadding="5">
@@ -368,11 +368,11 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                     }
                     @draw_status_bar('Update User: ' . $user_obj->getName() ,$_REQUEST['last_message']);	
                     ?>
-                        <script LANGUAGE="JavaScript1.2" src="FormCheck.js">
+                        <script type="text/javascript" src="FormCheck.js">
                         function redirect(url_location)
                         {       window.location=url_location    }
 
-                    </SCRIPT>
+                    </script>
 
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -545,7 +545,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         </tr>
                         </table>
                         </center>
-                        <SCRIPT language="JAVASCRIPT">
+                        <script type="text/javascript">
                         	function verify(this_form, pwd, conf_pwd, set_password)
                         	{
                         		if(pwd.value != "" && pwd.value != conf_pwd.value)
@@ -564,7 +564,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                         		return validateEmail(this_form);
                         	
                         	}
-                        	</SCRIPT>
+                        	</script>
                         	<?php
                 } // End Not Demo mode
                           draw_footer();
@@ -632,7 +632,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 
 ?>
                         <br>
-                                <script LANGUAGE="JavaScript">
+                                <script type="text/javascript">
                                 function Validate(dataform)
                                 {
                                 if(dataform.new_password.value != dataform.confirm_password.value)
@@ -646,7 +646,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                                 function redirect(url_location)
                                 {	window.location=url_location	}
 
-                                </SCRIPT>
+                                </script>
                                 <form action="commitchange.php" method="post" enctype="multipart/form-data\">
                                 <table name="header" align="center" border="1">
                                 <tr><td align="center" bgcolor="teal"><b>User Information</b></td></tr>
@@ -676,11 +676,11 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 }
 ?>
                 <br>
-                                <script LANGUAGE="JavaScript">
+                                <script type="text/javascript">
                                 function redirect(url_location)
                                 {	window.location=url_location	}
 
-                                </SCRIPT>
+                                </script>
                                 <form action="commitchange.php" method="post" enctype="multipart/form-data">
                                 <table name="header" align="center" border="1">
                                 <tr><td align="center" bgcolor="teal"><b>User Information</b></td></tr>
