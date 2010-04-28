@@ -260,6 +260,6 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
 
 // Create version number in db
 $result = mysql_query("
-INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES ('','version','1.2.6')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES ('','version','1.2.5.7')
 ") or die("<br>Could insert new version into db user");
 ?>
