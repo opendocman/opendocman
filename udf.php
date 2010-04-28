@@ -2,11 +2,12 @@
 /*
 udf.php - Administer User Defined Fields
 Copyright (C) 2007 Stephen Lawrence, Jonathan Miner
+Copyright (C) 2008-2010 Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -368,6 +369,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
         echo '<table>';
+        echo '<tr><th align=right>Table Name:</th><td>' . $_REQUEST['udf'] . '</td></tr>';
         echo '<tr><th align=right>Display Name:</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'"></td></tr>';
         echo '</table>';
         echo '<table>';
