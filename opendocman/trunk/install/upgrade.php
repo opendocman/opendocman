@@ -5,8 +5,8 @@ Copyright (C) 2002-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -80,12 +80,12 @@ function do_upgrade124 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
     include("install/upgrade_124.php");
 }
 
-/*** This function calls the upgrade from odm 1.2.5 ***/
-function do_upgrade125 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+/*** This function calls the upgrade from odm 1.2.5.2 ***/
+function do_upgrade1252 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
-    include("install/upgrade_125.php");
+    include("install/upgrade_1252.php");
 }
 
 /*** This function calls the upgrade from odm 1.2.5.6 ***/

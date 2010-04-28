@@ -2,11 +2,12 @@
 /*
 udf.php - Administer User Defined Fields
 Copyright (C) 2007 Stephen Lawrence, Jonathan Miner
+Copyright (C) 2008-2010 Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -54,12 +55,12 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
 	<tr>
-		<td><b>Table Name</b></td>
-		<td colspan="3"><input name="table_name" type="text"></td>
+		<td><b>Table Name(limit 5)</b></td>
+                <td colspan="3"><input maxlength="5" name="table_name" type="text"></td>
 	</tr>
 	<tr>
 		<td><b>Display Name</b></td>
-		<td colspan="3"><input name="display_name" type="text"></td>
+		<td colspan="3"><input maxlength="16" name="display_name" type="text"></td>
 	</tr>
 	<tr>
 		<td><b>Field Type</b></td>
@@ -262,7 +263,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
 		echo '<tr>';
-		echo '<td><input type="textbox" name="name" value="' . $lname . '"></td>';
+		echo '<td><input maxlength="16" type="textbox" name="name" value="' . $lname . '"></td>';
 		echo '<td><input type="hidden" name="id" value="' . $lid . '"></td>';
 		echo '</tr>';
 	}
@@ -368,7 +369,8 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
         echo '<table>';
-        echo '<tr><th align=right>Display Name:</th><td><input type=textbox name=display_name value="'.$display_name.'"></td></tr>';
+        echo '<tr><th align=right>Table Name:</th><td>' . $_REQUEST['udf'] . '</td></tr>';
+        echo '<tr><th align=right>Display Name:</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'"></td></tr>';
         echo '</table>';
         echo '<table>';
         echo '<tr bgcolor="83a9f7"><th>Delete?</th><th>Value</th></tr>';
@@ -382,7 +384,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
         }
         mysql_free_result($result);
-        echo '<tr><th align=right>New:</th><td><input type=textbox name=newvalue></td></tr>';
+        echo '<tr><th align=right>New:</th><td><input type=textbox maxlength="16" name=newvalue></td></tr>';
         echo '</table>';
         echo '<input type=submit value=Update></form>';
     }

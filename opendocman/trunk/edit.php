@@ -75,7 +75,7 @@ if (!isset($_REQUEST['submit']))
 	}
 	list($default_rights) = mysql_fetch_row($result);
 ?>
-	<Script Language="JavaScript">
+	<script type="text/javascript">
 	 //define a class like structure to hold multiple data
     		function Department(name, id, rights)
     		{
@@ -140,7 +140,7 @@ if (!isset($_REQUEST['submit']))
   	}
   //These are abstractive departments.  There are no discrete info in the database
 ?>
-</Script>
+</script>
 <?php
 
 // open a connection
@@ -474,11 +474,11 @@ else
 		exit; 
 	}
 	// update db with new information	
-	mysql_escape_string($query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='" . addslashes($_REQUEST['category']) . "', description='" . addslashes($_REQUEST['description'])."', comment='" . addslashes($_REQUEST['comment'])."', default_rights='" . addslashes($_REQUEST['default_Setting']) . "'  WHERE id = '$_REQUEST[id]'");
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+	$query = ("UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='" . mysql_real_escape_string($_REQUEST['category']) . "', description='" . mysql_real_escape_string($_REQUEST['description']) . "', comment='" . mysql_real_escape_string($_REQUEST['comment']) ."', default_rights='" . mysql_real_escape_string($_REQUEST['default_Setting']) . "'  WHERE id = '" . mysql_real_escape_string($_REQUEST['id']) . "'");
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(isset($_REQUEST['users']))
 	{
-		mysql_query('UPDATE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data set owner="' . $_REQUEST['users'] . '" WHERE id = ' . $_REQUEST['id']) or die(mysql_error());
+		mysql_query('UPDATE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data set owner="' . mysql_real_escape_string($_REQUEST['users']) . '" WHERE id = ' . mysql_real_escape_string($_REQUEST['id'])) or die(mysql_error());
 	}
 	udf_edit_file_update();
 
@@ -517,7 +517,7 @@ else
 	header('Location: out.php?last_message=' . $message);
 }
 ?>
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript">
 	var index = 0;
     var index2 = 0;
 	var begin_Authority;
@@ -736,4 +736,7 @@ else
 			}
 		} //end for
 	}
-</SCRIPT>
+</script>
+<?php
+draw_footer();
+?>

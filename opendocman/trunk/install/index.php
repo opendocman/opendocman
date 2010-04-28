@@ -5,8 +5,8 @@ Copyright (C) 2002-2007  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+as published by the Free Software Foundation; either version 3
+of the License, or any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -49,7 +49,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
    // User has version 11rc1 and is upgrading 
@@ -61,7 +62,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -73,7 +75,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -84,7 +87,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -94,7 +98,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -103,7 +108,8 @@ switch(@$_REQUEST['op']) {
          do_update_12p1();
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -111,20 +117,23 @@ switch(@$_REQUEST['op']) {
    case "update_12p3":
          do_update_12p3();
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
    // User has version 124 and is upgrading 
    case "update_124":
          do_update_124();
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
-   // User has version 125 and is upgrading 
+   // User has version 1252 and is upgrading
    case "update_125":
-         do_update_125();
+         do_update_1252();
+         do_update_1256();
          do_update_1256();
          break;
 
@@ -243,7 +252,7 @@ function do_update_124()
 
 function do_update_125()
 {
-        echo 'Updating from version 1.2.5 to 1.2.6<br>';        
+        echo 'Updating from version 1.2.5.2 to 1.2.5.3<br>';
         include("../config.php");
         include("upgrade_125.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
@@ -281,10 +290,10 @@ function print_intro()
   <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
   <tr>
-  <td><a href="index.php?op=update_1256">Upgrade from version 1.2.5.6</a><br><br></td>
+  <td><a href="index.php?op=update_1256">Upgrade versions 1.2.5.3 - 1.2.5.6</a><br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=update_125">Upgrade from version 1.2.5</a><br><br></td>
+  <td><a href="index.php?op=update_125">Upgrade versions 1.2.5 - 1.2.5.2</a><br><br></td>
  </tr>
  <tr>
   <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>

@@ -113,7 +113,7 @@ if(!isset($_REQUEST['submit']))
 		?>
 		</TABLE>
 		</FORM>
-		<SCRIPT LANGUAGE='JAVASCRIPT'>
+		<script text="text/javascript">
 		function checkedBoxesNumber()
 		{
 			counter=0;
@@ -211,7 +211,7 @@ if(!isset($_REQUEST['submit']))
 
 	}
 
-	</SCRIPT>	
+	</script>
 		<?php
 		draw_footer();
 
@@ -310,7 +310,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 	}
 	?>
 		</FORM>
-		<SCRIPT LANGUAGE='JAVASCRIPT'>
+                <script type="text/javascript">
 		function check(select, send_dept, send_all)
 		{
 			if(send_dept.checked || select.options[select.selectedIndex].value != "0")
@@ -348,7 +348,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 	}
 
 
-	</SCRIPT>
+	</script>
 		<?php
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
