@@ -62,7 +62,7 @@ if(!isset($_POST['submit'])) //un_submitted form
 	///////Define a class that hold Department information (id, name, and rights)/////////
 	//this class will be used to temporarily hold department information client-side wise//
 	?>
-	<Script Language="JavaScript">
+	<script type="text/javascript">
 	
 		 //define a class like structure to hold multiple data
     		function Department(name, id, rights)
@@ -129,8 +129,8 @@ if(!isset($_POST['submit'])) //un_submitted form
 		$index++;
 	}
 ?>
-	</Script>
-	<SCRIPT LANGUAGE="JavaScript" src="functions.js"></script>
+	</script>
+	<script type="text/javascript"src="functions.js"></script>
 	<!-- file upload formu using ENCTYPE -->
 	<form name="main" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="MAX_FILE_SIZE" value="50000000">
@@ -484,7 +484,7 @@ else //submited form
 	}
 }
 ?>
-<SCRIPT LANGUAGE="JavaScript">
+<script type="text/javascript">
 
     var index = 0;
     var index2 = 0;
@@ -688,5 +688,5 @@ else //submited form
 		} //end for
 	}
 
-</SCRIPT>
+</script>
 
