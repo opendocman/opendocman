@@ -43,14 +43,14 @@ INSERT INTO odm_category VALUES (4,'Presentation');
 
 CREATE TABLE odm_data (
   id int(11) unsigned NOT NULL auto_increment,
-  category tinyint(4) unsigned NOT NULL default '0',
+  category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) NOT NULL default '',
   status smallint(6) default NULL,
-  department int(11) unsigned default NULL,
+  department smallint(6) unsigned default NULL,
   default_rights tinyint(4) default NULL,
   publishable tinyint(4) default NULL,
   reviewer int(11) unsigned default NULL,
@@ -168,7 +168,7 @@ CREATE TABLE odm_user (
   Email varchar(50) default NULL,
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
-  pw_reset_code CHAR(32) default NULL,
+  pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM;
 
@@ -216,4 +216,13 @@ CREATE TABLE odm_udf
     display_name    varchar(16),
     field_type  int
 ) TYPE=MyISAM;
+
+CREATE TABLE IF NOT EXISTS odm_odmsys
+(
+    id  int(11) auto_increment unique,
+    sys_name  varchar(16),
+    sys_value    varchar(255)
+) TYPE=MyISAM;
+
+INSERT INTO odm_odmsys VALUES ('','version','1.2.6');
 
