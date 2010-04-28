@@ -54,8 +54,8 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
 	<tr>
-		<td><b>Table Name</b></td>
-                <td colspan="3"><input maxlength="16" name="table_name" type="text"></td>
+		<td><b>Table Name(limit 5)</b></td>
+                <td colspan="3"><input maxlength="5" name="table_name" type="text"></td>
 	</tr>
 	<tr>
 		<td><b>Display Name</b></td>
