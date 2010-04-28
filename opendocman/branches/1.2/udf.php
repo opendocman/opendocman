@@ -55,11 +55,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 <table border="0" cellspacing="5" cellpadding="5">
 	<tr>
 		<td><b>Table Name</b></td>
-		<td colspan="3"><input name="table_name" type="text"></td>
+                <td colspan="3"><input maxlength="16" name="table_name" type="text"></td>
 	</tr>
 	<tr>
 		<td><b>Display Name</b></td>
-		<td colspan="3"><input name="display_name" type="text"></td>
+		<td colspan="3"><input maxlength="16" name="display_name" type="text"></td>
 	</tr>
 	<tr>
 		<td><b>Field Type</b></td>
@@ -262,7 +262,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 	while(list($lid, $lname) = mysql_fetch_row($result))
 	{
 		echo '<tr>';
-		echo '<td><input type="textbox" name="name" value="' . $lname . '"></td>';
+		echo '<td><input maxlength="16" type="textbox" name="name" value="' . $lname . '"></td>';
 		echo '<td><input type="hidden" name="id" value="' . $lid . '"></td>';
 		echo '</tr>';
 	}
@@ -368,7 +368,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
         echo '<table>';
-        echo '<tr><th align=right>Display Name:</th><td><input type=textbox name=display_name value="'.$display_name.'"></td></tr>';
+        echo '<tr><th align=right>Display Name:</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'"></td></tr>';
         echo '</table>';
         echo '<table>';
         echo '<tr bgcolor="83a9f7"><th>Delete?</th><th>Value</th></tr>';
@@ -382,7 +382,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
         }
         mysql_free_result($result);
-        echo '<tr><th align=right>New:</th><td><input type=textbox name=newvalue></td></tr>';
+        echo '<tr><th align=right>New:</th><td><input type=textbox maxlength="16" name=newvalue></td></tr>';
         echo '</table>';
         echo '<input type=submit value=Update></form>';
     }
