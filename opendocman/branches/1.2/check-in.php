@@ -103,7 +103,7 @@ if (!isset($_POST['submit']))
 <?php
 		draw_footer();
 ?>
-		<SCRIPT language="JAVASCRIPT">
+		<script type="text/javascript">
 		function check(select, send_dept, send_all)
 		{
 			if(send_dept.checked || select.options[select.selectedIndex].value != "0")
@@ -115,7 +115,7 @@ if (!isset($_POST['submit']))
 					select.options[i].selected = false;
 			}
 		}
-		</SCRIPT>
+		</script>
 <?php
 	}//end else
 }//end if (!$submit)
