@@ -56,9 +56,7 @@ global $CONFIG;      $CONFIG = array(
 // keep users from removing files, users, etc.
 'demo' => 'false', 
 
-// This is useful if you have a web-based kerberos authenticatio site
-// Set to either kerbauth or mysql
-//'authen' => 'kerbauth',
+// Currently only MySQL authentication is supported
 'authen' => 'mysql',
 
 // Set the number of files that show up on each page
@@ -134,8 +132,13 @@ The first two options also result in sending email to reviewer
 // Attempt NIS password lookups?
 'try_nis' => 'Off',
 
- // Which theme to use?
-'theme' => 'default'
+// Which theme to use?
+'theme' => 'default',
+
+// Set the default language (english, spanish, turkish, etc.).
+// Local users may override this setting
+// check include/language folder for languages available
+'language' => 'english'
 );
 
 // List of allowed file types

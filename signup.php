@@ -35,14 +35,14 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         // If the above statement returns more than 0 rows, the user exists, so display error
         if(mysql_num_rows($result) > 0)
         {
-            echo 'That user already exists. Please <a href="signup.php">try again</a>';
+            echo msg('message_user_exists');
             exit;
         }
         else
         {     
-            $phonenumber = @$_REQUEST['phonenumber'];
+            $phonenumber = (!empty($_REQUEST['phonenumber']) ? $_REQUEST['phonenumber'] : '');
             // INSERT into user
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', password('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', md5('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
             // INSERT into admin
             $userid = mysql_insert_id($GLOBALS['connection']);
@@ -63,19 +63,13 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
             }
 
             // mail user telling him/her that his/her account has been created.
-            echo 'Your account has been created<br>';
+            echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
             if($GLOBALS['CONFIG']['authen'] == 'mysql')
             {
-                echo 'Your randomly generated passowrd is: '.$_REQUEST['password']."\n\n";
-                echo '<br>If you would like to change this to something else once you log in, ';
-                echo 'you can do so by clicking on "Preferences" in the status bar.'."\n";
-                echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">Login</a>';
+                echo msg('message_account_created_password') . ': '.$_REQUEST['password']."\n\n";
+                echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">' . msg('login'). '</a>';
                 exit;
             }
-            else 
-                $mail_body.='Your password is your UC Davis campus kerberos password.';
-            $mail_salute="\n\rSincerely,\n\r$full_name";
-            mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
         }
     }
     elseif(isset($_REQUEST['updateuser']))
@@ -99,7 +93,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
         if (!empty($_REQUEST['password']))
         {
-            $query .= "password = password('". addslashes($_REQUEST['password']) ."'), ";
+            $query .= "password = md5('". addslashes($_REQUEST['password']) ."'), ";
         }
         if( isset( $_REQUEST['department'] ) )
         {	$query.= 'department="' . addslashes($_REQUEST['department']) . '",';	}
@@ -150,9 +144,9 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         <center>
         <table border="0" cellspacing="5" cellpadding="5">
         <form name="add_user" action="signup.php" method="POST" enctype="multipart/form-data">
-        <tr><td><b>Last Name</b></td><td><input name="last_name" type="text"></td></tr>
-        <tr><td><b>First Name</b></td><td><input name="first_name" type="text"></td></tr>
-        <tr><td><b>Username</b></td><td><input name="username" type="text"></td></tr>
+        <tr><td><b><?php echo msg('label_last_name');?></b></td><td><input name="last_name" type="text"></td></tr>
+        <tr><td><b><?php echo msg('label_first_name');?></b></td><td><input name="first_name" type="text"></td></tr>
+        <tr><td><b><?php echo msg('username');?></b></td><td><input name="username" type="text"></td></tr>
         <tr>
         <td><b>Phone Number</b></td>
         <td>
@@ -199,7 +193,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         </td>
         <tr>
         <td></td>
-        <td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validatemod(add_user);" value="Sign Up!">
+        <td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validatemod(add_user);" value="<?php echo msg('submit');?>">
         </form>
         </td>
         </tr>

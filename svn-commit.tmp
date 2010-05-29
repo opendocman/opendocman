@@ -1,0 +1,7 @@
+merge from 1.2 branch
+--This line, and those below, will be ignored--
+
+_M   templates
+A  + templates/default/menu.tpl
+M    templates/default/header.tpl
+A  + templates/default/default.css

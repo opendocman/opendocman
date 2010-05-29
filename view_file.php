@@ -1,7 +1,8 @@
 <?php
 /*
 view_file.php - draws screen which allows users to view files inline
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2004  Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010  Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -31,7 +32,7 @@ $secureurl_obj = New phpsecureurl();
     $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
-	    list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+	    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
 		$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 if( !isset ($_REQUEST['last_message']) )
@@ -40,9 +41,9 @@ if( !isset ($_REQUEST['last_message']) )
 }
 if(!isset($_GET['submit']))
 {
-	draw_header('View File');
+	draw_header(msg('view') . ' ' . msg('file'));
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('File View',$_REQUEST['last_message']);
+	draw_status_bar(msg('view') . ' ' . msg('file'),$_REQUEST['last_message']);
 	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 	$file_name = $file_obj->getName();
 	$file_id = $file_obj->getId();
@@ -74,9 +75,8 @@ if(!isset($_GET['submit']))
 	echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
 	echo '<BR>';
 	// Present a link to allow for inline viewing
-	echo 'To view your file in a new window <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">Click Here</a><br><br>';
-	echo 'If you are not able to do so for some reason, ';
-	echo 'click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
+	echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">' . msg('button_click_here') . '</a><br><br>';
+	echo msg('message_if_you_are_unable_to_view');
 	echo '</form>';
 
     draw_footer();
@@ -118,7 +118,7 @@ elseif ($_GET['submit'] == 'view')
     }
     else
     {
-        echo 'File does not exist...';
+        echo msg('message_file_does_not_exist');
     }
 }
 elseif ($_GET['submit'] == 'Download')
@@ -152,13 +152,13 @@ elseif ($_GET['submit'] == 'Download')
     }
     else
     {
-        echo 'File does not exist...';
+        echo msg('message_file_does_not_exist');
     }
 
 }
 else
 {
-    echo 'Nothing to do ';
+    echo msg('message_nothing_to_do');
     echo 'submit is ' . $_GET['submit'];
 }
 ?>

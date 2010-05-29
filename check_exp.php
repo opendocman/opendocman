@@ -28,9 +28,9 @@ if (!isset($_REQUEST['last_message']))
 }
 
 // includes
-draw_header('Check Expirations');
+draw_header(msg('area_file_expiration'));
 draw_menu(@$_SESSION['uid']);
-draw_status_bar('Check Expirations', $_REQUEST['last_message']);
+draw_status_bar(msg('area_file_expiration'), $_REQUEST['last_message']);
 
 // Look up user
 $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user where username='{$GLOBALS['CONFIG']['root_username']}'";
@@ -71,8 +71,8 @@ $lexpired_revision = date('Y-m-d', mktime(0, 0, 0, $lok_month, $lok_day, $lok_ye
 //get expired file
 $lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id, {$GLOBALS['CONFIG']['db_prefix']}data.reviewer_comments FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}log WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}log.id AND {$GLOBALS['CONFIG']['db_prefix']}log.revision='current' AND modified_on<'$lexpired_revision' AND ({$GLOBALS['CONFIG']['db_prefix']}data.publishable!=-1 and {$GLOBALS['CONFIG']['db_prefix']}data.status!=-1)";
 $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-echo 'Rejecting files last edited before ' . $lexpired_revision . '<br>';
-echo 'Rejecting ' . mysql_num_rows($lresult) . ' file(s)<br>';
+echo msg('message_rejecting_files'). ' ' . $lexpired_revision . '<br>';
+echo msg('message_rejected') . ' ' . mysql_num_rows($lresult) . ' file(s)<br>';
 for($i = 0; $i<mysql_num_rows($lresult); $i++)
 {
 	list($lid) = mysql_fetch_row($lresult);
@@ -83,7 +83,7 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
 {
 	//get root's id
 	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-	$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
+	$reviewer_comments = 'To=' . msg('author') . ';Subject=' . msg('message_file_expired') . ';Comments=' . msg('email_file_was_rejected_because'). ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' ' .msg('days') . ';';
 	$user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
 	$date = date("D F d Y");
 	$time = date("h:i A");
@@ -91,10 +91,10 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
 	$full_name = $get_full_name[0].' '.$get_full_name[1];
 	$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
 	$mail_headers = "From: $mail_from";
-	$mail_subject='Review status for document ';
-	$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
-	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days.';
-	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
+	$mail_subject=msg('email_subject_review_status');
+	$mail_greeting=msg('email_greeting') . ":\n\r\t" . msg('email_i_would_like_to_inform');
+	$mail_body = msg('email_was_declined_for_publishing_at') . ' ' .$time.' on '.$date.' ' . msg('email_because_you_did_not_revise') . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' '. msg('days');
+	$mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
 	for($i = 0; $i<mysql_num_rows($lresult); $i++)
 	{	
 		list($lid) = mysql_fetch_row($lresult);	
@@ -107,7 +107,7 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
 if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) //do not show file
 {
 	$lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
-	$reviewer_comments = 'To=Author;Subject=File expired;Comments=Your file was rejected because you did not revise it for more than ' . $GLOBALS['CONFIG']['revision_expiration'] . ' days;';
+	$reviewer_comments = 'To=' . msg('author') . ';Subject=' . msg('message_file_expired') . ';Comments=' . msg('email_file_was_rejected_because'). ' ' .$GLOBALS['CONFIG']['revision_expiration'] . ' ' . msg('days');
 	for($i = 0; $i<mysql_num_rows($lresult); $i++)
 	{
 		list($lid) = mysql_fetch_row($lresult);
@@ -126,6 +126,6 @@ if( $GLOBALS['CONFIG']['file_expired_action'] == 2 ) //lock file, not check-outa
 		$file_obj->setStatus(-1);
 	}
 }
-echo 'All proccesses are completed successfully';
+echo msg('message_all_actions_successfull');
 draw_footer();
 ?>

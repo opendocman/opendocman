@@ -1,7 +1,7 @@
 <?php
 /*
 check-in.php - uploads a new version of a file
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -57,12 +57,13 @@ if (!isset($_POST['submit']))
 	{
 		// get result data
 		list($description, $realname) = mysql_fetch_row($result);
+                draw_header(msg('area_check_in_file'));
 		draw_menu($_SESSION['uid']);
-		@draw_status_bar('Check Document In',$_REQUEST['last_message']);		
+		@draw_status_bar(msg('button_check_in'),$_REQUEST['last_message']);
 		// correction
 		if($description == '') 
 		{ 
-			$description = 'No description available';
+			$description = msg('message_no_description_available');
 		}
 	
 		// clean up
@@ -74,28 +75,28 @@ if (!isset($_POST['submit']))
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
 		<tr>
-		<td><b>Document</b></td>
+		<td><b><?php echo msg('label_filename');?></b></td>
 		<td><b><?php echo $realname; ?></b></td>
 		</tr>
 		
 		<tr>
-		<td><b>Description</b></td>
+		<td><b><?php echo msg('label_description');?></b></td>
 		<td><?php echo $description; ?></td>
 		</tr>
 	
 		<tr>
-		<td><b>Location</b></td>
+		<td><b><?php echo msg('label_file_location');?></b></td>
 		<td><input name="file" type="file"></td>
 		</tr>
 		
 		<tr>
-		<td>Note (for revision log)</td>
+		<td><?php echo msg('label_note_for_revision_log');?></td>
 		<td><textarea name="note"></textarea></td>
 		</tr>
 		
 		
 			<tr>
-		<td colspan="4" align="center"><input type="Submit" name="submit" value="Check  Document In"></td>
+		<td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="submit" value="Check  Document In"><?php echo msg('button_check_in')?></button></div></td>
 		</tr>
 		</form>
 		</table>
@@ -190,7 +191,7 @@ else
 		{	
                         if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775))
                         {
-                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] . ' Failed';
+                                $last_message=msg('message_directory_creation_failed'). ': ' . $GLOBALS['CONFIG']['revisionDir'] ;
                                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                                 exit;
                         }
@@ -199,7 +200,7 @@ else
 		{   
                         if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'], 0775)) 
                         {
-                                $last_message='Directory Creation for ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'] . ' Failed';
+                                $last_message=msg('message_directory_creation_failed') . ': ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'];
                                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                                 exit;
                         }
@@ -242,36 +243,36 @@ else
 		$dept_id = $user_obj->getDeptId();
 		if(isset($send_to_all))
 		{
-			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
-			$mail_body.='Date: ' . $date . "\n\n";
-			$mail_body.='Time: ' . $time . "\n\n";
-			$mail_body.='Action: Updated'."\n\n";
+			$mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
+			$mail_body.=msg('date'). ': ' . $date . "\n\n";
+			$mail_body.=msg('label_modified_date'). ': ' . $time . "\n\n";
+			$mail_body.=msg('action'). ': ' .msg('updated') . "\n\n";
 
-			email_all($mail_from, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
+			email_all($mail_from, $fileobj->getName().' ' .msg('updated'),$mail_body,$mail_headers);
 		}
 
 		if(isset($send_to_dept))
 		{
-			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
-			$mail_body.='Date: ' . $date . "\n\n";
-			$mail_body.='Time: ' . $time . "\n\n";
-			$mail_body.='Action: Updated'."\n\n";
+			$mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
+			$mail_body.=msg('date'). ': ' . $date . "\n\n";
+			$mail_body.=msg('label_modified_date').': ' . $time . "\n\n";
+			$mail_body.=msg('action'). ': ' .msg('updated'). "\n\n";
 
-			email_dept($mail_from, $dept_id, $fileobj->getName().' was updated in OpenDocMan',$mail_body,$mail_headers);
+			email_dept($mail_from, $dept_id, $fileobj->getName().' ' .msg('updated'),$mail_body,$mail_headers);
 		}
 
 		if(isset($send_to_users) && sizeof($send_to_users) > 0)
 		{
-			$mail_body='Filename: '. $fileobj->getName(). "\n\n";
-			$mail_body.='Date: ' . $date . "\n\n";
-			$mail_body.='Time: ' . $time . "\n\n";
-			$mail_body.='Action: Updated'."\n\n";
+			$mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
+			$mail_body.=msg('date'). ': ' . $date . "\n\n";
+			$mail_body.=msg('label_modified_date'). ': ' . $time . "\n\n";
+			$mail_body.=msg('action'). ': ' .msg('updated'). "\n\n";
 
-			email_users_id($mail_from, $send_to_users, $fileobj->getName().' was updated in OpenDocMan',$mail_body, $mail_headers);
+			email_users_id($mail_from, $send_to_users, $fileobj->getName(). ' ' .msg('updated'),$mail_body, $mail_headers);
 		}
 
 		// clean up and back to main page
-		$last_message = 'Document successfully checked in';
+		$last_message = msg('message_document_checked_in');
 		header('Location: out.php?last_message=' . urlencode($last_message));
 	}
 }

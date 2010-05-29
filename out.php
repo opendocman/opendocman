@@ -39,33 +39,27 @@ if (isset($_REQUEST['last_message'])) {
     $last_message = $_REQUEST['last_message'];
 }
 
-draw_header('File Listing');
+draw_header(msg('label_file_listing'));
 draw_menu($_SESSION['uid']);
-draw_status_bar('Document Listing', @$_REQUEST['last_message']);
+draw_status_bar(msg('area_document_listing'), @$_REQUEST['last_message']);
 if($GLOBALS['CONFIG']['treeview'] != "On"){
    sort_browser();
 }
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-
 if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
-    echo '<img src="images/exclamation.gif"> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">You have '. sizeof($user_obj->getRevieweeIds()). ' document';
-    if (sizeof($user_obj->getRevieweeIds()) != 1)
-    {
-        echo 's';
-    }
-    echo ' waiting to be reviewed!</a>  <BR>';
+    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). ': ' . sizeof($user_obj->getRevieweeIds())  . '</a><br />';
 }
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-    echo '<img src="images/exclamation_red.gif"> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. sizeof($rejected_files_obj) . ' of your documents were rejected!</a> <BR>';
+    echo '<img src="images/exclamation_red.gif" /> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. msg('message_documents_rejected') . ': ' .sizeof($rejected_files_obj) . '<br />';
 }
 $llen = $user_obj->getNumExpiredFiles();
 if($llen > 0)
 {
-	echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'"> '. $llen . ' of your document(s) expired!</a> <BR>';
+	echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'">' .msg('message_documents_expired'). ': ' . $llen . '</a><br />';
 }
 // get a list of documents the user has "view" permission for
 // get current user's information-->department

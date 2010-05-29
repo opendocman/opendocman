@@ -152,14 +152,14 @@ function udf_details_display($fileId)
 
 function udf_admin_header()
 {
-	echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">User Defined<br>Fields</font></th>';
+	echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' .msg('label_user_defined_fields'). '</font></th>';
 }
 
 function udf_admin_menu($secureurl)
 {
   echo '<td valign=top><table border=0>';
-  echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=add&state=' . ($_REQUEST['state']+1)).'">Add</a></b></td></tr>';
-  echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1)).'">Delete</a></b></td></tr>';
+  echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=add&state=' . ($_REQUEST['state']+1)).'">' .msg('label_add'). '</a></b></td></tr>';
+  echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1)).'">' .msg('label_delete'). '</a></b></td></tr>';
   echo '<tr><td><hr></td></tr>';
   $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
   $result = mysql_query($query);
@@ -220,7 +220,7 @@ function udf_functions_add_udf()
 // Check for duplicate table name
     $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name='$table_name'";
     $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
-    echo mysql_num_rows($result);
+    //echo mysql_num_rows($result);
     if (mysql_numrows($result) == "0")
     {
         if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)

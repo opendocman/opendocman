@@ -36,9 +36,9 @@ include('udf_functions.php');
  */
 /// includes
 $start_time = time();
-draw_header('Search');
+draw_header(msg('search'));
 draw_menu($_SESSION['uid']);
-draw_status_bar('Search', "");
+draw_status_bar(msg('search'), "");
 
 if(!isset($_GET['starting_index']))
 {
@@ -71,31 +71,31 @@ if(!isset($_GET['submit']))
 		<form action=<?php echo $_SERVER['PHP_SELF']; ?> method="get">
 
 		<tr>
-		<td valign="top"><b>Search term</b></td>
+		<td valign="top"><b><?php echo msg('label_search_term');?></b></td>
 		<td><input type="Text" name="keyword" size="50"></td>
-		<td>Exact Phrase: <input type="checkbox" name="exact_phrase"></td>
-		<td>Case Sensitivity <input type="checkbox" name="case_sensitivity"></td>
+		<td><?php echo msg('label_exact_phrase');?>: <input type="checkbox" name="exact_phrase"></td>
+		<td><?php echo msg('label_case_sensitive'); ?><input type="checkbox" name="case_sensitivity"></td>
 		</tr>
 		<tr>
-		<td valign="top"><b>Search</b></td>
+		<td valign="top"><b><?php echo msg('search');?></b></td>
 		<td><select name="where">
-		<option value="author_only">Author (Last_name  First_name)</option>
-		<option value="department_only">Department only</option>
-		<option value="category_only">Category only</option>
-		<option value="descriptions_only">Descriptions only</option>
-		<option value="filenames_only">Filenames only</option>
-		<option value="comments_only">Comments only</option>
-		<option value="file_id_only">File ID only</option>
+		<option value="author_only"><?php echo msg('author');?> (Last_name  First_name)</option>
+		<option value="department_only"><?php echo msg('department');?></option>
+		<option value="category_only"><?php echo msg('category');?></option>
+		<option value="descriptions_only"><?php echo msg('label_description');?></option>
+		<option value="filenames_only"><?php echo msg('label_filename');?></option>
+		<option value="comments_only"><?php echo msg('label_comment');?></option>
+		<option value="file_id_only"><?php echo msg('file');?> #</option>
 <?php
 		udf_functions_search_options();
 ?>
-		<option value="all" selected>All</option>
+		<option value="all" selected><?php echo msg('all');?></option>
 		</select></td>
 		</tr>
 
 		<tr>
 		<td colspan="2" align="center">
-		<input type="Submit" name="submit" value="Search">
+		<input type="Submit" value="<?php echo msg('search');?>">
 		<input type="hidden" name="submit" value="Search">
 		</td>
 		</tr>
@@ -173,7 +173,7 @@ else
 				// Put all the file name for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the file name array are synchronized.
 				case 'filenames_only':
-				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.realname= \'' . $lkeyword . '\'';
+				$lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.realname' . $lequate . '\'' . $lkeyword . '\'';
 				break;
 				// Put all the comments for each of the OBJ in the OBJ array into an array
 				// Notice, the index of the OBJ_array and the comments array are synchronized.
@@ -228,7 +228,7 @@ else
 	$page_url = $_SERVER['PHP_SELF'].'?keyword='.urlencode($_GET['keyword']).'&where='.urlencode($_GET['where']).'&submit='.urlencode($_GET['submit']) . '&exact_phrase='.@$_GET['exact_phrase'];
 	$sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
 	list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
-	echo '<BR>';
+	echo '<br />';
 	list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
 	draw_footer();
 	//echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
