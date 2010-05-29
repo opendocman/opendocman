@@ -19,6 +19,7 @@
         //-->
         </script>
 {/literal}
+<link type="text/css" rel="stylesheet" href="templates/default/default.css">
     </head>
     <body bgcolor="white">
     <!----------------------------End drawing header-----------------------------!>
