@@ -224,5 +224,5 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) TYPE=MyISAM;
 
-INSERT INTO odm_odmsys VALUES ('','version','1.2.5.7');
+INSERT INTO odm_odmsys VALUES ('','version','1.2.6');
 

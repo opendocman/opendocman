@@ -19,11 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 <style type="text/css">
 	a.statusbar:link {color: white}
-	font.statusbar {color: white; text-decoration:none; font-size:70%} 
+	font.statusbar {color: white; text-decoration:none; }
 	a.statusbar:visited {color: white}
 	a.statusbar:hover {background:white; color: #0000A0; text-decoration: underline; font-weight:normal}
 	a.statusbar:active {color: #FFFFFF}
-	a.statusbar	{color: white; text-decoration:none; font-size:70% }
+	a.statusbar	{color: white; text-decoration:none; }
 </style>
 
 <style type="text/css">

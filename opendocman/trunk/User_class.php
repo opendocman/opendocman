@@ -145,20 +145,30 @@ if( !defined('User_class') )
 
 	function changePassword($non_encrypted_password)
 	{
-		$query = "UPDATE $this->tablename SET $this->tablename.password=password('". addslashes($non_encrypted_password) ."') WHERE $this->tablename.id=$this->id";
+		$query = "UPDATE $this->tablename SET $this->tablename.password=md5('". addslashes($non_encrypted_password) ."') WHERE $this->tablename.id=$this->id";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		return true;
 	}
 
 	function validatePassword($non_encrypted_password)
 	{
-		$query = "SELECT $this->tablename.username FROM $this->tablename WHERE $this->tablename.id=$this->id and password= password('". addslashes($non_encrypted_password) ."')";
+		$query = "SELECT $this->tablename.username FROM $this->tablename WHERE $this->tablename.id=$this->id and password= md5('". addslashes($non_encrypted_password) ."')";
 		$result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
 		if(mysql_num_rows($result) == 1)
                 {
-		        return true;
+                    return true;
                 }
-		return false;
+                else
+                {
+                    // Check the old password() style user password
+                    $query = "SELECT $this->tablename.username FROM $this->tablename WHERE $this->tablename.id=$this->id and password=password('". addslashes($non_encrypted_password) ."')";
+                    $result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
+                    if(mysql_num_rows($result) == 1)
+                    {
+                        return true;
+                    }
+                }
+                return false;
 	}
 
 	function changeName($new_name)

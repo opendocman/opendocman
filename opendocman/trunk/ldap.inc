@@ -28,8 +28,8 @@ $ds=ldap_connect($GLOBALS['CONFIG']['ldap_server']);
 
 if ($ds) { 
 	$cn=" ".$ldap_request." ";
-	$cn = ereg_replace (" ", "*", $cn);
-	$ldap_no_aster= ereg_replace ("\*", " ", $ldap_request);
+	$cn = preg_replace ("/ /", "*", $cn);
+	$ldap_no_aster= preg_replace ("/\*/", " ", $ldap_request);
 
 // ** $filter is the field it searches in the LDAP database.  Compares against Employee Number first. **//
 	$filter="(|(employeenumber=$ldap_no_aster))";
@@ -77,7 +77,7 @@ if ($ds) {
 //** No returns on Employee ID.  Check against Common Name, Email, UCD Login ID, employeenumber **//
 		case 0:
 			$cn=" ".$ldap_request." ";
-			$cn = ereg_replace (" ", "*", $cn);
+			$cn = preg_replace ("/ /", "*", $cn);
 			$filter="(|(cn=$cn)(mail=$ldap_request)(uid=$ldap_no_aster)(employeenumber=$ldap_no_aster))";
 			$justthese = array("cn", "mail", "uid", "telephonenumber", "postaladdress", "ou", "title", "employeenumber");
     		$r=ldap_bind($ds); #bind to directory

@@ -1,7 +1,9 @@
 <?php
 /*
 commitchange.php - provides database commits for various admin tasks
-Copyright (C) 2002-2007  Stephen Lawrence, Jon Miner
+Copyright (C) 2002-2006  Stephen Lawrence
+Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -46,7 +48,6 @@ if (!$user_obj->isAdmin())
         header('Location:' . $secureurl->encode('error.php?ec=4'));
         exit;
     }
-    $_REQUEST['admin']='no';
 }
 
 // Submitted so insert data now
@@ -70,13 +71,13 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
     {     
     	$phonenumber = @$_POST['phonenumber'];
 	   // INSERT into user
-       $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', password('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
+       $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
        // INSERT into admin
        $userid = mysql_insert_id($GLOBALS['connection']);
         if (!isset($_POST['admin']))
         {
-                $_POST['admin']='';
+                $_POST['admin']='0';
         }
        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -101,23 +102,19 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
 		$new_user_full_name = $get_full_name[0].' '.$get_full_name[1];
 		$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
 		$mail_headers = "From: $mail_from"; 
-		$mail_subject='Your account has been created';
-		$mail_greeting='Dear '.$new_user_full_name.":\n\r\tI would like to inform you that ";
-		$mail_body = 'your document management account was created at '.$time.' on '.$date.'.  You can now log into your account at this page:'."\n\r";
+		$mail_subject=msg('message_account_created_add_user');
+		$mail_greeting=$new_user_full_name.":\n\r\tI would like to inform you that ";
+		$mail_body = msg('email_your_account_created').' '.$time.' - '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
                 $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
-		$mail_body.= 'Your login name is: '.$new_user_obj->getName()."\n\n";
+		$mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
 		if($GLOBALS['CONFIG']['authen'] == 'mysql')
 		{
-			$mail_body.='Your randomly generated password is: '.$_POST['password']."\n\n";
-			$mail_body.='If you would like to change this to something else once you log in, ';
-			$mail_body.='you can do so by clicking on "Preferences" in the status bar.'."\n";
+			$mail_body.=msg('password') . ': '.$_POST['password']."\n\n";
 		}
-		else 
-			$mail_body.='Your password is your UC Davis campus kerberos password.';
-		$mail_salute="\n\rSincerely,\n\r$full_name";
+		$mail_salute="\n\r" . msg('salute') . ",\n\r$full_name";
 		$mail_to = $new_user_obj->getEmailAddress();
 		mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
-		$_POST['last_message'] = urlencode('User successfully added');
+		$_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
        	header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
     }
 }
@@ -132,14 +129,14 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 
     if(!isset($_POST['admin']) || $_POST['admin'] == '')
     {
-            $_POST['admin'] = 'no';
+            $_POST['admin'] = '0';
     }
 
 	if(!isset($_POST['caller']) || $_POST['caller'] == '')
 	{
 		$_POST['caller'] = 'admin.php';
     }
-	
+
     // UPDATE admin info
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -148,7 +145,7 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 
 	if (!empty($_POST['password']))
 	{
-		$query .= "password = password('". addslashes($_POST['password']) ."'), ";
+		$query .= "password = md5('". addslashes($_POST['password']) ."'), ";
 	}
 
 	if( isset( $_POST['department'] ) )
@@ -204,7 +201,7 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
         $_POST['caller'] = 'admin.php';	
     }
 
-    $_POST['last_message'] = urlencode('User successfully updated');
+    $_POST['last_message'] = urlencode(msg('message_user_successfully_updated'));
     header('Location: ' . $_POST['caller'] . '?last_message=' . $_POST['last_message']);
 }
 // Delete USER
@@ -234,7 +231,7 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // back to main page
-        $_POST['last_message'] = urlencode($_POST['id'] . ' User successfully deleted');
+        $_POST['last_message'] = urlencode($_POST['id'] . msg('message_user_successfully_deleted'));
         header('Location:' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
 //Add Departments
@@ -257,7 +254,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
 		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($_POST['department']) . '\')';
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
-        $_POST['last_message'] = urlencode('Department successfully added');
+        $_POST['last_message'] = urlencode(msg('message_department_successfully_added'));
         /////////Give New Department data's default rights///////////
         ////Get all default rights////
         $query = "SELECT id, default_rights FROM {$GLOBALS['CONFIG']['db_prefix']}data";
@@ -310,7 +307,7 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
 	$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($_POST['name']) ."' where id='$_POST[id]'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
-    $_POST['last_message'] = urlencode('Department successfully updated - name=' . $_POST['name'] . '- id=' . $_POST['id']);
+    $_POST['last_message'] = urlencode(msg('message_department_successfully_updated') . ' - ' . $_POST['name'] . '- id=' . $_POST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
 // Add Category
@@ -324,7 +321,7 @@ elseif(@$_REQUEST['submit']=='Add Category')
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
-        $_REQUEST['last_message'] = urlencode('Category successfully added');
+        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_added'));
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // Delete department
@@ -338,7 +335,7 @@ elseif(isset($_REQUEST['deletecategory']))
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
-        $_REQUEST['last_message'] = urlencode('Category (' . $_REQUEST['id'] . ') successfully deleted');
+        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // UPDATE Category
@@ -352,7 +349,7 @@ elseif(isset($_REQUEST['updatecategory']))
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // back to main page
-        $_REQUEST['last_message'] = urlencode('Category ' . $_REQUEST['name'] . ' successfully updated');
+        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 elseif(@$_REQUEST['submit']=='Add User Defined Field')
@@ -362,10 +359,10 @@ elseif(@$_REQUEST['submit']=='Add User Defined Field')
             header('Location:' . $secureurl->encode('error.php?ec=4'));
             exit;
         } 
-
+        
 	udf_functions_add_udf();
 
-        $_REQUEST['last_message'] = urlencode('User Defined Field ' . $_REQUEST['display_name'] . ' successfully added');
+        $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 elseif(isset($_REQUEST['deleteudf']))
@@ -378,11 +375,11 @@ elseif(isset($_REQUEST['deleteudf']))
 	udf_functions_delete_udf();
 
         // back to main page
-        $_REQUEST['last_message'] = urlencode('User Defined Field (' . $_REQUEST['id'] . ') successfully deleted');
+        $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 else
 {
-	echo 'Nothing to do';
+	echo msg('message_nothing_to_do');
 }
 ?>

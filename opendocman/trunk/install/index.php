@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>OpenDocMan Upgrade/Installation</title>
+<title>OpenDocMan <?php echo msg('installer');?></title>
 </head>
 
 <body>
@@ -140,6 +140,12 @@ switch(@$_REQUEST['op']) {
    // User has version 1256 and is upgrading
    case "update_1256":
          do_update_1256();
+         do_update_126();
+         break;
+
+        // User has version 1257 and is upgrading
+   case "update_126":
+         do_update_126();
          break;
 
     default:
@@ -265,6 +271,14 @@ function do_update_1256()
         include("upgrade_1256.php");
         echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
 }
+
+function do_update_126()
+{
+        echo 'Updating from version 1.2.5.7 to 1.2.6<br>';
+        include("../config.php");
+        include("upgrade_126.php");
+        echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+}
 function print_intro()
 {
 
@@ -288,6 +302,9 @@ function print_intro()
  </tr>
  <tr>
   <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+ </tr>
+   <tr>
+  <td><a href="index.php?op=update_1257">Upgrade versions 1.2.5.7 - 1.2.6</a><br><br></td>
  </tr>
   <tr>
   <td><a href="index.php?op=update_1256">Upgrade versions 1.2.5.3 - 1.2.5.6</a><br><br></td>

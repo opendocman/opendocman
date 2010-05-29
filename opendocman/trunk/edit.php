@@ -50,9 +50,9 @@ if (!isset($_REQUEST['last_message']))
 if (!isset($_REQUEST['submit']))
 // form not yet submitted, display initial form
 {
-	draw_header('File Properties Modification');
+	draw_header(msg('area_update_file'));
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Edit Document Properties', $_REQUEST['last_message']);
+	draw_status_bar(msg('area_update_file'), $_REQUEST['last_message']);
 	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 	checkUserPermission($_REQUEST['id'], $user_perm_obj->ADMIN_RIGHT);
 	$data_id = $_REQUEST['id'];
@@ -124,7 +124,7 @@ if (!isset($_REQUEST['submit']))
 	var default_Setting_pos = 0;
 	var all_Setting_pos = 1;
 	var departments = new Array();
-	var default_Setting = new Department("Default Setting for Unset Department", 0, <?php echo $default_rights; ?>);
+	var default_Setting = new Department("<?php echo msg('label_default_for_unset')?>", 0, <?php echo $default_rights; ?>);
 	var all_Setting = new Department("All", 0, 0);
 	departments[all_Setting_pos] = all_Setting;
 	departments[default_Setting_pos] = default_Setting;
@@ -175,11 +175,11 @@ if (!isset($_REQUEST['submit']))
 		<input type="hidden" name="id" value="<?php  echo $_REQUEST['id']; ?>">
 	
 		<tr>
-		<td valign="top">Name</td>
+		<td valign="top"><?php echo msg('label_name')?></td>
 		<td colspan="3"><b><?php  echo $realname; ?></b></td>
 		</tr>
 		<tr>
-		<td valign="top">Owner</td>
+		<td valign="top"><?php echo msg('owner')?></td>
 		<td colspan="3"><b>
 		<select name="users">
 			<?php  
@@ -200,7 +200,7 @@ if (!isset($_REQUEST['submit']))
 		</b></td>
 		</tr>
 		<tr>
-		<td valign="top">Category</td>
+		<td valign="top"><?php echo msg('category')?></td>
 		<td colspan="3"><select name="category">
 <?php
 		// query for category list
@@ -226,11 +226,11 @@ if (!isset($_REQUEST['submit']))
 ?>
 		<!-- Select Department to own file -->
         <TR>
-	    <TD><B>Department</B></TD>
+	    <TD><B><?php echo msg('department')?></B></TD>
      	<TD COLSPAN="3"><SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
-		<option value="0"> Select a Department</option>
-		<option value="1"> Default Setting for Unset Department</option>
-		<option value="2"> Set All Departments The Same</option>
+		<option value="0"> <?php echo msg('label_select_a_department')?></option>
+		<option value="1"> <?php echo msg('label_default_for_unset')?></option>
+		<option value="2"> <?php echo msg('label_all_departments')?></option>
 <?php
 		// query to get a list of department 
 		$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
@@ -247,7 +247,7 @@ if (!isset($_REQUEST['submit']))
 		</TR>
     	<TR>
 		<!-- Loading Authority radio_button group -->
-		<TD>Authority: </TD> <TD>  	
+		<TD><?php echo msg('label_department_authority')?>: </TD> <TD>
 <?php
       	$query = "SELECT RightId, Description FROM {$GLOBALS['CONFIG']['db_prefix']}rights order by RightId";
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
@@ -267,23 +267,23 @@ if (!isset($_REQUEST['submit']))
 	</td>
 	</tr>
 	<tr>
-	<td valign="top">Description</td>
+	<td valign="top"><?php echo msg('label_description')?></td>
 	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo str_replace('"', '&quot;', $description); ?>"></td>
 	</tr>
 	<tr>
-	<td valign="top">Comment</td>
+	<td valign="top"><?php echo msg('label_comment')?></td>
 	<td colspan="3"><textarea name="comment" rows="4"><?php  echo $comment; ?></textarea></td>
 	</tr>
 	</table>
-	<table border="1" cellspacing="0" cellpadding="3">
-            <tr><td colspan="5">Use Shift-Click and Ctrl-Click To Add New Perms</td></tr>
+	<table border="0" cellspacing="0" cellpadding="3">
+            <tr><td colspan="5"><?php echo msg('label_specific_permissions')?></td></tr>
 
 	<tr>
-	<td valign="top"><b><i>Forbidden</i> rights</b></td>
-	<td valign="top"><b><i>View</i> rights</b></td>
-	<td valign="top"><b><i>Read</i> rights</b></td>
-	<td valign="top"><b><i>Modify</i> rights</b></td>
-	<td valign="top"><b><i>Admin</i> rights</b></td>
+	<td valign="top"><b><?php echo msg('label_forbidden')?></b></td>
+	<td valign="top"><b><?php echo msg('label_view')?></b></td>
+	<td valign="top"><b><?php echo msg('label_read')?></b></td>
+	<td valign="top"><b><?php echo msg('label_modify')?></b></td>
+	<td valign="top"><b><?php echo msg('label_admin')?></b></td>
 	</TR>
 	<!--/////////////////////////////////////////////////////FORBIDDEN////////////////////////////////////////////-->
 	<TR>
@@ -443,9 +443,10 @@ if (!isset($_REQUEST['submit']))
 	</table>
 	<table>
 	<tr>
-	
-	<td colspan="4" align="center"><input type="Submit" name="submit" value="Update Document Properties"></td>
-	<td colspan="4" align="center"><input type="Reset" name="reset" value="Reset" onclick="reload()"></td>
+        
+	<td colspan="4" align="center"><div class="buttons"><button class="positive" type="Submit" name="submit" value="Update Document Properties"><?php echo msg('button_save')?></button></div></td>
+	<td colspan="4" align="center"><div class="buttons"><button class="negative" type="Reset" name="reset" value="Reset" onclick="reload()"><?php echo msg('button_reset')?></button></div></td>
+        </div>
 	</tr>
 	<table>
 	</form>

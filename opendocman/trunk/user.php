@@ -75,7 +75,7 @@ if (!isset($_REQUEST['last_message']))
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 {
-        @draw_status_bar('Add New User', $_REQUEST['last_message']);
+        @draw_status_bar(msg('area_add_new_user'), $_REQUEST['last_message']);
         // Check to see if user is admin
         ?>
                 <script type="text/javascript" src="FormCheck.js"></script>
@@ -83,21 +83,21 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <center>
                 <table border="0" cellspacing="5" cellpadding="5">
                 <form name="add_user" action="commitchange.php" method="POST" enctype="multipart/form-data">
-                <tr><td><b>Last Name</b></td><td><input name="last_name" type="text"></td></tr>
-                <tr><td><b>First Name</b></td><td><input name="first_name" type="text"></td></tr>
-                <tr><td><b>Username</b></td><td><input name="username" type="text"></td></tr>
+                <tr><td><b><?php echo msg('label_last_name')?></b></td><td><input name="last_name" type="text"></td></tr>
+                <tr><td><b><?php echo msg('label_first_name')?></b></td><td><input name="first_name" type="text"></td></tr>
+                <tr><td><b><?php echo msg('username')?></b></td><td><input name="username" type="text"></td></tr>
                 <tr>
-                <td><b>Phone Number</b></td>
+                <td><b><?php echo msg('label_phone_number')?></b></td>
                 <td>
                 <input name="phonenumber" type="text">
                 </td>
                 </tr>
                 <tr>
-                <td><b>Example</b></td>
+                <td><b><?php echo msg('label_example')?></b></td>
                 <td><b>999 9999999</b></td>
                 </tr>
                 <tr>
-                <td><b>E-mail Address</b></td>
+                <td><b><?php echo msg('label_email_address')?></b></td>
                 <td>
                 <input name="Email" type="text">
                 </td>
@@ -113,7 +113,7 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         ?>
 
                 <tr>
-                <td><b>Department</b></td>
+                <td><b><?php echo msg('label_department')?></b></td>
                 <td>
                 <select name="department">
                 <?php			
@@ -131,23 +131,23 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 </select>
                 </td>
                 <tr>
-                <td><b>Admin?</b></td>
+                <td><b><?php echo msg('label_is_admin')?>?</b></td>
                 <td>
                 <input name="admin" type="checkbox" value="1">
                 </td>
                 </tr>
                 <TR>
-        <TD><B>Reviewer?</B></TD>
+        <TD><B><?php echo msg('label_is_reviewer')?>?</B></TD>
                 <TD><INPUT type="checkbox" name="reviewer" value="1"></TD>
                 </TR>
                 <TR>
-                <TD></TD>
+                <TD><b><?php echo msg('label_reviewer_for')?></b></TD>
                 <TD>
                 <SELECT name="department_review[]" multiple />
                 <?php 
         $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-        echo '<OPTION SELECTED>Select the department(s)</OPTION>';
+        echo '<OPTION SELECTED>' . msg('label_select_departments') . '</OPTION>';
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
         {
                 echo '<OPTION value="' . $dept_id . '">' . $dept_name . '</OPTION>' . "\n";

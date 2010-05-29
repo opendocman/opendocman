@@ -28,9 +28,9 @@ exit;
 }
 // includes
 include('config.php');
-draw_header('Check-in');
+draw_header(msg('button_check_in'));
 draw_menu($_SESSION['uid']);
-@draw_status_bar('Documents Currently Checked Out To You', $_POST['last_message']); 
+@draw_status_bar(msg('message_document_checked_out_to_you'), $_POST['last_message']);
 
 // query to get list of documents checked out to this user
 $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id, 
@@ -50,20 +50,18 @@ $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $
 // how many records?
 $count = mysql_num_rows($result);
 if ($count == 0)
-	echo '<img src="images/exclamation.gif"> No documents checked out to you';
+	echo '<img src="images/exclamation.gif"> ' . msg('message_no_documents_checked_out');
 else
 {
-    echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1"><caption><b>'.$count.' document';
-	if ($count != 1)
-		echo 's';
-	echo ' checked out to you</caption>';
+    echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1">';
+	echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . $count . '</caption>';
 	echo '<tr bgcolor="#83a9f7">';
-        echo '<td class="listtable"><b>Check-In</td>';
-        echo '<td class="listtable"><b>File Name</td>';
-        echo '<td class="listtable"><b>Description</td>';
-        echo '<td class="listtable"><b>Created Date</td>';
-        echo '<td class="listtable"><b>Owner</td>';
-        echo '<td class="listtable"><b>Size</td>';
+        echo '<td class="listtable"><b>' .msg('button_check_in'). '</b></td>';
+        echo '<td class="listtable"><b>' .msg('label_file_name'). '</b></td>';
+        echo '<td class="listtable"><b>' .msg('label_description'). '</b></td>';
+        echo '<td class="listtable"><b>' .msg('label_created_date'). '</b></td>';
+        echo '<td class="listtable"><b>' .msg('owner'). '</b></td>';
+        echo '<td class="listtable"><b>' .msg('label_size'). '</b></td>';
         echo '</tr>';
 
         $row_color = "#FCFCFC";
@@ -73,14 +71,15 @@ else
 	// correction
 	if ($description == '') 
         {
-            $description = 'No information available'; 
+            $description = msg('message_no_information_available');
         }
 	$filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 	// display list
     $highlighted_color = '#bdf9b6';
 
     echo '<tr valign="middle" bgcolor="' . $row_color . '" onmouseover="this.style.backgroundColor=\'' . $highlighted_color . '\';" onmouseout="this.style.backgroundColor=\'' . $row_color . '\';">';
-    echo '<td class="listtable"><a href="check-in.php?id=' . $id . '&amp;state=' . ($_REQUEST['state']+1) . '"><img src="images/check-in.png" border="0" width="45" height="45" alt="check in" /></a></td>';
+    echo '<td class="listtable"><div class="buttons"><a href="check-in.php?id=' . $id . '&amp;state=' .($_REQUEST['state']+1) . '" class="regular"><img src="images/import-2.png" alt="checkin"/>' .msg('button_check_in'). '</a></div>';
+    echo '</td>';
     echo '<td class="listtable">' . $realname . '</td>';
     echo '<td class="listtable">' . $description . '</td>';
     echo '<td class="listtable">' . fix_date($created) . '</td> ';
@@ -93,7 +92,7 @@ else
         else
           $row_color = "#FCFCFC";
 	}
-
+        
 	// clean up
 	mysql_free_result ($result);
 
