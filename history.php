@@ -44,7 +44,7 @@ draw_status_bar('History', @$_REQUEST['last_message']);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
-	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
+	list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
 }
 $datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 // verify

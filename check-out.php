@@ -1,8 +1,8 @@
 <?php
 /*
 check-out.php - performs checkout and updates database
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2007  Stephen Lawrence
+Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2010  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -49,9 +49,9 @@ if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isAr
 }
 if (!isset($_GET['submit']))
 {
-	draw_header('Checkout');
+	draw_header(msg('area_check_out_file'));
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Check Out Document');
+	draw_status_bar(msg('area_check_out_file'));
 	// form not yet submitted
 	// display information on how to initiate download
 ?>
@@ -62,9 +62,9 @@ if (!isset($_GET['submit']))
 	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="get">
 	<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
 	<input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
-	<input type="submit" name="submit" value="Click here"> to check out the selected document and begin downloading it to your local workstation.
+	<div class="buttons"><button class="regular" type="submit" name="submit" value="Click here"><?php echo msg('area_check_out_file')?></button>&nbsp;<?php echo msg('message_click_to_checkout_document')?></div>
 	</form>
-	Once the document has completed downloading, you may <a href="out.php">continue browsing</a>.
+	<?php echo msg('message_once_the_document_has_completed')?>&nbsp;<a href="out.php"><?php echo msg('button_continue')?></a>.
 <?php
 draw_footer();
 }

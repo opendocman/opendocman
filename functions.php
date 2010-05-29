@@ -38,7 +38,13 @@ require_once('crumb.php');
 require_once('secureurl.class.php');
 include_once('secureurl.php');
 include('udf_functions.php');
+include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
 //require_once('includes/sanitize.inc.php');
+/* Set language  vars */
+foreach($GLOBALS['lang'] as $key=>$value)
+{
+    $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
+}
 if( !defined('function') )
 {
   	define('function', 'true', false);
@@ -91,13 +97,14 @@ if( !defined('function') )
 		//echo $message;
 		//echo '</font></b></td>'."\n";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php" style="text-decoration:none">Home</a>'."\n</td>";
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php" style="text-decoration:none">' .msg('home'). '</a>'."\n</td>";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/profile.php" style="text-decoration:none">Preferences</a>'."\n</td>";
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/profile.php" style="text-decoration:none">' .msg('preferences').'</a>'."\n</td>";
 		echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">Help</a>'."\n</td>";
-		?>	    <TD bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</FONT></TD>
-			<TD bgcolor="#0000A0" align="left" valign="middle">
+		echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">'.msg('help').'</a>'."\n</td>";
+		?>
+                        <td bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</font></td>
+			<td bgcolor="#0000A0" align="left" valign="middle">
 			<?php	$crumb = new crumb();
 		$crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);	
         $crumb->printTrail($_REQUEST['state']);
@@ -105,11 +112,11 @@ if( !defined('function') )
         if ( $lastmessage != "" )
         {
             echo '<b><font size="-2" face="Arial" color="White">';
-            echo 'Last Message: '.$lastmessage;
+            echo msg('message_last_message') . ': '.$lastmessage;
             echo '</td>';
         }
 		?>	    </font></b>
-			</TD>
+			</td>
 			</tr>
 			</table>
 			</center>
@@ -166,34 +173,23 @@ if( !defined('function') )
 	// This function draws the menu screen
         function draw_menu($uid='')
         {
-            echo "\n".'<!------------------begin_draw_menu------------------->'."\n";
-            echo "\n".'<!------------------UID is ' . $uid . '------------------->'."\n";
             if($uid != NULL)
             {
             	$current_user_obj = new User($uid, $GLOBALS['connection'], $GLOBALS['database']);
             }
-            echo '<table width="100%" cellspacing="0" cellpadding="0">'."\n";
-            echo '<tr>'."\n";
-            echo '<td align="left"><a href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/companylogo.gif" title="'.$GLOBALS['CONFIG']['title'].'" alt="'.$GLOBALS['CONFIG']['title'].'" border="0"></a></td>'."\n";
-            echo '<td align="right" nowrap>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/in.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/check-in.png" title="Check In" alt="Check In" border=0></a>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/search.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/search.png" title="Search" alt="Search" border=0></a>'."\n";
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/add.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/add.png" title="Add" alt="Add" border="0"></a>'."\n";
-           if($uid != NULL && $current_user_obj->isAdmin())
+            if($uid != NULL && $current_user_obj->isAdmin())
             {
-                echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/admin.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/setting.png" alt="Administration" border="0"></a>'."\n";
+                $GLOBALS['smarty']->assign('isadmin', 'yes');
             }
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/logout.php"><img src="' . $GLOBALS['CONFIG']['base_url'] . '/images/logout.png" alt="Logout" border="0"></a>'."\n";
-            echo '</td>'."\n";
-            echo '</tr>'."\n";
-            echo '</table>'."\n";
-            echo "\n".'<!------------------end_draw_menu------------------->'."\n";
+            $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
+            $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
+            $GLOBALS['smarty']->display('menu.tpl');
         }
 	function draw_header($page_title)
-    {
+        {
         if(is_dir('install'))
         {
-            echo  '<span style="color: red;">Security Notice: You should remove the "install" folder before proceeding</span>';
+            echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
         }
 
         $GLOBALS['smarty']->assign('page_title', $page_title);
@@ -291,7 +287,7 @@ if( !defined('function') )
            $secureurl= new phpsecureurl;
         	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
             {
-                echo'<img src="images/exclamation.gif"> No files found' . "\n";
+                echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . "\n";
                 return -1;
             }
 				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
@@ -316,7 +312,7 @@ if( !defined('function') )
 
                 echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
                 echo $count; 
-                echo(" found document(s)</FONT></B>\n");
+                echo(" " . msg('message_found_documents')."</FONT></B>\n");
                 echo('<BR><BR>'."\n");
                 $index = $starting_index;
                 $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $secureurl->encode($page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by) . '">';
@@ -341,7 +337,7 @@ if( !defined('function') )
                 }
                 echo($str);
 
-                echo ('<th>View</th>');
+                echo ('<th>' . msg('label_view') . '</th>');
 
                 if($sort_by == 'file_name')
                 {
@@ -349,79 +345,79 @@ if( !defined('function') )
                 }
                 else
                 { 
-                        $str = $default_url_pre . $secureurl->encode($link .'file_name') . $default_url_mid.'File Name'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'file_name') . $default_url_mid.msg('label_file_name').$default_url_post;
                 }
                 echo($str);
 
                 if($sort_by == 'description')
                 {
-                        $str = $url_pre.'Descripton'.$url_post;
+                        $str = $url_pre.msg('label_description').$url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre. $secureurl->encode($link .'description') . $default_url_mid.'Description'.$default_url_post;
+                        $str = $default_url_pre. $secureurl->encode($link .'description') . $default_url_mid.msg('label_description').$default_url_post;
                 }
                  echo($str);
 
                 if($sort_by == 'access_right')
                 {
-                        $str = '<TD class="' . $css_td_class . '"><B>Rights<B><IMG SRC="' . $sort_img . '"></TD>';
+                        $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B><IMG SRC="' . $sort_img . '"></TD>';
                 }
                 else
                 { 
-                        $str = '<TD class="' . $css_td_class . '"><B>Rights<B></TD>';
+                        $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B></TD>';
                 }
                 echo($str);
                 if($sort_by == 'created_date')
                 {
-                        $str = $url_pre.'Created Date'.$url_post;
+                        $str = $url_pre . msg('label_created_date') . $url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre . $secureurl->encode($link .'created_date') . $default_url_mid.'Created Date'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'created_date') . $default_url_mid . msg('label_created_date') . $default_url_post;
                 }
                 echo($str);
 
                 if($sort_by == 'modified_on')
                 {
-                        $str = $url_pre.'Modifed Date'.$url_post;
+                        $str = $url_pre . msg('label_modified_date') . $url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre . $secureurl->encode($link .'modified_on') . $default_url_mid.'Modified Date'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'modified_on') . $default_url_mid.msg('label_modified_date').$default_url_post;
                 }                
                 echo($str);
 
                 if($sort_by == 'author')
                 {
-                        $str = $url_pre.'Author'.$url_post;
+                        $str = $url_pre . msg('author') . $url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre . $secureurl->encode($link .'author') . $default_url_mid.'Author'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link .'author') . $default_url_mid . msg('author') . $default_url_post;
                 }
                 echo($str);
 
                 if($sort_by == 'department')
                 {
-                        $str = $url_pre.'Department'.$url_post;
+                        $str = $url_pre . msg('department') . $url_post;
                 }
                 else
                 {
-                        $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid.'Department'.$default_url_post;
+                        $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid . msg('department') . $default_url_post;
                 }
                 echo($str);
                 
-                $str = '<TD class="' . $css_td_class . '"><B>Size<B></TD>';
+                $str = '<TD class="' . $css_td_class . '"><B>' . msg('label_size') . '<B></TD>';
                 echo($str);
 
                 if($sort_by == 'status')
                 {
-                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>Avail<B> <IMG SRC="' . $sort_img . '"></TD>';
+                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B> <IMG SRC="' . $sort_img . '"></TD>';
                 }
                 else
                 {                
-                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>Avail<B></TD>';
+                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B></TD>';
                 }
                 echo($str);		
                 echo '</TR>';
@@ -520,7 +516,7 @@ if( !defined('function') )
                         $lmimetype = $GLOBALS['mimetypes']["$suffix"];
                     }
 
-                    echo '<td class="' . $css_td_class . '" NOWRAP><a class="listtable" target="_blank" href="view_file.php?submit=view&id=' . urlencode($fid).'&mimetype='.urlencode("$lmimetype") . '"><img border=0 width="45" height="45" src="' . $GLOBALS['CONFIG']['base_url'] . '/images/view.png" title="View"alt="View"></a></td>';
+                    echo '<td class="' . $css_td_class . '" NOWRAP><a class="" target="_blank" href="view_file.php?submit=view&id=' . urlencode($fid).'&mimetype='.urlencode("$lmimetype") . '"><span><span>' .msg('view'). '</span></span></a></td>';
                 }
                 else 
                 {
@@ -629,7 +625,7 @@ if( !defined('function') )
 			//if the number of listing item is less than the configed number of item per page
 			//no pagination needed
 			if($total_hit<$page_limit)  return 0;
-			echo '<center>Result Page:&nbsp;&nbsp;';
+			echo '<center>' . msg('label_page') . ':&nbsp;&nbsp;';
 
 			//calculate number of pages for the number of hits on
 			$num_pages = ceil($total_hit/($page_limit));
@@ -650,7 +646,7 @@ if( !defined('function') )
 			// Page 0: 0-14, Page 1: 15-29, Page 2: 30-44
 			if( $current_page > 0 )
 			{
-				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page-1)) . '&stoping_index=' . ($current_page*$page_limit-1) . '&page=' . ($current_page-1) . '">Prev</a>&nbsp; &nbsp;';
+				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page-1)) . '&stoping_index=' . ($current_page*$page_limit-1) . '&page=' . ($current_page-1) . '">' . msg('label_prev') . '</a>&nbsp; &nbsp;';
 			}
 
 			/* Suppose $link_limit is 20 and $current_page is 12.  Then $i=12 - 10=2.
@@ -693,7 +689,7 @@ if( !defined('function') )
 			//Generate Next link
 			if( $current_page < $num_pages-1 )
 			{
-				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page+1)) . '&stoping_index=' . (($current_page+2)*$page_limit-1) . '&page=' . ($current_page+1) . '">Next</a>&nbsp; &nbsp;';
+				echo '<a href="' . $page_url . '&sort_by=' . $sort_by . '&sort_order=' . $sort_order . '&starting_index=' . ($page_limit*($current_page+1)) . '&stoping_index=' . (($current_page+2)*$page_limit-1) . '&page=' . ($current_page+1) . '">' . msg('label_next') . '</a>&nbsp; &nbsp;';
 			}
              echo '</center>';
 		}
@@ -813,13 +809,13 @@ if( !defined('function') )
 ?>
 		<form name="browser_sort">
 			<table name="browser" border="0" cellspacing="1">
-			<tr><td>Browse by:</td>
+			<tr><td><?php echo msg('label_browse_by');?></td>
 				<td NOWRAP ROWSPAN="0">
 					<select name='category' onChange='loadItem(this)' width='0' size='1'>
-						<option id='0' selected>Select one</option>
-						<option id='1' value='author'>Author</option>
-						<option id='2' value='department'>Department</option>
-						<option id='3' value='category'>File Category</option>
+						<option id='0' selected><?php echo msg('label_select_one');?></option>
+						<option id='1' value='author'><?php echo msg('author');?></option>
+						<option id='2' value='department'><?php echo msg('label_department');?></option>
+						<option id='3' value='category'><?php echo msg('label_file_category');?></option>
 <?php
 	udf_functions_java_options(4);
 ?>
@@ -827,12 +823,12 @@ if( !defined('function') )
 				</td>
 				<td>
 					<select name='category_item' onChange='loadOrder(this)'>
-						<option id='0' selected>Empty</option>
+						<option id='0' selected><?php echo msg('label_empty');?></option>
 					</select>	
 				</td>
 				<td>
 					<select name='category_item_order' onChange='load(this)'>
-						<option id='0' selected>Empty</option>
+						<option id='0' selected><?php echo msg('label_empty');?></option>
 					</select>	
 				</td>
 			</tr>
@@ -879,8 +875,8 @@ if( !defined('function') )
 		$userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
 		if(!$userperm_obj->user_obj->isRoot() && $userperm_obj->getAuthority($file_id) < $permittable_right)
 		{
-			echo 'Error: OpenDocMan is unable to find the requested file.' . "\n";
-			echo '       Please email <A href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">Document Repository</A> for further assistance.';
+			echo msg('error').': '.msg('message_unable_to_find_file') . "\n";
+			echo '       ' . msg('message_please_email') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">' . msg('area_admin') . '</a>';
 			exit();
 		}
 	}
@@ -905,7 +901,7 @@ if( !defined('function') )
 	function getAllUsers()
 	{
 		$lquery = "SELECT id, last_name, first_name, username FROM {$GLOBALS['CONFIG']['db_prefix']}user";
-		$lresult = mysql_query($lquery) or die('Error in querying: ' . $lquery . mysql_error());
+		$lresult = mysql_query($lquery) or die(msg('error'). ':'. $lquery . mysql_error());
 		$llen = mysql_num_rows($lresult);
 		$return_array = array();
 		for($li = 0;$li<$llen; $li++)
@@ -960,8 +956,8 @@ if( !defined('function') )
         }
         function valid_username($username)
         {
-            $unrx = '^[a-zA-Z0-9]'; // allow only letters and numbers. Limit 5 - 25 characters.
-            if(ereg($unrx, $username))
+            $unrx = '/^[a-zA-Z0-9]/'; // allow only letters and numbers. Limit 5 - 25 characters.
+            if(preg_match($unrx, $username))
                 return true;
             else
                 return false;
@@ -1007,5 +1003,19 @@ function sanitizeme($input) {
         return false;
     }
 }
-
+/**
+ * Translate a string using the global lang set
+ * @param string $s
+ * @return string
+ */
+function msg($s) {
+    if (isset($GLOBALS['lang'][$s])) {
+        return $GLOBALS['lang'][$s];
+    } else {
+        //error_log("l10n error:LANG:" .
+        //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
+    
+        return $s;
+    }
+}
 ?>

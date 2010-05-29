@@ -22,7 +22,7 @@ echo 'Fixing any broken revision numbers...<br />';
 $sql = "SELECT id, revision from {$GLOBALS['CONFIG']['db_prefix']}log WHERE revision LIKE '%(%'";
 $result = mysql_query($sql);
 while(list($id,$revision) = mysql_fetch_row($result)) {
-    $rev_array = split("-", $revision);
+    $rev_array = explode("-", $revision);
     $rev_left = ltrim($rev_array[0], "(");
     $rev_right = rtrim($rev_array[1], ")");
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision=" . intval($rev_left-$rev_right) . " WHERE id='$id' AND revision='$revision'";

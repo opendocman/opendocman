@@ -1,8 +1,8 @@
 <?php
 /*
 file_ops.php - admin file operations
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2009 Stephen Lawrence
+Copyright (C) 2002-2004 Stephen Lawrence Jr, Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -65,9 +65,9 @@ if(@$_GET['submit'] == 'view_checkedout')
 {
 	echo "\n" . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">'; 
 	echo "\n" . '<input name="submit" type="hidden" value="Clear Status">';
-	draw_header('Checked-out File Listing');
+	draw_header(msg('label_checked_out_files'));
 	draw_menu($_SESSION['uid']);
-	draw_status_bar('Checked-out File Listing', @$_REQUEST['last_message']);
+	draw_status_bar(msg('label_checked_out_files'), @$_REQUEST['last_message']);
 	$lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status>0";
 	$lresult = mysql_query($lquery) or die("Error in querying: $lquery" . mysql_error());
 	$llen = mysql_num_rows($lresult);
@@ -80,7 +80,7 @@ if(@$_GET['submit'] == 'view_checkedout')
 	$list_status = list_files($sorted_id_array, $userpermission, $lpage_url, $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], true);
 	if($list_status != -1 )
 	{
-		echo "\n" . '<BR><center><input type="submit" name="submit" value="Clear Status"></center>';
+		echo "\n" . '<BR><center><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div></center><br />';
 		echo "\n" . '</form>';
 	}
 	list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $lpage_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);

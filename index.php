@@ -22,14 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // includes
 session_start();
 require ('config.php');
-include ('includes/filtreatment_class.php');
+
 
 if (!isset($_REQUEST['last_message'])) {
     $_REQUEST['last_message'] = '';
-}
-if (isset($_REQUEST['redirection'])) {
-    $filt = new Filtreatment;
-    $_REQUEST['redirection'] = $filt->doTreatment($_REQUEST['redirection'], 'XSS');
 }
 
 if(isset($_POST['login']))
@@ -42,7 +38,7 @@ if(isset($_POST['login']))
 
     if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
     {
-        echo "<font color=red>There is a problem with your dataDir. Check to make sure it exists and is writeable</font>";
+        echo "<font color=red>" . msg('message_datadir_problem'). "</font>";
         exit;
     }
 
@@ -52,17 +48,23 @@ if(isset($_POST['login']))
     // Check for NIS/YP data
     if ( $GLOBALS['CONFIG']['try_nis'] == "On")
     {
-        $pwent = @split(":",`ypmatch $frmuser passwd`);
+        $pwent = @explode(":",`ypmatch $frmuser passwd`);
         if(isset($pwent))
             $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
     }
 
-    // check login and password
+    // check login and md5()
     // connect and execute query
-    $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = password('$frmpass')";
+    $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = md5('$frmpass')";
     $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+    if(mysql_num_rows($result) != 1)
+    {
+        // Check old password() method
+        $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = password('$frmpass')";
+        $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+    }
 
-    // if MySQL login fails, check NIS/YP data
+    // check NIS/YP data
     if ( $GLOBALS['CONFIG']['try_nis'] == "On")
     {
         if (mysql_num_rows($result) == 0)
@@ -91,13 +93,12 @@ if(isset($_POST['login']))
         // close connection
     }
     else
-        // login/pass check failed
     {
-        mysql_free_result ($result);
-        // redirect to error page
-        header('Location: error.php?ec=0');
+        // Login Failed
+            mysql_free_result ($result);
+            // redirect to error page
+            header('Location: error.php?ec=0');
     }
-
 }
 elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
 {
@@ -110,7 +111,7 @@ elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
         }
         else
         {
-                list ($userid, $id2, $id3) = split ('[-]', $_COOKIE['AuthUser']);
+                list ($userid, $id2, $id3) = explode ('[-]', $_COOKIE['AuthUser']);
                 //// query to get id num from username
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username='$userid'";
                 $result = mysql_query($query) or die ('Error in query: '.$query . mysql_error());
@@ -139,7 +140,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
     if(is_dir('install'))
     {
-        $install_msg = '<span style="color: red;">Security Notice: If you already installed/updated then you should remove the "install" folder before proceeding</span>';
+        $install_msg = '<span style="color: red;">' . msg('install_folder') . '</span>';
     }
     else
     {
@@ -178,29 +179,37 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 		if(isset($_REQUEST['redirection']))
 			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
 		<tr>
-        <td>Username</td>
+        <td><?php echo msg('username'); ?></td>
         <td><input type="Text" name="frmuser" size="15"></td>
         </tr>
         <tr>
-        <td>Password</td>
+        <td><?php echo msg('password'); ?></td>
         <td><input type="password" name="frmpass" size="15">
         <?php
         if($GLOBALS['CONFIG']['allow_password_reset'] == 'On')
         {
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php">Forgot your password?</a>';
+            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php">' . msg('forgotpassword') . '</a>';
         }
 ?>
         </td>
         </tr>
         <tr>
-        <td colspan="2" align="CENTER"><input type="Submit" name="login" value="Enter"></td>
+        <td colspan="2" align="center"><input type="submit" name="login" value="<?php echo msg('enter');?>"></td>
         </tr>
+                </tr>
+<?php
+if(isset($GLOBALS['CONFIG']['demo']) && $GLOBALS['CONFIG']['demo'] == 'true')
+{
+        echo 'Regular User: <br />Username:demo Password:demo<br />';
+        echo 'Admin User: <br />Username:admin Password:admin<br />';
+}
+?>
         <?php
         if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         {
 ?>
         <tr>
-            <td colspan="2"><a href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/signup.php">Sign-up for an account</a>
+            <td colspan="2"><a href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/signup.php"><?php echo msg('signup');?></a>
         </tr>
 <?php
 }
@@ -211,9 +220,9 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         </center>
         </td>
         <td valign="top">
-        Welcome to OpenDocMan.
+        <?php echo msg('welcome'); ?>
         <p>
-        Log in to begin using the system's powerful storage, publishing and revision control features.
+        <?php echo msg('welcome2'); ?>
         </td>
         <td width="20%">
         &nbsp;

@@ -24,7 +24,7 @@ include_once('config.php');
 
 if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'On')
 {
-    echo 'Sorry, your are not allowed to do that';
+    echo msg('message_sorry_not_allowed');
     exit;
 }
 
@@ -45,7 +45,7 @@ if (isset($_POST['password']) && strlen($_POST['password']) && isset($_POST['use
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = PASSWORD('" . trim($_POST['password']) . "'), pw_reset_code = NULL WHERE id = " . $user_id . " AND username = '" . $username . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
-    $redirect = 'index.php?last_message=' . urlencode('Your password has been changed.  Please log in to view documents.');
+    $redirect = 'index.php?last_message=' . urlencode(msg('message_your_password_has_been_changed'));
     header("Location: $redirect");
     exit;
 }
@@ -61,7 +61,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
 
     if (!mysql_num_rows($result)) 
     {
-        $redirect = 'forgot_password.php?last_message=' . urlencode('The code you are trying to use to reset your password is no longer valid.  Please use this form to reset your password.');
+        $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_the_code_you_are_using'));
         header("Location: $redirect");
         exit;
     }
@@ -86,7 +86,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
             echo "<p class=\"hilitename\">" . $_REQUEST['last_message'] . ".</p>\n";
         ?>
 
-            <p>Set your new password using the form below.</p>
+            <p><?php echo msg('message_set_your_new_password')?></p>
 
             <form action="forgot_password.php" method="post">
             <input type="hidden" name="action" value="forgot">
@@ -95,7 +95,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
             <input type="hidden" name="code" value="<?php echo $code; ?>">
             <table>
             <tr>
-            <th>New Password:</th>
+            <th><?php echo msg('label_new_password')?>:</th>
             <td><input type="password" name="password" size="12" maxlength="50"></td>
             </tr>
             <tr>
@@ -133,7 +133,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
     // send them back if we didn't find the username
     if (mysql_num_rows($result) == 0) 
     {
-        $redirect = 'forgot_password.php?last_message=' . urlencode('The username you entered was not found in our system.  Contact us if you have forgotten your username.');
+        $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_the_username_you_entered'));
         header("Location: $redirect");
         exit;
     }
@@ -164,7 +164,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
         $resetLink = $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php?username=' . $username . '&code=' . $reset_code;
 
         // send the email
-        mail($email, "Reset Password", "Someone has requested a password reset.  If you wish to reset your password please follow the link below.  If you do not wish to reset your password then simply do nothing and disregard this email.
+        mail($email, msg('area_reset_password'), msg('email_someone_has_requested_password') ."
 
                 $resetLink
 
@@ -172,7 +172,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
                 Administration
                 ", "From: " . $GLOBALS['CONFIG']['site_mail']);
 
-        $redirect = 'forgot_password.php?last_message=' . urlencode('An email has been sent to the email address on file with a link that must be followed in order to reset the password.');
+        $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_an_email_has_been_sent'));
         header("Location: $redirect");
         exit;
     }
@@ -198,14 +198,13 @@ else
         echo "<p>" . $_REQUEST['last_message'] . ".</p>\n";
     ?>
 
-        <p>This site has a high level of security and we cannot retrieve your password for you.  You can use this form to reset your password.  Enter your username and we will send an email to the email address on file with a link that you must follow to reset your password.  At that point you may set it to anything you wish.</p>
+        <p><?php echo msg('message_this_site_has_high_security')?></p>
 
-        <p>Please contact us if you have forgotten your username.</p>
 
         <form action="forgot_password.php" method="post">
         <table border="0">
         <tr>
-        <th>Username:</th>
+        <th><?php echo msg('username')?>    :</th>
         <td><input type="text" name="username" size="25" maxlength="25"></td>
         </tr>
         <tr>
