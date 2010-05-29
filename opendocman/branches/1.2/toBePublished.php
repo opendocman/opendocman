@@ -96,9 +96,17 @@ if(!isset($_REQUEST['submit']))
 		</TR>
 		<TR>
 		<TD>
-		<CENTER>
-		<INPUT type="button" name="submit" value="Authorize" onClick="checkedBoxesNumber(); authcomment()">
-		<INPUT type="button" name="submit" value="Reject" onClick="checkedBoxesNumber(); rejectcomment()">
+                    <CENTER>
+                        <div class="buttons">
+		<button class="positive" type="button" name="submit" value="Authorize" onClick="checkedBoxesNumber(); authcomment()"><?php echo msg('button_authorize')?></button>
+		<button class="negative" type="button" name="submit" value="Reject" onClick="checkedBoxesNumber(); rejectcomment()"><?php echo msg('button_reject')?></button>
+                        </div>
+                <!--
+                    <div class="buttons">
+                     <button class="positive" type="button" name="submit" value="Authorize" onClick="checkedBoxesNumber(); authcomment()"><img src="images/check.png" alt="authorize" /><?php echo msg('button_authorize')?></button>
+                    <button class="negative" type="submit" name="submit" value="Reject" onClick="checkedBoxesNumber(); rejectcomment()"><img src="images/cross.png" alt="reject" /><?php echo msg('button_reject')?></button>
+                </div>
+                -->
 		<INPUT type="hidden" name="subject" value="Comments regarding the review of the document">
 		<INPUT type="hidden" name="comments" value="">
 		<INPUT type="hidden" name="to" value="Author(s)">
@@ -218,7 +226,6 @@ if(!isset($_REQUEST['submit']))
 }
 if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 {
-
 	$idfield=explode(' ',trim(@$_REQUEST['idfield']));
 	$number=explode(' ',trim(@$_REQUEST['number']));
 	$boxes = array(); //init
@@ -233,8 +240,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 	}
 
 	$type = substr(@$_REQUEST['mode'],9,1);
-	$mode= ereg_replace(" [[:digit:]]", "", @$_REQUEST['mode']);
-
+	$mode= preg_replace("/ [0-9]/", "", @$_REQUEST['mode']);
 	if($mode == 'reviewer')
 		$access_mode = 'enabled';
 	else
@@ -255,7 +261,7 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 
 	?>
 
-		<HEAD><TITLE>Notes to Author(s)</TITLE>
+		<HEAD><TITLE><?php echo msg('email_note_to_authors')?></TITLE>
 		<base target="Parent"></HEAD>
 		<FORM name="author_note_form"
 <?php
@@ -270,10 +276,10 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 ?>
 		<TABLE name="author_note_table">
 		<TR>
-		<TD>To:</TD>
+		<TD><?php echo msg('email_to')?>:</TD>
 		<TD><INPUT type="text" name="to" value="Author(s)" size='15' <?php echo $access_mode; ?>></TD>
 		</TR><TR>
-		<TD>Subject</TD>
+		<TD><?php echo msg('email_subject')?></TD>
 		<TD><INPUT type="text" name="subject" size=50 value="" size='30'<?php echo $access_mode; ?>></TD></TR>
 		</TABLE>
 		<BR>&nbsp&nbsp<TEXTAREA name="comments" cols=45 rows=7 size='220'<?php echo $access_mode; ?>></TEXTAREA>
@@ -288,11 +294,13 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 		}
 	if($mode == 'reviewer')
 	{
+
+
 		?>
 			<TABLE border="0">
-			<TR><TD>Email all users</TD><TD><INPUT type="checkbox" name="send_to_all" onchange="send_to_dept.disabled = !send_to_dept.disabled; author_note_form.elements['send_to_users[]'].disabled = !author_note_form.elements['send_to_users[]'].disabled;"></TD></TR>
-			<TR><TD>Email whole department</TD><TD><INPUT type="checkbox" name="send_to_dept" onchange="check(this.form.elements['send_to_users[]'], this, send_to_all);"></TD></TR>
-			<TR><TD valign="top">Email these users:</TD><TD><SELECT name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
+			<TR><TD><?php echo msg('email_email_all_users')?></TD><TD><INPUT type="checkbox" name="send_to_all" onchange="send_to_dept.disabled = !send_to_dept.disabled; author_note_form.elements['send_to_users[]'].disabled = !author_note_form.elements['send_to_users[]'].disabled;"></TD></TR>
+			<TR><TD><?php echo msg('email_email_whole_department')?></TD><TD><INPUT type="checkbox" name="send_to_dept" onchange="check(this.form.elements['send_to_users[]'], this, send_to_all);"></TD></TR>
+			<TR><TD valign="top"><?php echo msg('email_email_these_users')?>:</TD><TD><SELECT name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
 			<?php
 			$query = "SELECT id, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
@@ -304,8 +312,10 @@ if(isset($_REQUEST['submit']) && $_REQUEST['submit'] =='comments')
 		echo "\n";
 		?>
 			</SELECT></TD></TR></TABLE>
-			<CENTER><BR><INPUT type="Submit" name="submit" value="<?php echo $submit_value; ?>"  onClick='updateInfo();'>
-			<INPUT type="button" name="submit" value="Cancel" onClick="fastclose();"></CENTER>
+			<CENTER><BR>
+                            <input type="submit" name="submit" value="<?php echo $submit_value; ?>"  onClick='updateInfo();'  />
+                            <INPUT type="button" name="submit" value="Cancel" onClick="fastclose();">
+                            </CENTER>
 			<?php
 	}
 	?>
@@ -363,10 +373,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 	$full_name = $get_full_name[0].' '.$get_full_name[1];
 	$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
 	$mail_headers = "From: $mail_from"; 
-	$mail_subject='Review status for document ';
-	$mail_greeting="Dear author:\n\r\tI would like to inform you that ";
-	$mail_body = 'was declined for publishing at '.$time.' on '.$date.' for the following reason(s):'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
-	$mail_salute="\n\r\n\rSincerely,\n\r$full_name";
+	$mail_subject=msg('email_subject_review_status');
+	$mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
+	$mail_body = msg('email_was_declined_for_publishing_at') . ' '.$time.' - '.$date.' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
+	$mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
 	for($i = 0; $i<$_POST['num_checkboxes']; $i++)
 	{
 		if(isset($_POST["checkbox$i"]))
@@ -378,56 +388,36 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 			mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);	
 			$file_obj->Publishable(-1);
 			$file_obj->setReviewerComments($reviewer_comments);
+            // Set up rejected email message to sent out
+            $mail_subject=$file_obj->getName().' ' . msg('email_was_rejected_from_repository');
+            $mail_body=msg('email_a_new_file_has_been_rejected')."\n\n";
+            $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . "\n\n";
+            $mail_body.=msg('label_status').': ' .msg('message_rejected'). "\n\n";
+            $mail_body.=msg('date'). ': ' .$date. "\n\n";
+            $mail_body.=msg('time'). ': ' .$time. "\n\n";
+            $mail_body.=msg('label_reviewer'). ': ' .$full_name. "\n\n";
+            $mail_body.=msg('email_thank_you'). ','. "\n\n";
+            $mail_body.=msg('email_automated_document_messenger'). "\n\n";
+            $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
 
             if(isset($_POST['send_to_all']))
             {
-                $mail_subject=$file_obj->getName().' was rejected from repository';
-                $mail_body='A new file has been rejected.'."\n\n";
-                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-                $mail_body.='Status: Rejected'. "\n\n";
-                $mail_body.='Date: ' . $date . "\n\n";
-                $mail_body.='Time: ' . $time . "\n\n";
-                $mail_body.='Reviewer: ' . $full_name . "\n\n";
-                $mail_body.='Thank you,'. "\n\n";
-                $mail_body.='Automated Document Messenger'. "\n\n";
-                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                 email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
             }
 
             if(isset($_POST['send_to_dept']))
             {
-                $mail_subject=$file_obj->getName().' rejected from repository';
-                $mail_body='A new file has been rejected.'."\n\n";
-                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-                $mail_body.='Status: Rejected'. "\n\n";
-                $mail_body.='Date: ' . $date . "\n\n";
-                $mail_body.='Time: ' . $time . "\n\n";
-                $mail_body.='Reviewer: ' . $full_name . "\n\n";
-                $mail_body.='Thank you,'. "\n\n";
-                $mail_body.='Automated Document Messenger'. "\n\n";
-                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                 email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
             }
             if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
             {
-                $mail_subject=$file_obj->getName().' rejected from repository';
-
-                $mail_body='A new file has been rejected.'."\n\n";
-                $mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-                $mail_body.='Status: Rejected'. "\n\n";
-                $mail_body.='Date: ' . $date . "\n\n";
-                $mail_body.='Time: ' . $time . "\n\n";
-                $mail_body.='Reviewer: ' . $full_name . "\n\n";
-                $mail_body.='Thank you,'. "\n\n";
-                $mail_body.='Automated Document Messenger'. "\n\n";
-                $mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
                 email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
             }
 
 		}
 	}
 	$flag=1;
-	header("Location:$_SERVER[PHP_SELF]?last_message=File rejection completed successfully");	
+	header("Location:$_SERVER[PHP_SELF]?last_message=" .msg('message_file_rejected'));
 
 
 }
@@ -451,72 +441,47 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 			$file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
 			$user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
 			$mail_to = $user_obj->getEmailAddress();
+                        // Build email for author notification
+			$mail_body1=msg('email_your_file_has_been_authorized'). "\n\n";
+			$mail_body1.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
+			$mail_body1.=msg('label_status'). ': ' .msg('message_authorized'). "\n\n";
+			$mail_body1.=msg('date'). ': ' . $date . "\n\n";
+			$mail_body1.=msg('time'). ': ' . $time . "\n\n";
+			$mail_body1.=msg('label_reviewer'). ': ' . $full_name . "\n\n";
+			$mail_body1.=msg('email_thank_you'). ','. "\n\n";
+			$mail_body1.=msg('email_automated_document_messenger'). "\n\n";
+			$mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
 
-			$mail_body='Your file has been authorized for publication.'."\n\n";
-			$mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-			$mail_body.='Status: Authorized'. "\n\n";
-			$mail_body.='Date: ' . $date . "\n\n";
-			$mail_body.='Time: ' . $time . "\n\n";
-			$mail_body.='Reviewer: ' . $full_name . "\n\n";
-			$mail_body.='Thank you,'. "\n\n";
-			$mail_body.='Automated Document Messenger'. "\n\n";
-			$mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
-			mail($mail_to, $mail_subject. $file_obj->getName(), $mail_body, $mail_headers);
+			mail($mail_to, $mail_subject. $file_obj->getName(), $mail_body1, $mail_headers);
 			$file_obj->Publishable(1);
 			$file_obj->setReviewerComments($reviewer_comments);
+                        
+                        // Build email for general notices
+                        $mail_subject=$file_obj->getName().' ' .msg('email_added_to_repository');
+			$mail_body2=msg('email_a_new_file_has_been_added'). "\n\n";
+			$mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
+			$mail_body2.=msg('label_status'). ': New'. "\n\n";
+			$mail_body2.=msg('date'). ': ' . $date . "\n\n";
+			$mail_body2.=msg('time'). ': ' . $time . "\n\n";
+			$mail_body2.=msg('label_reviewer'). ': ' . $full_name . "\n\n";
+			$mail_body2.=msg('email_thank_you'). ','. "\n\n";
+			$mail_body2.=msg('email_automated_document_messenger'). "\n\n";
+			$mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
 
 			if(isset($_POST['send_to_all']))
 			{
-				$mail_subject=$file_obj->getName().' added to repository';
-
-				$mail_body='A new file has been added.'."\n\n";
-				$mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-				$mail_body.='Status: New'. "\n\n";
-				$mail_body.='Date: ' . $date . "\n\n";
-				$mail_body.='Time: ' . $time . "\n\n";
-				$mail_body.='Reviewer: ' . $full_name . "\n\n";
-				$mail_body.='Thank you,'. "\n\n";
-				$mail_body.='Automated Document Messenger'. "\n\n";
-				$mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
-				email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
+                            email_all($mail_from,$mail_subject,$mail_body2,$mail_headers);
 			}
-
 			if(isset($_POST['send_to_dept']))
 			{
-				$mail_subject=$file_obj->getName().' added to repository';
-
-				$mail_body='A new file has been added.'."\n\n";
-				$mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-				$mail_body.='Status: New'. "\n\n";
-				$mail_body.='Date: ' . $date . "\n\n";
-				$mail_body.='Time: ' . $time . "\n\n";
-				$mail_body.='Reviewer: ' . $full_name . "\n\n";
-				$mail_body.='Thank you,'. "\n\n";
-				$mail_body.='Automated Document Messenger'. "\n\n";
-				$mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
-				email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
+                            email_dept($mail_from, $dept_id,$mail_subject ,$mail_body2,$mail_headers);
 			}
 			if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
 			{
-				$mail_subject=$file_obj->getName().' added to repository';
-
-				$mail_body='A new file has been added.'."\n\n";
-				$mail_body.='Filename:  ' . $file_obj->getName() . "\n\n";
-				$mail_body.='Status: New'. "\n\n";
-				$mail_body.='Date: ' . $date . "\n\n";
-				$mail_body.='Time: ' . $time . "\n\n";
-				$mail_body.='Reviewer: ' . $full_name . "\n\n";
-				$mail_body.='Thank you,'. "\n\n";
-				$mail_body.='Automated Document Messenger'. "\n\n";
-				$mail_body.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
-				email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
+                            email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
 			}
 		}
-	header('Location:' . $_SERVER['PHP_SELF'] . '?last_message=File authorization completed successfully');
+	header('Location:' . $_SERVER['PHP_SELF'] . '?last_message=' .msg('message_file_authorized'));
 	?>
 		<BODY onload="closeifdown();"></BODY>
 <?php	

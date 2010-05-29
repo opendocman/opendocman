@@ -25,16 +25,16 @@ if (!isset ($_SESSION['uid']))
 	exit;
 }
 include('config.php');
-draw_header('Personal Profile');
+draw_header(msg('area_personal_profile'));
 draw_menu($_SESSION['uid']);
-@draw_status_bar('User Information', $_REQUEST['last_message']);
+@draw_status_bar(msg('area_personal_profile'), $_REQUEST['last_message']);
 ?>
 
 <html>
 <br><br>
 <INPUT type="hidden" name="callee" value="<?php echo $_SERVER['PHP_SELF']; ?>">
 <table name="list" align="center", border="1">
-<tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF']; ?>">Change Personal Info</a><center></td></tr>
+<tr><td><center><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo msg('label_update')?>  <?php echo msg('area_personal_profile')?></a><center></td></tr>
 </table>
 </center>
 <?php

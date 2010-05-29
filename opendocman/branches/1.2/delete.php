@@ -1,7 +1,8 @@
 <?php
 /*
 delete.php - delete a file from the respository and the db
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2010  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -68,7 +69,7 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
 	}
 	// delete from directory
 	// clean up and back to main page
-	$last_message = urlencode('Document has been archived');
+	$last_message = urlencode(msg('message_document_has_been_archived'));
 	header('Location: out.php?last_message=' . $last_message);
 }
 elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
@@ -126,7 +127,7 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
 	}
 	// delete from directory
 	// clean up and back to main page
-	$last_message = urlencode('Document successfully deleted');
+	$last_message = urlencode(msg('message_document_successfully_deleted'));
 	header('Location: delete.php?mode=view_del_archive&last_message=' . $last_message);
 }
 elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
@@ -164,8 +165,8 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 		$_REQUEST['page'] = 0;
 	}
 	draw_menu($_SESSION['uid']);
-	draw_header('Rejected Files');
-	@draw_status_bar('Del/Undel', $_REQUEST['last_message']);
+	draw_header(msg('area_deleted_files'));
+	@draw_status_bar(msg('label_delete_undelete'), $_REQUEST['last_message']);
 	$page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
 
 	$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -179,7 +180,7 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 	list_nav_generator(sizeof($sorted_array_id), $GLOBALS['CONFIG']['page_limit'], '',$page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
 	if( isset($list_status) && $list_status != -1)
 	{
-		echo '</TD></TR><TR><TD><CENTER><INPUT type="SUBMIT" name="mode" value="Undelete"><INPUT type="submit" name="mode" value="Delete file(s)">';
+		echo '</TD></TR><TR><TD><CENTER><div class="buttons"><button class="positive" type="SUBMIT" name="mode" value="Undelete">' . msg('button_undelete'). '</button><button class="negative" type="submit" name="mode" value="Delete file(s)">' .msg('button_delete_files') . ' </button></div>';
 		echo '</TABLE>';
 		echo '<input type="hidden" name="caller" value="' . $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'] . '">';
 	}
@@ -211,6 +212,6 @@ elseif(isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'Undelete')
 						fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
 				}
 		}
-		header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('Document has been unarchived'));
+		header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('message_document_has_been_archived'));
 }
 ?>

@@ -2,6 +2,7 @@
 /*
 rejects.php - Show rejected files
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -56,8 +57,8 @@ $with_caption = false;
 if(!isset($_POST['submit']))
 {
         draw_menu($_SESSION['uid']);
-        draw_header('Rejected Files');
-        @draw_status_bar('Rejected Document Listing', $_REQUEST['last_message']);
+        draw_header(msg('message_documents_rejected'));
+        @draw_status_bar(msg('message_documents_rejected'), $_REQUEST['last_message']);
         $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
         $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -73,7 +74,7 @@ if(!isset($_POST['submit']))
 				 echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' onsubmit="closeWindow(1250);" method="POST">';
 			 else
 				 echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1000);" method="POST">';?>
-                <TABLE border="1"><TR><TD>
+                <TABLE border="0"><TR><TD>
 
 <?php
 
@@ -82,14 +83,15 @@ if(!isset($_POST['submit']))
 ?>
                 </TD></TR>
 				<?php if($list_status != -1){?>
-				<TR><TD><CENTER><INPUT type="SUBMIT" name="submit" value="Re-Submit For Review"><INPUT type="submit" name="submit" value="Delete file(s)">
+                                <input type="hidden" name="action" value="resubmit" />
+				<TR><TD><CENTER><INPUT type="submit" name="submit" value="<?php echo msg('button_resubmit_for_review'); ?>"><INPUT type="submit" name="submit" value="<?php echo msg('button_delete');?>">
                 <?php } ?>
 				</TABLE></FORM>
 
 <?php
         draw_footer();
 }
-elseif($_POST['submit'] == 'Re-Submit For Review')
+elseif($_POST['action'] == 'resubmit')
 {
         for($i = 0; $i < $_POST['num_checkboxes'];$i++)
                 if(isset($_POST["checkbox$i"]))
@@ -101,9 +103,9 @@ elseif($_POST['submit'] == 'Re-Submit For Review')
                         //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
                         $file_obj->Publishable(0);
                 }
-        header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message=File authorization completed successfully');
+        header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
 }
-elseif($_POST['submit']=='Delete file(s)')
+elseif($_POST['action']==msg('button_delete'))
 {
         $url = 'delete.php?mode=tmpdel&';
         $id = 0;

@@ -1,8 +1,9 @@
 <?php
 /*
 error.php - displays error messages based on error code $ec
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-
+Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
+ *
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -37,53 +38,53 @@ switch ($_REQUEST['ec'])
 {
 // login failure
 case 0:
-$message = 'There was an error logging you in. <a href="'.$GLOBALS['CONFIG']['base_url'].'">Please try again.</a>';
+$message = msg('message_there_was_an_error_loggin_you_in') . ' <a href="'.$GLOBALS['CONFIG']['base_url'].'">' .msg('login') . '</a>';
 break;
 
 // session problem
 case 1:
-$message = 'Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
+$message = msg('message_session_error') . '<a href='.$GLOBALS['CONFIG']['base_url'].'>' . msg('login') . '</a>';
 break;
 
 // malformed variable/failed query
 case 2:
-$message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
+$message = msg('message_error_performing_action');
 break;
 
 // User already exists
 case 3:
-$message = 'Record already exists. Try again with a different value.';
+$message = msg('message_record_exists');
 break;
 
 // User not admin
 case 4:
-$message = 'You are not an administrator. <a href=out.php>Back</a>';
+$message = msg('message_you_are_not_administrator');
 break;
 
 // Category exists
 case 5:
-$message = 'Category '.$_REQUEST['category'].' already exists! <a href=out.php>Back</a>';
+$message = msg('message_record_exists').':'.$_REQUEST['category'].' <a href=out.php>Back</a>';
 break;
 
 // Input Field Blank
 case 6:
-$message = 'You did not enter a value! <a href=out.php>Back</a>';
+$message = msg('message_you_did_not_enter_value') .' <a href=out.php>Back</a>';
 break;
 
 
 // file not uploaded
 case 11:
-$message = 'Please upload a valid document.';
+$message = msg('message_please_upload_valid_doc');
 break;
 
 // rights not assigned
 case 12:
-$message = 'You must assign view/modify rights to at least one user.';
+$message = msg('message_you_must_assign_rights');
 break;
 
 // illegal file type
 case 13:
-$message = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types or add the missing MIMETYPE to config.php->allowedFileTypes:<br><ul align=left>';
+$message = msg('message_that_filetype_not_supported') . ' config.php->allowedFileTypes:<br><ul align=left>';
 //echo "_File array is " . array_values($_FILES['file']);
 	foreach($GLOBALS['allowedFileTypes'] as $thistype)
 	{
@@ -93,55 +94,55 @@ $message .= '</ul>';
 break;
 //non-unique account
 case 14:
-$message = 'Non-unique account.  Please contact '.$GLOBALS['CONFIG']['site_mail'].' for help.';
+$message = msg('message_non_unique_account');
 break;
 //check-in wrong filename
 case 15:
-$message = 'Error: wrong file!  Please check in the right file.';
+$message = msg('message_wrong_file_checkin');
 break;
 //non unique id in filename
 case 16: 
-$message = 'Non-unique key field in database.';
+$message = msg('message_non_unique_key');
 break;
 // file cannot be checked-in
 case 17: 
-$message = 'This file cannot be checked in';
+$message = msg('message_this_file_cannot_be_checked_in');
 break;
 //non-complete upload
 case 18:
-$message = 'This file cannot be uploaded propertly';
+$message = msg('message_this_file_cannot_be_uploaded');
 break;
 //no account in ODM
 case 19:
-$message = 'You do not currently have an account. Please contact <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a> to request one.';
+$message = msg('message_you_do_not_have_an_account') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a>';
 break;
 // cannot do this on revision
 case 20:
-$message = 'This operation cannot be done to a revision of a file';
+$message = msg('message_this_operation_cannot_be_done_rev');
 break;
 // operation cannot be done on file
 case 21:
-$message = 'This operation cannot be done on this file';
+$message = msg('message_this_operation_cannot_be_done_file');
 break;
 // bad root_username setting
 case 22:
-$message = 'Unable to determine the root username.  Please check your config file';
+$message = msg('message_unable_to_determine_root');
 break;
 // Folder not writable
 case 23:
-$message ='Folder Error. Check Last Message in status bar for details'; 
+$message = msg('message_folder_error_check');
 break;
 // Non root user trying to access root operations
 case 24:
-$message ='This page requires root clearance level.';
+$message =msg('message_this_page_requires_root');
 break;
 // File too big
 case 25:
-$message ='The file is too large. Max size is ' . $GLOBALS['CONFIG']['max_filesize'];
+$message =msg('message_the_file_is_too_large') .' ' . $GLOBALS['CONFIG']['max_filesize'];
 break;
 //default
 default:
-$message = 'There was an error performing the requested action. Please <a href='.$GLOBALS['CONFIG']['base_url'].'>log in</a> again.';
+$message = msg('message_there_was_an_error_performing_the_action') .' ' . msg('please') . ' <a href='.$GLOBALS['CONFIG']['base_url'].'>' . msg('login') . '</a>';
 break;
 }
 echo('<img src="images/exclamation_red.gif"> <font size="4" color="red">' . $message . '</font>');

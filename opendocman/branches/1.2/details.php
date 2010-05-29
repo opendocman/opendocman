@@ -35,18 +35,18 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 	exit;
 }
 
-draw_header('File Detail');
+draw_header(msg('area_file_details'));
 draw_menu($_SESSION['uid']);
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
-	list($_REQUEST['id'], $lrevision_id) = split('_' , $_REQUEST['id']);
-	@draw_status_bar('Rev.' . $lrevision_id . ' - Details',$_REQUEST['last_message']);
+	list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
+	@draw_status_bar(msg('area_file_details') . ' ' . msg('revision'). ' #' . $lrevision_id,$_REQUEST['last_message']);
         $filesize = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . '_' . $lrevision_id . '.dat'); 
 }
 else
 {
-	@draw_status_bar('File Details',$_REQUEST['last_message']);
+	@draw_status_bar(msg('area_file_details'),$_REQUEST['last_message']);
 }
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
@@ -74,11 +74,11 @@ $reviewer = $filedata->getReviewerName();
 // corrections
 if ($description == '') 
 { 
-	$description = 'No description available'; 
+	$description = msg('message_no_description_available');
 }
 if ($comment == '') 
 { 
-	$comment = 'No author comments available'; 
+	$comment = msg('message_no_author_comments_available');
 }
 
 $reviewer_comments_str = $filedata->getReviewerComments();
@@ -156,7 +156,7 @@ else
 <td align="left"><font size="+1"><?php echo $realname; ?></font></td>
 </tr>
 <tr>
-<th valign=top align=right>Category:</th><td><?php echo $category; ?></td>
+<th valign=top align=right><?php echo msg('category')?>:</th><td><?php echo $category; ?></td>
 </tr>
 <?php
 	udf_details_display($lrequest_id);
@@ -164,36 +164,36 @@ else
 <tr>
 
 </tr>
-<th valign=top align=right>File&nbsp;size:</th><td> <?php echo $filesize; ?></td>
+<th valign=top align=right><?php echo msg('label_size')?>:</th><td> <?php echo $filesize; ?></td>
 
 <tr>
-<th valign=top align=right>Creation&nbsp;Date:</th><td> <?php echo fix_date($created); ?></td>
+<th valign=top align=right><?php echo msg('label_created_date')?>:</th><td> <?php echo fix_date($created); ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Owner:</th><td>
+<th valign=top align=right><?php echo msg('owner')?>:</th><td>
 <?php echo ' <A href="mailto:' . $user_obj->getEmailAddress() . ' ?Subject=Regarding%20your%20document:  ' . $realname . ' &Body=Hello%20 ' . $owner_fullname[0] . '"> ' . $owner . '</A> ';?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Description:</th><td> <?php echo $description; ?></td>
+<th valign=top align=right><?php echo msg('label_description')?>:</th><td> <?php echo $description; ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Comment:</th><td> <?php echo $comment; ?></td>
+<th valign=top align=right><?php echo msg('label_comment')?>:</th><td> <?php echo $comment; ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Revision:</th><td>
+<th valign=top align=right><?php echo msg('revision')?>:</th><td>
     <?php
 if(isset($lrevision_id))
 {
     if( $lrevision_id == 0)
-        echo 'original revision';
+        echo msg('message_original_version');
     else
         echo $lrevision_id;
 }
-else echo 'latest'; ?>
+else echo msg('message_latest_version'); ?>
 </td>
 </tr>
 <?php
@@ -202,7 +202,7 @@ if($filedata->isPublishable() ==-1 )
 {
     echo('<tr><th valign=top align=right>Reviewer:</th><td>');
     echo $reviewer;
-    echo(" (<A HREF='javascript:showMessage()'>reviewer's comments regarding the rejection</A>)");
+    echo(" (<A HREF='javascript:showMessage()'>" .msg('message_reviewers_comments_re_rejection') . "</A>)");
 }
 ?></td>
 </tr>
