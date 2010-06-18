@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_126.php - Database upgrades for users upgrading from 1.2.5.7
-Copyright (C) 2010  Stephen Lawrence
+Copyright (C) 2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,5 +20,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 echo 'Updating db version...<br />';
 $result = mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.6' WHERE sys_name='version'")
-or die("<br>Could not update version number" . mysql_error());
-?>
+        or die("<br>Could not update version number" . mysql_error());

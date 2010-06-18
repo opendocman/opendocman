@@ -2,7 +2,7 @@
 
 /*
 upgrade_11rc1.php - database changes for users upgrading from 1.1rc1 
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,5 +21,3 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // No Database changes
 echo 'No database changes for this version';
-
-?>

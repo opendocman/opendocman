@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_12p3.php - Database upgrades for users upgrading from 1.2p1
-Copyright (C) 2006  Stephen Lawrence
+Copyright (C) 2006-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,4 +22,3 @@ echo 'Updating user table<br />';
 $result = mysql_query("
 ALTER TABLE user ADD pw_reset_code CHAR(32) default NULL 
 ") or die("<br>Could not update" . mysql_error());
-?>

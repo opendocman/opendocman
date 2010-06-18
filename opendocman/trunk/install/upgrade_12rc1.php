@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_12rc1.php - Database upgrades for users upgrading from 1.2rc1
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,4 +22,3 @@ $result = mysql_query("
 ALTER IGNORE TABLE data
     DROP filesize
 ");
-?>

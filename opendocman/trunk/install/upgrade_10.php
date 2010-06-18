@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_10.php - For users uprading from 1.0
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -131,5 +131,3 @@ ALTER TABLE user_perms CHANGE COLUMN uid uid smallint(5) unsigned NOT NULL defau
 $result = mysql_query("
 ALTER TABLE user_perms ADD INDEX user_perms_idx (fid,uid,rights)
 ") or die("<br>Could not update" . mysql_error());
-
-?>
