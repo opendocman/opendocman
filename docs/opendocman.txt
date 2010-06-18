@@ -1,4 +1,4 @@
-February 23rd, 2007
+June 4, 2010
 
 Abstract
 
@@ -244,6 +244,9 @@ options in that file:
   be allowed to be added to the repository. This may need
   some tweeking depending on what types of files your users
   have.
+
+* allow_signup - This option determines whether or not to display
+  the "Signup" link on the login page to allow users to self-register.
 
 3.2 Administration Editor
 
