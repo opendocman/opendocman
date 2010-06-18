@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_11.php - For users upgrading from 1.1
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -54,4 +54,3 @@ ALTER TABLE `user_perms`
     ADD INDEX uid (uid),
     ADD INDEX rights (rights)
 ") or die("<br>Could not update user_perms" . mysql_error());
-?>

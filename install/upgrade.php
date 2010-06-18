@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade.php - Main upgrade controller
-Copyright (C) 2002-2007  Stephen Lawrence
+Copyright (C) 2002-2010  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,88 +19,90 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /*** This function calls the upgrade from odm 1.0 ***/
-function do_upgrade10 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade10 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_10.php");
 }
 /*** This function calls the upgrade from odm 1.1rc1 ***/
-function do_upgrade11rc1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade11rc1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_11rc1.php");
 }
 /*** This function calls the upgrade from odm 1.1rc2 ***/
-function do_upgrade11rc2 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade11rc2 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_11rc2.php");
 }
-
 /*** This function calls the upgrade from odm 1.1 ***/
-function do_upgrade11 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade11 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_11.php");
 }
-
 /*** This function calls the upgrade from odm 1.2rc1 ***/
-function do_upgrade12rc1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade12rc1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_12rc1.php");
 }
-
 /*** This function calls the upgrade from odm 1.2p1 ***/
-function do_upgrade12p1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade12p1 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_12p1.php");
 }
-
 /*** This function calls the upgrade from odm 1.2p3 ***/
-function do_upgrade12p3 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade12p3 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_12p3.php");
 }
-
 /*** This function calls the upgrade from odm 1.2.4 ***/
-function do_upgrade124 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade124 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_124.php");
 }
-
 /*** This function calls the upgrade from odm 1.2.5.2 ***/
-function do_upgrade1252 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade1252 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_1252.php");
 }
-
 /*** This function calls the upgrade from odm 1.2.5.6 ***/
-function do_upgrade1256 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade1256 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_1256.php");
 }
-
 /*** This function calls the upgrade from odm 1.2.5.7 ***/
-function do_upgrade1257 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype) {
+function do_upgrade1257 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
     global $dbconn;
     mysql_connect($dbhost, $dbuname, $dbpass);
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">Unable to select database.</font>");
     include("install/upgrade_1257.php");
 }
-?>
