@@ -1,8 +1,8 @@
 <?php
 /*
 config.php - OpenDocMan main config file
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2009  Stephen Lawrence
+Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,7 +38,8 @@ $GLOBALS['user'] = 'opendocman'; // Enter the username for the database
 $GLOBALS['pass'] = 'opendocman'; // Enter the password for the username
 $GLOBALS['hostname'] = 'localhost'; // Enter the hostname that is serving the database
 
-global $CONFIG;      $CONFIG = array(
+global $CONFIG;
+
 /**
  * Prefix to append to each table name in the database (ex. odm_ would make the tables 
  * named "odm_users", "odm_data" etc. Leave this set to the default if you want to keep 
@@ -47,57 +48,57 @@ global $CONFIG;      $CONFIG = array(
  * @DEFAULT 'odm_'
  * @ARG String
  */
-'db_prefix' => 'odm_',
+$CONFIG['db_prefix'] = 'odm_';
 
-'debug' => '0',
+$CONFIG['debug'] = '0';
 
 // This setting is for a demo installation, where random people will be
 // all loggging in as the same username/password like 'demo/demo'. This will
 // keep users from removing files, users, etc.
-'demo' => 'false', 
+$CONFIG['demo'] = 'false';
 
 // Currently only MySQL authentication is supported
-'authen' => 'mysql',
+$CONFIG['authen'] = 'mysql';
 
 // Set the number of files that show up on each page
-'page_limit' => '15',
+$CONFIG['page_limit'] = '15';
 
 // Set the number of page links that show up on each page
-'num_page_limit' => '10', 
+$CONFIG['num_page_limit'] = '10';
 
 // Set the maximum displayable length of text field
-'displayable_len' => '15',
+$CONFIG['displayable_len'] = '15';
 
 // Set this to the url of the site
 // No need for trailing "/" here
-'base_url' => 'http://localhost/opendocman',
+$CONFIG['base_url'] = 'http://localhost/opendocman';
 
 // This is the browser window title
-'title' => 'Document Repository',
+$CONFIG['title'] = 'Document Repository';
 
 // The email address of the administrator of this site
-'site_mail' => 'root@localhost',
+$CONFIG['site_mail'] = 'root@localhost';
 
 //This variable sets the root username.  The root user will be able to access
 //all files and have authority for everything.
-'root_username'  => 'admin',
+$CONFIG['root_username']  = 'admin';
 
 // location of file repository
 // This should ideally be outside the Web server root. 
 // Make sure the server has permissions to read/write files to this folder!
 
 // Uncomment this one for WINDOWS - Don't forget the trailing backslash "/"
-//'dataDir' => 'c:/document_repository/',
+//$CONFIG['dataDir'] = 'c:/document_repository/';
 
 // Uncomment this one for LINUX - Don't forget the trailing slash "/"
-'dataDir' => '/var/www/document_repository/',
+$CONFIG['dataDir'] = '/var/www/document_repository/';
 
 // Set the maximum file upload size
-'max_filesize' => '5000000',
+$CONFIG['max_filesize'] = '5000000';
 
 //This var sets the amount of days until each file needs to be revised, 
 //assuming that there are 30 days in a month for all months.
-'revision_expiration' => '90',
+$CONFIG['revision_expiration'] = '90';
 
 /* Choose an action option when a file is found to be expired
 The first two options also result in sending email to reviewer
@@ -106,40 +107,39 @@ The first two options also result in sending email to reviewer
 	(3) Send email to reviewer only
 	(4) Do Nothing
 */
-'file_expired_action' => '1', 
+$CONFIG['file_expired_action'] = '1';
 
 //Authorization control: On or Off (case sensitive)
 //If set On, every document added or checked back must be reviewed by an admin
 //before it can go public.  To disable this review queue, set this variable to Off.
 //When set to Off, all newly added or checked back in documents will immediately go public
-'authorization' => 'On',
+$CONFIG['authorization'] = 'On';
 
 //Secure URL control: On or Off (case sensitive)
 //When set to 'On', all urls will be secured
 //When set to 'Off', all urls are normal and readable
-'secureurl' => 'On',
+$CONFIG['secureurl'] = 'On';
 
 // should we display document listings in the normal way or in a tree view
 // this must be 'On' to change the display
-'treeview' => 'Off',
+$CONFIG['treeview'] = 'Off';
 
 // should we display the signup link?
-'allow_signup' => 'On',
+$CONFIG['allow_signup'] = 'On';
 
 // should we allow users to reset their forgotten password?
-'allow_password_reset' => 'Off',
+$CONFIG['allow_password_reset'] = 'Off';
 
 // Attempt NIS password lookups?
-'try_nis' => 'Off',
+$CONFIG['try_nis'] = 'Off';
 
 // Which theme to use?
-'theme' => 'default',
+$CONFIG['theme'] = 'default';
 
 // Set the default language (english, spanish, turkish, etc.).
 // Local users may override this setting
 // check include/language folder for languages available
-'language' => 'english'
-);
+$CONFIG['language'] = 'english';
 
 // List of allowed file types
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
@@ -179,4 +179,3 @@ $_REQUEST = sanitizeme($_REQUEST);
 $_POST = sanitizeme($_POST);
 $_SERVER = sanitizeme($_SERVER);
 }
-?>
