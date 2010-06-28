@@ -24,8 +24,8 @@ session_start();
 // check for valid session
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
+    exit;
 }
 include('config.php');
 include('udf_functions.php');
@@ -53,88 +53,90 @@ if (!$user_obj->isAdmin())
 // Submitted so insert data now
 if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
 {
-    if (!$user_obj->isAdmin()){
-           header('Location:' . $secureurl->encode('error.php?ec=4'));
-           exit;
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
     }
-	// Check to make sure user does not already exist
+    // Check to make sure user does not already exist
     $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '" . addslashes($_POST['username']) . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
     // If the above statement returns more than 0 rows, the user exists, so display error
     if(mysql_num_rows($result) > 0)
     {
- 	   header('Location:' . $secureurl->encode('error.php?ec=3'));
-           exit;
+        header('Location:' . $secureurl->encode('error.php?ec=3'));
+        exit;
     }
     else
-    {     
-    	$phonenumber = @$_POST['phonenumber'];
-	   // INSERT into user
-       $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
-       $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-       // INSERT into admin
-       $userid = mysql_insert_id($GLOBALS['connection']);
+    {
+        $phonenumber = @$_POST['phonenumber'];
+        // INSERT into user
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        // INSERT into admin
+        $userid = mysql_insert_id($GLOBALS['connection']);
         if (!isset($_POST['admin']))
         {
-                $_POST['admin']='0';
+            $_POST['admin']='0';
         }
-       $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
-       $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-       if(isset($_POST['reviewer']))
-       {
-           for($i = 0; $i<sizeof($_POST['department_review']); $i++)
-           {
-               $dept_rev=$_POST['department_review'][$i];
-               $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
-               $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-           }
-       }
-	   
-	   // mail user telling him/her that his/her account has been created.
-       	$user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-       	$new_user_obj = new User($userid, $GLOBALS['connection'], $GLOBALS['database']);
-       	$date = date('D F d Y');
-		$time = date('h:i A');
-		$get_full_name = $user_obj->getFullName();
-		$full_name = $get_full_name[0].' '.$get_full_name[1];
-		$get_full_name = $new_user_obj->getFullName();
-		$new_user_full_name = $get_full_name[0].' '.$get_full_name[1];
-		$mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-		$mail_headers = "From: $mail_from"; 
-		$mail_subject=msg('message_account_created_add_user');
-		$mail_greeting=$new_user_full_name.":\n\r\tI would like to inform you that ";
-		$mail_body = msg('email_your_account_created').' '.$time.' - '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
-                $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
-		$mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
-		if($GLOBALS['CONFIG']['authen'] == 'mysql')
-		{
-			$mail_body.=msg('password') . ': '.$_POST['password']."\n\n";
-		}
-		$mail_salute="\n\r" . msg('salute') . ",\n\r$full_name";
-		$mail_to = $new_user_obj->getEmailAddress();
-		mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
-		$_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
-       	header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        if(isset($_POST['reviewer']))
+        {
+            for($i = 0; $i<sizeof($_POST['department_review']); $i++)
+            {
+                $dept_rev=$_POST['department_review'][$i];
+                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
+                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+            }
+        }
+
+        // mail user telling him/her that his/her account has been created.
+        $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+        $new_user_obj = new User($userid, $GLOBALS['connection'], $GLOBALS['database']);
+        $date = date('D F d Y');
+        $time = date('h:i A');
+        $get_full_name = $user_obj->getFullName();
+        $full_name = $get_full_name[0].' '.$get_full_name[1];
+        $get_full_name = $new_user_obj->getFullName();
+        $new_user_full_name = $get_full_name[0].' '.$get_full_name[1];
+        $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
+        $mail_headers = "From: $mail_from";
+        $mail_subject=msg('message_account_created_add_user');
+        $mail_greeting=$new_user_full_name.":\n\r\tI would like to inform you that ";
+        $mail_body = msg('email_your_account_created').' '.$time.' - '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
+        $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
+        $mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
+        if($GLOBALS['CONFIG']['authen'] == 'mysql')
+        {
+            $mail_body.=msg('password') . ': '.$_POST['password']."\n\n";
+        }
+        $mail_salute="\n\r" . msg('salute') . ",\n\r$full_name";
+        $mail_to = $new_user_obj->getEmailAddress();
+        mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
+        $_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
     }
 }
 elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 {
 //echo "id=$_POST[id], $_SESSION[uid], " . $user_obj->isAdmin();exit;
     // Check to make sue they are either the user being modified or an admin
-    if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin()){
-           header('Location:' . $secureurl->encode('error.php?ec=4'));
-           exit;
+    if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
     }
 
     if(!isset($_POST['admin']) || $_POST['admin'] == '')
     {
-            $_POST['admin'] = '0';
+        $_POST['admin'] = '0';
     }
 
-	if(!isset($_POST['caller']) || $_POST['caller'] == '')
-	{
-		$_POST['caller'] = 'admin.php';
+    if(!isset($_POST['caller']) || $_POST['caller'] == '')
+    {
+        $_POST['caller'] = 'admin.php';
     }
 
     // UPDATE admin info
@@ -143,44 +145,44 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
     // UPDATE into user
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
 
-	if (!empty($_POST['password']))
-	{
-		$query .= "password = md5('". addslashes($_POST['password']) ."'), ";
-	}
-
-	if( isset( $_POST['department'] ) )
-	{	
-        $query.= 'department="' . addslashes($_POST['department']) . '",';	
+    if (!empty($_POST['password']))
+    {
+        $query .= "password = md5('". addslashes($_POST['password']) ."'), ";
     }
 
-	if( isset( $_POST['phonenumber'] ) )
-	{	
-        $query.= 'phone="' . addslashes($_POST['phonenumber']) . '",';	
+    if( isset( $_POST['department'] ) )
+    {
+        $query.= 'department="' . addslashes($_POST['department']) . '",';
     }
 
-	if( isset( $_POST['Email'] ) )
-	{	
-        $query.= 'Email="' . addslashes($_POST['Email']) . '" ,';	
+    if( isset( $_POST['phonenumber'] ) )
+    {
+        $query.= 'phone="' . addslashes($_POST['phonenumber']) . '",';
     }
 
-	if( isset( $_POST['last_name'] ) )
-	{	
-        $query.= 'last_name="' . addslashes($_POST['last_name']) . '",';	
+    if( isset( $_POST['Email'] ) )
+    {
+        $query.= 'Email="' . addslashes($_POST['Email']) . '" ,';
     }
 
-	if( isset( $_POST['first_name'] ) )
-	{	
-        $query.= 'first_name="' . addslashes($_POST['first_name']) . '" ';	
+    if( isset( $_POST['last_name'] ) )
+    {
+        $query.= 'last_name="' . addslashes($_POST['last_name']) . '",';
     }
 
-	$query.= 'WHERE id="' . $_POST['id'] . '"';
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	
+    if( isset( $_POST['first_name'] ) )
+    {
+        $query.= 'first_name="' . addslashes($_POST['first_name']) . '" ';
+    }
+
+    $query.= 'WHERE id="' . $_POST['id'] . '"';
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
     if ($user_obj->isAdmin())
     {
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer WHERE user_id = '{$_POST['id']}'";
         $result = mysql_query($query, $GLOBALS['connection'])
-            or die("Error in query: $query". mysql_error());
+                or die("Error in query: $query". mysql_error());
         if(isset($_REQUEST['reviewer']))
         {
             if(isset($_REQUEST['department_review']))
@@ -195,10 +197,10 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
         }
     }
 
-	// back to main page
-	if(!isset($_POST['caller']))
-	{	
-        $_POST['caller'] = 'admin.php';	
+    // back to main page
+    if(!isset($_POST['caller']))
+    {
+        $_POST['caller'] = 'admin.php';
     }
 
     $_POST['last_message'] = urlencode(msg('message_user_successfully_updated'));
@@ -207,105 +209,108 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
 // Delete USER
 elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        }
-    
-        // form has been submitted -> process data
-        // DELETE admin info
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_POST['id']}'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
 
-        // DELETE user info
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = '$_POST[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // form has been submitted -> process data
+    // DELETE admin info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_POST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-        // DELETE perms info
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = '$_POST[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // DELETE user info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-        // Change data info to nobody
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' where owner = '$_POST[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // DELETE perms info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
-        // back to main page
-        $_POST['last_message'] = urlencode($_POST['id'] . msg('message_user_successfully_deleted'));
-        header('Location:' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+    // Change data info to nobody
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' where owner = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // back to main page
+    $_POST['last_message'] = urlencode($_POST['id'] . msg('message_user_successfully_deleted'));
+    header('Location:' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
 //Add Departments
 elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
 
-		//Check to see if this department is already in DB
-		$query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name='" . addslashes($_POST['department']) . "'";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        if(mysql_num_rows($result) != 0)
-        {
-	       	header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $_POST['department'] . ' already exist in the database'));
-        	exit;
-        }
-		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($_POST['department']) . '\')';
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // back to main page
-        $_POST['last_message'] = urlencode(msg('message_department_successfully_added'));
-        /////////Give New Department data's default rights///////////
-        ////Get all default rights////
-        $query = "SELECT id, default_rights FROM {$GLOBALS['CONFIG']['db_prefix']}data";
-       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-        $num_rows = mysql_num_rows($result);
-        $data_array = array();
+    //Check to see if this department is already in DB
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name='" . addslashes($_POST['department']) . "'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    if(mysql_num_rows($result) != 0)
+    {
+        header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $_POST['department'] . ' already exist in the database'));
+        exit;
+    }
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($_POST['department']) . '\')';
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $_POST['last_message'] = urlencode(msg('message_department_successfully_added'));
+    /////////Give New Department data's default rights///////////
+    ////Get all default rights////
+    $query = "SELECT id, default_rights FROM {$GLOBALS['CONFIG']['db_prefix']}data";
+    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+    $num_rows = mysql_num_rows($result);
+    $data_array = array();
 
-       	for($index = 0; $index< $num_rows; $index++)
-        {
-       		list($data_array[$index][0], $data_array[$index][1]) = mysql_fetch_row($result);
-        }
+    for($index = 0; $index< $num_rows; $index++)
+    {
+        list($data_array[$index][0], $data_array[$index][1]) = mysql_fetch_row($result);
+    }
 
-       	mysql_free_result($result);
-       	//////Get the new department's id////////////
-       	$query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE name = '" . addslashes($_POST['department']) . "'";
-       	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-       	$num_rows = mysql_num_rows($result);
-       	if( $num_rows != 1 )
-       	{
-       		header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $_POST['department']));
-       		exit;	
-       	}
+    mysql_free_result($result);
+    //////Get the new department's id////////////
+    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE name = '" . addslashes($_POST['department']) . "'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $num_rows = mysql_num_rows($result);
+    if( $num_rows != 1 )
+    {
+        header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $_POST['department']));
+        exit;
+    }
 
-        list($newly_added_dept_id) = mysql_fetch_row($result);
-        ////Set default rights into department//////
-        $num_rows = sizeof($data_array);
-        for($index = 0; $index < $num_rows; $index++)
-       	{
-       		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
-       		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());        
-       	}
-       	header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+    list($newly_added_dept_id) = mysql_fetch_row($result);
+    ////Set default rights into department//////
+    $num_rows = sizeof($data_array);
+    for($index = 0; $index < $num_rows; $index++)
+    {
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    }
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
 // UPDATE Department
 elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
 { 
     // Make sure they are an admin
-    if (!$user_obj->isAdmin()){
+    if (!$user_obj->isAdmin())
+    {
         header('Location:' . $secureurl->encode('error.php?ec=4'));
         exit;
-    } 
+    }
     //Check to see if this department is already in DB
-	$query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name=\"" . addslashes($_POST['name']) . '" and id!=' . $_POST['id'];
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name=\"" . addslashes($_POST['name']) . '" and id!=' . $_POST['id'];
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
-       	header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database'));
-    	exit;
-    }    
-	$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($_POST['name']) ."' where id='$_POST[id]'";
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database'));
+        exit;
+    }
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($_POST['name']) ."' where id='$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $_POST['last_message'] = urlencode(msg('message_department_successfully_updated') . ' - ' . $_POST['name'] . '- id=' . $_POST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
@@ -313,73 +318,77 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
 // Add Category
 elseif(@$_REQUEST['submit']=='Add Category')
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // back to main page
-        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_added'));
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_added'));
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // Delete department
 elseif(isset($_REQUEST['deletecategory']))
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // back to main page
-        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 // UPDATE Category
 elseif(isset($_REQUEST['updatecategory']))
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
-		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // back to main page
-        $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 elseif(@$_REQUEST['submit']=='Add User Defined Field')
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
-        
-	udf_functions_add_udf();
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
 
-        $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+    udf_functions_add_udf();
+
+    $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 elseif(isset($_REQUEST['deleteudf']))
 {
-        // Make sure they are an admin
-        if (!$user_obj->isAdmin()){
-            header('Location:' . $secureurl->encode('error.php?ec=4'));
-            exit;
-        } 
-	udf_functions_delete_udf();
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    udf_functions_delete_udf();
 
-        // back to main page
-        $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+    // back to main page
+    $_REQUEST['last_message'] = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
 else
 {
-	echo msg('message_nothing_to_do');
+    echo msg('message_nothing_to_do');
 }
-?>

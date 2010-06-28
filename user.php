@@ -1,8 +1,9 @@
 <?php
 /*
 user.php - user administration
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-
+Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -27,8 +28,8 @@ session_start();
 include('config.php');
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
+    exit;
 }
 
 // includes
@@ -42,30 +43,36 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['databas
 // Make sure the item and uid are set, then check to make sure they are the same and they have admin privs, otherwise, user is not able to modify another users' info
 if (isset($_SESSION['uid']) & isset($_GET['item']))
 {
-        if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
-        {
-                header('Location:' . $secureurl->encode('error.php?ec=4'));
-                exit;
-        }
+    if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
 }
 if(!isset($_REQUEST['caller']))
-{	$_REQUEST['caller'] = 'admin.php';	}
+{	
+    $_REQUEST['caller'] = 'admin.php';
+}
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if($user_obj->isAdmin() == true)
-        $mode = 'enabled';
-        else 
-        $mode = 'disabled';
-        if($mode == 'disabled' && $_GET['item'] != $_SESSION['uid'])
 {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
-        exit;
+    $mode = 'enabled';
+}
+else
+{
+    $mode = 'disabled';
+}
+if($mode == 'disabled' && $_GET['item'] != $_SESSION['uid'])
+{
+    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    exit;
 }
 ////////////////////////////////////////////////////////////////////////////
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
 {
-        draw_header('Admin users');
-        draw_menu($_SESSION['uid']);
+    draw_header('Admin users');
+    draw_menu($_SESSION['uid']);
 }
 
 if (!isset($_REQUEST['last_message']))
@@ -75,9 +82,9 @@ if (!isset($_REQUEST['last_message']))
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 {
-        @draw_status_bar(msg('area_add_new_user'), $_REQUEST['last_message']);
-        // Check to see if user is admin
-        ?>
+    @draw_status_bar(msg('area_add_new_user'), $_REQUEST['last_message']);
+    // Check to see if user is admin
+    ?>
                 <script type="text/javascript" src="FormCheck.js"></script>
 
                 <center>
@@ -169,24 +176,24 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 </center>
 
 <?php
-                       
-	 draw_footer();
-        }
-        // DELETE USER
-        elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
-        {
-                // If demo mode, don't allow them to update the demo account
-                if (@$GLOBALS['CONFIG']['demo'] == 'true')
-                {
-                        @draw_status_bar('Delete User ' ,$_REQUEST['last_message']);
-                        echo 'Sorry, demo mode only, you can\'t do that';
-                        draw_footer();
-                        exit;
-                }
-                $delete='';
-                $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
-                @draw_status_bar('Delete ' . $user_obj->getName(), $_REQUEST['last_message']);
-                ?>
+
+draw_footer();
+}
+// DELETE USER
+elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
+{
+// If demo mode, don't allow them to update the demo account
+if (@$GLOBALS['CONFIG']['demo'] == 'true')
+{
+    @draw_status_bar('Delete User ' ,$_REQUEST['last_message']);
+    echo 'Sorry, demo mode only, you can\'t do that';
+    draw_footer();
+    exit;
+}
+$delete='';
+$user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+@draw_status_bar('Delete ' . $user_obj->getName(), $_REQUEST['last_message']);
+?>
                         <center>
                         <table border="0" cellspacing="5" cellpadding="5">
                         <form action="commitchange.php" method="POST" enctype="multipart/form-data">
@@ -706,4 +713,3 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
         {	
         	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));
         }
-?>

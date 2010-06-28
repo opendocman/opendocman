@@ -1,4 +1,4 @@
-<!---------------------------Start drawing header-----------------------------!>
+<!-- -------------------------Start drawing header--------------------------- --!>
 <html>
     <head>
         <title>{$g_title} - {$page_title}</title>
@@ -22,5 +22,4 @@
 <link type="text/css" rel="stylesheet" href="templates/default/default.css">
     </head>
     <body bgcolor="white">
-    <!----------------------------End drawing header-----------------------------!>
-
+    <!-- --------------------------End drawing header--------------------------- --!>

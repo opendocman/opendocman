@@ -23,18 +23,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['REQUEST_URI']) );
+    exit;
 }
 include('config.php');
 if(strchr($_REQUEST['id'], '_') )
 {
-	    header('Location:error.php?ec=20');
+    header('Location:error.php?ec=20');
 }
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-	header('Location:error.php?ec=2');
-	exit;
+    header('Location:error.php?ec=2');
+    exit;
 }
 /* if the user has read-only authority on the file, his check out 
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
@@ -44,36 +44,36 @@ $fileobj = new FileData($_GET['id'], $GLOBALS['connection'], $GLOBALS['database'
 $fileobj->setId($_GET['id']);
 if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isArchived())
 {
-	header('Location:error.php?ec=2');
-	exit;
+    header('Location:error.php?ec=2');
+    exit;
 }
 if (!isset($_GET['submit']))
 {
-	draw_header(msg('area_check_out_file'));
-	draw_menu($_SESSION['uid']);
-	draw_status_bar(msg('area_check_out_file'));
-	// form not yet submitted
-	// display information on how to initiate download
-?>
-	
-	
-	<p>
-	
-	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="get">
-	<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-	<input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
-	<div class="buttons"><button class="regular" type="submit" name="submit" value="Click here"><?php echo msg('area_check_out_file')?></button>&nbsp;<?php echo msg('message_click_to_checkout_document')?></div>
-	</form>
-	<?php echo msg('message_once_the_document_has_completed')?>&nbsp;<a href="out.php"><?php echo msg('button_continue')?></a>.
-<?php
-draw_footer();
+    draw_header(msg('area_check_out_file'));
+    draw_menu($_SESSION['uid']);
+    draw_status_bar(msg('area_check_out_file'));
+    // form not yet submitted
+    // display information on how to initiate download
+    ?>
+
+
+<p>
+
+<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="get">
+    <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+    <input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
+    <div class="buttons"><button class="regular" type="submit" name="submit" value="Click here"><?php echo msg('area_check_out_file')?></button>&nbsp;<?php echo msg('message_click_to_checkout_document')?></div>
+</form>
+    <?php echo msg('message_once_the_document_has_completed')?>&nbsp;<a href="out.php"><?php echo msg('button_continue')?></a>.
+    <?php
+    draw_footer();
 }
 // form submitted - download
 else
 {
     $realname = $fileobj->getName();
     if($_GET['access_right'] == 'modify')
-    {	
+    {
         // since this user has checked it out and will modify it
         // update db to reflect new status
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
@@ -85,16 +85,14 @@ else
     if (file_exists($filename))
     {
         // send headers to browser to initiate file download
-        header ('Content-Type: application/octet-stream'); 
-        header ('Content-Disposition: attachment; filename="' . $realname . '"'); 
+        header ('Content-Type: application/octet-stream');
+        header ('Content-Disposition: attachment; filename="' . $realname . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
-        readfile($filename); 
+        readfile($filename);
     }
     else
     {
         echo 'File does not exist...';
     }
 }
-// clean up
-?>

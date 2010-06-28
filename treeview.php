@@ -1,7 +1,8 @@
 <?php
 /*
 treeview.php - page for changing personal info
-Copyright (C) 2005  Stephen Lawrence, Mitchell Broome 
+Copyright (C) 2005 Stephen Lawrence Jr., Mitchell Broome
+Copyright (C) 2006-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,8 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //require_once ('config.php');
 require_once ('class.tree/class.tree.php');
 
-function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
-    if(!isset($GLOBALS['tree'])){
+function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5)
+{
+    if(!isset($GLOBALS['tree']))
+    {
         //echo "defining in browser\n";
         $GLOBALS['tree'] = new Tree();
         $GLOBALS['root']  = $GLOBALS['tree']->open_tree("Directory", $_SERVER['PHP_SELF']);
@@ -33,7 +36,7 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
 
     if(isset($fileid_array['0']))
     {
-    	$secureurl_obj = new phpsecureurl;
+        $secureurl_obj = new phpsecureurl;
         while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
         {
             $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
@@ -55,4 +58,3 @@ function show_tree($fileid_array, $starting_index = 0, $stoping_index = 5) {
         $GLOBALS['tree']->close_tree ( );
     }
 }
-?>

@@ -16,84 +16,99 @@
 // 2003/01/04 - 0.1.0.1 fixed undefined tstr in addCrumb
 
 
-class crumb {
+class crumb
+{
 
-	
-	/**
-	 * @return void
-	 * @param level int
-	 * @param title string
-	 * @param url string
-	 * @param post boolean	 
-	 * @desc Add a bread crumb to the session array. If post is true add the $_POST args to the URL.
-	 */	
-	function addCrumb($level, $title, $url, $post = false) {
-		
-		$tstr = "";
-		
-		if (isset($_SESSION['crumbs'][$level])){
-			unset($_SESSION['crumbs'][$level]);
-		}
-		
-		if($post){
-			if(strpos($url,"?")){
-				$tstr = "&";
-			}else{
-				$tstr = "?";
-			}
-			
-			foreach($_POST as $key => $value) {
-				$tstr.=$key."=".urlencode($value)."&";
-			}
-			// pop off the last &
-			$tstr = rtrim ($tstr, "&");		
-		}
-		
-		
-		$tmp = array("title" => $title, "url" => $url . $tstr);
-		$_SESSION['crumbs'][$level] = $tmp;
-	} //end addCrumb()
-	
-	
-	/**
-	 * @return void
-	 * @param level int
-	 * @desc Deletes a bread crumb.
-	 */
-	function delCrumb($level) {		
-		if (isset($_SESSION['crumbs'][$level])){
-			unset($_SESSION['crumbs'][$level]);
-		}
-	} //end delCrumb()
 
-	
-	/**
-	 * @return void
-	 * @param cur_level int
-	 * @desc Print out the current crumb trail from $cur_level on down.
-	 */
-	function printTrail($cur_level) {
-		
-		echo "<span class=\"crumb\">";			
-		for ($i=1; $i != $cur_level+1; $i++){
-			
-			if (isset($_SESSION['crumbs'][$i])){			
-				if ($i != $cur_level){
-						echo "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
-						echo $_SESSION['crumbs'][$i]['title'];
-						echo "</a>";
-				}else{
-					echo '<FONT class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</font>';	
-					echo "</span>";				
-				}
-				if ($i != $cur_level){
-					echo "<FONT class=\"statusbar\">&nbsp;&gt;&nbsp;</FONT>";
-				}				
-			}
-		}
-		echo "</span>";	
-	} // end printTrail()
-	
+    /**
+     * @return void
+     * @param level int
+     * @param title string
+     * @param url string
+     * @param post boolean
+     * @desc Add a bread crumb to the session array. If post is true add the $_POST args to the URL.
+     */
+    function addCrumb($level, $title, $url, $post = false)
+    {
+
+        $tstr = "";
+
+        if (isset($_SESSION['crumbs'][$level]))
+        {
+            unset($_SESSION['crumbs'][$level]);
+        }
+
+        if($post)
+        {
+            if(strpos($url,"?"))
+            {
+                $tstr = "&";
+            }else
+            {
+                $tstr = "?";
+            }
+
+            foreach($_POST as $key => $value)
+            {
+                $tstr.=$key."=".urlencode($value)."&";
+            }
+            // pop off the last &
+            $tstr = rtrim ($tstr, "&");
+        }
+
+
+        $tmp = array("title" => $title, "url" => $url . $tstr);
+        $_SESSION['crumbs'][$level] = $tmp;
+    } //end addCrumb()
+
+
+    /**
+     * @return void
+     * @param level int
+     * @desc Deletes a bread crumb.
+     */
+    function delCrumb($level)
+    {
+        if (isset($_SESSION['crumbs'][$level]))
+        {
+            unset($_SESSION['crumbs'][$level]);
+        }
+    } //end delCrumb()
+
+
+    /**
+     * @return void
+     * @param cur_level int
+     * @desc Print out the current crumb trail from $cur_level on down.
+     */
+    function printTrail($cur_level)
+    {
+
+        echo "<span class=\"crumb\">";
+        for ($i=1; $i != $cur_level+1; $i++)
+        {
+
+            if (isset($_SESSION['crumbs'][$i]))
+            {
+                if ($i != $cur_level)
+                {
+                    echo "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
+                    echo $_SESSION['crumbs'][$i]['title'];
+                    echo "</a>";
+                }else
+                {
+                    echo '<FONT class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</font>';
+                    echo "</span>";
+                }
+                if ($i != $cur_level)
+                {
+                    echo "<FONT class=\"statusbar\">&nbsp;&gt;&nbsp;</FONT>";
+                }
+            }
+        }
+        echo "</span>";
+    } // end printTrail()
+
 } //end class crumb
 
 // #################  Example #############################
@@ -117,6 +132,3 @@ class crumb {
 // $crumb = new crumb();
 // $crumb->addCrumb(4, "Review", $_SERVER['REQUEST_URI']);
 // $crumb->printTrail(4);
-
-
-?>

@@ -1,8 +1,9 @@
 <?php
 /*
 view.php - performs download without updating database
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-
+Copyright (C) 2002, 2003, 2004  Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
+ 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -25,15 +26,15 @@ ob_end_clean();		//Make sure there are no garbage in buffer.
 ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
+    exit;
 }
 include_once('config.php');
 
 if (!isset($id) || $id == '')
 {
-	header('Location:error.php?ec=2');
-	exit;
+    header('Location:error.php?ec=2');
+    exit;
 }
 
 // includes
@@ -43,35 +44,35 @@ if (!isset($id) || $id == '')
 /*
    $query = "SELECT id, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
    $result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
- */
+*/
 //if (mysql_num_rows($result) <= 0)
 $filedata = new FileData($GLOBALS['connection'], $GLOBALS['database'], 'data');
 $filedata->setId($id);
 
 if ($filedata->getError() != '')
 {
-	header('Location:error.php?ec=2');
-	ob_end_flush();		// Flush buffer onto screens
-	ob_end_clean();		// Clean up buffer
-	exit;
+    header('Location:error.php?ec=2');
+    ob_end_flush();		// Flush buffer onto screens
+    ob_end_clean();		// Clean up buffer
+    exit;
 }
 else
 {
-	// all checks completed
+    // all checks completed
 
-	/* to avoid problems with some browsers, 
+    /* to avoid problems with some browsers,
 	   download script should not include parameters on the URL
 	   so let's use a form and pass the parameters via POST
-	 */ 
+    */
 
-	// form not yet submitted
-	// display information on how to initiate download
-	if (!isset($submit))
-	{
-		draw_header();
-		draw_menu($_SESSION['uid']);
-		draw_status_bar('Add New User', $message);
-		?>
+    // form not yet submitted
+    // display information on how to initiate download
+    if (!isset($submit))
+    {
+        draw_header();
+        draw_menu($_SESSION['uid']);
+        draw_status_bar('Add New User', $message);
+        ?>
 			<p>
 
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
@@ -111,5 +112,3 @@ else
         ob_end_clean();		//Clean up
     }
 }
-// clean up
-?>

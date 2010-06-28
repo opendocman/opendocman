@@ -1,7 +1,8 @@
 <?php
 /*
 edit.php - edit file properties
-Copyright (C) 2002-2007  Stephen Lawrence, Khoa Nguyen, Jon Miner
+Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -44,11 +45,19 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 }
 
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
-if( $filedata->isArchived() ) header('Location:error.php?ec=21');
+
+if( $filedata->isArchived() )
+{
+    header('Location:error.php?ec=21');
+}
+
 if (!isset($_REQUEST['last_message']))
-{	$_REQUEST['last_message'] = '';	}
-if (!isset($_REQUEST['submit']))
+{	
+    $_REQUEST['last_message'] = '';
+}
+
 // form not yet submitted, display initial form
+if (!isset($_REQUEST['submit']))
 {
 	draw_header(msg('area_update_file'));
 	draw_menu($_SESSION['uid']);
@@ -391,7 +400,10 @@ if (!isset($_REQUEST['submit']))
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->WRITE_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+        {
 		list($user_write_array[$i]) = mysql_fetch_row($lresult);
+        }
+
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -418,8 +430,11 @@ if (!isset($_REQUEST['submit']))
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->ADMIN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
 	for($i = 0; $i < mysql_num_rows($lresult); $i++ )
+        {
 		list($user_admin_array[$i]) = mysql_fetch_row($lresult);
-	for($a = 0; $a<sizeof($all_users); $a++)
+        }
+        
+        for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
 		for($u = 0; $u<sizeof($user_admin_array); $u++)
@@ -464,7 +479,11 @@ else
 	$filedata->setId($_REQUEST['id']);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
-	if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin'])) { header("Location:error.php?ec=12"); exit; }
+        if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin']))
+        {
+            header("Location:error.php?ec=12");
+            exit;
+        }
 
 	// query to verify
 	$query = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$_REQUEST[id]' and status = '0'";
@@ -488,13 +507,21 @@ else
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$result_array = array();// init;
 	if( isset( $_REQUEST['admin'] ) && isset ($_REQUEST['modify']) )
-	{	$result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);	}
+	{
+            $result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);
+        }
 	if( isset( $_REQUEST['read'] ) )
-	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);	}
+	{	
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);
+        }
 	if( isset( $_REQUEST['view'] ) )
-	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);	}
+	{	
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);
+        }
 	if( isset( $_REQUEST['forbidden'] ) )
-	{	$result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);	}
+	{	
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);
+        }
 	//display_array2D($result_array);
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
@@ -740,4 +767,3 @@ else
 </script>
 <?php
 draw_footer();
-?>

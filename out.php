@@ -1,7 +1,8 @@
 <?php
 /*
 out.php - display a list/ of all available documents that user has permission to view (with file status)
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,26 +25,29 @@ session_start();
 //$start_time = time();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
+    exit;
 }
 
 // includes
 $GLOBALS['state'] = 1;
 require_once 'config.php';
-if($GLOBALS['CONFIG']['treeview'] == "On"){
-   require_once 'treeview.php';
+if($GLOBALS['CONFIG']['treeview'] == "On")
+{
+    require_once 'treeview.php';
 }
 
-if (isset($_REQUEST['last_message'])) {
+if (isset($_REQUEST['last_message']))
+{
     $last_message = $_REQUEST['last_message'];
 }
 
 draw_header(msg('label_file_listing'));
 draw_menu($_SESSION['uid']);
 draw_status_bar(msg('area_document_listing'), @$_REQUEST['last_message']);
-if($GLOBALS['CONFIG']['treeview'] != "On"){
-   sort_browser();
+if($GLOBALS['CONFIG']['treeview'] != "On")
+{
+    sort_browser();
 }
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -59,34 +63,34 @@ if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 $llen = $user_obj->getNumExpiredFiles();
 if($llen > 0)
 {
-	echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'">' .msg('message_documents_expired'). ': ' . $llen . '</a><br />';
+    echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'">' .msg('message_documents_expired'). ': ' . $llen . '</a><br />';
 }
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
 if(!isset($_GET['starting_index']))
 {
-	$_GET['starting_index'] = 0;
+    $_GET['starting_index'] = 0;
 }
 
 if(!isset($_GET['stoping_index']))
 {
-	$limit=$GLOBALS['CONFIG']['page_limit'];
-	$_GET['stoping_index'] = ($_GET['starting_index']+$limit-1);
+    $limit=$GLOBALS['CONFIG']['page_limit'];
+    $_GET['stoping_index'] = ($_GET['starting_index']+$limit-1);
 }
 
 if(!isset($_GET['sort_by']))
 {
-	$_GET['sort_by'] = 'id';
+    $_GET['sort_by'] = 'id';
 }
 
 if(!isset($_GET['sort_order']))
 {
-	$_GET['sort_order'] = 'asc';
+    $_GET['sort_order'] = 'asc';
 }
 
 if(!isset($_GET['page']))
 {
-	$_GET['page'] = 0;
+    $_GET['page'] = 0;
 }
 //set values
 $page_url = $_SERVER['PHP_SELF'] . '?submit=true';
@@ -105,8 +109,8 @@ $sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']
 // Patch by jonathanwminer
 if($GLOBALS['CONFIG']['treeview'] == "On")
 {
-   $_GET['starting_index'] = 0;
-   $_GET['stoping_index'] = sizeof($sorted_id_array);
+    $_GET['starting_index'] = 0;
+    $_GET['stoping_index'] = sizeof($sorted_id_array);
 }
 
 if($GLOBALS['CONFIG']['treeview'] != 'On')
@@ -116,7 +120,7 @@ if($GLOBALS['CONFIG']['treeview'] != 'On')
     list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
     $limit=$GLOBALS['CONFIG']['page_limit'];
     $total_hit = sizeof($file_id_array);
-    list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);	
+    list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
 
     //$llist_e = getmicrotime();
     // clean up
@@ -136,4 +140,3 @@ draw_footer();
 //echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
 //echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
 //echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	
-?>

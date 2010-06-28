@@ -1,7 +1,8 @@
 <?php
 /*
 history.php - display revision history
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,35 +24,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 if (!isset($_SESSION['uid']))
 {
-header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-exit;
+    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
+    exit;
 }
 include('config.php');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
-header('Location:error.php?ec=2');
-exit;
+    header('Location:error.php?ec=2');
+    exit;
 }
 
 // includes
 if( !isset($_REQUEST['title']) )
-{	draw_header('');	}
-else 
-{ draw_header( $_REQUEST['title'] ); }
+{	
+    draw_header('');
+}
+else
+{ 
+    draw_header( $_REQUEST['title'] );
+}
 draw_menu($_SESSION['uid']);
 draw_status_bar('History', @$_REQUEST['last_message']);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
-	list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
+    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
 }
 $datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
 // verify
 if ($datafile->getError() != NULL)
 {
-	header('Location:error.php?ec=2');
-	exit;
+    header('Location:error.php?ec=2');
+    exit;
 }
 else
 {
@@ -67,18 +72,22 @@ $comments = $datafile->getComment();
 $status = $datafile->getStatus();
 
 // corrections
-if ($description == '') 
-    { 
-        $description = 'No description available'; 
-    }
-if ($comments == '') 
-    { 
-        $comment = 'No author comments available'; 
-    }
+if ($description == '')
+{ 
+    $description = 'No description available';
+}
+if ($comments == '')
+{ 
+    $comment = 'No author comments available';
+}
 if($datafile->isArchived())
-{	$filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	}
+{	
+    $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
+}
 else
-{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	}
+{	
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+}
 ?>
 <center>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
@@ -87,14 +96,14 @@ else
 <td align="right">
 <?php
 // check file status, display appropriate icon
-if ($status == 0) 
-    { 
-        echo '<img src="images/file_unlocked.png" alt="" border=0 align="absmiddle">';
-    } 
-else 
-    { 
-        echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
-    }
+if ($status == 0)
+{ 
+    echo '<img src="images/file_unlocked.png" alt="" border=0 align="absmiddle">';
+} 
+else
+{ 
+    echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
+}
 echo '</td>';
 echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 ?>
@@ -126,14 +135,22 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 <tr>
 <th valign=top align=right>Revision: </th><td>
 <?php 
-	if(isset($lrevision_id))
-	{
-		if( $lrevision_id == 0)
-			echo 'original revision';
-		else
-			echo $lrevision_id; 
-	}
-	else echo 'latest'; ?>
+if(isset($lrevision_id))
+{
+    if( $lrevision_id == 0)
+    {
+        echo 'original revision';
+    }
+    else
+    {
+        echo $lrevision_id;
+    }
+}
+else
+{
+    echo 'latest';
+}
+        ?>
 </td>
 </tr>
 
@@ -190,17 +207,25 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 	{
 
 	if ( isset($bgcolor) && $bgcolor == "#FCFCFC" )
+        {
           $bgcolor="#E3E7F9";
+        }
         else
+        {
           $bgcolor="#FCFCFC";
+        }
 
 	echo '<tr bgcolor=' . $bgcolor . '>';
 
 	$extra_message = '';
 	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
-	{	echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message; }
+	{	
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message;
+        }
 	else
-	{	echo '<td><font size="-1">' . $revision_id . $extra_message; 	}
+	{
+            echo '<td><font size="-1">' . $revision_id . $extra_message;
+        }
 ?>
 	</font></td>
 	<td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
@@ -221,4 +246,4 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 <?php
 draw_footer();
 }
-?>
+

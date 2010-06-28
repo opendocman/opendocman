@@ -1,7 +1,8 @@
 <?php
 /*
 details.php - display file information  check for session
-Copyright (C) 2002-2007  Stephen Lawrence, Khoa Nguyen, Jon Miner
+Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -116,18 +117,20 @@ else
 {
     $reviewer_comments_fields[0] = '';
 }
+
 if($filedata->isArchived())
 {	
         $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';	
         $filesize = display_filesize($filename);	
 }
 else
-{	$filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';	
+{
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 
-        if (!isset($filesize))
-        {
-                $filesize = display_filesize($filename);	
-        }
+    if (!isset($filesize))
+    {
+        $filesize = display_filesize($filename);
+    }
 }
 ?>
 <FORM name="data">
@@ -141,15 +144,11 @@ else
 // display red or green icon depending on file status
 if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
 { 
-?> 
-	<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">
-<?php 
+    echo '<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">';
 } 
 else 
 { 
-?>
-	<img src="images/file_locked.png" alt="" border="0" align="absmiddle"> 
-<?php 
+    echo '<img src="images/file_locked.png" alt="" border="0" align="absmiddle">';
 } 
 ?> 
 </td>
@@ -186,14 +185,21 @@ else
 <tr>
 <th valign=top align=right><?php echo msg('revision')?>:</th><td>
     <?php
-if(isset($lrevision_id))
-{
-    if( $lrevision_id == 0)
-        echo msg('message_original_version');
+    if(isset($lrevision_id))
+    {
+        if( $lrevision_id == 0)
+        {
+            echo msg('message_original_version');
+        }
+        else
+        {
+            echo $lrevision_id;
+        }
+    }
     else
-        echo $lrevision_id;
+    {
+        echo msg('message_latest_version'); ?>
 }
-else echo msg('message_latest_version'); ?>
 </td>
 </tr>
 <?php
@@ -204,7 +210,8 @@ if($filedata->isPublishable() ==-1 )
     echo $reviewer;
     echo(" (<A HREF='javascript:showMessage()'>" .msg('message_reviewers_comments_re_rejection') . "</A>)");
 }
-?></td>
+?>
+</td>
 </tr>
     <?php
 if ($status > 0)
@@ -303,8 +310,4 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 </script>
 	
 <?php
-// clean up
-?>
-<?php
 draw_footer();
-?>
