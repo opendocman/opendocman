@@ -1,8 +1,8 @@
 <?php
 /*
 udf.php - Administer User Defined Fields
-Copyright (C) 2007 Stephen Lawrence, Jonathan Miner
-Copyright (C) 2008-2010 Stephen Lawrence
+Copyright (C) 2007 Stephen Lawrence Jr., Jonathan Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-	exit;
+    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
+    exit;
 }
 // includes
 include('config.php');
 $secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-if(!$user_obj->isAdmin())        
+if(!$user_obj->isAdmin())
 {
     header('Location:' . $secureurl->encode('error.php?ec=4'));
     exit;
@@ -84,36 +84,36 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
     </table>
 </center>
 <?php
-	draw_footer();
+draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
 {
-    // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'true')
-    {
-        @draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields') ,$_POST['last_message']);
-        echo msg('message_sorry_demo_mode');
-        draw_footer();
-        exit;
-    }
-    $delete='';
+// If demo mode, don't allow them to update the demo account
+if (@$GLOBALS['CONFIG']['demo'] == 'true')
+{
+    @draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields') ,$_POST['last_message']);
+    echo msg('message_sorry_demo_mode');
+    draw_footer();
+    exit;
+}
+$delete='';
 
-    if (!isset($_REQUEST['last_message']))
-    {       
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'));
-    draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $_REQUEST['last_message']);
-    // query to show item
-    echo '<center>'; 
-    echo '<table border=0>';
-    $query = "SELECT table_name, display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['item']}'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($lid, $lname) = mysql_fetch_row($result))
-    {
-        echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $lid . '</td></tr>';
-        echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $lname . '</td></tr>';
-    }
+if (!isset($_REQUEST['last_message']))
+{       
+    $_REQUEST['last_message']='';
+}
+draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'));
+draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $_REQUEST['last_message']);
+// query to show item
+echo '<center>'; 
+echo '<table border=0>';
+$query = "SELECT table_name, display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['item']}'";
+$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+while(list($lid, $lname) = mysql_fetch_row($result))
+{
+    echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $lid . '</td></tr>';
+    echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $lname . '</td></tr>';
+}
     ?>
 	<TABLE name="delete_table">
 	<form action="commitchange.php" method="POST" enctype="multipart/form-data">
@@ -403,4 +403,3 @@ else
     draw_status_bar(msg('label_user_defined_field'),msg('message_nothing_to_do'));
     draw_footer();
 }
-?>

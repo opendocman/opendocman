@@ -1,8 +1,8 @@
 <?php
 /*
    forgot_password.php - utility to reset a user password
-   Copyright (C) 2005-2006 Glowball Solutions & Stephen Lawrence
-   Copyright (C) 2005-2009 Stephen Lawrence
+   Copyright (C) 2005-2006 Glowball Solutions & Stephen Lawrence Jr.
+   Copyright (C) 2005-2010 Stephen Lawrence Jr.
    This page was added to the core files for this utility.
 
    This program is free software; you can redistribute it and/or
@@ -228,4 +228,3 @@ else
 
          */
 }
-?>

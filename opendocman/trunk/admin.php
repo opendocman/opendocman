@@ -1,7 +1,8 @@
 <?php
 /*
 admin.php - provides admin interface
-Copyright (C) 2002-2007 Stephen Lawrence, Jon Miner
+Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,8 +27,8 @@ include('config.php');
 include('udf_functions.php');
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
+    exit;
 }
 
 // open a connection to the database
@@ -36,109 +37,109 @@ $secureurl = new phpsecureurl;
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
-	draw_error('error.php?ec=4');
-	exit;
+    draw_error('error.php?ec=4');
+    exit;
 }
 draw_header(msg('label_admin'));
 draw_menu($_SESSION['uid']);
 @draw_status_bar(msg('label_admin'),$_REQUEST['last_message']);
 ?>
-	<center>	
-	<table border="1" cellspacing="5" cellpadding="5" >
-	<font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
-<?php
- 	if($user_obj->isRoot())
-	  udf_admin_header();
-?>
-	  </tr>
-	  <tr>
-	   <td>
-<!-- User Admin -->
-	    <table border="0">
-		 <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=adduser&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('user.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
-	     </tr>
-		</table>
-	   </td>
-	   <td>
-<!-- Department Admin -->
-	 	<table border="0">
-		 <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
-	     </tr>
-		 <!-- 
-	     <tr>
-	      <td><b><a href="department.php?deletepick=1">Delete</a></b></td>
+<center>	
+    <table border="1" cellspacing="5" cellpadding="5" >
+        <font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
+        <?php
+        if($user_obj->isRoot())
+            udf_admin_header();
+        ?>
+        </tr>
+        <tr>
+            <td>
+                <!-- User Admin -->
+                <table border="0">
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('user.php?submit=adduser&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('user.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete')?></a></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('user.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('user.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <!-- Department Admin -->
+                <table border="0">
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('department.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
+                    </tr>
+                    <!--
+                <tr>
+                 <td><b><a href="department.php?deletepick=1">Delete</a></b></td>
 	     </tr>
 		 -->
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('department.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
-	     </tr>
-		</td>
-	   </table>
-	  </td>
-	   <td>
-<!-- Category Admin -->
-	 	<table border="0">
-		 <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
-	     </tr>
-	     <tr>
-	      <td><b><a href="<?php echo $secureurl->encode('category.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
-	     </tr>
-		</td>
-	   </table>
-	  </td>
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('department.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
+                    </tr>
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('department.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
+                    </tr>
+            </td>
+    </table>
+</td>
+<td>
+    <!-- Category Admin -->
+    <table border="0">
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('category.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('category.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('category.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('category.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
+        </tr>
+</td>
+</table>
+</td>
 <?php
 if ( $user_obj->isRoot()	)
 {
-?>	  
-	  <td>
-<!-- Admin-Only Section -->
-	 	<table border="0" valign="top">
-		 <tr>
-	      <td ><b><a href="<?php echo $secureurl->encode('delete.php?mode=view_del_archive&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete_undelete')?></a></b></td>
-	     </tr>
-	     <tr>
-		 <td><b><a href="<?php echo $secureurl->encode('toBePublished.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_reviews')?></a></b></td>
-		 </tr>
-		 <tr>
-		 <td><b><a href="<?php echo $secureurl->encode('rejects.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_rejections')?></a></b></td>
-		 </tr>
-		 <tr>
-		 <td><b><a href="<?php echo $secureurl->encode('check_exp.php?&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_check_expiration')?></a></b></td>
-		 </tr>
-		 <tr>
-		 <td><b><a href="<?php echo $secureurl->encode('file_ops.php?&state=' . ($_REQUEST['state']+1)); ?>&submit=view_checkedout"><?php echo msg('label_checked_out_files')?></a></b></td>
-		 </tr>
-	   </table>
-	  </td>
-<?php
-	udf_admin_menu($secureurl);
-?>
-<?php
+    ?>
+<td>
+    <!-- Admin-Only Section -->
+    <table border="0" valign="top">
+        <tr>
+            <td ><b><a href="<?php echo $secureurl->encode('delete.php?mode=view_del_archive&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete_undelete')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('toBePublished.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_reviews')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('rejects.php?mode=root&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_rejections')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('check_exp.php?&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_check_expiration')?></a></b></td>
+        </tr>
+        <tr>
+            <td><b><a href="<?php echo $secureurl->encode('file_ops.php?&state=' . ($_REQUEST['state']+1)); ?>&submit=view_checkedout"><?php echo msg('label_checked_out_files')?></a></b></td>
+        </tr>
+    </table>
+</td>
+    <?php
+    udf_admin_menu($secureurl);
+    ?>
+    <?php
 }
 ?>
-	 </tr>
-	</table>
-   </center>
-
-<?php draw_footer(); ?>
+</tr>
+</table>
+</center>
+<?php
+draw_footer();

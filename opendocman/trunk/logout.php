@@ -1,7 +1,7 @@
 <?php
 /*
 logout.php - provides logout functionality
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,16 +20,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 include ('config.php');
 
-	// If kerbauth, then display warning about shutting down browser
-	session_start();
-	// Unset all of the session variables.
-	$_SESSION = array();
-	// Finally, destroy the session.
-	session_destroy();
-	if($GLOBALS["CONFIG"]["authen"] =='kerbauth')
-	{
+// If kerbauth, then display warning about shutting down browser
+session_start();
+// Unset all of the session variables.
+$_SESSION = array();
+// Finally, destroy the session.
+session_destroy();
+if($GLOBALS["CONFIG"]["authen"] =='kerbauth')
+{
 
-?>
+    ?>
 	<html>
 	 <BODY bgcolor="#FFFFFF" link="#000000" vlink="#000000" background="images/background_blue.gif">
 	  <TABLE width="633" border="0" cellspacing="0" cellpadding="0">
@@ -68,13 +68,12 @@ include ('config.php');
         </FORM>
 <?php	
 draw_footer();
+}
+else
+// mysql auth, so just kill session and show login prompt
+{
+        session_start();
+        unset($_SESSION['uid']);
+        header('Location:index.php');
+}
 
-	}
-	else
-	// mysql auth, so just kill session and show login prompt
-	{
-        	session_start();
-        	unset($_SESSION['uid']);
-        	header('Location:index.php');
-	}
-        ?>

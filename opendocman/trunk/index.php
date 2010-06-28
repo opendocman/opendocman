@@ -1,7 +1,7 @@
 <?php
 /*
 index.php - main login form
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+Copyright (C) 2002-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@ session_start();
 require ('config.php');
 
 
-if (!isset($_REQUEST['last_message'])) {
+if (!isset($_REQUEST['last_message']))
+{
     $_REQUEST['last_message'] = '';
 }
 
@@ -50,7 +51,9 @@ if(isset($_POST['login']))
     {
         $pwent = @explode(":",`ypmatch $frmuser passwd`);
         if(isset($pwent))
+        {
             $cryptpw = @crypt(stripslashes($frmpass),substr($pwent[1],0,2));
+        }
     }
 
     // check login and md5()
@@ -69,11 +72,11 @@ if(isset($_POST['login']))
     {
         if (mysql_num_rows($result) == 0)
         {
-          if (isset($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
-          {
-            $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser'";
-            $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
-          }
+            if (isset($pwent) && isset($cryptpw) && strcmp($cryptpw,$pwent[1]) == 0)
+            {
+                $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser'";
+                $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+            }
         }
     }
 
@@ -86,55 +89,59 @@ if(isset($_POST['login']))
         $_SESSION['uid'] = $id;
         // redirect to main page
         if(isset($_REQUEST['redirection']))
+        {
             header('Location:' . $_REQUEST['redirection']);
+        }
         else
+        {
             header('Location:out.php');
-        mysql_free_result ($result);	
+        }
+        mysql_free_result ($result);
         // close connection
     }
     else
     {
         // Login Failed
-            mysql_free_result ($result);
-            // redirect to error page
-            header('Location: error.php?ec=0');
+        mysql_free_result ($result);
+        // redirect to error page
+        header('Location: error.php?ec=0');
     }
 }
 elseif($GLOBALS['CONFIG']['authen'] =='kerbauth')
 {
 
-        // check login and password
-        // connect and execute query
-        if (!isset($_COOKIE['AuthUser']))
+    // check login and password
+    // connect and execute query
+    if (!isset($_COOKIE['AuthUser']))
+    {
+        header('Location: https://secureweb.ucdavis.edu:443/cgi-auth/sendback?'.$GLOBALS['CONFIG']['base_url']);
+    }
+    else
+    {
+        list ($userid, $id2, $id3) = explode ('[-]', $_COOKIE['AuthUser']);
+        //// query to get id num from username
+        $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username='$userid'";
+        $result = mysql_query($query) or die ('Error in query: '.$query . mysql_error());
+        // if row exists then the user has an account
+        if (mysql_num_rows($result) == 1)
         {
-                header('Location: https://secureweb.ucdavis.edu:443/cgi-auth/sendback?'.$GLOBALS['CONFIG']['base_url']);
+            // initiate a session
+            session_start();
+            // register the user's ID
+            session_register('uid');
+            list($id) = mysql_fetch_row($result);
+            $_SESSION['uid'] = $id;
+            // redirect to main page
+            header('Location:out.php');
+            mysql_free_result ($result);
+            // close connection
         }
+        // User passed auth, but does not have an account
         else
         {
-                list ($userid, $id2, $id3) = explode ('[-]', $_COOKIE['AuthUser']);
-                //// query to get id num from username
-                $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username='$userid'";
-                $result = mysql_query($query) or die ('Error in query: '.$query . mysql_error());
-                // if row exists then the user has an account
-                if (mysql_num_rows($result) == 1)
-                {
-                        // initiate a session
-                        session_start();
-                        // register the user's ID
-                        session_register('uid');
-                        list($id) = mysql_fetch_row($result);
-                        $_SESSION['uid'] = $id;
-                        // redirect to main page
-                        header('Location:out.php');
-                        mysql_free_result ($result);	
-                        // close connection
-                }
-                // User passed auth, but does not have an account
-                else 
-                {
-                        header('Location:error.php?ec=19');
-                }
+            header('Location:error.php?ec=19');
         }
+    }
 }
 elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
 {
@@ -146,7 +153,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
     {
         $install_msg = '';
     }
-    
+
     ?>
 <!--
 
@@ -239,4 +246,3 @@ else
 {
         echo 'Check your config';
 }
-?>

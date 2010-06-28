@@ -1,8 +1,8 @@
 <?php
 /*
 view_file.php - draws screen which allows users to view files inline
-Copyright (C) 2002-2004  Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010  Stephen Lawrence Jr.
+Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,61 +23,61 @@ session_cache_limiter('private');
 session_start();
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-	exit;
+    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
+    exit;
 }
 include('config.php');
 $secureurl_obj = New phpsecureurl();
 
-    $lrequest_id = $_REQUEST['id']; //save an original copy of id
+$lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
-	    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
-		$lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
+    $lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 if( !isset ($_REQUEST['last_message']) )
 {	
-        $_REQUEST['last_message']='';	
+    $_REQUEST['last_message']='';
 }
 if(!isset($_GET['submit']))
 {
-	draw_header(msg('view') . ' ' . msg('file'));
-	draw_menu($_SESSION['uid']);
-	draw_status_bar(msg('view') . ' ' . msg('file'),$_REQUEST['last_message']);
-	$file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
-	$file_name = $file_obj->getName();
-	$file_id = $file_obj->getId();
-	$realname = $file_obj->getName();
-	
-	// Get the suffix of the file so we can look it up
-	// in the $mimetypes array
-	$suffix = '';
+    draw_header(msg('view') . ' ' . msg('file'));
+    draw_menu($_SESSION['uid']);
+    draw_status_bar(msg('view') . ' ' . msg('file'),$_REQUEST['last_message']);
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $file_name = $file_obj->getName();
+    $file_id = $file_obj->getId();
+    $realname = $file_obj->getName();
+
+    // Get the suffix of the file so we can look it up
+    // in the $mimetypes array
+    $suffix = '';
     if(strchr($realname, '.'))
     {
         // Fix by blackwes
         $prefix = (substr($realname,0,(strrpos($realname,"."))));
-        $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));    
+        $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
     }
-	if( !isset($GLOBALS['mimetypes']["$suffix"]) )
-	{	
-                $lmimetype = $GLOBALS['mimetypes']['default'];	
-        }
-	else 
-	{	
-                $lmimetype = $GLOBALS['mimetypes']["$suffix"];	
-        }
-	//echo "Realname is $realname<br>";
-	//echo "prefix = $prefix<br>";
-	//echo "suffix = $suffix<br>";
-	//echo "mime:$lmimetype";	
-	echo '<form action="view_file.php" name="view_file_form" method="get">';
-	echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
-	echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
-	echo '<BR>';
-	// Present a link to allow for inline viewing
-	echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">' . msg('button_click_here') . '</a><br><br>';
-	echo msg('message_if_you_are_unable_to_view');
-	echo '</form>';
+    if( !isset($GLOBALS['mimetypes']["$suffix"]) )
+    {
+        $lmimetype = $GLOBALS['mimetypes']['default'];
+    }
+    else
+    {
+        $lmimetype = $GLOBALS['mimetypes']["$suffix"];
+    }
+    //echo "Realname is $realname<br>";
+    //echo "prefix = $prefix<br>";
+    //echo "suffix = $suffix<br>";
+    //echo "mime:$lmimetype";
+    echo '<form action="view_file.php" name="view_file_form" method="get">';
+    echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
+    echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
+    echo '<BR>';
+    // Present a link to allow for inline viewing
+    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">' . msg('button_click_here') . '</a><br><br>';
+    echo msg('message_if_you_are_unable_to_view');
+    echo '</form>';
 
     draw_footer();
 }
@@ -91,16 +91,16 @@ elseif ($_GET['submit'] == 'view')
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
     $realname = $file_obj->getName();
     if( isset($lrevision_id) )
-    {	
+    {
         $filename = $lrevision_dir . $lrequest_id . ".dat";
     }
     elseif( $file_obj->isArchived() )
-    {	
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   
+    {
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
     }
     else
-    {	
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";	
+    {
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
     }
 
     if ( file_exists($filename) )
@@ -128,23 +128,23 @@ elseif ($_GET['submit'] == 'Download')
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
     $realname = $file_obj->getName();
     if( isset($lrevision_id) )
-    {   
+    {
         $filename = $lrevision_dir . $lrequest_id . ".dat";
     }
     elseif( $file_obj->isArchived() )
-    {   
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";   
+    {
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
     }
     else
-    {   
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";   
+    {
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
     }
 
     if (file_exists($filename))
     {
         // send headers to browser to initiate file download
         header('Cache-control: private');
-		header ('Content-Type: '.$_GET['mimetype']);
+        header ('Content-Type: '.$_GET['mimetype']);
         header ('Content-Disposition: attachment; filename="' . $realname . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');

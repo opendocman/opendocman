@@ -2,7 +2,7 @@
 /*
 file_ops.php - admin file operations
 Copyright (C) 2002-2004 Stephen Lawrence Jr, Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -73,7 +73,9 @@ if(@$_GET['submit'] == 'view_checkedout')
 	$llen = mysql_num_rows($lresult);
 	$array_id = array();
 	for($i=0; $i<$llen; $i++)
-		list($array_id[$i]) = mysql_fetch_row($lresult);
+        {
+            list($array_id[$i]) = mysql_fetch_row($lresult);
+        }
 	$sorted_id_array = my_sort($array_id, $_GET['sort_order'], $_GET['sort_by']);
 	$lpage_url = $_SERVER['PHP_SELF'] . '?';
 	$userpermission = new UserPermission($_SESSION['uid'], $connection, $database);

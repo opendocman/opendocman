@@ -1,7 +1,8 @@
 <?php
 /*
 add.php - adds files to the repository
-Copyright (C) 2002-2007  Stephen Lawrence, Jon Miner
+Copyright (C) 2002-2007 Stephen Lawrence Jr., Jon Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,7 +40,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
             exit;
         }
         else
-        {     
+        {
             $phonenumber = (!empty($_REQUEST['phonenumber']) ? $_REQUEST['phonenumber'] : '');
             // INSERT into user
             $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', md5('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
@@ -96,21 +97,31 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
             $query .= "password = md5('". addslashes($_REQUEST['password']) ."'), ";
         }
         if( isset( $_REQUEST['department'] ) )
-        {	$query.= 'department="' . addslashes($_REQUEST['department']) . '",';	}
+        {
+            $query.= 'department="' . addslashes($_REQUEST['department']) . '",';
+        }
         if( isset( $_REQUEST['phonenumber'] ) )
-        {	$query.= 'phone="' . addslashes($_REQUEST['phonenumber']) . '",';	}
+        {
+            $query.= 'phone="' . addslashes($_REQUEST['phonenumber']) . '",';
+        }
         if( isset( $_REQUEST['Email'] ) )
-        {	$query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,';	}
+        {
+            $query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,';
+        }
         if( isset( $_REQUEST['last_name'] ) )
-        {	$query.= 'last_name="' . addslashes($_REQUEST['last_name']) . '",';	}
+        {
+            $query.= 'last_name="' . addslashes($_REQUEST['last_name']) . '",';
+        }
         if( isset( $_REQUEST['first_name'] ) )
-        {	$query.= 'first_name="' . addslashes($_REQUEST['first_name']) . '" ';	}
+        {
+            $query.= 'first_name="' . addslashes($_REQUEST['first_name']) . '" ';
+        }
         $query.= 'WHERE id="' . $_REQUEST['id'] . '"';
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // UPDATE into dept_reviewer
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = '$_REQUEST[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());  
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         if(isset($_REQUEST['reviewer']))
         {
             //Remove all entry for $id
@@ -126,7 +137,9 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         }
         // back to main page
         if(!isset($_REQUEST['caller']))
-        {	$_REQUEST['caller'] = 'admin.php';	}
+        {
+            $_REQUEST['caller'] = 'admin.php';
+        }
         $_REQUEST['last_message'] = urlencode('User successfully updated');
         header('Location: ' . $_REQUEST['caller'] . '?last_message=' . $_REQUEST['last_message']);
     }
@@ -136,7 +149,9 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         <body>
 <?php
     if (is_readable("signup_header.html"))
+    {
       include("signup_header.html");
+    }
 ?>
         <center><font size=6>Sign Up</font></center>
         <br><script type="text/javascript" src="FormCheck.js"></script>
@@ -201,11 +216,12 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         </center>
 <?php
    if (is_readable("signup_footer.html"))
-    include("signup_footer.html");
+   {
+       include("signup_footer.html");
+   }
 ?>
 
         </body>
         </html>
         <?php
 }
-?>

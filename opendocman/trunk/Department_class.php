@@ -3,7 +3,8 @@
 Department_class.php - Department class is an extended class of the abstractive databaseData 
 class.  The only difference is that it provides it's own constructor to handle its own 
 characteristics.
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2010 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,17 +23,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 if( !defined('Department_class') )
 {
-  define('Department_class', 'true', false);
-  class Department extends databaseData
-  {
-	function Department($id, $connection, $database)
-	{
-		$this->field_name = 'name';
-		$this->field_id = 'id';
-		$this->result_limit = 1; //there is only 1 department with a certain department_id and department_name
-		$this->tablename = $this->TABLE_DEPARTMENT;
-		databaseData::databaseData($id, $connection, $database);
-	}
-  } 
+    define('Department_class', 'true', false);
+    class Department extends databaseData
+    {
+        function Department($id, $connection, $database)
+        {
+            $this->field_name = 'name';
+            $this->field_id = 'id';
+            $this->result_limit = 1; //there is only 1 department with a certain department_id and department_name
+            $this->tablename = $this->TABLE_DEPARTMENT;
+            databaseData::databaseData($id, $connection, $database);
+        }
+    }
 }
-?>

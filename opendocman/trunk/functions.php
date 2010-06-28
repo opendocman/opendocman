@@ -1,8 +1,9 @@
 <?php
 /*
 functions.php - various utility functions
-Copyright (C) 2002-2007 Stephen Lawrence, Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2009 Stephen Lawrence
+Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
+Copyright (C) 2008-2010 Stephen Lawrence Jr.
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -39,7 +40,7 @@ require_once('secureurl.class.php');
 include_once('secureurl.php');
 include('udf_functions.php');
 include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
-//require_once('includes/sanitize.inc.php');
+
 /* Set language  vars */
 foreach($GLOBALS['lang'] as $key=>$value)
 {
@@ -62,7 +63,9 @@ if( !defined('function') )
 			return date('d M Y (H:i)', mktime($timearr[0], $timearr[1], $timearr[2], $datearr[1], $datearr[2], $datearr[0]));
 		}
 		else
-		{	return 0;	}
+		{	
+                    return 0;
+                }
 	}
 	
 	// Return a copy of $string where all the spaces are converted into underscores
@@ -73,7 +76,9 @@ if( !defined('function') )
 		while( $index< $string_len )
 		{
 			if($string[$index] == ' ')
+                        {
 				$string[$index]= '_';
+                        }
 			$index++;
 		}
 		return $string;
@@ -127,9 +132,13 @@ if( !defined('function') )
 	function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 	{
 		if(!isset($id_array[0]))
+                {
 			return $id_array;
+                }
 		if (sizeof($id_array) == 0 )
+                {
 			return $id_array;
+                }
 		$lwhere_or_clause = '';
 		if( $sort_by == 'id' )
 		{
@@ -149,7 +158,6 @@ if( !defined('function') )
 		elseif($sort_by == 'department')
 		{
 			$lquery = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}department WHERE {$GLOBALS['CONFIG']['db_prefix']}data.department = {$GLOBALS['CONFIG']['db_prefix']}department.id ORDER BY {$GLOBALS['CONFIG']['db_prefix']}department.name $sort_order, {$GLOBALS['CONFIG']['db_prefix']}data.id asc";
-			
 		}
 		elseif($sort_by == 'created_date' )
 		{
@@ -166,7 +174,9 @@ if( !defined('function') )
 		$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . mysql_error());
 		$len = mysql_num_rows($lresult);
 		for($li = 0; $li<$len; $li++)
-			list($array[$li]) = mysql_fetch_row($lresult);
+                {
+                    list($array[$li]) = mysql_fetch_row($lresult);
+                }
 		return  array_values( array_intersect($array, $id_array) );
 	}
 
@@ -187,14 +197,14 @@ if( !defined('function') )
         }
 	function draw_header($page_title)
         {
-        if(is_dir('install'))
-        {
-            echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
-        }
+            if(is_dir('install'))
+            {
+                echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
+            }
 
-        $GLOBALS['smarty']->assign('page_title', $page_title);
-        $GLOBALS['smarty']->display('header.tpl');
-/*
+            $GLOBALS['smarty']->assign('page_title', $page_title);
+            $GLOBALS['smarty']->display('header.tpl');
+            /*
 		if (!isset($page_title))
 		{
 			$page_title='Main';
@@ -223,18 +233,18 @@ if( !defined('function') )
 		echo '	</HEAD>'."\n";
 		echo '  	<body bgcolor="white">'."\n";
 		echo '<!----------------------------End drawing header----------------------------->'."\n";
-*/
-	}
+            */
+        }
 
-	function draw_error($message)
-	{
-		header ('Location:' . $message);
-	}
-	
-	function draw_footer()
-	{
-        $GLOBALS['smarty']->display('footer.tpl');
-/*
+        function draw_error($message)
+        {
+            header ('Location:' . $message);
+        }
+
+        function draw_footer()
+        {
+            $GLOBALS['smarty']->display('footer.tpl');
+            /*
 		echo "\n".'<!-------------------------------begin_draw_footer------------------------------>'."\n";
 		echo '<hr>'."\n";
 		echo ' <h5>'.$GLOBALS['CONFIG']['current_version'].'<BR>';
@@ -242,267 +252,273 @@ if( !defined('function') )
 		echo ' </body>'."\n";
 		echo '</html>'."\n";
 		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
-*/
-	}
+            */
+        }
         function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
         {
-                $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
-                while( list($mail_to) = mysql_fetch_row($result) )
-                {
-                        mail($mail_to, $mail_subject, $mail_body, $mail_header);
-                }
-                mysql_free_result($result);
+            $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";
+            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
+            while( list($mail_to) = mysql_fetch_row($result) )
+            {
+                mail($mail_to, $mail_subject, $mail_body, $mail_header);
+            }
+            mysql_free_result($result);
         }
         function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
         {
-                $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());	
-                while( list($mail_to) = mysql_fetch_row($result) )
-                {
-                        mail($mail_to, $mail_subject, $mail_body, $mail_header);
-                }
-                mysql_free_result($result);
+            $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";
+            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
+            while( list($mail_to) = mysql_fetch_row($result) )
+            {
+                mail($mail_to, $mail_subject, $mail_body, $mail_header);
+            }
+            mysql_free_result($result);
         }
         function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body, $mail_header)
         {
-                for($i = 0; $i< sizeof($user_OBJ_array); $i++)
-                {
-                        mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
-                }
+            for($i = 0; $i< sizeof($user_OBJ_array); $i++)
+            {
+                mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+            }
         }
         function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)
         {
-                for($i = 0; $i<sizeof($user_ID_array); $i++)
-                        $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
-                email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-		}
-		
-		function getmicrotime(){ 
-			list($usec, $sec) = explode(" ",microtime()); 
-			return ((float)$usec + (float)$sec); 
-		}
+            for($i = 0; $i<sizeof($user_ID_array); $i++)
+            {
+                $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], $GLOBALS['database']);
+            }
+            email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
+        }
+
+        function getmicrotime()
+        {
+            list($usec, $sec) = explode(" ",microtime());
+            return ((float)$usec + (float)$sec);
+        }
+
         function list_files($fileid_array, $userperms_obj, $page_url, $dataDir, $sort_order = 'asc', $sort_by = 'id', $starting_index = 0, $stoping_index = 5, $showCheckBox = 'false', $with_caption = 'false')
         {
-           $secureurl= new phpsecureurl;
-        	if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
+            $secureurl= new phpsecureurl;
+            if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
             {
                 echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . "\n";
                 return -1;
             }
-				echo "\n".'<!----------------------Table Starts----------------------->'."\n";
-                $checkbox_index = 0;
-                $count = sizeof($fileid_array);
-                $css_td_class = "'listtable'";
-                if($sort_order == 'asc')
-                {
-                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_az.gif';
-                        $next_sort = 'desc';
-                }
-                else if($sort_order == 'desc')
-                {
-                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_za.gif';
-                        $next_sort = 'asc';
-                }
-                else 
-                {
-                        $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_null';
-                        $next_sort = 'asc';
-                }		
+            echo "\n".'<!----------------------Table Starts----------------------->'."\n";
+            $checkbox_index = 0;
+            $count = sizeof($fileid_array);
+            $css_td_class = "'listtable'";
+            if($sort_order == 'asc')
+            {
+                $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_az.gif';
+                $next_sort = 'desc';
+            }
+            else if($sort_order == 'desc')
+            {
+                $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_za.gif';
+                $next_sort = 'asc';
+            }
+            else
+            {
+                $sort_img = $GLOBALS['CONFIG']['base_url'] . '/images/icon_sort_null';
+                $next_sort = 'asc';
+            }
 
-                echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
-                echo $count; 
-                echo(" " . msg('message_found_documents')."</FONT></B>\n");
-                echo('<BR><BR>'."\n");
-                $index = $starting_index;
-                $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $secureurl->encode($page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by) . '">';
-                $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
-                $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"";
-                $link = "$page_url&sort_order=asc&sort_by=";
-                $default_url_mid = '">';
-                $default_url_post = "<B></TD>";
-                echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
-                echo("<TR bgcolor='83a9f7' id = '1'>");
+            echo '<B><FONT size="-2"> '.$starting_index.'-'.$stoping_index.'/';
+            echo $count;
+            echo(" " . msg('message_found_documents')."</FONT></B>\n");
+            echo('<BR><BR>'."\n");
+            $index = $starting_index;
+            $url_pre = '<TD class=' . $css_td_class . 'NOWRAP><B><A HREF="' . $secureurl->encode($page_url . '&sort_order=' . $next_sort . '&sort_by=' . $sort_by) . '">';
+            $url_post = '<B></A> <IMG SRC=' . $sort_img . '></TD>';
+            $default_url_pre = "<TD class=$css_td_class NOWRAP><B><A HREF=\"";
+            $link = "$page_url&sort_order=asc&sort_by=";
+            $default_url_mid = '">';
+            $default_url_post = "<B></TD>";
+            echo("<TABLE name='list_file' border='0' hspace='0' hgap='0' CELLPADDING='1' CELLSPACING='1' >");
+            echo("<TR bgcolor='83a9f7' id = '1'>");
+            if($showCheckBox=='true')
+            {
+                echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
+            }
+            if($sort_by == 'id')
+            {
+                $str = $url_pre.'ID'.$url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link . 'id') . $default_url_mid.'ID'.$default_url_post;
+            }
+            echo($str);
+
+            echo ('<th>' . msg('label_view') . '</th>');
+
+            if($sort_by == 'file_name')
+            {
+                $str = $url_pre.'File Name'.$url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link .'file_name') . $default_url_mid.msg('label_file_name').$default_url_post;
+            }
+            echo($str);
+
+            if($sort_by == 'description')
+            {
+                $str = $url_pre.msg('label_description').$url_post;
+            }
+            else
+            {
+                $str = $default_url_pre. $secureurl->encode($link .'description') . $default_url_mid.msg('label_description').$default_url_post;
+            }
+            echo($str);
+
+            if($sort_by == 'access_right')
+            {
+                $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B><IMG SRC="' . $sort_img . '"></TD>';
+            }
+            else
+            {
+                $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B></TD>';
+            }
+            echo($str);
+            if($sort_by == 'created_date')
+            {
+                $str = $url_pre . msg('label_created_date') . $url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link .'created_date') . $default_url_mid . msg('label_created_date') . $default_url_post;
+            }
+            echo($str);
+
+            if($sort_by == 'modified_on')
+            {
+                $str = $url_pre . msg('label_modified_date') . $url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link .'modified_on') . $default_url_mid.msg('label_modified_date').$default_url_post;
+            }
+            echo($str);
+
+            if($sort_by == 'author')
+            {
+                $str = $url_pre . msg('author') . $url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link .'author') . $default_url_mid . msg('author') . $default_url_post;
+            }
+            echo($str);
+
+            if($sort_by == 'department')
+            {
+                $str = $url_pre . msg('department') . $url_post;
+            }
+            else
+            {
+                $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid . msg('department') . $default_url_post;
+            }
+            echo($str);
+
+            $str = '<TD class="' . $css_td_class . '"><B>' . msg('label_size') . '<B></TD>';
+            echo($str);
+
+            if($sort_by == 'status')
+            {
+                $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B> <IMG SRC="' . $sort_img . '"></TD>';
+            }
+            else
+            {
+                $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B></TD>';
+            }
+            echo($str);
+            echo '</TR>';
+            echo '<HD6>';
+            $even_row_color = 'FCFCFC';
+            $odd_row_color = 'E3E7F9';
+            $unlock_highlighted_color = '#bdf9b6';
+            $lock_highlighted_color = '#ea7741';
+            echo "\n";
+            if(!isset($fileid_array))
+            {
+                echo '</TABLE>';
+                return 0;
+            }
+            if(!isset($_REQUEST['state']))
+            {
+                $_REQUEST['state']=1;
+            }
+            while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
+            {
+                if($index%2!=0)
+                {
+                    $tr_bgcolor = $odd_row_color;
+                }
+                else
+                {
+                    $tr_bgcolor = $even_row_color;
+                }
+                $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
+                if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
+                {
+                    $lock = false;
+                    $highlighted_color = $unlock_highlighted_color;
+                }
+                else
+                {
+                    $lock = true;
+                    $highlighted_color = $lock_highlighted_color;
+                }
+
+                if($with_caption == true )
+                {
+                    // correction for empty description
+                    echo '<TR bgcolor="' . $tr_bgcolor . '" id="' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\'" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
+                }
+                else
+                {
+                    echo '<TR bgcolor="' . $tr_bgcolor . '" id = "' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\';" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
+                }
+                if ($file_obj->getDescription() == '')
+                {
+                    $description = 'No description available';
+                }
+                // set filename for filesize() call below
+                //$filename = $dataDir . $file_obj->getId() . '.dat';
+                $fid = $file_obj->getId();
+
+
+                // begin displaying file list with basic information
+                $comment = $file_obj->getComment();
+                $description = $file_obj->getDescription();
+                $description = substr($description, 0, 35);
+
+
+                $created_date = fix_date($file_obj->getCreatedDate());
+                if ($file_obj->getModifiedDate())
+                {
+                    $modified_date = fix_date($file_obj->getModifiedDate());
+                }
+
+                //echo "$modified_date  and $fid fid";
+
+
+                $full_name_array = $file_obj->getOwnerFullName();
+                $owner_name = $full_name_array[1].', '.$full_name_array[0];
+                //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
+                $dept_name = $file_obj->getDeptName();
+                $realname = $file_obj->getRealname();
+                //$filesize = $file_obj->getFileSize();
+                //Get the file size in bytes.
+                $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid_array[$index] . '.dat');
+
                 if($showCheckBox=='true')
                 {
-                        echo '<TD><input type="checkbox" onClick="selectAll(this)"></TD>';
+                    echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
                 }
-                if($sort_by == 'id')
-                {
-                        $str = $url_pre.'ID'.$url_post;
-                }
-                else
-                {
-                     $str = $default_url_pre . $secureurl->encode($link . 'id') . $default_url_mid.'ID'.$default_url_post;
-                }
-                echo($str);
-
-                echo ('<th>' . msg('label_view') . '</th>');
-
-                if($sort_by == 'file_name')
-                {
-                        $str = $url_pre.'File Name'.$url_post;
-                }
-                else
-                { 
-                        $str = $default_url_pre . $secureurl->encode($link .'file_name') . $default_url_mid.msg('label_file_name').$default_url_post;
-                }
-                echo($str);
-
-                if($sort_by == 'description')
-                {
-                        $str = $url_pre.msg('label_description').$url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre. $secureurl->encode($link .'description') . $default_url_mid.msg('label_description').$default_url_post;
-                }
-                 echo($str);
-
-                if($sort_by == 'access_right')
-                {
-                        $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B><IMG SRC="' . $sort_img . '"></TD>';
-                }
-                else
-                { 
-                        $str = '<TD class="' . $css_td_class . '"><B>' .msg('label_rights'). '<B></TD>';
-                }
-                echo($str);
-                if($sort_by == 'created_date')
-                {
-                        $str = $url_pre . msg('label_created_date') . $url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre . $secureurl->encode($link .'created_date') . $default_url_mid . msg('label_created_date') . $default_url_post;
-                }
-                echo($str);
-
-                if($sort_by == 'modified_on')
-                {
-                        $str = $url_pre . msg('label_modified_date') . $url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre . $secureurl->encode($link .'modified_on') . $default_url_mid.msg('label_modified_date').$default_url_post;
-                }                
-                echo($str);
-
-                if($sort_by == 'author')
-                {
-                        $str = $url_pre . msg('author') . $url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre . $secureurl->encode($link .'author') . $default_url_mid . msg('author') . $default_url_post;
-                }
-                echo($str);
-
-                if($sort_by == 'department')
-                {
-                        $str = $url_pre . msg('department') . $url_post;
-                }
-                else
-                {
-                        $str = $default_url_pre . $secureurl->encode($link . 'department') . $default_url_mid . msg('department') . $default_url_post;
-                }
-                echo($str);
-                
-                $str = '<TD class="' . $css_td_class . '"><B>' . msg('label_size') . '<B></TD>';
-                echo($str);
-
-                if($sort_by == 'status')
-                {
-                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B> <IMG SRC="' . $sort_img . '"></TD>';
-                }
-                else
-                {                
-                        $str = '<TD NOWRAP class="' . $css_td_class . '"><B>' . msg('label_status') . '<B></TD>';
-                }
-                echo($str);		
-                echo '</TR>';
-                echo '<HD6>';
-                $even_row_color = 'FCFCFC';
-                $odd_row_color = 'E3E7F9';
-                $unlock_highlighted_color = '#bdf9b6';
-                $lock_highlighted_color = '#ea7741';
-                echo "\n";
-                if(!isset($fileid_array))
-                {
-                        echo '</TABLE>';
-                        return 0;
-                }
-        		if(!isset($_REQUEST['state']))
-        			$_REQUEST['state']=1;
-                while($index<sizeof($fileid_array) and $index>=$starting_index and $index<=$stoping_index)
-                {
-                	if($index%2!=0)
-                        {
-                                $tr_bgcolor = $odd_row_color;
-                        }
-                        else
-                        { 
-                                $tr_bgcolor = $even_row_color;
-                        }
-                        $file_obj = new FileData($fileid_array[$index], $GLOBALS['connection'], $GLOBALS['database']);
-						if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->WRITE_RIGHT)
-                        {
-                                $lock = false;
-                                $highlighted_color = $unlock_highlighted_color;
-                        }
-                        else
-                        {
-                                $lock = true;
-                                $highlighted_color = $lock_highlighted_color;
-                        }
-                        
-                        if($with_caption == true )
-                        {
-                                // correction for empty description
-				echo '<TR bgcolor="' . $tr_bgcolor . '" id="' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\'" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
-                        }
-                        else
-                        {
-	                        echo '<TR bgcolor="' . $tr_bgcolor . '" id = "' . $index . '" onMouseOver="this.style.backgroundColor=\'' . $highlighted_color . '\';" onMouseOut="this.style.backgroundColor=\'' . $tr_bgcolor . '\';">';
-                        } 
-                        if ($file_obj->getDescription() == '') 
-                        { 
-                                $description = 'No description available';
-                        }
-                        // set filename for filesize() call below
-                        //$filename = $dataDir . $file_obj->getId() . '.dat';
-                        $fid = $file_obj->getId();
-
-
-                        // begin displaying file list with basic information
-                        $comment = $file_obj->getComment();
-                        $description = $file_obj->getDescription();
-                        $description = substr($description, 0, 35);
-                        
-                        
-                        $created_date = fix_date($file_obj->getCreatedDate());
-                        if ($file_obj->getModifiedDate())
-                        {   
-                        	$modified_date = fix_date($file_obj->getModifiedDate());
-                        }
-                        
-                        //echo "$modified_date  and $fid fid";
-                        
-                        
-                        $full_name_array = $file_obj->getOwnerFullName();
-                        $owner_name = $full_name_array[1].', '.$full_name_array[0];
-                        //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
-                        $dept_name = $file_obj->getDeptName();
-                        $realname = $file_obj->getRealname();
-                        //$filesize = $file_obj->getFileSize();
-                        //Get the file size in bytes.
-                        $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid_array[$index] . '.dat');
-
-                        if($showCheckBox=='true')
-                        {
-				echo '<TD><input type="checkbox" value="' . $fid . '" name="checkbox' . $checkbox_index . '"></B></TD>';
-			}
-				echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
+                echo '<TD class="' . $css_td_class . '">' . $fid . '<B></TD>';
 
                 if ($userperms_obj->getAuthority($fileid_array[$index]) >= $userperms_obj->READ_RIGHT)
                 {
@@ -518,7 +534,7 @@ if( !defined('function') )
 
                     echo '<td class="' . $css_td_class . '" NOWRAP><a class="" target="_blank" href="view_file.php?submit=view&id=' . urlencode($fid).'&mimetype='.urlencode("$lmimetype") . '"><span><span>' .msg('view'). '</span></span></a></td>';
                 }
-                else 
+                else
                 {
                     echo "<td class=\"$css_td_class\" NOWRAP>&nbsp;</td>";
                 }
@@ -526,43 +542,43 @@ if( !defined('function') )
 
 
 				<TD class="<?php $css_td_class;?>" NOWRAP><a class="listtable" href="<?php echo $secureurl->encode("details.php?id=$fid&state=" . ($_REQUEST['state']+1)) . "\">$realname</a></TD>"?>
-<?php
-                        	echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';							
-                        $read = array($userperms_obj->READ_RIGHT, 'r');
-                        $write = array($userperms_obj->WRITE_RIGHT, 'w');
-                        $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
-                        $rights = array($read, $write, $admin);
-                        $userright = $userperms_obj->getAuthority($file_obj->getId());
-                        $index_found = -1;
-                        //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
-                        //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
-                        //and everything below it. 
-                        for($i = sizeof($rights)-1; $i>=0; $i--)
-                        {
-                                if($userright==$rights[$i][0])
-                                {
-                                        $index_found = $i;
-                                        $i = 0;
-                                }
-                        }
-                        //Found the user right, now bold every below it.  For those that matches, make them different.
-            			for($i = $index_found; $i>=0; $i--)
-                        {
-                                $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
-                        }
-                        //For everything above it, blanck out
-                        
-                        for($i = $index_found+1; $i<sizeof($rights); $i++)
-                        {
-                                $rights[$i][1] = '-';
-                        }
-			            echo '<TD class="' . $css_td_class . '" NOWRAP>';
+                <?php
+                echo '<TD class="' . $css_td_class . '" NOWRAP>' . $description . '</TD>';
+                $read = array($userperms_obj->READ_RIGHT, 'r');
+                $write = array($userperms_obj->WRITE_RIGHT, 'w');
+                $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
+                $rights = array($read, $write, $admin);
+                $userright = $userperms_obj->getAuthority($file_obj->getId());
+                $index_found = -1;
+                //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
+                //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
+                //and everything below it.
+                for($i = sizeof($rights)-1; $i>=0; $i--)
+                {
+                    if($userright==$rights[$i][0])
+                    {
+                        $index_found = $i;
+                        $i = 0;
+                    }
+                }
+                //Found the user right, now bold every below it.  For those that matches, make them different.
+                for($i = $index_found; $i>=0; $i--)
+                {
+                    $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
+                }
+                //For everything above it, blanck out
 
-                        echo $rights[0][1];
-                        for($i = 1; $i<sizeof($rights); $i++)
-                        {
-                                echo '|' . $rights[$i][1];
-                        }
+                for($i = $index_found+1; $i<sizeof($rights); $i++)
+                {
+                    $rights[$i][1] = '-';
+                }
+                echo '<TD class="' . $css_td_class . '" NOWRAP>';
+
+                echo $rights[0][1];
+                for($i = 1; $i<sizeof($rights); $i++)
+                {
+                    echo '|' . $rights[$i][1];
+                }
 ?>                      </TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $created_date;?></TD>
                         <TD class="<?php echo $css_td_class; ?>" NOWRAP><?php echo $modified_date;?></TD>
@@ -868,8 +884,8 @@ if( !defined('function') )
 	            $pass = $pass . $tmp;
 	            $i++;
 	    }
-    return $pass;	
-	}
+        return $pass;
+    }
 	function checkUserPermission($file_id, $permittable_right)
 	{
 		$userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
@@ -1009,13 +1025,15 @@ function sanitizeme($input) {
  * @return string
  */
 function msg($s) {
-    if (isset($GLOBALS['lang'][$s])) {
+    if (isset($GLOBALS['lang'][$s]))
+    {
         return $GLOBALS['lang'][$s];
-    } else {
+    } 
+    else
+    {
         //error_log("l10n error:LANG:" .
         //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
     
         return $s;
     }
 }
-?>
