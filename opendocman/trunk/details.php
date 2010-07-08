@@ -77,6 +77,7 @@ if ($description == '')
 { 
 	$description = msg('message_no_description_available');
 }
+
 if ($comment == '') 
 { 
 	$comment = msg('message_no_author_comments_available');
@@ -198,8 +199,9 @@ else
     }
     else
     {
-        echo msg('message_latest_version'); ?>
-}
+        echo msg('message_latest_version'); 
+    }
+    ?>
 </td>
 </tr>
 <?php
@@ -241,10 +243,12 @@ if ($status > 0)
 <!-- view option available at all time, place it outside the block -->
 <?php 
 if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->READ_RIGHT)
-{?>
+{
+?>
 <td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" title="View" alt="View" border="0"></a></td>
 <?php
 }		
+
 if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 {
 	// status = 0 -> file available for checkout
@@ -259,6 +263,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 <td align="center"><a href="<?php echo $secureurl->encode("check-out.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1) . '&access_right=modify');?>"><img src="images/check-out.png" title="Check Out" alt="Check Out" border="0"></a></td>
 <?php
 	}
+
 	mysql_free_result($result2);
 	
 	if ($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id)  && !$filedata->isArchived())
@@ -270,7 +275,8 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
        <td align="center"><a href="javascript:my_delete()"><img src="images/delete.png" title="Delete" alt="Delete" border="0"></a></td>
 <?php
 	}
-}//end if ($status == 0)
+}
+////end if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
 ?>
@@ -283,7 +289,6 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 </tr>
 </table>
 </center>
-
 
 <script type="text/javascript">
 	var message_window;
@@ -308,6 +313,5 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 		setTimeout("sendFields();", 500);
 	}
 </script>
-	
 <?php
 draw_footer();
