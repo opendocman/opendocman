@@ -145,7 +145,7 @@ $CONFIG['language'] = 'english';
 // Pay attention to the "Last Message:" in the status bar if your file is being rejected
 // because of its file type. It should display the proper MIME type there, and you can 
 // then add that string to this list to allow it
-$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint','application/vnd.ms-excel');
+$GLOBALS['allowedFileTypes'] = array('image/gif', 'text/html', 'text/plain', 'application/pdf', 'application/x-pdf', 'application/x-lyx', 'application/msword', 'image/jpeg', 'image/pjpeg', 'image/png', 'application/msexcel', 'application/msaccess', 'text/richtxt', 'application/mspowerpoint', 'application/octet-stream', 'application/x-zip-compressed','image/tiff','image/tif','application/vnd.ms-powerpoint','application/vnd.ms-excel','applicatiion/vnd.openxmlformats-officedocument.presenationml.presentation','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
 // <----- No need to edit below here ---->
 //
