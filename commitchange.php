@@ -360,7 +360,7 @@ elseif(isset($_REQUEST['updatecategory']))
     $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
-elseif(@$_REQUEST['submit']=='Add User Defined Field')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Field')
 {
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
