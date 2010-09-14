@@ -22,24 +22,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Admin table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}admin
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table" .  mysql_error());
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table" .  mysql_error());
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table. Error was:" .  mysql_error());
 
 // Admin user
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin VALUES (1,1)
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin user");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin user. Error was:" .  mysql_error());
 
 // Category table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}category
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table" .  mysql_error());
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}category (
@@ -47,28 +47,28 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}category (
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (1,'SOP')
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (2,'Training Manual')
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (3,'Letter')
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (4,'Presentation')
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 // Data table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}data
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}data (
@@ -92,12 +92,12 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}data (
   KEY publishable (publishable),
   KEY description (description)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table. Error was:" .  mysql_error());
 
 // Department Table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}department
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}department (
@@ -105,16 +105,16 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}department (
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department VALUES (1,'Information Systems')
-        ") or die("<br>Could not {$GLOBALS['CONFIG']['db_prefix']}add department");
+        ") or die("<br>Could not {$GLOBALS['CONFIG']['db_prefix']}add department. Error was:" .  mysql_error());
 
 // Department Permissions table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}dept_perms
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_perms (
@@ -125,29 +125,29 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_perms (
   KEY dept_id (dept_id),
   KEY fid (fid)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table. Error was:" .  mysql_error());
 
 // Department Reviewer table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table. Error was:" .  mysql_error());
 
 // data for table 'dept_reviewer'
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer VALUES (1,1)
-        ") or die("<br>Could add to {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
+        ") or die("<br>Could add to {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table. Error was:" .  mysql_error());
 
 // Log table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}log
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}log (
@@ -159,49 +159,49 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}log (
   KEY id (id),
   KEY modified_on (modified_on)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table. Error was:" .  mysql_error());
 
 // Rights table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}rights
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table. Error was:" .  mysql_error());
 
 // Rights values
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (0,'none')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (1,'view')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (-1,'forbidden')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (2,'read')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (3,'write')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 $result = mysql_query("
  INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}rights VALUES (4,'admin')
-        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry");
+        ") or die("<br>Could not add {$GLOBALS['CONFIG']['db_prefix']}rights entry. Error was:" .  mysql_error());
 
 // User table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}user
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}user (
@@ -216,17 +216,17 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}user (
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table. Error was:" .  mysql_error());
 
 // Create admin user
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user VALUES (1,'admin','','1','5555551212','admin@example.com','User','Admin','')
-        ") or die("<br>Could not add user");
+        ") or die("<br>Could not add user. Error was:" .  mysql_error());
 
 // User permissions table
 $result = mysql_query("
 DROP TABLE IF EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms (
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms (
   KEY uid (uid),
   KEY rights (rights)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}udf (
@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}udf (
     display_name varchar(16),
     field_type int
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}udf table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}udf table. Error was:" .  mysql_error());
 
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
@@ -256,9 +256,9 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
     sys_name  varchar(16),
     sys_value    varchar(255)
 ) TYPE=MyISAM
-        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}odmsys table");
+        ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}odmsys table. Error was:" .  mysql_error());
 
 // Create version number in db
 $result = mysql_query("
 INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES ('','version','1.2.6')
-        ") or die("<br>Could insert new version into db user");
+        ") or die("<br>Could not insert new version into {$GLOBALS['CONFIG']['db_prefix']}odmsys. Error was:" .  mysql_error());

@@ -174,10 +174,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 
                 // Create database
-                $result = mysql_query("DROP DATABASE IF EXISTS {$GLOBALS['database']}")
-                        or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
-                $result = mysql_query("CREATE DATABASE {$GLOBALS['database']}")
+                $result = mysql_query("CREATE DATABASE IF NOT EXISTS {$GLOBALS['database']}")
                         or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
                 echo 'Database Created<br />';
