@@ -138,23 +138,26 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
     {
         $_POST['caller'] = 'admin.php';
     }
-
-    // UPDATE admin info
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    // UPDATE into user
+    if (!$user_obj->isAdmin())
+    {
+        // UPDATE admin info
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        // UPDATE into user
+    }
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
 
     if (!empty($_POST['password']))
     {
         $query .= "password = md5('". addslashes($_POST['password']) ."'), ";
     }
-
-    if( isset( $_POST['department'] ) )
+    if (!$user_obj->isAdmin())
     {
-        $query.= 'department="' . addslashes($_POST['department']) . '",';
+        if( isset( $_POST['department'] ) )
+        {
+            $query.= 'department="' . addslashes($_POST['department']) . '",';
+        }
     }
-
     if( isset( $_POST['phonenumber'] ) )
     {
         $query.= 'phone="' . addslashes($_POST['phonenumber']) . '",';
