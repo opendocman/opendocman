@@ -152,8 +152,10 @@ $lang['email_your_account_created'] = 'your document management account was crea
 $lang['email_your_file_has_been_authorized'] = 'Your file has been authorized for publication';
 
 // Labels
+$lang['label_active'] = 'Active';
 $lang['label_add'] = 'Add';
 $lang['label_admin'] = 'Admin';
+$lang['label_allowed'] = 'Allowed';
 $lang['label_all_departments'] = 'All Departments';
 $lang['label_author'] = 'Author';
 $lang['label_browse_by'] = 'Filter by:';
@@ -180,6 +182,8 @@ $lang['label_file_listing'] = 'Files List';
 $lang['label_file_location'] = 'File Location';
 $lang['label_file_maintenance'] = 'File Maintenance';
 $lang['label_filename'] = 'Filename';
+$lang['label_filetype'] = 'File Type';
+$lang['label_filetypes'] = 'File Types';
 $lang['label_file_name'] = 'File Name';
 $lang['label_first_name'] = 'First Name';
 $lang['label_forbidden'] = 'Forbidden';
@@ -210,6 +214,7 @@ $lang['label_search_term'] = 'Search term';
 $lang['label_select_a_department'] = 'Select a department';
 $lang['label_select_departments'] = 'Select departments';
 $lang['label_select_one'] = 'Select one';
+$lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Size';
 $lang['label_specific_permissions'] = 'Specific User Permissions (use ctrl-click or cmd-click)';
 $lang['label_status'] = 'Status';
@@ -234,8 +239,11 @@ $lang['message_category_successfully_added'] = 'Category successfully added';
 $lang['message_category_successfully_deleted'] = 'Category successfully deleted';
 $lang['message_category_successfully_updated'] = 'Category successfully updated';
 $lang['message_click_to_checkout_document'] = 'Click to check out the selected document and begin downloading it to your local workstation';
+$lang['message_config_value_problem'] = 'There is a problem with one of your configuration values. Please check.';
 $lang['message_current'] = 'Current';
 $lang['message_datadir_problem'] = 'There is a problem with your dataDir. Check to make sure it exists and is writeable';
+$lang['message_datadir_problem_exists'] = 'There is a problem with your dataDir setting. It does not appear to exist.';
+$lang['message_datadir_problem_writable'] = 'There is a problem with your dataDir setting. It does not appear to be writeable to the web server.';
 $lang['message_department_successfully_added'] = 'Department successfully added';
 $lang['message_department_successfully_updated'] = 'Department successfully updated';
 $lang['message_directory_creation_failed'] = 'Directory Creation Failed';
@@ -310,4 +318,3 @@ $lang['message_you_must_assign_rights'] = 'You must assign view/modify rights to
 $lang['message_your_password_has_been_changed'] = 'Your password has been changed.';
 
 $lang['view'] = $lang['label_view'];
-?>
