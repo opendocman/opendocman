@@ -255,7 +255,22 @@ if ( !defined('udf_functions') )
 
     function udf_functions_add_udf()
     {
+        if(empty($_REQUEST['table_name']))
+        {
+            $secureurl = new phpsecureurl;
+            header('Location: ' . $secureurl->encode('admin.php?last_message=' . msg('message_udf_cannot_be_blank') ));
+            exit;
+        }
+        
         $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
+
+        if(!preg_match('/^\w+$/',$table_name))
+        {
+            $secureurl = new phpsecureurl;
+            header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)'));
+            exit;
+        }
+        
 // Check for duplicate table name
         $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name='$table_name'";
         $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
