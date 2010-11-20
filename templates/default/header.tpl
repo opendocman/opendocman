@@ -18,6 +18,11 @@
         }
         //-->
         </script>
+        
+<!--[if IE]>
+    <script type="text/javascript" src="templates/default/js/buttonfix.js"></script>
+<![endif]-->
+
 {/literal}
 <link type="text/css" rel="stylesheet" href="templates/default/default.css">
     </head>
