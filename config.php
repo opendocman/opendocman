@@ -87,7 +87,7 @@ $CONFIG['root_username']  = 'admin';
 // This should ideally be outside the Web server root. 
 // Make sure the server has permissions to read/write files to this folder!
 
-// Uncomment this one for WINDOWS - Don't forget the trailing backslash "/"
+// Uncomment this one for WINDOWS - Don't forget the trailing slash "/"
 //$CONFIG['dataDir'] = 'c:/document_repository/';
 
 // Uncomment this one for LINUX - Don't forget the trailing slash "/"
