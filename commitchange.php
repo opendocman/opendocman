@@ -151,7 +151,7 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
     {
         $query .= "password = md5('". addslashes($_POST['password']) ."'), ";
     }
-    if (!$user_obj->isAdmin())
+    if ($user_obj->isAdmin())
     {
         if( isset( $_POST['department'] ) )
         {
