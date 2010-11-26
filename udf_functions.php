@@ -78,7 +78,7 @@ if ( !defined('udf_functions') )
         {
             if ( $row[1] == 1 || $row[1] == 2)
             {
-                if ( $_REQUEST[$row[0]] != "" )
+                if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "" )
                 {
                     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET '{$row['0']}' = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
                     //echo $query;
@@ -151,7 +151,7 @@ if ( !defined('udf_functions') )
         {
             if ( $row[1] == 1 || $row[1] == 2)
             {
-                if ( $_REQUEST[$row[2]] != "" )
+                if ( isset($_REQUEST[$row[2]]) && $_REQUEST[$row[2]] != "" )
                 {
                     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET {$row['2']}={$_REQUEST[$row['2']]} WHERE id = {$_REQUEST['id']}";
                     $subresult = mysql_query($query);
@@ -270,7 +270,7 @@ if ( !defined('udf_functions') )
             header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)'));
             exit;
         }
-        
+
 // Check for duplicate table name
         $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name='$table_name'";
         $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
