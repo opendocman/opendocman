@@ -302,6 +302,7 @@ $lang['message_this_operation_cannot_be_done_rev'] = 'Aktion für diese Dateirez
 $lang['message_this_page_requires_root'] = 'Keine Berechtigung um diese Seite anzuzeigen';
 $lang['message_this_site_has_high_security'] = 'Aktuelle Sicherheitsauflagen ermöglichen uns keine solche Passwortabfragen. Zum Zurücksetzen Ihres Passworts geben Sie Ihren Benutzernamen im Formular unten ein und folgen Sie den per eMail zugestellten Anweisungen. Sie können Ihr Passwort beliebig setzen.';
 $lang['message_to_view_your_file'] = 'Datei im neuen Fenster anzeigen';
+$lang['message_udf_cannot_be_blank'] = 'The UDF name cannot be blank';
 $lang['message_udf_successfully_added'] = 'Benutzerdefiniertes Feld erfolgreich hinzugefügt';
 $lang['message_udf_successfully_deleted'] = 'Benutzerdefiniertes Feld erfolgreich gelöscht';
 $lang['message_unable_to_determine_root'] = 'Root-Benutzername kann nicht ermittelt werden. Überprüfen Sie bitte die Einstellungen.';
