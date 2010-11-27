@@ -302,6 +302,7 @@ $lang['message_this_operation_cannot_be_done_rev'] = 'Die handeling is ongeldig 
 $lang['message_this_page_requires_root'] = 'Om deze pagina te bewerken moet u systeembeheerder (root) permissies hebben';
 $lang['message_this_site_has_high_security'] = 'Om veiligheidsredenen kunnen wij uw wachtwoord niet voor u terughalen. Gebruik dit formulier om aan te geven dat u uw wachtwoord opnieuw wilt instellen. Vul uw gebruikersnaam in, dan sturen wij een mailtje naar het emailadres dat wij van u kennen. In dat mailtje staat een link. Klik op die link en u komt op een pagina waarmee u uw wachtwoord kunt her-instellen. U kunt dan zelf een nieuw wachtwoord kiezen.';
 $lang['message_to_view_your_file'] = 'Om uw bestand in een nieuw venster te bekijken';
+$lang['message_udf_cannot_be_blank'] = 'The UDF name cannot be blank';
 $lang['message_udf_successfully_added'] = 'Zelfgedefinieerd veld aangemaakt';
 $lang['message_udf_successfully_deleted'] = 'Zelfgedefinieerd veld verwijderd';
 $lang['message_unable_to_determine_root'] = 'Kan de gebruikersnaam van de beheerder niet vinden. Controleer uw configuratie.';

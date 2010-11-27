@@ -191,6 +191,7 @@ $lang['message_this_operation_cannot_be_done_rev'] = 'This operation cannot be d
 $lang['message_this_page_requires_root'] = 'This page requires root level permission';
 $lang['message_this_site_has_high_security'] = 'This site has a high level of security and we cannot retrieve your password for you.  You can use this form to reset your password.  Enter your username and we will send an email to the email address on file with a link that you must follow to reset your password.  At that point you may set it to anything you wish.';
 $lang['message_to_view_your_file'] = 'To view your file in a new window';
+$lang['message_udf_cannot_be_blank'] = 'The UDF name cannot be blank';
 $lang['message_udf_successfully_added'] = 'User defined field successfully added';
 $lang['message_udf_successfully_deleted'] = 'User defined field successfully deleted';
 $lang['message_unable_to_determine_root'] = 'Unable to determine the root username. Please check your configuration.';
