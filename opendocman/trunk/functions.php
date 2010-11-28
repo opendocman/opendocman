@@ -889,7 +889,7 @@ if( !defined('function') )
 	function checkUserPermission($file_id, $permittable_right)
 	{
 		$userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-		if(!$userperm_obj->user_obj->isRoot() && $userperm_obj->getAuthority($file_id) < $permittable_right)
+		if(!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id) < $permittable_right)
 		{
 			echo msg('error').': '.msg('message_unable_to_find_file') . "\n";
 			echo '       ' . msg('message_please_email') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">' . msg('area_admin') . '</a>';

@@ -76,7 +76,7 @@ if(!isset($_REQUEST['submit']))
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
     $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $lpage_url = $_SERVER['PHP_SELF'] . '?';
-    if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
+    if($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root')
     {
         $id_array = $user_obj->getAllRevieweeIds();
         $lpage_url .= 'mode=' . $_REQUEST['mode'];

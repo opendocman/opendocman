@@ -63,7 +63,7 @@ if(!isset($_POST['submit']))
 
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
     $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    if($user_obj->isRoot() && @$_REQUEST['mode'] == 'root')
+    if($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root')
     {
         $fileid_array = $user_obj->getAllRejectedFileIds();
     }
