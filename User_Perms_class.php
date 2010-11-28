@@ -85,7 +85,7 @@ if ( !defined('User_Perms_class') )
         // use the function above.  LoadData_UserPerm($right) can be invoke directly.
         function loadData_UserPerm($right)
         {
-            if($this->user_obj->isRoot())
+            if($this->user_obj->isAdmin())
             {
                 $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE
                         {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1";
@@ -200,7 +200,7 @@ if ( !defined('User_Perms_class') )
         // users may invoke this function if they are familiar of the numeric permision values
         function canUser($data_id, $right)
         {
-            if($this->user_obj->isRoot())
+            if($this->user_obj->isAdmin())
             {
                 return true;
             }

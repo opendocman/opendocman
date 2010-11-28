@@ -218,7 +218,7 @@ if( !defined('UserPermission_class') )
         function getAuthority($data_id)
         {
             $file_obj = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
-            if($this->user_obj->isRoot())
+            if($this->user_obj->isAdmin())
             {
                 return $this->ADMIN_RIGHT;
             }
