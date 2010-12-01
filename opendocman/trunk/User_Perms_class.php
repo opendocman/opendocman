@@ -87,16 +87,43 @@ if ( !defined('User_Perms_class') )
         {
             if($this->user_obj->isAdmin())
             {
-                $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE
-                        {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1";
+                $query = "SELECT 
+                            d.id
+                        FROM
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
+                        WHERE
+                            d.publishable = 1";
+            }
+            elseif ($this->user_obj->isReviewer())
+            {
+                // If they are a reviewer, let them see files in all departments they are a reviewer for
+                $query = "SELECT d.id
+                        FROM
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_REVIEWER as dr
+                        WHERE
+                            d.publishable = 1
+                        AND
+                            dr.dept_id = d.department
+                        AND
+                            dr.user_id = $this->id";
             }
             else 
             {
                 ////Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
-                $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA,
-                        {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE ({$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id
-				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid AND 
-                        {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights>=$right AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1)";
+                $query = "SELECT d.fid
+                        FROM
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as data,
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as userperms
+                        WHERE (
+                                userperms.uid = $this->id
+                        AND
+                                data.id = userperms.fid
+                        AND
+                                userperms.rights>=$right
+                        AND
+                                data.publishable = 1
+                               )";
             }
             //$start = getmicrotime();
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());

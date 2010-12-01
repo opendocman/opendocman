@@ -194,6 +194,44 @@ if( !defined('User_class') )
                 return 0;
             }
         }
+
+       /*
+        *   Determine if the current user is a reviewer for a specific ID
+        *   @return boolean
+        *   @var string
+        */
+        function isReviewerForFile($file_id)
+        {
+            if($this->isReviewer())
+            {
+                $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_REVIEWER WHERE user_id = ".$this->id;
+                $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+
+                $query = "SELECT
+                                id
+                          FROM
+                                {$GLOBALS['CONFIG']['db_prefix']}data as d,
+                                {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
+                          WHERE
+                                d.publishable >0 AND
+                                dr.dept_id = d.department AND
+                                dr.user_id = {$this->id} AND
+                                d.department=dr.dept_id
+
+                                ";
+
+                mysql_free_result($result);
+                $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+                $file_data = array();
+                $num_files = mysql_num_rows($result);
+                for($index = 0; $index< $num_files; $index++)
+                {
+                    list($fid) = mysql_fetch_row($result);
+                    $file_data[$index] = $fid;
+                }
+                return true;
+            }
+        }
         function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
 
         {

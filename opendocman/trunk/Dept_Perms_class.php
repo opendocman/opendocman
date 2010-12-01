@@ -78,7 +78,6 @@ if( !defined('Dept_Perms_class') )
         function loadData_UserPerm($right)
         {
             //$s1 = getmicrotime();
-            $index = -1;
             $fileid_array = array();
             $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
 			WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id=$this->id 
@@ -88,7 +87,7 @@ if( !defined('Dept_Perms_class') )
             //$fileid_array[$index][1] ==> owner
             //$fileid_array[$index][2] ==> username
             $llen = mysql_num_rows($result);
-            while( $index< $llen )
+            for($index=0; $index < $llen; $index++)
             {
                 list($fileid_array[++$index] ) = mysql_fetch_row($result);
             }
