@@ -80,7 +80,7 @@ if ( !defined('udf_functions') )
             {
                 if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "" )
                 {
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET '{$row['0']}' = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['0']}` = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
                     //echo $query;
                     mysql_query($query);
                 }
@@ -153,7 +153,7 @@ if ( !defined('udf_functions') )
             {
                 if ( isset($_REQUEST[$row[2]]) && $_REQUEST[$row[2]] != "" )
                 {
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET {$row['2']}={$_REQUEST[$row['2']]} WHERE id = {$_REQUEST['id']}";
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['2']}`={$_REQUEST[$row['2']]} WHERE id = {$_REQUEST['id']}";
                     $subresult = mysql_query($query);
                 }
             }
