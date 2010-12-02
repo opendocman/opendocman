@@ -111,7 +111,7 @@ if ( !defined('User_Perms_class') )
             else 
             {
                 ////Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
-                $query = "SELECT data.fid
+                $query = "SELECT userperms.fid
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as data,
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as userperms
