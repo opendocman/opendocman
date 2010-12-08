@@ -72,23 +72,23 @@ if(!isset($_POST['submit']))
         $fileid_array = $user_obj->getRejectedFileIds();
     }
     $sorted_id_array = my_sort($fileid_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
-    ?>
-    <?php
+
     if(@$_REQUEST['mode']=='root')
     {
         echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' onsubmit="closeWindow(1250);" method="POST">';
     }
     else
     {
-        echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1000);" method="POST">';?>
-}
+        echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1000);" method="POST">';
+    }
+    ?>
 <TABLE border="0"><TR><TD>
 
-                    <?php
+     <?php
 
-                    $list_status = list_files($sorted_id_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
-                    list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
-                    ?>
+     $list_status = list_files($sorted_id_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
+     list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
+     ?>
         </TD></TR>
             <?php
             if($list_status != -1)
