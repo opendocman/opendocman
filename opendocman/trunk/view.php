@@ -101,7 +101,11 @@ else
             // send headers to browser to initiate file download
             header ('Content-Type: application/octet-stream'); 
             header ('Content-Disposition: attachment; filename='.$realname); 
-            readfile($filename); 
+            readfile($filename);
+            
+            // Call the plugin API
+            callPluginMethod('onViewFile');
+            
         }
         else
         {

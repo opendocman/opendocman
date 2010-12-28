@@ -74,6 +74,10 @@ else
 {
         session_start();
         unset($_SESSION['uid']);
+
+        // Call the plugin API
+        callPluginMethod('onAfterLogout');
+
         header('Location:index.php');
 }
 

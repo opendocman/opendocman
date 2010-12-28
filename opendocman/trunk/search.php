@@ -234,6 +234,10 @@ else
     //echo 'khoa' . sizeof($search_result);
     $page_url = $_SERVER['PHP_SELF'].'?keyword='.urlencode($_GET['keyword']).'&where='.urlencode($_GET['where']).'&submit='.urlencode($_GET['submit']) . '&exact_phrase='.@$_GET['exact_phrase'];
     $sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
+    
+    // Call the plugin API
+    callPluginMethod('onSearch');
+
     list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
     echo '<br />';
     list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );

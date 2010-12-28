@@ -23,10 +23,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 include_once('version.php');
 
+include_once('Plugin_class.php');
+$plugin= new Plugin();
+
 require_once('includes/smarty/Smarty.class.php');
 $GLOBALS['smarty'] = new Smarty();
-$GLOBALS['smarty']->template_dir = 'templates/' . $GLOBALS['CONFIG']['theme'] .'/';
-
+$GLOBALS['smarty']->template_dir = dirname(__FILE__) . '/templates/' . $GLOBALS['CONFIG']['theme'] .'/';
+$GLOBALS['smarty']->compile_dir = dirname(__FILE__) . '/templates_c/';
 /**** SET g_ vars from Global Config arr ***/
 foreach($GLOBALS['CONFIG'] as $key => $value)
 {
@@ -46,9 +49,6 @@ foreach($GLOBALS['lang'] as $key=>$value)
 {
     $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
 }
-if( !defined('function') )
-{
-  	define('function', 'true', false);
 	// BEGIN FUNCTIONS
 	// function to format mySQL DATETIME values
 	function fix_date($val)
@@ -201,7 +201,6 @@ if( !defined('function') )
             {
                 echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
             }
-
             $GLOBALS['smarty']->assign('page_title', $page_title);
             $GLOBALS['smarty']->display('header.tpl');
             /*
@@ -972,13 +971,12 @@ if( !defined('function') )
         }
         function valid_username($username)
         {
-            $unrx = '/^[a-zA-Z0-9]/'; // allow only letters and numbers. Limit 5 - 25 characters.
-            if(preg_match($unrx, $username))
-                return true;
-            else
+            $unrx = '/^[a-z]+[\w.-]*$/i'; // allow only letters and numbers. Limit 5 - 25 characters.
+            if(!preg_match($unrx, $username))
                 return false;
+            else
+                return true;
         }
-}
 
 function cleanInput($input) {
  
@@ -1024,16 +1022,33 @@ function sanitizeme($input) {
  * @param string $s
  * @return string
  */
-function msg($s) {
+function msg($s){
     if (isset($GLOBALS['lang'][$s]))
     {
         return $GLOBALS['lang'][$s];
-    } 
+    }
     else
     {
         //error_log("l10n error:LANG:" .
         //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
-    
         return $s;
     }
 }
+
+    /*
+     * callPluginMethod
+     * @param string $method The name of the plugin method being envoked.
+     * @return null
+     */
+    function callPluginMethod($method)
+    {
+        foreach ($GLOBALS['plugin']->pluginslist as $value)
+        {
+            if (!valid_username($value))
+            {
+                echo 'Sorry, your plugin ' . $value . ' is not setup properly';
+            }
+            $plugin_obj = new $value;
+            $plugin_obj->$method();
+        }
+    }

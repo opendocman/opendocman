@@ -332,6 +332,10 @@ if(!isset($_POST['submit']))
 
         </TR>
     </TABLE>
+    <?php
+        // Call the plugin API
+        callPluginMethod('onBeforeAdd');
+    ?>
     <table>
         <tr>
             <td colspan="3" align="center"><div class="buttons"><button class="positive" tabindex=7 type="Submit" name="submit" value="Add Document"><?php echo msg('submit')?></button></div></td>
@@ -437,6 +441,10 @@ else
             }
         }
         // all checks completed, proceed!
+
+        // Run the onDuringAdd() plugin function
+        callPluginMethod('onDuringAdd');
+
         // INSERT file info into data table
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
 
@@ -516,6 +524,10 @@ else
         }
         // back to main page
         $message = urlencode(msg('message_document_added'));
+
+        // Call the plugin API
+        callPluginMethod('onAfterAdd');
+        
         header('Location: out.php?last_message=' . $message);
     }
 }
