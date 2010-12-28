@@ -72,6 +72,10 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
     // delete from directory
     // clean up and back to main page
     $last_message = urlencode(msg('message_document_has_been_archived'));
+
+    // Call the plugin API call for this section
+    callPluginMethod('onAfterArchiveFile');
+
     header('Location: out.php?last_message=' . $last_message);
 }
 elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
@@ -130,6 +134,9 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'pmntdel' )
                     }
                 }
             }
+            // Call the plugin API call for this section
+            callPluginMethod('onAfterDeleteFile');
+
         }
     }
     // delete from directory

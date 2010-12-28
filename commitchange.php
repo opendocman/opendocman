@@ -116,6 +116,10 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         $mail_to = $new_user_obj->getEmailAddress();
         mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
         $_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
+
+        // Call the plugin API call for this section
+        callPluginMethod('onAfterAddUser');
+
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
     }
 }

@@ -29,6 +29,9 @@ if (!isset($_REQUEST['last_message']))
     $_REQUEST['last_message'] = '';
 }
 
+// Call the plugin API
+callPluginMethod('onBeforeLogin');
+
 if(isset($_POST['login']))
 {
     if(!valid_username($_POST['frmuser']))
@@ -59,7 +62,7 @@ if(isset($_POST['login']))
     // check login and md5()
     // connect and execute query
     $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = md5('$frmpass')";
-    $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+    $result = mysql_query("$query") or die ("Error in query. Is the database created ?: $query. " . mysql_error());
     if(mysql_num_rows($result) != 1)
     {
         // Check old password() method
@@ -82,11 +85,15 @@ if(isset($_POST['login']))
 
     // if row exists - login/pass is correct
     if (mysql_num_rows($result) == 1)
-    {
+    {        
         // register the user's ID
         list($id, $username, $password) = mysql_fetch_row($result);
         // initiate a session
         $_SESSION['uid'] = $id;
+
+        // Run the plugin API
+        callPluginMethod('onAfterLogin');
+        
         // redirect to main page
         if(isset($_REQUEST['redirection']))
         {
@@ -104,6 +111,10 @@ if(isset($_POST['login']))
         // Login Failed
         mysql_free_result ($result);
         // redirect to error page
+        
+        // Call the plugin API
+        callPluginMethod('onFailedLogin');
+        
         header('Location: error.php?ec=0');
     }
 }

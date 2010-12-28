@@ -90,6 +90,11 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <center>
                 <table border="0" cellspacing="5" cellpadding="5">
                 <form name="add_user" action="commitchange.php" method="POST" enctype="multipart/form-data">
+                    <?php
+                    // Call the plugin API call for this section
+                    callPluginMethod('onBeforeAddUser');                     
+                    ?>
+
                 <tr><td><b><?php echo msg('label_last_name')?></b></td><td><input name="last_name" type="text"></td></tr>
                 <tr><td><b><?php echo msg('label_first_name')?></b></td><td><input name="first_name" type="text"></td></tr>
                 <tr><td><b><?php echo msg('username')?></b></td><td><input name="username" type="text"></td></tr>

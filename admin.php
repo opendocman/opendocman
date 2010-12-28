@@ -140,6 +140,24 @@ if ( $user_obj->isRoot()	)
 ?>
 </tr>
 </table>
+    <?php
+if(is_array($GLOBALS['plugin']->getPluginsList()))
+{
+    ?>
+            <table border="1" cellspacing="5" cellpadding="5" >
+            <font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_plugins')?></th>
+                <tr>
+                    <td>
+            <?php
+        //Perform the admin loop section to add plugin menu items
+        callPluginMethod('onAdminMenu');
+            ?>
+                    </td>
+                </tr>
+                    </table>
+    <?php
+}
+    ?>
 </center>
-<?php
+    <?php
 draw_footer();

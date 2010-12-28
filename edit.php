@@ -453,7 +453,12 @@ if (!isset($_REQUEST['submit']))
 	}
 
 ?>
-	</select></td>
+	</select>
+        </td>
+<?php
+    // Call Plugin API
+    callPluginMethod('onBeforeEditFile');
+?>
 	</tr>
 	</table>
 	<table>
@@ -542,7 +547,11 @@ else
 	// clean up
 	mysql_freeresult($result);
 	$message = urlencode('Document successfully updated');
-	header('Location: out.php?last_message=' . $message);
+
+        // Call the plugin API
+        callPluginMethod('onAfterEditFile');
+
+        header('Location: out.php?last_message=' . $message);
 }
 ?>
 <script type="text/javascript">
