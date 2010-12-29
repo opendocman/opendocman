@@ -257,6 +257,7 @@ $lang['label_next'] = 'Next';
 $lang['label_note_for_revision_log'] = 'Note for revision log';
 $lang['label_page'] = 'Page';
 $lang['label_phone_number'] = 'Phone Number';
+$lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Previous';
 $lang['label_read'] = "Oku";
 $lang['label_rejected_files'] = "Reddedilen Dosyalar";

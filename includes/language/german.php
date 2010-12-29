@@ -201,6 +201,7 @@ $lang['label_next'] = 'Weiter';
 $lang['label_note_for_revision_log'] = 'Revisionsprotokoll-Notiz';
 $lang['label_page'] = 'Seite';
 $lang['label_phone_number'] = 'Telefonnummer';
+$lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Zurück';
 $lang['label_read'] = 'Lesen';
 $lang['label_rejected_files'] = 'Zurückgewiesene Dateien';
