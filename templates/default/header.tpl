@@ -20,11 +20,11 @@
         </script>
         
 <!--[if IE]>
-    <script type="text/javascript" src="templates/default/js/buttonfix.js"></script>
+    <script type="text/javascript" src="{$g_base_url}/templates/default/js/buttonfix.js"></script>
 <![endif]-->
 
 {/literal}
-<link type="text/css" rel="stylesheet" href="templates/default/default.css">
+<link type="text/css" rel="stylesheet" href="{$g_base_url}/templates/default/default.css">
     </head>
     <body bgcolor="white">
     <!-- --------------------------End drawing header--------------------------- --!>
