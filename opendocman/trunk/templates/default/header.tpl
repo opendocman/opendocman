@@ -18,12 +18,12 @@
         }
         //-->
         </script>
-        
+{/literal}
 <!--[if IE]>
     <script type="text/javascript" src="{$g_base_url}/templates/default/js/buttonfix.js"></script>
 <![endif]-->
 
-{/literal}
+
 <link type="text/css" rel="stylesheet" href="{$g_base_url}/templates/default/default.css">
     </head>
     <body bgcolor="white">
