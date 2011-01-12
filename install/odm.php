@@ -50,19 +50,19 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}category (
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table. Error was:" .  mysql_error());
 
 $result = mysql_query("
-INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (1,'SOP')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (NULL,'SOP')
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
- INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (2,'Training Manual')
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (NULL,'Training Manual')
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
- INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (3,'Letter')
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (NULL,'Letter')
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 $result = mysql_query("
- INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (4,'Presentation')
+ INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category VALUES (NULL,'Presentation')
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category. Error was:" .  mysql_error());
 
 // Data table
@@ -108,7 +108,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}department (
         ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table. Error was:" .  mysql_error());
 
 $result = mysql_query("
-INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department VALUES (1,'Information Systems')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department VALUES (NULL,'Information Systems')
         ") or die("<br>Could not {$GLOBALS['CONFIG']['db_prefix']}add department. Error was:" .  mysql_error());
 
 // Department Permissions table
@@ -220,7 +220,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}user (
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user VALUES (1,'admin','','1','5555551212','admin@example.com','User','Admin','')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user VALUES (NULL,'admin','','1','5555551212','admin@example.com','User','Admin','')
         ") or die("<br>Could not add user. Error was:" .  mysql_error());
 
 // User permissions table
@@ -260,5 +260,5 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
 
 // Create version number in db
 $result = mysql_query("
-INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES ('version','1.2.6')
+INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}odmsys VALUES (NULL, 'version','1.2.6')
         ") or die("<br>Could not insert new version into {$GLOBALS['CONFIG']['db_prefix']}odmsys. Error was:" .  mysql_error());

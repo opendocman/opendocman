@@ -32,10 +32,10 @@ CREATE TABLE odm_category (
 # Dumping data for table 'odm_category'
 #
 
-INSERT INTO odm_category VALUES (1,'SOP');
-INSERT INTO odm_category VALUES (2,'Training Manual');
-INSERT INTO odm_category VALUES (3,'Letter');
-INSERT INTO odm_category VALUES (4,'Presentation');
+INSERT INTO odm_category VALUES (NULL,'SOP');
+INSERT INTO odm_category VALUES (NULL,'Training Manual');
+INSERT INTO odm_category VALUES (NULL,'Letter');
+INSERT INTO odm_category VALUES (NULL,'Presentation');
 
 #
 # Table structure for table 'odm_data'
@@ -81,7 +81,7 @@ CREATE TABLE odm_department (
 # Dumping data for table 'odm_department'
 #
 
-INSERT INTO odm_department VALUES (1,'Information Systems');
+INSERT INTO odm_department VALUES (NULL,'Information Systems');
 
 #
 # Table structure for table 'odm_dept_perms'
@@ -176,7 +176,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (1,'admin','',1,'5555551212','admin@example.com','User','Admin','');
+INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','');
 
 #
 # Table structure for table 'odm_user_perms'
@@ -224,5 +224,5 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) TYPE=MyISAM;
 
-INSERT INTO odm_odmsys VALUES ('','version','1.2.6');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6');
 
