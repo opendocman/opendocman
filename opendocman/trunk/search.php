@@ -211,8 +211,8 @@ else
     $query_array = array();
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
     //echo 'khoa' . sizeof($search_result);
-    $sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
-    
+    $sorted_result = my_sort($search_result);
+
     // Call the plugin API
     callPluginMethod('onSearch');
 
