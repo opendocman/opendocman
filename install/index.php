@@ -1,7 +1,7 @@
 <?php
 /*
-setup.php - Automated setup/upgrade script. Remove after installation
-Copyright (C) 2002-2010  Stephen Lawrence
+install/index.php - Automated setup/upgrade script. Remove after installation
+Copyright (C) 2002-2011  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,22 +17,61 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+// Sanity check.
+if ( false ) {
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Error: PHP is not running</title>
+</head>
+<body>
+	<h1 id="logo"><img alt="OpenDocMan" src="../images/logo.gif" /></h1>
+	<h2>Error: PHP is not running</h2>
+	<p>OpenDocMan requires that your web server is running PHP. Your server does not have PHP installed, or PHP is turned off.</p>
+</body>
+</html>
+<?php
+exit;
+}
+
+session_start();
+
+// Search for the config file in parent folders
+// If not found, redirect to index for install routine
+if(file_exists('../config.php'))
+{
+    include('../config.php');
+}
+elseif(file_exists('../../config.php'))
+{
+    include('../../config.php');
+}
+else
+{
+    Header('Location: ../index.php');
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
         <title>OpenDocMan Installer</title>
+        <link rel="stylesheet" href="../templates/common/css/install.css" type="text/css" />
     </head>
 
     <body>
         <center>
             <img src="../images/logo.gif"><br>
             <?php
-
-
-            switch(@$_REQUEST['op'])
+            
+            if(!isset($_REQUEST['op']))
             {
-
+                $_REQUEST['op'] = '';
+            }
+            switch($_REQUEST['op'])
+            {
                 case "install":
                     do_install();
                     break;
@@ -52,7 +91,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
                 // User has version 11rc1 and is upgrading
                 case "update_11rc1":
@@ -65,7 +104,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 11rc2 and is upgrading
@@ -78,7 +117,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 11 and is upgrading
@@ -90,7 +129,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 12rc1 and is upgrading
@@ -101,7 +140,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 12p1 and is upgrading
@@ -111,7 +150,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 12p3 and is upgrading
@@ -120,7 +159,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 124 and is upgrading
@@ -128,38 +167,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     do_update_124();
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 1252 and is upgrading
                 case "update_125":
                     do_update_1252();
                     do_update_1256();
-                    do_update_1256();
+                    do_update_1257();
                     break;
 
                 // User has version 1256 and is upgrading
                 case "update_1256":
                     do_update_1256();
-                    do_update_126();
+                    do_update_1257();
                     break;
 
-                // User has version 1257 and is upgrading
-                case "update_126":
-                    do_update_126();
+                // User has version 1257 or 126beta and is upgrading
+                case "update_1257":
+                    do_update_1257();
                     break;
-
+                
                 default:
                     print_intro();
                     break;
             }
-
+            
             function do_install()
             {
+                define('ODM_INSTALLING', 'true');
                 echo 'Checking that templates_c folder is writeable... ';
                 if(!is_writeable('../templates_c'))
                 {
-                    echo 'Not writeable - Fix and go <a href="javascript: history.back()">Back</a>';
+                    echo 'templates_c folder is <strong>Not writeable</strong> - Fix and go <a href="javascript: history.back()" class="button">Back</a>';
                     exit;
                 }
                 else
@@ -168,23 +208,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 }
                 echo '<br />installing...<br>';
 
-
-                include_once("../config.php");
-
-                mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
+                mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect!");
 
                 // Create database
-                $result = mysql_query("CREATE DATABASE IF NOT EXISTS {$GLOBALS['database']}")
+                $result = mysql_query("CREATE DATABASE IF NOT EXISTS " . DB_NAME)
                         or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
                 echo 'Database Created<br />';
-
-                mysql_select_db($GLOBALS['database']) or die (mysql_error() . "<br>Unable to select database.</font>");
+                mysql_select_db(DB_NAME) or die (mysql_error() . "<br>Unable to select database.</font>");
 
                 echo 'Database Selected<br />';
-
+                include('../config.php');
                 include_once("odm.php");
-                echo 'All Done with installation! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login';
+                echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password: None</strong></p></br />Click <a href="../admin/settings.php">HERE</a> to edit your site settings';
             } // End Install
 
             function do_update_10()
@@ -195,14 +231,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 //include("install/upgrade_09.php");
                 include("../config.php");
                 include("upgrade_10.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
             function do_update_11rc1()
             {
                 echo 'Updating version 1.1rc1<br>';
                 include("../config.php");
                 include("upgrade_11rc1.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_11rc2()
@@ -210,7 +246,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating version 1.1rc2<br>';
                 include("../config.php");
                 include("upgrade_11rc2.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_11()
@@ -218,7 +254,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating version 1.1<br>';
                 include("../config.php");
                 include("upgrade_11.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_12rc1()
@@ -226,7 +262,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating version 1.2rc1<br>';
                 include("../config.php");
                 include("upgrade_12rc1.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_12p1()
@@ -234,7 +270,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating from version 1.2p1 to 1.2p2<br>';
                 include("../config.php");
                 include("upgrade_12p1.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_12p3()
@@ -242,7 +278,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating from version 1.2p3 to 1.2.4<br>';
                 include("../config.php");
                 include("upgrade_12p3.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_124()
@@ -250,7 +286,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating from version 1.2.4 to 1.2.5<br>';
                 include("../config.php");
                 include("upgrade_124.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_125()
@@ -258,30 +294,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 echo 'Updating from version 1.2.5.2 to 1.2.5.3<br>';
                 include("../config.php");
                 include("upgrade_125.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
             function do_update_1256()
             {
-                echo 'Updating from version 1.2.5.6 to 1.2.5.7<br>';
+                echo 'Updating from version 1.2.5.6 to 1.2.5.7...<br />';
                 include("../config.php");
                 include("upgrade_1256.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
 
-            function do_update_126()
+            function do_update_1257()
             {
-                echo 'Updating from version 1.2.5.7 to 1.2.6<br>';
+                echo 'Updating from version 1.2.5.7...<br />';
                 include("../config.php");
-                include("upgrade_126.php");
-                echo 'All Done with update! Click <a href="' . $GLOBALS['CONFIG']['base_url'] . '">HERE</a> to login<br>';
+                include("upgrade_1257.php");
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }
             function print_intro()
             {
 
                 include_once('../version.php');
     ?>
-            <h3>Welcome to the OpenDocMan Configuration Tool</h3>
+            <h3>Welcome to the OpenDocMan Installer Tool</h3>
         </center>
         <hr>
         <table>
@@ -295,19 +331,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                 <td><strong>Please BACKUP all data and files before proceeding!</strong><br><br></td>
             </tr>
             <tr>
-                <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
+                <td>Please choose one from the following based on your current version.<br><br></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+                <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=update_1257">Upgrade versions 1.2.5.7 - 1.2.6</a><br><br></td>
+                <td><a href="index.php?op=update_1257">Upgrade from version 1.2.5.7 or 1.2.6beta</a><br><br></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=update_1256">Upgrade versions 1.2.5.3 - 1.2.5.6</a><br><br></td>
+                <td><a href="index.php?op=update_1256">Upgrade from version 1.2.5.3</a><br><br></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=update_125">Upgrade versions 1.2.5 - 1.2.5.2</a><br><br></td>
+                <td><a href="index.php?op=update_125">Upgrade from version 1.2.5</a><br><br></td>
             </tr>
             <tr>
                 <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>

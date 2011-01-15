@@ -2,7 +2,7 @@
 /*
 User_class.php - Container for user related info
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -180,7 +180,12 @@ if( !defined('User_class') )
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
             return true;
         }
-
+        
+       /*
+        *   Determine if the current user is a reviewer or not
+        *   @return boolean
+        *
+        */
         function isReviewer()
         {
             $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = " . $this->id;
@@ -232,6 +237,7 @@ if( !defined('User_class') )
                 return true;
             }
         }
+        
         function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
 
         {
@@ -269,6 +275,7 @@ if( !defined('User_class') )
                     }
                 }
                 $query = $query . " and {$GLOBALS['CONFIG']['db_prefix']}data.publishable = 0";
+
                 mysql_free_result($result);
                 $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
                 $file_data = array();
@@ -281,6 +288,7 @@ if( !defined('User_class') )
                 return $file_data;
             }
         }
+        
         function getAllRejectedFileIds()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE publishable = '-1'";
@@ -294,6 +302,7 @@ if( !defined('User_class') )
             }
             return $file_data;
         }
+        
         function getRejectedFileIds()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable = '-1' and owner = ".$this->id;
@@ -307,6 +316,7 @@ if( !defined('User_class') )
             }
             return $file_data;
         }
+        
         function getExpiredFileIds()
         {
             $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status=-1 AND owner = '$this->id'";
@@ -320,12 +330,14 @@ if( !defined('User_class') )
             }
             return $file_data;
         }
+        
         function getNumExpiredFiles()
         {
             $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status=-1 AND owner = '$this->id'";
             $lresult = mysql_query($lquery) or die(mysql_error());
             return mysql_num_rows($lresult);
         }
+        
         function getEmailAddress()
         {
             $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=".$this->id;
@@ -368,5 +380,24 @@ if( !defined('User_class') )
             mysql_free_result($result);
             return $full_name;
         }
+
+        //Return list of checked out files to root
+        function getCheckedOutFiles()
+        {
+            if ($this->isRoot())
+            {
+                $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status>0";
+                $result = mysql_query($query) or die("Error trying to create checked out files list: $lquery" . mysql_error());
+                $llen = mysql_num_rows($result);
+                $file_data = array();
+                for ($index = 0; $index < $llen; $index++)
+                {
+                    list($fid) = mysql_fetch_row($result);
+                    $file_data[$index] = $fid;
+                }
+                return $file_data;
+            }
+        }
+
     }
 }

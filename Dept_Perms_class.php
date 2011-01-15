@@ -2,7 +2,7 @@
 /*
 Dept_Perms_class.php - Dept_Perms is designed to handle permission settings of each department.
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -79,9 +79,18 @@ if( !defined('Dept_Perms_class') )
         {
             //$s1 = getmicrotime();
             $fileid_array = array();
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA, {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
-			WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id=$this->id 
-			AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id={$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable=1";
+            $query = "SELECT deptperms.fid
+                    FROM
+                        {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as data,
+                        {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS as deptperms
+                    WHERE
+                            deptperms.rights >= $right
+                    AND
+                            deptperms.dept_id=$this->id
+                    AND
+                            data.id=deptperms.fid
+                    AND
+                            data.publishable=1";
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
             //$fileid_array[$index][0] ==> fid
             //$fileid_array[$index][1] ==> owner

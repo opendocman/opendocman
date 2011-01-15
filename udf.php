@@ -2,7 +2,7 @@
 /*
 udf.php - Administer User Defined Fields
 Copyright (C) 2007 Stephen Lawrence Jr., Jonathan Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 // includes
-include('config.php');
+include('odm-load.php');
 $secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if(!$user_obj->isAdmin())
 {
     header('Location:' . $secureurl->encode('error.php?ec=4'));
@@ -391,8 +391,19 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         }
         mysql_free_result($result);
         echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name=newvalue></td></tr>';
-        echo '</table>';
-        echo '<div class="buttons"><button class="positive" type=submit value=Update>' . msg('button_update') . '</button></div><br /></form>';
+        echo '<tr><td colspan="2">';
+        echo '<div class="buttons"><button class="positive" type=submit value=Update>' . msg('button_update') . '</button></form></div>';
+        ?>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <div class="buttons">
+                <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+            </div>
+        </form>
+        </div>
+        </td>
+        </tr>
+        </table>
+<?php
     }
     draw_footer();
 }

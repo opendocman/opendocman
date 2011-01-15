@@ -3,7 +3,7 @@
 commitchange.php - provides database commits for various admin tasks
 Copyright (C) 2002-2006  Stephen Lawrence
 Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,11 +27,11 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 $secureurl = new phpsecureurl;
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 // Code added by Chad Blomquist
 // Check to make sure they should be here.
@@ -93,8 +93,8 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         }
 
         // mail user telling him/her that his/her account has been created.
-        $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-        $new_user_obj = new User($userid, $GLOBALS['connection'], $GLOBALS['database']);
+        $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+        $new_user_obj = new User($userid, $GLOBALS['connection'], DB_NAME);
         $date = date('D F d Y');
         $time = date('h:i A');
         $get_full_name = $user_obj->getFullName();
@@ -142,15 +142,16 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
     {
         $_POST['caller'] = 'admin.php';
     }
-    if (!$user_obj->isAdmin())
+
+    // UPDATE admin info
+    if($user_obj->isAdmin())
     {
-        // UPDATE admin info
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // UPDATE into user
     }
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
-
+    // UPDATE into user
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
+    
     if (!empty($_POST['password']))
     {
         $query .= "password = md5('". addslashes($_POST['password']) ."'), ";

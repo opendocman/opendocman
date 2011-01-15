@@ -3,7 +3,7 @@
 upgrade_125.php - Database upgrades for users upgrading from 1.2.5
 through 1.2.5.2
 
-Copyright (C) 2007-2010 Stephen Lawrence Jr.
+Copyright (C) 2007-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-) TYPE=MyISAM
+)
         ") or die("<br>Could not update" . mysql_error());
 
 // Create version number in db

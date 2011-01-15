@@ -2,7 +2,7 @@
 /*
 view_file.php - draws screen which allows users to view files inline
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,7 +26,9 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include('config.php');
+
+include('odm-load.php');
+
 $secureurl_obj = New phpsecureurl();
 
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
@@ -44,7 +46,7 @@ if(!isset($_GET['submit']))
     draw_header(msg('view') . ' ' . msg('file'));
     draw_menu($_SESSION['uid']);
     draw_status_bar(msg('view') . ' ' . msg('file'),$_REQUEST['last_message']);
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     $file_name = $file_obj->getName();
     $file_id = $file_obj->getId();
     $realname = $file_obj->getName();
@@ -86,7 +88,7 @@ elseif ($_GET['submit'] == 'view')
     //echo "mimetype = $mimetype<br>";
     //exit;
     //echo "ID is $_REQUEST['id']";
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
     $realname = $file_obj->getName();
@@ -123,7 +125,7 @@ elseif ($_GET['submit'] == 'view')
 }
 elseif ($_GET['submit'] == 'Download')
 {
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
     $realname = $file_obj->getName();

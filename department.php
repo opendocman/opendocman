@@ -1,7 +1,7 @@
 <?php
 /*
    department.php - Administer Departments
-   Copyright (C) 2002-2010 Stephen Lawrence Jr.
+   Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@ if (!isset($_SESSION['uid']))
 }
 
 // includes
-include('config.php');
+include('odm-load.php');
 // Make sure user is admin
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
@@ -40,7 +40,7 @@ if(!$user_obj->isAdmin() == true)
 }
 
 $secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 
 
@@ -171,7 +171,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
     {
         $_POST['last_message']='';
     }
-    $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+    $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
     draw_header(msg('area_update_department'));
     draw_menu($_SESSION['uid']);
     draw_status_bar(msg('area_update_department') .': ' . $dept_obj->getName(),$_POST['last_message']);

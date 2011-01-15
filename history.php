@@ -2,7 +2,7 @@
 /*
 history.php - display revision history
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
     exit;
 }
-include('config.php');
+include('odm-load.php');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -51,7 +51,7 @@ if(strchr($_REQUEST['id'], '_') )
 {
     list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
 }
-$datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+$datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 // verify
 if ($datafile->getError() != NULL)
 {

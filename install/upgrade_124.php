@@ -1,7 +1,7 @@
 <?php
 /*
 upgrade_124.php - Database upgrades for users upgrading from 1.2.4
-Copyright (C) 2007-2010 Stephen Lawrence Jr.
+Copyright (C) 2007-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,5 +26,5 @@ CREATE TABLE IF NOT EXISTS udf
     table_name  varchar(16),
     display_name    varchar(16),
     field_type  int
-) TYPE=MyISAM
+)
 ") or die("<br>Could not update" . mysql_error());

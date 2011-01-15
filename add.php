@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
     exit;
 }
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 //un_submitted form
 if(!isset($_POST['submit'])) 
@@ -369,7 +369,7 @@ else
     // change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
     for($khoa = 0; $khoa<1; $khoa++)
     {
-        if ($GLOBALS['CONFIG']['authorization'] == 'On')
+        if ($GLOBALS['CONFIG']['authorization'] == 'True')
         {
             $lpublishable = '0';
         }
@@ -388,6 +388,12 @@ else
         }
         list($current_user_dept) = mysql_fetch_row($result);
 
+        // File is bigger than what php.ini post/upload/memory limits allow.
+        if($_FILES['file'] ['error'] == '1')
+        {
+           header('Location:error.php?ec=26');
+            exit;
+        }
         //can't upload empty file
         if ($_FILES['file']['size'] <= 0 )
         {
@@ -403,7 +409,7 @@ else
         }
 
     // check file type
-    foreach($GLOBALS['allowedFileTypes'] as $thistype)
+    foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
     {
         if ($_FILES['file']['type'] == $thistype)
         {
@@ -476,7 +482,7 @@ else
         // Search for simular names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
         // Priority is in this order (admin, modify, read, view)
-        $filedata = new FileData($fileId, $GLOBALS['connection'], $GLOBALS['database']);
+        $filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
 
         if  (isset ($_REQUEST['admin']))
         {

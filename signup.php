@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Jon Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // You can add signup_header.html and signup_footer.html files to display on this page automatically
 
-include('config.php');
-if($GLOBALS['CONFIG']['allow_signup'] == 'On')
+include('odm-load.php');
+if($GLOBALS['CONFIG']['allow_signup'] == 'True')
 {
 
     // Submitted so insert data now
@@ -43,7 +43,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
         {
             $phonenumber = (!empty($_REQUEST['phonenumber']) ? $_REQUEST['phonenumber'] : '');
             // INSERT into user
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (id, username, password, department, phone, Email,last_name, first_name) VALUES('', '". addslashes($_POST['username'])."', md5('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
             // INSERT into admin
             $userid = mysql_insert_id($GLOBALS['connection']);
@@ -85,7 +85,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'On')
             $_REQUEST['caller'] = 'admin.php';
         }
 
-        $user_obj = new User($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+        $user_obj = new User($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
         // UPDATE admin info
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";

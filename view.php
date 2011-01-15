@@ -2,7 +2,7 @@
 /*
 view.php - performs download without updating database
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include_once('config.php');
+include_once('odm-load.php');
 
 if (!isset($id) || $id == '')
 {
@@ -41,12 +41,7 @@ if (!isset($id) || $id == '')
 // in case file is accessed directly
 // verify again that user has view rights
 
-/*
-   $query = "SELECT id, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}perms WHERE id = '$id' AND perms.rights = '1' AND perms.uid = '$_SESSION[uid]' AND perms.fid = data.id";
-   $result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
-*/
-//if (mysql_num_rows($result) <= 0)
-$filedata = new FileData($GLOBALS['connection'], $GLOBALS['database'], 'data');
+$filedata = new FileData($GLOBALS['connection'], DB_NAME, 'data');
 $filedata->setId($id);
 
 if ($filedata->getError() != '')

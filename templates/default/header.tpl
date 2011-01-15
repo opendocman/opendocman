@@ -1,6 +1,7 @@
-<!-- -------------------------Start drawing header--------------------------- --!>
+<!DOCTYPE html>
 <html>
     <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>{$g_title} - {$page_title}</title>
 {literal}
         <script type="text/javascript">
@@ -23,8 +24,9 @@
     <script type="text/javascript" src="{$g_base_url}/templates/default/js/buttonfix.js"></script>
 <![endif]-->
 
+{* Must Include This Section *}
+{include file='../../templates/common/head_include.tpl'}
 
-<link type="text/css" rel="stylesheet" href="{$g_base_url}/templates/default/default.css">
+<link type="text/css" rel="stylesheet" href="{$g_base_url}/templates/default/css/default.css">
     </head>
-    <body bgcolor="white">
-    <!-- --------------------------End drawing header--------------------------- --!>
+    <body >

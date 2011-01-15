@@ -2,7 +2,7 @@
 /*
 profile.php - page for changing personal info
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ if (!isset ($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include('config.php');
+include('odm-load.php');
 draw_header(msg('area_personal_profile'));
 draw_menu($_SESSION['uid']);
 @draw_status_bar(msg('area_personal_profile'), $_REQUEST['last_message']);

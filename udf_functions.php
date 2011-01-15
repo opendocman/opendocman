@@ -2,7 +2,7 @@
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence Jr., Jonathan Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -81,7 +81,6 @@ if ( !defined('udf_functions') )
                 if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "" )
                 {
                     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['0']}` = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
-                    //echo $query;
                     mysql_query($query);
                 }
             }
@@ -283,7 +282,7 @@ if ( !defined('udf_functions') )
                 mysql_query($query);
                 $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN '.$table_name.' int AFTER category';
                 mysql_query($query);
-                $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(16) )';
+                $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
                 mysql_query($query);
             }
         }

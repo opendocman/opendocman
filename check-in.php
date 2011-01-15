@@ -1,7 +1,7 @@
 <?php
 /*
 check-in.php - uploads a new version of a file
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include('config.php');
+include('odm-load.php');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -122,7 +122,7 @@ if (!isset($_POST['submit']))
 }//end if (!$submit)
 else
 {
-    if ($GLOBALS['CONFIG']['authorization'] == 'On')
+    if ($GLOBALS['CONFIG']['authorization'] == 'True')
     {
         $lpublishable = '0';
     }
@@ -162,7 +162,7 @@ else
     }
 
     // check file type
-    foreach($GLOBALS['allowedFileTypes'] as $thistype)
+    foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
     {
         if ($_FILES['file']['type'] == $thistype)
         {
@@ -183,7 +183,7 @@ else
     }
 
     // query to ensure that user has modify rights
-    $fileobj = new FileData($_POST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+    $fileobj = new FileData($_POST['id'], $GLOBALS['connection'], DB_NAME);
     if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
     {
         //look to see how many revision are there
@@ -239,7 +239,7 @@ else
         //Send email
         $date = date('D F d Y');
         $time = date('h:i A');
-        $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+        $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0].' '.$get_full_name[1];
         $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';

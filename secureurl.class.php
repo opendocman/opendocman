@@ -13,7 +13,7 @@
 * changement...... : 0.51 the first publishing version
 * A faire......... : Waitting for suggest
 * 					 
-* Suggestion...... : don’t hesitate… CONTACT ME !!
+* Suggestion...... : donï¿½t hesitateï¿½ CONTACT ME !!
 *					 pascal@cawete.com
 *
 * Description  ... : With PHP, to pass parameters between two pages you can use something like this
@@ -44,7 +44,7 @@
 *    class 
 *
 ********************************************************************/
-require_once('config.php');
+require_once('odm-load.php');
 class phpsecureurl{
 
 	var $var_name="aku"; 			// you hide all your URL in thid parmeter "aku" is an example you can redefine
@@ -54,7 +54,7 @@ class phpsecureurl{
 	}
 //*******************************************
 	function encode($url){ 			// methode to encode $url = par1=toto&par2=tioti& ...
-		if($GLOBALS['CONFIG']['secureurl'] == 'On')
+		if($GLOBALS['CONFIG']['secureurl'] == 'True')
 		{
 			$pos_debut=strpos($url,"?"); if(!$pos_debut){$sep="&";}
 			//$pos_fin=strpos($url," ");
