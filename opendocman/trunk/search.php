@@ -41,26 +41,6 @@ draw_header(msg('search'));
 draw_menu($_SESSION['uid']);
 draw_status_bar(msg('search'), "");
 
-if(!isset($_GET['starting_index']))
-{
-    $_GET['starting_index'] = 0;
-}
-if(!isset($_GET['stoping_index']))
-{
-    $_GET['stoping_index'] = $_GET['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
-}
-if(!isset($_GET['sort_by']))
-{
-    $_GET['sort_by'] = 'id';
-}
-if(!isset($_GET['sort_order']))
-{
-    $_GET['sort_order'] = 'asc';
-}
-if(!isset($_GET['page']))
-{
-    $_GET['page'] = 0;
-}
 echo '<body bgcolor="white">';
 if(!isset($_GET['submit']))
 {
