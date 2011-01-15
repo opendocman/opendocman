@@ -2,7 +2,7 @@
 /*
 UserPermission_class.php - relates users to files 
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -55,21 +55,11 @@ if( !defined('UserPermission_class') )
         // return an array of all the Allowed files ( right >= view_right) ID
         function getAllowedFileIds()
         {
-            $start_time = time();
             $viewable_array = $this->getViewableFileIds();
-            echo '<br> <b> Load Viewable Time: ' . (time() - $start_time) . ' </b>';
-            $start_time = time();
             $readable_array = $this->getReadableFileIds();
-            echo '<br> <b> Load Readable Time: ' . (time() - $start_time) . ' </b>';
-            $start_time = time();
             $writeable_array = $this->getWriteableFileIds();
-            echo '<br> <b> Load Writable Time: ' . (time() - $start_time) . ' </b>';
-            $start_time = time();
             $adminable_array = $this->getAdminableFileIds();
-            echo '<br> <b> Load Admin Time: ' . (time() - $start_time) . ' </b>';
-            $start_time = time();
             $result_array = array_values( array_unique( array_merge($viewable_array, $readable_array, $writeable_array, $adminable_array) ) );
-            echo '<br> <b> 3 combines Time: ' . (time() - $start_time) . ' </b><br>';
             return $result_array;
         }
         // return an array of all the Allowed files ( right >= view_right) object
@@ -217,7 +207,7 @@ if( !defined('UserPermission_class') )
         // by combining and prioritizing user and deparment right
         function getAuthority($data_id)
         {
-            $file_obj = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
+            $file_obj = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
             if($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($this->field_id))
             {
                 return $this->ADMIN_RIGHT;

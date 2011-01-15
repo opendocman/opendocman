@@ -2,7 +2,7 @@
 /*
 rejects.php - Show rejected files
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,50 +19,31 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//print_r($_REQUEST);
 session_start();
 if (!isset ($_SESSION['uid']))
 {
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include ('./config.php');
+include ('./odm-load.php');
 // includes
-if(!isset($_REQUEST['starting_index']))
-{
-    $_REQUEST['starting_index'] = 0;
-}
-
-if(!isset($_REQUEST['stoping_index']))
-{
-    $_REQUEST['stoping_index'] = $_REQUEST['starting_index']+$GLOBALS['CONFIG']['page_limit']-1;
-}
-
-if(!isset($_REQUEST['sort_by']))
-{
-    $_REQUEST['sort_by'] = 'id';
-}
-
-if(!isset($_REQUEST['sort_order']))
-{
-    $_REQUEST['sort_order'] = 'asc';
-}
-
-if(!isset($_REQUEST['page']))
-{
-    $_REQUEST['page'] = 0;
-}
-
 $with_caption = false;
 
 if(!isset($_POST['submit']))
 {
+    if(!isset($_REQUEST['last_message']))
+    {
+        $_REQUEST['last_message'] = '';
+    }
+
     draw_menu($_SESSION['uid']);
     draw_header(msg('message_documents_rejected'));
-    @draw_status_bar(msg('message_documents_rejected'), $_REQUEST['last_message']);
+    draw_status_bar(msg('message_documents_rejected'), $_REQUEST['last_message']);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
-    $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+    $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     if($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root')
     {
         $fileid_array = $user_obj->getAllRejectedFileIds();
@@ -71,63 +52,116 @@ if(!isset($_POST['submit']))
     {
         $fileid_array = $user_obj->getRejectedFileIds();
     }
-    $sorted_id_array = my_sort($fileid_array, $_REQUEST['sort_order'], $_REQUEST['sort_by']);
 
     if(@$_REQUEST['mode']=='root')
     {
-        echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' onsubmit="closeWindow(1250);" method="POST">';
+        echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' method="post">';
     }
     else
     {
-        echo '<FORM name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" onsubmit="closeWindow(1000);" method="POST">';
+        echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
     }
     ?>
-<TABLE border="0"><TR><TD>
+<table border="0">
+    <tr>
+        <td>
 
-     <?php
+<?php
+$list_status = list_files($fileid_array, $userperms, $GLOBALS['CONFIG']['dataDir'], true, true);
 
-     $list_status = list_files($sorted_id_array, $userperms, $page_url, $GLOBALS['CONFIG']['dataDir'], $_REQUEST['sort_order'],  $_REQUEST['sort_by'], $_REQUEST['starting_index'], $_REQUEST['stoping_index'], true, $with_caption);
-     list_nav_generator(sizeof($sorted_id_array), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_REQUEST['page'], $_REQUEST['sort_by'], $_REQUEST['sort_order']);
-     ?>
-        </TD></TR>
-            <?php
+
+?>
+        </td>
+    </tr>
+<?php
             if($list_status != -1)
-            {?>
-    <input type="hidden" name="action" value="resubmit" />
-    <TR><TD><CENTER><INPUT type="submit" name="submit" value="<?php echo msg('button_resubmit_for_review'); ?>"><INPUT type="submit" name="submit" value="<?php echo msg('button_delete');?>">
-                            <?php } ?>
-                </TABLE></FORM>
+            {
+?>
+    <tr>
+        <td>
+                <div class="buttons">
+                    <input type="submit" name="submit" value="<?php echo msg('button_resubmit_for_review'); ?>" />
+                    <input type="submit" name="submit" value="<?php echo msg('button_delete'); ?>" />
 
-                        <?php
-                        draw_footer();
-                    }
-                    elseif($_POST['action'] == 'resubmit')
-                    {
-                        for($i = 0; $i < $_POST['num_checkboxes'];$i++)
-                        {
-                            if(isset($_POST["checkbox$i"]))
-                            {
-                                $fileid = $_POST["checkbox$i"];
-                                $file_obj = new FileData($fileid, $GLOBALS['connection'], $GLOBALS['database']);
-                                //$user_obj = new User($file_obj->getOwner(), $connection, $GLOBALS['database']);
-                                //$mail_to = $user_obj->getEmailAddress();
-                                //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
-                                $file_obj->Publishable(0);
-                            }
-                        }
-                        header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
-                    }
-                    elseif($_POST['action'] == msg('button_delete'))
-                    {
-                        $url = 'delete.php?mode=tmpdel&';
-                        $id = 0;
-                        for($i = 0; $i<$_POST['num_checkboxes']; $i++)
-                            if(isset($_POST["checkbox$i"]))
-                            {
-                                $fileid = $_POST["checkbox$i"];
-                                $url .= 'id'.$id.'='.$fileid.'&';
-                                $id ++;
-                            }
-                        $url = substr($url, 0, strlen($url)-1);
-                        header('Location:'.$url.'&num_checkboxes='.$_POST['num_checkboxes']);
-                    }
+                </div>
+<?php
+            }
+?>
+</table>
+</form>
+
+<?php
+           draw_footer();
+}
+elseif(isset($_POST['submit']) && $_POST['submit'] == msg('button_resubmit_for_review'))
+{
+    if(isset($_POST["checkbox"]))
+    {
+        foreach($_POST['checkbox'] as $cbox)
+        {
+            //echo $cbox;exit;
+            $fileid = $cbox;
+            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
+            //$user_obj = new User($file_obj->getOwner(), $connection, DB_NAME);
+            //$mail_to = $user_obj->getEmailAddress();
+            //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+            $file_obj->Publishable(0);
+        }
+    }
+    header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
+}
+elseif($_POST['submit'] == msg('button_delete'))
+{
+    $url = 'delete.php?mode=tmpdel&';
+    $id = 0;
+    if(isset($_POST["checkbox"]))
+    {
+        $loop = 0;
+        foreach($_POST['checkbox'] as $num=>$cbox)
+        {
+            $fileid = $cbox;
+            $url .= 'id'.  $num . '='.$fileid.'&';
+            $id ++;
+            $loop++;
+        }
+        $url = substr($url, 0, strlen($url)-1);
+    }
+    header('Location:'.$url.'&num_checkboxes=' . $loop);
+}
+
+?>
+<script type="text/javascript">
+    function closeWindow(close_window_in_ms)
+    {
+    setTimeout(window.close, close_window_in_ms);
+    }
+
+
+function checkedBoxesNumber()
+{
+    counter=0;
+    record="";
+    for(j=0; j<document.forms[0].elements.length; j++)
+    {
+            if(document.forms[0].elements[j].type == "checkbox")
+            {
+                    counter++;
+            }
+    }
+    for(i=1; i<counter; i++)
+    {
+            if(eval('document.forms[0].checkbox' + i + '.checked') == true)
+            {
+                    id=(eval('document.forms[0].checkbox' + i + '.value'));
+                    document.table.fileid.value +="" + id +" ";
+                    record +="" + i +" ";
+            }
+    }
+
+    document.table.checkedboxes.value = record;
+    document.table.checkednumber.value = counter;
+    alert("boxes " + document.table.checkedboxes.value  + " are selected");
+
+}
+
+</script>

@@ -1,6 +1,7 @@
 /*
 linkcontrol.css - link customization 
-Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
+Copyright (C) 2002, 2003, 2004  Stephen Lawrence Jr., Khoa Nguyen
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 	a.statusbar:visited {color: white}
 	a.statusbar:hover {background:white; color: #0000A0; text-decoration: underline; font-weight:normal}
 	a.statusbar:active {color: #FFFFFF}
-	a.statusbar	{color: white; text-decoration:none; }
+        .statusbar {color: white; text-decoration:none; }
 </style>
 
 <style type="text/css">

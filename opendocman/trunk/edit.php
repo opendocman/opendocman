@@ -2,7 +2,7 @@
 /*
 edit.php - edit file properties
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //$submit=true;
 
 session_start();
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 if(strchr($_REQUEST['id'], '_') )
 {
@@ -44,7 +44,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
   	exit;
 }
 
-$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
 if( $filedata->isArchived() )
 {
@@ -62,12 +62,11 @@ if (!isset($_REQUEST['submit']))
 	draw_header(msg('area_update_file'));
 	draw_menu($_SESSION['uid']);
 	draw_status_bar(msg('area_update_file'), $_REQUEST['last_message']);
-	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 	checkUserPermission($_REQUEST['id'], $user_perm_obj->ADMIN_RIGHT);
 	$data_id = $_REQUEST['id'];
 	// includes
 	$query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=$_SESSION[uid]";
-	//echo($GLOBALS['database']); echo($query); echo($connection);
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
 	{
@@ -151,14 +150,7 @@ if (!isset($_REQUEST['submit']))
 ?>
 </script>
 <?php
-
-// open a connection
-
-	
-	// query to obtain current properties and rights 
-//	$query = "SELECT category, realname, description, comment FROM data WHERE id = '$id' AND status = '0' AND owner = '$_SESSION[uid]'";
-//	$result = mysql_query($query, $connection) or die ("Error in query: $query. " . mysql_error());
-	$filedata = new FileData($data_id, $GLOBALS['connection'], $GLOBALS['database']);
+	$filedata = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
 	// error check
 	if( !$filedata->exists() ) 
 	{
@@ -167,9 +159,6 @@ if (!isset($_REQUEST['submit']))
 	}
 	else
 	{
-		// obtain data from resultset
-		//list($category, $realname, $description, $comment) = mysql_fetch_row($result);
-		//mysql_free_result($result);
 		$category = $filedata->getCategory();
 		$realname = $filedata->getName();
 		$description = $filedata->getDescription();
@@ -305,7 +294,7 @@ if (!isset($_REQUEST['submit']))
 	for($i = 0; $i<mysql_num_rows($result); $i++)
 	{
 		list($my_uid) = mysql_fetch_row($result);
-		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], $GLOBALS['database']);
+		$all_users[$i] = new User($my_uid, $GLOBALS['connection'], DB_NAME);
 	}
 	//  LIST ALL FORBIDDEN USERS FOR THIS FILE
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights=" . $filedata->FORBIDDEN_RIGHT;
@@ -480,7 +469,7 @@ if (!isset($_REQUEST['submit']))
 else
 {
 	// form submitted, process data
-	$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+	$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 	$filedata->setId($_REQUEST['id']);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
@@ -541,8 +530,8 @@ else
 	while( list($dept_name, $id) = mysql_fetch_row($result) )
 	{
 		$string=addslashes(space_to_underscore($dept_name));
-		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights =\"".$_REQUEST[$string]."\" where fid=".$filedata->getId()." and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id =$id";
-		$result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights ='{$_REQUEST[$string]}' where fid=".$filedata->getId()." and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id =$id";
+                $result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// clean up
 	mysql_freeresult($result);

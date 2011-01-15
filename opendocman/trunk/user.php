@@ -2,7 +2,7 @@
 /*
 user.php - user administration
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,14 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
-session_start();
 // user.php - Administer Users
 // check for valid session
 // if changes are to be made on other account, then $item will contain
-// the other account's id number. 
+// the other account's id number.
 
-include('config.php');
+session_start();
+
+include('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
@@ -38,7 +39,7 @@ $secureurl = new phpsecureurl;
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 // Make sure the item and uid are set, then check to make sure they are the same and they have admin privs, otherwise, user is not able to modify another users' info
 if (isset($_SESSION['uid']) & isset($_GET['item']))
@@ -63,7 +64,7 @@ else
 {
     $mode = 'disabled';
 }
-if($mode == 'disabled' && $_GET['item'] != $_SESSION['uid'])
+if($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['uid'])
 {
     header('Location:' . $secureurl->encode('error.php?ec=4'));
     exit;
@@ -196,7 +197,7 @@ if (@$GLOBALS['CONFIG']['demo'] == 'true')
     exit;
 }
 $delete='';
-$user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
 @draw_status_bar('Delete ' . $user_obj->getName(), $_REQUEST['last_message']);
 ?>
                         <center>
@@ -281,7 +282,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User')
         {
                 // query to show item
-                $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                 draw_status_bar('Show User: ' . $user_obj->getName(), $_REQUEST['last_message']);
                 ?>
                         <center>
@@ -373,7 +374,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
                 else
                 {
                     // Begin Not Demo Mode
-                    $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']); 
+                    $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
                     if (!isset($_REQUEST['last_message']))
                     {
                         $_REQUEST['last_message']='';
@@ -470,7 +471,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
                 <td colspan=1>
 <?php
                 // query to get a list of departments
-                $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], $GLOBALS['database']);
+                $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
                 //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
@@ -614,8 +615,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
                         echo '<option value="' . $id . '">' . $last_name . ', ' . $first_name . ' - ' . $username . '</option>';
                 }
 
-                mysql_free_result ($result);
-                echo "the username right now is: $first_name $last_name";
+                mysql_free_result ($result);                
                 ?>
                         </td>
                         </tr>
@@ -639,7 +639,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick')
         {
                 @draw_status_bar('Change password', $_REQUEST['last_message']);
-                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
                 $submit_message = 'Changing password';
 
 ?>
@@ -675,7 +675,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], $GLOBALS['database'
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick')
         {
                 @draw_status_bar('Change password', $_REQUEST['last_message']);
-                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
                 // If demo mode, don't allow them to update the demo account

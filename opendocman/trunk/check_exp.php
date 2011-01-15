@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-include('config.php');
+include('odm-load.php');
 $start_time = time();
 session_start();
 
@@ -89,7 +89,7 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
     //get root's id
     $lresult = mysql_query($lquery) or die('Error querying: ' . $lquery . mysql_error());
     $reviewer_comments = 'To=' . msg('author') . ';Subject=' . msg('message_file_expired') . ';Comments=' . msg('email_file_was_rejected_because'). ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' ' .msg('days') . ';';
-    $user_obj = new user($lroot_id, $GLOBALS['connection'], $GLOBALS['database']);
+    $user_obj = new user($lroot_id, $GLOBALS['connection'], DB_NAME);
     $date = date("D F d Y");
     $time = date("h:i A");
     $get_full_name = $user_obj->getFullName();
@@ -103,8 +103,8 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
     for($i = 0; $i<mysql_num_rows($lresult); $i++)
     {
         list($lid) = mysql_fetch_row($lresult);
-        $file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
-        $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
+        $file_obj = new FileData($lid, $GLOBALS['connection'], DB_NAME);
+        $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
         $mail_to = $user_obj->getEmailAddress();
         mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
     }
@@ -117,7 +117,7 @@ if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) //do not show file
     for($i = 0; $i<mysql_num_rows($lresult); $i++)
     {
         list($lid) = mysql_fetch_row($lresult);
-        $file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
+        $file_obj = new FileData($lid, $GLOBALS['connection'], DB_NAME);
         $file_obj->Publishable(-1);
         $file_obj->setReviewerComments($reviewer_comments);
     }
@@ -129,7 +129,7 @@ if( $GLOBALS['CONFIG']['file_expired_action'] == 2 ) //lock file, not check-outa
     for($i = 0; $i<mysql_num_rows($lresult); $i++)
     {
         list($lid) = mysql_fetch_row($lresult);
-        $file_obj = new FileData($lid, $GLOBALS['connection'], $GLOBALS['database']);
+        $file_obj = new FileData($lid, $GLOBALS['connection'], DB_NAME);
         $file_obj->setStatus(-1);
     }
 }

@@ -2,7 +2,7 @@
 /*
 details.php - display file information  check for session
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ if (!isset($_SESSION['uid']))
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
 	exit;
 }
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 
 // in case this file is accessed directly - check for $_REQUEST['id']
@@ -49,12 +49,12 @@ else
 {
 	@draw_status_bar(msg('area_file_details'),$_REQUEST['last_message']);
 }
-$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], $GLOBALS['database']);
+$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
-$user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
-$userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], $GLOBALS['database']);
-$user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], $GLOBALS['database']);
+$userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], DB_NAME);
+$user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 
 ?>
@@ -255,7 +255,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	// check if user has modify rights
 	$query2 = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid = '$_REQUEST[id]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.uid = '$_SESSION[uid]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights = '2' AND {$GLOBALS['CONFIG']['db_prefix']}data.status = '0' AND {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
-	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
 	{
 		// if so, display link for checkout

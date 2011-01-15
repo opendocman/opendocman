@@ -2,7 +2,7 @@
 /*
 admin.php - provides admin interface
 Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ session_start();
 // admin.php - administration functions for admin users 
 // check for valid session
 // includes
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 if (!isset($_SESSION['uid']))
 {
@@ -32,7 +32,7 @@ if (!isset($_SESSION['uid']))
 }
 
 // open a connection to the database
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
@@ -43,15 +43,18 @@ if(!$user_obj->isAdmin())
 draw_header(msg('label_admin'));
 draw_menu($_SESSION['uid']);
 @draw_status_bar(msg('label_admin'),$_REQUEST['last_message']);
+if(isset($_REQUEST['last_message']))
+{
+    echo '<h2><img src="images/exclamation.gif">' . $_REQUEST['last_message']. ' </h2>';
+}
 ?>
 <center>	
     <table border="1" cellspacing="5" cellpadding="5" >
-        <font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></th></font><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
+        <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></font></th><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
         <?php
-        if($user_obj->isRoot())
+        if($user_obj->isAdmin())
             udf_admin_header();
         ?>
-        </tr>
         <tr>
             <td>
                 <!-- User Admin -->
@@ -87,9 +90,8 @@ draw_menu($_SESSION['uid']);
                     <tr>
                         <td><b><a href="<?php echo $secureurl->encode('department.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
                     </tr>
+                </table>
             </td>
-    </table>
-</td>
 <td>
     <!-- Category Admin -->
     <table border="0">
@@ -105,15 +107,11 @@ draw_menu($_SESSION['uid']);
         <tr>
             <td><b><a href="<?php echo $secureurl->encode('category.php?submit=showpick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_display')?></a></b></td>
         </tr>
+    </table>
 </td>
-</table>
-</td>
-<?php
-if ( $user_obj->isRoot()	)
-{
-    ?>
+<?php if ( $user_obj->isRoot()	) { ?>
 <td>
-    <!-- Admin-Only Section -->
+    <!-- Root-Only Section -->
     <table border="0" valign="top">
         <tr>
             <td ><b><a href="<?php echo $secureurl->encode('delete.php?mode=view_del_archive&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete_undelete')?></a></b></td>
@@ -132,13 +130,27 @@ if ( $user_obj->isRoot()	)
         </tr>
     </table>
 </td>
-    <?php
-    udf_admin_menu($secureurl);
-    ?>
-    <?php
-}
-?>
+    <?php udf_admin_menu($secureurl); ?>
 </tr>
+
+<tr>
+    <td>
+        <table>
+            <tr>
+                <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_settings')?></font></th>
+            </tr>
+            <tr>
+                <td><b><a href="<?php echo $secureurl->encode('settings.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('edit') . ' ' . msg('label_settings')?></a></b></td>
+            </tr>
+            <tr>
+                <td><b><a href="<?php echo $secureurl->encode('filetypes.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('edit') . ' ' . msg('label_filetypes');?></a></b></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+    <?php } ?>
+
 </table>
     <?php
 if(is_array($GLOBALS['plugin']->getPluginsList()))

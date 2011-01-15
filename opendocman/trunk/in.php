@@ -1,7 +1,7 @@
 <?php
 /*
 in.php - display files checked out to user, offer link to check back in
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 // includes
-include('config.php');
+include('odm-load.php');
 draw_header(msg('button_check_in'));
 draw_menu($_SESSION['uid']);
 @draw_status_bar(msg('message_document_checked_out_to_you'), $_POST['last_message']);

@@ -2,7 +2,7 @@
 /*
 search.php - main search logic
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2010 Stephen Lawrence Jr.
+Copyright (C) 2008-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
-include('config.php');
+include('odm-load.php');
 include('udf_functions.php');
 
 /*$_GET['where']='department_only';
@@ -199,7 +199,6 @@ else
 
         }
         $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";
-//echo $lquery_pre.$lquery;
         $lresult = mysql_query($lquery_pre.$lquery);
 
         $lindex = 0;
@@ -215,9 +214,9 @@ else
         }
         return array_values( array_intersect($lid_array, $lsearch_array) );
     }
-    $current_user = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
-    $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+    $current_user = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     //$s_getFTime = getmicrotime();
     if($_GET['where'] == 'author_locked_files')
     {
@@ -232,15 +231,13 @@ else
     $query_array = array();
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
     //echo 'khoa' . sizeof($search_result);
-    $page_url = $_SERVER['PHP_SELF'].'?keyword='.urlencode($_GET['keyword']).'&where='.urlencode($_GET['where']).'&submit='.urlencode($_GET['submit']) . '&exact_phrase='.@$_GET['exact_phrase'];
     $sorted_result = my_sort($search_result, $_GET['sort_order'], $_GET['sort_by']);
     
     // Call the plugin API
     callPluginMethod('onSearch');
 
-    list_files($sorted_result,  $current_user_permission, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index']);
+    list_files($sorted_result,  $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false,false);
     echo '<br />';
-    list_nav_generator(sizeof($search_result), $GLOBALS['CONFIG']['page_limit'], $GLOBALS['CONFIG']['num_page_limit'], $page_url,$_GET['page'], $_GET['sort_by'], $_GET['sort_order'] );
     draw_footer();
     //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
     //echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';

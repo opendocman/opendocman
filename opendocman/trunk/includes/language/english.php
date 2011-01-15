@@ -1,6 +1,6 @@
 <?php
 //ENGLISH LANGUAGE FILE
-// (C) 2010 Stephen Lawrence Jr.
+// (C) 20010-2011 Stephen Lawrence Jr.
 // Translated by: Stephen Lawrence Jr.
 /*
 This program is free software; you can redistribute it and/or
@@ -292,7 +292,8 @@ $lang['message_sorry_demo_mode'] = 'Sorry, demo mode only, you can not do that!'
 $lang['message_sorry_not_allowed'] = 'Sorry, you are not allowed do to that!';
 $lang['message_that_filetype_not_supported'] = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types or add the missing MIMETYPE to ';
 $lang['message_the_code_you_are_using'] = 'The code you are trying to use to reset your password is no longer valid.  Please use this form to reset your password.';
-$lang['message_the_file_is_too_large'] = 'The file is too large. Maximum size is';
+$lang['message_the_file_is_too_large'] = 'The file is too large. Check your OpenDocMan settings. Maximum size is';
+$lang['message_the_file_is_too_large_php_ini'] = 'The file is too large for your php server. Check your php.ini configuration for max upload/post/memory. Maximum size is currently: ';
 $lang['message_there_was_an_error_loggin_you_in'] = 'There was an error loggin you in. Please try again.';
 $lang['message_there_was_an_error_performing_the_action'] = 'There was an error performing the requested action.';
 $lang['message_the_username_you_entered'] = 'The username you entered was not found in our system.  Contact us if you have forgotten your username.';

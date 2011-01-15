@@ -2,7 +2,7 @@
 /*
 User_Perms_class.php - relates users to specific files
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen J. Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -80,15 +80,18 @@ if ( !defined('User_Perms_class') )
         {
             return $this->id;
         }
-        // All of the function above provides an abstraction for loadData_UserPerm($right)
-        // If you user doesn't want to or doens't know the numeric value for permission,
-        // use the function above.  LoadData_UserPerm($right) can be invoke directly.
+
+        /*
+         * All of the functions above provide an abstraction for loadData_UserPerm($right).
+         * If your user doesn't want to or does not know the numeric value for permission,
+         * use the function above.  LoadData_UserPerm($right) can be invoke directly.
+         * @param integer $right The "Right" that is bein checked.
+         */
         function loadData_UserPerm($right)
         {
             if($this->user_obj->isAdmin())
             {
-                $query = "SELECT 
-                            d.id
+                $query = "SELECT d.id
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
                         WHERE
@@ -108,22 +111,22 @@ if ( !defined('User_Perms_class') )
                         AND
                             dr.user_id = $this->id";
             }
-            else 
+            else
             {
-                ////Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
-                $query = "SELECT userperms.fid
+                //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
+                $query = "SELECT up.fid
                         FROM
-                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as data,
-                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as userperms
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
+                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as up
                         WHERE (
-                                userperms.uid = $this->id
-                        AND
-                                data.id = userperms.fid
-                        AND
-                                userperms.rights>=$right
-                        AND
-                                data.publishable = 1
-                               )";
+                                    up.uid = $this->id
+				AND 
+                                    d.id = up.fid
+                                AND
+                                    up.rights>=$right
+                                AND
+                                    d.publishable = 1
+                              )";
             }
             //$start = getmicrotime();
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
@@ -223,11 +226,18 @@ if ( !defined('User_Perms_class') )
                 }
             }
         }
-        // this all the canRead, canView, ... function provide an abstraction for this fucntion.
-        // users may invoke this function if they are familiar of the numeric permision values
+        
+        /*
+         * This function is used by all the canRead, canView, etc... abstract functions.
+         * Users may invoke this function directly if they are familiar of the numeric permision values.
+         * If they are an "Admin" or "Reviewer" for this file return true right away
+         * @param integer $data_id The ID number of the file in question
+         * @param integer $right The number of the "right" ID that is being checked
+         * @return true They CAN perform the right
+         */
         function canUser($data_id, $right)
         {
-            if($this->user_obj->isAdmin())
+            if($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
             {
                 return true;
             }

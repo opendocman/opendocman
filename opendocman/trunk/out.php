@@ -2,7 +2,7 @@
 /*
 out.php - display a list/ of all available documents that user has permission to view (with file status)
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2010 Stephen Lawrence Jr.
+Copyright (C) 2005-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -31,35 +31,29 @@ if (!isset($_SESSION['uid']))
 
 // includes
 $GLOBALS['state'] = 1;
-require_once 'config.php';
-if($GLOBALS['CONFIG']['treeview'] == "On")
-{
-    require_once 'treeview.php';
-}
+require_once 'odm-load.php';
 
-if (isset($_REQUEST['last_message']))
-{
-    $last_message = $_REQUEST['last_message'];
-}
+$last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
 
 draw_header(msg('label_file_listing'));
 draw_menu($_SESSION['uid']);
 draw_status_bar(msg('area_document_listing'), @$_REQUEST['last_message']);
-if($GLOBALS['CONFIG']['treeview'] != "On")
-{
-    sort_browser();
-}
+sort_browser();
+
 $secureurl_obj = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
 {
-    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). ': ' . sizeof($user_obj->getRevieweeIds())  . '</a><br />';
+    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). '</a>: ' . sizeof($user_obj->getRevieweeIds())  . '</a><br />';
 }
+
 $rejected_files_obj = $user_obj->getRejectedFileIds();
+
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-    echo '<img src="images/exclamation_red.gif" /> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. msg('message_documents_rejected') . ': ' .sizeof($rejected_files_obj) . '<br />';
+    echo '<img src="images/exclamation_red.gif" /> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. msg('message_documents_rejected') . '</a>: ' .sizeof($rejected_files_obj) . '<br />';
 }
+
 $llen = $user_obj->getNumExpiredFiles();
 if($llen > 0)
 {
@@ -67,74 +61,21 @@ if($llen > 0)
 }
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
-if(!isset($_GET['starting_index']))
-{
-    $_GET['starting_index'] = 0;
-}
 
-if(!isset($_GET['stoping_index']))
-{
-    $limit=$GLOBALS['CONFIG']['page_limit'];
-    $_GET['stoping_index'] = ($_GET['starting_index']+$limit-1);
-}
 
-if(!isset($_GET['sort_by']))
-{
-    $_GET['sort_by'] = 'id';
-}
 
-if(!isset($_GET['sort_order']))
-{
-    $_GET['sort_order'] = 'asc';
-}
-
-if(!isset($_GET['page']))
-{
-    $_GET['page'] = 0;
-}
 //set values
 $page_url = $_SERVER['PHP_SELF'] . '?submit=true';
-$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 //$start_P = getmicrotime();
 $file_id_array = $user_perms->getViewableFileIds();
 //$end_P = getmicrotime();
 
 $count = sizeof($file_id_array);
-//$lsort_b = getmicrotime();
-$sorted_id_array = my_sort($file_id_array, $_GET['sort_order'], $_GET['sort_by']);
-//$lsort_e = getmicrotime();
-//$sorted_obj_array = $user_perms->convertToFileDataOBJ($sorted_id_array);
-//$llist_b = getmicrotime();
 
-// Patch by jonathanwminer
-if($GLOBALS['CONFIG']['treeview'] == "On")
-{
-    $_GET['starting_index'] = 0;
-    $_GET['stoping_index'] = sizeof($sorted_id_array);
-}
+list_files($file_id_array, $user_perms, $GLOBALS['CONFIG']['dataDir'],'false');
+$total_hit = sizeof($file_id_array);
 
-if($GLOBALS['CONFIG']['treeview'] != 'On')
-{
-    echo '<table border="0">';
-    echo '<tr><td>';
-    list_files($sorted_id_array, $user_perms, $page_url,  $GLOBALS['CONFIG']['dataDir'], $_GET['sort_order'], $_GET['sort_by'], $_GET['starting_index'], $_GET['stoping_index'], 'false','false');
-    $limit=$GLOBALS['CONFIG']['page_limit'];
-    $total_hit = sizeof($file_id_array);
-    list_nav_generator($total_hit, $limit, $GLOBALS['CONFIG']['num_page_limit'], $page_url, $_GET['page'], $_GET['sort_by'], $_GET['sort_order']);
-
-    //$llist_e = getmicrotime();
-    // clean up
-    echo '</td></tr></table>';
-
-}
-
-if($GLOBALS['CONFIG']['treeview'] == 'On')
-{
-    if(is_array($sorted_id_array) && $sorted_id_array[0] != '')
-    {
-        show_tree($sorted_id_array, $_GET['starting_index'], $_GET['stoping_index']);
-    }
-}
 draw_footer();	
 //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
 //echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	

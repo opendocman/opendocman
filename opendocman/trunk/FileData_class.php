@@ -55,7 +55,7 @@ if( !defined('FileData_class') )
         var $write_users;
         var $admin_users;
         var $filesize;
-        var	$isLocked;
+        var $isLocked;
 
         function FileData($id, $connection, $database)
         {

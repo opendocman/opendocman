@@ -2,7 +2,7 @@
 /*
    forgot_password.php - utility to reset a user password
    Copyright (C) 2005-2006 Glowball Solutions & Stephen Lawrence Jr.
-   Copyright (C) 2005-2010 Stephen Lawrence Jr.
+   Copyright (C) 2005-2011 Stephen Lawrence Jr.
    This page was added to the core files for this utility.
 
    This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-include_once('config.php');
+include_once('odm-load.php');
 
 if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'On')
 {
@@ -181,19 +181,6 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
 // default form
 else 
 {
-    // build the header and navigation
-    /*
-
-
-
-
-
-       ADD FORMATTING HERE
-
-
-
-
-     */
     if (strlen($_REQUEST['last_message']))
         echo "<p>" . $_REQUEST['last_message'] . ".</p>\n";
     ?>
@@ -215,16 +202,4 @@ else
         </form>
 
         <?php
-        /*
-
-
-
-
-
-           ADD FORMATTING HERE
-
-
-
-
-         */
 }

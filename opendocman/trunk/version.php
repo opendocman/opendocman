@@ -1,7 +1,7 @@
 <?php
 /*
 version.php - OpenDocMan version information
-Copyright (C) 2007-2010 Stephen Lawrence Jr.
+Copyright (C) 2007-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

@@ -1,16 +1,4 @@
-June 4, 2010
-
-Abstract
-
-OpenDocMan is a full featured Web-based document management
-system designed to conform to ISO 17025/IEC. It features
-automatic installation, file expiration, multiple version
-handling, file check-in/out, departmental access control,
-file moderation, fine grained user access control, email
-notificaiton and a great search function. Written in PHP,
-and utilizing MySQL for the backend, this project is useful
-for any company looking to keep their documentation in a
-centralized repository.
+January 12, 2011
 
 Table of Contents
 
@@ -81,8 +69,7 @@ centralized repository.
   a file
 
 9. Admin and Root users - Each installation can have any number
-  of "admin" users, who can create users,
-  categories, etc.. One "root"
+  of "admin" users, who can create users, categories, etc.. One "root"
   user can do all.
 
 10. Multiple Document Versions - Instead of overwriting a document
@@ -106,13 +93,15 @@ centralized repository.
   in file list but non-checkoutable, Send email to reviewer
   only, or Do Nothing.
 
+15. 
+
 1.2 Requirements
 
 * Apache Webserver 2.x (or any other webserver, that supports PHP) (http://www.apache.org/)
 
-* MySQL Server 4.0+ (http://www.mysql.com/)
+* MySQL Server 5.0+ (http://www.mysql.com/)
 
-* PHP 4+ compiled with MySQL-Support (http://www.php.net/)
+* PHP 5+ compiled with MySQL-Support (http://www.php.net/)
 
 1.2.1 Partially Tested
 
@@ -130,36 +119,34 @@ To update your current version to the latest release:
 
 2. Unarchive opendocman into a new folder
 
-3. Copy the local_config.php.sample in your new folder (Look at your old
-  config.php file for some settings that can be transferred
-  over from the old config to the new).
+3. 
 
-4. Load the installation page in your web browser at /install/ 
-  ( ex. http://www.example.com/opendocman/install/ )
-  and click on the appropriate upgrade link. Refer to your
-  old config.php to see what version you were using before.
+4. Load the opendocman page in your web browser
+( ex. http://www.example.com/opendocman/ )
+  You should follow the prompts for installation.
 
 2.2 New Installation
 
 1. Untar/Unzip files into any dir in your webserver documents dir
 
-2. Edit config.php
+2. Create a MySQL database/username/password.
+
+3. Edit config.php
 
   (a) All parameters are commented and should be self explanatory.
     Change any that apply, especially the database parameters.
 
-3. Make a directory for the files to be stored that is accessible
+4. Make a directory for the files to be stored that is accessible
   to the web server but not available by browsing. Ensure the
   permissions are correct on this folder to allow for the web
   server to write to it
 
   ex.  $>mkdir /usr/local/opendocman/data
 
-4. Load the installation page in your web browser at /install/ 
-   (ex. http://www.example.com/opendocman/install ) and click on the 
-    new install link. 
+5. Load the opendocman page in your web browser
+(ex. http://www.example.com/opendocman/ ) and follow the prompts.
 
-5. Point your favorite webbrowser to the opendocman folder:
+6. Point your favorite webbrowser to the opendocman folder:
   ex. "http://www.mydomain.com/opendocman"
 
 7. Login as "admin" (without password). After that, go to
@@ -171,20 +158,11 @@ To update your current version to the latest release:
 
 3 Configuration
 
-3.1 config.php
+3.1 Configuration Settings
 
-Most of the configuration for OpenDocMan is controlled by
-a file name config.php. Below are some of the configurable
-options in that file:
+Most of the configuration for OpenDocMan is controlled by the Admin->Edit Settings page.
 
-* $database - The name of the database used (ex. opendocman)
-
-* $user - The user that has update/insert/delete permissions
-  on above database
-
-* $pass - Password for above user
-
-* $hostname - The hostname:port of the database server (ex. db1.mydomain.com or db1.mydomain.com:8889)
+Below are some of the configurable options:
 
 * dataDir - Location of file repository. This should ideally
   be outside the Web server root. Make sure the server has
@@ -197,12 +175,6 @@ options in that file:
 * authen - Future setting to control other authentication
   methods. Currently only MySQL and web-based kerberos authentication
   is supported.
-
-* page_limit - Set the number of files that show up on each
-  page
-
-* displayable_len - Set the maximum displayable length of
-  text field in file list
 
 * base_url - Set this to the url of the site (no ending slash)
 
@@ -232,18 +204,11 @@ options in that file:
 
 * secureurl [On,Off] - Hide the URL contents from prying
 
-* treeview [On,Off] - Use treeview mode instead of file list mode
-
 * theme [default="default"] - which theme to use? Smarty-based
   themes are located in templates/ folder. Look at default for example.
   To add a new one just create a new theme folder in templates/ 
-  with the header.tpl and footer.tpl files. Global variables are 
+  with header.tpl and footer.tpl files. Global variables are 
   added to smarty as $g_VARIABLENAME.
-
-* $allowedFileTypes - This is a list of file types that will
-  be allowed to be added to the repository. This may need
-  some tweeking depending on what types of files your users
-  have.
 
 * allow_signup - This option determines whether or not to display
   the "Signup" link on the login page to allow users to self-register.
@@ -314,9 +279,9 @@ use by the installation scrip. This is an automated
 web-based update/installation script. Here is how it works
 for users:
 
-1. The user loads /install/index.php into their browser. They can either
-  select the new installation link, or one of the upgrade
-  links.
+1. The user loads any page into their browser. The program will detect
+   if they have a config.php file or not. If they do not it will have them
+   create one.
 
 2. For a new installation:
 
@@ -365,9 +330,9 @@ new files need to be created and a current files modified.
   This can be a mysqldump straight from the latest database
   schema.
 
-These files MUST be kept syncronized for each release!
+These files MUST be kept in sync for each release!
 
-7 Changes
+7 Old Changes
 
 7.1 1.2rc1 - July 9th, 2003
 

@@ -1,7 +1,7 @@
 <?php
 /*
 category.php - Administer Categories
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,9 +26,9 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 // includes
-include('config.php');
+include('odm-load.php');
 $secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], $GLOBALS['database']);
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
@@ -60,12 +60,16 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 
             <input type="hidden" name="submit" value="Add Category">
             <td>
-                <div class="buttons"><button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button></div>
+                <div class="buttons">
+                    <button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
+                </div>
                 </form>
             </td>
             <td>
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                    <div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div>
+                    <div class="buttons">
+                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    </div>
                 </form>
                 </div>
             </td>
@@ -153,9 +157,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 
                 <td></td>
                 <td colspan="2" align="center">
+                    <input type="hidden" name="submit" value="delete">
                     <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
-                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="positive" type="submit" name="submit" ><?php echo msg('button_delete')?></button>
+                        <button class="negative" type="submit" name="submit" ><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
