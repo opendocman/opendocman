@@ -79,7 +79,7 @@ CREATE TABLE {$_SESSION['db_prefix']}data (
   realname varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
   description varchar(255) default NULL,
-  comment varchar(255) NOT NULL default '',
+  comment varchar(255) default '',
   status smallint(6) default NULL,
   department smallint(6) unsigned default NULL,
   default_rights tinyint(4) default NULL,
