@@ -61,7 +61,7 @@ ALTER TABLE data CHANGE COLUMN default_rights default_rights tinyint(4) default 
 
 //  was text
 $result = mysql_query("
-ALTER TABLE data CHANGE COLUMN comment comment varchar(255) NOT NULL default ''
+ALTER TABLE data CHANGE COLUMN comment comment varchar(255) default ''
 ") or die("<br>Could not update" . mysql_error());
 
 // was tinyint(4) unsigned NOT NULL auto_increment
