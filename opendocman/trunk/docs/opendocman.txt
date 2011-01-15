@@ -131,30 +131,27 @@ To update your current version to the latest release:
 
 2. Create a MySQL database/username/password.
 
-3. Edit copy config-sample.php to config.php
-  (a) Edit config.php. All parameters are commented and should be self explanatory.
-
-4. Make a directory for the files to be stored that is accessible
+3. Make a directory for the files to be stored that is accessible
   to the web server but not available by browsing. Ensure the
   permissions are correct on this folder to allow for the web
   server to write to it
 
   ex.  $>mkdir /usr/local/opendocman/data
 
-5. Load the opendocman page in your web browser
+4. Load the opendocman page in your web browser
 (ex. http://www.example.com/opendocman/ ) and follow the prompts.
 
-6. Point your favorite webbrowser to the opendocman folder:
+5. Point your favorite webbrowser to the opendocman folder:
   ex. "http://www.mydomain.com/opendocman"
 
-7. Login as "admin" (without password). After that, go to
+6. Login as "admin" (without password). After that, go to
   "admin->users->update->admin" and set your admin password.
 
-8. Edit your site settings at Admin->Site Settings
+7. Edit your site settings at Admin->Site Settings
 
-9. Add departments, categories, users, etc.
+8. Add departments, categories, users, etc.
 
-10. Enjoy!
+9. Enjoy!
 
 3 Configuration
 
