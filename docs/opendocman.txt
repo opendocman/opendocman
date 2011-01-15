@@ -131,10 +131,8 @@ To update your current version to the latest release:
 
 2. Create a MySQL database/username/password.
 
-3. Edit config.php
-
-  (a) All parameters are commented and should be self explanatory.
-    Change any that apply, especially the database parameters.
+3. Edit copy config-sample.php to config.php
+  (a) Edit config.php. All parameters are commented and should be self explanatory.
 
 4. Make a directory for the files to be stored that is accessible
   to the web server but not available by browsing. Ensure the
@@ -152,13 +150,15 @@ To update your current version to the latest release:
 7. Login as "admin" (without password). After that, go to
   "admin->users->update->admin" and set your admin password.
 
-8. Add departments, categories, users, etc.
+8. Edit your site settings at Admin->Site Settings
 
-9. Enjoy!
+9. Add departments, categories, users, etc.
+
+10. Enjoy!
 
 3 Configuration
 
-3.1 Configuration Settings
+3.1 Configuration values
 
 Most of the configuration for OpenDocMan is controlled by the Admin->Edit Settings page.
 
@@ -180,10 +180,6 @@ Below are some of the configurable options:
 
 * title - This is the browser window title and be anything
   you want (ex. Mycomany Document Managment System)
-
-* current_version - This is the program version for window
-  title (This should be set to the current version of the
-  program)
 
 * site_mail - The email address of the administrator of this
   site. Users will be told to contact this person if they
