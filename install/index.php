@@ -220,7 +220,7 @@ else
                 echo 'Database Selected<br />';
                 include('../config.php');
                 include_once("odm.php");
-                echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password: None</strong></p></br />Click <a href="../settings.php">HERE</a> to edit your site settings';
+                echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password: None</strong></p></br />Click <a href="../settings.php?submit=update">HERE</a> to edit your site settings';
             } // End Install
 
             function do_update_10()
