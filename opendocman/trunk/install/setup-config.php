@@ -295,9 +295,9 @@ function sanitizeme($input)
         //echo "Raw Input:" . $input . "<br />";
         $input  = cleanInput($input);
         //echo "Clean Input:" . $input . "<br />";
-        $output = mysql_real_escape_string($input);
+        //$output = mysql_real_escape_string($input);
         //echo "mysql_escape output" . $output . "<br />";
-
+        $output=$input;
     }
     if(isset($output) && $output != '')
     {
