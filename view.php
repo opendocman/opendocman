@@ -95,7 +95,7 @@ else
         {
             // send headers to browser to initiate file download
             header ('Content-Type: application/octet-stream'); 
-            header ('Content-Disposition: attachment; filename='.$realname); 
+            header ('Content-Disposition: attachment; filename='.rawurlencode($realname));
             readfile($filename);
             
             // Call the plugin API
