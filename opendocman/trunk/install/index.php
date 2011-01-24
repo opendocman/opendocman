@@ -38,15 +38,11 @@ exit;
 
 session_start();
 
-// Search for the config file in parent folders
+// Search for the config file in parent folder
 // If not found, redirect to index for install routine
 if(file_exists('../config.php'))
 {
     include('../config.php');
-}
-elseif(file_exists('../../config.php'))
-{
-    include('../../config.php');
 }
 else
 {

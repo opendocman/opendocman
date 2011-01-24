@@ -48,13 +48,6 @@ if (file_exists(ABSPATH . 'config.php'))
 
 }
 
-// Check if config.php exists above the root directory but is not part of another install
-if (file_exists(ABSPATH . '../config.php') )
-{
-	echo("<p>The file 'config.php' already exists one level above your OpenDocMan installation. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='./'>installing now</a>.</p>");
-        exit;
-}
-
 if (isset($_GET['step']))
 	$step = $_GET['step'];
 else
