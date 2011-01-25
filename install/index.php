@@ -49,6 +49,10 @@ else
     Header('Location: ../index.php');
 }
 
+// Lets get a connection going
+$GLOBALS['connection'] = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect: " . mysql_error());
+$db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -203,8 +207,6 @@ else
                     echo 'OK';
                 }
                 echo '<br />installing...<br>';
-
-                mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect!");
 
                 // Create database
                 $result = mysql_query("CREATE DATABASE IF NOT EXISTS " . DB_NAME)
