@@ -34,7 +34,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 if (file_exists('config.php'))
 {
+    // In the case of root folder calls
     require_once( 'config.php' );
+}
+elseif (file_exists('../config.php'))
+{
+    // In the case of subfolders
+    require_once( '../config.php' );
+}
+elseif (file_exists('../../config.php'))
+{
+    // In the case of plugins
+    require_once( '../../config.php' );
 }
 else
 {
