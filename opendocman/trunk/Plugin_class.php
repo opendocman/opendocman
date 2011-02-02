@@ -165,4 +165,14 @@ class Plugin
      * This function is run after the add user form is saved
      */
     function onAfterAddUser() {}
+
+    /*
+     * This function allows for setting of class settings
+     */
+    function setProperties(){}
+
+    /*
+     * This function allows for getting of class settings
+     */
+    function getProperties(){}
 }
