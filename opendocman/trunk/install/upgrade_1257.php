@@ -98,4 +98,9 @@ $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'audio/mpeg', 0);"
         );
 
+foreach($sql_operations as $query)
+{
+    $result = mysql_query($query) or die('Died while inserting to filetypes table: ' . mysql_error());
+}
+
 echo 'Update to 1.2.6 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
