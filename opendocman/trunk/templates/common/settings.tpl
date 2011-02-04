@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="../templates/common/css/install.css" type="text/css" />
 <script type="text/javascript" src="../includes/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.pack.js"></script>
 <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/additional-methods.js"></script>
