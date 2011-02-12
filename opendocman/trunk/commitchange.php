@@ -338,7 +338,7 @@ elseif(@$_REQUEST['submit']=='Add Category')
     $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_added'));
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
-// Delete department
+// Delete category
 elseif(isset($_REQUEST['deletecategory']))
 {
     // Make sure they are an admin
@@ -349,6 +349,11 @@ elseif(isset($_REQUEST['deletecategory']))
     }
     $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // Set all old category_id's to the new re-assigned category
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='{$_REQUEST['assigned_id']}' WHERE category = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to Unassigned category: $query. " . mysql_error());
+    
     // back to main page
     $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
