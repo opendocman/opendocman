@@ -165,6 +165,118 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
  <?php
     draw_footer();
 }
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
+{
+    if (!isset($_POST['last_message']))
+    {
+        $_POST['last_message']='';
+    }
+    draw_header(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+    draw_menu($_SESSION['uid']);
+    draw_status_bar(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+
+    $delete='';
+    
+    // Pull up a list of deparments excluding the one being deleted
+    $reassign_list_query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE id != '{$_REQUEST['item']}' ORDER BY name";
+    $reassign_list_result = mysql_query($reassign_list_query, $GLOBALS['connection']) or die ("Error in query: $reassign_list_query. " . mysql_error());
+
+    // If the above statement returns less than 1 row they will need to create another category to re-assign to so display error
+    if(mysql_num_rows($reassign_list_result) < 1)
+    {
+        echo msg('message_need_one_department');
+        exit;
+    }
+
+
+    // query to show item
+    echo '<center>';
+    echo '<table border=0>';
+    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id={$_REQUEST['item']}";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in department lookup: $query. " . mysql_error());
+    while(list($lid, $lname) = mysql_fetch_row($result))
+    {
+        echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . $lid . '</td></tr>';
+        echo '<tr><td>'.msg('label_name').' :</td><td>' . $lname . '</td></tr>';
+    }
+
+
+    {
+
+    ?>
+    <form action="commitchange.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
+        <tr>
+            <td><?php echo msg('label_reassign_to');?>:<br />
+                  <select name="assigned_id">
+                      <?php
+                            while(list($lid, $lname) = mysql_fetch_row($reassign_list_result))
+                            {
+                                echo '<option value="' . $lid . '">' . $lname . '</option>';
+                            }
+                            mysql_free_result ($reassign_list_result);
+                            ?>
+                    </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
+            <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button></div></td>
+    </form>
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+        <td colspan="4" align="center"><div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div></td>
+    </form>
+</tr>
+</TABLE>
+    <?php
+    }
+    draw_footer();
+}
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
+{
+    if (!isset($_POST['last_message']))
+    {
+        $_POST['last_message']='';
+    }
+    draw_header(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+    draw_menu($_SESSION['uid']);
+    draw_status_bar(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+    ?>
+<center>
+    <table border="0" cellspacing="5" cellpadding="5">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
+            <tr>
+                <td><b><?php echo msg('department')?></b></td>
+                <td colspan=3><select name="item">
+                            <?php
+                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                            while(list($lid, $lname) = mysql_fetch_row($result))
+                            {
+                                $str = '<option value="' . $lid . '"';
+                                $str .= '>' . $lname . '</option>';
+                                echo $str;
+                            }
+                            mysql_free_result ($result);
+                            $deletepick='';
+                            ?>
+                    </select></td>
+
+                <td></td>
+                <td colspan="2" align="center">
+                    <div class="buttons">
+                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
+                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    </div>
+                </td>
+            </tr>
+        </form>
+    </table>
+</center>
+    <?php
+    draw_footer();
+}
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 {
     if (!isset($_POST['last_message']))
