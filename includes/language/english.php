@@ -204,6 +204,7 @@ $lang['label_phone_number'] = 'Phone Number';
 $lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Previous';
 $lang['label_read'] = 'Read';
+$lang['label_reassign_to'] = 'Re-assign To';
 $lang['label_rejected_files'] = 'Rejected Files';
 $lang['label_rejections'] = 'Rejections';
 $lang['label_reviewer_for'] = 'Dept. reviewer for';

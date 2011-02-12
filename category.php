@@ -57,8 +57,6 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
                 <td colspan="3"><input name="category" type="text"></td>
-
-            <input type="hidden" name="submit" value="Add Category">
             <td>
                 <div class="buttons">
                     <button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
@@ -109,9 +107,23 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
         echo '<tr><td>'.msg('label_name').' :</td><td>' . $lname . '</td></tr>';
     }
     ?>
-<TABLE name="delete_table">
     <form action="commitchange.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
+        <tr>
+            <td><?php echo msg('label_reassign_to');?>:<br />
+                  <select name="assigned_id">
+                            <?php
+                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id != '{$_REQUEST['item']}' ORDER BY name";
+                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                            while(list($lid, $lname) = mysql_fetch_row($result))
+                            {
+                                echo '<option value="' . $lid . '">' . $lname . '</option>';
+                            }
+                            mysql_free_result ($result);
+                            ?>
+                    </select>
+            </td>
+        </tr>
         <tr>
             <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
             <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button></div></td>
@@ -157,10 +169,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 
                 <td></td>
                 <td colspan="2" align="center">
-                    <input type="hidden" name="submit" value="delete">
                     <div class="buttons">
-                        <button class="positive" type="submit" name="submit" ><?php echo msg('button_delete')?></button>
-                        <button class="negative" type="submit" name="submit" ><?php echo msg('button_cancel')?></button>
+                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
+                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
