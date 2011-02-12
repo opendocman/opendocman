@@ -323,6 +323,42 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     $_POST['last_message'] = urlencode(msg('message_department_successfully_updated') . ' - ' . $_POST['name'] . '- id=' . $_POST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
+// Delete department
+elseif(isset($_REQUEST['deletedepartment']))
+{
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+
+    // Set all old dept_id's to the new re-assigned dept_id or remove the old dept_id
+
+    // Update entries in data table
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET department='{$_REQUEST['assigned_id']}' WHERE department = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in user
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET department='{$_REQUEST['assigned_id']}' WHERE department = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating user old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in dept perms
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET dept_id='{$_REQUEST['assigned_id']}' WHERE dept_id = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating user old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in dept_reviewer
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer SET dept_id='{$_REQUEST['assigned_id']}' WHERE dept_id = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating dept_reviewer old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Delete from department
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in deleting ID from department: $query. " . mysql_error());
+
+    // back to main page
+    $_REQUEST['last_message'] = urlencode(msg('message_all_actions_successfull') . ' id:' . $_REQUEST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
+}
 // Add Category
 elseif(@$_REQUEST['submit']=='Add Category')
 {
@@ -352,7 +388,7 @@ elseif(isset($_REQUEST['deletecategory']))
 
     // Set all old category_id's to the new re-assigned category
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='{$_REQUEST['assigned_id']}' WHERE category = '{$_REQUEST['id']}'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to Unassigned category: $query. " . mysql_error());
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to re-assigned category: $query. " . mysql_error());
     
     // back to main page
     $_REQUEST['last_message'] = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);

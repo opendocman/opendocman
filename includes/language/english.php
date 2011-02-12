@@ -270,6 +270,7 @@ $lang['message_if_you_are_unable_to_view'] = 'If you are not able to do so for s
 $lang['message_initial_import'] = 'Initial Import';
 $lang['message_last_message'] = 'Last Message';
 $lang['message_latest_version'] = 'Latest version';
+$lang['message_need_one_department'] = 'You need at least one department';
 $lang['message_no_author_comments_available'] = 'No author comments available';
 $lang['message_no_description_available'] = 'No description available';
 $lang['message_no_documents_checked_out'] = 'No documents are currently checked out to you.';

@@ -79,11 +79,9 @@ if(isset($_REQUEST['last_message']))
                     <tr>
                         <td><b><a href="<?php echo $secureurl->encode('department.php?submit=add&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_add')?></a></b></td>
                     </tr>
-                    <!--
-                <tr>
-                 <td><b><a href="department.php?deletepick=1">Delete</a></b></td>
-	     </tr>
-		 -->
+                    <tr>
+                        <td><b><a href="<?php echo $secureurl->encode('department.php?submit=deletepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_delete')?></a></b></td>
+                    </tr>
                     <tr>
                         <td><b><a href="<?php echo $secureurl->encode('department.php?submit=updatepick&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('label_update')?></a></b></td>
                     </tr>
