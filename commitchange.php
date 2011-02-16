@@ -112,7 +112,7 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         {
             $mail_body.=msg('password') . ': '.$_POST['password']."\n\n";
         }
-        $mail_salute="\n\r" . msg('salute') . ",\n\r$full_name";
+        $mail_salute="\n\r" . msg('email_salute') . ",\n\r$full_name";
         $mail_to = $new_user_obj->getEmailAddress();
         mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
         $_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
