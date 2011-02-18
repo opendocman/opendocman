@@ -1,5 +1,5 @@
 html {
-	background: #f9f9f9;
+	background-color: #43A5EC;
 }
 
 body {
@@ -211,3 +211,4 @@ textarea {
 	margin: 5px 0 15px;
 	background-color: #ffffe0;
 }
+label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }

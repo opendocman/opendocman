@@ -70,6 +70,11 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
             {
                 $_REQUEST['op'] = '';
             }
+            
+            // Initiate a connection and select the database for the install/update functions to operate with
+            $connection = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly?" . mysql_error());
+            mysql_select_db(DB_NAME);
+
             switch($_REQUEST['op'])
             {
                 case "install":

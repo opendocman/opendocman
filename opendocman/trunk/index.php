@@ -31,7 +31,7 @@ if(!file_exists('config.php'))
     // A config file doesn't exist
     ?>
     <html><head><link rel="stylesheet" href="templates/common/css/install.css" type="text/css" /></head>
-        <body>Looks like this is a fresh installation or you are upgrading to a new version. We need to create a config.php file: <p><a href="install/setup-config.php" class="button">Create a Configuration File</a></p></body>
+        <body>Looks like this is a new installation because we did not find a config.php file. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a Configuration File</a></p></body>
     </html>
     <?php
     exit;

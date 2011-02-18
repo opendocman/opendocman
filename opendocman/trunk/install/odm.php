@@ -291,7 +291,7 @@ $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'authorization', 'True', 'Authorization control: True or False. If set True, every document added or checked back must be reviewed by an admin before it can go public. To disable this review queue, set this setting to False. When set to False, all newly added or checked back in documents will immediately go public', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'secureurl', 'True', 'Secure URL control: On or Off (case sensitive). When set to ''On'', all urls will be secured. When set to \"Off\", all urls are normal and readable', 'bool');",
-"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'allow_signup', 'True', 'Should we display the sign-up link?', 'bool');",
+"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL, 'theme', 'default', 'Which theme to use?', '');",
