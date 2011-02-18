@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 echo 'Updating db version...<br />';
 $result = mysql_query("UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.6' WHERE sys_name='version'")
-        or die("<br>Could not update version number" . mysql_error());
+        or die("<br>Could not update version number: " . mysql_error());
 
 echo 'Adding the settings table...<br />';
  // Create the settings table
@@ -49,7 +49,7 @@ $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'authorization', 'True', 'Authorization control: True or False. If set True, every document added or checked back must be reviewed by an admin before it can go public. To disable this review queue, set this setting to False. When set to False, all newly added or checked back in documents will immediately go public', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'secureurl', 'True', 'Secure URL control: On or Off (case sensitive). When set to \"On\", all urls will be secured. When set to \"Off\", all urls are normal and readable', 'bool');",
-"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'allow_signup', 'True', 'Should we display the sign-up link?', 'bool');",
+"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'theme', 'default', 'Which theme to use?', '');",
@@ -59,7 +59,7 @@ $sql_operations = array(
 
 foreach($sql_operations as $query)
 {
-    $result = mysql_query($query) or die('Died while inserting to settings table: ' . mysql_error());
+    $result = mysql_query($query) or die('Died while inserting to settings table. Are you already running a version greater than 1.2.5.7?: ' . mysql_error());
 }
 
 echo 'Adding the filetypes table...<br />';

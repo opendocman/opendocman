@@ -67,8 +67,8 @@ function display_header() {
 <title>OpenDocMan &rsaquo; Setup Configuration File</title>
 <link rel="stylesheet" href="../templates/common/css/install.css" type="text/css" />
 <script type="text/javascript" src="../includes/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.pack.js"></script>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/additional-methods.js"></script>
+<script type="text/javascript" src="../includes/jquery.validate.pack.js"></script>
+<script type="text/javascript" src="../includes/additional-methods.js"></script>
 </head>
 <body>
 <h1 id="logo"><img alt="OpenDocMan" src="../images/logo.gif" /></h1>
@@ -152,6 +152,19 @@ switch($step) {
 	break;
 
 	case 2:
+        // Test the db connection.
+	/**#@+
+	 * @ignore
+	 */
+	define('DB_NAME', trim($_POST['dbname']));
+	define('DB_USER', trim($_POST['uname']));
+	define('DB_PASS', trim($_POST['pwd']));
+	define('DB_HOST', trim($_POST['dbhost']));
+
+	// We'll fail here if the values are no good.
+        $connection = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly?" . mysql_error());
+        $db = mysql_select_db(DB_NAME, $connection) or die ("Can't select database. We have connected to the database so we know the username and password are correct, but we were unable to select the database name you gave us. Are you sure it exists? You might still need to create the database.");
+
 	$dbname  = sanitizeme(trim($_POST['dbname']));
 	$uname   = sanitizeme(trim($_POST['uname']));
 	$passwrd = sanitizeme(trim($_POST['pwd']));
@@ -178,19 +191,6 @@ switch($step) {
          $_SESSION['datadir'] = $datadir;
          $_SESSION['baseurl'] = $baseurl;
 
-        // Test the db connection.
-	/**#@+
-	 * @ignore
-	 */
-	define('DB_NAME', $dbname);
-	define('DB_USER', $uname);
-	define('DB_PASS', $passwrd);
-	define('DB_HOST', $dbhost);
-
-	// We'll fail here if the values are no good.
-        $connection = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly?" . mysql_error());
-        $db = mysql_select_db(DB_NAME, $connection) or die ("Can't select database. We have connected to the database so we know the username and password are correct, but we were unable to select the database name you gave us. Are you sure it exists? You might still need to create the database.");
-        
         // Here we check their datadir value and try to create the folder. If we cannot, we will warn them.
         if(!is_dir($datadir))
         {
@@ -287,9 +287,10 @@ function sanitizeme($input)
         }
         //echo "Raw Input:" . $input . "<br />";
         $input  = cleanInput($input);
-        //echo "Clean Input:" . $input . "<br />";
-        //$output = mysql_real_escape_string($input);
-        //echo "mysql_escape output" . $output . "<br />";
+        $input = strip_tags($input); // Remove HTML
+        $input = htmlspecialchars($input); // Convert characters
+        $input = trim(rtrim(ltrim($input))); // Remove spaces
+        $input = mysql_real_escape_string($input); // Prevent SQL Injection
         $output=$input;
     }
     if(isset($output) && $output != '')
