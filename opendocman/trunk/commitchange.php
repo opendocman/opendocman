@@ -95,7 +95,7 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         // mail user telling him/her that his/her account has been created.
         $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
         $new_user_obj = new User($userid, $GLOBALS['connection'], DB_NAME);
-        $date = date('c'); //locale insensitive
+        $date = date('Y-m-d H:i:s T'); //locale insensitive
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0].' '.$get_full_name[1];
         $get_full_name = $new_user_obj->getFullName();
