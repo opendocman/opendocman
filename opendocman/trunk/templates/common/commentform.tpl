@@ -46,8 +46,10 @@
                                     
 			</select></td></tr></table>
 			<center><br />
-                            <input type="submit" name="submit" value="{$submit_value}"  />
-                            <input type="button" name="submit" value="Cancel" />
+                         <div class="buttons">
+                            <button class="positive" type="submit" name="submit" value="{$submit_value}">{$submit_value}</button>
+                            <button class="negative" type="submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button>
+                         </div><br /><br />
                             </center>
 
 		</form>

@@ -35,12 +35,14 @@ if(!$user_obj->isReviewer() && !$user_obj->isRoot())
     header('Location:out.php?last_message=Access+denied');
 }
 
+//print_r($_REQUEST);exit;
 if(!isset($_REQUEST['submit']))
 {
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
     draw_header('Files Review');
     draw_menu($_SESSION['uid']);
     draw_status_bar('Document Listing for Review',  $llast_message);
+    echo "<p>$llast_message</p>";
     $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     if($user_obj->isRoot())
     {
@@ -59,6 +61,11 @@ if(!isset($_REQUEST['submit']))
 }
 elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' || $_REQUEST['submit'] == 'commentReject'))
 {
+    if(!isset($_REQUEST['checkbox']))
+    {
+        header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+    }
+
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
     draw_header(msg('label_comment'));
     draw_menu($_SESSION['uid']);
@@ -181,7 +188,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             header("Location:$_SERVER[PHP_SELF]?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
-    header("Location:$_SERVER[PHP_SELF]?last_message=" .urlencode(msg('message_file_rejected')));
+    header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 {
@@ -263,6 +270,11 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             header("Location:$_SERVER[PHP_SELF]?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
-    header('Location:' . $_SERVER['PHP_SELF'] . '?last_message=' .urlencode(msg('message_file_authorized')));
+    header('Location: out.php?last_message=' .urlencode(msg('message_file_authorized')));
+}
+elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
+{
+    $_REQUEST['last_message']=urlencode(msg('message_action_cancelled'));
+    header ('Location: toBePublished.php?last_message=' . $_REQUEST['last_message']);
 }
     draw_footer();
