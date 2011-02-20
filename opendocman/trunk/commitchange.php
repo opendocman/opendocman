@@ -95,17 +95,17 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         // mail user telling him/her that his/her account has been created.
         $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
         $new_user_obj = new User($userid, $GLOBALS['connection'], DB_NAME);
-        $date = date('D F d Y');
-        $time = date('h:i A');
+        $date = date('c'); //locale insensitive
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0].' '.$get_full_name[1];
         $get_full_name = $new_user_obj->getFullName();
         $new_user_full_name = $get_full_name[0].' '.$get_full_name[1];
         $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-        $mail_headers = "From: $mail_from";
+        $mail_headers = "From: $mail_from"."\r\n";
+        $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
         $mail_subject=msg('message_account_created_add_user');
-        $mail_greeting=$new_user_full_name.":\n\r\tI would like to inform you that ";
-        $mail_body = msg('email_your_account_created').' '.$time.' - '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
+        $mail_greeting=$new_user_full_name.":\n\r\t".msg(email_i_would_like_to_inform);
+        $mail_body = msg('email_your_account_created').' '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
         $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
         $mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
         if($GLOBALS['CONFIG']['authen'] == 'mysql')
