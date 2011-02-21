@@ -104,7 +104,7 @@ if(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         $mail_headers = "From: $mail_from"."\r\n";
         $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
         $mail_subject=msg('message_account_created_add_user');
-        $mail_greeting=$new_user_full_name.":\n\r\t".msg(email_i_would_like_to_inform);
+        $mail_greeting=$new_user_full_name.":\n\r\t".msg('email_i_would_like_to_inform');
         $mail_body = msg('email_your_account_created').' '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
         $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
         $mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
