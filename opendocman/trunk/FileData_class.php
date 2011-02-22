@@ -417,7 +417,7 @@ if( !defined('FileData_class') )
         // this function sets the publisable field in the data table to $boolean
         function Publishable($boolean = true)
         {
-            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET publishable ='$boolean', {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.reviewer = '$this->id' WHERE id = '$this->id'";
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA SET publishable ='$boolean', {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.reviewer = '{$_SESSION['uid']}' WHERE id = '$this->id'";
             $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
         }
         // return the user id of the reviewer
