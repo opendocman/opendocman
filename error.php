@@ -86,7 +86,8 @@ if(isset($_REQUEST['ec']))
 
         // illegal file type
         case 13:
-            $message = msg('message_that_filetype_not_supported') . ' Admin->Settings->allowedFileTypes:<br><ul align=left>';
+            $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '' );
+            $message = $last_message . ": " . msg('message_that_filetype_not_supported') . ' Admin->Settings->allowedFileTypes:<br><ul align=left>';
             //echo "_File array is " . array_values($_FILES['file']);
             foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
             {
