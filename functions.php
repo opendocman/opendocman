@@ -212,40 +212,14 @@ function draw_menu($uid='')
     $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
     display_smarty_template('menu.tpl');
 }
+/*
+ * draw_header - Draw the header area from the template file
+ * @param string $page_title The title from the settings.
+ */
 function draw_header($page_title)
 {
     $GLOBALS['smarty']->assign('page_title', $page_title);
     $GLOBALS['smarty']->display('header.tpl');
-    /*
-		if (!isset($page_title))
-		{
-			$page_title='Main';
-		}
-		echo '<!---------------------------Start drawing header----------------------------->'."\n";
-		echo '<html>'."\n";
-		echo '	<HEAD>'."\n";
-		echo '  	<TITLE>'.$GLOBALS['CONFIG']['title'].' - '.$page_title.'</TITLE>'."\n";
-?>
-		<SCRIPT TYPE="text/javascript">
-		<!--
-		function popup(mylink, windowname)
-		{
-			if (! window.focus)return true;
-			var href;
-			if (typeof(mylink) == 'string')
-				href=mylink;
-			else
-				href=mylink.href;
-			window.open(href, windowname, 'width=300,height=500,scrollbars=yes');
-			return false;
-		}
-		//-->
-		</SCRIPT>
-<?php
-		echo '	</HEAD>'."\n";
-		echo '  	<body bgcolor="white">'."\n";
-		echo '<!----------------------------End drawing header----------------------------->'."\n";
-    */
     if(is_dir('install'))
     {
         echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
