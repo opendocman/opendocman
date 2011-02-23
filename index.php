@@ -167,7 +167,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
         <td><?php echo msg('password'); ?></td>
         <td><input type="password" name="frmpass" size="15">
         <?php
-        if($GLOBALS['CONFIG']['allow_password_reset'] == 'On')
+        if($GLOBALS['CONFIG']['allow_password_reset'] == 'True')
         {
             echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php">' . msg('forgotpassword') . '</a>';
         }

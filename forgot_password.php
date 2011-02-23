@@ -22,7 +22,7 @@
 
 include_once('odm-load.php');
 
-if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'On')
+if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'True')
 {
     echo msg('message_sorry_not_allowed');
     exit;
