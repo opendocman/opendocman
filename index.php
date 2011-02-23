@@ -62,12 +62,6 @@ if(isset($_SESSION['uid']))
 
 if(isset($_POST['login']))
 {
-    if(!valid_username($_POST['frmuser']))
-    {
-        echo "<font color=red>The username or password was invalid. Please try again.</font>";
-        exit;
-    }
-
     if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
     {
         echo "<font color=red>" . msg('message_datadir_problem'). "</font>";
