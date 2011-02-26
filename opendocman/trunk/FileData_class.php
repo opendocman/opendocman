@@ -50,6 +50,7 @@ if( !defined('FileData_class') )
         var $comment;
         var $status;
         var $department;
+        var $default_rights;
         var $view_users;
         var $read_users;
         var $write_users;
@@ -90,13 +91,13 @@ if( !defined('FileData_class') )
             $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.category,{$GLOBALS['CONFIG']['db_prefix']}$this->tablename.owner,
                     {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.created, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.description,
                     {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.comment, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.status,
-                    {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.department
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.department, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.default_rights
 			FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.id = $this->id";
 
             $result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
             if( mysql_num_rows($result) == $this->result_limit )
             {
-                while( list($category, $owner, $created_date, $description, $comment, $status, $department) = mysql_fetch_row($result) )
+                while( list($category, $owner, $created_date, $description, $comment, $status, $department, $default_rights) = mysql_fetch_row($result) )
                 {
                     $this->category = $category;
                     $this->owner = $owner;
@@ -105,6 +106,7 @@ if( !defined('FileData_class') )
                     $this->comment = stripslashes($comment);
                     $this->status = $status;
                     $this->department = $department;
+                    $this->default_rights = $default_rights;
                 }
             }
             else
@@ -112,6 +114,25 @@ if( !defined('FileData_class') )
                 $this->error = 'Non unique file id';
             }
             $this->isLocked = $this->status==-1;
+        }
+
+        // Update the dynamic values of the file
+        function updateData()
+        {
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA
+              SET
+                    category = '{$this->category}',
+                    owner = '{$this->owner}',
+                    description = '{$this->description}',
+                    comment = '{$this->comment}',
+                    status = '{$this->status}',
+                    department = '{$this->department}',
+                    default_rights = '{$this->default_rights}'
+               WHERE
+                    id = $this->id
+                            ";
+                    //echo $query;exit;
+                             mysql_query($query) or die('Error during updateData: ' . mysql_error());
         }
         //return filesize
         function getFileSize()
@@ -122,6 +143,10 @@ if( !defined('FileData_class') )
         function getCategory()
         {
             return $this->category;
+        }
+        function setCategory($value)
+        {
+            $this->category = $value;
         }
         // return this file's category name
         function getCategoryName()
@@ -146,6 +171,11 @@ if( !defined('FileData_class') )
         function getOwner()
         {
             return $this->owner;
+        }
+        // set the user_id of the file
+        function setOwner($value)
+        {
+            $this->owner = $value;
         }
         // return the username of the owner
         function getOwnerName()
@@ -180,10 +210,27 @@ if( !defined('FileData_class') )
         {
             return $this->description;
         }
+        function setDescription($value)
+        {
+            $this->description = $value;
+        }
+
+        function getDefaultRights()
+        {
+            return $this->default_rights;
+        }
+        function setDefaultRights($value)
+        {
+            $this->default_rights = $value;
+        }
         // return file commnents
         function getComment()
         {
             return $this->comment;
+        }
+        function setComment($value)
+        {
+            $this->comment = $value;
         }
         // return an aray of the user id of all the people who has $right right to this file
         function getUserIds($right)
@@ -264,6 +311,10 @@ if( !defined('FileData_class') )
         function getDepartment()
         {
             return $this->department;
+        }
+        function setDepartment($value)
+        {
+            $this->department = $value;
         }
         // return the name of the deparment of the file
         function getDeptName()
