@@ -260,6 +260,13 @@ if ( !defined('udf_functions') )
             header('Location: ' . $secureurl->encode('admin.php?last_message=' . msg('message_udf_cannot_be_blank') ));
             exit;
         }
+
+        if(empty($_REQUEST['display_name']))
+        {
+            $secureurl = new phpsecureurl;
+            header('Location: ' . $secureurl->encode('admin.php?last_message=' . msg('message_udf_cannot_be_blank') ));
+            exit;
+        }
         
         $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
 
