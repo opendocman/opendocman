@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 include('odm-load.php');
 include('udf_functions.php');
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -164,6 +166,7 @@ if (!isset($_REQUEST['submit']))
 		$description = $filedata->getDescription();
 		$comment = $filedata->getComment();
 		$owner_id = $filedata->getOwner();
+                $department = $filedata->getDepartment();
 		// display the form
 ?>
 		<p>
@@ -177,9 +180,9 @@ if (!isset($_REQUEST['submit']))
 		<td colspan="3"><b><?php  echo $realname; ?></b></td>
 		</tr>
 		<tr>
-		<td valign="top"><?php echo msg('owner')?></td>
+		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('owner')?></td>
 		<td colspan="3"><b>
-		<select name="users">
+		<select name="file_owner">
 			<?php  
 			$lusers = getAllUsers();
 			for($i = 0; $i < sizeof($lusers); $i++)
@@ -197,6 +200,31 @@ if (!isset($_REQUEST['submit']))
 		</select>
 		</b></td>
 		</tr>
+                <tr>
+		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('department'); ?></td>
+		<td colspan="3"><b>
+		<select name="file_department">
+			<?php
+                        // query to get a list of available departments
+                        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        //////////////////Forbidden////////////////////
+                        while(list($id, $name) = mysql_fetch_row($result))
+                        {
+                            if($id == $department)
+                            {
+                                $selected = 'selected';
+                            }
+                            else
+                            {
+                                $selected = '';
+                            }
+                            echo "<option value=\"$id\" $selected>$name</option>";
+                        }
+			?>
+		</select>
+		</b></td>
+		</tr>
 		<tr>
 		<td valign="top"><?php echo msg('category')?></td>
 		<td colspan="3"><select name="category">
@@ -204,15 +232,15 @@ if (!isset($_REQUEST['submit']))
 		// query for category list
 		$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
 		$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-		while(list($ID, $CATEGORY) = mysql_fetch_row($result))
+		while(list($catid, $cat) = mysql_fetch_row($result))
 		{
-			$str = '<option value="' . $ID . '"';
+			$str = '<option value="' . $catid . '"';
 			// pre-select current category
-			if ($category == $ID) 
+			if ($category == $catid)
 			{ 
 				$str .= ' selected'; 
 			}
-			$str .= '>' . $CATEGORY . '</option>';
+			$str .= '>' . $cat . '</option>';
 			echo $str;
 		}
 		mysql_free_result($result);
@@ -479,21 +507,31 @@ else
             exit;
         }
 
-	// query to verify
-	$query = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$_REQUEST[id]' and status = '0'";
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	if(mysql_num_rows($result) <= 0)
+        // Check to make sure the file is available
+        $status = $filedata->getStatus($_REQUEST['id']);
+        if($status != 0)
 	{
-		header('Location:error.php?ec=2'); 
-		exit; 
+		header('Location:error.php?ec=2');
+		exit;
 	}
-	// update db with new information	
-	$query = ("UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='" . mysql_real_escape_string($_REQUEST['category']) . "', description='" . mysql_real_escape_string($_REQUEST['description']) . "', comment='" . mysql_real_escape_string($_REQUEST['comment']) ."', default_rights='" . mysql_real_escape_string($_REQUEST['default_Setting']) . "'  WHERE id = '" . mysql_real_escape_string($_REQUEST['id']) . "'");
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	if(isset($_REQUEST['users']))
+        
+	// update category
+        $filedata->setCategory(mysql_real_escape_string($_REQUEST['category']));
+        $filedata->setDescription(mysql_real_escape_string($_REQUEST['description']));
+        $filedata->setComment(mysql_real_escape_string($_REQUEST['comment']));
+        $filedata->setDefaultRights(mysql_real_escape_string($_REQUEST['default_Setting']));
+        if(isset($_REQUEST['file_owner']))
 	{
-		mysql_query('UPDATE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data set owner="' . mysql_real_escape_string($_REQUEST['users']) . '" WHERE id = ' . mysql_real_escape_string($_REQUEST['id'])) or die(mysql_error());
-	}
+            $filedata->setOwner(mysql_real_escape_string($_REQUEST['file_owner']));
+        }
+        if(isset($_REQUEST['file_department']))
+	{
+            $filedata->setDepartment(mysql_real_escape_string($_REQUEST['file_department']));
+        }
+
+        // Update the file with the new values
+        $filedata->updateData();
+        
 	udf_edit_file_update();
 
 	// clean out old permissions

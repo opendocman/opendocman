@@ -1,7 +1,7 @@
 <?php
 /*
 add.php - adds files to the repository
-Copyright (C) 2007 Stephen Lawrence Jr., Jon Miner
+Copyright (C) 2007 Stephen Lawrence Jr.
 Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
@@ -34,6 +34,9 @@ if (!isset($_SESSION['uid']))
 }
 include('odm-load.php');
 include('udf_functions.php');
+
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+
 //un_submitted form
 if(!isset($_POST['submit'])) 
 {
@@ -145,6 +148,67 @@ if(!isset($_POST['submit']))
         <td colspan=3><input tabindex="0" name="file" type="file">
         </td>
     </tr>
+
+<?php if($user_obj->isAdmin()) { // Begin Admin ?>
+    <tr>
+
+        <td>
+            <?php echo msg('label_assign_to') . ' ' . msg('owner');?>
+        </td>
+        <td>
+            <select name="file_owner">
+            <?php
+                        // query to get a list of available users
+                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        //////////////////Forbidden////////////////////
+                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
+                        {
+                            if($id == $_SESSION['uid'])
+                            {
+                                $selected = 'selected';
+                            }
+                            else
+                            {
+                                $selected = '';
+                            }
+                            echo "<option value=\"$id\" $selected>$last_name, $first_name</option>";
+                        }
+
+            ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <?php echo msg('label_assign_to') . ' ' . msg('department');?>
+        </td>
+        <td>
+            <select name="file_department">
+            <?php
+                        $user_dept_id = $user_obj->getDeptId();
+                        
+                        // query to get a list of available departments
+                        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        //////////////////Forbidden////////////////////
+                        while(list($id, $name) = mysql_fetch_row($result))
+                        {
+                            if($id == $user_dept_id)
+                            {
+                                $selected = 'selected';
+                            }
+                            else
+                            {
+                                $selected = '';
+                            }
+                            echo "<option value=\"$id\" $selected>$name</option>";
+                        }
+             ?>
+            </select>
+        </td>
+    </tr>
+<?php } // End Admin ?>
     <tr>
         <td>
             <a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('category');?></a>
@@ -169,9 +233,10 @@ if(!isset($_POST['submit']))
     <!-- Set Department rights on the file -->
     <TR>
         <TD>
-            <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('department');?></a>
+            <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_departments');?></a>
         </TD>
-        <TD COLSPAN=3><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
+        <TD COLSPAN=3>
+            <hr /><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
                 <option value=0> <?php echo msg('label_select_a_department');?></option>
                 <option value=1> <?php echo msg('label_default_for_unset');?></option>
                 <option value=2> <?php echo msg('label_all_departments');?></option>
@@ -204,7 +269,7 @@ if(!isset($_POST['submit']))
         echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
     }
     ?>
-        </TD>
+        <hr /></TD>
     </TR>
     <tr>
         <td>
@@ -378,16 +443,25 @@ else
             $lpublishable= '1';
         }
         $result_array = array();
-        //get user's department
-        $query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user where id=$_SESSION[uid]";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        if(mysql_num_rows($result) != 1)
+        
+        // If the admin has chosen to assign the department
+        // Set it here. Otherwise just use the session UID's department
+        if($user_obj->isAdmin() && isset($_REQUEST['file_department']))
         {
-            header('Location:error.php?ec=14');
-            exit; //non-unique error
+            $current_user_dept = $_REQUEST['file_department'];
         }
-        list($current_user_dept) = mysql_fetch_row($result);
-
+        else
+        {
+            //get current user's department
+            $query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user where id=$_SESSION[uid]";
+            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            if(mysql_num_rows($result) != 1)
+            {
+                header('Location:error.php?ec=14');
+                exit; //non-unique error
+            }
+            list($current_user_dept) = mysql_fetch_row($result);
+        }
         // File is bigger than what php.ini post/upload/memory limits allow.
         if($_FILES['file'] ['error'] == '1')
         {
@@ -451,8 +525,44 @@ else
         // Run the onDuringAdd() plugin function
         callPluginMethod('onDuringAdd');
 
+        // If the admin has chosen to assign the owner
+        // Set it here. Otherwise just use the session UID
+        if($user_obj->isAdmin() && isset($_REQUEST['file_owner']))
+        {
+            $owner_id = $_REQUEST['file_owner'];
+        }
+        else
+        {
+            $owner_id = $_SESSION['uid'];
+        }
+        
         // INSERT file info into data table
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}data (status, category, owner, realname, created, description, department, comment, default_rights, publishable) VALUES(0, '" . addslashes($_REQUEST['category']) . "', '" . addslashes($_SESSION['uid']) . "', '" . addslashes($_FILES['file']['name']) . "', NOW(), '" . addslashes($_REQUEST['description']) . "','" . addslashes($current_user_dept) . "', '" . addslashes($_REQUEST['comment']) . "','" . addslashes($_REQUEST['default_Setting']) . "', $lpublishable )";
+        $query = "INSERT INTO 
+        {$GLOBALS['CONFIG']['db_prefix']}data (
+            status,
+            category,
+            owner,
+            realname,
+            created,
+            description,
+            department,
+            comment,
+            default_rights,
+            publishable
+        )
+            VALUES
+        (
+            0,
+            '" . addslashes($_REQUEST['category']) . "',
+            '" . addslashes($owner_id) . "',
+            '" . addslashes($_FILES['file']['name']) . "',
+            NOW(),
+            '" . addslashes($_REQUEST['description']) . "',
+            '" . addslashes($current_user_dept) . "',
+            '" . addslashes($_REQUEST['comment']) . "',
+            '" . addslashes($_REQUEST['default_Setting']) . "',
+            $lpublishable
+        )";
 
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // get id from INSERT operation
