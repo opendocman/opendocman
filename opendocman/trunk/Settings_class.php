@@ -121,7 +121,8 @@ if( !defined('Settings_class') )
             {
                 while (false !== ($file = readdir($handle)))
                 {
-                    if ($file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh')
+                    // Filter out any other types of folders that might be in here
+                    if ($file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh' && $file != 'common')
                     {
                         array_push($file_list, $file);
                     }
