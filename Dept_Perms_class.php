@@ -96,9 +96,10 @@ if( !defined('Dept_Perms_class') )
             //$fileid_array[$index][1] ==> owner
             //$fileid_array[$index][2] ==> username
             $llen = mysql_num_rows($result);
-            for($index=0; $index < $llen; $index++)
+            $index = 0;
+            while($index<$llen)
             {
-                list($fileid_array[++$index] ) = mysql_fetch_row($result);
+                list($fileid_array[$index++] ) = mysql_fetch_row($result);
             }
             return $fileid_array;
         }

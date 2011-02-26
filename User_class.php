@@ -188,7 +188,7 @@ if( !defined('User_class') )
         */
         function isReviewer()
         {
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = " . $this->id;
+            $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = " . $this->id;
             $result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
             if(mysql_num_rows($result) > 0)
             {
@@ -207,50 +207,43 @@ if( !defined('User_class') )
         */
         function isReviewerForFile($file_id)
         {
-            if($this->isReviewer())
+            $query = "SELECT
+                            d.id
+                      FROM
+                            {$GLOBALS['CONFIG']['db_prefix']}data as d,
+                            {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
+                      WHERE
+                            d.publishable >0 AND
+                            dr.dept_id = d.department AND
+                            dr.user_id = {$this->id} AND
+                            d.department=dr.dept_id AND
+                            d.id = '$file_id'
+                            ";
+            $result = mysql_query($query, $this->connection) or die("Error in query during isReviewerForFile call: " . mysql_error());
+            $num_rows = mysql_num_rows($result);
+            if($num_rows < 1)
             {
-                $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_REVIEWER WHERE user_id = ".$this->id;
-                $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-
-                $query = "SELECT
-                                id
-                          FROM
-                                {$GLOBALS['CONFIG']['db_prefix']}data as d,
-                                {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
-                          WHERE
-                                d.publishable >0 AND
-                                dr.dept_id = d.department AND
-                                dr.user_id = {$this->id} AND
-                                d.department=dr.dept_id
-
-                                ";
-
-                mysql_free_result($result);
-                $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-                $file_data = array();
-                $num_files = mysql_num_rows($result);
-                for($index = 0; $index< $num_files; $index++)
-                {
-                    list($fid) = mysql_fetch_row($result);
-                    $file_data[$index] = $fid;
-                }
-                return true;
+                return false;
             }
+            return true;
         }
         
-        function getAllRevieweeIds() // this functions assume that you are a root thus allowing you to by pass everything
-
+        // this functions assume that you are a root thus allowing you to by pass everything
+        function getAllRevieweeIds() 
         {
-            $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 0";
-            $lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
-            $lfile_data = array();
-            $lnum_files = mysql_num_rows($lresult);
-            for($lindex = 0; $lindex< $lnum_files; $lindex++)
+            if($this->isRoot())
             {
-                list($lfid) = mysql_fetch_row($lresult);
-                $lfile_data[$lindex] = $lfid;
+                $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 0";
+                $lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
+                $lfile_data = array();
+                $lnum_files = mysql_num_rows($lresult);
+                for($lindex = 0; $lindex< $lnum_files; $lindex++)
+                {
+                    list($lfid) = mysql_fetch_row($lresult);
+                    $lfile_data[$lindex] = $lfid;
+                }
+                return $lfile_data;
             }
-            return $lfile_data;
         }
         
         //return an array of files that need reviewing under this person
