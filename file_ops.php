@@ -38,7 +38,7 @@ if(!$user_obj->isRoot())
 	header('Location:error.php?ec=24');
 }
 $flag = 0;
-if(@$_GET['submit'] == 'view_checkedout')
+if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 {
 	echo "\n" . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">'; 
 	echo "\n" . '<input name="submit" type="hidden" value="Clear Status">';
@@ -74,4 +74,8 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Clear Status')
 
     }
     header('Location:' . $_SERVER['PHP_SELF'] . '?state=2&submit=view_checkedout');
+}
+else
+{
+    echo 'Nothing to do';
 }
