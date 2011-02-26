@@ -253,3 +253,38 @@ INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password
 INSERT INTO `odm_settings` VALUES(NULL,'theme', 'default', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
 INSERT INTO `odm_settings` VALUES(NULL,'base_url', 'http://localhost/opendocman', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');
+
+CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
+`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
+`type` VARCHAR(255) NOT NULL ,
+`active` TINYINT(4) NOT NULL ,
+PRIMARY KEY (`id`)
+);
+
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/gif', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'text/html', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'text/plain', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/pdf', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-pdf', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/msword', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/jpeg', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/pjpeg', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/png', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/msexcel', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/msaccess', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'text/richtxt', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/mspowerpoint', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/octet-stream', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/tiff', 1);
+INSERT INTO `odm_filetypes` VALUES(NUll, 'image/tif', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.ms-powerpoint', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.ms-excel', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'applicatiion/vnd.openxmlformats-officedocument.presenationml.presentation', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'text/csv', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'audio/mpeg', 0);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dwg', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dfx', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'drawing/x-dwf', 1);

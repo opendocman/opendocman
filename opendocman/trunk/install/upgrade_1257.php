@@ -95,7 +95,10 @@ $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'text/csv', 1);",
-"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'audio/mpeg', 0);"
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'audio/mpeg', 0);",
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'image/x-dwg', 1);",
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'image/x-dfx', 1);",
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);"
         );
 
 foreach($sql_operations as $query)
