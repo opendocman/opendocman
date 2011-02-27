@@ -466,12 +466,6 @@ else
            header('Location:error.php?ec=26');
             exit;
         }
-        //can't upload empty file
-        if ($_FILES['file']['size'] <= 0 )
-        {
-            header('Location:error.php?ec=11');
-            exit;
-        }
 
         // File too big?
         if($_FILES['file']['size'] >  $GLOBALS['CONFIG']['max_filesize'] )
