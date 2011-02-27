@@ -32,14 +32,10 @@ $with_caption = false;
 
 if(!isset($_POST['submit']))
 {
-    if(!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message'] = '';
-    }
-
+    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
     draw_menu($_SESSION['uid']);
     draw_header(msg('message_documents_rejected'));
-    draw_status_bar(msg('message_documents_rejected'), $_REQUEST['last_message']);
+    draw_status_bar(msg('message_documents_rejected'), $llast_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
@@ -80,9 +76,8 @@ $list_status = list_files($fileid_array, $userperms, $GLOBALS['CONFIG']['dataDir
     <tr>
         <td>
                 <div class="buttons">
-                    <input type="submit" name="submit" value="<?php echo msg('button_resubmit_for_review'); ?>" />
-                    <input type="submit" name="submit" value="<?php echo msg('button_delete'); ?>" />
-
+                    <button class="positive" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review'); ?></button>
+                    <button class="negative" type="submit" name="submit" value="delete"><?php echo msg('button_delete'); ?></button>
                 </div>
 <?php
             }
@@ -93,13 +88,18 @@ $list_status = list_files($fileid_array, $userperms, $GLOBALS['CONFIG']['dataDir
 <?php
            draw_footer();
 }
-elseif(isset($_POST['submit']) && $_POST['submit'] == msg('button_resubmit_for_review'))
+elseif(isset($_POST['submit']) && $_POST['submit'] == 'resubmit')
 {
+    if(!isset($_REQUEST['checkbox']))
+    {
+        header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+        exit;
+    }
+    
     if(isset($_POST["checkbox"]))
     {
         foreach($_POST['checkbox'] as $cbox)
         {
-            //echo $cbox;exit;
             $fileid = $cbox;
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
             //$user_obj = new User($file_obj->getOwner(), $connection, DB_NAME);
@@ -110,8 +110,14 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == msg('button_resubmit_for_r
     }
     header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
 }
-elseif($_POST['submit'] == msg('button_delete'))
+elseif($_POST['submit'] == 'delete')
 {
+    if(!isset($_REQUEST['checkbox']))
+    {
+        header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+        exit;
+    }
+    
     $url = 'delete.php?mode=tmpdel&';
     $id = 0;
     if(isset($_POST["checkbox"]))

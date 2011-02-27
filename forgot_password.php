@@ -83,7 +83,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
 
          */
         if (strlen($_REQUEST['last_message']))
-            echo "<p class=\"hilitename\">" . $_REQUEST['last_message'] . ".</p>\n";
+            draw_error($_REQUEST['last_message']);
         ?>
 
             <p><?php echo msg('message_set_your_new_password')?></p>
@@ -182,7 +182,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
 else 
 {
     if (strlen($_REQUEST['last_message']))
-        echo "<p>" . $_REQUEST['last_message'] . ".</p>\n";
+        draw_error($_REQUEST['last_message']);
     ?>
 
         <p><?php echo msg('message_this_site_has_high_security')?></p>

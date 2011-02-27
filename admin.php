@@ -37,16 +37,12 @@ $secureurl = new phpsecureurl;
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
-    draw_error('error.php?ec=4');
+    header('Location:error.php?ec=4');
     exit;
 }
 draw_header(msg('label_admin'));
 draw_menu($_SESSION['uid']);
 @draw_status_bar(msg('label_admin'),$_REQUEST['last_message']);
-if(isset($_REQUEST['last_message']))
-{
-    echo '<h2><img src="images/exclamation.gif">' . $_REQUEST['last_message']. ' </h2>';
-}
 ?>
 <center>	
     <table border="1" cellspacing="5" cellpadding="5" >

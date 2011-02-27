@@ -1,6 +1,5 @@
-
-
-<table>
+<center>
+<table class="form-table">
 		<tr>
 		<td>
                         <div class="buttons">
@@ -118,3 +117,4 @@
 */
 	</script>
                 {/literal}
+</center>

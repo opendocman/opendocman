@@ -40,13 +40,11 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 //un_submitted form
 if(!isset($_POST['submit'])) 
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
+    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
     draw_header(msg('area_add_new_file'));
     draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_add_new_file'), $_REQUEST['last_message']);
+    draw_status_bar(msg('area_add_new_file'), $llast_message);
+
     echo '<body bgcolor="white">';
     echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
     //////////////////////////Get Current User's department id///////////////////

@@ -1,13 +1,15 @@
 <center>
-    <table class="form-table" style="width: 200px;">
+<table class="form-table" style="width: 200px;">
         <thead>
             <tr>
-                <th>{$g_lang_label_delete}&nbsp;{$g_lang_label_filetypes}&nbsp;-&nbsp;{$g_lang_choose}</th>
+                <th colspan="3">{$g_lang_label_delete}&nbsp;{$g_lang_label_filetypes}&nbsp;-&nbsp;{$g_lang_choose}</th>
+
             </tr>
 
             </thead>
             <tbody>
-                <tr><td>
+                <tr>
+                    <td>
                     <form action="filetypes.php" method="POST" enctype="multipart/form-data">
                         <select id="types" multiple="multiple" name="types[]">
                         {foreach from=$filetypes_array item=i}
