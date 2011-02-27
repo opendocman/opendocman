@@ -143,6 +143,10 @@ function draw_status_bar($message, $lastmessage='')
 </table>
 </center>
     <?php
+        if ( $lastmessage != "" )
+        {
+            draw_error($lastmessage);
+        }
 }
 
 
@@ -228,7 +232,7 @@ function draw_header($page_title)
 
 function draw_error($message)
 {
-    header ('Location:' . $message);
+    echo '<div id="last_message">' . $message . '</div>';
 }
 
 function draw_footer()
@@ -740,24 +744,24 @@ function sanitizeme($input)
 }
 
 /**
- * Translate a string using the global lang set
+ * Translate a string using the global lang set.
  * @param string $s
  * @return string
  */
 function msg($s)
 {
-    if (isset($GLOBALS['lang'][$s]))
-    {
-        return $GLOBALS['lang'][$s];
-    }
-    else
-    {
-        //error_log("l10n error:LANG:" .
-        //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
+        if (isset($GLOBALS['lang'][$s]))
+        {
+            return $GLOBALS['lang'][$s];
+        }
+        else
+        {
+            //error_log("l10n error:LANG:" .
+            //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
 
-        return $s;
+            return $s;
+        }
     }
-}
 
 /*
  * This function will check for the existence of a template file

@@ -42,7 +42,6 @@ if(!isset($_REQUEST['submit']))
     draw_header('Files Review');
     draw_menu($_SESSION['uid']);
     draw_status_bar('Document Listing for Review',  $llast_message);
-    echo "<p>$llast_message</p>";
     $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     if($user_obj->isRoot())
     {

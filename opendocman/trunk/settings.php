@@ -89,11 +89,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
         $_POST['last_message']='';
     }
     draw_status_bar(msg('label_settings'), $_POST['last_message']);
-//    echo '<h2><span style="color:red;">' . $_POST['last_message'] . '</span></h2>';
-    //$settings->load();
-    echo '<h2><img src="images/exclamation.gif" alt="exclamation" />' . $_POST['last_message'] . '</h2>';
     $settings->edit();
-    //print_r($_POST);
     draw_footer();
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')

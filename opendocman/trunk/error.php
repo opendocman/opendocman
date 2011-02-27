@@ -87,7 +87,7 @@ if(isset($_REQUEST['ec']))
         // illegal file type
         case 13:
             $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '' );
-            $message = $last_message . ": " . msg('message_that_filetype_not_supported') . ' Admin->Settings->allowedFileTypes:<br><ul align=left>';
+            $message = draw_error($last_message) . ": " . msg('message_that_filetype_not_supported') . ' Admin->Settings->allowedFileTypes:<br><br />Current allowed filetypes:<ul align=left>';
             //echo "_File array is " . array_values($_FILES['file']);
             foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
             {
@@ -151,6 +151,6 @@ if(isset($_REQUEST['ec']))
             $message = msg('message_there_was_an_error_performing_the_action') .' ' . msg('please') . ' <a href='.$GLOBALS['CONFIG']['base_url'].'>' . msg('login') . '</a>';
             break;
     }
-    echo('<img src="images/exclamation_red.gif"> <font size="4" color="red">' . $message . '</font>');
+    draw_error($message);
 }
 draw_footer();

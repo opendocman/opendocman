@@ -38,7 +38,6 @@ $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '
 draw_header(msg('label_file_listing'));
 draw_menu($_SESSION['uid']);
 draw_status_bar(msg('area_document_listing'), @$_REQUEST['last_message']);
-echo "<p>$last_message</p>";
 sort_browser();
 
 $secureurl_obj = new phpsecureurl;

@@ -1,9 +1,8 @@
 <center>
-    <h2>{$last_message}</h2>
     <table class="form-table" style="width: 200px;">
         <thead>
             <tr>
-                <th>{$g_lang_label_allowed}&nbsp;{$g_lang_label_filetypes}</th>
+                <th colspan="3">{$g_lang_label_allowed}&nbsp;{$g_lang_label_filetypes}</th>
             </tr>
 
             </thead>
