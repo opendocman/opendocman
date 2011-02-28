@@ -39,7 +39,7 @@ if( !defined('User_class') )
             $this->result_limit = 1; //there is only 1 user with a certain user_name or user_id
 
             databaseData::setTableName($this->TABLE_USER);
-            databaseData::databaseData($id, $connection, $database);
+            databaseData::databaseData($id, $connection, `$database`);
         }
 
         /**
