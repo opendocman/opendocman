@@ -127,7 +127,7 @@ if(isset($_REQUEST['ec']))
         case 21:
             $message = msg('message_this_operation_cannot_be_done_file');
             break;
-        // bad root_username setting
+        // bad root_id setting
         case 22:
             $message = msg('message_unable_to_determine_root');
             break;

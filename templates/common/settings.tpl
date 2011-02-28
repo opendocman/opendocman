@@ -40,10 +40,10 @@
                     <select name="authen">
                         <option value="mysql" {if $i.value eq 'mysql'}selected="selected"{/if}>MySQL</option>
                     </select>
-                {elseif $i.name eq 'root_username'}
-                    <select name="root_username">
-                        {foreach from=$usernames item=username}
-                            <option value="{$username[0]}" {if $i.value eq $username[0]} selected="selected"{/if}>{$username[0]}</option>
+                {elseif $i.name eq 'root_id'}
+                    <select name="root_id">
+                        {foreach from=$useridnums item=useridnum}
+                            <option value="{$useridnum[0]}" {if $i.value eq $useridnum[0]} selected="selected"{/if}>{$useridnum[1]}</option>
                         {/foreach}
                     </select>
                 {else}

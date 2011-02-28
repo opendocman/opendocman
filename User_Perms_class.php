@@ -1,8 +1,7 @@
 <?php
 /*
 User_Perms_class.php - relates users to specific files
-Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen J. Lawrence Jr.
+Copyright (C) 2002-2011 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -256,7 +255,7 @@ if ( !defined('User_Perms_class') )
         // return this user's permission on the file $data_id
         function getPermission($data_id)
         {
-            if($GLOBALS['CONFIG']['root_username'] == $this->user_obj->getName())
+            if($GLOBALS['CONFIG']['root_id'] == $this->user_obj->getId())
             {
                 return true;
             }

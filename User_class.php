@@ -25,14 +25,14 @@ if( !defined('User_class') )
 
     class User extends databaseData
     {
-        var $root_username;
+        var $root_id;
         /**
          *
          *
          **/
         function User($id, $connection, $database)
         {
-            $this->root_username = $GLOBALS['CONFIG']['root_username'];
+            $this->root_id = $GLOBALS['CONFIG']['root_id'];
             $this->field_name = 'username';
             $this->field_id = 'id';
             $this->tablename = $GLOBALS['CONFIG']['db_prefix'] . $this->TABLE_USER;
@@ -127,7 +127,7 @@ if( !defined('User_class') )
          */
         function isRoot()
         {
-            return ($this->root_username == $this->getName());
+            return ($this->root_id == $this->getId());
         }
 
         function getPassword()

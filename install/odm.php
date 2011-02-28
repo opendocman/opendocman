@@ -300,7 +300,7 @@ $sql_operations = array(
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'title', 'Document Repository', 'This is the browser window title', 'maxsize=255');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'site_mail', 'root@localhost', 'The email address of the administrator of this site', 'email|maxsize=255|req');",
-"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'root_username', 'admin', 'This variable sets the root username.  The root user will be able to access all files and have authority for everything.', 'alpha|req|maxsize=255');",
+"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'root_id', '1', 'This variable sets the root user id.  The root user will be able to access all files and have authority for everything.', 'num|req'));",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'dataDir', '{$_SESSION['datadir']}', 'location of file repository. This should ideally be outside the Web server root. Make sure the server has permissions to read/write files to this folder!. (Examples: Linux - /var/www/document_repository/ : Windows - c:/document_repository/', 'maxsize=255');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'max_filesize', '5000000', 'Set the maximum file upload size', 'num|maxsize=255');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255');",
