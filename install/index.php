@@ -214,7 +214,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 echo '<br />installing...<br>';
 
                 // Create database
-                $result = mysql_query("CREATE DATABASE IF NOT EXISTS " . DB_NAME)
+                $result = mysql_query("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "`")
                         or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
                 echo 'Database Created<br />';

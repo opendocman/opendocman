@@ -88,7 +88,39 @@ switch($step) {
 	<li>Database host</li>
 	<li>Table prefix (if you want to run more than one OpenDocMan in a single database) </li>
 </ol>
-<p><strong>You will also need to create a directory where you plan to store your uploaded files on the server.</strong> This directory must be writable by the web server but preferably NOT inside your public html folder. The main reason for locating the folder outside or your web document root is so that people won't be able to guess at a URL to directly access your files, bypassing the access restrictions that OpenDocMan puts in place.</p>
+<p><strong>You will also need to create a directory (your "dataDir") where you plan to store your uploaded files on the server.</strong> This directory must be writable by the web server but preferably NOT inside your public html folder. The main reason for locating the folder outside or your web document root is so that people won't be able to guess at a URL to directly access your files, bypassing the access restrictions that OpenDocMan puts in place.</p>
+<p>You can update your web server configuration file to prevent visitors from browsing your files directly.
+
+<?php
+echo '<pre>';
+echo htmlentities('
+<Directory "/path/to/your/documents/dataDir">
+  Deny all
+</Directory>
+');
+echo '</pre>';
+
+echo '<p>Or For newer version of apache</p>';
+
+echo '<pre>';
+echo htmlentities('
+<Directory "/path/to/your/documents/dataDir">
+  Deny From all
+</Directory>
+');
+echo '</pre>';
+?>
+    <p>
+Or don't put your dataDir directory in the web space at all.<br />
+
+Or in a .htaccess file in the dataDir directory:<br />
+
+<pre>
+order allow,deny
+deny from all
+</pre>
+    </p>
+
 <p>If for any reason this automatic file creation doesn't work, don't worry. All this does is fill in the database information to a configuration file. You may also simply open <code>config-sample.php</code> in a text editor, fill in your information, and save it as <code>config.php</code> and import the <code>database.sql</code> file into your database.</p>
 
 <p class="step"><a href="setup-config.php?step=1" class="button">Let&#8217;s go!</a></p>
@@ -163,6 +195,8 @@ switch($step) {
 
 	// We'll fail here if the values are no good.
         $connection = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly?" . mysql_error());
+        $result = mysql_query("CREATE DATABASE IF NOT EXISTS `". DB_NAME . "`")
+                        or die("<br>Unable to Create Database - Error in query:" . mysql_error());
         $db = mysql_select_db(DB_NAME, $connection) or die ("Can't select database. We have connected to the database so we know the username and password are correct, but we were unable to select the database name you gave us. Are you sure it exists? You might still need to create the database.");
 
 	$dbname  = sanitizeme(trim($_POST['dbname']));
