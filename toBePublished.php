@@ -120,13 +120,13 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $mail_break = '--------------------------------------------------'."\n";
     $reviewer_comments = "To=$lto;Subject=$lsubject;Comments=$lcomments;";
     $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $date = date("D F d Y");
-    $time = date("h:i A");
+    $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $dept_id = $user_obj->getDeptId();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-    $mail_headers = "From: $mail_from";
+    $mail_headers = "From: $mail_from"."\r\n";
+    $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
     $mail_subject=msg('email_subject_review_status');
     $mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
     $mail_body = msg('email_was_declined_for_publishing_at') . ' '.$time.' - '.$date.' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
@@ -160,7 +160,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . "\n\n";
             $mail_body.=msg('label_status').': ' .msg('message_rejected'). "\n\n";
             $mail_body.=msg('date'). ': ' .$date. "\n\n";
-            $mail_body.=msg('time'). ': ' .$time. "\n\n";
             $mail_body.=msg('label_reviewer'). ': ' .$full_name. "\n\n";
             $mail_body.=msg('email_thank_you'). ','. "\n\n";
             $mail_body.=msg('email_automated_document_messenger'). "\n\n";
@@ -194,13 +193,13 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $date = date("D F d Y");
-    $time = date("h:i A");
+    $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject='Review status for ';
+    $mail_subject=msg('email_subject_review_status');
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-    $mail_headers = "From: $mail_from";
+    $mail_headers = "From: $mail_from"."\r\n";
+    $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
     $dept_id = $user_obj->getDeptId();
 
     if($user_obj->isRoot())
@@ -228,7 +227,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $mail_body1.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body1.=msg('label_status'). ': ' .msg('message_authorized'). "\n\n";
             $mail_body1.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body1.=msg('time'). ': ' . $time . "\n\n";
             $mail_body1.=msg('label_reviewer'). ': ' . $full_name . "\n\n";
             $mail_body1.=msg('email_thank_you'). ','. "\n\n";
             $mail_body1.=msg('email_automated_document_messenger'). "\n\n";
@@ -244,7 +242,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body2.=msg('label_status'). ': New'. "\n\n";
             $mail_body2.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body2.=msg('time'). ': ' . $time . "\n\n";
             $mail_body2.=msg('label_reviewer'). ': ' . $full_name . "\n\n";
             $mail_body2.=msg('email_thank_you'). ','. "\n\n";
             $mail_body2.=msg('email_automated_document_messenger'). "\n\n";
