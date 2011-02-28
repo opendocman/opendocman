@@ -9,6 +9,7 @@ All code copyright Stephen Lawrence Jr. 2002-2011
 * Stephen Lawrence Jr. [lead developer]
 * Khoa Nguyen [core programming]
 * Jon Miner [udf functions]
+* Willem van der Mark [ bug fixes and i8n ]
 
 == Translations
 
