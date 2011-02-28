@@ -34,7 +34,7 @@ draw_menu(@$_SESSION['uid']);
 draw_status_bar(msg('area_file_expiration'), $_REQUEST['last_message']);
 
 // Look up user
-$lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user where username='{$GLOBALS['CONFIG']['root_username']}'";
+$lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='{$GLOBALS['CONFIG']['root_id']}'";
 $lresult = mysql_query($lquery) or die('Error querying' . mysql_error());
 if(mysql_num_rows($lresult) != 1)
 {	

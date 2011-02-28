@@ -117,13 +117,11 @@ To update your current version to the latest release:
 
 1. Rename your current opendocman folder.
 
-2. Unarchive opendocman into a new folder
+2. Unarchive opendocman into a new folder and rename it to the original folder name
 
-3. 
+3. Load the opendocman page in your web browser ( ex. http://www.example.com/opendocman/ )
 
-4. Load the opendocman page in your web browser
-( ex. http://www.example.com/opendocman/ )
-  You should follow the prompts for installation.
+4. You should follow the prompts for installation.
 
 2.2 New Installation
 
@@ -141,17 +139,14 @@ To update your current version to the latest release:
 4. Load the opendocman page in your web browser
 (ex. http://www.example.com/opendocman/ ) and follow the prompts.
 
-5. Point your favorite webbrowser to the opendocman folder:
-  ex. "http://www.mydomain.com/opendocman"
-
-6. Login as "admin" (without password). After that, go to
+5. Login as "admin" (without password). After that, go to
   "admin->users->update->admin" and set your admin password.
 
-7. Edit your site settings at Admin->Site Settings
+6. Edit your site settings at Admin->Site Settings
 
-8. Add departments, categories, users, etc.
+7. Add departments, categories, users, etc.
 
-9. Enjoy!
+8. Enjoy!
 
 3 Configuration
 
@@ -182,10 +177,10 @@ Below are some of the configurable options:
   site. Users will be told to contact this person if they
   encounter errors.
 
-* root_username - This variable sets the root username. It
-  must be set to one of the current users of opendocman.
+* root_id - This variable sets the root id. It
+  must be set to one of the current user_id's of opendocman.
   The root user will be able to access all files and have
-  authority for everything. (ex. jsmith)
+  authority for everything. (ex. 1)
 
 * revision_expiration [integer]- Period in days that files
   will expire.

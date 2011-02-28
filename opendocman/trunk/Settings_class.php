@@ -50,7 +50,6 @@ if( !defined('Settings_class') )
             foreach ($data as $key=>$value)
             {
                 $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}settings SET value='$value' WHERE name='$key'";
-                //echo $query . "<br />";
                 $result = mysql_query($query) or die ('Failed to save settings: ' . mysql_error());
             }
             return TRUE;
@@ -85,7 +84,7 @@ if( !defined('Settings_class') )
 
             $GLOBALS['smarty']->assign('themes', $this->getThemes());
             $GLOBALS['smarty']->assign('languages', $this->getLanguages());
-            $GLOBALS['smarty']->assign('usernames', $this->getUserNames());
+            $GLOBALS['smarty']->assign('useridnums', $this->getUserIdNums());
             $GLOBALS['smarty']->assign('settings_array',$settings_arr);
             display_smarty_template('settings.tpl');
         }
@@ -135,16 +134,16 @@ if( !defined('Settings_class') )
         /*
          * Return an array of user names
          */
-        function getUserNames()
+        function getUserIdNums()
         {
-            $query = "SELECT username from {$GLOBALS['CONFIG']['db_prefix']}user";
+            $query = "SELECT id,username from {$GLOBALS['CONFIG']['db_prefix']}user";
             $result = mysql_query($query) or die('Failed to read user names for settings: ' . mysql_error());
-            $usernames_arr = array();
+            $useridnums_arr = array();
             while($row = mysql_fetch_array($result))
             {
-                array_push($usernames_arr,$row);
+                array_push($useridnums_arr,$row);
             }
-            return $usernames_arr;
+            return $useridnums_arr;
         }
 
     }
