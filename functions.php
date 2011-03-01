@@ -368,7 +368,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         }
         else
         {
-            $view_link = '&nbsp;';
+            $view_link = 'none';
         }
 
 

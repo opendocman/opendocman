@@ -27,7 +27,12 @@
                 <td></td>
             {/if}
             <td class="center">{$item.id}</td>
-            <td class="center" style="width: 50px;"><a href="{$item.view_link}">View</a></td>
+            <td class="center" style="width: 50px;">
+                {if $item.view_link eq 'none'}
+                    &nbsp;
+                {else}
+                    <a href="{$item.view_link}">View</a></td>
+                {/if}
             <td><a href="{$item.details_link}">{$item.filename}</a></td>
             <td >{$item.description}</td>
             <td class="center">{$item.rights[0][1]} | {$item.rights[1][1]} | {$item.rights[2][1]}</td>
