@@ -162,15 +162,15 @@ else if (isset($_POST['username']) && strlen($_POST['username']))
 
         // generate the link
         $resetLink = $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php?username=' . $username . '&code=' . $reset_code;
-
+        $mail_headers  = "From: " . $GLOBALS['CONFIG']['site_mail'] . "\r\n";
+        $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . "\r\n";
+        $mail_body  = msg('email_someone_has_requested_password')."\n\n";
+        $mail_body .= $resetLink . "\n\n";
+        $mail_body .= msg('email_thank_you') . "\n\n";
+        $mail_body .= msg('area_admin') . "\n\n";
+        
         // send the email
-        mail($email, msg('area_reset_password'), msg('email_someone_has_requested_password') ."
-
-                $resetLink
-
-                Thank you,
-                Administration
-                ", "From: " . $GLOBALS['CONFIG']['site_mail']);
+        mail($email, msg('area_reset_password'), $mail_body, $mail_headers);
 
         $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_an_email_has_been_sent'));
         header("Location: $redirect");
