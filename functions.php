@@ -772,7 +772,7 @@ function msg($s)
 function display_smarty_template($template_file)
 {
     /* @var $template_file string */
-    if(file_exists('templates/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file))
+    if(file_exists(ABSPATH . '/templates/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file))
     {
         $GLOBALS['smarty']->display($template_file);
     }
