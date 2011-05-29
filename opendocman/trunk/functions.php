@@ -786,9 +786,10 @@ function display_smarty_template($template_file)
     /*
      * callPluginMethod
      * @param string $method The name of the plugin method being envoked.
+     * @param string $args Any arguments that should be passed to the plugin method
      * @return null
      */
-    function callPluginMethod($method)
+    function callPluginMethod($method,$args='')
     {
         foreach ($GLOBALS['plugin']->pluginslist as $value)
         {
@@ -797,6 +798,6 @@ function display_smarty_template($template_file)
                 echo 'Sorry, your plugin ' . $value . ' is not setup properly';
             }
             $plugin_obj = new $value;
-            $plugin_obj->$method();
+            $plugin_obj->$method($args);
         }
     }
