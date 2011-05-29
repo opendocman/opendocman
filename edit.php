@@ -474,7 +474,7 @@ if (!isset($_REQUEST['submit']))
         </td>
 <?php
     // Call Plugin API
-    callPluginMethod('onBeforeEditFile');
+    callPluginMethod('onBeforeEditFile',$id);
 ?>
 	</tr>
 	</table>
@@ -496,9 +496,10 @@ if (!isset($_REQUEST['submit']))
 }
 else
 {
+        $fileId = $_REQUEST['id'];
 	// form submitted, process data
-	$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-	$filedata->setId($_REQUEST['id']);
+	$filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+	$filedata->setId($fileId);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
         if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin']))
@@ -508,7 +509,7 @@ else
         }
 
         // Check to make sure the file is available
-        $status = $filedata->getStatus($_REQUEST['id']);
+        $status = $filedata->getStatus($fileId);
         if($status != 0)
 	{
 		header('Location:error.php?ec=2');
@@ -535,7 +536,7 @@ else
 	udf_edit_file_update();
 
 	// clean out old permissions
-	$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$_REQUEST[id]'";
+	$query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$fileId'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	$result_array = array();// init;
 	if( isset( $_REQUEST['admin'] ) && isset ($_REQUEST['modify']) )
@@ -557,7 +558,7 @@ else
 	//display_array2D($result_array);
 	for($i = 0; $i<sizeof($result_array); $i++)
 	{
-		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($_REQUEST[id], '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+		$query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, '".$result_array[$i][0]."','". $result_array[$i][1]."')";
 		//echo $query."<br>";
 		$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());;
 	}
@@ -576,7 +577,7 @@ else
 	$message = urlencode('Document successfully updated');
 
         // Call the plugin API
-        callPluginMethod('onAfterEditFile');
+        callPluginMethod('onAfterEditFile',$fileId);
 
         header('Location: out.php?last_message=' . $message);
 }

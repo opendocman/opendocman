@@ -634,7 +634,7 @@ else
         $message = urlencode(msg('message_document_added'));
 
         // Call the plugin API
-        callPluginMethod('onAfterAdd');
+        callPluginMethod('onAfterAdd',$fileId);
         
         header('Location: out.php?last_message=' . $message);
     }

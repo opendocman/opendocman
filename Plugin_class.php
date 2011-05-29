@@ -103,17 +103,17 @@ class Plugin
     /*
      * This function is run after a new file is added
      */
-    function onAfterAdd() {}
+    function onAfterAdd($fileid) {}
 
     /*
      * This function is run before the edit file form is finished being rendered
      */
-    function onBeforeEditFile() {}
+    function onBeforeEditFile($fileid) {}
 
     /*
      * This function is run after the user saves and change to a file
      */
-    function onAfterEditFile() {}
+    function onAfterEditFile($fileid) {}
 
     /*
      * This function is run after the user deletes a file (aka archive)
