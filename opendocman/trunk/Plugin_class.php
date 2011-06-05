@@ -179,5 +179,5 @@ class Plugin
     /*
      * This function is run during the details view
      */
-    function onDuringDetails(){}
+    function onDuringDetails($fileid){}
 }
