@@ -234,7 +234,7 @@ if ($status > 0)
 }
 
 // Call the plugin API
-callPluginMethod('onDuringDetails');
+callPluginMethod('onDuringDetails',$filedata->id);
 ?>
 <!-- available actions -->
 <tr>
