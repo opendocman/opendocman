@@ -232,8 +232,10 @@ if ($status > 0)
         </tr>
         <?php
 }
-?>
 
+// Call the plugin API
+callPluginMethod('onDuringDetails');
+?>
 <!-- available actions -->
 <tr>
 <td colspan="2" align="center">
