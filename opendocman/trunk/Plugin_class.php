@@ -175,4 +175,9 @@ class Plugin
      * This function allows for getting of class settings
      */
     function getProperties(){}
+
+    /*
+     * This function is run during the details view
+     */
+    function onDuringDetails(){}
 }
