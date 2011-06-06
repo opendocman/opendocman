@@ -162,9 +162,8 @@ else
 	udf_details_display($lrequest_id);
 ?>
 <tr>
-
-</tr>
 <th valign=top align=right><?php echo msg('label_size')?>:</th><td> <?php echo $filesize; ?></td>
+</tr>
 
 <tr>
 <th valign=top align=right><?php echo msg('label_created_date')?>:</th><td> <?php echo fix_date($created); ?></td>
