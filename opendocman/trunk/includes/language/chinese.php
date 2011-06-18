@@ -222,6 +222,7 @@ $lang['label_settings'] = '设置';
 $lang['label_size'] = '大小';
 $lang['label_specific_permissions'] = '指定用户许可（用ctrl+点击）';
 $lang['label_status'] = '状态';
+$lang['label_text'] = 'Text';
 $lang['label_update'] = '修改';
 $lang['label_user_defined_fields'] = '用户定义域';
 $lang['label_user_defined_field'] = '用户定义域';

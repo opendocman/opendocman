@@ -222,6 +222,7 @@ $lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Größe';
 $lang['label_specific_permissions'] = 'Besondere Benutzerberechtigungen (ctrl-click oder cmd-click drücken)';
 $lang['label_status'] = 'Status';
+$lang['label_text'] = 'Text';
 $lang['label_update'] = 'Aktualisierung';
 $lang['label_user_defined_fields'] = 'Benutzerdefinierte Felder';
 $lang['label_user_defined_field'] = 'Benutzerdefiniertes Feld';

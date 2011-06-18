@@ -43,6 +43,8 @@ if ( !defined('udf_functions') )
             }
 
             echo '</td><td>';
+
+            //Type is Select List
             if ( $row[1] == 1 )
             {
                 echo '<select name="'.$row[0].'">';
@@ -55,6 +57,8 @@ if ( !defined('udf_functions') )
                 mysql_free_result($subresult);
                 echo '</select>';
             }
+
+            // Type is Radio
             if ( $row[1] == 2 )
             {
                 $query = "SELECT id,value FROM ".$row[0];
@@ -64,6 +68,12 @@ if ( !defined('udf_functions') )
                     echo '<input type=radio name="'.$row[0].'" value="'.$subrow[0].'">'.$subrow[1];
                 }
                 mysql_free_result($subresult);
+            }
+
+            // Type is Text
+            if ( $row[1] == 3 )
+            {
+                echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="50">';
             }
             echo '</td></tr>';
         }
@@ -76,7 +86,7 @@ if ( !defined('udf_functions') )
         $result = mysql_query($query);
         while ($row = mysql_fetch_row($result))
         {
-            if ( $row[1] == 1 || $row[1] == 2)
+            if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3)
             {
                 if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "" )
                 {
@@ -121,22 +131,27 @@ if ( !defined('udf_functions') )
                         }
                         echo '>' . $subrow[1] . '</option>';
                     }
-                    else
+                     elseif ($row[1] == 2)
                     {
-                        echo '<input type=radio name="'.$row[2].'" value="'.$subrow[0].'"';
-                        if ( $sel == $subrow[0] )
-                        {
+                        echo '<input type=radio name="' . $row[2] . '" value="' . $subrow[0] . '"';
+                        if ($sel == $subrow[0])
                             echo ' checked';
-                        }
-                        echo '>'.$subrow[1];
+                        echo '>' . $subrow[1];
                     }
                 }
                 mysql_free_result($subresult);
-                if ( $row[1] == 1 )
-                {
+                if ($row[1] == 1)
                     echo '</select>';
-                }
                 echo '</td></tr>';
+            }
+            elseif ($row[1] == 3)
+            {
+                echo '<tr><td>' . $row[0] . '</td><td>';
+                $query = "SELECT {$row['2']} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
+                $subresult = mysql_query($query);
+                $subrow = mysql_fetch_row($subresult);
+                echo '<input type="text" name="' . $row[2] . '" size="50" value="' . $subrow[0] . '">';
+                mysql_free_result($subresult);
             }
         }
         mysql_free_result($result);
@@ -148,11 +163,11 @@ if ( !defined('udf_functions') )
         $result = mysql_query($query);
         while ($row = mysql_fetch_row($result))
         {
-            if ( $row[1] == 1 || $row[1] == 2)
+            if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3)
             {
                 if ( isset($_REQUEST[$row[2]]) && $_REQUEST[$row[2]] != "" )
                 {
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['2']}`={$_REQUEST[$row['2']]} WHERE id = {$_REQUEST['id']}";
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['2']}`='{$_REQUEST[$row['2']]}' WHERE id = {$_REQUEST['id']}";
                     $subresult = mysql_query($query);
                 }
             }
@@ -176,6 +191,18 @@ if ( !defined('udf_functions') )
                     echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
                     mysql_free_result($subresult);
                 }
+            } 
+            elseif ($row[1] == 3)
+            {
+                $query = "SELECT {$row[2]} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId ";
+                $subresult = mysql_query($query);
+                if ($subresult)
+                {
+                    $subrow = mysql_fetch_row($subresult);
+                    echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    mysql_free_result($subresult);
+                }
+
             }
         }
         mysql_free_result($result);
@@ -208,7 +235,7 @@ if ( !defined('udf_functions') )
         $result = mysql_query($query);
         while ( $row = mysql_fetch_row($result))
         {
-            if ( $row[1] == 1 || $row[1] == 2 )
+            if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3 )
             {
                 echo "case '".$row[2]."':\n";
                 echo "      info_Array = ".$row[0]."_array;\n";
@@ -283,14 +310,22 @@ if ( !defined('udf_functions') )
         //echo mysql_num_rows($result);
         if (mysql_numrows($result) == "0")
         {
-            if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
+            if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2 || $_REQUEST['field_type'] == 3 )
             {
                 $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
                 mysql_query($query);
-                $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN '.$table_name.' int AFTER category';
-                mysql_query($query);
-                $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
-                mysql_query($query);
+                if ($_REQUEST['field_type'] == 1)
+                {
+                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' int AFTER category';
+                    mysql_query($query);
+                    $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
+                    mysql_query($query);
+                }
+                if ($_REQUEST['field_type'] == 3)
+                {
+                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' varchar(255) AFTER category';
+                    mysql_query($query);
+                }
             }
         }
         else
@@ -330,13 +365,19 @@ if ( !defined('udf_functions') )
         $tmp = $lwhere;
         $dn = strtok($tmp,"_");
 
-        $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
+        $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
         $result = mysql_query($query);
         $row = mysql_fetch_row($result);
-
-        $lquery_pre .= ', '.$row[0];
-        $lquery .= $row[0].'.value' . $lequate  . '\'' . $lkeyword . '\'';
-        $lquery .= ' AND '.$GLOBALS['CONFIG']['db_prefix'].'data.'.$row[0].' = '.$row[0].'.id';
+        if ($row[1] == 1)
+        {
+            $lquery_pre .= ', ' . $row[0];
+            $lquery .= $row[0] . '.value' . $lequate . '\'' . $lkeyword . '\'';
+            $lquery .= ' AND ' . $GLOBALS['CONFIG']['db_prefix'] . 'data.' . $row[0] . ' = ' . $row[0] . '.id';
+        }
+        elseif ($row[1] == 3)
+        {
+            $lquery .= $row[0] . $lequate . '\'' . $lkeyword . '\'';
+        }
         mysql_free_result($result);
 
         return array($lquery_pre,$lquery);

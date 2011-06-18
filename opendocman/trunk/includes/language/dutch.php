@@ -222,6 +222,7 @@ $lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Grootte';
 $lang['label_specific_permissions'] = 'Permissies per gebruiker (ctrl-klik or cmd-klik)';
 $lang['label_status'] = 'Status';
+$lang['label_text'] = 'Text';
 $lang['label_update'] = 'Update';
 $lang['label_user_defined_fields'] = 'Zelf-gedefinieerde velden';
 $lang['label_user_defined_field'] = 'Zelf-gedefinieerd veld';

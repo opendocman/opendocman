@@ -280,6 +280,7 @@ $lang['label_settings'] = 'Settings';
 $lang['label_size'] = "Boyut";
 $lang['label_specific_permissions'] = "&#214;zelle&#351;tirilmi&#351; Kullan&#305;c&#305; &#304;zinleri";
 $lang['label_status'] = "Durumlar";
+$lang['label_text'] = 'Text';
 $lang['label_update'] = "G&#252;ncelle";
 $lang['label_user'] = "Kullan&#305;c&#305;";
 $lang['label_user_defined_field'] = 'User Defined Field';

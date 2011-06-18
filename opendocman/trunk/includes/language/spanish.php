@@ -222,6 +222,7 @@ $lang['label_settings'] = 'Settings';
 $lang['label_size'] = "Tama&ntilde;o";
 $lang['label_specific_permissions'] = "Permisos Espec&iacute;ficos del Usuario (ctrl-click / cmd-click)";
 $lang['label_status'] = "Estado";
+$lang['label_text'] = 'Text';
 $lang['label_update'] = "Actualizar";
 $lang['label_user'] = "Usuario";
 $lang['label_user_defined_field'] = 'User Defined Field';
