@@ -66,6 +66,7 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 		<td><b><?php echo msg('type')?></b></td>
 		<td colspan="3"><select name="field_type">
 		<option value=1><?php echo msg('select') . ' ' . msg('list')?></option>
+                <option value=3><?php echo msg('label_text'); ?></option>
 		</select>
 		</td>
 	</tr>
@@ -370,7 +371,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             }
             $max--;
         }
-
+        
         echo '<form>';
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
@@ -405,6 +406,10 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         </table>
 <?php
     }
+        if($field_type == 3)
+        {
+            echo msg('message_nothing_to_do');
+        }
     draw_footer();
 }
 else

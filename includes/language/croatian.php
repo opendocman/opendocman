@@ -222,6 +222,7 @@ $lang['label_settings'] = 'Postavke';
 $lang['label_size'] = 'Veličina';
 $lang['label_specific_permissions'] = 'Specifične korisničke dozvole (koristi ctrl-klik ili cmd-klik)';
 $lang['label_status'] = 'Status';
+$lang['label_text'] = 'Text';
 $lang['label_update'] = 'Obnovi';
 $lang['label_user_defined_fields'] = 'Korisnički definirana polja';
 $lang['label_user_defined_field'] = 'Korisnički definirano polje';
