@@ -30,7 +30,7 @@ while(list($id,$revision) = mysql_fetch_row($result)) {
 }
 
 echo 'Updating db version...<br />';
-$result = mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.5.7' WHERE sys_name='version'")
+$result = mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.5.8' WHERE sys_name='version'")
 or die("<br>Could not update version number" . mysql_error());
 
 echo 'Updating UDF Table Names...<br />';

@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not update" . mysql_error());
 
 // Create version number in db
