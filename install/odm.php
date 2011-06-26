@@ -28,7 +28,7 @@ $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}admin table" .  mysql_error());
 
 // Admin user
@@ -46,7 +46,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}category table");
 
 $result = mysql_query("
@@ -91,7 +91,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}data (
   KEY id_2 (id),
   KEY publishable (publishable),
   KEY description (description)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}data table");
 
 // Department Table
@@ -104,7 +104,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}department table");
 
 $result = mysql_query("
@@ -124,7 +124,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_perms (
   KEY rights (rights),
   KEY dept_id (dept_id),
   KEY fid (fid)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_perms table");
 
 // Department Reviewer table
@@ -136,7 +136,7 @@ $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer table");
 
 // data for table 'dept_reviewer'
@@ -158,7 +158,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}log (
   revision varchar(255) default NULL,
   KEY id (id),
   KEY modified_on (modified_on)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}log table");
 
 // Rights table
@@ -170,7 +170,7 @@ $result = mysql_query("
 CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}rights table");
 
 // Rights values
@@ -215,7 +215,7 @@ CREATE TABLE {$GLOBALS['CONFIG']['db_prefix']}user (
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user table");
 
 // Create admin user
@@ -237,7 +237,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}user_perms (
   KEY fid (fid),
   KEY uid (uid),
   KEY rights (rights)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}user_perms table");
 
 $result = mysql_query("
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}udf (
     table_name varchar(16),
     display_name varchar(16),
     field_type int
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}udf table");
 
 $result = mysql_query("
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS {$GLOBALS['CONFIG']['db_prefix']}odmsys
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-) TYPE=MyISAM
+)
 ") or die("<br>Could not create {$GLOBALS['CONFIG']['db_prefix']}odmsys table");
 
 // Create version number in db

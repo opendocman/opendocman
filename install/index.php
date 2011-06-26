@@ -269,7 +269,7 @@ function print_intro()
   <td><a href="../docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
  </tr>
 </table>
-
+<form method="post">
 <table align="center">
  <tr>
   <td><strong>Please BACKUP all data and files before proceeding!</strong><br><br></td>
@@ -278,39 +278,32 @@ function print_intro()
     <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
  </tr>
  <tr>
-  <td><a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+  <td>1) <a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');"><strong>New installation</strong> of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+ </tr>
+ <tr>
+     <td>Or<br /><br /></td>
+ </tr>
+ <tr>
+     <td>2) <strong>Database Upgrade</strong> for version(s):</td>
  </tr>
   <tr>
-  <td><a href="index.php?op=update_1256">Upgrade versions 1.2.5.3 - 1.2.5.6</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_125">Upgrade versions 1.2.5 - 1.2.5.2</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_124">Upgrade from version 1.2.4</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_12p3">Upgrade from version 1.2p3</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_12p1">Upgrade from version 1.2p1</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_12rc1">Upgrade from version 1.2rc(x)</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_11">Upgrade from version 1.1</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_11rc2">Upgrade from version 1.1rc2</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_11rc1">Upgrade from version 1.1rc1</a><br><br></td>
- </tr>
- <tr>
-  <td><a href="index.php?op=update_10">Upgrade from version 1.0</a><br><br></td>
+      <td><select name="op">
+              <option value="update_1256">1.2.5.3 thru 1.2.5.6</option>
+              <option value="update_125">1.2.5 thru 1.2.5.2</option>
+              <option value="update_124">1.2.4</option>
+              <option value="update_12p3">1.2p3</option>
+              <option value="update_12p1">1.2p1</option>
+              <option value="update_12rc1">1.2rc(x)</option>
+              <option value="update_11">1.1</option>
+              <option value="update_11rc2">1.1rc2</option>
+              <option value="update_11rc1">1.1rc1</option>
+              <option value="update_10">1.0</option>
+          </select>
+          <input type="submit" name="submit" />
+      </td>
  </tr>
 </table>
+</form>
 <?php
 }
 

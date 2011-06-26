@@ -89,7 +89,7 @@ if(!isset($_GET['submit']))
 <?php
 		udf_functions_search_options();
 ?>
-		<option value="all" selected>All</option>
+		<option value="all" selected>All Standard Fields</option>
 		</select></td>
 		</tr>
 

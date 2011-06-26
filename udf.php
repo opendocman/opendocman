@@ -2,7 +2,7 @@
 /*
 udf.php - Administer User Defined Fields
 Copyright (C) 2007 Stephen Lawrence, Jonathan Miner
-Copyright (C) 2008-2010 Stephen Lawrence
+Copyright (C) 2008-2011 Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -65,7 +65,9 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 	<tr>
 		<td><b>Field Type</b></td>
 		<td colspan="3"><select name="field_type">
-		<option value=1>Pick List</option>
+		<option value=1>Select List</option>
+                <option value=2>Radio List</option>
+                <option value=3>Text Field</option>
 		</select>
 		</td>
 	</tr>
@@ -339,7 +341,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
     $display_name = $row[2];
     $field_type = $row[1];
     mysql_free_result($result);
-    if ( $field_type == 1 ) {
+    if ( $field_type == 1 || $field_type == 2) {
         // Do Updates
         if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "" ) {
             $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";

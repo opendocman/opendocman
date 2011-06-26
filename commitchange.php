@@ -144,7 +144,13 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // UPDATE into user
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET ";
+
+    // Do not allow non-root users to update the username
+    if($user_obj->isRoot())
+    {
+        $query .= "username='". addslashes($_POST['username']) ."',";
+    }
 
 	if (!empty($_POST['password']))
 	{
@@ -355,7 +361,7 @@ elseif(isset($_REQUEST['updatecategory']))
         $_REQUEST['last_message'] = urlencode('Category ' . $_REQUEST['name'] . ' successfully updated');
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_REQUEST['last_message']));
 }
-elseif(@$_REQUEST['submit']=='Add User Defined Field')
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Field')
 {
         // Make sure they are an admin
         if (!$user_obj->isAdmin()){

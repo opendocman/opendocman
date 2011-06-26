@@ -10,7 +10,7 @@
 CREATE TABLE odm_admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_admin'
@@ -26,7 +26,7 @@ CREATE TABLE odm_category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_category'
@@ -61,7 +61,7 @@ CREATE TABLE odm_data (
   KEY id_2 (id),
   KEY publishable (publishable),
   KEY description (description)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_data'
@@ -75,7 +75,7 @@ CREATE TABLE odm_department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_department'
@@ -94,7 +94,7 @@ CREATE TABLE odm_dept_perms (
   KEY rights (rights),
   KEY dept_id (dept_id),
   KEY fid (fid)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_dept_perms'
@@ -108,7 +108,7 @@ CREATE TABLE odm_dept_perms (
 CREATE TABLE odm_dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_dept_reviewer'
@@ -128,7 +128,7 @@ CREATE TABLE odm_log (
   revision varchar(255) default NULL,
   KEY id (id),
   KEY modified_on (modified_on)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_log'
@@ -142,7 +142,7 @@ CREATE TABLE odm_log (
 CREATE TABLE odm_rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_rights'
@@ -170,7 +170,7 @@ CREATE TABLE odm_user (
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_user'
@@ -190,7 +190,7 @@ CREATE TABLE odm_user_perms (
   KEY fid (fid),
   KEY uid (uid),
   KEY rights (rights)
-) TYPE=MyISAM;
+);
 
 #
 # Dumping data for table 'odm_user_perms'
@@ -215,14 +215,14 @@ CREATE TABLE odm_udf
     table_name  varchar(16),
     display_name    varchar(16),
     field_type  int
-) TYPE=MyISAM;
+);
 
 CREATE TABLE IF NOT EXISTS odm_odmsys
 (
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-) TYPE=MyISAM;
+);
 
-INSERT INTO odm_odmsys VALUES ('','version','1.2.5.7');
+INSERT INTO odm_odmsys VALUES ('','version','1.2.5.8');
 
