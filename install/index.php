@@ -157,11 +157,7 @@ function do_install()
         
         mysql_connect($GLOBALS['hostname'], $GLOBALS['user'], $GLOBALS['pass']) or die ("Unable to connect!");
 
-        // Create database
-        $result = mysql_query("DROP DATABASE IF EXISTS {$GLOBALS['database']}") 
-        	or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
-        $result = mysql_query("CREATE DATABASE {$GLOBALS['database']}") 
+        $result = mysql_query("CREATE DATABASE IF NOT EXISTS {$GLOBALS['database']}")
         	or die("<br>Unable to Create Database - Error in query:" . mysql_error());
 
         echo 'Database Created<br />';
@@ -269,7 +265,7 @@ function print_intro()
   <td><a href="../docs/opendocman.txt" target="#main" >Installation Instructions (text)</a><br><br></td>
  </tr>
 </table>
-<form method="post">
+<form method="post" action="index.php">
 <table align="center">
  <tr>
   <td><strong>Please BACKUP all data and files before proceeding!</strong><br><br></td>
@@ -278,7 +274,7 @@ function print_intro()
     <td>Please choose one from the following based on your current version <?php echo $GLOBALS['CONFIG']['current_version']; ?> (look in your config.php for your version prior to 1.2.5). <br />After 1.2.4 check in the file "version.php":<br><br></td>
  </tr>
  <tr>
-  <td>1) <a href="index.php?op=install" onClick="javascript: alert('are you sure? This will wipe out the database you have configured in config.php. Only use this option for a FRESH INSTALL.');"><strong>New installation</strong> of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+  <td>1) <a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.')"><strong>New installation</strong> of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
  </tr>
  <tr>
      <td>Or<br /><br /></td>
