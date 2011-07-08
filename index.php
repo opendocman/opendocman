@@ -131,6 +131,7 @@ elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
     ?>
         <html>
         <head>
+            <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <TITLE><?php echo $GLOBALS['CONFIG']['title']; ?></TITLE>
         <basefont face="Verdana">
         </head>
