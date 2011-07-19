@@ -66,6 +66,7 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 		<td><b><?php echo msg('type')?></b></td>
 		<td colspan="3"><select name="field_type">
 		<option value=1><?php echo msg('select') . ' ' . msg('list')?></option>
+                <option value=2><?php echo msg('label_radio_button'); ?></option>
                 <option value=3><?php echo msg('label_text'); ?></option>
 		</select>
 		</td>
@@ -346,7 +347,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
     $display_name = $row[2];
     $field_type = $row[1];
     mysql_free_result($result);
-    if ( $field_type == 1 ) {
+    if ( $field_type == 1 || $field_type == 2) {
         // Do Updates
         if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "" ) {
             $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";

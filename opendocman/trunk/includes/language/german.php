@@ -205,6 +205,7 @@ $lang['label_page'] = 'Seite';
 $lang['label_phone_number'] = 'Telefonnummer';
 $lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Zurück';
+$lang['label_radio_button'] = 'Radio Button';
 $lang['label_read'] = 'Lesen';
 $lang['label_reassign_to'] = 'Re-assign To';
 $lang['label_rejected_files'] = 'Zurückgewiesene Dateien';

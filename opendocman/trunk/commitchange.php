@@ -150,7 +150,12 @@ elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     }
     // UPDATE into user
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET ";
+
+    if($user_obj->isAdmin())
+    {
+        $query .= "username='". addslashes($_POST['username']) ."',";
+    }
     
     if (!empty($_POST['password']))
     {
