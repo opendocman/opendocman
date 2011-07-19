@@ -73,7 +73,7 @@ if ( !defined('udf_functions') )
             // Type is Text
             if ( $row[1] == 3 )
             {
-                echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="50">';
+                echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="16">';
             }
             echo '</td></tr>';
         }
@@ -314,14 +314,14 @@ if ( !defined('udf_functions') )
             {
                 $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
                 mysql_query($query);
-                if ($_REQUEST['field_type'] == 1)
+                if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
                 {
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' int AFTER category';
                     mysql_query($query);
                     $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
                     mysql_query($query);
                 }
-                if ($_REQUEST['field_type'] == 3)
+                elseif ($_REQUEST['field_type'] == 3)
                 {
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' varchar(255) AFTER category';
                     mysql_query($query);

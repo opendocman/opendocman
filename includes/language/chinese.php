@@ -205,6 +205,7 @@ $lang['label_page'] = '页';
 $lang['label_phone_number'] = '电话号码';
 $lang['label_plugins'] = '插件';
 $lang['label_prev'] = '前';
+$lang['label_radio_button'] = 'Radio Button';
 $lang['label_read'] = '读';
 $lang['label_reassign_to'] = '重指定';
 $lang['label_rejected_files'] = '退回文档';

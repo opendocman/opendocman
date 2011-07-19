@@ -205,6 +205,7 @@ $lang['label_page'] = 'Pagina';
 $lang['label_phone_number'] = 'Numero de telefone';
 $lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Anterior';
+$lang['label_radio_button'] = 'Radio Button';
 $lang['label_read'] = 'Ler';
 $lang['label_reassign_to'] = 'Re-atribuir a';
 $lang['label_rejected_files'] = 'Arquivos rejeitados';
