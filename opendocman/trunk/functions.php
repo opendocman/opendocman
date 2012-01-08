@@ -426,6 +426,10 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
     //print_r($file_list_arr);exit;
     $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);
     //print_r($GLOBALS['smarty']);
+
+    // Call the plugin API
+    callPluginMethod('onBeforeListFiles');
+
     display_smarty_template('out.tpl');
 }
 
@@ -799,5 +803,13 @@ function display_smarty_template($template_file)
             }
             $plugin_obj = new $value;
             $plugin_obj->$method($args);
+        }
+    }
+
+    function debug_query($file, $line, $query)
+    {
+        if($GLOBALS['CONFIG']['debug'] == 'True')
+        {
+            $GLOBALS['debug_text'] .= $file . ': Line #' . $line . ": ". $query . '<br />';
         }
     }
