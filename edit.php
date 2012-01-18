@@ -579,7 +579,7 @@ else
         // Call the plugin API
         callPluginMethod('onAfterEditFile',$fileId);
 
-        header('Location: out.php?last_message=' . $message);
+        header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
 }
 ?>
 <script type="text/javascript">
