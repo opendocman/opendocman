@@ -280,7 +280,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'image/tiff', 1);
 INSERT INTO `odm_filetypes` VALUES(NUll, 'image/tif', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.ms-powerpoint', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.ms-excel', 1);
-INSERT INTO `odm_filetypes` VALUES(NULL, 'applicatiion/vnd.openxmlformats-officedocument.presenationml.presentation', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/csv', 1);
