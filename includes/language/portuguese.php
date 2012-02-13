@@ -127,6 +127,7 @@ $lang['email_a_new_file_has_been_rejected'] = 'Um novo arquivo foi rejeitado';
 $lang['email_automated_document_messenger'] = 'Automated Document Messenger';
 $lang['email_because_you_did_not_revise'] = 'porque você não reveu mais de because';
 $lang['email_comments_regarding_review'] = 'Comentários a respeito de sua revisão do documento';
+$lang['email_custom_comment'] = 'Custom Comment';
 $lang['email_email_all_users'] = 'Enviar para todos usuários';
 $lang['email_email_these_users'] = 'Enviar para estes usuários';
 $lang['email_email_whole_department'] = 'Enviar para todos usuarios do departamento';

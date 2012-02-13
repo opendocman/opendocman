@@ -8,7 +8,7 @@
                         {/if}
 		<table name="author_note_table">
 		<tr>
-		<td>{$g_lang_email_to}:</td>
+		<td>{$g_lang_email_to}</td>
 		<td>
                     <input type="text" name="to" value="Author(s)" size='15' {$access_mode}>
                 </td>
@@ -18,9 +18,13 @@
                     <td>
                         <input type="text" name="subject" size=50 value="" size='30' {$access_mode}></td>
                 </tr>
+                <tr>
+                    <td>{$g_lang_email_custom_comment}</td>
+                    <td><textarea name="comments" cols=45 rows=7 size='220' {$access_mode}></textarea></td>
+                </tr>
 		</table>
 		<br />&nbsp&nbsp
-                    <textarea name="comments" cols=45 rows=7 size='220' {$access_mode}></textarea>
+                    
 
 			<tr><input type="hidden" name="checkbox" value="{foreach from=$checkbox item=id}{$id} {/foreach}" /></tr>
 			<table border="0">

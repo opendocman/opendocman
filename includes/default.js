@@ -5,6 +5,14 @@ $(document).ready(function() {
             "sPaginationType": "full_numbers"
         });
 
+        $('#checkall').click(function () {
+                var checked_status = this.checked;
+				$(".checkbox").each(function()
+				{
+					this.checked = checked_status;
+				});
+        });
+
 	$('select[multiple="multiple"]').multiSelect();
 
         /* Animated Message */

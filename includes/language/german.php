@@ -127,6 +127,7 @@ $lang['email_a_new_file_has_been_rejected'] = 'Datei wurde zurückgewiesen';
 $lang['email_automated_document_messenger'] = 'Automatisierte Dokumentbenachrichtigung';
 $lang['email_because_you_did_not_revise'] = 'weil die Revision länger dauerte als';
 $lang['email_comments_regarding_review'] = 'Kommentare zu Ihrer Dokumentrevision';
+$lang['email_custom_comment'] = 'Custom Comment';
 $lang['email_email_all_users'] = 'An alle Benutzer senden';
 $lang['email_email_these_users'] = 'An folgende Benutzer senden';
 $lang['email_email_whole_department'] = 'An die ganze Abteilung senden';

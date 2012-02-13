@@ -127,6 +127,7 @@ $lang['email_a_new_file_has_been_rejected'] = '新文档被退回';
 $lang['email_automated_document_messenger'] = '自动文档来信';
 $lang['email_because_you_did_not_revise'] = '因为你未修改已超过';
 $lang['email_comments_regarding_review'] = '对你的文档进行评审的意见';
+$lang['email_custom_comment'] = 'Custom Comment';
 $lang['email_email_all_users'] = '对所有用户发送邮件';
 $lang['email_email_these_users'] = '对这些用户发送邮件';
 $lang['email_email_whole_department'] = '对所有部门发送邮件';
