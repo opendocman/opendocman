@@ -227,7 +227,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $mail_to = $user_obj->getEmailAddress();
             // Build email for author notification
             $mail_body1=$lcomments . "\n\n";
-            $mail_body1=msg('email_your_file_has_been_authorized'). "\n\n";
+            $mail_body1.=msg('email_your_file_has_been_authorized'). "\n\n";
             $mail_body1.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body1.=msg('label_status'). ': ' .msg('message_authorized'). "\n\n";
             $mail_body1.=msg('date'). ': ' . $date . "\n\n";
