@@ -35,6 +35,8 @@ if(!$user_obj->isReviewer() && !$user_obj->isRoot())
     header('Location:out.php?last_message=Access+denied');
 }
 
+$lcomments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) : '';
+
 //print_r($_REQUEST);exit;
 if(!isset($_REQUEST['submit']))
 {
@@ -114,7 +116,6 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 {
     $lto = isset($_POST['to'])?$_POST['to'] : '';
     $lsubject = isset($_POST['subject'])?$_POST['subject'] : '';
-    $lcomments = isset($_POST['comments'])?$_POST['comments'] : '';
     $lcheckbox = isset($_POST['checkbox'])?$_POST['checkbox'] : '';
 
     $mail_break = '--------------------------------------------------'."\n";
@@ -127,9 +128,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
-    $mail_subject=msg('email_subject_review_status');
+    $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status');
     $mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
-    $mail_body = msg('email_was_declined_for_publishing_at') . ' '.$time.' - '.$date.' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
+    $mail_body = $lcomments . "\n\n";
+    $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
     $mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
 
     if($user_obj->isRoot())
@@ -155,8 +157,9 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
             // Set up rejected email message to sent out
-            $mail_subject=$file_obj->getName().' ' . msg('email_was_rejected_from_repository');
-            $mail_body=msg('email_a_new_file_has_been_rejected')."\n\n";
+            $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' . msg('email_was_rejected_from_repository');
+            $mail_body = $lcomments . "\n\n";
+            $mail_body.=msg('email_a_new_file_has_been_rejected')."\n\n";
             $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . "\n\n";
             $mail_body.=msg('label_status').': ' .msg('message_rejected'). "\n\n";
             $mail_body.=msg('date'). ': ' .$date. "\n\n";
@@ -189,14 +192,14 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
-{
+{   
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject=msg('email_subject_review_status');
+    $mail_subject = isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status');
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
@@ -223,6 +226,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
             // Build email for author notification
+            $mail_body1=$lcomments . "\n\n";
             $mail_body1=msg('email_your_file_has_been_authorized'). "\n\n";
             $mail_body1.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body1.=msg('label_status'). ': ' .msg('message_authorized'). "\n\n";
@@ -231,14 +235,15 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $mail_body1.=msg('email_thank_you'). ','. "\n\n";
             $mail_body1.=msg('email_automated_document_messenger'). "\n\n";
             $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-
             mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+            
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
 
             // Build email for general notices
-            $mail_subject=$file_obj->getName().' ' .msg('email_added_to_repository');
-            $mail_body2=msg('email_a_new_file_has_been_added'). "\n\n";
+            $mail_subject = isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository');
+            $mail_body2=$lcomments . "\n\n";
+            $mail_body2.=msg('email_a_new_file_has_been_added'). "\n\n";
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body2.=msg('label_status'). ': New'. "\n\n";
             $mail_body2.=msg('date'). ': ' . $date . "\n\n";

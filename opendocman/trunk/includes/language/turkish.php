@@ -323,6 +323,7 @@ $lang['email_added_to_repository'] = 'added to repository';
 $lang['email_automated_document_messenger'] = 'Automated Document Messenger';
 $lang['email_because_you_did_not_revise'] = 'because you did not revise it for more than';
 $lang['email_comments_regarding_review'] = 'Comments regarding your review of the document';
+$lang['email_custom_comment'] = 'Custom Comment';
 $lang['email_email_all_users'] = 'E-mail all users';
 $lang['email_email_these_users'] = 'E-mail theses users';
 $lang['email_email_whole_department'] = 'E-mail whole department';
