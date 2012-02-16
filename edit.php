@@ -65,7 +65,7 @@ if (!isset($_REQUEST['submit']))
 	draw_menu($_SESSION['uid']);
 	draw_status_bar(msg('area_update_file'), $_REQUEST['last_message']);
 	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-	checkUserPermission($_REQUEST['id'], $user_perm_obj->ADMIN_RIGHT);
+	checkUserPermission($_REQUEST['id'], $filedata->ADMIN_RIGHT, $filedata);
 	$data_id = $_REQUEST['id'];
 	// includes
 	$query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=$_SESSION[uid]";
@@ -499,7 +499,11 @@ else
         $fileId = $_REQUEST['id'];
 	// form submitted, process data
 	$filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
-	$filedata->setId($fileId);
+
+        // Call the plugin API
+        callPluginMethod('onBeforeEditFileSaved');
+
+        $filedata->setId($fileId);
 	// check submitted data
 	// at least one user must have "view" and "modify" rights
         if ( !isset($_REQUEST['view']) or !isset($_REQUEST['modify']) or !isset($_REQUEST['read']) or !isset ($_REQUEST['admin']))
