@@ -190,4 +190,9 @@ class Plugin
      * This function is run after the file list view is drawn
      */
     function onAfterListFiles() {}
+
+    /*
+     * This function is run before the edited file object is saved to the db
+     */
+    function onBeforeEditFileSaved() {}
 }
