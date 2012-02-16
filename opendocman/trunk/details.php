@@ -50,7 +50,7 @@ else
 	@draw_status_bar(msg('area_file_details'),$_REQUEST['last_message']);
 }
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT);
+checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT, $filedata);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 $userPermObj = new UserPermission($_SESSION['uid'] , $GLOBALS['connection'], DB_NAME);
@@ -243,7 +243,7 @@ callPluginMethod('onDuringDetails',$filedata->id);
 <!-- inner table begins -->
 <!-- view option available at all time, place it outside the block -->
 <?php 
-if($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->READ_RIGHT)
+if($userPermObj->getAuthority($_REQUEST['id'],$filedata) >= $userPermObj->READ_RIGHT)
 {
 ?>
 <td align="center"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>"><img src="images/view.png" title="View" alt="View" border="0"></a></td>
@@ -257,7 +257,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	$query2 = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid = '$_REQUEST[id]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.uid = '$_SESSION[uid]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights = '2' AND {$GLOBALS['CONFIG']['db_prefix']}data.status = '0' AND {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid";
 	$result2 = mysql_query($query2, $GLOBALS['connection']) or die ("Error in query: $query2. " . mysql_error());
 	$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-	if($user_perms->getAuthority($_REQUEST['id'])>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
+	if($user_perms->getAuthority($_REQUEST['id'], $filedata)>=$user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived())
 	{
 		// if so, display link for checkout
 ?>
@@ -267,7 +267,7 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 
 	mysql_free_result($result2);
 	
-	if ($userPermObj->getAuthority($_REQUEST['id']) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id)  && !$filedata->isArchived())
+	if ($userPermObj->getAuthority($_REQUEST['id'], $filedata) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id)  && !$filedata->isArchived())
 	{
 		// if user is also the owner of the file AND file is not checked out
 		// additional actions are available 

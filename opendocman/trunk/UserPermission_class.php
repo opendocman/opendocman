@@ -203,29 +203,35 @@ if( !defined('UserPermission_class') )
 		}
 		return $filedata_array;
 	}*/
-        // return the authority that this user have on file data_id
-        // by combining and prioritizing user and deparment right
-        function getAuthority($data_id)
+
+        /*
+         * getAuthority
+         * Return the authority that this user have on file data_id
+         * by combining and prioritizing user and deparment right
+         * @param $data_id int
+         * @param $file_obj object current file object
+         */
+        function getAuthority($data_id, $file_obj)
         {
-            $file_obj = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
-            if($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
+            if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
             {
                 return $this->ADMIN_RIGHT;
             }
-            if($file_obj->isOwner($this->uid) && $file_obj->isLocked() )
+            if ($file_obj->isOwner($this->uid) && $file_obj->isLocked())
             {
                 return $this->WRITE_RIGHT;
             }
             $uperm = $this->userperm_obj->getPermission($data_id);
             $dperm = $this->deptperm_obj->getPermission($data_id);
-            if( $uperm>=$this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
+            if ($uperm >= $this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
             {
                 return $uperm;
-            }
-            else
+            } else
             {
                 return $dperm;
             }
         }
+
     }
+
 }

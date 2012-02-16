@@ -90,7 +90,7 @@ elseif ($_GET['submit'] == 'view')
     //echo "ID is $_REQUEST['id']";
     $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
+    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
     $realname = $file_obj->getName();
     if( isset($lrevision_id) )
     {
@@ -127,7 +127,7 @@ elseif ($_GET['submit'] == 'Download')
 {
     $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT);
+    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
     $realname = $file_obj->getName();
     if( isset($lrevision_id) )
     {

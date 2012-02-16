@@ -34,5 +34,29 @@ if( !defined('Department_class') )
             $this->tablename = $this->TABLE_DEPARTMENT;
             databaseData::databaseData($id, $connection, `$database`);
         }
+
+        /*
+         * Function: getAllDepartments
+         * Get a list of department names and ids sorted by name
+         *
+         * @returns array
+         */
+
+        static function getAllDepartments()
+        {
+            $departments = array();
+            $query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER by name";
+            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+            $count = 0;
+            while (list($dept_name, $dept_id) = mysql_fetch_row($result))
+            {
+                $departments[$count]['id'] = $dept_id;
+                $departments[$count]['name'] = $dept_name;
+                $count++;
+            }
+            return $departments;
+        }
+
     }
+
 }
