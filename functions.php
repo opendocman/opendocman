@@ -312,7 +312,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
     foreach($fileid_array as $fileid)
     {
         $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
-        if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid) >= $userperms_obj->WRITE_RIGHT)
+        if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid,$file_obj) >= $userperms_obj->WRITE_RIGHT)
         {
             $lock = false;
         }
@@ -352,7 +352,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         //Get the file size in bytes.
         $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid. '.dat');
 
-        if ($userperms_obj->getAuthority($fileid) >= $userperms_obj->READ_RIGHT)
+        if ($userperms_obj->getAuthority($fileid,$file_obj) >= $userperms_obj->READ_RIGHT)
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
             if( !isset($GLOBALS['mimetypes']["$suffix"]) )
@@ -378,7 +378,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         $write = array($userperms_obj->WRITE_RIGHT, 'w');
         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
         $rights = array($read, $write, $admin);
-        $userright = $userperms_obj->getAuthority($file_obj->getId());
+        $userright = $userperms_obj->getAuthority($file_obj->getId(), $file_obj);
         $index_found = -1;
         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
@@ -611,10 +611,15 @@ function makeRandomPassword()
     }
     return $pass;
 }
-function checkUserPermission($file_id, $permittable_right)
+/*
+ * @param $file_id int
+ * @param $permittable_right int the right value requested
+ * @param $obj object an object reference that has access to Database class static vars (VIEW_RIGHT, etc)
+ */
+function checkUserPermission($file_id, $permittable_right, $obj)
 {
     $userperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    if(!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id) < $permittable_right)
+    if(!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id, $obj) < $permittable_right)
     {
         echo msg('error').': '.msg('message_unable_to_find_file') . "\n";
         echo '       ' . msg('message_please_email') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">' . msg('area_admin') . '</a>';
