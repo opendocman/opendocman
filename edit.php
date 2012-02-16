@@ -179,7 +179,7 @@ if (!isset($_REQUEST['submit']))
 		<td valign="top"><?php echo msg('label_name')?></td>
 		<td colspan="3"><b><?php  echo $realname; ?></b></td>
 		</tr>
-		<tr>
+		<tr id="ownerSelect">
 		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('owner')?></td>
 		<td colspan="3"><b>
 		<select name="file_owner">
@@ -200,7 +200,7 @@ if (!isset($_REQUEST['submit']))
 		</select>
 		</b></td>
 		</tr>
-                <tr>
+                <tr id="deptOwnerSelect">
 		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('department'); ?></td>
 		<td colspan="3"><b>
 		<select name="file_department">
@@ -251,7 +251,7 @@ if (!isset($_REQUEST['submit']))
 		udf_edit_file_form();
 ?>
 		<!-- Select Department to own file -->
-        <TR>
+        <TR id="departmentSelect">
 	    <TD><B><?php echo msg('department')?></B></TD>
      	<TD COLSPAN="3"><SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
 		<option value="0"> <?php echo msg('label_select_a_department')?></option>
@@ -271,7 +271,7 @@ if (!isset($_REQUEST['submit']))
 ?>
         </TD></SELECT>
 		</TR>
-    	<TR>
+    	<TR id="authorityRadio">
 		<!-- Loading Authority radio_button group -->
 		<TD><?php echo msg('label_department_authority')?>: </TD> <TD>
 <?php
@@ -301,7 +301,7 @@ if (!isset($_REQUEST['submit']))
 	<td colspan="3"><textarea name="comment" rows="4"><?php  echo $comment; ?></textarea></td>
 	</tr>
 	</table>
-	<table border="0" cellspacing="0" cellpadding="3">
+	<table id="specificUserPerms" border="0" cellspacing="0" cellpadding="3">
             <tr><td colspan="5"><?php echo msg('label_specific_permissions')?></td></tr>
 
 	<tr>

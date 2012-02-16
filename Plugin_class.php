@@ -184,5 +184,5 @@ class Plugin
     /*
      * This function is run before the file list view
      */
-    function onBeforeListFiles(){}
+    function onBeforeListFiles($fileList){}
 }
