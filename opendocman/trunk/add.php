@@ -56,11 +56,7 @@ if(!isset($_POST['submit']))
         header('Location:error.php?ec=14');
         exit; //non-unique error
     }
-    list($current_user_dept) = mysql_fetch_row($result);
-    //Get a list of department names and id to populate javascript obj//
-    $query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER by name";
-    $result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    $dept_data = $result;
+    list($current_user_dept) = mysql_fetch_row($result);    
     $index = 0;
     ///////Define a class that hold Department information (id, name, and rights)/////////
     //this class will be used to temporarily hold department information client-side wise//
@@ -229,7 +225,7 @@ if(!isset($_POST['submit']))
     udf_add_file_form();
     ?>
     <!-- Set Department rights on the file -->
-    <TR>
+    <TR id="departmentSelect">
         <TD>
             <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_departments');?></a>
         </TD>
@@ -254,7 +250,7 @@ if(!isset($_POST['submit']))
             </SELECT>
         </TD>
     </TR>
-    <TR>
+    <TR id="authorityRadio">
         <!-- Loading Authority radio_button group -->
         <TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department_authority')?></a></td>
         <!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
@@ -283,7 +279,7 @@ if(!isset($_POST['submit']))
         <td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
     </tr>
 
-    <TABLE border="0" cellspacing="0" cellpadding="3" NOWRAP>
+    <TABLE id="specificUserPerms" border="0" cellspacing="0" cellpadding="3" NOWRAP>
         <tr nowrap>
             <td colspan="4" NOWRAP><b><?php echo msg('label_specific_permissions')?></b></td>
         </TR>
