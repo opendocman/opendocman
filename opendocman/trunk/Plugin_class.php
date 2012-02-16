@@ -185,4 +185,9 @@ class Plugin
      * This function is run before the file list view
      */
     function onBeforeListFiles($fileList){}
+
+    /*
+     * This function is run after the file list view is drawn
+     */
+    function onAfterListFiles() {}
 }

@@ -428,9 +428,11 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
     //print_r($GLOBALS['smarty']);
 
     // Call the plugin API
-    callPluginMethod('onBeforeListFiles');
+    callPluginMethod('onBeforeListFiles', $file_list_arr);
 
     display_smarty_template('out.tpl');
+
+    callPluginMethod('onAfterListFiles');
 }
 
 function sort_browser()
