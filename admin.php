@@ -48,7 +48,7 @@ draw_menu($_SESSION['uid']);
     <table border="1" cellspacing="5" cellpadding="5" >
         <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></font></th><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
         <?php
-        if($user_obj->isAdmin())
+        if($user_obj->isRoot())
             udf_admin_header();
         ?>
         <tr>
@@ -147,7 +147,8 @@ draw_menu($_SESSION['uid']);
 
 </table>
     <?php
-if(is_array($GLOBALS['plugin']->getPluginsList()))
+
+if(is_array($GLOBALS['plugin']->getPluginsList()) && $user_obj->isRoot())
 {
     ?>
             <table border="1" cellspacing="5" cellpadding="5" >
