@@ -26,7 +26,7 @@ $lang['forgotpassword'] = 'Forgot your password?';
 $lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'Sign-up for an account';
 $lang['welcome'] = 'Welcome to OpenDocMan';
-$lang['welcome2'] = 'Log in to begin using The system\'s powerful storage, publishing and revision control features.';
+$lang['welcome2'] = 'Log in to begin using the system\'s powerful storage, publishing and revision control features.';
 $lang['welcome_anonymous_title'] = 'OpenDocMan Anonymous Page: List All';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonymous Page';
 
