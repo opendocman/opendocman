@@ -64,7 +64,7 @@ if( !defined('FileData_class') )
             $this->field_id = 'id';
             $this->result_limit = 1;  //EVERY FILE IS LISTED UNIQUELY ON THE DATABASE DATA;
             $this->tablename = $this->TABLE_DATA;
-            databaseData::databaseData($id, $connection, `$database`);
+            databaseData::databaseData($id, $connection, $database);
 
             $this->loadData();
         }
