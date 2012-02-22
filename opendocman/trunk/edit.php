@@ -19,16 +19,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-
-// check session and $id
-//$_SESSION['uid']=102;
-//$id=67;
-//$submit=true;
-
 session_start();
 include('odm-load.php');
 include('udf_functions.php');
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 if(strchr($_REQUEST['id'], '_') )
 {
@@ -64,7 +57,6 @@ if (!isset($_REQUEST['submit']))
 	draw_header(msg('area_update_file'));
 	draw_menu($_SESSION['uid']);
 	draw_status_bar(msg('area_update_file'), $_REQUEST['last_message']);
-	$user_perm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 	checkUserPermission($_REQUEST['id'], $filedata->ADMIN_RIGHT, $filedata);
 	$data_id = $_REQUEST['id'];
 	// includes
@@ -74,8 +66,7 @@ if (!isset($_REQUEST['submit']))
 	{
 	  header('Location:error.php?ec=14');
 	  exit; //non-unique error
-	}
-	list($current_user_dept) = mysql_fetch_row($result);
+	}	
 	$query = "SELECT default_rights FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = $data_id";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	if(mysql_num_rows($result) != 1)
@@ -141,7 +132,7 @@ if (!isset($_REQUEST['submit']))
 <?php
 	$query = "SELECT name, dept_id, rights FROM {$GLOBALS['CONFIG']['db_prefix']}department, {$GLOBALS['CONFIG']['db_prefix']}dept_perms  WHERE {$GLOBALS['CONFIG']['db_prefix']}department.id ={$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.fid = $data_id ORDER by name";
 	$result = mysql_query ($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	$dept_data = $result;
+
 	$index = 0;
   	while( list($dept_name, $dept_id, $rights) = mysql_fetch_row($result) )
   	{    
@@ -489,15 +480,13 @@ if (!isset($_REQUEST['submit']))
 	</form>
 	</table>
 	</center>
-	</body>
-	</html>
 <?php 
 	}//end else
 }
 else
-{
+{   
+        // form submitted, process data
         $fileId = $_REQUEST['id'];
-	// form submitted, process data
 	$filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
 
         // Call the plugin API
@@ -574,7 +563,7 @@ else
 	{
 		$string=addslashes(space_to_underscore($dept_name));
 		$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights ='{$_REQUEST[$string]}' where fid=".$filedata->getId()." and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id =$id";
-                $result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+                mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
 	}
 	// clean up
 	mysql_freeresult($result);
@@ -739,7 +728,8 @@ else
 		if( current_selected_dept == all_Setting_pos) //for all user option. linked with predefine value above.
 		{
 			index = 0;
-			while(index < dept_drop_box.length)
+                        // Don't include the "Select a Department" prompt
+			while(index < (dept_drop_box.length - 1))
 			{
 				if(index != default_Setting_pos && index != all_Setting_pos) //Don't set default and All
 				{

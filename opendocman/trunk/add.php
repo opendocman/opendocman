@@ -118,15 +118,17 @@ if(!isset($_POST['submit']))
     departments[default_Setting_pos] = default_Setting;
     /////////////////////////Populate Department obj////////////////////////////////
     <?php
-    while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
+
+    $allDepartments = Department::getAllDepartments();
+    foreach ($allDepartments as $singleDepartment)
     {
-        if($dept_id == $current_user_dept)
+        if($singleDepartment['id'] == $current_user_dept)
         {
-            echo 'departments[' . ($index+2) . '] = new Department("' . $dept_name . '", "' . $dept_id . '", "1")' . "\n";
+            echo 'departments[' . ($index+2) . '] = new Department("' . $singleDepartment['name'] . '", "' . $singleDepartment['id'] . '", "1")' . "\n";
         }
         else
         {
-            echo 'departments[' . ($index+2) . '] = new Department("' . $dept_name . '", "' . $dept_id . '", "0")' . "\n";
+            echo 'departments[' . ($index+2) . '] = new Department("' . $singleDepartment['name'] . '", "' . $singleDepartment['id'] . '", "0")' . "\n";
         }
         $index++;
     }
@@ -419,8 +421,7 @@ if(!isset($_POST['submit']))
 </form>
 </table>
 </center>
-    <?php
-    draw_footer();
+<?php
 }
 else 
 {
@@ -582,7 +583,7 @@ else
         {
             //echo "Dept is $dept_name";
             $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
-            $result2 = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
         }
         // Search for simular names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
@@ -762,7 +763,7 @@ else
         departments[current_selected_dept].setFlag("true");
         if(  current_selected_dept == default_Setting_pos )  //for default user option
         {
-            frm_main.elements['default_Setting'].value = frm_main.elements[selected_rb_name].value
+            frm_main.elements['default_Setting'].value = frm_main.elements[selected_rb_name].value;
             while (index< dept_drop_box.length)
             {
                 //do not need to set "All Department" and "Default Department"  they are only abstracts
@@ -780,7 +781,7 @@ else
         if( current_selected_dept == all_Setting_pos) //for all user option. linked with predefine value above.
         {
             index = 0;
-            while(index < dept_drop_box.length)
+            while(index < (dept_drop_box.length - 1))
             {
                 if(index != default_Setting_pos && index != all_Setting_pos) //Don't set default and All
                 {
@@ -847,3 +848,5 @@ else
     }
 
 </script>
+    <?php
+    draw_footer();
