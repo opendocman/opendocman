@@ -93,7 +93,7 @@ class Plugin
     /*
      * This function is run on the Add File page
      */
-    function onBeforeAdd($fileid) {}
+    function onBeforeAdd() {}
 
     /*
      * This function is run on while the file is being added to the database
