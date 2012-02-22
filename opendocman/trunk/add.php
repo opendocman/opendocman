@@ -428,6 +428,13 @@ else
     // change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
     for($khoa = 0; $khoa<1; $khoa++)
     {
+        //invalid file
+        if(empty($_FILES))
+        {
+            header('Location:error.php?ec=11');
+            exit;
+        }
+        
         if ($GLOBALS['CONFIG']['authorization'] == 'True')
         {
             $lpublishable = '0';
@@ -457,7 +464,7 @@ else
             list($current_user_dept) = mysql_fetch_row($result);
         }
         // File is bigger than what php.ini post/upload/memory limits allow.
-        if($_FILES['file'] ['error'] == '1')
+        if($_FILES['file']['error'] == '1')
         {
            header('Location:error.php?ec=26');
             exit;
@@ -606,7 +613,6 @@ else
         {
             $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
             $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());
-            ;
         }
 
         // use id to generate a file name

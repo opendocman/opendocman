@@ -21,7 +21,7 @@
  *
  * @author Stephen J. Lawrence Jr.
  */
-class Plugin
+class Plugin 
 {
 
     var $name = '';
@@ -30,7 +30,7 @@ class Plugin
     var $homepage = '';
     var $description = '';
     var $pluginslist = '';
-
+    
     function Plugin()
     {
         $name = $this->name;
@@ -93,12 +93,12 @@ class Plugin
     /*
      * This function is run on the Add File page
      */
-    function onBeforeAdd() {}
+    function onBeforeAdd($fileid) {}
 
     /*
      * This function is run on while the file is being added to the database
      */
-    function onDuringAdd() {}
+    function onDuringAdd($fileid) {}
 
     /*
      * This function is run after a new file is added
