@@ -2,7 +2,7 @@
 /*
 out.php - display a list/ of all available documents that user has permission to view (with file status)
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2012 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -37,14 +37,18 @@ $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '
 
 draw_header(msg('label_file_listing'));
 draw_menu($_SESSION['uid']);
-draw_status_bar(msg('area_document_listing'), @$_REQUEST['last_message']);
+draw_status_bar(msg('area_document_listing'), $last_message);
 sort_browser();
 
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-if($user_obj->isReviewer() && sizeof($user_obj->getRevieweeIds()) > 0)
+
+// How many are waiting for review?
+$reviewIdCount = sizeof($user_obj->getRevieweeIds());
+
+if($user_obj->isReviewer() && $reviewIdCount > 0)
 {
-    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). '</a>: ' . sizeof($user_obj->getRevieweeIds())  . '</a><br />';
+    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). '</a>: ' . $reviewIdCount  . '</a><br />';
 }
 
 $rejected_files_obj = $user_obj->getRejectedFileIds();
@@ -65,19 +69,16 @@ if($llen > 0)
 
 
 //set values
-$page_url = $_SERVER['PHP_SELF'] . '?submit=true';
 $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 //$start_P = getmicrotime();
 $file_id_array = $user_perms->getViewableFileIds();
 //$end_P = getmicrotime();
 
-$count = sizeof($file_id_array);
 
 list_files($file_id_array, $user_perms, $GLOBALS['CONFIG']['dataDir'],'false');
-$total_hit = sizeof($file_id_array);
 
 draw_footer();	
-//echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
+//Fb::log('<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>');
 //echo '<br> <b> Load Permission Time: ' . ($end_P - $start_P) . ' </b>';	
 //echo '<br> <b> Load Sort Time: ' . ($lsort_e - $lsort_b) . ' </b>';	
 //echo '<br> <b> Load Table Time: ' . ($llist_e - $llist_b) . ' </b>';	
