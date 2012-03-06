@@ -75,7 +75,7 @@ $file_id_array = $user_perms->getViewableFileIds();
 //$end_P = getmicrotime();
 
 
-list_files($file_id_array, $user_perms, $GLOBALS['CONFIG']['dataDir'],'false');
+list_files($file_id_array, $user_perms, $GLOBALS['CONFIG']['dataDir'],false);
 
 draw_footer();	
 //Fb::log('<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>');

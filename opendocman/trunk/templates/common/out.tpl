@@ -3,7 +3,9 @@
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>
         <tr>
-            <th ><input type="checkbox" id="checkall"/></th>
+            {if $showCheckBox}
+                <th ><input type="checkbox" id="checkall"/></th>
+            {/if}
             <th class="sorting">ID</th>
             <th>{$g_lang_label_view}</th>
             <th class="sorting">{$g_lang_label_file_name}</th>
@@ -23,8 +25,6 @@
             {if $item.showCheckbox eq '1'}
                 {assign var=form value=1}
                 <td><input type="checkbox" class="checkbox" value="{$item.id}" name="checkbox[]"/></td>
-            {else}
-                <td></td>
             {/if}
             <td class="center">{$item.id}</td>
             <td class="center" style="width: 50px;">
