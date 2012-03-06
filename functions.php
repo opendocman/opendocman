@@ -312,7 +312,10 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
     foreach($fileid_array as $fileid)
     {
         $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
-        if ($file_obj->getStatus() == 0 and $userperms_obj->getAuthority($fileid,$file_obj) >= $userperms_obj->WRITE_RIGHT)
+        $userAccessLevel = $userperms_obj->getAuthority($fileid,$file_obj);
+        $description = $file_obj->getDescription();
+        
+        if ($file_obj->getStatus() == 0 and $userAccessLevel >= $userperms_obj->WRITE_RIGHT)
         {
             $lock = false;
         }
@@ -320,20 +323,17 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $lock = true;
         }
-        if ($file_obj->getDescription() == '')
+        if ($description == '')
         {
             $description = 'No description available';
         }
+        $description = substr($description, 0, 35);
+        
         // set filename for filesize() call below
         //$filename = $dataDir . $file_obj->getId() . '.dat';
-        $fid = $file_obj->getId();
-
 
         // begin displaying file list with basic information
-        $comment = $file_obj->getComment();
-        $description = $file_obj->getDescription();
-        $description = substr($description, 0, 35);
-
+        //$comment = $file_obj->getComment();
 
         $created_date = fix_date($file_obj->getCreatedDate());
         if ($file_obj->getModifiedDate())
@@ -341,18 +341,17 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
             $modified_date = fix_date($file_obj->getModifiedDate());
         }
 
-        //echo "$modified_date  and $fid fid";
-
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1].', '.$full_name_array[0];
         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
         $dept_name = $file_obj->getDeptName();
         $realname = $file_obj->getRealname();
+        
         //$filesize = $file_obj->getFileSize();
         //Get the file size in bytes.
         $filesize = display_filesize($GLOBALS['CONFIG']['dataDir'] . $fileid. '.dat');
 
-        if ($userperms_obj->getAuthority($fileid,$file_obj) >= $userperms_obj->READ_RIGHT)
+        if ($userAccessLevel >= $userperms_obj->READ_RIGHT)
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
             if( !isset($GLOBALS['mimetypes']["$suffix"]) )
@@ -364,28 +363,26 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
                 $lmimetype = $GLOBALS['mimetypes']["$suffix"];
             }
 
-            $view_link = 'view_file.php?submit=view&id=' . urlencode($fid).'&mimetype='.urlencode("$lmimetype");
+            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
         }
         else
         {
             $view_link = 'none';
         }
 
-
-        $details_link = $secureurl->encode('details.php?id=' . $fid . '&state=' . ($_REQUEST['state']+1));
+        $details_link = $secureurl->encode('details.php?id=' . $fileid . '&state=' . ($_REQUEST['state']+1));
 
         $read = array($userperms_obj->READ_RIGHT, 'r');
         $write = array($userperms_obj->WRITE_RIGHT, 'w');
         $admin = array($userperms_obj->ADMIN_RIGHT, 'a');
         $rights = array($read, $write, $admin);
-        $userright = $userperms_obj->getAuthority($file_obj->getId(), $file_obj);
         $index_found = -1;
         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
         //and everything below it.
         for($i = sizeof($rights)-1; $i>=0; $i--)
         {
-            if($userright==$rights[$i][0])
+            if($userAccessLevel==$rights[$i][0])
             {
                 $index_found = $i;
                 $i = 0;
@@ -403,7 +400,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
             $rights[$i][1] = '-';
         }
         $file_list_arr[] = array(
-                'id'=>$fid,
+                'id'=>$fileid,
                 'view_link'=>$view_link,
                 'details_link'=>$details_link,
                 'filename'=>$realname,
@@ -422,7 +419,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
 
     }
 
-
+    $GLOBALS['smarty']->assign('showCheckBox', $showCheckBox);
     //print_r($file_list_arr);exit;
     $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);
     //print_r($GLOBALS['smarty']);
