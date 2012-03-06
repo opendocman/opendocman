@@ -222,7 +222,7 @@ $lang['label_select_departments'] = 'Odaberi odjele';
 $lang['label_select_one'] = 'Izaberi jedan';
 $lang['label_settings'] = 'Postavke';
 $lang['label_size'] = 'Veličina';
-$lang['label_specific_permissions'] = 'Specifične korisničke dozvole (koristi ctrl-klik ili cmd-klik)';
+$lang['label_specific_permissions'] = 'Specifične korisničke dozvole';
 $lang['label_status'] = 'Status';
 $lang['label_update'] = 'Obnovi';
 $lang['label_user_defined_fields'] = 'Korisnički definirana polja';
@@ -327,3 +327,9 @@ $lang['message_you_must_assign_rights'] = 'Morate dodjeliti dozvolu za gledanje/
 $lang['message_your_password_has_been_changed'] = 'Vaša lozinka je promjenjena.';
 
 $lang['view'] = $lang['label_view'];
+
+// Edit File Page
+$lang['editpage_uncheck_all'] = 'odznači sve';
+$lang['editpage_check_all'] = 'Provjeri sve';
+$lang['editpage_of'] = 'od';
+$lang['editpage_selected'] = 'odabran';
