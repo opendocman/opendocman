@@ -13,8 +13,19 @@ $(document).ready(function() {
 				});
         });
 
-	$('select[multiple="multiple"]').multiSelect();
+    // This section controls the Specific User Permissions on add/edit pages
+    var $multiViewObject = $(".multiView");
 
+    if($multiViewObject.length>0) {
+        $multiViewObject.multiselect({
+            selectedText:   "# " + langOf + " # " + langSelected,
+            uncheckAllText: langUncheckAll,
+            checkAllText:   langCheckAll        
+        });
+
+        // Add a multi-select / search to the top of the Specific User Permissions controls
+        $multiViewObject.multiselectfilter();
+    }
         /* Animated Message */
         $(".close").click(function(){
             $("#last_message").animate({left:"+=10px"}).animate({left:"-5000px"});

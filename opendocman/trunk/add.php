@@ -61,7 +61,18 @@ if(!isset($_POST['submit']))
     ///////Define a class that hold Department information (id, name, and rights)/////////
     //this class will be used to temporarily hold department information client-side wise//
     ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
+    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.js"></script>
+    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.js"></script>
+	
 <script type="text/javascript">
+    // Here are the translations for the multiselect area of this page
+    var langUncheckAll = '<?php echo $GLOBALS['lang']['editpage_uncheck_all']; ?>';
+    var langCheckAll = '<?php echo $GLOBALS['lang']['editpage_check_all']; ?>';
+    var langOf = '<?php echo $GLOBALS['lang']['editpage_of']; ?>';
+    var langSelected = '<?php echo $GLOBALS['lang']['editpage_selected']; ?>';
 
     //define a class like structure to hold multiple data
     function Department(name, id, rights)
@@ -293,7 +304,7 @@ if(!isset($_POST['submit']))
             <td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a></td>
         </tr>
         <tr>
-            <td><select tabindex="8" name="forbidden[]" multiple size="10" onchange="changeForbiddenList(this, this.form);">
+            <td><select class="multiView" tabindex="8" name="forbidden[]" multiple="multiple" size="10" onchange="changeForbiddenList(this, this.form);">
                         <?php
 
                         // query to get a list of available users
@@ -310,7 +321,7 @@ if(!isset($_POST['submit']))
                         mysql_free_result ($result);
                         ?>
                 </select></td>
-            <td><select tabindex="9" name="view[]" multiple size="10" onchange="changeList(this, this.form);">
+            <td><select class="multiView" tabindex="9" name="view[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////View//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -330,7 +341,7 @@ if(!isset($_POST['submit']))
                         mysql_free_result ($result);
                         ?>
                 </SELECT></td>
-            <td><select tabindex="10"  name="read[]" multiple size="10"onchange="changeList(this, this.form);">
+            <td><select class="multiView" tabindex="10"  name="read[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////Read//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -351,7 +362,7 @@ if(!isset($_POST['submit']))
                         mysql_free_result ($result);
                         ?>
                 </SELECT></td>
-            <td><select tabindex="11" name="modify[]" multiple size="10"onchange="changeList(this, this.form);">
+            <td><select class="multiView" tabindex="11" name="modify[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////Read//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -371,7 +382,7 @@ if(!isset($_POST['submit']))
                         mysql_free_result ($result);
                         ?>
                 </SELECT></td>
-            <td><select tabindex="12" name="admin[]" multiple size="10" onchange="changeList(this, this.form);">
+            <td><select class="multiView" tabindex="12" name="admin[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
     <?php
     ////////////////////Read//////////////////////////
     $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";

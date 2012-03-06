@@ -222,7 +222,7 @@ $lang['label_select_departments'] = '选多个部门';
 $lang['label_select_one'] = '选一个';
 $lang['label_settings'] = '设置';
 $lang['label_size'] = '大小';
-$lang['label_specific_permissions'] = '指定用户许可（用ctrl+点击）';
+$lang['label_specific_permissions'] = '指定用户许可';
 $lang['label_status'] = '状态';
 $lang['label_text'] = 'Text';
 $lang['label_update'] = '修改';
@@ -328,3 +328,9 @@ $lang['message_you_must_assign_rights'] = '你必须给至少一个用户指定�
 $lang['message_your_password_has_been_changed'] = '你的密码已经修改';
 
 $lang['view'] = $lang['label_view'];
+
+// Edit File Page
+$lang['editpage_uncheck_all'] = '全部取消';
+$lang['editpage_check_all'] = '检查所有';
+$lang['editpage_of'] = '的';
+$lang['editpage_selected'] = '选';

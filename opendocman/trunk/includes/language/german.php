@@ -222,7 +222,7 @@ $lang['label_select_departments'] = 'Abteilungen auswählen';
 $lang['label_select_one'] = 'Eins auswählen';
 $lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Größe';
-$lang['label_specific_permissions'] = 'Besondere Benutzerberechtigungen (ctrl-click oder cmd-click drücken)';
+$lang['label_specific_permissions'] = 'Besondere Benutzerberechtigungen';
 $lang['label_status'] = 'Status';
 $lang['label_text'] = 'Text';
 $lang['label_update'] = 'Aktualisierung';
@@ -328,3 +328,9 @@ $lang['message_you_must_assign_rights'] = 'Zumindest einem Benutzer müssen Bere
 $lang['message_your_password_has_been_changed'] = 'Ihr Passwort wurde erfolgreich geändert.';
 
 $lang['view'] = $lang['label_view'];
+
+// Edit File Page
+$lang['editpage_uncheck_all'] = 'Alle deaktivieren';
+$lang['editpage_check_all'] = 'checken alle';
+$lang['editpage_of'] = 'von';
+$lang['editpage_selected'] = 'ausgewählt';

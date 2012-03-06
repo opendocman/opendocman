@@ -222,7 +222,7 @@ $lang['label_select_departments'] = 'Kies afdelingen';
 $lang['label_select_one'] = 'Kies een';
 $lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Grootte';
-$lang['label_specific_permissions'] = 'Permissies per gebruiker (ctrl-klik or cmd-klik)';
+$lang['label_specific_permissions'] = 'Permissies per gebruiker';
 $lang['label_status'] = 'Status';
 $lang['label_text'] = 'Text';
 $lang['label_update'] = 'Update';
@@ -328,3 +328,9 @@ $lang['message_you_must_assign_rights'] = 'U moet tenminste één gebruiker view
 $lang['message_your_password_has_been_changed'] = 'Uw wachtwoord is gewijzigd.';
 
 $lang['view'] = $lang['label_view'];
+
+// Edit File Page
+$lang['editpage_uncheck_all'] = 'Deselecteer alles';
+$lang['editpage_check_all'] = 'check All';
+$lang['editpage_of'] = 'van';
+$lang['editpage_selected'] = 'gekozen';

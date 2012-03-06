@@ -351,4 +351,9 @@ $lang['email_your_file_has_been_authorized'] = 'Your file has been authorized fo
 //Single word
 
 $lang['view'] = $lang['label_view'];
-?>
+
+// Edit File Page
+$lang['editpage_uncheck_all'] = 'Tüm kaldırın';
+$lang['editpage_check_all'] = 'Tüm kontrol edin';
+$lang['editpage_of'] = 'arasında';
+$lang['editpage_selected'] = 'seçilmiş';

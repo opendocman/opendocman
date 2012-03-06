@@ -76,7 +76,18 @@ if (!isset($_REQUEST['submit']))
 	}
 	list($default_rights) = mysql_fetch_row($result);
 ?>
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
+    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.js"></script>
+    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.js"></script>
 	<script type="text/javascript">
+            
+        // Here are the translations for the multiselect area of this page
+        var langUncheckAll = '<?php echo $GLOBALS['lang']['editpage_uncheck_all'];?>';
+        var langCheckAll = '<?php echo $GLOBALS['lang']['editpage_check_all'];?>';
+        var langOf = '<?php echo $GLOBALS['lang']['editpage_of'];?>';
+        var langSelected = '<?php echo $GLOBALS['lang']['editpage_selected'];?>';
 	 //define a class like structure to hold multiple data
     		function Department(name, id, rights)
     		{
@@ -325,7 +336,7 @@ if (!isset($_REQUEST['submit']))
 	}
 
 	$found = false;
-	echo '<td><select name="forbidden[]" multiple size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
+	echo '<td><select class="multiView" name="forbidden[]" multiple="multiple" size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -349,7 +360,7 @@ if (!isset($_REQUEST['submit']))
 ?>
 	</select></td>
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
-	<td><select name="view[]" multiple size = 10 onchange="changeList(this, this.form);">
+	<td><select class="multiView" name="view[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
 <?php
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->VIEW_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -376,7 +387,7 @@ if (!isset($_REQUEST['submit']))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
-	<td><select name="read[]" multiple size="10" onchange="changeList(this, this.form);">
+	<td><select class="multiView" name="read[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->READ_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -403,7 +414,7 @@ if (!isset($_REQUEST['submit']))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
-	<td><select name="modify[]" multiple size = 10 onchange="changeList(this, this.form);">
+	<td><select class="multiView" name="modify[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->WRITE_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -433,7 +444,7 @@ if (!isset($_REQUEST['submit']))
 	</select></td>
 
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
-	<td><select name="admin[]" multiple size = 10 onchange="changeList(this, this.form);">
+	<td><select class="multiView" name="admin[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->ADMIN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
