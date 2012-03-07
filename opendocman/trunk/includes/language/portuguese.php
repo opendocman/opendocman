@@ -334,3 +334,11 @@ $lang['editpage_uncheck_all'] = 'desmarque todos';
 $lang['editpage_check_all'] = 'verificar todos';
 $lang['editpage_of'] = 'de';
 $lang['editpage_selected'] = 'selecionado';
+
+// Details Page
+$lang['detailspage_view'] = 'View';
+$lang['detailspage_check_out'] = 'Check out';
+$lang['detailspage_edit'] = 'Edit';
+$lang['detailspage_delete'] = 'Delete';
+$lang['detailspage_history'] = 'History';
+$lang['detailspage_are_sure'] = 'Are you sure?';
