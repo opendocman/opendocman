@@ -211,13 +211,14 @@ if( !defined('UserPermission_class') )
          * @param $data_id int
          * @param $file_obj object current file object
          */
-        function getAuthority($data_id, $file_obj)
+        function getAuthority($data_id)
         {
+            $fileData = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
             if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
             {
                 return $this->ADMIN_RIGHT;
             }
-            if ($file_obj->isOwner($this->uid) && $file_obj->isLocked())
+            if ($fileData->isOwner($this->uid) && $fileData->isLocked())
             {
                 return $this->WRITE_RIGHT;
             }
