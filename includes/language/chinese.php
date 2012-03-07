@@ -334,3 +334,11 @@ $lang['editpage_uncheck_all'] = '全部取消';
 $lang['editpage_check_all'] = '检查所有';
 $lang['editpage_of'] = '的';
 $lang['editpage_selected'] = '选';
+
+// Details Page
+$lang['detailspage_view'] = 'View';
+$lang['detailspage_check_out'] = 'Check out';
+$lang['detailspage_edit'] = 'Edit';
+$lang['detailspage_delete'] = 'Delete';
+$lang['detailspage_history'] = 'History';
+$lang['detailspage_are_sure'] = 'Are you sure?';

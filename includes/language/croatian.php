@@ -333,3 +333,11 @@ $lang['editpage_uncheck_all'] = 'Odznači sve';
 $lang['editpage_check_all'] = 'Označi sve';
 $lang['editpage_of'] = 'od';
 $lang['editpage_selected'] = 'odabrano';
+
+// Details Page
+$lang['detailspage_view'] = 'Prikaži';
+$lang['detailspage_check_out'] = 'Odjavi';
+$lang['detailspage_edit'] = 'Uredi';
+$lang['detailspage_delete'] = 'Obriši';
+$lang['detailspage_history'] = 'Povijest';
+$lang['detailspage_are_sure'] = 'Jeste li sigurni?';

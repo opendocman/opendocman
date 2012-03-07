@@ -334,3 +334,11 @@ $lang['editpage_uncheck_all'] = 'Deselecteer alles';
 $lang['editpage_check_all'] = 'check All';
 $lang['editpage_of'] = 'van';
 $lang['editpage_selected'] = 'gekozen';
+
+// Details Page
+$lang['detailspage_view'] = 'View';
+$lang['detailspage_check_out'] = 'Check out';
+$lang['detailspage_edit'] = 'Edit';
+$lang['detailspage_delete'] = 'Delete';
+$lang['detailspage_history'] = 'History';
+$lang['detailspage_are_sure'] = 'Are you sure?';

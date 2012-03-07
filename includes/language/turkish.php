@@ -357,3 +357,11 @@ $lang['editpage_uncheck_all'] = 'Tüm kaldırın';
 $lang['editpage_check_all'] = 'Tüm kontrol edin';
 $lang['editpage_of'] = 'arasında';
 $lang['editpage_selected'] = 'seçilmiş';
+
+// Details Page
+$lang['detailspage_view'] = 'View';
+$lang['detailspage_check_out'] = 'Check out';
+$lang['detailspage_edit'] = 'Edit';
+$lang['detailspage_delete'] = 'Delete';
+$lang['detailspage_history'] = 'History';
+$lang['detailspage_are_sure'] = 'Are you sure?';
