@@ -4,7 +4,7 @@ $(document).ready(function() {
         "bStateSave": true,
         "sPaginationType": "full_numbers",
         "oLanguage": {
-            "sUrl": "includes/language/DataTables/dataTables." + langLanguage + ".txt"
+            "sUrl": "includes/language/DataTables/datatables." + langLanguage + ".txt"
         }
     });
 
