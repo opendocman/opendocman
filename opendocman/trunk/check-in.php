@@ -28,6 +28,8 @@ if (!isset($_SESSION['uid']))
 }
 include('odm-load.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
     $last_message='Failed';
@@ -57,9 +59,7 @@ if (!isset($_POST['submit']))
     {
         // get result data
         list($description, $realname) = mysql_fetch_row($result);
-        draw_header(msg('area_check_in_file'));
-        draw_menu($_SESSION['uid']);
-        @draw_status_bar(msg('button_check_in'),$_REQUEST['last_message']);
+        draw_header(msg('button_check_in'),$last_message);
         // correction
         if($description == '')
         {
@@ -70,7 +70,6 @@ if (!isset($_POST['submit']))
         mysql_free_result($result);
         // start displaying form
         ?>
-
 <table border="0" cellspacing="5" cellpadding="5">
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
@@ -100,7 +99,6 @@ if (!isset($_POST['submit']))
         </tr>
     </form>
 </table>
-</center>
         <?php
         draw_footer();
         ?>

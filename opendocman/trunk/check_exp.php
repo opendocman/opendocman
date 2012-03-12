@@ -23,15 +23,10 @@ include('odm-load.php');
 $start_time = time();
 session_start();
 
-if (!isset($_REQUEST['last_message']))
-{
-    $_REQUEST['last_message']='';
-}
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 // includes
-draw_header(msg('area_file_expiration'));
-draw_menu(@$_SESSION['uid']);
-draw_status_bar(msg('area_file_expiration'), $_REQUEST['last_message']);
+draw_header(msg('area_file_expiration'), $last_message);
 
 // Look up user
 $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='{$GLOBALS['CONFIG']['root_id']}'";

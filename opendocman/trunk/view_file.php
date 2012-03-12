@@ -29,6 +29,8 @@ if (!isset($_SESSION['uid']))
 
 include('odm-load.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 $secureurl_obj = New phpsecureurl();
 
 $lrequest_id = $_REQUEST['id']; //save an original copy of id
@@ -37,15 +39,10 @@ if(strchr($_REQUEST['id'], '_') )
     list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
     $lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
-if( !isset ($_REQUEST['last_message']) )
-{	
-    $_REQUEST['last_message']='';
-}
+
 if(!isset($_GET['submit']))
 {
-    draw_header(msg('view') . ' ' . msg('file'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('view') . ' ' . msg('file'),$_REQUEST['last_message']);
+    draw_header(msg('view') . ' ' . msg('file'),$last_message);
     $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     $file_name = $file_obj->getName();
     $file_id = $file_obj->getId();

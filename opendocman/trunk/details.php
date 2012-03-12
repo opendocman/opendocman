@@ -29,6 +29,8 @@ if (!isset($_SESSION['uid']))
 include('odm-load.php');
 include('udf_functions.php');
 
+$last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
+
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 {
@@ -36,19 +38,21 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
 	exit;
 }
 
-draw_header(msg('area_file_details'));
-draw_menu($_SESSION['uid']);
-$lrequest_id = $_REQUEST['id']; //save an original copy of id
 if(strchr($_REQUEST['id'], '_') )
 {
 	list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
-	@draw_status_bar(msg('area_file_details') . ' ' . msg('revision'). ' #' . $lrevision_id,$_REQUEST['last_message']);
+	$pageTitle = msg('area_file_details') . ' ' . msg('revision'). ' #' . $lrevision_id;
         $filesize = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . '_' . $lrevision_id . '.dat'); 
 }
 else
 {
-	@draw_status_bar(msg('area_file_details'),$_REQUEST['last_message']);
+	$pageTitle = msg('area_file_details');
 }
+
+draw_header(msg('area_file_details'), $last_message);
+
+$lrequest_id = $_REQUEST['id']; //save an original copy of id
+
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT, $filedata);
 $user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

@@ -94,6 +94,7 @@ $lang['area_update_category'] = 'Promjeni kategoriju';
 $lang['area_update_department'] = 'Promjeni odjel';
 $lang['area_update_file'] = 'Promjeni datoteku';
 $lang['area_view_category'] = 'Prikaži kategoriju';
+$lang['area_view_history'] = 'Povijest';
 
 // Buttons
 $lang['button_add_category'] = 'Dodaj kategoriju';
@@ -224,7 +225,7 @@ $lang['label_settings'] = 'Postavke';
 $lang['label_size'] = 'Veličina';
 $lang['label_specific_permissions'] = 'Specifične korisničke dozvole';
 $lang['label_status'] = 'Status';
-$lang['label_update'] = 'Ažuriraj';
+$lang['label_update'] = 'Izmjeni';
 $lang['label_user_defined_fields'] = 'Korisnički definirana polja';
 $lang['label_user_defined_field'] = 'Korisnički definirano polje';
 $lang['label_users_in_department'] = 'Korisnici u ovom odjelu';
@@ -333,6 +334,9 @@ $lang['editpage_uncheck_all'] = 'Odznači sve';
 $lang['editpage_check_all'] = 'Označi sve';
 $lang['editpage_of'] = 'od';
 $lang['editpage_selected'] = 'odabrano';
+$lang['editpage_none_selected'] = 'Mogućnosti odabira';
+$lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
+$lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 
 // Details Page
 $lang['detailspage_view'] = 'Prikaži';
@@ -341,3 +345,22 @@ $lang['detailspage_edit'] = 'Uredi';
 $lang['detailspage_delete'] = 'Obriši';
 $lang['detailspage_history'] = 'Povijest';
 $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
+
+// Details Page
+$lang['detailspage_view'] = 'Prikaži';
+
+// History Page
+$lang['historypage_category'] = 'Kategorija:';
+$lang['historypage_file_size'] = 'Veličina datoteke:';
+$lang['historypage_creation_date'] = 'Datum stvaranja:';
+$lang['historypage_owner'] = 'Vlasnik:';
+$lang['historypage_description'] = 'Opis:';
+$lang['historypage_comment'] = 'Komentar:';
+$lang['historypage_revision'] = 'Revizija:';
+$lang['historypage_original_revision'] = 'Izvorna revizija';
+$lang['historypage_latest'] = 'Najnovija';
+$lang['historypage_history'] = 'Povijest';
+$lang['historypage_version'] = 'Inačica';
+$lang['historypage_modification'] = 'Datum promjene';
+$lang['historypage_by'] = 'Od';
+$lang['historypage_note'] = 'Bilješka';

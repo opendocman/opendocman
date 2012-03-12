@@ -36,22 +36,12 @@ if(!$user_obj->isAdmin())
     exit;
 }
 
-if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
-{
-    draw_menu($_SESSION['uid']);
-}
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('area_add_new_category'));
-    draw_status_bar(msg('area_add_new_category'), $_REQUEST['last_message']);
-
+    draw_header(msg('area_add_new_category'), $last_message);
     ?>
-<center>
     <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
@@ -75,29 +65,23 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 
 
         </table>
-</center>
+    </form>
     <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
     // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'true')
+    if ($GLOBALS['CONFIG']['demo'] == 'True')
     {
-        @draw_status_bar(msg('area_delete_category'),$_POST['last_message']);
+        draw_header(msg('area_delete_category'), $last_message);
         echo msg('message_sorry_demo_mode');
         draw_footer();
         exit;
     }
-    $delete='';
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('area_delete_category'));
-    draw_status_bar(msg('area_delete_category'), $_REQUEST['last_message']);
+
+    draw_header(msg('area_delete_category'), $last_message);
     // query to show item
-    echo '<center>';
     echo '<table border=0>';
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id={$_REQUEST['item']}";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -138,15 +122,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
     $deletepick='';
-    draw_header(msg('area_delete_category'));
-    draw_status_bar(msg('area_delete_category'). ' : ' .msg('choose'), $_REQUEST['last_message']);
+    draw_header(msg('area_delete_category'). ' : ' .msg('choose'), $last_message);
     ?>
-<center>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -177,20 +155,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
             </tr>
         </form>
     </table>
-</center>
     <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 {
     // query to show item
-    draw_header(msg('area_view_category'));
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message'] = '';
-    }
-    draw_status_bar(msg('area_view_category'), $_REQUEST['last_message']);
-    echo '<center>';
+    draw_header(msg('area_view_category'), $last_message);
+
     // Select name
     $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -214,15 +186,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('area_view_category'));
-    draw_status_bar(msg('area_view_category') . ' : ' . msg('choose'), $_REQUEST['last_message']);
-    $showpick='';
+    draw_header(msg('area_view_category') . ' : ' . msg('choose'), $last_message);
     ?>
-<center>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -250,7 +215,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
             </tr>
         </form>
     </table>
-</center>
 </body>
 </html>
     <?php
@@ -258,14 +222,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('area_update_category'));
-    draw_status_bar(msg('area_update_category'), $_REQUEST['last_message']);
+    draw_header(msg('area_update_category'), $last_message);
     ?>
-<center>
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
         <form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
@@ -301,20 +259,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
         </td>
         </tr>
     </table>
-</center>
     <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header(msg('area_update_category'));
-    draw_status_bar(msg('area_update_category') . ': ' .msg('choose'),$_REQUEST['last_message']);
+    draw_header(msg('area_update_category'). ': ' .msg('choose'), $last_message);
     ?>
-<center>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
         <table border="0">
@@ -343,7 +294,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
     </form></TD>
 </tr>
 </table>
-</center>
     <?php
     draw_footer();
 }

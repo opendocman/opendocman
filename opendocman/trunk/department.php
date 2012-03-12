@@ -28,6 +28,9 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 // Make sure user is admin
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
@@ -39,11 +42,6 @@ if(!$user_obj->isAdmin() == true)
     exit;
 }
 
-$secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-
-
-
 /*
    Add A New Department
 */
@@ -53,12 +51,9 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
     {
         $_POST['last_message']='';
     }
-    draw_header(msg('area_add_new_department'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_add_new_department'), $_POST['last_message']);
+    draw_header(msg('area_add_new_department'), $last_message);
     ?>
 
-<center>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="commitchange.php" method="POST" enctype="multipart/form-data">
             <tr>
@@ -77,21 +72,13 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
                         </form>
                         </tr>
                         </table>
-                        </center>
 <?php
     draw_footer();
 }
 elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
     // query to show item
-    draw_header(msg('area_department_information'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_department_information'), $_POST['last_message']);
-    echo '<center>';
+    draw_header(msg('area_department_information'), $last_message);
     //select name
     $query = "SELECT name,id FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_POST[item]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -124,16 +111,9 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
-    draw_header(msg('area_choose_department'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_choose_department'), $_POST['last_message']);
+    draw_header(msg('area_choose_department'), $last_message);
     $showpick='';
 ?>
-                        <center>
                             <table border="0" cellspacing="5" cellpadding="5">
                                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
                                     <tr>
@@ -161,19 +141,12 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                                 </td>
                                 </tr>
                             </table>
-                        </center>
  <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
-    draw_header(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+    draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
 
     $delete='';
     
@@ -190,7 +163,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 
 
     // query to show item
-    echo '<center>';
     echo '<table border=0>';
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id={$_REQUEST['item']}";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in department lookup: $query. " . mysql_error());
@@ -234,15 +206,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
-    draw_header(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('department') . ': ' . msg('label_delete'), $_POST['last_message']);
+    draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
     ?>
-<center>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -273,22 +238,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
             </tr>
         </form>
     </table>
-</center>
     <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
     $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
-    draw_header(msg('area_update_department'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_update_department') .': ' . $dept_obj->getName(),$_POST['last_message']);
+    draw_header(msg('area_update_department') .': ' . $dept_obj->getName(),$last_message);
     ?>
-                        <center>
                             <table border="0" cellspacing="5" cellpadding="5">
                                 <form action="commitchange.php" method="POST" enctype="multipart/form-data">
                                     <tr>
@@ -317,21 +274,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
                                 </form>
                                 </tr>
                             </table>
-                        </center>
                             <?php
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
-    draw_header(msg('area_choose_department'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_choose_department'),$_POST['last_message']);
+    draw_header(msg('area_choose_department'), $last_message);
     ?>
-                        <center>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="GET" enctype="multipart/form-data">
                                 <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
                                 <table border="0" cellspacing="5" cellpadding="5">
@@ -361,7 +310,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                                     </td>
                                     </tr>
                                 </table>
-                        </center>
     <?php
     draw_footer();
 }

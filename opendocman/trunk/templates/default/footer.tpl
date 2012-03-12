@@ -1,4 +1,7 @@
-    <hr>
+</div>
+</div>
+</div>
+<hr>
     <a href="mailto:{$g_site_mail}">{$g_title}</a><p />
     <a href="http://www.opendocman.com/" target="_new">OpenDocMan v{$g_current_version}</a><br />
     Copyright &copy; 2000-2012 Stephen Lawrence<br />

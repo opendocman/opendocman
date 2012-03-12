@@ -113,6 +113,7 @@ $lang['area_update_category'] = "Kategori g&#252;ncelle";
 $lang['area_update_department'] = 'Update Department';
 $lang['area_update_file'] = 'Update File';
 $lang['area_view_category'] = 'View Category';
+$lang['area_view_history'] = 'History';
 
 // Messages
 $lang['message_account_created'] = 'Your account has been created. Please check your email for login information.';
@@ -357,6 +358,9 @@ $lang['editpage_uncheck_all'] = 'Tüm kaldırın';
 $lang['editpage_check_all'] = 'Tüm kontrol edin';
 $lang['editpage_of'] = 'arasında';
 $lang['editpage_selected'] = 'seçilmiş';
+$lang['editpage_none_selected'] = 'Select options';
+$lang['editpage_assign_owner'] = 'Assign to owner';
+$lang['editpage_assign_department'] = 'Assign to department';
 
 // Details Page
 $lang['detailspage_view'] = 'View';
@@ -365,3 +369,22 @@ $lang['detailspage_edit'] = 'Edit';
 $lang['detailspage_delete'] = 'Delete';
 $lang['detailspage_history'] = 'History';
 $lang['detailspage_are_sure'] = 'Are you sure?';
+
+// Out Page
+$lang['outpage_view'] = 'View';
+
+// History Page
+$lang['historypage_category'] = 'Category:';
+$lang['historypage_file_size'] = 'File size:';
+$lang['historypage_creation_date'] = 'Creation date:';
+$lang['historypage_owner'] = 'Owner:';
+$lang['historypage_description'] = 'Description:';
+$lang['historypage_comment'] = 'Comment:';
+$lang['historypage_revision'] = 'Revision:';
+$lang['historypage_original_revision'] = 'Original revision';
+$lang['historypage_latest'] = 'Latest';
+$lang['historypage_history'] = 'History';
+$lang['historypage_version'] = 'Version';
+$lang['historypage_modification'] = 'Modification date';
+$lang['historypage_by'] = 'By';
+$lang['historypage_note'] = 'Note';

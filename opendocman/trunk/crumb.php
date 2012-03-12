@@ -77,14 +77,13 @@ class crumb
 
 
     /**
-     * @return void
+     * @return string $trail
      * @param cur_level int
      * @desc Print out the current crumb trail from $cur_level on down.
      */
     function printTrail($cur_level)
     {
-
-        echo "<span class=\"crumb\">";
+        $trail = "<span class=\"crumb\">";
         for ($i=1; $i != $cur_level+1; $i++)
         {
 
@@ -92,21 +91,23 @@ class crumb
             {
                 if ($i != $cur_level)
                 {
-                    echo "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
-                    echo $_SESSION['crumbs'][$i]['title'];
-                    echo "</a>";
+                    $trail .= "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
+                    $trail .= $_SESSION['crumbs'][$i]['title'];
+                    $trail .= "</a>";
                 }else
                 {
-                    echo '<FONT class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</font>';
-                    echo "</span>";
+                    $trail .= '<FONT class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</font>';
+                    $trail .= "</span>";
                 }
                 if ($i != $cur_level)
                 {
-                    echo "<FONT class=\"statusbar\">&nbsp;&gt;&nbsp;</FONT>";
+                    $trail .= "<FONT class=\"statusbar\">&nbsp;&gt;&nbsp;</FONT>";
                 }
             }
         }
-        echo "</span>";
+        $trail .= "</span>";
+        
+        return $trail;
     } // end printTrail()
 
 } //end class crumb

@@ -22,17 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // includes
 include('odm-load.php');
 session_start();
-draw_header('Error');
-if (!isset($_SESSION['uid']))
-{
-    draw_menu();
-}
-else
-{
-    draw_menu($_SESSION['uid']);
-}
 
-@draw_status_bar('Error', $_REQUEST['last_message']);
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
+draw_header(msg('lang_error'), $last_message);
 
 if(isset($_REQUEST['ec']))
 {

@@ -153,10 +153,11 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
       include("signup_header.html");
     }
 ?>
-        <center><font size=6>Sign Up</font></center>
+                
+            <font size=6>Sign Up</font>
         <br><script type="text/javascript" src="FormCheck.js"></script>
 
-        <center>
+
         <table border="0" cellspacing="5" cellpadding="5">
         <form name="add_user" action="signup.php" method="POST" enctype="multipart/form-data">
         <tr><td><b><?php echo msg('label_last_name');?></b></td><td><input name="last_name" type="text"></td></tr>
@@ -213,7 +214,6 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
         </td>
         </tr>
         </table>
-        </center>
 <?php
    if (is_readable("signup_footer.html"))
    {

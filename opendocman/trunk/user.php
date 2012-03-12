@@ -27,6 +27,8 @@ session_start();
 
 include('odm-load.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if (!isset($_SESSION['uid']))
 {
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
@@ -69,28 +71,18 @@ if($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['ui
     header('Location:' . $secureurl->encode('error.php?ec=4'));
     exit;
 }
-////////////////////////////////////////////////////////////////////////////
-if(isset($_REQUEST['submit']) and $_REQUEST['submit'] != 'Cancel')
-{
-    draw_header('Admin users');
-    draw_menu($_SESSION['uid']);
-}
 
-if (!isset($_REQUEST['last_message']))
-{
-    $_REQUEST['last_message']='';
-}
 
 if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 {
-    @draw_status_bar(msg('area_add_new_user'), $_REQUEST['last_message']);
+    draw_header(msg('area_add_new_user'), $last_message);
     // Check to see if user is admin
     ?>
                 <script type="text/javascript" src="FormCheck.js"></script>
 
-                <center>
+                <form name="add_user" action="user.php" method="POST" enctype="multipart/form-data">    
                 <table border="0" cellspacing="5" cellpadding="5">
-                <form name="add_user" action="commitchange.php" method="POST" enctype="multipart/form-data">
+                
                     <?php
                     // Call the plugin API call for this section
                     callPluginMethod('onBeforeAddUser');                     
@@ -172,35 +164,103 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 <tr>
 <td></td>
 <td columnspan=3 align="center"><input type="Submit" name="submit" onClick="return validatemod(add_user);" value="Add User">
-</form>
-<form action="user.php">
-<input type="Submit" name="cancel" value="Cancel">
-</form>
+<input type="Submit" name="submit" value="Cancel">
+
 </td>
 </tr>
 </table>
-</center>
-
+</form>
 <?php
-
 draw_footer();
+}
+elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
+{
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    // Check to make sure user does not already exist
+    $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '" . addslashes($_POST['username']) . "'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // If the above statement returns more than 0 rows, the user exists, so display error
+    if(mysql_num_rows($result) > 0)
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=3'));
+        exit;
+    }
+    else
+    {
+        $phonenumber = @$_POST['phonenumber'];
+        // INSERT into user
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        // INSERT into admin
+        $userid = mysql_insert_id($GLOBALS['connection']);
+        if (!isset($_POST['admin']))
+        {
+            $_POST['admin']='0';
+        }
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        if(isset($_POST['reviewer']))
+        {
+            for($i = 0; $i<sizeof($_POST['department_review']); $i++)
+            {
+                $dept_rev=$_POST['department_review'][$i];
+                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
+                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+            }
+        }
+
+        // mail user telling him/her that his/her account has been created.
+        $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+        $new_user_obj = new User($userid, $GLOBALS['connection'], DB_NAME);
+        $date = date('Y-m-d H:i:s T'); //locale insensitive
+        $get_full_name = $user_obj->getFullName();
+        $full_name = $get_full_name[0].' '.$get_full_name[1];
+        $get_full_name = $new_user_obj->getFullName();
+        $new_user_full_name = $get_full_name[0].' '.$get_full_name[1];
+        $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
+        $mail_headers = "From: $mail_from"."\r\n";
+        $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
+        $mail_subject=msg('message_account_created_add_user');
+        $mail_greeting=$new_user_full_name.":\n\r\t".msg('email_i_would_like_to_inform');
+        $mail_body = msg('email_your_account_created').' '.$date.'.  ' . msg('email_you_can_now_login') . ':'."\n\r";
+        $mail_body.= $GLOBALS['CONFIG']['base_url']."\n\n";
+        $mail_body.= msg('username') . ': '.$new_user_obj->getName()."\n\n";
+        if($GLOBALS['CONFIG']['authen'] == 'mysql')
+        {
+            $mail_body.=msg('password') . ': '.$_POST['password']."\n\n";
+        }
+        $mail_salute="\n\r" . msg('email_salute') . ",\n\r$full_name";
+        $mail_to = $new_user_obj->getEmailAddress();
+        mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
+        $_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
+
+        // Call the plugin API call for this section
+        callPluginMethod('onAfterAddUser');
+
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+    }
 }
 // DELETE USER
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 {
-// If demo mode, don't allow them to update the demo account
-if (@$GLOBALS['CONFIG']['demo'] == 'true')
-{
-    @draw_status_bar('Delete User ' ,$_REQUEST['last_message']);
-    echo 'Sorry, demo mode only, you can\'t do that';
-    draw_footer();
-    exit;
-}
-$delete='';
-$user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
-@draw_status_bar('Delete ' . $user_obj->getName(), $_REQUEST['last_message']);
-?>
-                        <center>
+    // If demo mode, don't allow them to update the demo account
+    if (@$GLOBALS['CONFIG']['demo'] == 'true')
+    {
+        draw_header('Delete User ' ,$last_message);
+        echo 'Sorry, demo mode only, you can\'t do that';
+        draw_footer();
+        exit;
+    }
+    $delete='';
+    $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
+    draw_header('Delete ' . $user_obj->getName(), $last_message);
+    ?>
+                        
                         <table border="0" cellspacing="5" cellpadding="5">
                         <form action="commitchange.php" method="POST" enctype="multipart/form-data">
                         <tr>
@@ -230,7 +290,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         </tr>
                         </form>
                         </table>
-                        </center>
+                        
                         <?php
                         draw_footer();
         }
@@ -238,9 +298,9 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick')
         {
                 $deletepick='';
-                @draw_status_bar('Choose User to Delete', $_REQUEST['last_message']);
+                draw_header('Choose User to Delete', $last_message);
                 ?>
-                        <center>
+                        
                         <table border="0" cellspacing="5" cellpadding="5">
                         <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -273,7 +333,6 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         </td>
                         </tr>
                         </table>
-                        </center>
 
                         <?php
                         draw_footer();
@@ -283,9 +342,8 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
         {
                 // query to show item
                 $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
-                draw_status_bar('Show User: ' . $user_obj->getName(), $_REQUEST['last_message']);
+                draw_header('Show User: ' . $user_obj->getName(), $last_message);
                 ?>
-                        <center>
                         <table border=0>
                         <th>User Information</th>
                         <?php
@@ -318,18 +376,16 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         </tr>
                         </form>
                         </table>
-                        </center>
                         <?php
                         draw_footer();
         }
         // CHOOSE USER TO DISPLAY INFO FOR
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick')
         {
-                @draw_status_bar('Choose User to View', $_REQUEST['last_message']);
+                draw_header('Choose User to View', $last_message);
 
                 $showpick='';
                 ?>
-                        <center>
                         <table border="0" cellspacing="5" cellpadding="5">
                         <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>" />
@@ -358,7 +414,6 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         </td>
                         </tr>
                         </table>
-                        </center>
                         <?php
                         draw_footer();
         }
@@ -368,18 +423,16 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar('Update User ' ,$_REQUEST['last_message']);
+                        draw_header('Update User ' ,$last_message);
                         echo 'Sorry, demo mode only, you can\'t do that';
+                        draw_footer();
+                        exit;
                 }
                 else
                 {
                     // Begin Not Demo Mode
                     $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
-                    if (!isset($_REQUEST['last_message']))
-                    {
-                        $_REQUEST['last_message']='';
-                    }
-                    @draw_status_bar('Update User: ' . $user_obj->getName() ,$_REQUEST['last_message']);	
+                    draw_header('Update User: ' . $user_obj->getName() ,$last_message);	
                     ?>
                         <script type="text/javascript" src="FormCheck.js">
                         function redirect(url_location)
@@ -387,7 +440,6 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
 
                     </script>
 
-                        <center>
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
                         <form name="update" action="commitchange.php" method="POST" enctype="multipart/form-data">
@@ -557,7 +609,6 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         </td>
                         </tr>
                         </table>
-                        </center>
                         <script type="text/javascript">
                         	function verify(this_form, pwd, conf_pwd, set_password)
                         	{
@@ -585,7 +636,7 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
         // CHOOSE USER TO UPDATE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')
         {
-                @draw_status_bar('Modify User',$_REQUEST['$last_message']);
+                draw_header('Modify User',$last_message);
 
                 // Check to see if user is admin
                 $query = "SELECT admin FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_SESSION['uid']}' and admin = '1'";
@@ -596,7 +647,6 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                         exit;
                 }
                 ?>
-                        <center>
                         <form action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>" />
                         <table border="0" cellspacing="5" cellpadding="5">
@@ -618,27 +668,23 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                 mysql_free_result ($result);                
                 ?>
                         </td>
-                        </tr>
-                        <tr>
-                        <td colspan="4" align="right">
+                        <td  align="right">
                         <input type="Submit" name="submit" value="Modify User">
                         </td>
-                        </form>
-                        <td colspan="4" align="center">
+
+                        <td align="center">
                         <form action="user.php">
                         <input type="Submit" name="submit" value="Cancel">
-                        </form>
                         </td>
                         </tr>
                         </table>
-                        </center>
-
+                        </form>
                         <?php
                         draw_footer();
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick')
         {
-                @draw_status_bar('Change password', $_REQUEST['last_message']);
+                draw_header('Change password', $last_message);
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
                 $submit_message = 'Changing password';
 
@@ -674,14 +720,13 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
         }
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick')
         {
-                @draw_status_bar('Change password', $_REQUEST['last_message']);
+                draw_header('Change password', $last_message);
                 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
                 // If demo mode, don't allow them to update the demo account
                 if (@$GLOBALS['CONFIG']['demo'] == 'true')
                 {
-                        @draw_status_bar('Change Personal Info ' ,$_REQUEST['last_message']);
                         echo 'Sorry, demo mode only, you can\'t do that';
                         draw_footer();
                         exit;
@@ -704,8 +749,8 @@ $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
                                 </table>
                                 <br>
                                 <input type="hidden" name="submit" value="change_personal_info">
-                                <center><input type="Submit" name="change_personal_info" value="Submit">
-                                <input type="Button" name="submit" value="Cancel" onclick="redirect('profile.php?last_message=Personal Info alteration canceled')"></center>
+                                <input type="Submit" name="change_personal_info" value="Submit">
+                                <input type="Button" name="submit" value="Cancel" onclick="redirect('profile.php?last_message=Personal Info alteration canceled')">
                                 </form>
 <?php
         }

@@ -28,6 +28,8 @@ if (!isset($_SESSION['uid']))
 include('odm-load.php');
 include('udf_functions.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 /*$_GET['where']='department_only';
   $_GET['keyword']='Information Systems';
   $_SESSION['uid']=102;
@@ -37,15 +39,12 @@ include('udf_functions.php');
 */
 /// includes
 $start_time = time();
-draw_header(msg('search'));
-draw_menu($_SESSION['uid']);
-draw_status_bar(msg('search'), "");
+draw_header(msg('search'), $last_message);
 
 echo '<body bgcolor="white">';
 if(!isset($_GET['submit']))
 {
     ?>
-<center>
     <p>
 
     <table border="0" cellspacing="5" cellpadding="5">
@@ -83,7 +82,6 @@ if(!isset($_GET['submit']))
 
         </form>
     </table>
-</center>
 
     <?php
     //echo '<br><b>Load Time: ' . time() - $start_time;

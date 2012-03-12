@@ -28,6 +28,8 @@ if (!isset($_SESSION['uid']))
 }
 include('odm-load.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if( !isset($_REQUEST['caller']) )
 {
     $_REQUEST['caller'] = 'out.php';
@@ -94,16 +96,9 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
         list($array_id[$i]) = mysql_fetch_row($lresult);
     }
     $luserperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    //$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id);
-
-    if(!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message'] = '';
-    }
+    //$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id)
     
-    draw_menu($_SESSION['uid']);
-    draw_header(msg('area_deleted_files'));
-    draw_status_bar(msg('label_delete_undelete'), $_REQUEST['last_message']);
+    draw_header(msg('area_deleted_files'), $last_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

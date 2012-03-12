@@ -27,6 +27,9 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if(strchr($_REQUEST['id'], '_') )
 {
     header('Location:error.php?ec=20');
@@ -49,9 +52,7 @@ if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isAr
 }
 if (!isset($_GET['submit']))
 {
-    draw_header(msg('area_check_out_file'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_check_out_file'));
+    draw_header(msg('area_check_out_file'), $last_message);
     // form not yet submitted
     // display information on how to initiate download
     ?>

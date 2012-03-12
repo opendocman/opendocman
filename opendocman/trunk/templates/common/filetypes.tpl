@@ -1,4 +1,3 @@
-<center>
     <table class="form-table" style="width: 200px;">
         <thead>
             <tr>
@@ -10,7 +9,7 @@
                 <tr>
                     <td>
                         <form action="filetypes.php" method="POST" enctype="multipart/form-data">
-                            <select multiple="multiple" id="types" name="types[]">
+                            <select class="multiView" multiple="multiple" id="types" name="types[]">
                             {foreach from=$filetypes_array item=i}
                                 <option value="{$i.id}" {if $i.active eq '1'}selected="selected"{/if}>{$i.type}</option>
                             {/foreach}
@@ -36,4 +35,3 @@
         </tr>
         <tbody>
     </table>
-</center>

@@ -31,6 +31,8 @@ if (!isset($_SESSION['uid']))
 }
 include_once('odm-load.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if (!isset($id) || $id == '')
 {
     header('Location:error.php?ec=2');
@@ -64,9 +66,7 @@ else
     // display information on how to initiate download
     if (!isset($submit))
     {
-        draw_header();
-        draw_menu($_SESSION['uid']);
-        draw_status_bar('Add New User', $message);
+        draw_header('Add New User', $last_message);
         ?>
 			<p>
 

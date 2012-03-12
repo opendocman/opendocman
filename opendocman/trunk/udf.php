@@ -28,6 +28,9 @@ if (!isset($_SESSION['uid']))
 }
 // includes
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 $secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if(!$user_obj->isAdmin())
@@ -47,11 +50,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
     {
         $_REQUEST['last_message']='';
     }
-    draw_header(msg('area_add_new_udf'));
-    draw_status_bar(msg('area_add_new_udf'), $_REQUEST['last_message']);
+    
+    draw_header(msg('area_add_new_udf'), $last_message);
+    
     // Check to see if user is admin
     ?>
-<center>
 <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
 	<tr>
@@ -84,30 +87,24 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 </td>
 </tr>
     </table>
-</center>
 <?php
 draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
 {
 // If demo mode, don't allow them to update the demo account
-if (@$GLOBALS['CONFIG']['demo'] == 'true')
+if (@$GLOBALS['CONFIG']['demo'] == 'True')
 {
-    @draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields') ,$_POST['last_message']);
+    
+    draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields') ,$last_message);
     echo msg('message_sorry_demo_mode');
     draw_footer();
     exit;
 }
 $delete='';
 
-if (!isset($_REQUEST['last_message']))
-{       
-    $_REQUEST['last_message']='';
-}
-draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'));
-draw_status_bar(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $_REQUEST['last_message']);
+draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
 // query to show item
-echo '<center>'; 
 echo '<table border=0>';
 $query = "SELECT table_name, display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['item']}'";
 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -129,21 +126,14 @@ while(list($lid, $lname) = mysql_fetch_row($result))
 	</form>
 		</tr>
 	</TABLE>
-	</center>
 <?php
 	draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
     $deletepick='';
-    draw_header(msg('select') . ' ' . msg('label_user_defined_fields'));
-    draw_status_bar(msg('select') . ' ' . msg('label_user_defined_fields'), $_REQUEST['last_message']);
+    draw_header(msg('select') . ' ' . msg('label_user_defined_fields'), $last_message);
     ?>
-        <center>
         <table border="0" cellspacing="5" cellpadding="5">
 	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -174,20 +164,15 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 	</tr>
 			</form>
 		</table>
-		</center>
 <?php
 	draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined Field')
 {
     // query to show item
-    draw_header(msg('label_display') . ' ' . msg('label_user_defined_field'));
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message'] = '';
-    }
-    draw_status_bar(msg('label_display') . ' ' . msg('label_user_defined_field'), $_REQUEST['last_message']);
-    echo '<center>';
+    
+    draw_header(msg('label_display') . ' ' . msg('label_user_defined_field'), $last_message);
+    
     // Select name
     $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -210,16 +195,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
 	draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
-{
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }       
-    draw_header('User Defined Field Selection');
-    draw_status_bar('Choose item to view', $_REQUEST['last_message']);
+{      
+    draw_header(msg('user_defined_field'), $last_message);
     $showpick='';
     ?>
-			<center>
 			<table border="0" cellspacing="5" cellpadding="5">
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
@@ -245,22 +224,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
 		</tr>
 		</form>
 		</table>
-		</center>
-	</body>
-</html>
 <?php
 	draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header('Update User Defined Field');
-    draw_status_bar('Update Item', $_REQUEST['last_message']);
+    draw_header('Update User Defined Field', $last_message);
     ?>
-	<center>
 		<table border="0" cellspacing="5" cellpadding="5">
 			<tr>
 		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
@@ -286,20 +256,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 			</td>
 		</tr>
 	</table>
-</center>
 <?php
 draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 {
-    if (!isset($_REQUEST['last_message']))
-    {
-        $_REQUEST['last_message']='';
-    }
-    draw_header('User Defined Field Selection');
-    draw_status_bar('Modify Item',$_REQUEST['last_message']);
+    draw_header('User Defined Field Selection', $last_message);
     ?>
-	<center>
 		<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<table border="0">
@@ -328,7 +291,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 	</form></TD>
 	</tr>
 	</table>
-	</center>
 <?php
 	draw_footer();
 }
@@ -339,8 +301,9 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 {
-    draw_header(msg('edit') . ' ' . msg('label_user_defined_field'));
-    draw_status_bar(msg('edit') . ' ' . msg('label_user_defined_field'),@$_REQUEST['last_message']);
+    
+    draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
+    
     $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name = '{$_REQUEST['udf']}'";
     $result = mysql_query($query);
     $row = mysql_fetch_row($result);
@@ -372,7 +335,6 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             }
             $max--;
         }
-        
         echo '<form>';
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
@@ -416,7 +378,6 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 else
 {
 
-    draw_header(msg('label_user_defined_field'));
-    draw_status_bar(msg('label_user_defined_field'),msg('message_nothing_to_do'));
+    draw_header(msg('label_user_defined_field'), $last_message);
     draw_footer();
 }
