@@ -28,6 +28,9 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 $filetypes = new FileTypes_class();
@@ -41,21 +44,14 @@ if(!$user_obj->isRoot() == true)
 
 if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='update')
 {
-    if(!isset($_POST['last_message']))
-    {
-        
-        $_POST['last_message']='';
-    }
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
+    draw_header(msg('label_filetypes'), $last_message);
     $filetypes->edit();
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 {
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
+    draw_header(msg('label_filetypes'), $last_message);
+
     if($filetypes->save($_POST))
     {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
@@ -71,23 +67,11 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {
-    if(!isset($_POST['last_message']))
-    {
-
-        $_POST['last_message']='';
-    }
     header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_action_cancelled'))));
 }
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNew')
 {
-    if(!isset($_POST['last_message']))
-    {
-
-        $_POST['last_message']='';
-    }
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
+    draw_header(msg('label_filetypes'), $last_message);
     display_smarty_template('filetype_add.tpl');
     draw_footer();
 }
@@ -102,22 +86,16 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave')
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
+
+    draw_header(msg('label_filetypes'), $last_message);
+
     $filetypes->edit();
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'DeleteSelect')
 {
-    if(!isset($_POST['last_message']))
-    {
+    draw_header(msg('label_filetypes'), $last_message);
 
-        $_POST['last_message']='';
-    }
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
     $filetypes->deleteSelect();
     draw_footer();
 }
@@ -132,9 +110,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
-    draw_header(msg('label_filetypes'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
+    draw_header(msg('label_filetypes'), $last_message);
     $filetypes->edit();
     draw_footer();
 }

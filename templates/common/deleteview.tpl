@@ -1,4 +1,3 @@
-<center>
 <table class="form-table">
 		<tr>
 		<td>
@@ -117,4 +116,3 @@
 */
 	</script>
                 {/literal}
-</center>

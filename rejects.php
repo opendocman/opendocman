@@ -30,12 +30,11 @@ include ('./odm-load.php');
 // includes
 $with_caption = false;
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if(!isset($_POST['submit']))
 {
-    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
-    draw_menu($_SESSION['uid']);
-    draw_header(msg('message_documents_rejected'));
-    draw_status_bar(msg('message_documents_rejected'), $llast_message);
+    draw_header(msg('message_documents_rejected'), $last_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

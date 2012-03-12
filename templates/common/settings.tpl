@@ -1,9 +1,7 @@
-<script type="text/javascript" src="../includes/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/jquery.validate.pack.js"></script>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.validate/1.7/additional-methods.js"></script>
-<center>
+<script type="text/javascript" src="{$g_base_url}/includes/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{$g_base_url}/includes/additional-methods.min.js"></script>
     <table class="form-table">
-        <form action="settings.php" method="POST" enctype="multipart/form-data">
+        <form action="settings.php" method="POST" enctype="multipart/form-data" id="settingsForm">
         
             <tr>
                 <th>{$g_lang_label_name}</th><th>{$g_lang_value}</th><th>{$g_lang_label_description}</th>{$g_lang_label_settings}</th>
@@ -63,4 +61,3 @@
         </form>
         </tr>
     </table>
-</center>

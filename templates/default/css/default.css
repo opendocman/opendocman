@@ -1,4 +1,8 @@
-
+#content {
+    width:90%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .buttons a, .buttons button{
     display:block;

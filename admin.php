@@ -40,11 +40,10 @@ if(!$user_obj->isAdmin())
     header('Location:error.php?ec=4');
     exit;
 }
-draw_header(msg('label_admin'));
-draw_menu($_SESSION['uid']);
-@draw_status_bar(msg('label_admin'),$_REQUEST['last_message']);
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+draw_header(msg('label_admin'), $last_message);
 ?>
-<center>	
     <table border="1" cellspacing="5" cellpadding="5" >
         <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('users')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_department')?></font></th><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('category')?></font></th><?php if($user_obj->isRoot()) echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' . msg('file') . '</th></font>'; ?>
         <?php
@@ -165,6 +164,5 @@ if(is_array($GLOBALS['plugin']->getPluginsList()) && $user_obj->isRoot())
     <?php
 }
     ?>
-</center>
     <?php
 draw_footer();

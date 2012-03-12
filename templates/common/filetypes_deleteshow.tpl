@@ -1,4 +1,3 @@
-<center>
 <table class="form-table" style="width: 200px;">
         <thead>
             <tr>
@@ -11,7 +10,7 @@
                 <tr>
                     <td>
                     <form action="filetypes.php" method="POST" enctype="multipart/form-data">
-                        <select id="types" multiple="multiple" name="types[]">
+                        <select class="multiView" id="types" multiple="multiple" name="types[]">
                         {foreach from=$filetypes_array item=i}
                             <option value="{$i.id}">{$i.type}</option>
                         {/foreach}
@@ -30,4 +29,3 @@
 
         <tbody>
     </table>
-</center>

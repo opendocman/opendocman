@@ -23,6 +23,8 @@ session_start();
 include('odm-load.php');
 include('udf_functions.php');
 
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -46,17 +48,10 @@ if( $filedata->isArchived() )
     header('Location:error.php?ec=21');
 }
 
-if (!isset($_REQUEST['last_message']))
-{	
-    $_REQUEST['last_message'] = '';
-}
-
 // form not yet submitted, display initial form
 if (!isset($_REQUEST['submit']))
 {
-	draw_header(msg('area_update_file'));
-	draw_menu($_SESSION['uid']);
-	draw_status_bar(msg('area_update_file'), $_REQUEST['last_message']);
+	draw_header(msg('area_update_file'), $last_message);
 	checkUserPermission($_REQUEST['id'], $filedata->ADMIN_RIGHT, $filedata);
 	$data_id = $_REQUEST['id'];
 	// includes
@@ -76,18 +71,7 @@ if (!isset($_REQUEST['submit']))
 	}
 	list($default_rights) = mysql_fetch_row($result);
 ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
-    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.js"></script>
-    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.js"></script>
-	<script type="text/javascript">
-            
-        // Here are the translations for the multiselect area of this page
-        var langUncheckAll = '<?php echo $GLOBALS['lang']['editpage_uncheck_all'];?>';
-        var langCheckAll = '<?php echo $GLOBALS['lang']['editpage_check_all'];?>';
-        var langOf = '<?php echo $GLOBALS['lang']['editpage_of'];?>';
-        var langSelected = '<?php echo $GLOBALS['lang']['editpage_selected'];?>';
+<script type="text/javascript">
 	 //define a class like structure to hold multiple data
     		function Department(name, id, rights)
     		{
@@ -172,17 +156,16 @@ if (!isset($_REQUEST['submit']))
 		// display the form
 ?>
 		<p>
-		<center>
 		<table border="0" cellspacing="5" cellpadding="5">
 		<form name=main action="<?php  echo $_SERVER['PHP_SELF']; ?>" method="POST">
 		<input type="hidden" name="id" value="<?php  echo $_REQUEST['id']; ?>">
 	
 		<tr>
-		<td valign="top"><?php echo msg('label_name')?></td>
+		<td><?php echo msg('label_name')?></td>
 		<td colspan="3"><b><?php  echo $realname; ?></b></td>
 		</tr>
 		<tr id="ownerSelect">
-		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('owner')?></td>
+		<td><?php echo msg('editpage_assign_owner')?></td>
 		<td colspan="3"><b>
 		<select name="file_owner">
 			<?php  
@@ -203,7 +186,7 @@ if (!isset($_REQUEST['submit']))
 		</b></td>
 		</tr>
                 <tr id="deptOwnerSelect">
-		<td valign="top"><?php echo msg('label_assign_to') . ' ' . msg('department'); ?></td>
+		<td><?php echo msg('editpage_assign_department')?></td>
 		<td colspan="3"><b>
 		<select name="file_department">
 			<?php
@@ -228,7 +211,7 @@ if (!isset($_REQUEST['submit']))
 		</b></td>
 		</tr>
 		<tr>
-		<td valign="top"><?php echo msg('category')?></td>
+		<td><a class="body" href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('category')?></a></td>
 		<td colspan="3"><select name="category">
 <?php
 		// query for category list
@@ -254,7 +237,7 @@ if (!isset($_REQUEST['submit']))
 ?>
 		<!-- Select Department to own file -->
         <TR id="departmentSelect">
-	    <TD><B><?php echo msg('department')?></B></TD>
+	    <TD><a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('department')?></a></TD>
      	<TD COLSPAN="3"><SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
 		<option value="0"> <?php echo msg('label_select_a_department')?></option>
 		<option value="1"> <?php echo msg('label_default_for_unset')?></option>
@@ -275,8 +258,9 @@ if (!isset($_REQUEST['submit']))
 		</TR>
     	<TR id="authorityRadio">
 		<!-- Loading Authority radio_button group -->
-		<TD><?php echo msg('label_department_authority')?>: </TD> <TD>
-<?php
+		<TD><a class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department_authority')?></a></TD> 
+                <TD>
+<?php                 
       	$query = "SELECT RightId, Description FROM {$GLOBALS['CONFIG']['db_prefix']}rights order by RightId";
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
@@ -295,24 +279,17 @@ if (!isset($_REQUEST['submit']))
 	</td>
 	</tr>
 	<tr>
-	<td valign="top"><?php echo msg('label_description')?></td>
+	<td><a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a></td>
 	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo str_replace('"', '&quot;', $description); ?>"></td>
 	</tr>
 	<tr>
-	<td valign="top"><?php echo msg('label_comment')?></td>
+	<td><a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a></td>
 	<td colspan="3"><textarea name="comment" rows="4"><?php  echo $comment; ?></textarea></td>
 	</tr>
 	</table>
 	<table id="specificUserPerms" border="0" cellspacing="0" cellpadding="3">
-            <tr><td colspan="5"><?php echo msg('label_specific_permissions')?></td></tr>
-
-	<tr>
-	<td valign="top"><b><?php echo msg('label_forbidden')?></b></td>
-	<td valign="top"><b><?php echo msg('label_view')?></b></td>
-	<td valign="top"><b><?php echo msg('label_read')?></b></td>
-	<td valign="top"><b><?php echo msg('label_modify')?></b></td>
-	<td valign="top"><b><?php echo msg('label_admin')?></b></td>
-	</TR>
+            <tr><td colspan="5"><b><?php echo msg('label_specific_permissions')?></b></td></tr>
+            
 	<!--/////////////////////////////////////////////////////FORBIDDEN////////////////////////////////////////////-->
 	<TR>
 <?php 
@@ -336,7 +313,9 @@ if (!isset($_REQUEST['submit']))
 	}
 
 	$found = false;
-	echo '<td><select class="multiView" name="forbidden[]" multiple="multiple" size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
+	echo '<td valign="top" align="center">
+            <a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, \'Help\')" style="text-decoration:none">' . msg('label_forbidden') . '</a><br />
+            <select class="multiView" name="forbidden[]" multiple="multiple" size=10 onchange="changeForbiddenList(this, this.form);">' . "\n\t";
 	for($a = 0; $a<sizeof($all_users); $a++)
 	{
 		$found = false;
@@ -358,9 +337,11 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select></td>
+	</select><br />
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
-	<td><select class="multiView" name="view[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
+	<a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a><br/>            
+            <select class="multiView" name="view[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
+                
 <?php
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->VIEW_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -384,10 +365,11 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select></td>
+	</select><br />
 
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
-	<td><select class="multiView" name="read[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
+        <a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a><br />
+	<select class="multiView" name="read[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->READ_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -411,10 +393,11 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select></td>
+	</select><br />
 
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
-	<td><select class="multiView" name="modify[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
+        <a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a><br />
+	<select class="multiView" name="modify[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->WRITE_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -441,10 +424,11 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 	?>
-	</select></td>
+	</select><br />
 
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
-	<td><select class="multiView" name="admin[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
+        <a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a><br />
+	<select class="multiView" name="admin[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
 	<?php 
 	$lquery = "SELECT uid FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = $id AND rights>=" . $filedata->ADMIN_RIGHT;
 	$lresult = mysql_query($lquery) or die('Error in querying:' . $lquery . "\n<BR>" . mysql_error());
@@ -490,7 +474,6 @@ if (!isset($_REQUEST['submit']))
 	<table>
 	</form>
 	</table>
-	</center>
 <?php 
 	}//end else
 }

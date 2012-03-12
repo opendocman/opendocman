@@ -1,4 +1,3 @@
-<center>
     <table>
         <thead>
             <tr>
@@ -25,4 +24,3 @@
                 </tr>
     </tbody>
     </table>
-</center>

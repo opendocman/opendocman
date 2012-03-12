@@ -22,12 +22,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check session and $id
 session_start();
+
 if (!isset($_SESSION['uid']))
 {
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
     exit;
 }
+
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 {
@@ -35,17 +39,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
     exit;
 }
 
-// includes
-if( !isset($_REQUEST['title']) )
-{	
-    draw_header('');
-}
-else
-{ 
-    draw_header( $_REQUEST['title'] );
-}
-draw_menu($_SESSION['uid']);
-draw_status_bar('History', @$_REQUEST['last_message']);
+draw_status_bar(msg('area_view_history'), $last_message);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
@@ -89,7 +83,6 @@ else
     $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
 }
 ?>
-<center>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
 
 <tr>
@@ -110,36 +103,36 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 </tr>
 
 <tr>
-<th valign=top align=right>Category: </th><td><?php echo $category; ?></td>
+<th valign=top align=right><?php echo msg('historypage_category');?></th><td><?php echo $category; ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>File&nbsp;size:</th><td> <?php echo display_filesize($filename); ?></td>
+<th valign=top align=right><?php echo msg('historypage_file_size');?></th><td> <?php echo display_filesize($filename); ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Creation&nbsp;Date:</th><td> <?php echo fix_date($created); ?></td>
+<th valign=top align=right><?php echo msg('historypage_creation_date');?></th><td> <?php echo fix_date($created); ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Owner:</th><td> <?php echo $owner; ?></td>
+<th valign=top align=right><?php echo msg('historypage_owner');?></th><td> <?php echo $owner; ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Description:</th><td> <?php echo $description; ?></td>
+<th valign=top align=right><?php echo msg('historypage_description');?></th><td> <?php echo $description; ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right>Comment:</th><td> <?php echo $comments; ?></td>
+<th valign=top align=right><?php echo msg('historypage_comment');?></th><td> <?php echo $comments; ?></td>
 </tr>
 <tr>
-<th valign=top align=right>Revision: </th><td>
+<th valign=top align=right><?php echo msg('historypage_revision');?></th><td>
 <?php 
 if(isset($lrevision_id))
 {
     if( $lrevision_id == 0)
     {
-        echo 'original revision';
+        echo msg('historypage_original_revision');
     }
     else
     {
@@ -148,7 +141,7 @@ if(isset($lrevision_id))
 }
 else
 {
-    echo 'latest';
+    echo msg('historypage_latest');
 }
         ?>
 </td>
@@ -159,7 +152,7 @@ else
 <td align="right">
 <img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">
 </td>
-<td>History</td>
+<td><?php echo msg('historypage_history');?></td>
 </td>
 </tr>
 
@@ -167,10 +160,10 @@ else
 <td colspan="2" align="center">
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr bgcolor="#83a9f7">
-	<th><font size=-1>Version</font></th>
-	<th><font size=-1>Modification Date</font></th>
-	<th><font size=-1>By</font></th>
-	<th><font size=-1>Note</font></th>
+	<th><font size=-1><?php echo msg('historypage_version');?></font></th>
+	<th><font size=-1><?php echo msg('historypage_modification');?></font></th>
+	<th><font size=-1><?php echo msg('historypage_by');?></font></th>
+	<th><font size=-1><?php echo msg('historypage_note');?></font></th>
 	</tr>
 <?php
 	// query to obtain a list of modifications
@@ -242,7 +235,6 @@ else
 </tr>
 
 </table>
-</center>
 <?php
 draw_footer();
 }

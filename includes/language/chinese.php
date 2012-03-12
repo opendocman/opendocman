@@ -94,6 +94,7 @@ $lang['area_update_category'] = '变更分类';
 $lang['area_update_department'] = '变更部门';
 $lang['area_update_file'] = '变更文档';
 $lang['area_view_category'] = '查看分类';
+$lang['area_view_history'] = 'History';
 
 // Buttons
 $lang['button_add_category'] = '增加分类';
@@ -334,6 +335,9 @@ $lang['editpage_uncheck_all'] = '全部取消';
 $lang['editpage_check_all'] = '检查所有';
 $lang['editpage_of'] = '的';
 $lang['editpage_selected'] = '选';
+$lang['editpage_none_selected'] = 'Select options';
+$lang['editpage_assign_owner'] = 'Assign to owner';
+$lang['editpage_assign_department'] = 'Assign to department';
 
 // Details Page
 $lang['detailspage_view'] = 'View';
@@ -342,3 +346,22 @@ $lang['detailspage_edit'] = 'Edit';
 $lang['detailspage_delete'] = 'Delete';
 $lang['detailspage_history'] = 'History';
 $lang['detailspage_are_sure'] = 'Are you sure?';
+
+// Out Page
+$lang['outpage_view'] = 'View';
+
+// History Page
+$lang['historypage_category'] = 'Category:';
+$lang['historypage_file_size'] = 'File size:';
+$lang['historypage_creation_date'] = 'Creation date:';
+$lang['historypage_owner'] = 'Owner:';
+$lang['historypage_description'] = 'Description:';
+$lang['historypage_comment'] = 'Comment:';
+$lang['historypage_revision'] = 'Revision:';
+$lang['historypage_original_revision'] = 'Original revision';
+$lang['historypage_latest'] = 'Latest';
+$lang['historypage_history'] = 'History';
+$lang['historypage_version'] = 'Version';
+$lang['historypage_modification'] = 'Modification date';
+$lang['historypage_by'] = 'By';
+$lang['historypage_note'] = 'Note';

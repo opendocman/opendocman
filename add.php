@@ -41,12 +41,8 @@ $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if(!isset($_POST['submit'])) 
 {
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
-    draw_header(msg('area_add_new_file'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('area_add_new_file'), $llast_message);
-
-    echo '<body bgcolor="white">';
-    echo '<center>'."\n".'<table border="0" cellspacing="5" cellpadding="5">'."\n";
+    draw_header(msg('area_add_new_file'), $llast_message);
+    echo '<table border="0" cellspacing="5" cellpadding="5">'."\n";
     //////////////////////////Get Current User's department id///////////////////
     $query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='$_SESSION[uid]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -61,18 +57,8 @@ if(!isset($_POST['submit']))
     ///////Define a class that hold Department information (id, name, and rights)/////////
     //this class will be used to temporarily hold department information client-side wise//
     ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.css" />
-    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.js"></script>
-    <script type="text/javascript" src="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/templates/common/multiSelect112/jquery.multiselect.filter.js"></script>
-	
+
 <script type="text/javascript">
-    // Here are the translations for the multiselect area of this page
-    var langUncheckAll = '<?php echo $GLOBALS['lang']['editpage_uncheck_all']; ?>';
-    var langCheckAll = '<?php echo $GLOBALS['lang']['editpage_check_all']; ?>';
-    var langOf = '<?php echo $GLOBALS['lang']['editpage_of']; ?>';
-    var langSelected = '<?php echo $GLOBALS['lang']['editpage_selected']; ?>';
 
     //define a class like structure to hold multiple data
     function Department(name, id, rights)
@@ -160,7 +146,7 @@ if(!isset($_POST['submit']))
     <tr>
 
         <td>
-            <?php echo msg('label_assign_to') . ' ' . msg('owner');?>
+            <?php echo msg('editpage_assign_owner');?>
         </td>
         <td>
             <select name="file_owner">
@@ -188,7 +174,7 @@ if(!isset($_POST['submit']))
     </tr>
     <tr>
         <td>
-            <?php echo msg('label_assign_to') . ' ' . msg('department');?>
+            <?php echo msg('editpage_assign_department');?>
         </td>
         <td>
             <select name="file_department">
@@ -218,7 +204,7 @@ if(!isset($_POST['submit']))
 <?php } // End Admin ?>
     <tr>
         <td>
-            <a class="body" tabindex= href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('category');?></a>
+            <a class="body" href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('category');?></a>
         </td>
         <td colspan=3><select tabindex=2 name="category" >
                     <?php
@@ -240,7 +226,7 @@ if(!isset($_POST['submit']))
     <!-- Set Department rights on the file -->
     <TR id="departmentSelect">
         <TD>
-            <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_departments');?></a>
+            <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department');?></a>
         </TD>
         <TD COLSPAN=3>
             <hr /><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
@@ -265,7 +251,7 @@ if(!isset($_POST['submit']))
     </TR>
     <TR id="authorityRadio">
         <!-- Loading Authority radio_button group -->
-        <TD><a tabindex="4" class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department_authority')?></a></td>
+        <TD><a class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department_authority')?></a></td>
         <!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
         <TD>
                 <?php
@@ -296,15 +282,10 @@ if(!isset($_POST['submit']))
         <tr nowrap>
             <td colspan="4" NOWRAP><b><?php echo msg('label_specific_permissions')?></b></td>
         </TR>
-        <TR>
-            <td valign="top" align="center"><a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_forbidden')?></a></td>
-            <td valign="top" align="center"><a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a></td>
-            <td valign="top" align="center"><a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a></td>
-            <td valign="top" align="center"><a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a></td>
-            <td valign="top" align="center"><a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a></td>
-        </tr>
         <tr>
-            <td><select class="multiView" tabindex="8" name="forbidden[]" multiple="multiple" size="10" onchange="changeForbiddenList(this, this.form);">
+            <td>
+                <a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_forbidden')?></a><br />
+                <select class="multiView" tabindex="8" name="forbidden[]" multiple="multiple" size="10" onchange="changeForbiddenList(this, this.form);">
                         <?php
 
                         // query to get a list of available users
@@ -320,8 +301,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </select></td>
-            <td><select class="multiView" tabindex="9" name="view[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
+                </select><br />
+                <a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a><br />
+                <select class="multiView" tabindex="9" name="view[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////View//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -340,8 +322,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT></td>
-            <td><select class="multiView" tabindex="10"  name="read[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
+                </SELECT><br />
+                <a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a><br />
+            <select class="multiView" tabindex="10"  name="read[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////Read//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -361,8 +344,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT></td>
-            <td><select class="multiView" tabindex="11" name="modify[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
+                </SELECT><br />
+                <a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a><br />
+            <select class="multiView" tabindex="11" name="modify[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
                         ////////////////////Read//////////////////////////
                         $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -381,8 +365,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT></td>
-            <td><select class="multiView" tabindex="12" name="admin[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
+                </SELECT><br />
+                <a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a><br />
+            <select class="multiView" tabindex="12" name="admin[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
     <?php
     ////////////////////Read//////////////////////////
     $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
@@ -431,7 +416,6 @@ if(!isset($_POST['submit']))
     ?>
 </form>
 </table>
-</center>
 <?php
 }
 else 

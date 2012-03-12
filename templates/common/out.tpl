@@ -31,7 +31,7 @@
                 {if $item.view_link eq 'none'}
                     &nbsp;
                 {else}
-                    <a href="{$item.view_link}">View</a></td>
+                    <a href="{$item.view_link}">{$g_lang_detailspage_view}</a></td>
                 {/if}
             <td><a href="{$item.details_link}">{$item.filename}</a></td>
             <td >{$item.description}</td>

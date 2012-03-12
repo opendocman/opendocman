@@ -1,6 +1,6 @@
 <?php
 // GERMAN LANGUAGE FILE
-// (C) 2010 Stephen Lawrence Jr.
+// (C) 2012 Stephen Lawrence Jr.
 // Translated by: Martin Waiss
 /*
     This program is free software; you can redistribute it and/or
@@ -94,6 +94,7 @@ $lang['area_update_category'] = 'Kategorie aktualisieren';
 $lang['area_update_department'] = 'Abteilung aktualisieren';
 $lang['area_update_file'] = 'Datei aktualisieren';
 $lang['area_view_category'] = 'Kategorie anzeigen';
+$lang['area_view_history'] = 'History';
 
 // Buttons
 $lang['button_add_category'] = 'Kategorie hinzufügen';
@@ -334,6 +335,9 @@ $lang['editpage_uncheck_all'] = 'Alle deaktivieren';
 $lang['editpage_check_all'] = 'checken alle';
 $lang['editpage_of'] = 'von';
 $lang['editpage_selected'] = 'ausgewählt';
+$lang['editpage_none_selected'] = 'Select options';
+$lang['editpage_assign_owner'] = 'Assign to owner';
+$lang['editpage_assign_department'] = 'Assign to department';
 
 // Details Page
 $lang['detailspage_view'] = 'View';
@@ -342,3 +346,22 @@ $lang['detailspage_edit'] = 'Edit';
 $lang['detailspage_delete'] = 'Delete';
 $lang['detailspage_history'] = 'History';
 $lang['detailspage_are_sure'] = 'Are you sure?';
+
+// Out Page
+$lang['outpage_view'] = 'View';
+
+// History Page
+$lang['historypage_category'] = 'Category:';
+$lang['historypage_file_size'] = 'File size:';
+$lang['historypage_creation_date'] = 'Creation date:';
+$lang['historypage_owner'] = 'Owner:';
+$lang['historypage_description'] = 'Description:';
+$lang['historypage_comment'] = 'Comment:';
+$lang['historypage_revision'] = 'Revision:';
+$lang['historypage_original_revision'] = 'Original revision';
+$lang['historypage_latest'] = 'Latest';
+$lang['historypage_history'] = 'History';
+$lang['historypage_version'] = 'Version';
+$lang['historypage_modification'] = 'Modification date';
+$lang['historypage_by'] = 'By';
+$lang['historypage_note'] = 'Note';

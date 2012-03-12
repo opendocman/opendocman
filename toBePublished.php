@@ -19,9 +19,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+session_start();
+
 include('odm-load.php');
 
-session_start();
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if (!isset ($_SESSION['uid']))
 {
@@ -40,10 +42,7 @@ $lcomments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) 
 //print_r($_REQUEST);exit;
 if(!isset($_REQUEST['submit']))
 {
-    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
-    draw_header('Files Review');
-    draw_menu($_SESSION['uid']);
-    draw_status_bar('Document Listing for Review',  $llast_message);
+    draw_header(msg('message_documents_waiting'), $last_message);
     $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     if($user_obj->isRoot())
     {
@@ -67,11 +66,8 @@ elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' |
         header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
     }
 
-    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
-    draw_header(msg('label_comment'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_comment'),  $llast_message);
-
+    draw_header(msg('label_comment'), $last_message);
+    
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
 /*    if($mode == 'reviewer')
     {

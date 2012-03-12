@@ -96,57 +96,13 @@ function space_to_underscore($string)
     return $string;
 }
 // Draw the status bar for each page
-function draw_status_bar($message, $lastmessage='')
+function draw_status_bar()
 {
-    if(!isset($_REQUEST['state']))
-        $_REQUEST['state']=1;
-    if (!isset ($message))
-    {
-        $message='Select';
-    }
-    echo '<link rel="stylesheet" type="text/css" href="' . $GLOBALS['CONFIG']['base_url'] . '/linkcontrol.css">'."\n";
-    echo '<center>'."\n";
-    echo '<table width="100%" border="0" cellspacing="0" cellpadding="5">'."\n";
-    echo '<tr>'."\n";
     //echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
     //echo '<b><font size="-2" face="Arial" color="White">'."\n";
     //echo $message;
     //echo '</font></b></td>'."\n";
-    if(isset($_SESSION['uid']))
-    {
-        $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-        echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-        echo '<span class="statusbar">' . $user_obj->getName() . '</span></td>';
-    }
-    echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-    echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/out.php" style="text-decoration:none">' .msg('home'). '</a>'."\n</td>";
-    echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-    echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/profile.php" style="text-decoration:none">' .msg('preferences').'</a>'."\n</td>";
-    echo '<td bgcolor="#0000A0" align="left" valign="middle" width="10">'."\n";
-    echo '<a class="statusbar" href="' . $GLOBALS['CONFIG']['base_url'] . '/help.html" onClick="return popup(this, \'Help\')" style="text-decoration:none">'.msg('help').'</a>'."\n</td>";
-    ?>
-<td bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</font></td>
-<td bgcolor="#0000A0" align="left" valign="middle">
-        <?php	$crumb = new crumb();
-        $crumb->addCrumb($_REQUEST['state'], $message, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
-        $crumb->printTrail($_REQUEST['state']);
-        echo '<td bgcolor="#0000A0" align="right" valign="middle">'."\n";
-        if ( $lastmessage != "" )
-        {
-            echo '<b><font size="-2" face="Arial" color="White">';
-            echo msg('message_last_message') . ': '.$lastmessage;
-            echo '</td>';
-        }
-        ?>	    </font></b>
-</td>
-</tr>
-</table>
-</center>
-    <?php
-        if ( $lastmessage != "" )
-        {
-            draw_error($lastmessage);
-        }
+    return;
 }
 
 
@@ -202,32 +158,55 @@ function my_sort ($id_array, $sort_order = 'asc', $sort_by = 'id')
 }
 
 // This function draws the menu screen
-function draw_menu($uid='')
+function draw_menu()
 {
-    if($uid != NULL)
-    {
-        $current_user_obj = new User($uid, $GLOBALS['connection'], DB_NAME);
-    }
-    if($uid != NULL && $current_user_obj->isAdmin())
-    {
-        $GLOBALS['smarty']->assign('isadmin', 'yes');
-    }
-    $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
-    $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
-    display_smarty_template('menu.tpl');
+    return;
 }
 /*
  * draw_header - Draw the header area from the template file
- * @param string $page_title The title from the settings.
+ * @param string $pageTitle The title from the settings.
+ * @param string $lastmessage Any error or feedback message to be sent to screen
  */
-function draw_header($page_title)
+function draw_header($pageTitle, $lastmessage='')
 {
-    $GLOBALS['smarty']->assign('page_title', $page_title);
-    $GLOBALS['smarty']->display('header.tpl');
-    if(is_dir('install'))
+    if (is_dir('install'))
     {
-        echo  '<span style="color: red;">' . msg('install_folder') . '</span>';
+        echo '<span style="color: red;">' . msg('install_folder') . '</span>';
     }
+
+    $uid = $_SESSION['uid'];
+    
+    // Is the uid set?
+    if ($uid != NULL)
+    {
+        $current_user_obj = new User($uid, $GLOBALS['connection'], DB_NAME);
+        $GLOBALS['smarty']->assign('userName', $current_user_obj->getName());
+    }
+    
+    // Are they an Admin?
+    if ($uid != NULL && $current_user_obj->isAdmin())
+    {
+        $GLOBALS['smarty']->assign('isadmin', 'yes');
+    }
+    
+    if(!isset($_REQUEST['state'])) 
+    {
+        $_REQUEST['state']=1;
+    }      
+    
+    $lastmessage = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
+    // Set up the breadcrumbs
+    $crumb = new crumb();
+    $crumb->addCrumb($_REQUEST['state'], $pageTitle, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+    $breadCrumb = $crumb->printTrail($_REQUEST['state']);
+        
+    $GLOBALS['smarty']->assign('breadCrumb', $breadCrumb);
+    $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
+    $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
+    $GLOBALS['smarty']->assign('page_title', $pageTitle);
+    $GLOBALS['smarty']->assign('lastmessage', $lastmessage);
+    display_smarty_template('header.tpl');
 }
 
 function draw_error($message)
@@ -237,17 +216,9 @@ function draw_error($message)
 
 function draw_footer()
 {
-    $GLOBALS['smarty']->display('footer.tpl');
-    /*
-		echo "\n".'<!-------------------------------begin_draw_footer------------------------------>'."\n";
-		echo '<hr>'."\n";
-		echo ' <h5>'.$GLOBALS['CONFIG']['current_version'].'<BR>';
-		echo '&copy; <a href="mailto:'.$GLOBALS['CONFIG']['site_mail'].'">'.$GLOBALS['CONFIG']['title'].'</a>'."\n";
-		echo ' </body>'."\n";
-		echo '</html>'."\n";
-		echo '<!-------------------------------end_draw_footer------------------------------>'."\n";
-    */
+    display_smarty_template('footer.tpl');
 }
+
 function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
 {
     $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";

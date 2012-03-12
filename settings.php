@@ -28,6 +28,9 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('odm-load.php');
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 $settings = new Settings();
@@ -42,25 +45,16 @@ if(!$user_obj->isRoot() == true)
 
 if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='update')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
-    draw_header(msg('label_settings'));
-    draw_menu($_SESSION['uid']);
-    draw_status_bar(msg('label_settings'), $_POST['last_message']);
-    //print_r($GLOBALS['smarty']);
-    //$settings_arr = $settings->load();
-    //print_r($settings_arr);exit;
+
+    draw_header(msg('label_settings'), $last_message);
+
     $settings->edit();
 
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 {
-    //print_r($_REQUEST);exit;
-    draw_header(msg('label_settings'));
-    draw_menu($_SESSION['uid']);
+    draw_header(msg('label_settings'), $last_message);
 
     // Perform Input Validation
     if(!is_dir($_POST['dataDir']))
@@ -88,7 +82,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     {
         $_POST['last_message']='';
     }
-    draw_status_bar(msg('label_settings'), $_POST['last_message']);
     $settings->edit();
     draw_footer();
 }

@@ -26,11 +26,12 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
     exit;
 }
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 // includes
 include('odm-load.php');
-draw_header(msg('button_check_in'));
-draw_menu($_SESSION['uid']);
-@draw_status_bar(msg('message_document_checked_out_to_you'), $_POST['last_message']);
+draw_header(msg('button_check_in'), $last_message);
 
 // query to get list of documents checked out to this user
 $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id, 

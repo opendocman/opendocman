@@ -24,6 +24,9 @@ session_start();
 //$_SESSION['uid'] = 102;
 //$_GET['submit'] = 'view_checkedout';
 //echo $_POST['submit'];
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
 if (!isset($_SESSION['uid']))
 {
 	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
@@ -42,10 +45,8 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 {
 	echo "\n" . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">'; 
 	echo "\n" . '<input name="submit" type="hidden" value="Clear Status">';
-	draw_header(msg('label_checked_out_files'));
-	draw_menu($_SESSION['uid']);
-	draw_status_bar(msg('label_checked_out_files'), @$_REQUEST['last_message']);
-
+	draw_header(msg('label_checked_out_files'), $last_message);
+        
         $fileid_array = $user_obj->getCheckedOutFiles();
 
 	$lpage_url = $_SERVER['PHP_SELF'] . '?';
@@ -53,7 +54,7 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 	$list_status = list_files($fileid_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true, true);
 	if($list_status != -1 )
 	{
-		echo "\n" . '<BR><center><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div></center><br />';
+		echo "\n" . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
 		echo "\n" . '</form>';
 	}
 	draw_footer();

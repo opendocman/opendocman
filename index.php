@@ -118,100 +118,14 @@ if(isset($_POST['login']))
     }
 }
 elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
-{
-    if(is_dir('install'))
-    {
-        $install_msg = '<span style="color: red;">' . msg('install_folder') . '</span>';
-    }
-    else
-    {
-        $install_msg = '';
-    }
-
-    ?>
-        <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <TITLE><?php echo $GLOBALS['CONFIG']['title']; ?></TITLE>
-        <basefont face="Verdana">
-        </head>
-
-        <body bgcolor="White">
-
-        <table cellspacing="0" cellpadding="0">
-        <tr>
-        <td align="left"><img src="images/logo.gif" alt="Site Logo" border=0></td>
-        </tr>
-        </table>
-
-        <table border="0" cellspacing="5" cellpadding="5">
-        <tr>
-        <td valign="top">
-        <?php echo $install_msg; ?>
-        <center>
-        <table border="0" cellspacing="5" cellpadding="5">
-        <form action="index.php" method="post">
-        <?php
-		if(isset($_REQUEST['redirection']))
-			echo '<input type="hidden" name="redirection" value="' . $_REQUEST['redirection'] . '">' . "\n"; ?>
-		<tr>
-        <td><?php echo msg('username'); ?></td>
-        <td><input type="Text" name="frmuser" size="15"></td>
-        </tr>
-        <tr>
-        <td><?php echo msg('password'); ?></td>
-        <td><input type="password" name="frmpass" size="15">
-        <?php
-        if($GLOBALS['CONFIG']['allow_password_reset'] == 'True')
-        {
-            echo '<a href="' . $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php">' . msg('forgotpassword') . '</a>';
-        }
-?>
-        </td>
-        </tr>
-        <tr>
-        <td colspan="2" align="center"><input type="submit" name="login" value="<?php echo msg('enter');?>"></td>
-        </tr>
-                </tr>
-<?php
-if(isset($GLOBALS['CONFIG']['demo']) && $GLOBALS['CONFIG']['demo'] == 'true')
-{
-        echo 'Regular User: <br />Username:demo Password:demo<br />';
-        echo 'Admin User: <br />Username:admin Password:admin<br />';
-}
-?>
-        <?php
-        if($GLOBALS['CONFIG']['allow_signup'] == 'True')
-        {
-?>
-        <tr>
-            <td colspan="2"><a href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/signup.php"><?php echo msg('signup');?></a>
-        </tr>
-<?php
-}
-?>
-
-        </form>
-        </table>
-        </center>
-        </td>
-        <td valign="top">
-        <?php echo msg('welcome'); ?>
-        <p>
-        <?php echo msg('welcome2'); ?>
-        </td>
-        <td width="20%">
-        &nbsp;
-    </td>
-        </tr>
-        </table>
-
-        </center>
-
-<?php
-        draw_footer();
+{    
+    $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
+    
+    $GLOBALS['smarty']->assign('redirection', $redirection);
+    display_smarty_template('login.tpl');
 }
 else
 {
         echo 'Check your config';
 }
+        draw_footer();

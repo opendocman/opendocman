@@ -62,7 +62,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
     </head>
 
     <body>
-        <center>
+        <div id="content">
             <img src="../images/logo.gif"><br>
             <?php
             
@@ -317,7 +317,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 include_once('../version.php');
     ?>
             <h3>Welcome to the OpenDocMan Installer Tool</h3>
-        </center>
+        </div>
         <hr>
         <table>
             <tr>

@@ -12,4 +12,6 @@ function buttonfix() {
         }
     }
 }
-window.attachEvent("onload", buttonfix);
+$(document).ready(function() {
+    window.attachEvent("onload", buttonfix);
+})

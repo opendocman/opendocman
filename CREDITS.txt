@@ -17,6 +17,7 @@ All code copyright Stephen Lawrence Jr. 2002-2011
 * Martin Waiss [German]
 * Pablo Luis Zorzoli <pablozorzoli@yahoo.com.ar> [Spanish]
 * "A. Murat Ergin" <murat.ergin@ege.edu.tr> [Turkish]
+* Mihovil Stanić <Croatian>
 
 == Third-party code used
 Various lines of the installer logic - Wordpress
