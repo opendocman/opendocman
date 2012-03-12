@@ -39,7 +39,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
     exit;
 }
 
-draw_status_bar(msg('area_view_history'), $last_message);
+draw_header(msg('area_view_history'), $last_message);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
