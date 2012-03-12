@@ -61,7 +61,6 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
-    draw_status_bar(msg('label_filetypes'), $_POST['last_message']);
     $filetypes->edit();
     draw_footer();
 }
