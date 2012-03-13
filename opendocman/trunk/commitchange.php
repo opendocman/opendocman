@@ -125,8 +125,6 @@ if(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer WHERE user_id = '{$_POST['id']}'";
         $result = mysql_query($query, $GLOBALS['connection'])
                 or die("Error in query: $query". mysql_error());
-        if(isset($_REQUEST['reviewer']))
-        {
             if(isset($_REQUEST['department_review']))
             {
                 for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
@@ -136,7 +134,6 @@ if(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
                     $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
                 }
             }
-        }
     }
 
     // back to main page

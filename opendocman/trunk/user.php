@@ -34,7 +34,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
     exit;
 }
-
+Fb::log($_POST);
 // includes
 $secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
@@ -142,17 +142,12 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 </td>
                 </tr>
                 <TR>
-        <TD><B><?php echo msg('label_is_reviewer')?>?</B></TD>
-                <TD><INPUT type="checkbox" name="reviewer" value="1"></TD>
-                </TR>
-                <TR>
                 <TD><b><?php echo msg('label_reviewer_for')?></b></TD>
                 <TD>
                 <SELECT class="multiView" name="department_review[]" multiple="multiple" />
                 <?php 
         $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-        echo '<OPTION SELECTED>' . msg('label_select_departments') . '</OPTION>';
         while(list($dept_id, $dept_name) = mysql_fetch_row($result))
         {
                 echo '<OPTION value="' . $dept_id . '">' . $dept_name . '</OPTION>' . "\n";
@@ -204,7 +199,7 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         }
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        if(isset($_POST['reviewer']))
+        if(isset($_POST['department_review']))
         {
             for($i = 0; $i<sizeof($_POST['department_review']); $i++)
             {
@@ -538,23 +533,8 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 {
                         echo '<input name="admin" type="checkbox" value="1"  '.$mode.'></input>'."\n";
                 }
-                if($user_obj->isReviewer())
-                {
-                	$checked = 'checked';
-                }
-                else
-                {
-                	$checked = '';
-                }
 ?>
                 </TR>
-                <TR>
-                <TD><B><?php echo msg('userpage_reviewer');?></B></TD>
-<?php
-                echo '<TD><INPUT type="checkbox" id="userReviewCheck" value="1" '.$checked.' name="reviewer" '.$mode.'></TD></TR>'."\n";
-?>
-                </td>
-                </tr>
                 <TR>
                     <TD><?php echo msg('userpage_reviewer_for');?></TD>
                 <TD>
