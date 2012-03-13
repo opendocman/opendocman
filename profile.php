@@ -36,7 +36,7 @@ draw_header(msg('area_personal_profile'), $last_message);
     <br><br>
     <INPUT type="hidden" name="callee" value="<?php echo $_SERVER['PHP_SELF']; ?>">
     <table name="list" align="center" border="0">
-           <tr><td><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo msg('label_update')?>  <?php echo msg('area_personal_profile')?></a></td></tr>
+           <tr><td><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>&caller=<?php echo $_SERVER['PHP_SELF']; ?>"><?php echo msg('profilepage_update_profile')?></a></td></tr>
                         </table>
 <?php
 draw_footer();

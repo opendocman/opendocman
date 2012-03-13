@@ -58,7 +58,7 @@ $lang['please'] = 'Molim';
 $lang['profile'] = 'Profil';
 $lang['public'] = 'Javno';
 $lang['revision'] = 'Revizija';
-$lang['search'] = 'Pretraži';
+$lang['search'] = 'Traži';
 $lang['select'] = 'Izaberi';
 $lang['sincerely'] = 'Iskreno';
 $lang['submit'] = 'Pošalji';
@@ -105,7 +105,7 @@ $lang['button_back'] = 'Nazad';
 $lang['button_cancel'] = 'Odustani';
 $lang['button_check_in'] = 'Prijavi';
 $lang['button_clear_status'] = 'Očisti status';
-$lang['button_click_here'] = 'Klikni ovdje';
+$lang['button_click_here'] = 'Kliknite ovdje';
 $lang['button_continue'] = 'Nastavi';
 $lang['button_delete'] = 'Obriši';
 $lang['button_delete_files'] = 'Obriši datoteke';
@@ -166,7 +166,7 @@ $lang['label_case_sensitive'] = 'Osjetljivo na velika/mala slova';
 $lang['label_checked_out_files'] = 'Datoteke koje su izdane';
 $lang['label_check_expiration'] = 'Provjeri istek roka trajanja';
 $lang['label_comment'] = 'Komentar';
-$lang['label_created_date'] = 'Datum kreiranja';
+$lang['label_created_date'] = 'Datum stvaranja';
 $lang['label_default_for_unset'] = 'Standardne postavke kada odjel nije odabran';
 $lang['label_delete'] = 'Izbriši';
 $lang['label_delete_undelete'] = 'Izbriši/Vrati izbrisano';
@@ -225,6 +225,7 @@ $lang['label_settings'] = 'Postavke';
 $lang['label_size'] = 'Veličina';
 $lang['label_specific_permissions'] = 'Specifične korisničke dozvole';
 $lang['label_status'] = 'Status';
+$lang['label_text'] = 'Tekst';
 $lang['label_update'] = 'Izmjeni';
 $lang['label_user_defined_fields'] = 'Korisnički definirana polja';
 $lang['label_user_defined_field'] = 'Korisnički definirano polje';
@@ -271,7 +272,9 @@ $lang['message_folder_error_check'] = 'Greška u direktoriju. Provjerite zadnju 
 $lang['message_folder_perms_error'] = 'Greška u dozvolama direktorija:';
 $lang['message_for_further_assistance'] = 'za daljnu pomoć';
 $lang['message_found_documents'] = 'pronašao dokument(e)';
-$lang['message_if_you_are_unable_to_view'] = 'Ako iz nekog razloga niste u mogućnosti, kliknite <input type="submit" name="submit" value="Download"> kako biste preuzeli odabrani dokument i spremili ga na vaše računalo.';
+$lang['message_if_you_are_unable_to_view1'] = 'Ako iz nekog razloga niste u mogućnosti, kliknite ';
+$lang['message_if_you_are_unable_to_view2'] = 'Preuzmi';
+$lang['message_if_you_are_unable_to_view3'] = '<br> kako biste preuzeli odabrani dokument i spremili ga na vaše računalo.';
 $lang['message_initial_import'] = 'Početni uvoz';
 $lang['message_last_message'] = 'Posljednja poruka';
 $lang['message_latest_version'] = 'Najnovija inačica';
@@ -337,6 +340,8 @@ $lang['editpage_selected'] = 'odabrano';
 $lang['editpage_none_selected'] = 'Mogućnosti odabira';
 $lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
 $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
+$lang['editpage_filter'] = 'Traži:';
+$lang['editpage_keyword'] = 'Unesite tekst';
 
 // Details Page
 $lang['detailspage_view'] = 'Prikaži';
@@ -346,8 +351,8 @@ $lang['detailspage_delete'] = 'Obriši';
 $lang['detailspage_history'] = 'Povijest';
 $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
 
-// Details Page
-$lang['detailspage_view'] = 'Prikaži';
+// Out Page
+$lang['outpage_view'] = 'Prikaži';
 
 // History Page
 $lang['historypage_category'] = 'Kategorija:';
@@ -364,3 +369,47 @@ $lang['historypage_version'] = 'Inačica';
 $lang['historypage_modification'] = 'Datum promjene';
 $lang['historypage_by'] = 'Od';
 $lang['historypage_note'] = 'Bilješka';
+
+// Profile Page
+$lang['profilepage_update_profile'] = 'Izmjeni osobni profil';
+
+// User Page
+$lang['userpage_admin'] = 'Administrator';
+$lang['userpage_are_sure'] = 'Jeste li sigurni da želite obrisati ';
+$lang['userpage_back'] = 'Nazad';
+$lang['userpage_button_add_user'] = 'Dodaj korisnika';
+$lang['userpage_button_cancel'] = 'Odustani';
+$lang['userpage_button_delete'] = 'Obriši';
+$lang['userpage_button_modify'] = 'Izmjeni korisnika';
+$lang['userpage_button_show'] = 'Prikaži korisnika';
+$lang['userpage_button_update'] = 'Izmjeni korisnika';
+$lang['userpage_choose_departments'] = 'Odaberite odjel(e)';
+$lang['userpage_choose_user'] = 'Odaberite korisnika za prikaz';
+$lang['userpage_confirm_password'] = 'Potvrdite lozinku';
+$lang['userpage_department'] = 'Odjel';
+$lang['userpage_email'] = 'Adresa e-pošte';
+$lang['userpage_first_name'] = 'Ime';
+$lang['userpage_id'] = 'ID';
+$lang['userpage_last_name'] = 'Prezime';
+$lang['userpage_leave_empty'] = 'Ostavite prazno ako se ne mijenja';
+$lang['userpage_modify_user'] = 'Izmjenite korisnika';
+$lang['userpage_no'] = 'Ne';
+$lang['userpage_password'] = 'Lozinka';
+$lang['userpage_phone_number'] = 'Broj telefona';
+$lang['userpage_reviewer'] = 'Pregledavač';
+$lang['userpage_show_user'] = 'Prikaži korisnika: ';
+$lang['userpage_status_delete'] = 'Obriši ';
+$lang['userpage_update_user'] = 'Izmjenite korisnika: ';
+$lang['userpage_update_user_demo'] = 'Uključen je DEMO način rada, ne možete to uraditi';
+$lang['userpage_user'] = 'Korisnik';
+$lang['userpage_user_delete'] = 'Odaberite korisnika za obrisati';
+$lang['userpage_user_info'] = 'Informacije o korisniku';
+$lang['userpage_username'] = 'Korisničko ime';
+$lang['userpage_yes'] = 'Da';
+
+// Admin Page
+$lang['adminpage_edit_settings'] = 'Uredi postavke';
+$lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
+
+// User page
+$lang['userpage_reviewer_for'] = 'Reviewer for';

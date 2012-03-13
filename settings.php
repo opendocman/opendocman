@@ -28,7 +28,7 @@ if (!isset($_SESSION['uid']))
 
 // includes
 include('odm-load.php');
-
+    
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
@@ -82,8 +82,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     {
         $_POST['last_message']='';
     }
+    
     $settings->edit();
+    
     draw_footer();
+    
+    // Clear the tpl templates_c files after update in case they updated theme
+    $GLOBALS['smarty']->clear_compiled_tpl();
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {

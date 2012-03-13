@@ -133,10 +133,10 @@ draw_header(msg('label_admin'), $last_message);
                 <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_settings')?></font></th>
             </tr>
             <tr>
-                <td><b><a href="<?php echo $secureurl->encode('settings.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('edit') . ' ' . msg('label_settings')?></a></b></td>
+                <td><b><a href="<?php echo $secureurl->encode('settings.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('adminpage_edit_settings'); ?></a></b></td>
             </tr>
             <tr>
-                <td><b><a href="<?php echo $secureurl->encode('filetypes.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('edit') . ' ' . msg('label_filetypes');?></a></b></td>
+                <td><b><a href="<?php echo $secureurl->encode('filetypes.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('adminpage_edit_filetypes'); ?></a></b></td>
             </tr>
         </table>
     </td>
@@ -151,7 +151,7 @@ if(is_array($GLOBALS['plugin']->getPluginsList()) && $user_obj->isRoot())
 {
     ?>
             <table border="1" cellspacing="5" cellpadding="5" >
-            <font color="#FFFFFF"><th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_plugins')?></th>
+            <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('label_plugins')?></font></th>
                 <tr>
                     <td>
             <?php

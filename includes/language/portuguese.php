@@ -272,7 +272,9 @@ $lang['message_folder_error_check'] = 'Folder Error. Check Last Message in statu
 $lang['message_folder_perms_error'] = 'Folder Permissions Error:';
 $lang['message_for_further_assistance'] = 'for further assistance';
 $lang['message_found_documents'] = 'found document(s)';
-$lang['message_if_you_are_unable_to_view'] = 'If you are not able to do so for some reason, click <input type="submit" name="submit" value="Download"> to download the selected document and begin downloading it to your local workstation for local view.';
+$lang['message_if_you_are_unable_to_view1'] = 'If you are not able to do so for some reason, click ';
+$lang['message_if_you_are_unable_to_view2'] = 'Download';
+$lang['message_if_you_are_unable_to_view3'] = '<br> to begin downloading it to your local workstation for local view.';
 $lang['message_initial_import'] = 'Initial Import';
 $lang['message_last_message'] = 'Last Message';
 $lang['message_latest_version'] = 'Latest version';
@@ -338,6 +340,8 @@ $lang['editpage_selected'] = 'selecionado';
 $lang['editpage_none_selected'] = 'Select options';
 $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
+$lang['editpage_filter'] = 'Filter:';
+$lang['editpage_keyword'] = 'Enter keywords';
 
 // Details Page
 $lang['detailspage_view'] = 'View';
@@ -365,3 +369,45 @@ $lang['historypage_version'] = 'Version';
 $lang['historypage_modification'] = 'Modification date';
 $lang['historypage_by'] = 'By';
 $lang['historypage_note'] = 'Note';
+
+// Profile Page
+$lang['profilepage_update_profile'] = 'Update personal profile';
+
+// User Page
+$lang['userpage_admin'] = 'Admin';
+$lang['userpage_are_sure'] = 'Are you sure you want to delete ';
+$lang['userpage_back'] = 'Back';
+$lang['userpage_button_add_user'] = 'Add User';
+$lang['userpage_button_cancel'] = 'Cancel';
+$lang['userpage_button_delete'] = 'Delete';
+$lang['userpage_button_modify'] = 'Modify User';
+$lang['userpage_button_show'] = 'Show User';
+$lang['userpage_button_update'] = 'Update User';
+$lang['userpage_choose_departments'] = 'Choose the department(s)';
+$lang['userpage_choose_user'] = 'Choose User to View';
+$lang['userpage_confirm_password'] = 'Confirm password';
+$lang['userpage_department'] = 'Department';
+$lang['userpage_email'] = 'E-mail';
+$lang['userpage_first_name'] = 'First name';
+$lang['userpage_id'] = 'ID';
+$lang['userpage_last_name'] = 'Last name';
+$lang['userpage_leave_empty'] = 'Leave empty if unchanged';
+$lang['userpage_modify_user'] = 'Modify User';
+$lang['userpage_no'] = 'No';
+$lang['userpage_password'] = 'Password';
+$lang['userpage_phone_number'] = 'Phone number';
+$lang['userpage_reviewer'] = 'Reviewer';
+$lang['userpage_reviewer_for'] = 'Reviewer for';
+$lang['userpage_show_user'] = 'Show User: ';
+$lang['userpage_status_delete'] = 'Delete ';
+$lang['userpage_update_user'] = 'Update User: ';
+$lang['userpage_update_user_demo'] = 'Sorry, demo mode only, you can\'t do that';
+$lang['userpage_user'] = 'User';
+$lang['userpage_user_delete'] = 'Choose User to Delete';
+$lang['userpage_user_info'] = 'User information';
+$lang['userpage_username'] = 'Username';
+$lang['userpage_yes'] = 'Yes';
+
+// Admin Page
+$lang['adminpage_edit_filetypes'] = 'Edit file types';
+$lang['adminpage_edit_settings'] = 'Edit settings';

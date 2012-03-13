@@ -53,8 +53,6 @@ if(!isset($_GET['submit']))
             <tr>
                 <td valign="top"><b><?php echo msg('label_search_term');?></b></td>
                 <td><input type="Text" name="keyword" size="50"></td>
-                <td><?php echo msg('label_exact_phrase');?>: <input type="checkbox" name="exact_phrase"></td>
-                <td><?php echo msg('label_case_sensitive'); ?><input type="checkbox" name="case_sensitivity"></td>
             </tr>
             <tr>
                 <td valign="top"><b><?php echo msg('search');?></b></td>
@@ -74,12 +72,14 @@ if(!isset($_GET['submit']))
             </tr>
 
             <tr>
-                <td colspan="2" align="center">
-                    <input type="Submit" value="<?php echo msg('search');?>">
-                    <input type="hidden" name="submit" value="Search">
+                <td><?php echo msg('label_exact_phrase');?>: <input type="checkbox" name="exact_phrase"></td>
+                <td><?php echo msg('label_case_sensitive'); ?><input type="checkbox" name="case_sensitivity"></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="buttons"><button class="positive" type="Submit" name="submit" value="Search"><?php echo msg('search');?></button></div>
                 </td>
             </tr>
-
         </form>
     </table>
 
