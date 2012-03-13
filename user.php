@@ -34,7 +34,7 @@ if (!isset($_SESSION['uid']))
     header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
     exit;
 }
-Fb::log($_POST);
+
 // includes
 $secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
