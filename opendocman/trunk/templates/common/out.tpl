@@ -31,7 +31,7 @@
                 {if $item.view_link eq 'none'}
                     &nbsp;
                 {else}
-                    <a href="{$item.view_link}">{$g_lang_detailspage_view}</a></td>
+                    <a href="{$item.view_link}">{$g_lang_outpage_view}</a></td>
                 {/if}
             <td><a href="{$item.details_link}">{$item.filename}</a></td>
             <td >{$item.description}</td>
@@ -53,7 +53,9 @@
     </tbody>
     <tfoot>
        <tr>
+           {if $item.showCheckbox eq '1'}
            <th></th>
+           {/if}
             <th>ID</th>
             <th>{$g_lang_label_view}</th>
             <th>{$g_lang_label_file_name}</th>

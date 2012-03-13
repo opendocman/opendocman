@@ -288,10 +288,10 @@ if (!isset($_REQUEST['submit']))
 	</tr>
 	</table>
 	<table id="specificUserPerms" border="0" cellspacing="0" cellpadding="3">
-            <tr><td colspan="5"><b><?php echo msg('label_specific_permissions')?></b></td></tr>
+            <tr><td colspan="5"><b><?php echo msg('label_specific_permissions')?></b></td>
             
 	<!--/////////////////////////////////////////////////////FORBIDDEN////////////////////////////////////////////-->
-	<TR>
+
 <?php 
 	$id = $data_id;
 	// GET ALL USERS

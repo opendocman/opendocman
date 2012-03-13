@@ -74,8 +74,13 @@ if(!isset($_GET['submit']))
     echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
     echo '<BR>';
     // Present a link to allow for inline viewing
-    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id='.urlencode($lrequest_id).'&mimetype='.urlencode("$lmimetype").'">' . msg('button_click_here') . '</a><br><br>';
-    echo msg('message_if_you_are_unable_to_view');
+    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id=' . urlencode($lrequest_id) . '&mimetype=' . urlencode("$lmimetype") . '">' . msg('button_click_here') . '</a><br><br>';
+    echo '<div class="buttons"><button class="regular" type="submit" name="submit" value="Download">';
+    echo msg('message_if_you_are_unable_to_view2');
+    echo '</button></div>';
+    echo msg('message_if_you_are_unable_to_view1');
+    echo msg('message_if_you_are_unable_to_view2');
+    echo msg('message_if_you_are_unable_to_view3');
     echo '</form>';
 
     draw_footer();
