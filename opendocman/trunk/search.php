@@ -104,7 +104,7 @@ else
         }
         else
         {
-            $lequate = ' REGEXP BINARY';
+            $lequate = ' COLLATE latin1_general_cs LIKE ';
         }
 
         $lkeyword = addslashes($lkeyword);
