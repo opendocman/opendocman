@@ -304,37 +304,89 @@ if ( !defined('udf_functions') )
             exit;
         }
 
-// Check for duplicate table name
+        // Check for duplicate table name
         $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name='$table_name'";
-        $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_query($query);
         //echo mysql_num_rows($result);
         if (mysql_numrows($result) == "0")
         {
-            if ( $_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2 || $_REQUEST['field_type'] == 3 )
-            {
-                $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","'.$_REQUEST['display_name'].'",'.$_REQUEST['field_type'].')';
-                mysql_query($query);
-                if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
+            if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
+            {               
+                // They have chosen Select list of Radio list
+                // 
+                // First we add a new column in the data table
+                $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' int AFTER category';
+                $result = mysql_query($query);
+                if (!$result)
                 {
-                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' int AFTER category';
-                    mysql_query($query) or die ("Error in query320: $query. " . mysql_error());
-                    $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
-                    mysql_query($query) or die ("Error in query322: $query. " . mysql_error());
+                    $secureurl = new phpsecureurl;
+                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Alter'));
+                    exit;
                 }
-                elseif ($_REQUEST['field_type'] == 3)
+
+                // Now we need to create a new table to store the UDF Info
+                $query = 'CREATE TABLE ' . $table_name . ' ( id int auto_increment unique, value varchar(64) )';
+                $result = mysql_query($query);
+                if (!$result)
                 {
-                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' varchar(255) AFTER category';
-                    mysql_query($query) or die ("Error in query327: $query. " . mysql_error());
+                    // If the CREATE fails, rollback the ALTER
+                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
+                    $result = mysql_query($query);
+                    
+                    $secureurl = new phpsecureurl;
+                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Create'));
+                    exit;
+                }
+
+                // And finally, add an entry into the udf table
+                $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","' . $_REQUEST['display_name'] . '",' . $_REQUEST['field_type'] . ')';
+                $result = mysql_query($query);
+                if (!$result)
+                {
+                    // If the INSERT fails, rollback the CREATE and ALTER
+                    $query = 'DROP TABLE ' . $table_name;
+                    $result = mysql_query($query);
+
+                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
+                    $result = mysql_query($query);
+
+                    $secureurl = new phpsecureurl;
+                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+INSERT'));
+                    exit;
+                }
+            } 
+            elseif ($_REQUEST['field_type'] == 3)
+            {             
+                // The have chosen a text field
+                $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data ADD COLUMN ' . $table_name . ' varchar(255) AFTER category';
+                $result = mysql_query($query);
+                if (!$result)
+                {
+                    $secureurl = new phpsecureurl;
+                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Alter'));
+                    exit;
+                }
+
+                $query = 'INSERT into ' . $GLOBALS['CONFIG']['db_prefix'] . 'udf (table_name,display_name,field_type) VALUES ("' . $table_name . '","' . $_REQUEST['display_name'] . '",' . $_REQUEST['field_type'] . ')';
+                $result = mysql_query($query);
+                if (!$result)
+                {                    
+                    // If the INSERT fails, rollback the ALTER
+                    $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
+                    $result = mysql_query($query);
+                    
+                    $secureurl = new phpsecureurl;
+                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+INSERT'));
+                    exit;
                 }
             }
-        }
+        } 
         else
         {
             $secureurl = new phpsecureurl;
             header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Duplicate+Table+Name'));
             exit;
         }
-
     }
 
     function udf_functions_delete_udf()
@@ -342,11 +394,15 @@ if ( !defined('udf_functions') )
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['id']}'";
         mysql_query($query) or die ("Error in query343: $query. " . mysql_error());
 
-        $query = 'DROP TABLE '.$_REQUEST['id'];
-        mysql_query($query) or die ("Error in query346: $query. " . mysql_error());
-
         $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$_REQUEST['id']}";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+        
+        // For 1 or 2, drop the table
+        if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
+        {
+            $query = 'DROP TABLE ' . $_REQUEST['id'];
+            mysql_query($query) or die("Error in query346: $query. " . mysql_error());
+        }
     }
 
     function udf_functions_search_options()

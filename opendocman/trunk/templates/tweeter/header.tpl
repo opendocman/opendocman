@@ -54,15 +54,16 @@
             <ul class="nav">
 
               <li class="active"><a href="{$g_base_url}/out.php">Home</a></li>
-              <li><a href="{$g_base_url}/in.php" class="regular">{$g_lang_button_check_in}</a></li>
-              <li><a href="{$g_base_url}/search.php" class="regular">{$g_lang_search}</a></li>
-              <li><a href="{$g_base_url}/add.php" class="regular">{$g_lang_button_add_document}</a></li>
+              <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
+              <li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>
+              <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
               {if $isadmin eq 'yes'}
               <li>
                  
-                    <a href="{$g_base_url}/admin.php" class="positive">{$g_lang_label_admin}</a>
+                    <a href="{$g_base_url}/admin.php">{$g_lang_label_admin}</a>
               </li>
               {/if}
+              <li><a href="{$g_base_url}/logout.php">{$g_lang_logout}</a></li>
             </ul>
               <p class="navbar-text pull-right">
 Logged in as
