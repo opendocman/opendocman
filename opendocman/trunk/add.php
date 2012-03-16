@@ -301,7 +301,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </select><br />
+                </select>
+            </td>
+            <td>
                 <a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a><br />
                 <select class="multiView" tabindex="9" name="view[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
                         <?php
@@ -322,7 +324,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT><br />
+                </SELECT>
+            </td>
+            <td>
                 <a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a><br />
             <select class="multiView" tabindex="10"  name="read[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
@@ -344,7 +348,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT><br />
+                </SELECT>
+            </td>
+            <td>
                 <a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a><br />
             <select class="multiView" tabindex="11" name="modify[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
                         <?php
@@ -365,7 +371,9 @@ if(!isset($_POST['submit']))
                         }
                         mysql_free_result ($result);
                         ?>
-                </SELECT><br />
+                </SELECT>
+            </td>
+            <td>
                 <a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a><br />
             <select class="multiView" tabindex="12" name="admin[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
     <?php

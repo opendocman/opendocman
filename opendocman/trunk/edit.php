@@ -237,8 +237,12 @@ if (!isset($_REQUEST['submit']))
 ?>
 		<!-- Select Department to own file -->
         <TR id="departmentSelect">
-	    <TD><a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('department')?></a></TD>
-     	<TD COLSPAN="3"><SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
+            
+	    <TD>
+                <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('department')?></a></TD>
+     	<TD COLSPAN="3">
+            <hr />
+            <SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
 		<option value="0"> <?php echo msg('label_select_a_department')?></option>
 		<option value="1"> <?php echo msg('label_default_for_unset')?></option>
 		<option value="2"> <?php echo msg('label_all_departments')?></option>
@@ -253,7 +257,7 @@ if (!isset($_REQUEST['submit']))
 		  echo '	<option value="' . $dept_id . '" name="' . $name . '">' . $name . '</option> ' . "\n";  
         }
 		mysql_free_result ($result);
-?>
+?>          
         </TD></SELECT>
 		</TR>
     	<TR id="authorityRadio">
@@ -275,7 +279,7 @@ if (!isset($_REQUEST['submit']))
 	      echo "\n\t" . '<input type="hidden" name="' . space_to_underscore($dept_name) . '" value=' . $rights . '>';
 	}
 	echo "\n\t" . '<input type="hidden" name="default_Setting" value=' . $default_rights . '>';
-?>
+?><hr />
 	</td>
 	</tr>
 	<tr>
@@ -288,7 +292,10 @@ if (!isset($_REQUEST['submit']))
 	</tr>
 	</table>
 	<table id="specificUserPerms" border="0" cellspacing="0" cellpadding="3">
-            <tr><td colspan="5"><b><?php echo msg('label_specific_permissions')?></b></td>
+            <tr>
+                <td colspan="5"><b><?php echo msg('label_specific_permissions')?></b></td>
+            </tr>
+            <tr>
             
 	<!--/////////////////////////////////////////////////////FORBIDDEN////////////////////////////////////////////-->
 
@@ -337,7 +344,9 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select><br />
+	</select>
+        </td>
+        <td>
 	<!--/////////////////////////////////////////////////////VIEW[]////////////////////////////////////////////-->
 	<a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a><br/>            
             <select class="multiView" name="view[]" multiple="multiple" size = 10 onchange="changeList(this, this.form);">
@@ -365,7 +374,9 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select><br />
+	</select>
+        </td>
+        <td>
 
 	<!--/////////////////////////////////////////////////////READ[]////////////////////////////////////////////-->
         <a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a><br />
@@ -393,7 +404,9 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 ?>
-	</select><br />
+	</select>
+        </td>
+        <td>
 
 	<!--/////////////////////////////////////////////////////MODIFY[]////////////////////////////////////////////-->
         <a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a><br />
@@ -424,7 +437,9 @@ if (!isset($_REQUEST['submit']))
 		}
 	}
 	?>
-	</select><br />
+	</select>
+        </td>
+        <td>
 
 	<!--/////////////////////////////////////////////////Admin/////////////////////////////////////////////////////-->
         <a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a><br />
