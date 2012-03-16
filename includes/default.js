@@ -8,12 +8,12 @@ $(document).ready(function() {
         }
     });
 
-    $('#checkall').click(function () {
-                var checked_status = this.checked;
-				$(".checkbox").each(function()
-				{
-					this.checked = checked_status;
-				});
+    $("#checkall").live('click',function () {
+        var checked_status = this.checked;       
+        $(".checkbox").each(function()
+            {
+                this.checked = checked_status;
+            });
         });
 
     // This section controls the Specific User Permissions on add/edit pages
@@ -54,8 +54,8 @@ $(document).ready(function() {
 //		}
 //		
 //	});
-//        }
-} );
+//        } 
+});
 
         function blink(){
             $("#last_message").fadeOut(800).fadeIn(800).fadeOut(400).fadeIn(400).fadeOut(400).fadeIn(400);
