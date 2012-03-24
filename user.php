@@ -240,6 +240,37 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
     }
 }
+// Delete USER from DB
+elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
+{
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+
+    // form has been submitted -> process data
+    // DELETE admin info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_POST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // DELETE user info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // DELETE perms info
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // Change data info to nobody
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' where owner = '$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // back to main page
+    $_POST['last_message'] = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
+    header('Location:' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+}
 // DELETE USER
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 {
@@ -257,7 +288,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     ?>
                         
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="commitchange.php" method="POST" enctype="multipart/form-data">
+                        <form action="user.php" method="POST" enctype="multipart/form-data">
                         <tr>
                         <td valign="top"><?php echo msg('userpage_are_sure');?> 
 						<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
