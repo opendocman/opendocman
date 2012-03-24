@@ -167,10 +167,10 @@ $lang['label_checked_out_files'] = 'Checked-Out Files';
 $lang['label_check_expiration'] = 'Check Expiration';
 $lang['label_comment'] = 'Comment';
 $lang['label_created_date'] = 'Date Created';
-$lang['label_default_for_unset'] = 'Default Setting for Unset Department';
+$lang['label_default_for_unset'] = 'Default Department Permissions';
 $lang['label_delete'] = 'Delete';
 $lang['label_delete_undelete'] = 'Delete/Undelete';
-$lang['label_department_authority'] = 'Deptartments Authority';
+$lang['label_department_authority'] = 'Specific Department Permissions:';
 $lang['label_department'] = 'Department';
 $lang['label_departments'] = 'Departments';
 $lang['label_department_to_modify'] = 'Department to modify';
@@ -223,7 +223,7 @@ $lang['label_select_departments'] = 'Select departments';
 $lang['label_select_one'] = 'Select one';
 $lang['label_settings'] = 'Settings';
 $lang['label_size'] = 'Size';
-$lang['label_specific_permissions'] = 'Specific User Permissions';
+$lang['label_specific_permissions'] = 'Specific User Permissions:';
 $lang['label_status'] = 'Status';
 $lang['label_text'] = 'Text';
 $lang['label_update'] = 'Update';
@@ -332,6 +332,9 @@ $lang['message_your_password_has_been_changed'] = 'Your password has been change
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Uncheck All';
 $lang['editpage_check_all'] = 'Check All';
@@ -342,6 +345,7 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'View';

@@ -332,6 +332,9 @@ $lang['message_your_password_has_been_changed'] = 'Ihr Passwort wurde erfolgreic
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Alle deaktivieren';
 $lang['editpage_check_all'] = 'checken alle';
@@ -342,6 +345,7 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'View';

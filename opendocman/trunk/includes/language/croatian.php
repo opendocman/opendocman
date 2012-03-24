@@ -332,6 +332,9 @@ $lang['message_your_password_has_been_changed'] = 'Vaša lozinka je promjenjena.
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
 $lang['editpage_check_all'] = 'Označi sve';
@@ -342,6 +345,7 @@ $lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
 $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'Prikaži';
