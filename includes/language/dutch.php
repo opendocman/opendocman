@@ -1,6 +1,6 @@
 <?php
 //DUTCH LANGUAGE FILE
-// (C) 2010 Stephen Lawrence Jr.
+// (C) 2010-2012 Stephen Lawrence Jr.
 // Translated by: Jan Sepp
 /*
         This program is free software; you can redistribute it and/or
@@ -332,6 +332,9 @@ $lang['message_your_password_has_been_changed'] = 'Uw wachtwoord is gewijzigd.';
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deselecteer alles';
 $lang['editpage_check_all'] = 'check All';
@@ -342,6 +345,7 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'View';

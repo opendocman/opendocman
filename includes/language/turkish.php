@@ -1,6 +1,6 @@
 <?php
 //Turkish LANGUAGE FILE
-//(C) 2010 Stephen Lawrence Jr.
+//(C) 2010-2012 Stephen Lawrence Jr.
 // Translator:  "A. Murat Ergin" <murat.ergin@ege.edu.tr>
 /*
 This program is free software; you can redistribute it and/or
@@ -355,6 +355,9 @@ $lang['email_your_file_has_been_authorized'] = 'Your file has been authorized fo
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Tüm kaldırın';
 $lang['editpage_check_all'] = 'Tüm kontrol edin';
@@ -365,6 +368,7 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'View';

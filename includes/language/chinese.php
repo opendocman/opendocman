@@ -1,6 +1,6 @@
 <?php
 //ENGLISH LANGUAGE FILE
-// (C) 20010-2011 Stephen Lawrence Jr.
+// (C) 20010-2012 Stephen Lawrence Jr.
 // Translated by: fanquanfang
 /*
 This program is free software; you can redistribute it and/or
@@ -332,6 +332,9 @@ $lang['message_your_password_has_been_changed'] = '你的密码已经修改';
 
 $lang['view'] = $lang['label_view'];
 
+// Add File Page
+$lang['addpage_none'] = 'None';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = '全部取消';
 $lang['editpage_check_all'] = '检查所有';
@@ -342,6 +345,7 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_none'] = 'None';
 
 // Details Page
 $lang['detailspage_view'] = 'View';
