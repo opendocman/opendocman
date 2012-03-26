@@ -405,7 +405,7 @@ if( !defined('FileData_class') )
 					WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $this->id 
 					AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER.department = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id 
 	  				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights = $this->FORBIDDEN_RIGHT";
-
+                                        
             $u_result = mysql_query($u_query, $this->connection) or die("Error in query: " .$u_query . mysql_error() );
             $d_result = mysql_query($d_query, $this->connection) or die("Error in query: " .$d_query . mysql_error() );
             $d_uid = array();
@@ -428,6 +428,59 @@ if( !defined('FileData_class') )
 
 
         }
+        
+        // Return all depts that have forbidden for this file
+        function getForbiddenRightDeptIds()
+        {
+            return $this->getDeptRightsIds($this->FORBIDDEN_RIGHT);
+        }
+        
+        // Return all depts that have view for this file
+        function getViewRightDeptIds()
+        {
+            return $this->getDeptRightsIds($this->VIEW_RIGHT);
+        }
+        
+        // Return all depts that have read for this file
+        function getReadRightDeptIds()
+        {
+            return $this->getDeptRightsIds($this->READ_RIGHT);
+        }
+        
+        // Return all depts that have modify for this file
+        function getModifyRightDeptIds()
+        {
+            return $this->getDeptRightsIds($this->WRITE_RIGHT);
+        }
+        
+        // Return all depts that have admin for this file
+        function getAdminRightDeptIds()
+        {
+            return $this->getDeptRightsIds($this->ADMIN_RIGHT);
+        }
+        // return an array of departments id who are forbidden to this file
+        /*
+         * getForbiddenRightDeptIds Find all departments who have forbidden perms for this file
+         * @param int $right The numerical permission level
+         */
+        function getDeptRightsIds($right)
+        {
+            $did = array();
+            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id
+                        FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
+			WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $this->id 
+	  		AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights = $right";
+            $result = mysql_query($query, $this->connection) or die("Error in query: " .$query . mysql_error() );  
+            
+            for($i = 0; $i<mysql_num_rows($result); $i++)
+            {
+                list($did[$i]) = mysql_fetch_row($result);
+            }
+            mysql_free_result($result);
+            
+            return $did;
+        }
+
         // convert a an array of user id into an array of user object
         function toUserOBJs($uid_array)
         {
