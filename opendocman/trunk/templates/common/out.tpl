@@ -4,7 +4,7 @@
     <thead>
         <tr>
             {if $showCheckBox}
-                <th ><input type="checkbox" id="checkall"/></th>
+                <th class="sorting_desc_disabled sorting_asc_disabled"><input type="checkbox" id="checkall"/></th>
             {/if}
             <th class="sorting">ID</th>
             <th>{$g_lang_label_view}</th>
