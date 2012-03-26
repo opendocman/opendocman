@@ -391,6 +391,21 @@ if( !defined('User_class') )
                 return $file_data;
             }
         }
+        
+        /*
+         * getAllUsers - Returns an array of all the active users
+         * @returns array
+         */
+        public static function getAllUsers()
+        {
+                // query to get a list of available users
+                $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+                while($row = mysql_fetch_assoc($result)){
+                    $userListArray[] = $row;
+                }
+                return $userListArray;
+        }
 
     }
 }
