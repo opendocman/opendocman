@@ -25,7 +25,7 @@ session_start();
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-draw_header(msg('lang_error'), $last_message);
+draw_header(msg('error'), $last_message);
 
 if(isset($_REQUEST['ec']))
 {
