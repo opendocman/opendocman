@@ -31,16 +31,22 @@ if( !defined('classHeader') )
     include_once('Dept_Perms_class.php');
     include_once('UserPermission_class.php');
 
+    /*
+     * @param $hi_priority_array array 
+     * @param $hi_postfix 
+     * @param $low_priority_array
+     * @param $low_postfix
+     */
     function advanceCombineArrays($hi_priority_array, $hi_postfix, $low_priority_array, $low_postfix)
     {
         //merge higher priority onto lower priority one.
         $user_rights = array();
         $k = 0;
-        $foundFlag = false;
+        $foundFlag = false;   
         //create a multidimension array: element of view and right of view
         for($i = 0; $i<sizeof($low_priority_array); $i++)
         {
-            $user_rights[$i] = array($low_priority_array[$i], $low_postfix);
+            $user_rights[$i] = array($low_priority_array[$i], $low_postfix);         
         }
 
         $k = sizeof($user_rights);
