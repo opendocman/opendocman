@@ -38,6 +38,11 @@ exit;
 
 session_start();
 
+if ( file_exists('../config.php') && (!isset($_SESSION['datadir']) ) )
+{
+    echo "<p>Looks like the file 'config.php' already exists. If you need to re-install, please delete it or rename it first. You may then <a href='./'>try again</a>.</p>";
+    exit;
+}
 // Search for the config file in parent folder
 // If not found, redirect to index for install routine
 if(file_exists('../config.php'))
@@ -219,7 +224,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 echo 'Database Selected<br />';
                 include('../config.php');
                 include_once("odm.php");
-                echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password: None</strong></p></br />Click <a href="../settings.php?submit=update">HERE</a> to edit your site settings';
+                echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password (WRITE IT DOWN): ' . $_SESSION['adminpass'] . '</strong></p></br />Click <a href="../settings.php?submit=update">HERE</a> to edit your site settings';
             } // End Install
 
             function do_update_10()

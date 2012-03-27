@@ -23,6 +23,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Added for automated script installers
 $dbprefix = isset($GLOBALS['CONFIG']['db_prefix']) ? $GLOBALS['CONFIG']['db_prefix'] : $_SESSION['db_prefix'];
+if(!isset($_SESSION['adminpass'])) 
+{
+    echo 'No Admin Pass!';
+    exit;
+}
+$adminpass = $_SESSION['adminpass'];
 
 $result = mysql_query("
 DROP TABLE IF EXISTS {$dbprefix}admin
@@ -224,7 +230,7 @@ CREATE TABLE {$dbprefix}user (
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO {$dbprefix}user VALUES (NULL,'admin','','1','5555551212','admin@example.com','User','Admin','')
+INSERT INTO {$dbprefix}user VALUES (NULL,'admin',md5('{$adminpass}'),'1','5555551212','admin@example.com','User','Admin','')
         ") or die("<br>Could not add user. Error was:" .  mysql_error());
 
 // User permissions table
