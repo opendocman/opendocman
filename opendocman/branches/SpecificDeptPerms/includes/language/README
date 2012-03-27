@@ -1,0 +1,4 @@
+use the sync.sh script to find out if a language file is out
+of sync with the english.php master
+
+To create a new language, just copy english.php to your language (ex. portugues.php). Once you have the translations done, run the sync.sh program to see if anything has been added since you copied the english.php file.

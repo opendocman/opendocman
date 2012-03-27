@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+help.html - Online help
+Copyright (C) 2002, 2003, 2004  Stephen Lawrence
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-->
+
+<html>
+<head>
+  <title>User - Help</title>
+                     
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+            
+  <script type="text/javascript">
+<!--
+window.focus();
+//-->
+  </script>
+</head>
+  <body>
+   
+<h1>OpenDocMan - Help</h1>
+   
+<ul>
+   <li><a href="#Add_File_-_File_Location">Adding a file: File Location</a></li>
+   <li><a href="#Add_File_-_Category">Adding a file: Category</a></li>
+   <li><a href="#Add_File_-_Department">Adding a file: Department</a></li>
+   <li><a href="#Add_File_-_Authority">Adding a file: Authority</a></li>
+  <li><a href="#Add_File_-_Description">Adding a file: Description</a></li>
+  <li><a href="#Add_File_-_Comment">Adding a file: Comment</a></li>
+  <li><a href="#Add_File_-_Example">Adding a file: Example</a></li>
+ 
+</ul>
+   <a name="Add_File_-_File_Location"></a><br>
+  <b>Add File - File Location</b><br>
+  This box allows you to browse your local computer to find a file. Click 
+the "Browse..." button to bring up a popup prompt. Navigate to your file, 
+then click "Open". Once you have done this, the location of your file should 
+show up in the text box, and you can continue to fill out the rest of the 
+form.<br>
+ <br>
+ <b><a name="Add_File_-_Category"></a>Add File - Category</b><br>
+  This box allows you to define which category your document corresponds
+to. Make sure this fits, because many people will search for documents based 
+on this field.<br>
+ <b><br>
+ <a name="Add_File_-_Department"></a>Add File - Department</b><br>
+  This box allows you to define, for each department, the corresponding access 
+rights you want users to have. <br>
+ <br>
+ <b><a name="Add_File_-_Authority"></a>Add File - Authority</b><br>
+   This box allows you to define a specific type of access for departments,
+including <a href="#Rights_-_Forbidden">forbidden</a>, <a
+ href="#Rights_-_View">view</a>, <a href="#Rights_-_Read">read</a>, <a
+ href="#Rights_-_Modify">modify</a>, and <a href="#Rights_-_Admin">admin</a><br>
+<br>
+<b><a name="Add_File_-_Description"></a>Add File - Description<br>
+</b>   This box allows you to attach a short description to the file, which
+will be used in the file listings, and also during searches. Try to be as
+precise as possible. Use the <a href="#Add_File_-_Comment">Comment</a> section
+if you need more space<br>
+<br>
+ <b><a name="Add_File_-_Comment"></a>Add File - Comment</b><br>
+   This box allows you to attach a longer message about the file, maybe explaining
+instructions on how to open or view the file, etc..<br>
+ <br>
+ <b><a name="Add_File_-_Example"></a>Add File - Example</b><br>
+ <br>
+ Let's assume you want to set up the following access rights on a file:<br>
+ 
+<ul>
+   <li>Only you can <a href="#Rights_-_Admin">administer</a> the file</li>
+   <li>Only your department can <a href="#Rights_-_Modify">Modify</a> the 
+file</li>
+   <li>Only the IS department can <a href="#Rights_-_Read">Read</a> the file</li>
+   <li>Only the Bacti department has <a href="#Rights_-_View">View</a> rights</li>
+   <li>Anyone else is <a href="#Rights_-_Forbidden">Forbidden</a></li>
+ 
+</ul>
+ After you select the <a href="#Add_File_-_File_Location">file location</a> 
+and <a href="#Add_File_-_Category">category</a>, do the following to set the
+file permissions to match above example:<br>
+ 
+<ol>
+   <li>By default, you are set with <a href="#Rights_-_Admin">admin</a> permissions 
+on your new file. See the "Specific Permissions Settings" section. You should 
+see only your username selected under all but the <a
+ href="#Rights_-_Forbidden">forbidden</a> column.</li>
+   <li>In the <a href="#Add_File_-_Department">Department</a> drop-down box, 
+select your department from the dropdown.</li>
+   <li>Notice the radio toggle buttons below the Department box. These are 
+used to set up each department with specific "department wide" permissions.</li>
+   <li>In the <a href="#Add_File_-_Authority">Authority</a> section, click 
+on the <a href="#Rights_-_Modify">Modify</a> button. Your entire department 
+is now set to be able to modify the file</li>
+   <li>In the department drop-down box, select the IS department</li>
+   <li>In the Authority section, click on <a href="#Rights_-_Read">Rea</a><a
+ href="#Rights_-_Read">d</a> . The entire IS department is now set to be able
+to read the file</li>
+   <li>In the department drop-down box, select the Bacti department</li>
+   <li>In the Authority section, click on the <a href="#Rights_-_View">View</a> 
+button. The entire Bacti department is now set to be able to view the file</li>
+   <li>In the department drop-down box, select "Default Setting for unset 
+department"</li>
+   <li>In the Authority section, click on the <a
+ href="#Rights_-_Forbidden">Forbidden</a> . Any department not specifically 
+set is now set to forbidden</li>
+  <li>Now click on the "Add document" button to submit your file<br>
+  </li>
+ 
+</ol>
+ Note: There is also an "All departments" field, which you can use to set 
+all the departments to the same, whether it be admin, read, view, etc..<br>
+ You may also notice as you are setting permissions that you can go "back" 
+to another department, and the settings are retained.<br>
+ <b><br>
+ <a name="Rights_-_Admin"></a>Rights - </b> <b>Admin</b><br>
+This level of access means you can do anything to the file including downloading,
+updating, deleting, etc..<br>
+ <br>
+ <b><a name="Rights_-_Modify"></a>Rights - Modify</b><br>
+This level of access means you can update the file, but not remove it<br>
+ <b><br>
+ <a name="Rights_-_Read"></a>Rights - Read</b><br>
+This level of access means you can <br>
+ <br>
+ <b><a name="Rights_-_View"></a>Rights - View</b><br>
+ <br>
+ <a name="Rights_-_Forbidden"></a><b>Rights - Forbidden</b><br>
+This level of access means you may not have any access to the file whatsoever
+and will not see it in any lists, or searches.<br>
+ <br>
+  <br>
+ <br>
+</body>
+</html>
