@@ -158,6 +158,11 @@ deny from all
 			<td><input name="prefix" id="prefix" type="text" value="odm_" size="8" class="required" minlength="2"/></td>
 			<td>If you want to run multiple OpenDocMan installations in a single database, change this.</td>
 		</tr>
+                <tr>
+			<th scope="row"><label for="adminpass">Administrator Password</label></th>
+			<td><input name="adminpass" id="adminpass" type="text" value="" size="8" class="required" minlength="6"/></td>
+			<td>Enter an administrator password here. Write it down!</td>
+		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Data Directory</label></th>
 			<td colspan="2"><input name="datadir" id="datadir" type="text" value="<?php echo dirname($_SERVER['DOCUMENT_ROOT']);?>/odm_data/" size="45" class="required" minlength="2"/>
@@ -170,7 +175,7 @@ deny from all
 		</tr>
                 <tr>
 			<th scope="row"><label for="prefix">Base URL</label></th>
-			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2"/>
+			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $_SERVER['HTTP_HOST'];?>/opendocman"/>
                             <br/>Enter in the root URL where OpenDocMan will be running from. Example: http://www.myhost.com/opendocman<br/>
                         </td>
 		</tr>
@@ -204,6 +209,7 @@ deny from all
 	$passwrd = sanitizeme(trim($_POST['pwd']));
 	$dbhost  = sanitizeme(trim($_POST['dbhost']));
 	$prefix  = sanitizeme(trim($_POST['prefix']));
+        $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
         
@@ -224,7 +230,8 @@ deny from all
          $_SESSION['db_prefix'] = $prefix;
          $_SESSION['datadir'] = $datadir;
          $_SESSION['baseurl'] = $baseurl;
-
+         $_SESSION['adminpass'] = $adminpass;
+         
         // Here we check their datadir value and try to create the folder. If we cannot, we will warn them.
         if(!is_dir($datadir))
         {
