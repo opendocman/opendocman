@@ -100,7 +100,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
         echo '<tr><td colspan="2">'.$lfirst_name.' '.$llast_name.'</td></tr>';
     }
 ?>
-                        <form action="admin.php?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+                        <form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
                             <tr>
                                 <td colspan="4" align="center"><div class="buttons"><button class="regular" type="Submit" name="" value="Back"><?php echo msg('button_back')?></button></div></td>
                             </tr>
@@ -115,7 +115,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     $showpick='';
 ?>
                             <table border="0" cellspacing="5" cellpadding="5">
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
                                     <tr>
                                     <input type="hidden" name="state" value="<?php echo ($_GET['state']+1); ?>">
                                     <td><b><?php echo msg('department')?></b></td>
@@ -195,7 +195,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
             <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
             <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button></div></td>
     </form>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_POST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
         <td colspan="4" align="center"><div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div></td>
     </form>
 </tr>

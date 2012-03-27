@@ -67,8 +67,8 @@ function display_header() {
 <title>OpenDocMan &rsaquo; Setup Configuration File</title>
 <link rel="stylesheet" href="../templates/common/css/install.css" type="text/css" />
 <script type="text/javascript" src="../includes/jquery.min.js"></script>
-<script type="text/javascript" src="../includes/jquery.validate.pack.js"></script>
-<script type="text/javascript" src="../includes/additional-methods.js"></script>
+<script type="text/javascript" src="../includes/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../includes/additional-methods.min.js"></script>
 </head>
 <body>
 <h1 id="logo"><img alt="OpenDocMan" src="../images/logo.gif" /></h1>

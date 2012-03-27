@@ -30,6 +30,48 @@ $(document).ready(function() {
         // Add a multi-select / search to the top of the Specific User Permissions controls
         $multiViewObject.multiselectfilter();
     }
+    
+    var forbiddenDeptSelect = $("#deptForbiddenSelect");
+    var viewDeptSelect = $("#deptViewSelect");
+    var readDeptSelect = $("#deptReadSelect");
+    var modifyDeptSelect = $("#deptModifySelect");
+    var adminDeptSelect = $("#deptAdminSelect");
+    
+    if(forbiddenDeptSelect.length>0){
+        
+        forbiddenDeptSelect.bind("multiselectclick", function(event, ui) {
+            console.log('Value ' + ui.value);
+            console.log('Text:' + ui.text);
+            var val = ui.value;
+
+            var index;
+            
+            $("#deptViewOption4").attr("selected", "selected");
+            
+            $('#deptViewSelect option[value]').each(function(key,value) {
+                deptViewOption = $(value);
+                thisItemViewVal = deptViewOption.val();
+                console.log('deptViewSelect Option Value = ' + thisItemViewVal);
+
+                if(thisItemViewVal === val) {
+                    console.log('thisItemViewVal: ' + thisItemViewVal + ", val: " + val);
+                    console.log('deptViewOption.attr:' + deptViewOption.attr("selected"));
+                    console.log(deptViewOption);
+                     
+                        console.log(deptViewOption.name + ' is selected');
+                        
+                        deptViewOption.attr("selected", false);
+//                    } else {
+//                        deptViewOption.attr("selected", "selected");
+
+                    console.log('deptViewOption Selected? ' + deptViewOption.attr("selected"))
+                }
+                index++;
+            });
+            
+            
+        })
+    }
         /* Animated Message */
         $(".close").click(function(){
             $("#last_message").animate({left:"+=10px"}).animate({left:"-5000px"});
@@ -54,7 +96,22 @@ $(document).ready(function() {
 //		}
 //		
 //	});
-//        } 
+//        }
+
+//    userReviewCheck = $('#userReviewCheck');
+//    userReviewDepartmentsList = $('#userReviewDepartmentsList');
+//    if(userReviewCheck.length > 0) {
+//        if(userReviewCheck.attr('checked')) {
+//            //alert('yes, checked');
+//             userReviewDepartmentsList.attr('disabled','disabled');
+//        }
+//        
+//        userReviewCheck.click(function(){
+//            
+//        });
+//       
+//    }
+
 });
 
         function blink(){

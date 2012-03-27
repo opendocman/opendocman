@@ -42,7 +42,7 @@ if(!isset($_POST['submit']))
 {
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
     draw_header(msg('area_add_new_file'), $llast_message);
-    echo '<table border="0" cellspacing="5" cellpadding="5">'."\n";
+
     //////////////////////////Get Current User's department id///////////////////
     $query ="SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='$_SESSION[uid]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -56,378 +56,46 @@ if(!isset($_POST['submit']))
     $index = 0;
     ///////Define a class that hold Department information (id, name, and rights)/////////
     //this class will be used to temporarily hold department information client-side wise//
-    ?>
+        
+    $userListArray = User::getAllUsers();
 
-<script type="text/javascript">
+    $departmentListArray = Department::getAllDepartments();
 
-    //define a class like structure to hold multiple data
-    function Department(name, id, rights)
-    {
-        this.name = name;
-        this.id = id;
-        this.rights = rights;
-        this.isset_flag = false;
-        if (typeof(_department_prototype_called) == "undefined")
-        {
-            _department_prototype_called = true;
-            Department.prototype.getName = getName;
-            Department.prototype.getId = getId;
-            Department.prototype.getRights = getRights;
-            Department.prototype.setName = setName;
-            Department.prototype.setId = setId;
-            Department.prototype.setRights = setRights;
-            Department.prototype.issetFlag = issetFlag;
-            Department.prototype.setFlag = setFlag;
-
-        }
-        function setFlag(set_boolean)
-        {	this.isset_flag = set_boolean;	}
-
-        function getName()
-        {       return this.name;		}
-
-        function getId()
-        {       return this.id;	                }
-
-        function getRights()
-        {	return parseInt(this.rights);		}
-
-        function setRights(rights)
-        {       this.rights = parseInt(rights); }
-
-        function setName(name)
-        {       this.name = name;               }
-
-        function setId(id)
-        {       this.id = id;         }
-
-        function issetFlag()
-        {       return this.isset_flag;         }
-    }
-
-    ///Create default_Setting and all_Setting obj for mass department setting/////
-    var default_Setting_pos = 0;
-    var all_Setting_pos = 1;
-    var departments = new Array();
-    var default_Setting = new Department("<?php echo msg('label_default_for_unset')?>", "0", "0");
-    var all_Setting = new Department("<?php echo msg('all')?>", "0", "0");
-    departments[all_Setting_pos] = all_Setting;
-    departments[default_Setting_pos] = default_Setting;
-    /////////////////////////Populate Department obj////////////////////////////////
-    <?php
-
+    $categoryListArray = Category::getAllCategories();
+    
+    $rightsListArray = User_Perms::getAllRights();
+    
     $allDepartments = Department::getAllDepartments();
-    foreach ($allDepartments as $singleDepartment)
-    {
-        if($singleDepartment['id'] == $current_user_dept)
-        {
-            echo 'departments[' . ($index+2) . '] = new Department("' . $singleDepartment['name'] . '", "' . $singleDepartment['id'] . '", "1")' . "\n";
-        }
-        else
-        {
-            echo 'departments[' . ($index+2) . '] = new Department("' . $singleDepartment['name'] . '", "' . $singleDepartment['id'] . '", "0")' . "\n";
-        }
-        $index++;
-    }
-    ?>
-</script>
-<script type="text/javascript"src="functions.js"></script>
-<!-- file upload formu using ENCTYPE -->
-<form name="main" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-    <tr>
-        <td>
-            <a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_file_location');?></a>
-        </td>
-        <td colspan=3><input tabindex="0" name="file" type="file">
-        </td>
-    </tr>
+    $userDeptartmentId = $user_obj->getDeptId();
 
-<?php if($user_obj->isAdmin()) { // Begin Admin ?>
-    <tr>
-
-        <td>
-            <?php echo msg('editpage_assign_owner');?>
-        </td>
-        <td>
-            <select name="file_owner">
-            <?php
-                        // query to get a list of available users
-                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                        //////////////////Forbidden////////////////////
-                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-                            if($id == $_SESSION['uid'])
-                            {
-                                $selected = 'selected';
-                            }
-                            else
-                            {
-                                $selected = '';
-                            }
-                            echo "<option value=\"$id\" $selected>$last_name, $first_name</option>";
-                        }
-
-            ?>
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <?php echo msg('editpage_assign_department');?>
-        </td>
-        <td>
-            <select name="file_department">
-            <?php
-                        $user_dept_id = $user_obj->getDeptId();
-                        
-                        // query to get a list of available departments
-                        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                        //////////////////Forbidden////////////////////
-                        while(list($id, $name) = mysql_fetch_row($result))
-                        {
-                            if($id == $user_dept_id)
-                            {
-                                $selected = 'selected';
-                            }
-                            else
-                            {
-                                $selected = '';
-                            }
-                            echo "<option value=\"$id\" $selected>$name</option>";
-                        }
-             ?>
-            </select>
-        </td>
-    </tr>
-<?php } // End Admin ?>
-    <tr>
-        <td>
-            <a class="body" href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('category');?></a>
-        </td>
-        <td colspan=3><select tabindex=2 name="category" >
-                    <?php
-                    /////////////// Populate category drop down list//////////////
-                    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-                    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($id, $name) = mysql_fetch_row($result))
-    {
-        echo '<option value="' . $id . '">' . $name . '</option>';
-        }
-        mysql_free_result ($result);
-        ?>
-            </select>
-        </td>
-    </tr>
-    <?php
-    udf_add_file_form();
-    ?>
-    <!-- Set Department rights on the file -->
-    <TR id="departmentSelect">
-        <TD>
-            <a class="body" href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department');?></a>
-        </TD>
-        <TD COLSPAN=3>
-            <hr /><SELECT tabindex=3 NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex)">
-                <option value=0> <?php echo msg('label_select_a_department');?></option>
-                <option value=1> <?php echo msg('label_default_for_unset');?></option>
-                <option value=2> <?php echo msg('label_all_departments');?></option>
-                    <?php
-                    //////Populate department drop down list/////////////////
-                    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                    //since we want value to corepodant to group id, 2 must be added to compesate for the first two none group related options.
-                    while(list($id, $name) = mysql_fetch_row($result))
-                    {
-        $id+=2;
-        //don't put quotes around values.  javascript might not work
-        echo '	<option value ="' . $id . '" name="' . $name . '">'. $name . '</option>' . "\n";
-    }
-    mysql_free_result ($result);
-    ?>
-            </SELECT>
-        </TD>
-    </TR>
-    <TR id="authorityRadio">
-        <!-- Loading Authority radio_button group -->
-        <TD><a class="body" href="help.html#Add_File_-_Authority" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_department_authority')?></a></td>
-        <!-- <TD><a href="help.html" onClick="return popup(this, 'Help')">Authority</a></TD> -->
-        <TD>
-                <?php
-                $query = "SELECT RightId, Description FROM {$GLOBALS['CONFIG']['db_prefix']}rights order by RightId";
-    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
-    while(list($RightId, $Description) = mysql_fetch_row($result))
-    {
-        echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
-    }
-    ?>
-        <hr /></TD>
-    </TR>
-    <tr>
-        <td>
-            <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a>
-        </td>
-        <td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
-    </tr>
-
-    <tr>
-        <td>
-            <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a>
-        </td>
-        <td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
-    </tr>
-
-    <TABLE id="specificUserPerms" border="0" cellspacing="0" cellpadding="3" NOWRAP>
-        <tr nowrap>
-            <td colspan="4" NOWRAP><b><?php echo msg('label_specific_permissions')?></b></td>
-        </TR>
-        <tr>
-            <td>
-                <a class="body" href="help.html#Rights_-_Forbidden" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_forbidden')?></a><br />
-                <select class="multiView" tabindex="8" name="forbidden[]" multiple="multiple" size="10" onchange="changeForbiddenList(this, this.form);">
-                        <?php
-
-                        // query to get a list of available users
-                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                        //////////////////Forbidden////////////////////
-                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-                            $str = '<option value="' . $id . '"';
-        // select current user's name
-        $str .= '>'.$last_name.', '.$first_name.'</option>';
-                            echo $str;
-                        }
-                        mysql_free_result ($result);
-                        ?>
-                </select>
-            </td>
-            <td>
-                <a class="body" href="help.html#Rights_-_View" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_view')?></a><br />
-                <select class="multiView" tabindex="9" name="view[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
-                        <?php
-                        ////////////////////View//////////////////////////
-                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                        //////////////////Forbidden////////////////////
-                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-                            $str = '<option value="' . $id . '"';
-                            // select current user's name
-        if($id == $_SESSION['uid'])
-        {
-                                $str .= ' selected';
-                            }
-                            $str .= '>'.$last_name.', '.$first_name.'</option>';
-                            echo $str;
-                        }
-                        mysql_free_result ($result);
-                        ?>
-                </SELECT>
-            </td>
-            <td>
-                <a class="body" href="help.html#Rights_-_Read" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_read')?></a><br />
-            <select class="multiView" tabindex="10"  name="read[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
-                        <?php
-                        ////////////////////Read//////////////////////////
-                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                        //////////////////Forbidden////////////////////
-                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-        $str = '<option value="' . $id . '"';
-        // select current user's name
-
-                            if($id == $_SESSION['uid'])
-                            {
-                                $str .= ' selected';
-                            }
-                            $str .= '>'.$last_name.', '.$first_name.'</option>';
-                            echo $str;
-                        }
-                        mysql_free_result ($result);
-                        ?>
-                </SELECT>
-            </td>
-            <td>
-                <a class="body" href="help.html#Rights_-_Modify" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_modify')?></a><br />
-            <select class="multiView" tabindex="11" name="modify[]" multiple="multiple" size="10"onchange="changeList(this, this.form);">
-                        <?php
-                        ////////////////////Read//////////////////////////
-                        $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    //////////////////Forbidden////////////////////
-                        while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-                        {
-                            $str = '<option value="' . $id . '"';
-                            // select current user's name
-                            if($id == $_SESSION['uid'])
-                            {
-                                $str .= ' selected';
-                            }
-                            $str .= '>'.$last_name.', '.$first_name.'</option>';
-                            echo $str;
-                        }
-                        mysql_free_result ($result);
-                        ?>
-                </SELECT>
-            </td>
-            <td>
-                <a class="body" href="help.html#Rights_-_Admin" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_admin')?></a><br />
-            <select class="multiView" tabindex="12" name="admin[]" multiple="multiple" size="10" onchange="changeList(this, this.form);">
-    <?php
-    ////////////////////Read//////////////////////////
-    $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    //////////////////Forbidden////////////////////
-    while(list($id, $last_name, $first_name) = mysql_fetch_row($result))
-    {
-                $str = '<option value="' . $id . '"';
-                // select current user's name
-                if($id == $_SESSION['uid'])
-                {
-                    $str .= ' selected';
-                }
-                $str .= '>'.$last_name.', '.$first_name.'</option>';
-                echo $str;
-            }
-            mysql_free_result ($result);
-            ?>	</SELECT></td>
-
-        </TR>
-    </TABLE>
-    <?php
-        // Call the plugin API
-        callPluginMethod('onBeforeAdd');
-    ?>
-    <table>
-        <tr>
-            <td colspan="3" align="center"><div class="buttons"><button class="positive" tabindex=7 type="Submit" name="submit" value="Add Document"><?php echo msg('submit')?></button></div></td>
-        </tr>
-    <?php
-    $query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while( list($dept_name, $dept_id) = mysql_fetch_row($result) )
-    {
-        if($dept_id == $current_user_dept)
-        {
-            echo "\n\t".'<input type="hidden" name="'. space_to_underscore($dept_name).'" value="1"> '."\n";
-        }
-        else
-        {
-            echo "\n\t".'<input type="hidden" name="'.space_to_underscore($dept_name).'" value="0"> '."\n";
-        }
-    }
-    echo "\n\t".'<input type="hidden" name="default_Setting" value="0"> '."\n";
-    mysql_free_result ($result);
-    ?>
-</form>
-</table>
-<?php
+    // Store the output of any UDF form fields
+    $udfForm = udf_add_file_form();
+    
+    // Assign all of the needed smarty vars
+    $GLOBALS['smarty']->assign('allDepartments', $allDepartments);
+    $GLOBALS['smarty']->assign('userDepartmentId', $userDeptartmentId);
+    $GLOBALS['smarty']->assign('isAdmin', $user_obj->isAdmin());
+    $GLOBALS['smarty']->assign('userListArray', $userListArray);
+    $GLOBALS['smarty']->assign('departmentListArray', $departmentListArray);
+    $GLOBALS['smarty']->assign('categoryListArray', $categoryListArray);
+    $GLOBALS['smarty']->assign('udfForm', $udfForm);
+    $GLOBALS['smarty']->assign('rightsListArray', $rightsListArray);
+    
+    // Drop the beginning of the form
+    display_smarty_template('add_file.tpl');
+    
+    // Call the plugin API
+    callPluginMethod('onBeforeAdd');
+    
+    //Now close the form up
+    display_smarty_template('add_file_footer.tpl');
+//    display_smarty_template('add_file_js.tpl');
 }
 else 
 {
+
+Fb::log($_POST);
+    
     //submited form
     // change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
     for($khoa = 0; $khoa<1; $khoa++)
@@ -559,9 +227,11 @@ else
             '" . addslashes($_REQUEST['description']) . "',
             '" . addslashes($current_user_dept) . "',
             '" . addslashes($_REQUEST['comment']) . "',
-            '" . addslashes($_REQUEST['default_Setting']) . "',
+            '" . addslashes($_REQUEST['defaultDepartmentPerms']) . "',
             $lpublishable
         )";
+        
+Fb::log($query);
 
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         // get id from INSERT operation
@@ -580,24 +250,114 @@ else
 
 
         //Insert Department Rights into dept_perms
-        $query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
-        while( list($dept_name, $id) = mysql_fetch_row($result) )
-        {
-            //echo "Dept is $dept_name";
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '" . addslashes($_REQUEST[space_to_underscore($dept_name)]) . "', '$id')";
-            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
-        }
-        // Search for simular names in the two array (merge the array.  repetitions are deleted)
+
+                // Search for simular names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
         // Priority is in this order (admin, modify, read, view)
         $filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+        $result_array = array();
+        
+        if  (isset ($_REQUEST['deptAdmin']))
+        {
+            $result_array = advanceCombineArrays($_REQUEST['deptAdmin'], $filedata->ADMIN_RIGHT, $_REQUEST['deptModify'], $filedata->WRITE_RIGHT);
+        }
 
+        if (isset ($_REQUEST['deptModify']))
+        {
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['deptModify'], $filedata->WRITE_RIGHT);
+        }
+        
+        if (isset ($_REQUEST['deptRead']))
+        {
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['deptRead'], $filedata->READ_RIGHT);
+        }
+
+        if (isset ($_REQUEST['deptView']))
+        {
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['deptView'], $filedata->VIEW_RIGHT);
+        }
+
+        if (isset ($_REQUEST['deptForbidden']))
+        {
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['deptForbidden'], $filedata->FORBIDDEN_RIGHT);
+        }
+        // INSERT user permissions - view
+        for($i = 0; $i<sizeof($result_array); $i++)
+        {
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, dept_id, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+Fb::log($query, 'deptPerms SQL');            
+            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());
+        }
+        
+        
+        
+        
+        
+        
+//        
+//        
+//        
+//        // Forbidden
+//        foreach($_POST['deptForbidden'] as $deptForbiddenItem)
+//        {
+//            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '-1', '$deptForbiddenItem')";
+//Fb::log($query, 'deptForbidden SQL');            
+//            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+//        }
+//
+//        // View
+//        foreach($_POST['deptView'] as $deptViewItem)
+//        {
+//            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '1', '$deptViewItem')";
+//Fb::log($query, 'deptView SQL');            
+//            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+//        }
+//        
+//        // Read
+//        foreach($_POST['deptRead'] as $deptReadItem)
+//        {
+//            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '2', '$deptReadItem')";
+//Fb::log($query, 'deptRead SQL');            
+//            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+//        }
+//        
+//        // Modify
+//        foreach($_POST['deptModify'] as $deptModifyItem)
+//        {
+//            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '3', '$deptModifyItem')";
+//Fb::log($query, 'deptModify SQL');            
+//            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+//        }       
+// 
+//        // Admin
+//        foreach($_POST['deptAdmin'] as $deptAdminItem)
+//        {
+//            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, rights, dept_id) VALUES('$fileId', '4', '$deptAdminItem')";
+//Fb::log($query, 'deptAdmin SQL');            
+//            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+//        }        
+//        
+//        
+//      
+//     
+        /*
+         * Begin Specific User Perms
+         */
+        // Search for simular names in the two array (merge the array.  repetitions are deleted)
+        // In case of repetitions, higher priority ones stay.
+        // Priority is in this order (admin, modify, read, view)
+
+        $result_array = array();
         if  (isset ($_REQUEST['admin']))
         {
             $result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);
         }
-
+        
+        if (isset ($_REQUEST['modify']))
+        {
+            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['modify'], $filedata->WRITE_RIGHT);
+        }
+        
         if (isset ($_REQUEST['read']))
         {
             $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);
@@ -615,7 +375,8 @@ else
         // INSERT user permissions - view
         for($i = 0; $i<sizeof($result_array); $i++)
         {
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid,uid,rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
+Fb::log($query, 'userPerms SQL');            
             $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());
         }
 
@@ -648,207 +409,7 @@ else
 ?>
 <script type="text/javascript">
 
-    var index = 0;
-    var index2 = 0;
-    var begin_Authority;
-    var end_Authority;
-    var frm_main = document.main;
-    var dept_drop_box = frm_main.dept_drop_box;
-    //Find init position of Authority
-    while(frm_main.elements[index].name != "forbidden")
-    {       index++;        }
-    index2 = index;         //continue the search from index to avoid unnessary iteration
-    // Now index contains the position of the view radio button
-    //Next search for the position of the admin radio button
-    while(frm_main.elements[index2].name != "admin")
-    {       index2++;       }
-    //Now index2 contains the position of the admin radio button
-    //Set the size of the array
-    begin_Authority = index;
-    end_Authority = index2;
-    /////////////////////////////Defining event-handling functions///////////////////////////////////////////////////////
-    var num_of_authorities = 4;
-    function showData()
-    {
-        alert(frm_main.elements["Information_Systems"].value);
-        alert(frm_main.elements["Test"].value);
-        alert(frm_main.elements["Toxicology"].value);
-    }
-    function test()
-    {
-        alert(frm_main.elements["default_Setting"].value);
-    }
-
-    //loadData(_selectedIndex) load department data array
-    //loadData(_selectedIndes) will only load data at index=_selectedIndex-1 of the array since
-    //since _selectedIndex=0 is the "Please choose a department" option
-    //when _selectedIndex=0, all radio button will be cleared.  No department[] will be set
-    function loadDeptData(_selectedIndex)
-    {
-        if(_selectedIndex > 0)  //does not load data for option 0
-        {
-            switch(departments[(_selectedIndex-1)].getRights())
-            {
-                case -1:
-                    frm_main.forbidden.checked = true;
-                    deselectOthers("forbidden");
-                    break;
-                case 0:
-                    frm_main.none.checked = true;
-                    deselectOthers("none");
-                    break;
-                case 1:
-                    frm_main.view.checked = true;
-                    deselectOthers("view");
-                    break;
-                case 2:
-                    frm_main.read.checked = true;
-                    deselectOthers("read");
-                    break;
-                case 3:
-                    frm_main.write.checked = true;
-                    deselectOthers("write");
-                    break;
-                case 4:
-                    frm_main.admin.checked = true;
-                    deselectOthers("admin");
-                    break;
-                default: break;
-            }
-        }
-        else
-        {
-            index = begin_Authority;
-            while(index <= end_Authority)
-            {
-                frm_main.elements[index++].checked = false;
-            }
-        }
-    }
-
-    //Deselect other button except the button with the name stored in selected_rb_name
-    //Design to control the rights radio buttons
-    function deselectOthers(selected_rb_name)
-    {
-        var index = begin_Authority;
-        while(index <= end_Authority)
-        {
-            if(frm_main.elements[index].name != selected_rb_name)
-            {
-                frm_main.elements[index].checked = false;
-            }
-            index++;
-        }
-    }
-
-    function spTo_(string)
-    {
-        // Joe Jeskiewicz fix
-        var pattern = / /g;
-        return string.replace(pattern, "_");
-        //	return string.replace(" ", "_");
-    }
-
-    function setData(selected_rb_name)
-    {
-        var index = 0;
-        var current_selected_dept =  dept_drop_box.selectedIndex - 1;
-        var current_dept = departments[current_selected_dept];
-        deselectOthers(selected_rb_name);
-        //set right into departments
-        departments[current_selected_dept].setRights(frm_main.elements[selected_rb_name].value);
-        //Since the All and Defualt department are abstractive departments, hidden fields do not exists for them.
-        if(current_selected_dept-2 >= 0) // -1 from above and -2 now will set the first real field being 0
-        {
-            //set department data into hidden field
-            frm_main.elements[spTo_( current_dept.getName() )].value = current_dept.getRights();
-        }
-        departments[current_selected_dept].setFlag("true");
-        if(  current_selected_dept == default_Setting_pos )  //for default user option
-        {
-            frm_main.elements['default_Setting'].value = frm_main.elements[selected_rb_name].value;
-            while (index< dept_drop_box.length)
-            {
-                //do not need to set "All Department" and "Default Department"  they are only abstracts
-                if(departments[index].issetFlag() == false && index != all_Setting_pos && index != default_Setting_pos)
-                {
-                    //set right radio buton's value into all Department that is available on the database
-                    departments[index].setRights(frm_main.elements[selected_rb_name].value);
-                    //set right onto hidden valid hidden fields to communicate with php
-                    frm_main.elements[spTo_(departments[index].getName())].value = frm_main.elements[selected_rb_name].value;
-                }
-                index++;
-            }
-            index = 0;
-        }
-        if( current_selected_dept == all_Setting_pos) //for all user option. linked with predefine value above.
-        {
-            index = 0;
-            while(index < (dept_drop_box.length - 1))
-            {
-                if(index != default_Setting_pos && index != all_Setting_pos) //Don't set default and All
-                {
-                    //All setting acts like the user actually setting the right for all the department. -->setFlag=true
-                    departments[index].setFlag(true);
-                    //Set rights into department array
-                    departments[index].setRights(frm_main.elements[selected_rb_name].value );
-                    //Set rights into hidden fields for php
-                    frm_main.elements[spTo_(departments[index].getName())].value = frm_main.elements[selected_rb_name].value;
-                }
-                index++;
-            }
-        }
-    }
-    function changeList(select_list, current_form)
-    {
-        var select_list_array = new Array();
-        select_list_array[0] = current_form['view[]'];
-        select_list_array[1] = current_form['read[]'];
-        select_list_array[2] = current_form['modify[]'];
-        select_list_array[3] = current_form['admin[]'];
-        for( var i=0; i < select_list_array.length; i++)
-        {
-            if(select_list_array[i] == select_list)
-            {
-                for(var j=0; j< select_list.options.length; j++)
-                {
-                    if(select_list.options[j].selected)
-                    {
-                        for(var k=0; k < i; k++)
-                        {
-                            select_list_array[k].options[j].selected=true;
-                        }//end for
-                        current_form['forbidden[]'].options[j].selected=false;
-                    }//end if
-                    else
-                    {
-                        for(var k=i+1; k < select_list_array.length; k++)
-                        {
-                            select_list_array[k].options[j].selected=false;
-                        }
-                    }//end else
-                }//end for
-            }//end if
-        }//end for
-    }
-    function changeForbiddenList(select_list, current_form)
-    {
-        var select_list_array = new Array();
-        select_list_array[0] = current_form['view[]'];
-        select_list_array[1] = current_form['read[]'];
-        select_list_array[2] = current_form['modify[]'];
-        select_list_array[3] = current_form['admin[]'];
-        for(var i=0; i < select_list.options.length; i++)
-        {
-            if(select_list.options[i].selected==true)
-            {
-                for( var j=0; j < select_list_array.length; j++)
-                {
-                    select_list_array[j].options[i].selected=false;
-                }//end for
-            }
-        } //end for
-    }
+ 
 
 </script>
     <?php

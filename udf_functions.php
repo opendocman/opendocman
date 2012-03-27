@@ -28,34 +28,35 @@ if ( !defined('udf_functions') )
 
     function udf_add_file_form()
     {
+        $output = '';
         $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER by id";
         $result = mysql_query($query) or die ("Error in query32: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
         {
-            echo '<tr><td>';
+            $output .= '<tr><td>';
             if (file_exists("udf_help.html"))
             {
-                echo '<a class="body" href="udf_help.html#Add_File_'.$row[2].'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'.$row[2].'</a>';
+                $output .= '<a class="body" href="udf_help.html#Add_File_'.$row[2].'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'.$row[2].'</a>';
             }
             else
             {
-                echo $row[2];
+                $output .= $row[2];
             }
 
-            echo '</td><td>';
+            $output .= '</td><td>';
 
             //Type is Select List
             if ( $row[1] == 1 )
             {
-                echo '<select name="'.$row[0].'">';
+                $output .= '<select name="'.$row[0].'">';
                 $query = "SELECT id,value FROM ".$row[0];
                 $subresult = mysql_query($query) or die ("Error in query52: $query. " . mysql_error());
                 while ($subrow = mysql_fetch_row($subresult))
                 {
-                    echo '<option value="'.$subrow[0].'">'.$subrow[1].'</option>';
+                    $output .= '<option value="'.$subrow[0].'">'.$subrow[1].'</option>';
                 }
                 mysql_free_result($subresult);
-                echo '</select>';
+                $output .= '</select>';
             }
 
             // Type is Radio
@@ -65,7 +66,7 @@ if ( !defined('udf_functions') )
                 $subresult = mysql_query($query) or die ("Error in query65: $query. " . mysql_error());
                 while ($subrow = mysql_fetch_row($subresult))
                 {
-                    echo '<input type=radio name="'.$row[0].'" value="'.$subrow[0].'">'.$subrow[1];
+                    $output .= '<input type=radio name="'.$row[0].'" value="'.$subrow[0].'">'.$subrow[1];
                 }
                 mysql_free_result($subresult);
             }
@@ -73,11 +74,12 @@ if ( !defined('udf_functions') )
             // Type is Text
             if ( $row[1] == 3 )
             {
-                echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="16">';
+                $output .= '<input tabindex="5" type="Text" name="'.$row[0].'" size="16">';
             }
-            echo '</td></tr>';
+            $output .= '</td></tr>';
         }
         mysql_free_result($result);
+        return $output;
     }
 
     function udf_add_file_insert($fileId)
@@ -100,16 +102,17 @@ if ( !defined('udf_functions') )
 
     function udf_edit_file_form()
     {
+        $output = '';
         $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $result = mysql_query($query) or die ("Error in query104: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
         {
             if ( $row[1] == 1 || $row[1] == 2)
             {
-                echo '<tr><td>' . $row[0] . '</td><td>';
+                $output .= '<tr><td>' . $row[0] . '</td><td>';
                 if ( $row[1] == 1 )
                 {
-                    echo '<select name="'.$row[2].'">';
+                    $output .= '<select name="'.$row[2].'">';
                 }
 
                 $query = "SELECT {$row['2']} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
@@ -124,37 +127,38 @@ if ( !defined('udf_functions') )
                 {
                     if ( $row[1] == 1 )
                     {
-                        echo '<option value="' . $subrow[0] . '"';
+                        $output .= '<option value="' . $subrow[0] . '"';
                         if ( $sel == $subrow[0] )
                         {
-                            echo ' selected';
+                            $output .= ' selected';
                         }
-                        echo '>' . $subrow[1] . '</option>';
+                        $output .= '>' . $subrow[1] . '</option>';
                     }
                      elseif ($row[1] == 2)
                     {
-                        echo '<input type=radio name="' . $row[2] . '" value="' . $subrow[0] . '"';
+                        $output .= '<input type=radio name="' . $row[2] . '" value="' . $subrow[0] . '"';
                         if ($sel == $subrow[0])
-                            echo ' checked';
-                        echo '>' . $subrow[1];
+                            $output .= ' checked';
+                        $output .= '>' . $subrow[1];
                     }
                 }
                 mysql_free_result($subresult);
                 if ($row[1] == 1)
-                    echo '</select>';
-                echo '</td></tr>';
+                    $output .= '</select>';
+                $output .= '</td></tr>';
             }
             elseif ($row[1] == 3)
             {
-                echo '<tr><td>' . $row[0] . '</td><td>';
+                $output .= '<tr><td>' . $row[0] . '</td><td>';
                 $query = "SELECT {$row['2']} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
                 $subresult = mysql_query($query) or die ("Error in query151: $query. " . mysql_error());
                 $subrow = mysql_fetch_row($subresult);
-                echo '<input type="text" name="' . $row[2] . '" size="50" value="' . $subrow[0] . '">';
+                $output .= '<input type="text" name="' . $row[2] . '" size="50" value="' . $subrow[0] . '">';
                 mysql_free_result($subresult);
             }
         }
         mysql_free_result($result);
+        return $output;
     }
 
     function udf_edit_file_update()

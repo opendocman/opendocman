@@ -32,6 +32,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * untouched.
  *
  */
+
+require_once('includes/FirePHPCore/fb.php');
+
 if (file_exists('config.php'))
 {
     // In the case of root folder calls

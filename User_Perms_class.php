@@ -1,7 +1,7 @@
 <?php
 /*
 User_Perms_class.php - relates users to specific files
-Copyright (C) 2002-2011 Stephen Lawrence Jr.
+Copyright (C) 2002-2012 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -272,5 +272,24 @@ if ( !defined('User_Perms_class') )
                 return -999;
             }
         }
+        
+        /*
+         * getAllRights - Returns an array of all the available rights values
+         * @returns array
+         */
+
+        public static function getAllRights()
+        {
+            // query to get a list of available users
+            $query = "SELECT RightId, Description FROM {$GLOBALS['CONFIG']['db_prefix']}rights order by RightId";
+            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
+            while ($row = mysql_fetch_assoc($result))
+            {
+                $rightsListArray[] = $row;
+            }
+            mysql_free_result($result);
+            return $rightsListArray;
+        }
+
     }
 }

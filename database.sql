@@ -126,7 +126,8 @@ CREATE TABLE odm_log (
   note text,
   revision varchar(255) default NULL,
   KEY id (id),
-  KEY modified_on (modified_on)
+  KEY modified_on (modified_on),
+  KEY revision (revision)
 );
 
 #
