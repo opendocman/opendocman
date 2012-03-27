@@ -146,7 +146,7 @@ else
 <td align="right">
 <?php 
 // display red or green icon depending on file status
-if ($status == 0  && $user->canWrite($_REQUEST['id'])) 
+if ($status == 0  && $user->canView($_REQUEST['id'])) 
 { 
     echo '<img src="images/file_unlocked.png" alt="" border="0" align="absmiddle">';
 } 

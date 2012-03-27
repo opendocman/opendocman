@@ -287,7 +287,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         $userAccessLevel = $userperms_obj->getAuthority($fileid,$file_obj);
         $description = $file_obj->getDescription();
         
-        if ($file_obj->getStatus() == 0 and $userAccessLevel >= $userperms_obj->WRITE_RIGHT)
+        if ($file_obj->getStatus() == 0 and $userAccessLevel >= $userperms_obj->VIEW_RIGHT)
         {
             $lock = false;
         }
