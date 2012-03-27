@@ -25,3 +25,6 @@
     var langLanguage = '{$g_language}';
     var langNoneSelected = '{$g_lang_editpage_none_selected}';
 </script>
+<![if IE]>
+    <script type="text/javascript" src="{$g_base_url}/templates/common/js/buttonfix.js"></script>
+<![endif]>
