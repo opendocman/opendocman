@@ -42,6 +42,7 @@ require_once('crumb.php');
 require_once('secureurl.class.php');
 include_once('secureurl.php');
 include('udf_functions.php');
+require_once('Category_class.php');
 include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
 
 /* Set language  vars */
@@ -174,7 +175,7 @@ function draw_header($pageTitle, $lastmessage='')
         echo '<span style="color: red;">' . msg('install_folder') . '</span>';
     }
 
-    $uid = $_SESSION['uid'];
+    $uid = (isset($_SESSION['uid']) ? $_SESSION['uid'] : '');
     
     // Is the uid set?
     if ($uid != NULL)
