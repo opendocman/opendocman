@@ -370,6 +370,9 @@ $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
 $lang['editpage_none'] = 'None';
 
+// Departments Page
+$lang['departmentpage_department_name_required'] = 'A department name is required';
+
 // Details Page
 $lang['detailspage_view'] = 'View';
 $lang['detailspage_check_out'] = 'Check out';
