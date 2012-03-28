@@ -10,6 +10,7 @@
     <!-- Le styles -->
 
     <link href="{$g_base_url}/templates/tweeter/css/bootstrap.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/tweeter/css/tweeter.css" rel="stylesheet">
     <style type="text/css">
         {literal}
       body {
