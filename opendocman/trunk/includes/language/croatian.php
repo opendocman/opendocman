@@ -347,6 +347,9 @@ $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
 $lang['editpage_none'] = 'None';
 
+// Departments Page
+$lang['departmentpage_department_name_required'] = 'A department name is required';
+
 // Details Page
 $lang['detailspage_view'] = 'Prikaži';
 $lang['detailspage_check_out'] = 'Odjavi';

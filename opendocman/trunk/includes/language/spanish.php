@@ -347,6 +347,9 @@ $lang['editpage_filter'] = 'Filtro:';
 $lang['editpage_keyword'] = 'Palabras Clave';
 $lang['editpage_none'] = 'None';
 
+// Departments Page
+$lang['departmentpage_department_name_required'] = 'A department name is required';
+
 // Details Page
 $lang['detailspage_view'] = 'Ver';
 $lang['detailspage_check_out'] = 'Bloquear y Actualizar Documento';

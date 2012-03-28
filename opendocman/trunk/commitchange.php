@@ -155,15 +155,22 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
         exit;
     }
 
+    $department = (isset($_POST['department']) ? $_POST['department'] : '');
+    if($department == '') {
+        $last_message=msg('departmentpage_department_name_required');
+        
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        exit;
+    }
     //Check to see if this department is already in DB
-    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name='" . addslashes($_POST['department']) . "'";
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name='" . addslashes($department) . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
-        header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $_POST['department'] . ' already exist in the database'));
+        header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $department . ' already exist in the database'));
         exit;
     }
-    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($_POST['department']) . '\')';
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($department) . '\')';
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $_POST['last_message'] = urlencode(msg('message_department_successfully_added'));
@@ -181,12 +188,12 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
 
     mysql_free_result($result);
     //////Get the new department's id////////////
-    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE name = '" . addslashes($_POST['department']) . "'";
+    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE name = '" . addslashes($department) . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     $num_rows = mysql_num_rows($result);
     if( $num_rows != 1 )
     {
-        header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $_POST['department']));
+        header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $department));
         exit;
     }
 
@@ -209,18 +216,27 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
         header('Location:' . $secureurl->encode('error.php?ec=4'));
         exit;
     }
+    
+    $name = (isset($_POST['name']) ? $_POST['name'] : '');
+    if($name == '') {
+        $last_message=msg('departmentpage_department_name_required');
+        
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        exit;
+    }
+    
     //Check to see if this department is already in DB
-    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name=\"" . addslashes($_POST['name']) . '" and id!=' . $_POST['id'];
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name=\"" . addslashes($name) . '" and id!=' . $_POST['id'];
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
         header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database'));
         exit;
     }
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($_POST['name']) ."' where id='$_POST[id]'";
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($name) ."' where id='$_POST[id]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
-    $_POST['last_message'] = urlencode(msg('message_department_successfully_updated') . ' - ' . $_POST['name'] . '- id=' . $_POST['id']);
+    $_POST['last_message'] = urlencode(msg('message_department_successfully_updated') . ' - ' . $name . '- id=' . $_POST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
 }
 // Delete department
