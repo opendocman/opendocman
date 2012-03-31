@@ -250,18 +250,22 @@ if ( !defined('udf_functions') )
         $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $result = mysql_query($query) or die ("Error in query251: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
-        {
-            $query = "SELECT id,value FROM ".$row[0];
-            $subresult = mysql_query($query) or die ("Error in query255: $query. " . mysql_error());
-            echo $row[0]."_array = new Array();\n";
-            $index = 0;
-            while ($subrow = mysql_fetch_row($subresult))
+        {           
+            if ($row[1] == 1 || $row[1] == 2)
             {
-                echo "\t".$row[0]."_array[".$index."] = new Array(\"".$subrow[1]."\", ".$subrow[0].");\n";
-                $index++;
+                $query = "SELECT id,value FROM " . $row[0];
+          
+                $subresult = mysql_query($query) or die("Error in query255: $query. " . mysql_error());
+                echo $row[0] . "_array = new Array();\n";              
+                $index = 0;
+                while ($subrow = mysql_fetch_row($subresult))
+                {
+                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $subrow[1] . "\", " . $subrow[0] . ");\n";
+                    $index++;
+                }
             }
-            mysql_free_result($subresult);
         }
+        mysql_free_result($result);
     }
 
     function udf_functions_java_options($id)
@@ -270,7 +274,7 @@ if ( !defined('udf_functions') )
         $result = mysql_query($query) or die ("Error in query270: $query. " . mysql_error());
         while ( $row = mysql_fetch_row($result))
         {
-            if ( $row[1] == 1 )
+            if ( $row[1] == 1 || $row[1] == 2)
             {
                 echo '<option id="'.$id.'" value="'.$row[2].'">'.$row[2].'</option>';
                 $id++;
@@ -390,19 +394,15 @@ if ( !defined('udf_functions') )
     }
 
     function udf_functions_delete_udf()
-    {
+    {       
         $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['id']}'";
         mysql_query($query) or die ("Error in query343: $query. " . mysql_error());
 
         $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$_REQUEST['id']}";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
         
-        // For 1 or 2, drop the table
-        if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
-        {
-            $query = 'DROP TABLE ' . $_REQUEST['id'];
-            mysql_query($query) or die("Error in query346: $query. " . mysql_error());
-        }
+        $query = 'DROP TABLE IF EXISTS ' . $_REQUEST['id'];
+        mysql_query($query) or die("Error in query346: $query. " . mysql_error());          
     }
 
     function udf_functions_search_options()
@@ -424,7 +424,7 @@ if ( !defined('udf_functions') )
         $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
         $result = mysql_query($query) or die ("Error in query369: $query. " . mysql_error());
         $row = mysql_fetch_row($result);
-        if ($row[1] == 1)
+        if ($row[1] == 1 || $row[1] == 2)
         {
             $lquery_pre .= ', ' . $row[0];
             $lquery .= $row[0] . '.value' . $lequate . '\'' . $lkeyword . '\'';

@@ -42,11 +42,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 {
     draw_header(msg('area_add_new_category'), $last_message);
     ?>
-    <form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
+    <form id="categoryAddForm" action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
-                <td colspan="3"><input name="category" type="text"></td>
+                <td colspan="3"><input name="category" type="text" class="required" maxlength="40"></td>
             <td>
                 <div class="buttons">
                     <button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
@@ -66,6 +66,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 
         </table>
     </form>
+     <script>
+  $(document).ready(function(){
+    $('#categoryAddForm').validate();
+  });
+  </script>
     <?php
     draw_footer();
 }
@@ -224,17 +229,17 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 {
     draw_header(msg('area_update_category'), $last_message);
     ?>
+<form id="updateCategoryForm" action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
-        <form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
-                <?php
+                       <?php
                 // query to get a list of users
                 $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 while(list($lid, $lname) = mysql_fetch_row($result))
                 {
                     echo '<tr>';
-                    echo '<td colspan="2">' . msg('category') .': <input type="textbox" name="name" value="' . $lname . '"></td>';
+                    echo '<td colspan="2">' . msg('category') .': <input type="textbox" name="name" value="' . $lname . '" class="required" maxlength="40"></td>';
                     echo '<input type="hidden" name="id" value="' . $lid . '">';
 
                 }
@@ -259,6 +264,11 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
         </td>
         </tr>
     </table>
+ <script>
+  $(document).ready(function(){
+    $('#updateCategoryForm').validate();
+  });
+  </script>
     <?php
     draw_footer();
 }

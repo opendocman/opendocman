@@ -55,15 +55,15 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
     
     // Check to see if user is admin
     ?>
-<form action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
+<form id="udfAddForm" action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
 	<tr>
 		<td><b><?php echo msg('label_name')?>(limit 5)</b></td>
-                <td colspan="3"><input maxlength="5" name="table_name" type="text"></td>
+                <td colspan="3"><input maxlength="5" name="table_name" type="text" class="required"></td>
 	</tr>
 	<tr>
 		<td><b><?php echo msg('label_display')?> <?php echo msg('label_name')?></b></td>
-		<td colspan="3"><input maxlength="16" name="display_name" type="text"></td>
+		<td colspan="3"><input maxlength="16" name="display_name" type="text" class="required"></td>
 	</tr>
 	<tr>
 		<td><b><?php echo msg('type')?></b></td>
@@ -87,6 +87,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 </td>
 </tr>
     </table>
+     <script>
+  $(document).ready(function(){
+    $('#udfAddForm').validate();
+  });
+  </script>
 <?php
 draw_footer();
 }
@@ -121,7 +126,7 @@ while(list($lid, $lname) = mysql_fetch_row($result))
 			<td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
 			<td colspan="4" align="center"><div class="buttons"> <button class="positive" type="Submit" name="deleteudf" value="Yes"><?php echo msg('button_yes')?></button></div></td>
 	</form>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
 		<td colspan="4" align="center"><div class="buttons"> <button class="negative" type="Submit" name="" value="No, Cancel"><?php echo msg('button_cancel')?></button></div></td>
 	</form>
 		</tr>
@@ -184,7 +189,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
     echo '<td>' . $_REQUEST['item'] . '</td>';
     echo '</tr>';	
 ?>
-	<form action="admin.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+	<form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
 		<tr>
 			<td colspan="4" align="center"><input type="Submit" name="" value="Back"></td>
 		</tr>
@@ -200,7 +205,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     $showpick='';
     ?>
 			<table border="0" cellspacing="5" cellpadding="5">
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+			<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
 			<tr>
 			<td><b>User Defined Field</b></td>
@@ -233,9 +238,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
     ?>
 		<table border="0" cellspacing="5" cellpadding="5">
 			<tr>
-		<form action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+		<form action="commitchange.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
 <?php
-	// query to get a list of users
 	$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 	while(list($lid, $lname) = mysql_fetch_row($result))
@@ -250,7 +254,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 		<td>
 			<input type="Submit" name="updatecategory" value="Modify User Defined Field">
 	</form>
-	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>">
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>">
 		<input type="Submit" name="submit" value="Cancel">
 	</form>
 			</td>
@@ -296,8 +300,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
 {
-    $_REQUEST['last_message']=urlencode('Action canceled');
-    header ('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+    $last_message=urlencode('Action canceled');
+    header ('Location: admin.php?last_message=' . $last_message);
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 {
@@ -335,12 +339,12 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             }
             $max--;
         }
-        echo '<form>';
+        echo '<form id="editUdfForm">';
         echo '<input type=hidden name=submit value="edit">';
         echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
         echo '<table>';
         echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $_REQUEST['udf'] . '</td></tr>';
-        echo '<tr><th align=right>' . msg('label_display') . ' ' . msg('label_name') . ':</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'"></td></tr>';
+        echo '<tr><th align=right>' . msg('label_display') . ' ' . msg('label_name') . ':</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'" class="required"></td></tr>';
         echo '</table>';
         echo '<table>';
         echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
@@ -354,7 +358,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
         }
         mysql_free_result($result);
-        echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name=newvalue></td></tr>';
+        echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
         echo '<tr><td colspan="2">';
         echo '<div class="buttons"><button class="positive" type=submit value=Update>' . msg('button_update') . '</button></form></div>';
         ?>
@@ -367,6 +371,11 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         </td>
         </tr>
         </table>
+ <script>
+  $(document).ready(function(){
+    $('#editUdfForm').validate();
+  });
+  </script>
 <?php
     }
         if($field_type == 3)

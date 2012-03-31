@@ -10,3 +10,5 @@
         background-color: #BDE5F8;
         background-image: url('../images/info.png');
     }
+
+    label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }

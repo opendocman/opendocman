@@ -8,6 +8,8 @@
 <script type="text/javascript" src="{$g_base_url}/includes/jquery.min.js"></script>
 <script type="text/javascript" src="{$g_base_url}/includes/DataTables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{$g_base_url}/templates/common/multiSelect112/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="{$g_base_url}/includes/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{$g_base_url}/includes/additional-methods.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{$g_base_url}/templates/common/multiSelect112/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="{$g_base_url}/templates/common/multiSelect112/jquery.multiselect.filter.css" />
