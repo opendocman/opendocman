@@ -54,11 +54,11 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
     draw_header(msg('area_add_new_department'), $last_message);
     ?>
 
+        <form id="addDepartmentForm" action="commitchange.php" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action="commitchange.php" method="POST" enctype="multipart/form-data">
             <tr>
                 <td><b><?php echo msg('department')?></b></td>
-                <td colspan="3"><input name="department" type="text"></td>
+                <td colspan="3"><input name="department" type="text" class="required" minlength="2"></td>
 
             <input type="hidden" name="submit" value="Add Department">
             <td></td>
@@ -72,6 +72,11 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
                         </form>
                         </tr>
                         </table>
+   <script>
+  $(document).ready(function(){
+    $('#addDepartmentForm').validate();
+  });
+  </script>
 <?php
     draw_footer();
 }
@@ -245,9 +250,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 {
     $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(),$last_message);
-    ?>
+    ?>  
+                        <form action="commitchange.php" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
                             <table border="0" cellspacing="5" cellpadding="5">
-                                <form action="commitchange.php" method="POST" enctype="multipart/form-data">
+                                
                                     <tr>
                                             <?php
                                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_REQUEST[item]'";
@@ -257,7 +263,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
                                                 ?>
                                     <tr>
                                         <td>
-                                                    <?php echo msg('department')?>:<input type="textbox" name="name" value="<?php echo $lname; ?>">
+                                                    <?php echo msg('department')?>:<input type="textbox" name="name" value="<?php echo $lname; ?>" class="required" maxlength="40">
                                             <input type="hidden" name="id" value="<?php echo $lid; ?>">
                                         </td>
 
@@ -274,6 +280,11 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
                                 </form>
                                 </tr>
                             </table>
+   <script>
+  $(document).ready(function(){
+    $('#modifyDeptForm').validate();
+  });
+  </script>
                             <?php
     draw_footer();
 }

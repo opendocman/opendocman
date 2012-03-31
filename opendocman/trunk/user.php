@@ -78,9 +78,8 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
     draw_header(msg('area_add_new_user'), $last_message);
     // Check to see if user is admin
     ?>
-                <script type="text/javascript" src="FormCheck.js"></script>
 
-                <form name="add_user" action="user.php" method="POST" enctype="multipart/form-data">    
+                <form name="add_user" id="add_user" action="user.php" method="POST" enctype="multipart/form-data">    
                 <table border="0" cellspacing="5" cellpadding="5">
                 
                     <?php
@@ -88,34 +87,42 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                     callPluginMethod('onBeforeAddUser');                     
                     ?>
 
-                <tr><td><b><?php echo msg('label_last_name')?></b></td><td><input name="last_name" type="text"></td></tr>
-                <tr><td><b><?php echo msg('label_first_name')?></b></td><td><input name="first_name" type="text"></td></tr>
-                <tr><td><b><?php echo msg('username')?></b></td><td><input name="username" type="text"></td></tr>
+                <tr><td><b><?php echo msg('label_last_name')?></b></td><td><input name="last_name" type="text" class="required" minlength="2" maxlength="255"></td></tr>
+                <tr><td><b><?php echo msg('label_first_name')?></b></td><td><input name="first_name" type="text" class="required" minlength="2" maxlength="255"></td></tr>
+                <tr><td><b><?php echo msg('username')?></b></td><td><input name="username" type="text" class="required" minlength="2" maxlength="25"></td></tr>
                 <tr>
                 <td><b><?php echo msg('label_phone_number')?></b></td>
                 <td>
-                <input name="phonenumber" type="text">
+                <input name="phonenumber" type="text" maxlength="20">
                 </td>
                 </tr>
                 <tr>
                 <td><b><?php echo msg('label_example')?></b></td>
                 <td><b>999 9999999</b></td>
                 </tr>
+                <?php
+                // If mysqlauthentication, then ask for password
+                if( $GLOBALS["CONFIG"]["authen"] =='mysql')
+                {
+                    $rand_password = makeRandomPassword(); 
+?>
+                    <tr>
+                    <td><b><?php echo msg('userpage_password');?></b></td>
+                    <td>
+                    <input name="password" type="text" value="<?php echo $rand_password; ?>" class="required" minlength="5" maxlength="10">
+                    </td>
+                    </tr>
+<?php                     
+                }//endif
+?>
+
                 <tr>
                 <td><b><?php echo msg('label_email_address')?></b></td>
                 <td>
-                <input name="Email" type="text">
+                <input name="Email" type="text" class="required email" maxlength="50">
                 </td>
                 </tr>
                 <tr>
-                <?php
-                // If mysqlauthentication, then ask for password
-                if( $GLOBALS['CONFIG']['authen'] =='mysql')
-                {
-                        $rand_password = makeRandomPassword(); 
-                        echo '<INPUT type="hidden" name="password" value="' . $rand_password . '">';
-                }
-        ?>
 
                 <tr>
                 <td><b><?php echo msg('label_department')?></b></td>
@@ -158,13 +165,18 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 </TR>
 <tr>
 <td columnspan=3 align="center">
-<div class="buttons"><button class="positive" type="Submit" name="submit" value="Add User" onClick="return validatemod(add_user);"><?php echo msg('userpage_button_add_user')?></button>
+<div class="buttons"><button class="positive" type="Submit" name="submit" value="Add User"><?php echo msg('userpage_button_add_user')?></button>
 <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
 
 </td>
 </tr>
 </table>
 </form>
+  <script>
+  $(document).ready(function(){
+    $('#add_user').validate();
+  });
+  </script>
 <?php
 draw_footer();
 }
@@ -467,16 +479,11 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                     $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
                     draw_header(msg('userpage_update_user') . $user_obj->getName() ,$last_message);	
                     ?>
-                        <script type="text/javascript" src="FormCheck.js">
-                        function redirect(url_location)
-                        {       window.location=url_location    }
-
-                    </script>
-
+                        <form name="update" id="modifyUserForm" action="commitchange.php" method="POST" enctype="multipart/form-data">
+                        <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
-                        <form name="update" action="commitchange.php" method="POST" enctype="multipart/form-data">
-                        <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
+
                         <?php
                 $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='" . $_REQUEST['item'] . "' ORDER BY username";
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -485,11 +492,11 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 echo '<input type=hidden name=id value="'.$id.'">';
                 echo '</tr>';
                 echo '<tr>';
-                echo '<td><b>'.msg('userpage_last_name').'</b></td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="'.$last_name.'"></td></TR>';
-                echo '<td><b>'.msg('userpage_first_name').'</b></td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="'.$first_name.'"></td></TR>';
-                echo '<td><b>'.msg('userpage_username').'</b></td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'.$username.'"></td></TR>';
+                echo '<td><b>'.msg('userpage_last_name').'</b></td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="'.$last_name.'" class="required" minlength="2" maxlength="255"></td></TR>';
+                echo '<td><b>'.msg('userpage_first_name').'</b></td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="'.$first_name.'" class="required" minlength="2" maxlength="255"></td></TR>';
+                echo '<td><b>'.msg('userpage_username').'</b></td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'.$username.'" class="required" minlength="2" maxlength="25"></td></TR>';
                 echo "<tr>";
-                echo ("<td><b>".msg('userpage_phone_number')."</b></td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\"></td>");
+                echo ("<td><b>".msg('userpage_phone_number')."</b></td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\" maxlegnth=\"20\"></td>");
                 // If mysqlauthentication, then ask for password
                 if( $GLOBALS["CONFIG"]["authen"] =='mysql')
                 {
@@ -497,14 +504,8 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                     <tr>
                     <td><b><?php echo msg('userpage_password');?></b></td>
                     <td>
-                    <input name="password" type="password">
+                    <input name="password" type="password" maxlength="10">
                     <font size="1"><?php echo msg('userpage_leave_empty');?></font>
-                    </td>
-                    </tr>
-                    <tr>
-                    <td><b><?php echo msg('userpage_confirm_password');?></b></td>
-                    <td>
-                    <input name="conf_password" type="password">
                     </td>
                     </tr>
                     </tr>
@@ -514,7 +515,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 <tr>
                 <td><b><?php echo msg('userpage_email');?></td>
                 <td colspan=4>
-                <input name="Email" type="text" value="<?php echo $Email; ?>"></td>
+                <input name="Email" type="text" value="<?php echo $Email; ?>" class="email required" maxlength="50"></td>
                 </tr>
           		<tr>
    		
@@ -616,7 +617,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                                                <tr>
                                                        <td align="center" colspan="3">
                                                        <INPUT type="hidden" name="set_password" value="0">
-                                                       <div class="buttons"><button class="positive" type="Submit" name="submit" onClick="return verify(this.form, password, conf_password, set_password);" value="Update User"><?php echo msg('userpage_button_update')?></button></div>  
+                                                       <div class="buttons"><button class="positive" type="Submit" name="submit" value="Update User"><?php echo msg('userpage_button_update')?></button></div>  
                         </form>
                         <form action="user.php" >
                         <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
@@ -624,26 +625,11 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         </td>
                         </tr>
                         </table>
-                        <script type="text/javascript">
-                        	function verify(this_form, pwd, conf_pwd, set_password)
-                        	{
-                        		if(pwd.value != "" && pwd.value != conf_pwd.value)
-                        		{
-                        			alert("Password and Confirm Password fields do not match, Please check it again."); 
-									return false;
-                        		}
-                       			if(pwd.value != "")
-                       			{
-                       				set_password.value = true;
-                       			}
-                       			else
-                       			{
-                       				set_password.value = false;
-                       			}
-                        		return validateEmail(this_form);
-                        	
-                        	}
-                        	</script>
+   <script>
+  $(document).ready(function(){
+    $('#modifyUserForm').validate();
+  });
+  </script>
                         	<?php
                 } // End Not Demo mode
                           draw_footer();

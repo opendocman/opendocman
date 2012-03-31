@@ -1,5 +1,3 @@
-<script type="text/javascript" src="{$g_base_url}/includes/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{$g_base_url}/includes/additional-methods.min.js"></script>
     <table class="form-table">
         <form action="settings.php" method="POST" enctype="multipart/form-data" id="settingsForm">
         

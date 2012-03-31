@@ -243,9 +243,9 @@ if (!isset($_REQUEST['submit']))
      	<TD COLSPAN="3">
             <hr />
             <SELECT NAME="dept_drop_box" onChange ="loadDeptData(this.selectedIndex, this.name)">
-		<option value="0"> <?php echo msg('label_select_a_department')?></option>
-		<option value="1"> <?php echo msg('label_default_for_unset')?></option>
-		<option value="2"> <?php echo msg('label_all_departments')?></option>
+		<option value="0"><?php echo msg('label_select_a_department')?></option>
+		<option value="1">(<?php echo msg('label_default_for_unset')?>)</option>
+		<option value="2">(<?php echo msg('label_all_departments')?>)</option>
 <?php
 		// query to get a list of department 
 		$query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
