@@ -287,7 +287,7 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 {
     // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'true')
+    if (@$GLOBALS['CONFIG']['demo'] == 'True')
     {
         draw_header('Delete User ' ,$last_message);
         echo 'Sorry, demo mode only, you can\'t do that';
@@ -466,7 +466,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User')
         {
                 // If demo mode, don't allow them to update the demo account
-                if (@$GLOBALS['CONFIG']['demo'] == 'true')
+                if (@$GLOBALS['CONFIG']['demo'] == 'True')
                 {
                         draw_header(msg('userpage_update_user'),$last_message);
                         echo msg('userpage_update_user_demo');
@@ -727,7 +727,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
                 // If demo mode, don't allow them to update the demo account
-                if (@$GLOBALS['CONFIG']['demo'] == 'true')
+                if (@$GLOBALS['CONFIG']['demo'] == 'True')
                 {
                         echo 'Sorry, demo mode only, you can\'t do that';
                         draw_footer();
