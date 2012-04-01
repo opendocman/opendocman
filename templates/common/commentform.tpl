@@ -42,7 +42,7 @@
                             <td valign="top">{$g_lang_email_email_these_users}:</td>
                             <td>
                                 <select name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
-                                    <option value="0" selected>no one</option>
+                                    <option value="0" selected="selected">no one</option>
                                     {foreach from=$user_info item=user}
                                     <option value="{$user.id}">{$user.last_name}, {$user.first_name}</option>
                                     {/foreach}
