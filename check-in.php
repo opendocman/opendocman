@@ -234,41 +234,6 @@ else
         // rename and save file
         $newFileName = $_POST['id'] . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
-        //Send email
-        $date = date('D F d Y');
-        $time = date('h:i A');
-        $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-        $get_full_name = $user_obj->getFullName();
-        $full_name = $get_full_name[0].' '.$get_full_name[1];
-        $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-        $mail_headers = 'From: ' . $mail_from;
-        $dept_id = $user_obj->getDeptId();
-        if(isset($send_to_all))
-        {
-            $mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
-            $mail_body.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body.=msg('label_modified_date'). ': ' . $time . "\n\n";
-            $mail_body.=msg('action'). ': ' .msg('updated') . "\n\n";
-            email_all($mail_from, $fileobj->getName().' ' .msg('updated'),$mail_body,$mail_headers);
-        }
-
-        if(isset($send_to_dept))
-        {
-            $mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
-            $mail_body.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body.=msg('label_modified_date').': ' . $time . "\n\n";
-            $mail_body.=msg('action'). ': ' .msg('updated'). "\n\n";
-            email_dept($mail_from, $dept_id, $fileobj->getName().' ' .msg('updated'),$mail_body,$mail_headers);
-        }
-
-        if(isset($send_to_users) && sizeof($send_to_users) > 0)
-        {
-            $mail_body=msg('file'). ': '. $fileobj->getName(). "\n\n";
-            $mail_body.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body.=msg('label_modified_date'). ': ' . $time . "\n\n";
-            $mail_body.=msg('action'). ': ' .msg('updated'). "\n\n";
-            email_users_id($mail_from, $send_to_users, $fileobj->getName(). ' ' .msg('updated'),$mail_body, $mail_headers);
-        }
 
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');

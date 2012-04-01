@@ -124,7 +124,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
-    $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status');
+    $mail_subject= (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
     $mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
     $mail_body = $lcomments . "\n\n";
     $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
@@ -188,14 +188,14 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
-{        
+{         
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject = isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status');
+    $mail_subject = (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
@@ -218,13 +218,15 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
         if(in_array($value, $id_array))
         {
             $fileid = $value;
-            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
+            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);            
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
-            
+         
             // Build email for author notification
-            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0] != 0)
+            if(isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users']))
             {
+                // Lets unset this now so the new array will just be user_id's
+                $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
                 $mail_body1 = $lcomments . "\n\n";
                 $mail_body1.=msg('email_your_file_has_been_authorized') . "\n\n";
                 $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
@@ -234,14 +236,14 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                 $mail_body1.=msg('email_thank_you') . ',' . "\n\n";
                 $mail_body1.=msg('email_automated_document_messenger') . "\n\n";
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-                mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+                mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);               
             }
             
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
 
             // Build email for general notices
-            $mail_subject = isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository');
+            $mail_subject = (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
             $mail_body2=$lcomments . "\n\n";
             $mail_body2.=msg('email_a_new_file_has_been_added'). "\n\n";
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
@@ -260,10 +262,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             {
                 email_dept($mail_from, $dept_id,$mail_subject ,$mail_body2,$mail_headers);
             }
-            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
-            {
+            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0)
+            {                     
                 email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
-            }
+            }           
         }
         else
         {
