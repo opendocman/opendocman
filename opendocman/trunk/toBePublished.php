@@ -109,7 +109,7 @@ elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' |
 
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
-{
+{  
     $lto = isset($_POST['to'])?$_POST['to'] : '';
     $lsubject = isset($_POST['subject'])?$_POST['subject'] : '';
     $lcheckbox = isset($_POST['checkbox'])?$_POST['checkbox'] : '';
@@ -188,7 +188,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
-{   
+{        
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
@@ -221,17 +221,21 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
+            
             // Build email for author notification
-            $mail_body1=$lcomments . "\n\n";
-            $mail_body1.=msg('email_your_file_has_been_authorized'). "\n\n";
-            $mail_body1.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
-            $mail_body1.=msg('label_status'). ': ' .msg('message_authorized'). "\n\n";
-            $mail_body1.=msg('date'). ': ' . $date . "\n\n";
-            $mail_body1.=msg('label_reviewer'). ': ' . $full_name . "\n\n";
-            $mail_body1.=msg('email_thank_you'). ','. "\n\n";
-            $mail_body1.=msg('email_automated_document_messenger'). "\n\n";
-            $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-            mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0] != 0)
+            {
+                $mail_body1 = $lcomments . "\n\n";
+                $mail_body1.=msg('email_your_file_has_been_authorized') . "\n\n";
+                $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
+                $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . "\n\n";
+                $mail_body1.=msg('date') . ': ' . $date . "\n\n";
+                $mail_body1.=msg('label_reviewer') . ': ' . $full_name . "\n\n";
+                $mail_body1.=msg('email_thank_you') . ',' . "\n\n";
+                $mail_body1.=msg('email_automated_document_messenger') . "\n\n";
+                $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+                mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+            }
             
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
