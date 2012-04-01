@@ -82,3 +82,6 @@ Logged in as
             </div>
         </div>
         <p></p>
+        {if $lastmessage ne ''}
+            <div id="last_message">{$lastmessage}</div>
+        {/if}
