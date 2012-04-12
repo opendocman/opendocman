@@ -1,0 +1,28 @@
+= Credits and copyright
+
+See LICENSE file for details on the license for this software.
+
+== OpenDocMan contributors and acknowledgments
+
+All code copyright Stephen Lawrence Jr. 2002-2011
+
+* Stephen Lawrence Jr. [lead developer]
+* Khoa Nguyen [core programming]
+* Jon Miner [udf functions]
+* Willem van der Mark [ bug fixes and i8n ]
+
+== Translations
+
+* Jan Sepp [Dutch]
+* Martin Waiss [German]
+* Pablo Luis Zorzoli <pablozorzoli@yahoo.com.ar> [Spanish]
+* "A. Murat Ergin" <murat.ergin@ege.edu.tr> [Turkish]
+* Mihovil Stanić <Croatian>
+
+== Third-party code used
+Various lines of the installer logic - Wordpress
+Template system - Smarty
+Table output - DataTables
+Javascript library - jQuery
+Validation - jQuery validation plug-in Copyright (c) 2006 - 2008 JÃ¶rn Zaefferer
+

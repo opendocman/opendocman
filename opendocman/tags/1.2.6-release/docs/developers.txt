@@ -1,0 +1,43 @@
+developers.txt - notes for developers
+Copyright (C) 2002-2010  Stephen Lawrence
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+****
+**** automated installation and upgrade
+****
+There is a new folder named "install" which contains files use by the new script called setup.php. This is an automated web-based update/installation script. Here is how it works:
+
+The user loads setup.php into their browser. They can either select the new installation link, or one of the upgrade links.
+
+For a new installation, the user will be prompted to enter a priviledged mysql username and password. This is for the database creation and grant assignments. The script will then proceed to install all the necessary data structures and default data entries for the most current version of ODM.
+
+For updates, the user will be shown their current version (which comes from config.php), and they would then click on the appropriate upgrade link. For example, if their version number is 1.0, they would click on the "Upgrade from 1.0" link. This will apply all necessary database changes to their current database.
+
+For developers, when their is a new version release, a few new files need to be created and a current files modified:
+
+   1.  upgrade_x.php -  where x is the release name. This file should follow the same format as the other upgrade_x.php files and is used for upgrades only. This should be built from the output of a program like mysqldiff.pl and is the "diff"erence between the it's version, and the version before it.
+   2. setup.php - add a new function for the new version upgrade (ex. "do_update_x()") where x is the release name.
+         1. Inside this new function, you must "include" each previous upgrade file in succession (see upgrade_10.php for an exmaple).
+         2. Add a new case statement for the new upgrade call
+         3. Add a new link to print_intro() for the upgrade function
+   3. odm.php - This file should follow the same format as the current odm.php file, and should contain all the necessary sql commands to create a new installation. 
+   4. database.sql  - This should contain the same sql commands as odm.php, only in a mysqldump format for users that need to manually install the program for some reason.
+
+These files MUST be kept syncronized for each release!
+
+****
+****
+****
