@@ -47,31 +47,32 @@ if(!$user_obj->isAdmin() == true)
 */
 if(isset($_GET['submit']) && $_GET['submit']=='add')
 {
-    if (!isset($_POST['last_message']))
-    {
-        $_POST['last_message']='';
-    }
     draw_header(msg('area_add_new_department'), $last_message);
     ?>
 
-        <form id="addDepartmentForm" action="commitchange.php" method="POST" enctype="multipart/form-data">
+        <form id="addDepartmentForm" action="department.php" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
             <tr>
-                <td><b><?php echo msg('department')?></b></td>
-                <td colspan="3"><input name="department" type="text" class="required" minlength="2"></td>
-
-            <input type="hidden" name="submit" value="Add Department">
-            <td></td>
-            <td align="center"><div class="buttons"><button class="positive" type="submit" name="submit" value="Add Department"><?php echo msg('button_add_department')?></buttons></td>
-                        </form>
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-
-                            <td align="center">
-                                <div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div>
-                            </td>
-                        </form>
-                        </tr>
-                        </table>
+                <td>
+                    <b><?php echo msg('department')?></b>
+                </td>
+                <td colspan="3">
+                    <input name="department" type="text" class="required" minlength="2">
+                </td>
+                <td align="center">
+                    <input type="hidden" name="submit" value="Add Department">
+                    <div class="buttons">
+                        <button class="positive" type="submit" name="submit" value="Add Department"><?php echo msg('button_add_department')?></buttons>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="buttons">
+                        <button class="negative cancel" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    </div>
+                </td>
+            </tr>
+    </table>
+           </form>
    <script>
   $(document).ready(function(){
     $('#addDepartmentForm').validate();
@@ -79,6 +80,69 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
   </script>
 <?php
     draw_footer();
+}
+elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
+{
+    //Add Departments
+    //
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+
+    $department = (isset($_POST['department']) ? $_POST['department'] : '');
+    if($department == '') {
+        $last_message=msg('departmentpage_department_name_required');
+        
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        exit;
+    }
+    //Check to see if this department is already in DB
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name='" . addslashes($department) . "'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    if(mysql_num_rows($result) != 0)
+    {
+        header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $department . ' already exist in the database'));
+        exit;
+    }
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($department) . '\')';
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $last_message = urlencode(msg('message_department_successfully_added'));
+    /////////Give New Department data's default rights///////////
+    ////Get all default rights////
+    $query = "SELECT id, default_rights FROM {$GLOBALS['CONFIG']['db_prefix']}data";
+    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+    $num_rows = mysql_num_rows($result);
+    $data_array = array();
+
+    for($index = 0; $index< $num_rows; $index++)
+    {
+        list($data_array[$index][0], $data_array[$index][1]) = mysql_fetch_row($result);
+    }
+
+    mysql_free_result($result);
+    //////Get the new department's id////////////
+    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}department WHERE name = '" . addslashes($department) . "'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $num_rows = mysql_num_rows($result);
+    if( $num_rows != 1 )
+    {
+        header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $department));
+        exit;
+    }
+
+    list($newly_added_dept_id) = mysql_fetch_row($result);
+    ////Set default rights into department//////
+    $num_rows = sizeof($data_array);
+    for($index = 0; $index < $num_rows; $index++)
+    {
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    }
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
 {
@@ -136,16 +200,21 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     mysql_free_result ($result);
     ?>
                                         </select></td>
-                                    <td colspan="" align="center"><div class="buttons"><button class="positive" type="submit" name="submit" value="Show Department"><?php echo msg('button_view_department')?></button></div>
-                                </form>
-
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                    <td colspan="" align="center">
+                                        <div class="buttons">
+                                            <button class="positive" type="submit" name="submit" value="Show Department"><?php echo msg('button_view_department')?></button>
+                                        </div>
+                                    </td>
                                     <td>
-                                        <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div>
-                                </form>
+                                        <div class="buttons">
+                                            <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                        </div>
+                                    </td>
+
                                 </td>
                                 </tr>
                             </table>
+                     </form>
  <?php
     draw_footer();
 }
@@ -168,6 +237,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 
 
     // query to show item
+    echo '    <form action="department.php" method="POST" enctype="multipart/form-data">';
     echo '<table border=0>';
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id={$_REQUEST['item']}";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in department lookup: $query. " . mysql_error());
@@ -181,10 +251,12 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
     {
 
     ?>
-    <form action="commitchange.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
         <tr>
-            <td><?php echo msg('label_reassign_to');?>:<br />
+            <td>
+                <?php echo msg('label_reassign_to');?>:
+            </td>
+            <td>
                   <select name="assigned_id">
                       <?php
                             while(list($lid, $lname) = mysql_fetch_row($reassign_list_result))
@@ -198,13 +270,17 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
         </tr>
         <tr>
             <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
-            <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button></div></td>
-    </form>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
-        <td colspan="4" align="center"><div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div></td>
-    </form>
+            <td align="center">
+                <div class="buttons">
+                    <button class="positive" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button>
+                </div>
+                <div class="buttons">
+                    <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                </div>
+            </td>
 </tr>
-</TABLE>
+</table>
+    </form>
     <?php
     }
     draw_footer();
@@ -234,10 +310,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
                     </select></td>
 
                 <td></td>
-                <td colspan="2" align="center">
+                <td align="center">
                     <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
-                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>                        
+                    </div>
+                </td>
+                <td>
+                    <div class="buttons">
+                        <button class="negative cancel" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -246,12 +326,47 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
     <?php
     draw_footer();
 }
+elseif(isset($_REQUEST['deletedepartment']))
+{
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+
+    // Set all old dept_id's to the new re-assigned dept_id or remove the old dept_id
+
+    // Update entries in data table
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET department='{$_REQUEST['assigned_id']}' WHERE department = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in user
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET department='{$_REQUEST['assigned_id']}' WHERE department = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating user old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in dept perms
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET dept_id='{$_REQUEST['assigned_id']}' WHERE dept_id = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating user old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Update entries in dept_reviewer
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer SET dept_id='{$_REQUEST['assigned_id']}' WHERE dept_id = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating dept_reviewer old department ID to re-assigned dept id: $query. " . mysql_error());
+
+    // Delete from department
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}department where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in deleting ID from department: $query. " . mysql_error());
+
+    // back to main page
+    $last_message = urlencode(msg('message_all_actions_successfull') . ' id:' . $_REQUEST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+}
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 {
     $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(),$last_message);
     ?>  
-                        <form action="commitchange.php" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
+                        <form action="department.php" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
                             <table border="0" cellspacing="5" cellpadding="5">
                                 
                                     <tr>
@@ -272,14 +387,18 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
                                             mysql_free_result ($result);
                                             ?>
                                         <td>
-                                            <div class="buttons"><button class="positive" type="Submit" name="submit" value="Update Department"><?php echo msg('button_save')?></button>
+                                            <div class="buttons">
+                                                <button class="positive" type="Submit" name="submit" value="Update Department"><?php echo msg('button_save')?></button>
+                                            </div>
                                         </td>
-                                </form>
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" >
-                                    <td><div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div></td>
-                                </form>
-                                </tr>
+                                        <td>
+                                            <div class="buttons">
+                                                <button class="negative cancel" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                            </div>
+                                        </td>
+                                    </tr>
                             </table>
+                        </form>
    <script>
   $(document).ready(function(){
     $('#modifyDeptForm').validate();
@@ -311,18 +430,54 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                                                     ?>
                                         </td>
                                         <td>
-                                            <div class="buttons"><button class="positive" type="submit" name="submit" value="modify"><?php echo msg('button_modify_department')?></button></div>
+                                            <div class="buttons">
+                                                <button class="positive" type="submit" name="submit" value="modify"><?php echo msg('button_modify_department')?></button>
+                                            </div>
                                         </td>
-                                        </form>
-                                    <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
                                         <td >
-                                            <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div>
-                                    </form>
+                                            <div class="buttons">
+                                                <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                            </div>
                                     </td>
                                     </tr>
                                 </table>
+                            </form>
     <?php
     draw_footer();
+}
+elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
+{ 
+    // UPDATE Department
+    // 
+    // 
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    
+    $name = (isset($_POST['name']) ? $_POST['name'] : '');
+    if($name == '') {
+        $last_message=msg('departmentpage_department_name_required');
+        
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        exit;
+    }
+    
+    //Check to see if this department is already in DB
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}department where name=\"" . addslashes($name) . '" and id!=' . $_POST['id'];
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    if(mysql_num_rows($result) != 0)
+    {
+        header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database'));
+        exit;
+    }
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($name) ."' where id='$_POST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $last_message = urlencode(msg('message_department_successfully_updated') . ' - ' . $name . '- id=' . $_POST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {

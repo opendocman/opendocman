@@ -32,19 +32,19 @@ if (!isset ($_SESSION['uid']))
 }
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-if(!$user_obj->isReviewer() && !$user_obj->isRoot())
+if(!$user_obj->isReviewer() && !$user_obj->isAdmin())
 {
     header('Location:out.php?last_message=Access+denied');
 }
 
 $lcomments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) : '';
 
-//print_r($_REQUEST);exit;
 if(!isset($_REQUEST['submit']))
 {
     draw_header(msg('message_documents_waiting'), $last_message);
     $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    if($user_obj->isRoot())
+  
+    if($user_obj->isAdmin())
     {
         $id_array = $user_obj->getAllRevieweeIds();
     }
@@ -130,7 +130,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
     $mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
 
-    if($user_obj->isRoot())
+    if($user_obj->isAdmin())
     {
         $id_array = $user_obj->getAllRevieweeIds();
     }
@@ -201,7 +201,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
     $dept_id = $user_obj->getDeptId();
 
-    if($user_obj->isRoot())
+    if($user_obj->isAdmin())
     {
         $id_array = $user_obj->getAllRevieweeIds();
     }
@@ -277,7 +277,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
 {
-    $_REQUEST['last_message']=urlencode(msg('message_action_cancelled'));
-    header ('Location: toBePublished.php?last_message=' . $_REQUEST['last_message']);
+    $last_message=urlencode(msg('message_action_cancelled'));
+    header ('Location: toBePublished.php?last_message=' . $last_message);
 }
     draw_footer();

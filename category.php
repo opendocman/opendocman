@@ -42,7 +42,7 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
 {
     draw_header(msg('area_add_new_category'), $last_message);
     ?>
-    <form id="categoryAddForm" action="commitchange.php?last_message=<?php $_REQUEST['last_message']; ?>" method="GET" enctype="multipart/form-data">
+    <form id="categoryAddForm" action="category.php?last_message=<?php echo $last_message; ?>" method="GET" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -51,19 +51,13 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
                 <div class="buttons">
                     <button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
                 </div>
-                </form>
             </td>
             <td>
-                <form action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                    <div class="buttons">
-                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </form>
+                <div class="buttons">
+                    <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                 </div>
-            </td>
+             </td>
             </tr>
-
-
         </table>
     </form>
      <script>
@@ -73,6 +67,20 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
   </script>
     <?php
     draw_footer();
+}
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category')
+{
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $last_message = urlencode(msg('message_category_successfully_added'));
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
@@ -96,10 +104,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
         echo '<tr><td>'.msg('label_name').' :</td><td>' . $lname . '</td></tr>';
     }
     ?>
-    <form action="commitchange.php" method="POST" enctype="multipart/form-data">
+    <form action="category.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
         <tr>
-            <td><?php echo msg('label_reassign_to');?>:<br />
+            <td>
+                <?php echo msg('label_reassign_to');?>:
+            </td>
+            <td>
                   <select name="assigned_id">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id != '{$_REQUEST['item']}' ORDER BY name";
@@ -115,15 +126,41 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
         </tr>
         <tr>
             <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
-            <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button></div></td>
-    </form>
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
-        <td colspan="4" align="center"><div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button></div></td>
+            <td align="center">
+                <div class="buttons">
+                    <button class="positive" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button>
+                </div>
+                <div class="buttons">
+                    <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                </div>
+            </td>
     </form>
 </tr>
 </TABLE>
     <?php
     draw_footer();
+}
+elseif(isset($_REQUEST['deletecategory']))
+{
+    // Delete category
+    // 
+    // 
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    // Set all old category_id's to the new re-assigned category
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='{$_REQUEST['assigned_id']}' WHERE category = '{$_REQUEST['id']}'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to re-assigned category: $query. " . mysql_error());
+    
+    // back to main page
+    $last_message = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
@@ -154,7 +191,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
                 <td colspan="2" align="center">
                     <div class="buttons">
                         <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
-                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -179,7 +216,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
     echo '<td>' . $_REQUEST['item'] . '</td>';
     echo '</tr>';
     ?>
-<form action="admin.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+<form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
     <tr>
         <td colspan="4" align="center"><div class="buttons"><button class="regular" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div></td>
     </tr>
@@ -194,7 +231,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     draw_header(msg('area_view_category') . ' : ' . msg('choose'), $last_message);
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -214,7 +251,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                 <td colspan="3" align="center">
                     <div class="buttons">
                         <button class="positive" type="Submit" name="submit" value="Show Category"><?php echo msg('area_view_category')?></button>
-                        <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -229,7 +266,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 {
     draw_header(msg('area_update_category'), $last_message);
     ?>
-<form id="updateCategoryForm" action="commitchange.php?last_message=<?php echo $_REQUEST['last_message']; ?>" method="POST" enctype="multipart/form-data">
+<form id="updateCategoryForm" action="category.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
                        <?php
@@ -247,23 +284,20 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
                 ?>
 
 
-            <td >
+            <td align="center">
 
                 <div class="buttons">
                     <button class="positive" type="Submit" name="updatecategory" value="Modify Category"><?php echo msg('area_update_category')?></button>
                 </div>
             </td>
-        </form>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $_REQUEST['last_message']; ?>">
-            <td>
+            <td align="center">
                 <div class="buttons">
-                    <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    <button class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                 </div>
-        </form>
-        </div>
-        </td>
+            </td>
         </tr>
     </table>
+ </form>
  <script>
   $(document).ready(function(){
     $('#updateCategoryForm').validate();
@@ -294,10 +328,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                             ?>
                 </td>
 
-                <td colspan="3" align="center">
+                <td align="center">
                     <div class="buttons">
                         <button class="positive" type="submit" name="submit" value="Update"><?php echo msg('choose')?></button>
-                        <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    </div>
+                </td>
+                <td align="center">
+                    <div class="buttons">
+                        <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -307,8 +345,22 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
     <?php
     draw_footer();
 }
-elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
+elseif(isset($_REQUEST['updatecategory']))
 {
-    $_REQUEST['last_message']=urlencode(msg('message_action_cancelled'));
-    header ('Location: admin.php?last_message=' . $_REQUEST['last_message']);
+    // Make sure they are an admin
+    if (!$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    // back to main page
+    $last_message = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
+    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+}
+elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel')
+{
+    $last_message=urlencode(msg('message_action_cancelled'));
+    header ('Location: admin.php?last_message=' . $last_message);
 }

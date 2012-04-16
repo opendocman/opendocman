@@ -41,12 +41,21 @@ sort_browser();
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
-// How many are waiting for review?
-$reviewIdCount = sizeof($user_obj->getRevieweeIds());
-
-if($user_obj->isReviewer() && $reviewIdCount > 0)
+if ($user_obj->isAdmin())
+{   
+    $reviewIdCount = sizeof($user_obj->getAllRevieweeIds());   
+}
+elseif( $user_obj->isReviewer()) 
+{
+    $reviewIdCount = sizeof($user_obj->getRevieweeIds());
+}else {
+    $reviewIdCount = 0;
+} 
+    
+if($reviewIdCount > 0)
 {
     echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). '</a>: ' . $reviewIdCount  . '</a><br />';
+
 }
 
 $rejected_files_obj = $user_obj->getRejectedFileIds();

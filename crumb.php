@@ -96,7 +96,7 @@ class crumb
                     $trail .= "</a>";
                 }else
                 {
-                    $trail .= '<FONT class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</font>';
+                    $trail .= '<span class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</span>';
                     $trail .= "</span>";
                 }
                 if ($i != $cur_level)

@@ -116,28 +116,28 @@ elseif(isset($_POST['submit']) && $_POST['submit']=='Delete file(s)')
 {
     isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
 
-    foreach($_REQUEST['checkbox'] as $key=>$value)
+    foreach($_REQUEST['checkbox'] as $value)
     {
         if(!pmt_delete($value))
         {
-            header('Location: error.php');
+            header('Location: error.php?ec=21');
             exit;
         }
     }
-    header('Location:delete.php?mode=view_del_archive');
+    header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete')
 {
-    for($i= 0; $i<$_REQUEST['num_checkboxes']; $i++)
+    if(isset($_REQUEST['checkbox']))
     {
-        if(isset($_REQUEST["checkbox$i"]))
+        foreach ($_REQUEST['checkbox'] as $fileId)
         {
-            $file_obj = new FileData($_REQUEST["checkbox$i"], $GLOBALS['connection'], DB_NAME);
+            $file_obj = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
             $file_obj->undelete();
-            fmove($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST["checkbox$i"] . '.dat', $GLOBALS['CONFIG']['dataDir'] . $_REQUEST["checkbox$i"] . '.dat');
+            fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
         }
     }
-    header('Location:' . $_REQUEST['caller'] . '&last_message=' . urlencode('message_document_has_been_archived'));
+    header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
 }
 
 draw_footer();
@@ -177,9 +177,9 @@ function pmt_delete($id)
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
             $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());            
             $filename = $id . ".dat";
-            unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
+            unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);            
             if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )
             {
                 $dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
@@ -196,6 +196,8 @@ function pmt_delete($id)
                     rmdir($GLOBALS['CONFIG']['revisionDir'] . $id);
                 }
             }
+            return true;
         }
     }
+    return false;
 }

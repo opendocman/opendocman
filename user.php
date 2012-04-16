@@ -145,13 +145,13 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <tr>
                 <td><b><?php echo msg('label_is_admin')?>?</b></td>
                 <td>
-                <input name="admin" type="checkbox" value="1">
+                <input name="admin" type="checkbox" value="1" id="cb_admin">
                 </td>
                 </tr>
-                <TR>
-                <TD><b><?php echo msg('label_reviewer_for')?></b></TD>
-                <TD>
-                <SELECT class="multiView" name="department_review[]" multiple="multiple" />
+                <TR id="userReviewDepartmentRow">
+                <TD id="userReviewDepartmentLabelTd"><b><?php echo msg('label_reviewer_for')?></b></TD>
+                <TD id="userReviewDepartmentListTd">
+                <SELECT class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" />
                 <?php 
         $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
         $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
@@ -164,17 +164,24 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 </TD>
 </TR>
 <tr>
-<td columnspan=3 align="center">
-<div class="buttons"><button class="positive" type="Submit" name="submit" value="Add User"><?php echo msg('userpage_button_add_user')?></button>
-<button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
-
-</td>
+    <td align="center">
+        <div class="buttons">
+            <button id="submitButton" class="positive" type="Submit" name="submit" value="Add User"><?php echo msg('userpage_button_add_user')?></button>
+        </div>
+    </td>
+    <td>
+        <div class="buttons">    
+            <button id="cancelButton" class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button>
+        </div>
+    </td>
 </tr>
 </table>
 </form>
   <script>
   $(document).ready(function(){
-    $('#add_user').validate();
+      $('#submitButton').click(function(){
+          $('#add_user').validate();
+      })  
   });
   </script>
 <?php
@@ -244,12 +251,12 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         $mail_salute="\n\r" . msg('email_salute') . ",\n\r$full_name";
         $mail_to = $new_user_obj->getEmailAddress();
         mail($mail_to, $mail_subject, ($mail_greeting.' '.$mail_body.$mail_salute), $mail_headers);
-        $_POST['last_message'] = urlencode(msg('message_user_successfully_added'));
+        $last_message = urlencode(msg('message_user_successfully_added'));
 
         // Call the plugin API call for this section
         callPluginMethod('onAfterAddUser');
 
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
     }
 }
 // Delete USER from DB
@@ -280,8 +287,8 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
     // back to main page
-    $_POST['last_message'] = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
-    header('Location:' . $secureurl->encode('admin.php?last_message=' . $_POST['last_message']));
+    $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
+    header('Location:' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 // DELETE USER
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
@@ -316,13 +323,11 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 ?> 
                         ?
                         </td>
-                        <td colspan="4" align="center">
-                        <div class="buttons"><button class="positive" type="Submit" name="submit" value="Delete User"><?php echo msg('userpage_button_delete')?></button></div>
+                        <td align="center">
+                            <div class="buttons"><button class="positive" type="Submit" name="submit" value="Delete User"><?php echo msg('userpage_button_delete')?></button></div>
                         </td>
-                        </form>
-                        <form action="user.php" method="POST" enctype="multipart/form-data">
-                        <td colspan="4" align="center">
-                        <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
+                        <td align="center">
+                            <div class="buttons"><button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
                         </td>
                         </tr>
                         </form>
@@ -359,17 +364,14 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         </select>
                         </td>
                         <td>
-                        <div class="buttons"><button class="positive" type="Submit" name="submit" value="Delete"><?php echo msg('userpage_button_delete')?></button></div>
-                        </form>
+                            <div class="buttons"><button class="positive" type="Submit" name="submit" value="Delete"><?php echo msg('userpage_button_delete')?></button></div>
                         </td>
                         <td>
-                        <form action="user.php">
-                        <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
-                        </form>
+                            <div class="buttons"><button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
                         </td>
                         </tr>
                         </table>
-
+                        </form>
                         <?php
                         draw_footer();
         }
@@ -446,19 +448,19 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 ?>
                         </select>
                         </td>
-                        <tr>
-                        <td colspan="4" align="center">
+                        <td  align="center">
                         <div class="buttons">
                             <button class="positive" type="Submit" name="submit" value="Show User"><?php echo msg('userpage_button_show')?></button>
                         </div>
-                        </form>
-                        <td><form name='cancel' action='user.php'>
+                        </td>    
+                        <td>
                         <div class="buttons">
-                            <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button>
+                            <button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button>
                         </div>
-                        </form>
+                        </td>    
                         </tr>
                         </table>
+                        </form>
                         <?php
                         draw_footer();
         }
@@ -479,7 +481,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                     $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
                     draw_header(msg('userpage_update_user') . $user_obj->getName() ,$last_message);	
                     ?>
-                        <form name="update" id="modifyUserForm" action="commitchange.php" method="POST" enctype="multipart/form-data">
+                        <form name="update" id="modifyUserForm" action="user.php" method="POST" enctype="multipart/form-data">
                         <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
@@ -559,17 +561,17 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
-                        echo '<input name="admin" type="checkbox" value="1" checked '.$mode.'></input>'."\n";
+                        echo '<input name="admin" type="checkbox" value="1" checked '.$mode.' id="cb_admin"></input>'."\n";
                 }
                 else
                 {
-                        echo '<input name="admin" type="checkbox" value="1"  '.$mode.'></input>'."\n";
+                        echo '<input name="admin" type="checkbox" value="1"  '.$mode.' id="cb_admin"></input>'."\n";
                 }
 ?>
                 </TR>
-                <TR>
-                    <TD><?php echo msg('userpage_reviewer_for');?></TD>
-                <TD>
+                <TR id="userReviewDepartmentRow" <?php if($user_obj->isAdmin()) { echo 'style="display: none;"'; } ?>>
+                    <TD id="userReviewDepartmentLabelTd"><?php echo msg('userpage_reviewer_for');?></TD>
+                <TD id="userReviewDepartmentListTd">
                 <SELECT class="multiView" id="userReviewDepartmentsList" name='department_review[]' multiple="multiple" <?php echo $mode; ?>>
 <?php
                 $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = '{$_REQUEST['item']}'";
@@ -614,17 +616,18 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 ?>
                         </SELECT>
                         </TD></TR>
-                                               <tr>
-                                                       <td align="center" colspan="3">
-                                                       <INPUT type="hidden" name="set_password" value="0">
-                                                       <div class="buttons"><button class="positive" type="Submit" name="submit" value="Update User"><?php echo msg('userpage_button_update')?></button></div>  
-                        </form>
-                        <form action="user.php" >
-                        <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
-                        </form>
+                        <tr>
+                        <td align="center">
+                        <INPUT type="hidden" name="set_password" value="0">
+                        <div class="buttons">
+                            <button class="positive" type="Submit" name="submit" value="Update User"><?php echo msg('userpage_button_update')?></button></div>  
+                        </td>
+                        <td>
+                            <div class="buttons"><button class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
                         </td>
                         </tr>
                         </table>
+                        </form>
    <script>
   $(document).ready(function(){
     $('#modifyUserForm').validate();
@@ -633,6 +636,99 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         	<?php
                 } // End Not Demo mode
                           draw_footer();
+        }
+        elseif(isset($_POST['submit']) && 'Update User' == $_POST['submit'])
+        {       
+
+    // Check to make sue they are either the user being modified or an admin
+    if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin())
+    {
+        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        exit;
+    }
+
+    if(!isset($_POST['admin']) || $_POST['admin'] == '')
+    {
+        $_POST['admin'] = '0';
+    }
+
+    if(!isset($_POST['caller']) || $_POST['caller'] == '')
+    {
+        $_POST['caller'] = 'admin.php';
+    }
+
+    // UPDATE admin info
+    if($user_obj->isAdmin())
+    {
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
+        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    }
+    // UPDATE into user
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET ";
+
+    if($user_obj->isAdmin())
+    {
+        $query .= "username='". addslashes($_POST['username']) ."',";
+    }
+    
+    if (!empty($_POST['password']))
+    {
+        $query .= "password = md5('". addslashes($_POST['password']) ."'), ";
+    }
+    if ($user_obj->isAdmin())
+    {
+        if( isset( $_POST['department'] ) )
+        {
+            $query.= 'department="' . addslashes($_POST['department']) . '",';
+        }
+    }
+    if( isset( $_POST['phonenumber'] ) )
+    {
+        $query.= 'phone="' . addslashes($_POST['phonenumber']) . '",';
+    }
+
+    if( isset( $_POST['Email'] ) )
+    {
+        $query.= 'Email="' . addslashes($_POST['Email']) . '" ,';
+    }
+
+    if( isset( $_POST['last_name'] ) )
+    {
+        $query.= 'last_name="' . addslashes($_POST['last_name']) . '",';
+    }
+
+    if( isset( $_POST['first_name'] ) )
+    {
+        $query.= 'first_name="' . addslashes($_POST['first_name']) . '" ';
+    }
+
+    $query.= 'WHERE id="' . $_POST['id'] . '"';
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    if ($user_obj->isAdmin())
+    {
+        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer WHERE user_id = '{$_POST['id']}'";
+        $result = mysql_query($query, $GLOBALS['connection'])
+                or die("Error in query: $query". mysql_error());
+            if(isset($_REQUEST['department_review']))
+            {
+                for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
+                {
+                    $dept_rev = addslashes($_REQUEST['department_review'][$i]);
+                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '{$_POST['id']}')";
+                    $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+                }
+            }
+    }
+
+    // back to main page
+    if(!isset($_POST['caller']))
+    {
+        $_POST['caller'] = 'admin.php';
+    }
+
+    $last_message = urlencode(msg('message_user_successfully_updated'));
+    header('Location: ' . $_POST['caller'] . '?last_message=' . $last_message);
         }
         // CHOOSE USER TO UPDATE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')
@@ -670,13 +766,10 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 ?>
                         </td>
                         <td>
-                        <div class="buttons"><button class="positive" type="Submit" name="submit" value="Modify User"><?php echo msg('userpage_button_modify')?></button></div>
+                            <div class="buttons"><button class="positive" type="Submit" name="submit" value="Modify User"><?php echo msg('userpage_button_modify')?></button></div>
                         </td>
-                        </form>
                         <td>
-                        <form action="user.php">
-                        <div class="buttons"><button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
-                        </form>
+                            <div class="buttons"><button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('userpage_button_cancel')?></button></div>
                         </td>
                         </tr>
                         </table>
@@ -752,11 +845,11 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                                 <br>
                                 <input type="hidden" name="submit" value="change_personal_info">
                                 <input type="Submit" name="change_personal_info" value="Submit">
-                                <input type="Button" name="submit" value="Cancel" onclick="redirect('profile.php?last_message=Personal Info alteration canceled')">
+                                <input type="Button" name="cancel" value="Cancel" onclick="redirect('profile.php?last_message=Personal Info alteration canceled')">
                                 </form>
 <?php
         }
-        elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
+        elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel')
         {
                 $last_message="Action Cancelled";
                 header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));

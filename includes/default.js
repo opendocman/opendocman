@@ -35,6 +35,34 @@ $(document).ready(function() {
             $("#last_message").animate({left:"+=10px"}).animate({left:"-5000px"});
         });
         blink();
+        
+        // If the user is an admin, then disable the reviewer input
+        var $adminUser = $('#cb_admin');
+        
+        if($adminUser.length > 0) {
+        $adminUser.change(function(){ 
+            if ($(this).attr("checked")) {
+                // checked
+                $('#userReviewDepartmentRow').fadeOut(200);
+                return;
+            } else {
+                $('#userReviewDepartmentRow').fadeIn(200);
+            }
+
+            })          
+            
+            function toggleAdminReviewerBoxes() {
+                if($adminUser.not(':checked')) {
+                    
+                    alert('not currently checked');
+                } else {
+                    alert('is currently checked');
+                }
+            }
+
+        }
+        // END admin/reviewer toggles
+        
 //        
 //        // validate the comment form when it is submitted
 //	if($("#settingsForm").length > 0) {
