@@ -350,6 +350,10 @@ $lang['editpage_none'] = 'None';
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'A department name is required';
 
+// Delete/Undeleta Admin Page
+$lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
+$lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';
+
 // Details Page
 $lang['detailspage_view'] = 'Ver';
 $lang['detailspage_check_out'] = 'Bloquear y Actualizar Documento';

@@ -228,13 +228,13 @@ if( !defined('User_class') )
             return true;
         }
         
-        // this functions assume that you are a root thus allowing you to by pass everything
+        // this functions assume that you are an admin thus allowing you to review all departments
         function getAllRevieweeIds() 
         {
-            if($this->isRoot())
+            if($this->isAdmin())
             {
                 $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 0";
-                $lresult = mysql_query($lquery, $this->connection) or die("Error in query: $query" . mysql_error());
+                $lresult = mysql_query($lquery, $this->connection) or die("Error in query: $lquery" . mysql_error());
                 $lfile_data = array();
                 $lnum_files = mysql_num_rows($lresult);
                 for($lindex = 0; $lindex< $lnum_files; $lindex++)
@@ -246,14 +246,22 @@ if( !defined('User_class') )
             }
         }
         
-        //return an array of files that need reviewing under this person
+        /*
+         * getRevieweeIds - Return an array of files that need reviewing under this person
+         * @return array
+         */
         function getRevieweeIds() 
         {
             if($this->isReviewer())
             {
+                // Which departments can this user review?
                 $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_REVIEWER WHERE user_id = ".$this->id;
                 $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+                
+                // How many reviewable departments are there?
                 $num_depts = mysql_num_rows($result);
+                
+                // Build the query
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE (";
                 for($index = 0; $index < $num_depts; $index++)
                 {

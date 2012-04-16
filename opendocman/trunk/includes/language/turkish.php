@@ -370,6 +370,10 @@ $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
 $lang['editpage_none'] = 'None';
 
+// Delete/Undeleta Admin Page
+$lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
+$lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';
+
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'A department name is required';
 
