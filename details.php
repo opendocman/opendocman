@@ -2,7 +2,7 @@
 /*
 details.php - display file information  check for session
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2012 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@ include('odm-load.php');
 include('udf_functions.php');
 
 $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
+
+$full_requestId = $_REQUEST['id'];
 
 // in case this file is accessed directly - check for $_REQUEST['id']
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "")
@@ -249,7 +251,7 @@ callPluginMethod('onDuringDetails',$filedata->id);
 if($userPermObj->getAuthority($_REQUEST['id'],$filedata) >= $userPermObj->READ_RIGHT)
 {
 ?>
-<td align="center"><div class="buttons"><a href="<?php echo $secureurl->encode("view_file.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state']+1)); ?>" class="positive"><img src="images/view.png" alt="view"/><?php echo msg('detailspage_view')?></a></div></td>
+<td align="center"><div class="buttons"><a href="<?php echo $secureurl->encode("view_file.php?id=$full_requestId" . '&state=' . ($_REQUEST['state']+1)); ?>" class="positive"><img src="images/view.png" alt="view"/><?php echo msg('detailspage_view')?></a></div></td>
 <?php
 }		
 
