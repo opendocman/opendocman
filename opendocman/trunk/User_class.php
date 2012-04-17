@@ -213,12 +213,12 @@ if( !defined('User_class') )
                             {$GLOBALS['CONFIG']['db_prefix']}data as d,
                             {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
                       WHERE
-                            d.publishable >0 AND
+                            
                             dr.dept_id = d.department AND
                             dr.user_id = {$this->id} AND
                             d.department=dr.dept_id AND
                             d.id = '$file_id'
-                            ";
+                            ";                          
             $result = mysql_query($query, $this->connection) or die("Error in query during isReviewerForFile call: " . mysql_error());
             $num_rows = mysql_num_rows($result);
             if($num_rows < 1)
