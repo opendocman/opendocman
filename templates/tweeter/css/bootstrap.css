@@ -757,7 +757,7 @@ input[type="image"], input[type="checkbox"], input[type="radio"] {
   width: auto;
   height: auto;
   padding: 0;
-  margin: 3px 0;
+  margin: 3px 4px 10px 10px;
   *margin-top: 0;
   /* IE7 */
 
