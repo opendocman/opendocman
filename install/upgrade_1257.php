@@ -52,7 +52,7 @@ $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');",
-"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'theme', 'default', 'Which theme to use?', '');",
+"INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'theme', 'tweeter', 'Which theme to use?', '');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');",
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'base_url', '{$_SESSION['baseurl']}', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');"
 );
