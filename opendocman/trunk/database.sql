@@ -250,7 +250,7 @@ INSERT INTO `odm_settings` VALUES(NULL,'secureurl', 'True', 'Secure URL control:
 INSERT INTO `odm_settings` VALUES(NULL,'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');
-INSERT INTO `odm_settings` VALUES(NULL,'theme', 'default', 'Which theme to use?', '');
+INSERT INTO `odm_settings` VALUES(NULL,'theme', 'tweeter', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
 INSERT INTO `odm_settings` VALUES(NULL,'base_url', 'http://localhost/opendocman', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');
 
