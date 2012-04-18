@@ -170,11 +170,6 @@ function draw_menu()
  */
 function draw_header($pageTitle, $lastmessage='')
 {
-    if (is_dir('install'))
-    {
-        echo '<span style="color: red;">' . msg('install_folder') . '</span>';
-    }
-
     $uid = (isset($_SESSION['uid']) ? $_SESSION['uid'] : '');
     
     // Is the uid set?
@@ -208,6 +203,12 @@ function draw_header($pageTitle, $lastmessage='')
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
     $GLOBALS['smarty']->assign('lastmessage', $lastmessage);
     display_smarty_template('header.tpl');
+    
+    if (is_dir('install'))
+    {
+        echo '<span style="color: red;">' . msg('install_folder') . '</span>';
+    }
+
 }
 
 function draw_error($message)
