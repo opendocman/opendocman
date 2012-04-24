@@ -138,7 +138,8 @@ if(!isset($_POST['submit']))
         <td>
             <a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_file_location');?></a>
         </td>
-        <td colspan=3><input tabindex="0" name="file" type="file">
+        <td colspan=3>
+            <input tabindex="0" name="file[]" type="file" multiple="multiple">
         </td>
     </tr>
 
@@ -428,16 +429,42 @@ if(!isset($_POST['submit']))
 }
 else 
 {
-    //submited form
-    // change this to 100 if you want to add 100 of the same files automatically.  For debuging purpose only
-    for($khoa = 0; $khoa<1; $khoa++)
+    //invalid file
+    if (empty($_FILES))
     {
-        //invalid file
-        if(empty($_FILES))
+        header('Location:error.php?ec=11');
+        exit;
+    }
+
+    $numberOfFiles = count($_FILES['file']['name']);
+    
+    // First we need to make sure all files are allowed types
+    for ($count = 0; $count < $numberOfFiles; $count++)
+    {
+        // check file type
+        foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
         {
-            header('Location:error.php?ec=11');
+            if ($_FILES['file']['type'][$count] == $thistype)
+            {
+                $allowedFile = 1;
+                break;
+            } else
+            {
+                $allowedFile = 0;
+            }
+        }
+        // illegal file type!
+        if ($allowedFile != 1)
+        {
+            $last_message = 'MIMETYPE: ' . $_FILES['file']['type'][$count] . ' Failed';
+            header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
             exit;
         }
+    }
+    
+    //submited form
+    for ($count = 0; $count<$numberOfFiles; $count++)
+    {
         
         if ($GLOBALS['CONFIG']['authorization'] == 'True')
         {
@@ -468,40 +495,18 @@ else
             list($current_user_dept) = mysql_fetch_row($result);
         }
         // File is bigger than what php.ini post/upload/memory limits allow.
-        if($_FILES['file']['error'] == '1')
+        if($_FILES['file']['error'][$count] == '1')
         {
            header('Location:error.php?ec=26');
             exit;
         }
 
         // File too big?
-        if($_FILES['file']['size'] >  $GLOBALS['CONFIG']['max_filesize'] )
+        if($_FILES['file']['size'][$count] >  $GLOBALS['CONFIG']['max_filesize'] )
         {
             header('Location:error.php?ec=25');
             exit;
         }
-
-    // check file type
-    foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-    {
-        if ($_FILES['file']['type'] == $thistype)
-        {
-            $allowedFile = 1;
-            break;
-        }
-        else
-        {
-            $allowedFile = 0;
-        }
-    }
-    // illegal file type!
-    if ($allowedFile != 1)
-    {
-        $last_message='MIMETYPE: ' . $_FILES['file']['type'] . ' Failed';
-        header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
-        exit;
-    }
-
 
         // Check to make sure the dir is available and writeable
         if (!is_dir($GLOBALS['CONFIG']['dataDir']))
@@ -554,7 +559,7 @@ else
             0,
             '" . addslashes($_REQUEST['category']) . "',
             '" . addslashes($owner_id) . "',
-            '" . addslashes($_FILES['file']['name']) . "',
+            '" . addslashes($_FILES['file']['name'][$count]) . "',
             NOW(),
             '" . addslashes($_REQUEST['description']) . "',
             '" . addslashes($current_user_dept) . "',
@@ -623,27 +628,23 @@ else
         // save uploaded file with new name
         $newFileName = $fileId . '.dat';
 
-        if($khoa==0)
+        if (!is_uploaded_file($_FILES['file']['tmp_name'][$count]))
         {
-            if (!is_uploaded_file ($_FILES['file']['tmp_name']))
-            {
-                header('Location: error.php?ec=18');
-                exit;
-            }
-            move_uploaded_file($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+            header('Location: error.php?ec=18');
+            exit;
         }
-        else
-        {
-            copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
-        }
+        move_uploaded_file($_FILES['file']['tmp_name'][$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+
+        //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+        
         // back to main page
         $message = urlencode(msg('message_document_added'));
 
         // Call the plugin API
-        callPluginMethod('onAfterAdd',$fileId);
-        
-        header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
+        callPluginMethod('onAfterAdd', $fileId);
     }
+    header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
+    exit;
 }
 ?>
 <script type="text/javascript">
