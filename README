@@ -1,0 +1,71 @@
+Check the docs folder for further documentation
+
+
+1 Installation and Updating
+
+1.1 Update Procedure
+
+ To update your current version to the latest release:
+
+ 1. Rename your current opendocman folder.
+
+ 2. Unarchive opendocman into a new folder and rename it to the original folder name
+
+ 3. Load the opendocman page in your web browser ( ex. http://www.example.com/opendocman/ )
+
+ 4. You should follow the prompts for installation.
+
+ 5. When you get to the end you will be able to choose an upgrade path
+
+ 6. Refer to your old config.php file for database connection values
+
+1.2 New Installation (Automatic)
+
+ 1. Untar/Unzip files into any dir in your webserver documents dir
+
+ 2. Create a MySQL database/username/password.
+
+ 3. Make a directory for the files to be stored that is accessible
+  to the web server but not available by browsing. Ensure the
+  permissions are correct on this folder to allow for the web
+  server to write to it. Refer to the help text in the installer
+  for more information.
+
+  ex.  $>mkdir /usr/local/opendocman/data
+
+ 4. Load the opendocman page in your web browser
+(ex. http://www.example.com/opendocman/ ) and follow the prompts.
+
+ 5. Login as "admin" (with the password you set during the installation). 
+
+ 6. Edit your site settings at Admin->Site Settings
+
+ 7. Add departments, categories, users, etc.
+
+ 8. Enjoy!
+
+1.3 New Installation (Manual)
+
+ 1. Untar/Unzip files into any dir in your webserver documents dir
+
+ 2. Create a MySQL database/username/password.
+
+ 3. Make a directory for the files to be stored that is accessible
+  to the web server but not available by browsing. Ensure the
+  permissions are correct on this folder to allow for the web
+  server to write to it
+
+  ex.  $>mkdir /usr/local/opendocman/data
+
+ 4. Copy the config-sample.php to config.php
+ 
+ 5. Edit the config.php to include your database parameters
+
+ 6. Edit the database.sql file. You need to change the values set in the odm_settings table, specifically for these two entries:
+    dataDir
+    base_url
+    
+    Change those to reflect the correct locations.
+ 7. Import your database.sql file into your database
+
+ 8. Visit the URL for your installation and login as admin (no password)
