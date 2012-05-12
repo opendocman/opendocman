@@ -151,7 +151,9 @@ deny from all
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
 			<td><input name="dbhost" id="dbhost" type="text" size="25" value="localhost" class="required" minlength="2"/></td>
-			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.</td>
+			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work. 
+                            It can also include a port number. e.g. "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for the localhost. 
+                        </td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Table Prefix</label></th>
