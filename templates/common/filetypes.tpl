@@ -1,4 +1,5 @@
-    <table class="form-table" style="width: 200px;">
+<form action="filetypes.php" method="POST" enctype="multipart/form-data">    
+<table class="form-table" style="width: 200px;">
         <thead>
             <tr>
                 <th colspan="3">{$g_lang_label_allowed}&nbsp;{$g_lang_label_filetypes}</th>
@@ -8,25 +9,21 @@
             <tbody>
                 <tr>
                     <td>
-                        <form action="filetypes.php" method="POST" enctype="multipart/form-data">
-                            <select class="multiView" multiple="multiple" id="types" name="types[]">
+                        <select class="multiView" multiple="multiple" id="types" name="types[]">
                             {foreach from=$filetypes_array item=i}
                                 <option value="{$i.id}" {if $i.active eq '1'}selected="selected"{/if}>{$i.type}</option>
                             {/foreach}
-                            </select>
+                        </select>
                     </td>
                 
-                    <td align="center">
-                    <div class="buttons"><button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
-
-         </form>
-                                            </td>
-                                            <td>
-
-         <form action="{php}echo $_SERVER['PHP_SELF']; {/php}">
-                <div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button></div>
-            </td>
-        </form>
+                    <td>
+                        <div class="buttons"><button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
+                    </td>
+                    <td >
+                        <div class="buttons">
+                            <button class="negative" type="Submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button>
+                        </div>
+                     </td>
         </tr>
         <tr>
             <td>
@@ -35,3 +32,4 @@
         </tr>
         <tbody>
     </table>
+</form>
