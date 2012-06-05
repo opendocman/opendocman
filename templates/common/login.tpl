@@ -43,7 +43,7 @@
         {/if}
         {if $g_allow_signup eq 'True'}
                 <tr>
-            <td colspan="2"><a href="<?php echo $GLOBALS['CONFIG']['base_url']; ?>/signup.php"><?php echo msg('signup');?></a>
+            <td colspan="2"><a href="{$g_base_url}/signup.php">{$g_lang_signup}</a>
         </tr>
         {/if}
         
