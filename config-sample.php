@@ -36,6 +36,8 @@ define('DB_USER', 'username_here');
 define('DB_PASS', 'password_here');
 
 /** MySQL hostname */
+/* The MySQL server. It can also include a port number. e.g. "hostname:port" or a path to a 
+ * local socket e.g. ":/path/to/socket" for the localhost.  */
 define('DB_HOST', 'localhost');
 
 /**

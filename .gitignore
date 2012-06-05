@@ -4,3 +4,5 @@
 ~$*
 .*.swp
 Thumbs.db
+/nbproject
+.gitignore
