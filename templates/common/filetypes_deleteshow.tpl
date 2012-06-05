@@ -16,15 +16,16 @@
                         {/foreach}
                         </select>
                     </td>
-                    <td align="center">
-                    <div class="buttons"><button class="positive" type="submit" name="submit" value="Delete">{$g_lang_button_delete}</button>
-         </form>
-                </td>
-         <form action="{php}echo $_SERVER['PHP_SELF']; {/php}">
-            <td align="center">
-                <div class="buttons"><button class="negative" type="submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button></div>
-            </td>
-        </form>
+                    <td>
+                        <div class="buttons">
+                            <button class="positive" type="submit" name="submit" value="Delete">{$g_lang_button_delete}</button>
+                        </div>
+                    </td>
+                    <td >
+                        <div class="buttons">
+                            <button class="negative" type="Submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button>
+                        </div>
+                     </td>
         </tr>
 
         <tbody>
