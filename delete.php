@@ -27,6 +27,7 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 include('odm-load.php');
+require_once("AccessLog_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -78,9 +79,11 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
     // clean up and back to main page
     $last_message = urlencode(msg('message_document_has_been_archived'));
 
+    AccessLog::addLogEntry($_REQUEST['id'],'X');
+        
     // Call the plugin API call for this section
     callPluginMethod('onAfterArchiveFile');
-
+    
     header('Location: out.php?last_message=' . $last_message);
 }
 elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )

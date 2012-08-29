@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 
 include('odm-load.php');
+require_once("AccessLog_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -152,6 +153,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
+            addLogEntry($fileid,'R');
             // Set up rejected email message to sent out
             $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' . msg('email_was_rejected_from_repository');
             $mail_body = $lcomments . "\n\n";
@@ -221,7 +223,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);            
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
-         
+            
             // Build email for author notification
             if(isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users']))
             {
@@ -241,7 +243,8 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
-
+            AccessLog::addLogEntry($fileid,'Y');
+            
             // Build email for general notices
             $mail_subject = (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
             $mail_body2=$lcomments . "\n\n";

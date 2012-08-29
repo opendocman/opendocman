@@ -3,6 +3,17 @@
 #--------------------------------------------------------
 
 #
+# Table structure for table 'odm_access_log'
+#
+
+CREATE TABLE `odm_access_log` (
+  `file_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
+);
+
+#
 # Table structure for table 'odm_admin'
 #
 
