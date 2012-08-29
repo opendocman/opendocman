@@ -1,7 +1,7 @@
 <?php
 /*
 odm.php - main file for creating a fresh installation
-Copyright (C) 2002-2010  Stephen Lawrence
+Copyright (C) 2002-2012  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,6 +30,21 @@ if(!isset($_SESSION['adminpass']))
 }
 $adminpass = $_SESSION['adminpass'];
 
+// Access Log Table
+$result = mysql_query("
+DROP TABLE IF EXISTS {$dbprefix}access_log
+        ") or die("<br>Could not create {$dbprefix}access_log table. Error was:" .  mysql_error());
+        
+$result = mysql_query("
+CREATE TABLE `{$dbprefix}access_log` (
+  `file_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
+)
+    ") or die("<br>Could not create {$dbprefix}access_log table. Error was:" .  mysql_error());
+
+// Admin table    
 $result = mysql_query("
 DROP TABLE IF EXISTS {$dbprefix}admin
         ") or die("<br>Could not create {$dbprefix}admin table. Error was:" .  mysql_error());

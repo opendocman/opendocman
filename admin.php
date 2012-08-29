@@ -140,6 +140,16 @@ draw_header(msg('label_admin'), $last_message);
             </tr>
         </table>
     </td>
+     <td>
+         <table>
+             <tr>
+                 <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('adminpage_reports');?></font></th>
+             </tr>
+             <tr>
+                 <td><b><a href="<?php echo $secureurl->encode('access_log.php?submit=update&state=' . ($_REQUEST['state']+1)); ?>"><?php echo msg('adminpage_access_log');?></a></b></td>
+             </tr>
+         </table>
+     </td>
 </tr>
 
     <?php } ?>
