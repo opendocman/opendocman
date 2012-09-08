@@ -465,6 +465,3 @@ $lang['accesslogpage_file_deleted'] = 'File Deleted';
 $lang['accesslogpage_file_authorized'] = 'File Authorized';
 $lang['accesslogpage_file_rejected'] = 'File Rejected';
 $lang['accesslogpage_reserved'] = 'Reserved';
-
-// User page
-$lang['userpage_reviewer_for'] = 'Reviewer for';
