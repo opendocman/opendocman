@@ -341,7 +341,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=update_1257">Upgrade from version 1.2.5.7 or 1.2.6beta</a><br><br></td>
+                <td><a href="index.php?op=update_1257">Upgrade from versions 1.2.5.7 - 1.2.6.1</a><br><br></td>
             </tr>
             <tr>
                 <td><a href="index.php?op=update_1256">Upgrade from version 1.2.5.3</a><br><br></td>
