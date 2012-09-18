@@ -34,6 +34,7 @@ if (!isset($_SESSION['uid']))
 }
 include('odm-load.php');
 include('udf_functions.php');
+require_once("AccessLog_class.php");
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
@@ -643,6 +644,9 @@ else
         // Call the plugin API
         callPluginMethod('onAfterAdd', $fileId);
     }
+        
+    AccessLog::addLogEntry($fileId, 'A');
+
     header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
     exit;
 }

@@ -232,6 +232,11 @@ $lang['label_user_defined_field'] = 'Campos a Definidos por Usuario';
 $lang['label_user_defined_fields'] = 'Campos Definidos por Usuario';
 $lang['label_users_in_department'] = 'Usuarios en esta Area';
 $lang['label_view'] = 'Ver';
+$lang['label_userid'] = 'User ID';
+$lang['label_fileid'] = 'File ID';
+$lang['label_username'] = 'User Name';
+$lang['label_action'] = 'Action';
+$lang['label_date'] = 'Date';
 
 // Mensajes
 $lang['message_account_created'] = 'Su usuario ha sido creado. Por favor revise su e-mail por informaci&oacute;n requerida .';
@@ -422,3 +427,18 @@ $lang['userpage_yes'] = 'S&iacute;';
 // Admin Page
 $lang['adminpage_edit_filetypes'] = 'Editar Tipo de Documentos';
 $lang['adminpage_edit_settings'] = 'Editar Configuraci&oacute;n';
+$lang['adminpage_reports'] = 'Reports';
+$lang['adminpage_access_log'] = 'Access Log';
+
+// Access Log page
+$lang['accesslogpage_access_log'] = 'Access Log';
+$lang['accesslogpage_file_added'] = 'File Added';
+$lang['accesslogpage_file_viewed'] = 'File Viewed';
+$lang['accesslogpage_file_downloaded'] = 'File Downloaded';
+$lang['accesslogpage_file_modified'] = 'File Modified';
+$lang['accesslogpage_file_checked_in'] = 'File Checked-in';
+$lang['accesslogpage_file_checked_out'] = 'File Checked-out';
+$lang['accesslogpage_file_deleted'] = 'File Deleted';
+$lang['accesslogpage_file_authorized'] = 'File Authorized';
+$lang['accesslogpage_file_rejected'] = 'File Rejected';
+$lang['accesslogpage_reserved'] = 'Reserved';

@@ -27,6 +27,7 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 include('odm-load.php');
+require_once("AccessLog_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -234,7 +235,9 @@ else
         // rename and save file
         $newFileName = $_POST['id'] . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
-
+    
+        AccessLog::addLogEntry($_POST['id'],'I');
+    
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');
         header('Location: out.php?last_message=' . urlencode($last_message));

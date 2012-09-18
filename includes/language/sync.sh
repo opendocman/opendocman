@@ -2,13 +2,17 @@
 # Unix Script to compare english language file with others to show if
 # the other language file is out of sync with english
 #
-# usage: sync.sh <language>
+# usage: sync.sh <language-name>
 # ex. sync.sh spanish
 #
-if [ $1 == "" ]
+
+if [ $# -ne 1 ]
 then
-        echo "usage: sync.sh <language>"
-        exit
+        echo "usage: sync.sh <language-name>"
+	echo "This script will compare the english lang file to the provided language file"
+	echo "to determine if there are any missing language phrases"
+	echo "Example: 'sync.sh chinese'"
+        exit 1
 fi
 
 cat english.php |grep "lang\\['" |awk -F= {'print $1'} | sort > english.diff

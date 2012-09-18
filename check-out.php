@@ -27,7 +27,8 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 include('odm-load.php');
-
+require_once("AccessLog_class.php");
+ 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if(strchr($_REQUEST['id'], '_') )
@@ -91,6 +92,9 @@ else
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);
+        
+        AccessLog::addLogEntry($_REQUEST['id'],'O');
+        AccessLog::addLogEntry($_REQUEST['id'],'D');
     }
     else
     {

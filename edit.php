@@ -22,7 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 include('odm-load.php');
 include('udf_functions.php');
-
+require_once("AccessLog_class.php");
+ 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if(strchr($_REQUEST['id'], '_') )
@@ -578,9 +579,11 @@ else
 	mysql_freeresult($result);
 	$message = urlencode('Document successfully updated');
 
+        AccessLog::addLogEntry($fileId,'M');
+                
         // Call the plugin API
         callPluginMethod('onAfterEditFile',$fileId);
-
+        
         header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
 }
 ?>
