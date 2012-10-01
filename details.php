@@ -190,39 +190,43 @@ else
 <tr>
 <th valign=top align=right><?php echo msg('revision')?>:</th><td>
     <?php
-    if(isset($lrevision_id))
-    {
+   //chm sahar
+    if( isset($lrevision_id) ) {
         $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-           {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-           {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-           {$GLOBALS['CONFIG']['db_prefix']}log.note, 
-           {$GLOBALS['CONFIG']['db_prefix']}log.revision 
-           FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-           WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-           AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-           AND {$GLOBALS['CONFIG']['db_prefix']}log.revision <= $lrevision_id 
-           AND {$GLOBALS['CONFIG']['db_prefix']}log.revision != 'current'
-           ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+        {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.note, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.revision 
+        FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
+        WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
+        AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
+        AND {$GLOBALS['CONFIG']['db_prefix']}log.revision = $lrevision_id 
+        ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+    } else {
+        $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
+        {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.note, 
+        {$GLOBALS['CONFIG']['db_prefix']}log.revision 
+        FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
+        WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
+        AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
+        ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+    }  
+  
+    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+    $rows = mysql_num_rows($result);
+    $revisionData = mysql_fetch_assoc($result);
+
+    if ($rows == 1 && !(isset($lrevision_id))) {
+        echo "1";
+    } elseif(isset($lrevision_id)) {
+        echo $lrevision_id+1;
+    } else {
+        echo "$rows";
     }
-    else
-    {
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-               {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-               {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-               {$GLOBALS['CONFIG']['db_prefix']}log.note, 
-               {$GLOBALS['CONFIG']['db_prefix']}log.revision 
-               FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-               WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-               AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-               ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
-    }
-        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-        $current_revision = mysql_num_rows($result);
-        if ($current_revision > '1') {
-            echo $current_revision;
-        } elseif ($current_revision == '1') {
-            echo msg('message_original_version');
-        }
+
+      
     ?>
 </td>
 </tr>
