@@ -272,7 +272,7 @@ DROP TABLE IF EXISTS {$dbprefix}udf
 $result = mysql_query("
 CREATE TABLE IF NOT EXISTS {$dbprefix}udf (
     id  int auto_increment unique,
-    table_name varchar(16),
+    table_name varchar(50),
     display_name varchar(16),
     field_type int
 )

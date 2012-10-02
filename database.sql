@@ -222,7 +222,7 @@ CREATE TABLE odm_user_perms (
 CREATE TABLE odm_udf
 (
     id  int(11) auto_increment unique,
-    table_name  varchar(16),
+    table_name  varchar(50),
     display_name    varchar(16),
     field_type  int
 );
