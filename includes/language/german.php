@@ -237,6 +237,13 @@ $lang['label_fileid'] = 'File ID';
 $lang['label_username'] = 'User Name';
 $lang['label_action'] = 'Action';
 $lang['label_date'] = 'Date';
+$lang['label_type_pr_sec'] = 'Type'; //CHM
+$lang['label_primary_type'] = 'Primary'; //CHM
+$lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
+$lang['label_userid'] = 'User ID';
+$lang['label_username'] = 'User Name';
+$lang['label_action'] = 'Action';
+$lang['label_date'] = 'Date';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Ihr Konto wurde erstellt';
