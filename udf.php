@@ -500,7 +500,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             xmlhttp.send();
             }
 */            </script>
-            <?
+            <?php
 			echo '<form id="editUdfForm" method="POST">';
 			echo '<input type=hidden name=submit value="edit">';
 			echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
@@ -513,7 +513,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 			
 			<div id="txtHint">
             
-            <?
+            <?php
 			/*echo "<PRE>";
 			print_r($_REQUEST);*/
 			echo '<table>';
