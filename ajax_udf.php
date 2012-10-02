@@ -45,7 +45,7 @@ $q=$_GET["q"];
                         echo '</select></td></tr>';
                         echo '</table>';
                     }
-fb::log($q);                    
+                  
                     if ($q == 'secondary') {
                         $tablename = '_secondary';
                     } elseif ($q == 'primary') {
@@ -62,7 +62,7 @@ fb::log($q);
 
                     if ( ( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary' ) ) {
                         $query = 'SELECT * FROM odm_udftbl_' . $field_name . $tablename;
-fb::log($query, 'primary ajax query');                        
+                       
                         $result = mysql_query($query);
                         while ($row = mysql_fetch_row($result)) {
                             if (isset($bg) && $bg == "FCFCFC") {
