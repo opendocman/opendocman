@@ -94,3 +94,77 @@ $(document).ready(function() {
             .animate({left:"+=5px"},20).animate({top:"+=5px"},20).animate({top:"-=10px"},20).animate({left:"-=10px"},20)
             .animate({top:"+=5px"},20).animate({left:"+=5px"},20);
         }
+        
+//subselect udf
+function showdivs(str, add, table)
+{
+    var add_value = add;
+    var table_value = table;
+
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+        }
+    }
+    if(add_value == 'add'){
+        xmlhttp.open("GET","ajax_udf.php?q="+str+'&add_value='+add_value+'&table='+table_value,true);
+    }
+    else if(add_value == 'edit'){
+        xmlhttp.open("GET","ajax_udf.php?q="+str+'&add_value='+add_value+'&table='+table_value,true);
+    }
+    else{
+        xmlhttp.open("GET","ajax_udf.php?q="+str+'&add_value='+add_value,true);
+    }
+    //xmlhttp.open("GET","ajax_udf.php?q="+str,true);
+    xmlhttp.send();
+}
+
+
+function showdropdowns(str, add, table)
+{
+    var add_value = add;
+    var table_value = table;
+
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            document.getElementById('txtHint'+table_value).innerHTML=xmlhttp.responseText;
+        }
+    }
+    if(add_value == 'add'){
+        xmlhttp.open("GET","ajax_udf.php?q="+str+'&add_value='+add_value+'&table='+table_value,true);
+    }
+    else if(add_value == 'edit'){
+        xmlhttp.open("GET","ajax_udf.php?q="+str+'&add_value='+add_value+'&table='+table_value,true);
+    }
+                 
+    xmlhttp.send();
+}
+
+function checksec(){
+    var i_value = document.getElementById('i_value').value;
+    for(i=0;i<=i_value;i++){
+        tablename = document.getElementById('tablename'+i).value;
+        document.getElementById('secondary'+i).value = document.getElementById('odm_udftbl_'+tablename+'_secondary').value;
+    }
+
+}

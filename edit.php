@@ -2,7 +2,7 @@
 /*
 edit.php - edit file properties
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2012 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -158,7 +158,24 @@ if (!isset($_REQUEST['submit']))
 ?>
 		<p>
 		<table border="0" cellspacing="5" cellpadding="5">
-		<form name=main action="<?php  echo $_SERVER['PHP_SELF']; ?>" method="POST">
+		<form name=main action="<?php  echo $_SERVER['PHP_SELF']; ?>" method="POST" onsubmit="return checksec();">
+        
+		<?
+        //CHM
+        $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
+        $result = mysql_query($query) or die ("Error in query163: $query. " . mysql_error());
+        $num_rows = mysql_num_rows($result);
+        $i=0;
+        while($data = mysql_fetch_array($result)){
+            $explode_v = explode('_', $data['table_name']);
+            $t_name = $explode_v[2];
+            ?>
+            <input type="hidden" id="secondary<?=$i?>" name="secondary<?=$i?>" value="" /> <!-- CHM hidden and onsubmit added-->
+            <input type="hidden" id="tablename<?=$i?>" name="tablename<?=$i?>" value="<?=$t_name?>" /> <!-- CHM hidden and onsubmit added-->
+         <? 
+        $i++; 
+        }?>
+      <input id="i_value" type="hidden" name="i_value" value="<?=$i?>" /> <!-- CHM hidden and onsubmit added-->
 		<input type="hidden" name="id" value="<?php  echo $_REQUEST['id']; ?>">
 	
 		<tr>
