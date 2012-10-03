@@ -234,7 +234,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6.3');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
