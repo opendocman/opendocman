@@ -416,6 +416,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         }
 		//CHM
 		if ( $field_type == 4) {
+                    $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
 			// Do Updates
 			/*echo "<PRE>";
 			print_r($_REQUEST);*/
@@ -430,7 +431,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 			$field_name = $explode_udf[2];
 			
 			// Do Inserts
-			if($_REQUEST['type_pr_sec'] == 'primary'){
+			if($type_pr_sec == 'primary'){
 				$tablename = '_primary';
 				$prefix = "pr_";
 			}else{
@@ -439,7 +440,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 				$sec_values = 'pr_id';
 			}
 			if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "" ) {
-				if($_REQUEST['type_pr_sec'] == 'primary'){
+				if($type_pr_sec == 'primary'){
 					$query = 'INSERT INTO odm_udftbl_'.$field_name.$tablename.' (value) VALUES ("'.$_REQUEST['newvalue'].'")';
 					//echo $query;
 				}else{
