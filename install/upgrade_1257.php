@@ -33,7 +33,7 @@ echo 'Adding the settings table...<br />';
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 UNIQUE ( `name` )
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$_SESSION['db_prefix']}settings table. Error was:" .  mysql_error());
 
 $sql_operations = array(

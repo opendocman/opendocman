@@ -41,7 +41,7 @@ CREATE TABLE `{$dbprefix}access_log` (
   `user_id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
-)
+) ENGINE = MYISAM
     ") or die("<br>Could not create {$dbprefix}access_log table. Error was:" .  mysql_error());
 
 // Admin table    
@@ -53,7 +53,7 @@ $result = mysql_query("
 CREATE TABLE {$dbprefix}admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}admin table. Error was:" .  mysql_error());
 
 // Admin user
@@ -71,7 +71,7 @@ CREATE TABLE {$dbprefix}category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}category table. Error was:" .  mysql_error());
 
 $result = mysql_query("
@@ -116,7 +116,7 @@ CREATE TABLE {$dbprefix}data (
   KEY id_2 (id),
   KEY publishable (publishable),
   KEY description (description)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}data table. Error was:" .  mysql_error());
 
 // Department Table
@@ -129,7 +129,7 @@ CREATE TABLE {$dbprefix}department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}department table. Error was:" .  mysql_error());
 
 $result = mysql_query("
@@ -149,7 +149,7 @@ CREATE TABLE {$dbprefix}dept_perms (
   KEY rights (rights),
   KEY dept_id (dept_id),
   KEY fid (fid)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}dept_perms table. Error was:" .  mysql_error());
 
 // Department Reviewer table
@@ -161,7 +161,7 @@ $result = mysql_query("
 CREATE TABLE {$dbprefix}dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}dept_reviewer table. Error was:" .  mysql_error());
 
 // data for table 'dept_reviewer'
@@ -183,7 +183,7 @@ CREATE TABLE {$dbprefix}log (
   revision varchar(255) default NULL,
   KEY id (id),
   KEY modified_on (modified_on)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}log table. Error was:" .  mysql_error());
 
 // Rights table
@@ -195,7 +195,7 @@ $result = mysql_query("
 CREATE TABLE {$dbprefix}rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}rights table. Error was:" .  mysql_error());
 
 // Rights values
@@ -240,7 +240,7 @@ CREATE TABLE {$dbprefix}user (
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}user table. Error was:" .  mysql_error());
 
 // Create admin user
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS {$dbprefix}user_perms (
   KEY fid (fid),
   KEY uid (uid),
   KEY rights (rights)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}user_perms table. Error was:" .  mysql_error());
 
         $result = mysql_query("
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS {$dbprefix}udf (
     table_name varchar(50),
     display_name varchar(16),
     field_type int
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}udf table. Error was:" .  mysql_error());
 
         $result = mysql_query("
@@ -288,12 +288,12 @@ CREATE TABLE IF NOT EXISTS {$dbprefix}odmsys
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}odmsys table. Error was:" .  mysql_error());
 
 // Create version number in db
 $result = mysql_query("
-INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.6')
+INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.6.3')
         ") or die("<br>Could not insert new version into {$dbprefix}odmsys. Error was:" .  mysql_error());
 
                 $result = mysql_query("
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 UNIQUE ( `name` )
-)
+) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}settings table. Error was:" .  mysql_error());
 
 // Populate the setttings table with default values
@@ -351,7 +351,7 @@ CREATE  TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `type` VARCHAR(255) NOT NULL ,
 `active` TINYINT(4) NOT NULL ,
-PRIMARY KEY (`id`) )
+PRIMARY KEY (`id`) ) ENGINE = MYISAM
     ") or die("<br>Could not create {$dbprefix}filetypes table. Error was:" .  mysql_error());
 
 // Create the filetypes data

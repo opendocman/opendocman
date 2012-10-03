@@ -26,5 +26,5 @@ CREATE TABLE IF NOT EXISTS udf
     table_name  varchar(16),
     display_name    varchar(16),
     field_type  int
-)
+) ENGINE = MYISAM
 ") or die("<br>Could not update" . mysql_error());

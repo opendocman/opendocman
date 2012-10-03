@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `{$_SESSION['db_prefix']}access_log` (
   `user_id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
-);
+) ENGINE = MYISAM;
         ") or die("<br>Could not create {$_SESSION['db_prefix']}access_log table. Error was:" .  mysql_error());
 
 echo 'Updating db version...<br />';
