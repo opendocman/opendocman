@@ -195,4 +195,31 @@ class Plugin
      * This function is run before the edited file object is saved to the db
      */
     function onBeforeEditFileSaved() {}
+        
+     /*
+     * This function is run while the add department form is being drawn
+     */
+
+    function onDepartmentAddForm() {}
+
+    /*
+     * This function is run while the edit department form is being drawn
+     * @param int $deptId The ID for the department being edited
+     */
+
+    function onDepartmentEditForm($deptId) {}
+
+    /*
+     * This function is run while the edit department form is being drawn
+     * @param array $formData The _REQUEST passed in
+     */
+
+    function onDepartmentModifySave($formData) {}
+    
+    /*
+     * This function is run while the add department form is being submitted
+     * @param int $deptId The new department ID
+     */
+
+    function onDepartmentAddSave($deptId) {}    
 }
