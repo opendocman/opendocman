@@ -276,6 +276,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'image/gif', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/html', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/plain', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/pdf', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/pdf',1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-pdf', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/msword', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/jpeg', 1);

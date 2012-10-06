@@ -412,96 +412,54 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
     }
         if($field_type == 3)
         {
-            echo msg('message_nothing_to_do');
+          echo msg('message_nothing_to_do');
         }
-		//CHM
-		if ( $field_type == 4) {
-                    $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
-			// Do Updates
-			/*echo "<PRE>";
-			print_r($_REQUEST);*/
-			if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "" ) {
-				//$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";
-				//echo $query;
-				mysql_query($query);
-				$display_name = $_REQUEST['display_name'];
-			}
-			
-			$explode_udf = explode('_',$_REQUEST['udf']);
-			$field_name = $explode_udf[2];
-			
-			// Do Inserts
-			if($type_pr_sec == 'primary'){
-				$tablename = '_primary';
-				$prefix = "pr_";
-			}else{
-				$tablename = '_secondary';
-				$prefix = "sec_";
-				$sec_values = 'pr_id';
-			}
-			if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "" ) {
-				if($type_pr_sec == 'primary'){
-					$query = 'INSERT INTO odm_udftbl_'.$field_name.$tablename.' (value) VALUES ("'.$_REQUEST['newvalue'].'")';
-					//echo $query;
-				}else{
-					$query = 'INSERT INTO odm_udftbl_'.$field_name.$tablename.' (value, pr_id) VALUES ("'.$_REQUEST['newvalue'].'", "'.$_REQUEST['primary_type'].'")';
-				}
-				//echo $query;
-				//exit;
-				mysql_query($query);
-			}
-			// Do Deletes
-			$query = 'SELECT max('.$prefix.'id) FROM odm_udftbl_'.$field_name.$tablename;
-			//echo $query;
-			$result = mysql_query($query);
-			$row = mysql_fetch_row($result);
-			$max = $row[0];
-			mysql_free_result($result);
-			while ( $max > 0 ) {
-				if ( isset($_REQUEST['x'.$max]) && $_REQUEST['x'.$max] == "on" ) {
-					$query = 'DELETE FROM odm_udftbl_'.$field_name.$tablename.' WHERE '.$prefix.'id = '.$max;
-					//echo $query;
-					mysql_query($query);
-				}
-				$max--;
-			}
-			?>
-			<script>
-           /* function toggleOther(chosen){
-				//alert(chosen);
-            if (chosen == 'primary') {
-              document.getElementById('primary').style.visibility = 'visible';
+
+	if ( $field_type == 4) {
+          $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
+
+        if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "") {
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";
+            mysql_query($query);
+            $display_name = $_REQUEST['display_name'];
+        }
+
+        $explode_udf = explode('_', $_REQUEST['udf']);
+        $field_name = $explode_udf[2];
+
+        // Do Inserts
+        if ($type_pr_sec == 'primary') {
+            $tablename = '_primary';
+        } else {
+            $tablename = '_secondary';
+            $sec_values = 'pr_id';
+        }
+        if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "") {
+            if ($type_pr_sec == 'primary') {
+                $query = 'INSERT INTO odm_udftbl_' . $field_name . $tablename . ' (value) VALUES ("' . $_REQUEST['newvalue'] . '")';
+                //echo $query;
             } else {
-              document.getElementById('primary').style.visibility = 'hidden';
-              document.myform.other.value = '';
+                $query = 'INSERT INTO odm_udftbl_' . $field_name . $tablename . ' (value, pr_id) VALUES ("' . $_REQUEST['newvalue'] . '", "' . $_REQUEST['primary_type'] . '")';
             }
-            }*/
-            </script>
-            
-			<script type="text/javascript">
-/*            function showdivs(str)
-            {
-				//alert(str);
-            if (window.XMLHttpRequest)
-              {// code for IE7+, Firefox, Chrome, Opera, Safari
-              xmlhttp=new XMLHttpRequest();
-              }
-            else
-              {// code for IE6, IE5
-              xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-              }
-            xmlhttp.onreadystatechange=function()
-              {
-              if (xmlhttp.readyState==4 && xmlhttp.status==200)
-                {
-                document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
-                }
-              }
-            xmlhttp.open("GET","ajax_udf.php?q="+str,true);
-            xmlhttp.send();
+            //echo $query;
+            //exit;
+            mysql_query($query);
+        }
+        // Do Deletes
+        $query = 'SELECT max(id) FROM odm_udftbl_' . $field_name . $tablename;
+        $result = mysql_query($query);
+        $row = mysql_fetch_row($result);
+        $max = $row[0];
+        mysql_free_result($result);
+        while ($max > 0) {
+            if (isset($_REQUEST['x' . $max]) && $_REQUEST['x' . $max] == "on") {
+                $query = 'DELETE FROM odm_udftbl_' . $field_name . $tablename . ' WHERE id = ' . $max;
+                //echo $query;
+                mysql_query($query);
             }
-*/            </script>
-            <?php
+            $max--;
+        }
+
 			echo '<form id="editUdfForm" method="POST">';
 			echo '<input type=hidden name=submit value="edit">';
 			echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
@@ -515,12 +473,10 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 			<div id="txtHint">
             
             <?php
-			/*echo "<PRE>";
-			print_r($_REQUEST);*/
 			echo '<table>';
 			echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
 			$query = 'SELECT * FROM ' . $_REQUEST['udf'];
-			//echo $query;
+
 			$result = mysql_query($query);
 			while ($row = mysql_fetch_row($result)) {
 				if ( isset($bg) && $bg == "FCFCFC" )

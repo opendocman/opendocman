@@ -107,27 +107,24 @@ if ( !defined('udf_functions') )
     function udf_add_file_insert($fileId)
     {
         $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
-        $result = mysql_query($query) or die ("Error in query86: $query . " . mysql_error());
-		$i=0; //CHM
-        while ($row = mysql_fetch_row($result))
-        {
-            if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3 || $row[1] == 4) //CHM
-            {
-                if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "" )
-                {
-					$explode_row = explode('_',$row[0]);
-					$field_name = $explode_row[2];
-					
+        $result = mysql_query($query) or die("Error in query86: $query . " . mysql_error());
+        $i = 0; //CHM
+        while ($row = mysql_fetch_row($result)) {
+            if ($row[1] == 1 || $row[1] == 2 || $row[1] == 3 || $row[1] == 4) { //CHM
+                if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "") {
+                    $explode_row = explode('_', $row[0]);
+                    $field_name = $explode_row[2];
+
                     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$row['0']}` = '{$_REQUEST[$row['0']]}' WHERE id = '$fileId'";
-                    mysql_query($query) or die ("Error in query94: $query. " . mysql_error());
-					
-					//CHM
-					if($_REQUEST['secondary'.$i] !='' && $row[1] == 4){
-						$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET odm_udftbl_{$field_name}_secondary = '{$_REQUEST['secondary'.$i]}' WHERE id = '$fileId'";
-						mysql_query($query) or die ("Error in query94: $query. " . mysql_error());
-						$i++;
-					}
-					//CHM
+                    mysql_query($query) or die("Error in query94: $query. " . mysql_error());
+
+                    //CHM
+                    if (isset($_REQUEST['secondary' . $i]) && $_REQUEST['secondary' . $i] != '' && $row[1] == 4) {
+                        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET odm_udftbl_{$field_name}_secondary = '{$_REQUEST['secondary' . $i]}' WHERE id = '$fileId'";
+                        mysql_query($query) or die("Error in query94: $query. " . mysql_error());
+                        $i++;
+                    }
+                    //CHM
                 }
             }
         }
@@ -205,8 +202,8 @@ if ( !defined('udf_functions') )
                 $sel_pri = $subrow[0];
                 mysql_free_result($subresult);
 
-                $query = 'SELECT pr_id, value FROM ' . $row[2];
-                $subresult = mysql_query($query) or die ("Error in query122: $query. " . mysql_error());
+                $query = 'SELECT id, value FROM ' . $row[2];
+                $subresult = mysql_query($query) or die ("Error in query117: $query. " . mysql_error());
                 while ($subrow = mysql_fetch_row($subresult))
                 {
                     if ( $row[1] == 4 )
@@ -235,8 +232,8 @@ if ( !defined('udf_functions') )
 				if($sel ==''){
 					echo 'Secondary items will show up here.';	
 				}else{
-					$query = "SELECT sec_id, value FROM odm_udftbl_{$field_name}_secondary WHERE pr_id = '{$sel_pri}'";
-					$subresult = mysql_query($query) or die ("Error in query122: $query. " . mysql_error());
+					$query = "SELECT id, value FROM odm_udftbl_{$field_name}_secondary WHERE pr_id = '{$sel_pri}'";
+					$subresult = mysql_query($query) or die ("Error in query123: $query. " . mysql_error());
 					echo '<select id="odm_udftbl_'.$field_name.'_secondary" name="odm_udftbl_'.$field_name.'_secondary">';
 					while ($subrow = mysql_fetch_row($subresult))
 					{
@@ -320,8 +317,8 @@ if ( !defined('udf_functions') )
 			//CHM
             elseif ($row[1] == 4)
             {
-                $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.pr_id";
-                $subresult = mysql_query($query) or die ("Error in query198: $query. " . mysql_error());
+                $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
+                $subresult = mysql_query($query) or die ("Error in query199: $query. " . mysql_error());
                 if ($subresult)
                 {
                     $subrow = mysql_fetch_row($subresult);
@@ -504,7 +501,7 @@ if ( !defined('udf_functions') )
                 }
 
                 // Now we need to create a new table to store the UDF Info
-                $query = 'CREATE TABLE ' . $table_name . '_primary ( pr_id int auto_increment unique, value varchar(64) )';
+                $query = 'CREATE TABLE ' . $table_name . '_primary ( id int auto_increment unique, value varchar(64) )';
                 $result = mysql_query($query);
                 if (!$result)
                 {
@@ -518,7 +515,7 @@ if ( !defined('udf_functions') )
                     exit;
                 }
 				
-                $query = 'CREATE TABLE ' . $table_name . '_secondary ( sec_id int auto_increment unique, value varchar(64), pr_id int )';
+                $query = 'CREATE TABLE ' . $table_name . '_secondary ( id int auto_increment unique, value varchar(64), pr_id int )';
                 $result = mysql_query($query);
                 if (!$result)
                 {
@@ -624,7 +621,8 @@ if ( !defined('udf_functions') )
         $result = mysql_query($query) or die ("Error in query355: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
         {
-            echo '<option value="'.$row[2].'_only">'.$row[2].' only</option>';
+            $name = str_replace(' ', '_', $row[2]);
+            echo '<option value="'.$name.'">'.$name.' only</option>';
         }
         mysql_free_result($result);
     }
@@ -632,7 +630,8 @@ if ( !defined('udf_functions') )
     function udf_functions_search($lwhere,$lquery_pre,$lquery,$lequate,$lkeyword)
     {
         $tmp = $lwhere;
-        $dn = strtok($tmp,"_");
+       
+        $dn = str_replace('_', ' ', $tmp);
 
         $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
         $result = mysql_query($query) or die ("Error in query369: $query. " . mysql_error());
