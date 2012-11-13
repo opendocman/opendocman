@@ -1,17 +1,17 @@
 {
-    "sProcessing":   "Processing...",
-    "sLengthMenu":   "Show _MENU_ entries",
-    "sZeroRecords":  "No matching records found",
-    "sInfo":         "Showing _START_ to _END_ of _TOTAL_ entries",
-    "sInfoEmpty":    "Showing 0 to 0 of 0 entries",
-    "sInfoFiltered": "(filtered from _MAX_ total entries)",
-    "sInfoPostFix":  "",
-    "sSearch":       "Search:",
-    "sUrl":          "",
+    "sProcessing": "Elaborazione in corso ...",
+    "sLengthMenu": "Mostra _MENU_ elementi a pagina",
+    "sZeroRecords": "Nessun documento selezionato",
+    "sInfo": "Visualizzati da _START_ a _END_ di _TOTAL_ documenti trovati",
+    "sInfoEmpty": "Visualizzati 0 documenti ",
+    "sInfoFiltered": "(selezionati da _MAX_ depositati)",
+    "sInfoPostFix": " in archivio",
+    "sSearch": "Ricerca:",
+    "sUrl": "",
     "oPaginate": {
-        "sFirst":    "First",
-        "sPrevious": "Previous",
-        "sNext":     "Next",
-        "sLast":     "Last"
+        "sFirst": "Primo",
+        "sPrevious": "Precedente",
+        "sNext": "Prossimo",
+        "sLast": "Ultimo"
     }
 }
