@@ -213,6 +213,7 @@ if( !defined('UserPermission_class') )
          */
         function getAuthority($data_id)
         {
+            $data_id = (int) $data_id;
             $fileData = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
             if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
             {

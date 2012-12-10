@@ -92,7 +92,7 @@ if( !defined('FileData_class') )
                     {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.created, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.description,
                     {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.comment, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.status,
                     {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.department, {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.default_rights
-			FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.id = $this->id";
+			FROM {$GLOBALS['CONFIG']['db_prefix']}$this->tablename WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->tablename.id = '$this->id'";
 
             $result = mysql_query($query, $this->connection) or die ("Error in query: $query. " . mysql_error());
             if( mysql_num_rows($result) == $this->result_limit )

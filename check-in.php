@@ -132,7 +132,9 @@ else
     // form has been submitted, process data
 
     // checks
-    $query = "SELECT realname FROM {$GLOBALS['CONFIG']['db_prefix']}data where id = '$_POST[id]'";
+    $id = (int) $_POST['id'];
+
+    $query = "SELECT realname FROM {$GLOBALS['CONFIG']['db_prefix']}data where id = '$id'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
 
     //
@@ -182,11 +184,11 @@ else
     }
 
     // query to ensure that user has modify rights
-    $fileobj = new FileData($_POST['id'], $GLOBALS['connection'], DB_NAME);
+    $fileobj = new FileData($id, $GLOBALS['connection'], DB_NAME);
     if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
     {
         //look to see how many revision are there
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = $_POST[id]";
+        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         $lrevision_num = mysql_num_rows($result);
         // if dir not available, create it
@@ -199,23 +201,23 @@ else
                 exit;
             }
         }
-        if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id']) )
+        if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $id) )
         {
-            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'], 0775))
+            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $id, 0775))
             {
-                $last_message=msg('message_directory_creation_failed') . ': ' . $GLOBALS['CONFIG']['revisionDir'] .  $_POST['id'];
+                $last_message=msg('message_directory_creation_failed') . ': ' . $GLOBALS['CONFIG']['revisionDir'] .  $id;
                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                 exit;
             }
 
         }
-        $lfilename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] .'.dat';
+        $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
         //read and close
         $lfhandler = fopen ($lfilename, "r");
         $lfcontent = fread($lfhandler, filesize ($lfilename));
         fclose ($lfhandler);
         //write and close
-        $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $_POST['id'] . '/' . $_POST['id'] . '_' . ($lrevision_num - 1) . '.dat', "w");
+        $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num - 1) . '.dat', "w");
         fwrite($lfhandler, $lfcontent);
         fclose ($lfhandler);
         // all OK, proceed!
@@ -223,23 +225,23 @@ else
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         list($username) = mysql_fetch_row($result);
         // update revision log
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($lrevision_num) - 1)) . "' WHERE id = {$_POST['id']} and revision = 'current'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($lrevision_num) - 1)) . "' WHERE id = '{$id}' and revision = 'current'";
         mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES('$_POST[id]', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable' WHERE id='$_POST[id]'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable' WHERE id='$id'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // rename and save file
-        $newFileName = $_POST['id'] . '.dat';
+        $newFileName = $id . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
     
-        AccessLog::addLogEntry($_POST['id'],'I');
+        AccessLog::addLogEntry($id,'I');
     
         // clean up and back to main page
-        $last_message = msg('message_document_checked_in');
+        $last_message = msg('message_document_checked_in');        
         header('Location: out.php?last_message=' . urlencode($last_message));
     }
 }

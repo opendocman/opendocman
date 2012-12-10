@@ -153,7 +153,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
-            addLogEntry($fileid,'R');
+            AccessLog::addLogEntry($fileid,'R');
             // Set up rejected email message to sent out
             $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' . msg('email_was_rejected_from_repository');
             $mail_body = $lcomments . "\n\n";
