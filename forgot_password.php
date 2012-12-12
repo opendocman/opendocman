@@ -1,8 +1,8 @@
 <?php
 /*
    forgot_password.php - utility to reset a user password
-   Copyright (C) 2005-2006 Glowball Solutions & Stephen Lawrence Jr.
-   Copyright (C) 2005-2011 Stephen Lawrence Jr.
+   Copyright (C) 2005-2006 Glowball Solutions
+   Copyright (C) 2005-2012 Stephen Lawrence Jr.
    This page was added to the core files for this utility.
 
    This program is free software; you can redistribute it and/or
@@ -33,23 +33,23 @@ if (!isset($_REQUEST['last_message']))
     $_REQUEST['last_message']='';
 }
 
-if (isset($_POST['password']) && strlen($_POST['password']) && isset($_POST['username']) && strlen($_POST['username']) && isset($_POST['code']) && strlen($_POST['code']) && isset($_POST['user_id']) && $_POST['user_id']+0>0) 
+if (isset($_POST['password']) && strlen($_POST['password']) && isset($_POST['username']) && strlen($_POST['username']) && isset($_POST['code']) && ( strlen($_POST['code']) == 32) && isset($_POST['user_id']) && $_POST['user_id']+0>0) 
 {
     // reset their password and code
     $newPass = trim($_POST['password']);
-    $oldCode = $_POST['code'];
-    $username = trim($_POST['username']);
-    $user_id = $_POST['user_id']+0;
+    $oldCode = str_replace(' ', '', $_POST['code']);
+    $username = str_replace(' ', '', $_POST['username']);
+    $user_id = (int) $_POST['user_id']+0;
 
     // reset the password
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = PASSWORD('" . trim($_POST['password']) . "'), pw_reset_code = NULL WHERE id = " . $user_id . " AND username = '" . $username . "'";
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = md5('" . $newPass . "'), pw_reset_code = NULL WHERE id = " . $user_id . " AND username = '" . $username . "' AND pw_reset_code = '" . $oldCode . "'";
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
 
     $redirect = 'index.php?last_message=' . urlencode(msg('message_your_password_has_been_changed'));
     header("Location: $redirect");
     exit;
 }
-else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['code']) && strlen($_GET['code'])) 
+else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['code']) && ( strlen($_GET['code']) == 32 ) ) 
 {
     // they have clicked on the link we sent them
     $username = trim($_GET['username']);
@@ -121,7 +121,7 @@ else if (isset($_GET['username']) && strlen($_GET['username']) && isset($_GET['c
              */
     }
 }
-else if (isset($_POST['username']) && strlen($_POST['username'])) 
+else if (isset($_POST['username']) && strlen($_POST['username']) > 0) 
 {	
     // they have sent an username
     $username = trim($_POST['username']);
