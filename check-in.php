@@ -131,27 +131,8 @@ else
     }
     // form has been submitted, process data
 
-    // checks
-    $query = "SELECT realname FROM {$GLOBALS['CONFIG']['db_prefix']}data where id = '$_POST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: ".$mysql_error());
-
-    //
-    if(mysql_num_rows($result) != 1)
-    {
-        $last_message='Failed';
-        header('Location:error.php?ec=16&last_message=' . urlencode($last_message));
-        exit;
-    }
-
-    list($realname) = mysql_fetch_row($result);
-
-    if($_FILES['file']['name'] != $realname)
-    {
-        $last_message='Failed';
-        header('Location:error.php?ec=15&last_message=' . urlencode($last_message));
-        exit;
-    }
-
+    $filename = $_FILES['file']['name'];
+    
     // no file!
     if ($_FILES['file']['size'] <= 0)
     {
@@ -162,7 +143,7 @@ else
 
     // check file type
     foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-    {
+    {        
         if ($_FILES['file']['type'] == $thistype)
         {
             $allowedFile = 1;
@@ -229,7 +210,7 @@ else
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable' WHERE id='$_POST[id]'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$_POST[id]'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // rename and save file
