@@ -204,16 +204,17 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 {
     // query to show item
     draw_header(msg('area_view_category'), $last_message);
-
+    $category_id = (int) $_REQUEST['item'];
+        
     // Select name
-    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$category_id'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     echo('<table name="main" cellspacing="15" border="0">');
     list($lcategory) = mysql_fetch_row($result);
     echo '<th>' .msg('label_name'). '</th><th>' .msg('label_id'). '</th>';
     echo '<tr>';
     echo '<td>' . $lcategory . '</td>';
-    echo '<td>' . $_REQUEST['item'] . '</td>';
+    echo '<td>' . $category_id . '</td>';
     echo '</tr>';
     ?>
 <form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
@@ -222,8 +223,17 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
     </tr>
 </form>
 </table>
-    <?php
-
+<!-- ADD THE LIST OF FILES HERE -->
+<?php
+    echo msg('categoryviewpage_list_of_files_title') . '<br />';
+    $query = "SELECT id, realname FROM `odm_data` WHERE category = '$category_id'";
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    while(list($file_id, $file_name) = mysql_fetch_row($result)) {
+        ?>
+            <a href="edit.php?id=<?php echo $file_id; ?>&state=3">ID: <?php echo $file_id . ','; echo $file_name; ?></a><br />
+     <?php  
+    }
+    
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
