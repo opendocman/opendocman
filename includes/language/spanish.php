@@ -449,3 +449,6 @@ $lang['accesslogpage_file_deleted'] = 'File Deleted';
 $lang['accesslogpage_file_authorized'] = 'File Authorized';
 $lang['accesslogpage_file_rejected'] = 'File Rejected';
 $lang['accesslogpage_reserved'] = 'Reserved';
+
+//Category View Page
+$lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

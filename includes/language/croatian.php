@@ -451,3 +451,6 @@ $lang['accesslogpage_reserved'] = 'Reserved';
 
 // User page
 $lang['userpage_reviewer_for'] = 'Reviewer for';
+
+//Category View Page
+$lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
