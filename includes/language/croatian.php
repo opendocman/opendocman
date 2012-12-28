@@ -24,6 +24,7 @@ global $lang;
 $lang['anonymous_link'] = 'Kliknite ovdje kako biste anonimno gledali javne datoteke';
 $lang['forgotpassword'] = 'Zaboravili ste lozinku?';
 $lang['install_folder']  = 'Sigurnosno upozorenje: Ako ste već instalirali/nadogradili program, trebali bi ste izbrisati \'install\' direktorij prije nego nastavite dalje';
+
 $lang['signup'] = 'Registrirajte račun';
 $lang['welcome'] = 'Dobro došli u OpenDocMan.';
 $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku pohranu podataka, objavljivanje i kontrolu promjena nad datotekama.';
@@ -137,11 +138,11 @@ $lang['email_file_was_rejected_because'] = 'Vaša datoteka je odbijena zato što
 $lang['email_file_was_rejected_expired'] = 'Vašoj datoteci je istekao rok trajanja. Molimo obnovite datoteku što je prije moguće. Vaša datoteka možda neće biti dostupna dok je ne obnovite.';
 $lang['email_for_the_following_reasons'] = 'iz slijedećih razloga';
 $lang['email_greeting'] = 'Dragi autore';
-$lang['email_i_would_like_to_inform'] = 'Želio bih vas obavjestiti da';
+$lang['email_i_would_like_to_inform'] = 'Obavještavamo vas da je';
 $lang['email_note_to_authors'] = 'Poruka autoru(ima)';
 $lang['email_revision_days'] = 'Maksimalni broj dana prije isticanja roka:';
-$lang['email_salute'] = 'Srdačan';
-$lang['email_someone_has_requested_password'] = 'Netko je zatražio resetiranje lozinke.  Ako želite resetirati lozinku molimo pratite poveznicu ispod.  Ako ne želite resetirati svoju lozinku nemojte ništa raditi i zanemarite ovu poruku.';
+$lang['email_salute'] = 'S poštovanjem,';
+$lang['email_someone_has_requested_password'] = 'Netko je zatražio resetiranje lozinke.  Ukoliko želite resetirati lozinku molimo pratite poveznicu ispod.  Ukoliko ne želite resetirati svoju lozinku nemojte ništa raditi i zanemarite ovu poruku.';
 $lang['email_status_expired'] = 'Status: Istekao rok';
 $lang['email_subject_review_status'] = 'Status pregleda dokumenta ';
 $lang['email_subject'] = 'Naslov';
@@ -149,8 +150,8 @@ $lang['email_thank_you'] = 'Hvala';
 $lang['email_to'] = 'Prima';
 $lang['email_was_declined_for_publishing_at'] = 'Odbijen je za objavljivanje u';
 $lang['email_was_rejected_from_repository'] = 'Odbijen je iz repozitorija';
-$lang['email_you_can_now_login'] = 'Možete se prijaviti u svoj račun na ovoj stranici';
-$lang['email_your_account_created'] = 'vaš račun za upravljanje dokumenti je napravljen u';
+$lang['email_you_can_now_login'] = 'Možete se prijaviti u svoj račun na ovoj adresi';
+$lang['email_your_account_created'] = 'vaš račun za upravljanje dokumentima napravljen u';
 $lang['email_your_file_has_been_authorized'] = 'Vaša datoteka je odobrena za objavljivanje';
 
 // Labels
@@ -232,18 +233,11 @@ $lang['label_user_defined_field'] = 'Korisnički definirano polje';
 $lang['label_users_in_department'] = 'Korisnici u ovom odjelu';
 $lang['label_user'] = 'Korisnik';
 $lang['label_view'] = 'Prikaži';
-$lang['label_userid'] = 'User ID';
-$lang['label_fileid'] = 'File ID';
-$lang['label_username'] = 'User Name';
-$lang['label_action'] = 'Action';
-$lang['label_date'] = 'Date';
-$lang['label_type_pr_sec'] = 'Type'; //CHM
-$lang['label_primary_type'] = 'Primary'; //CHM
-$lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
-$lang['label_userid'] = 'User ID';
-$lang['label_username'] = 'User Name';
-$lang['label_action'] = 'Action';
-$lang['label_date'] = 'Date';
+$lang['label_userid'] = 'ID korisnika';
+$lang['label_fileid'] = 'ID datoteke';
+$lang['label_username'] = 'Korisničko ime';
+$lang['label_action'] = 'Radnja';
+$lang['label_date'] = 'Datum';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Vaš račun je stvoren.';
@@ -345,7 +339,7 @@ $lang['message_your_password_has_been_changed'] = 'Vaša lozinka je promjenjena.
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
-$lang['addpage_none'] = 'None';
+$lang['addpage_none'] = 'Nikakva';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
@@ -357,14 +351,14 @@ $lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
 $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
-$lang['editpage_none'] = 'None';
+$lang['editpage_none'] = 'Nikakva';
 
 // Delete/Undeleta Admin Page
-$lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
-$lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';
+$lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
+$lang['undeletepage_file_undeleted'] = 'Datoteka je vraćena';
 
 // Departments Page
-$lang['departmentpage_department_name_required'] = 'A department name is required';
+$lang['departmentpage_department_name_required'] = 'Naziv odjela je obavezan';
 
 // Details Page
 $lang['detailspage_view'] = 'Prikaži';
@@ -420,6 +414,7 @@ $lang['userpage_no'] = 'Ne';
 $lang['userpage_password'] = 'Lozinka';
 $lang['userpage_phone_number'] = 'Broj telefona';
 $lang['userpage_reviewer'] = 'Pregledavač';
+$lang['userpage_reviewer_for'] = 'Pregledavač za';
 $lang['userpage_show_user'] = 'Prikaži korisnika: ';
 $lang['userpage_status_delete'] = 'Obriši ';
 $lang['userpage_update_user'] = 'Izmjenite korisnika: ';
@@ -433,21 +428,21 @@ $lang['userpage_yes'] = 'Da';
 // Admin Page
 $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
-$lang['adminpage_reports'] = 'Reports';
-$lang['adminpage_access_log'] = 'Access Log';
+$lang['adminpage_reports'] = 'Izvještaji';
+$lang['adminpage_access_log'] = 'Popis pristupa';
 
 // Access Log page
-$lang['accesslogpage_access_log'] = 'Access Log';
-$lang['accesslogpage_file_added'] = 'File Added';
-$lang['accesslogpage_file_viewed'] = 'File Viewed';
-$lang['accesslogpage_file_downloaded'] = 'File Downloaded';
-$lang['accesslogpage_file_modified'] = 'File Modified';
-$lang['accesslogpage_file_checked_in'] = 'File Checked-in';
-$lang['accesslogpage_file_checked_out'] = 'File Checked-out';
-$lang['accesslogpage_file_deleted'] = 'File Deleted';
-$lang['accesslogpage_file_authorized'] = 'File Authorized';
-$lang['accesslogpage_file_rejected'] = 'File Rejected';
-$lang['accesslogpage_reserved'] = 'Reserved';
+$lang['accesslogpage_access_log'] = 'Popis pristupa';
+$lang['accesslogpage_file_added'] = 'Datoteka dodana';
+$lang['accesslogpage_file_viewed'] = 'Datoteka pregledana';
+$lang['accesslogpage_file_downloaded'] = 'Datoteka preuzeta';
+$lang['accesslogpage_file_modified'] = 'Datoteka izmjenjena';
+$lang['accesslogpage_file_checked_in'] = 'Datoteka prijavljena';
+$lang['accesslogpage_file_checked_out'] = 'Datoteka odjavljena';
+$lang['accesslogpage_file_deleted'] = 'Datoteka obrisana';
+$lang['accesslogpage_file_authorized'] = 'Datoteka odobrena';
+$lang['accesslogpage_file_rejected'] = 'Datoteka odbijena';
+$lang['accesslogpage_reserved'] = 'Rezervirano';
 
 // User page
 $lang['userpage_reviewer_for'] = 'Reviewer for';
