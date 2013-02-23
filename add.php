@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2007 Stephen Lawrence Jr.
-Copyright (C) 2002-2011 Stephen Lawrence Jr.
+Copyright (C) 2002-2012 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -134,7 +134,25 @@ if(!isset($_POST['submit']))
 </script>
 <script type="text/javascript"src="functions.js"></script>
 <!-- file upload formu using ENCTYPE -->
-<form name="main" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+<form name="main" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
+
+        <?php
+		//CHM
+		$query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
+		$result = mysql_query($query) or die ("Error in query163: $query. " . mysql_error());
+		$num_rows = mysql_num_rows($result);
+		$i=0;
+		while($data = mysql_fetch_array($result)){
+			$explode_v = explode('_', $data['table_name']);
+			$t_name = $explode_v[2];
+			?>
+			<input type="hidden" id="secondary<?=$i?>" name="secondary<?=$i?>" value="" /> <!-- CHM hidden and onsubmit added-->
+			<input type="hidden" id="tablename<?=$i?>" name="tablename<?=$i?>" value="<?=$t_name?>" /> <!-- CHM hidden and onsubmit added-->
+		 <?php
+		$i++; 
+		}?>
+      <input id="i_value" type="hidden" name="i_value" value="<?=$i?>" /> <!-- CHM hidden and onsubmit added-->
+ 
     <tr>
         <td>
             <a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_file_location');?></a>

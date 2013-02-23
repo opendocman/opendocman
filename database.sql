@@ -11,7 +11,7 @@ CREATE TABLE `odm_access_log` (
   `user_id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
-);
+) ENGINE = MYISAM;
 
 #
 # Table structure for table 'odm_admin'
@@ -20,7 +20,7 @@ CREATE TABLE `odm_access_log` (
 CREATE TABLE odm_admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_admin'
@@ -36,7 +36,7 @@ CREATE TABLE odm_category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_category'
@@ -71,7 +71,7 @@ CREATE TABLE odm_data (
   KEY id_2 (id),
   KEY publishable (publishable),
   KEY description (description)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_data'
@@ -85,7 +85,7 @@ CREATE TABLE odm_department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_department'
@@ -104,7 +104,7 @@ CREATE TABLE odm_dept_perms (
   KEY rights (rights),
   KEY dept_id (dept_id),
   KEY fid (fid)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_dept_perms'
@@ -118,7 +118,7 @@ CREATE TABLE odm_dept_perms (
 CREATE TABLE odm_dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_dept_reviewer'
@@ -138,7 +138,7 @@ CREATE TABLE odm_log (
   revision varchar(255) default NULL,
   KEY id (id),
   KEY modified_on (modified_on)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_log'
@@ -152,7 +152,7 @@ CREATE TABLE odm_log (
 CREATE TABLE odm_rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_rights'
@@ -180,7 +180,7 @@ CREATE TABLE odm_user (
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
   PRIMARY KEY  (id)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_user'
@@ -200,7 +200,7 @@ CREATE TABLE odm_user_perms (
   KEY fid (fid),
   KEY uid (uid),
   KEY rights (rights)
-);
+) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_user_perms'
@@ -222,19 +222,19 @@ CREATE TABLE odm_user_perms (
 CREATE TABLE odm_udf
 (
     id  int(11) auto_increment unique,
-    table_name  varchar(16),
+    table_name  varchar(50),
     display_name    varchar(16),
     field_type  int
-);
+) ENGINE = MYISAM;
 
 CREATE TABLE IF NOT EXISTS odm_odmsys
 (
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-);
+) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6.3');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -244,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `odm_settings` (
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 UNIQUE ( `name` )
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `odm_settings` VALUES(NULL,'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like \"demo/demo\". This will keep users from removing files, users, etc.', 'bool');
@@ -270,12 +270,13 @@ CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
 `type` VARCHAR(255) NOT NULL ,
 `active` TINYINT(4) NOT NULL ,
 PRIMARY KEY (`id`)
-);
+) ENGINE = MYISAM;
 
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/gif', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/html', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/plain', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/pdf', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'image/pdf',1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-pdf', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/msword', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/jpeg', 1);

@@ -194,7 +194,7 @@ else
 					ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
 	}
 	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	$current_revision = mysql_num_rows($result) - 1;
+	$current_revision = mysql_num_rows($result);
 	// iterate through resultset
 	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
 	{
@@ -213,7 +213,7 @@ else
 	$extra_message = '';
 	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
 	{	
-            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . $revision_id . '</a>' . $extra_message;
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . ($revision_id +1). '</a>' . $extra_message;
         }
 	else
 	{

@@ -176,7 +176,7 @@ else
                 break;
 
         }
-        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";
+        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";      
         $lresult = mysql_query($lquery_pre.$lquery);
 
         $lindex = 0;

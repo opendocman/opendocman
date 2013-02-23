@@ -58,6 +58,10 @@ if(isset($_GET['submit']) && $_GET['submit']=='add')
                 </td>
                 <td colspan="3">
                     <input name="department" type="text" class="required" minlength="2">
+<?php
+                 // Call the plugin API
+                 callPluginMethod('onDepartmentAddForm');
+?>
                 </td>
                 <td align="center">
                     <input type="hidden" name="submit" value="Add Department">
@@ -142,6 +146,10 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_perms (fid, dept_id, rights) values(".$data_array[$index][0].','. $newly_added_dept_id.','. $data_array[$index][1].')';
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     }
+        
+    // Call the plugin API
+    callPluginMethod('onDepartmentAddSave', $newly_added_dept_id);
+  
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
@@ -366,7 +374,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
     $dept_obj = new Department($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(),$last_message);
     ?>  
-                        <form action="department.php" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
+                        <form action="department.php" id="modifyDeptForm" method="POST" enctype="multipart/form-data">                                        
                             <table border="0" cellspacing="5" cellpadding="5">
                                 
                                     <tr>
@@ -376,22 +384,29 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
                                             while(list($lid, $lname) = mysql_fetch_row($result))
                                             {
                                                 ?>
-                                    <tr>
                                         <td>
-                                                    <?php echo msg('department')?>:<input type="textbox" name="name" value="<?php echo $lname; ?>" class="required" maxlength="40">
-                                            <input type="hidden" name="id" value="<?php echo $lid; ?>">
+                                            <b><?php echo msg('department')?></b>
                                         </td>
-
-                                                <?php
+                                        <td colspan="3">
+                                            <input type="textbox" name="name" value="<?php echo $lname; ?>" class="required" maxlength="40">
+                                            <input type="hidden" name="id" value="<?php echo $lid; ?>">
+                                            <?php
+                                            // Call the plugin API
+                                            callPluginMethod('onDepartmentEditForm', $lid);
+                                            ?>
+                                        </td>
+                                             <?php
                                             }
                                             mysql_free_result ($result);
                                             ?>
-                                        <td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">
                                             <div class="buttons">
                                                 <button class="positive" type="Submit" name="submit" value="Update Department"><?php echo msg('button_save')?></button>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td align="center">
                                             <div class="buttons">
                                                 <button class="negative cancel" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
                                             </div>
@@ -477,6 +492,10 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $last_message = urlencode(msg('message_department_successfully_updated') . ' - ' . $name . '- id=' . $_POST['id']);
+    
+    // Call the plugin API
+    callPluginMethod('onDepartmentModifySave', $_REQUEST);
+    
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
