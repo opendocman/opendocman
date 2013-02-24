@@ -306,7 +306,7 @@ if( !defined('User_class') )
         
         function getRejectedFileIds()
         {
-            $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable = '-1' and owner = ".$this->id;
+            $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable = '-1' and owner = '" . $this->id . "'";
             $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
             $file_data = array();
             $num_files = mysql_num_rows($result);

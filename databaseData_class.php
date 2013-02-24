@@ -69,7 +69,7 @@ if( !defined("databaseData_class") );
             /*setId($id) sets the data member $id and it also look
 		a name that is correspondent to that id and set it to
 		the data member field $name*/
-            $this->id = $id;
+            $this->id = (int) $id;
             $this->name = $this->findName();
         }
         function setName($name)

@@ -56,6 +56,7 @@ if (!isset($_GET['submit']))
     draw_header(msg('area_check_out_file'), $last_message);
     // form not yet submitted
     // display information on how to initiate download
+    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
     ?>
 
 
@@ -73,6 +74,7 @@ if (!isset($_GET['submit']))
 // form submitted - download
 else
 {
+    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
     $realname = $fileobj->getName();
     if($_GET['access_right'] == 'modify')
     {
