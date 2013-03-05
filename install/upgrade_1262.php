@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 echo 'Altering the udf table...<br />';
 
  $result = mysql_query("
-     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}udf CHANGE `table_name` `table_name` varchar(50));
+     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}udf CHANGE `table_name` `table_name` varchar(50)
         ") or die("<br>Could not create {$_SESSION['db_prefix']}access_log table. Error was:" .  mysql_error());
 
 echo 'Updating db version...<br />';
