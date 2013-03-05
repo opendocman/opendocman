@@ -130,6 +130,7 @@ else
         $lpublishable= '1';
     }
     // form has been submitted, process data
+    $id = (int) $_POST['id'];
 
     $filename = $_FILES['file']['name'];
     
@@ -144,7 +145,7 @@ else
     // check file type
     foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
     {        
-        if ($_FILES['file']['type'] == $thistype)
+	if (mime_content_type($_FILES['file']['tmp_name']) == $thistype)
         {
             $allowedFile = 1;
             break;
