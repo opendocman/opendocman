@@ -309,12 +309,11 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         //$comment = $file_obj->getComment();
 
         $created_date = fix_date($file_obj->getCreatedDate());
-        if ($file_obj->getModifiedDate())
-        {
+        if ($file_obj->getModifiedDate()) {
             $modified_date = fix_date($file_obj->getModifiedDate());
-        }  else {
-            $modified_date = $created_date;
-	}
+        } else {
+            $modified_date = $created_date;
+        }
 
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1].', '.$full_name_array[0];
