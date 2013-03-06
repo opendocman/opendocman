@@ -463,7 +463,7 @@ else
         // check file type
         foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
         {
-            if ($_FILES['file']['type'][$count] == $thistype)
+            if (mime_content_type($_FILES['file']['tmp_name'][$count]) == $thistype)
             {
                 $allowedFile = 1;
                 break;
