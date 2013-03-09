@@ -28,6 +28,7 @@ if (!isset($_SESSION['uid']))
 }
 include('odm-load.php');
 require_once("AccessLog_class.php");
+require_once("File_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -142,10 +143,18 @@ else
         exit;
     }
 
+    // Check ini size
+    if ($_FILES['file']['error'][$count] == 1) {
+        $last_message = 'Upload Failed - check your upload_max_filesize directive in php.ini';
+        header('Location: error.php?last_message=' . urlencode($last_message));
+    }
+    
     // check file type
     foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-    {        
-	if (mime_content_type($_FILES['file']['tmp_name']) == $thistype)
+    {      
+        $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
+                
+	if ($file_name == $thistype)
         {
             $allowedFile = 1;
             break;
