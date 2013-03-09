@@ -143,27 +143,26 @@ else
         exit;
     }
 
-    // Check ini size
+    // Check ini max upload size
     if ($_FILES['file']['error'][$count] == 1) {
         $last_message = 'Upload Failed - check your upload_max_filesize directive in php.ini';
         header('Location: error.php?last_message=' . urlencode($last_message));
     }
     
+    // Lets try and determine the true file-type
+    $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
+    
     // check file type
-    foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-    {      
-        $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
-                
-	if ($file_name == $thistype)
-        {
+    foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
+
+        if ($file_mime == $thistype) {
             $allowedFile = 1;
             break;
-        }
-        else
-        {
+        } else {
             $allowedFile = 0;
         }
     }
+    
     // illegal file type!
     if ($allowedFile != 1)
     {
