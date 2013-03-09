@@ -147,6 +147,7 @@ else
     if ($_FILES['file']['error'][$count] == 1) {
         $last_message = 'Upload Failed - check your upload_max_filesize directive in php.ini';
         header('Location: error.php?last_message=' . urlencode($last_message));
+        exit;
     }
     
     // Lets try and determine the true file-type
