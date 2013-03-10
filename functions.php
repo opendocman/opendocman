@@ -313,7 +313,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $modified_date = fix_date($file_obj->getModifiedDate());
         }  else {
-            $modified_date = $created_date;
+            $modified_date = $created_date;
 	}
 
         $full_name_array = $file_obj->getOwnerFullName();
