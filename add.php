@@ -35,6 +35,7 @@ if (!isset($_SESSION['uid']))
 include('odm-load.php');
 include('udf_functions.php');
 require_once("AccessLog_class.php");
+require_once("File_class.php");
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
@@ -458,24 +459,33 @@ else
     $numberOfFiles = count($_FILES['file']['name']);
     
     // First we need to make sure all files are allowed types
-    for ($count = 0; $count < $numberOfFiles; $count++)
-    {
+    for ($count = 0; $count < $numberOfFiles; $count++) {
+        
+        // Check ini max upload size
+        if ($_FILES['file']['error'][$count] == 1) {
+            $last_message = 'Upload Failed - check your upload_max_filesize directive in php.ini';
+            header('Location: error.php?last_message=' . urlencode($last_message));
+            exit;
+        }
+
+        // Lets lookup the try mime type
+        $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
+
         // check file type
-        foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-        {
-            if (mime_content_type($_FILES['file']['tmp_name'][$count]) == $thistype)
-            {
+        foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
+
+            if ($file_mime == $thistype) {
                 $allowedFile = 1;
                 break;
-            } else
-            {
+            } else {
                 $allowedFile = 0;
             }
         }
+        
         // illegal file type!
         if ($allowedFile != 1)
         {
-            $last_message = 'MIMETYPE: ' . $_FILES['file']['type'][$count] . ' Failed';
+            $last_message = 'MIMETYPE: ' . $file_mime . ' Failed';
             header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
             exit;
         }
