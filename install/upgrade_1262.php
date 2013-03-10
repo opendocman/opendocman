@@ -21,12 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 echo 'Altering the udf table...<br />';
 
  $result = mysql_query("
-     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}udf CHANGE `table_name` `table_name` varchar(50)
-        ") or die("<br>Could not create {$_SESSION['db_prefix']}access_log table. Error was:" .  mysql_error());
+     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}udf CHANGE `table_name` `table_name` varchar(50)") 
+        or die("<br>Could not create {$_SESSION['db_prefix']}access_log table. Error was:" .  mysql_error());
 
 echo 'Updating db version...<br />';
 $result = mysql_query("UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.6.3' WHERE sys_name='version'")
         or die("<br>Could not update version number: " . mysql_error());
 
 
-echo 'Update to 1.2.6.3 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
+echo 'Database update 1.2.6.3 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';

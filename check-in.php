@@ -134,7 +134,7 @@ else
     $id = (int) $_POST['id'];
 
     $filename = $_FILES['file']['name'];
-    
+
     // no file!
     if ($_FILES['file']['size'] <= 0)
     {
