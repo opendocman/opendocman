@@ -29,6 +29,15 @@ include('odm-load.php');
 include('udf_functions.php');
 $secureurl = new phpsecureurl;
 
+// open a connection to the database
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+// Check to see if user is admin
+if(!$user_obj->isAdmin())
+{
+    header('Location:error.php?ec=4');
+    exit;
+}
+
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 draw_header(msg('accesslogpage_access_log'), $last_message);
@@ -43,8 +52,6 @@ $query = "SELECT
             {$GLOBALS['CONFIG']['db_prefix']}data ON {$GLOBALS['CONFIG']['db_prefix']}access_log.file_id={$GLOBALS['CONFIG']['db_prefix']}data.id
           INNER JOIN 
             {$GLOBALS['CONFIG']['db_prefix']}user ON {$GLOBALS['CONFIG']['db_prefix']}access_log.user_id = {$GLOBALS['CONFIG']['db_prefix']}user.id
-          WHERE 
-            {$GLOBALS['CONFIG']['db_prefix']}access_log.user_id='$_SESSION[uid]'
         ";
 $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
 
