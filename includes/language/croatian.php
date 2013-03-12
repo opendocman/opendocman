@@ -238,6 +238,9 @@ $lang['label_fileid'] = 'ID datoteke';
 $lang['label_username'] = 'Korisničko ime';
 $lang['label_action'] = 'Radnja';
 $lang['label_date'] = 'Datum';
+$lang['label_type_pr_sec'] = 'Type'; //CHM
+$lang['label_primary_type'] = 'Primary'; //CHM
+$lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
 
 // Messages
 $lang['message_account_created_add_user'] = 'Vaš račun je stvoren.';
@@ -443,9 +446,6 @@ $lang['accesslogpage_file_deleted'] = 'Datoteka obrisana';
 $lang['accesslogpage_file_authorized'] = 'Datoteka odobrena';
 $lang['accesslogpage_file_rejected'] = 'Datoteka odbijena';
 $lang['accesslogpage_reserved'] = 'Rezervirano';
-
-// User page
-$lang['userpage_reviewer_for'] = 'Reviewer for';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
