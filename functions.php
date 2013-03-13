@@ -228,7 +228,10 @@ function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
     while( list($mail_to) = mysql_fetch_row($result) )
     {
-        mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        }
     }
     mysql_free_result($result);
 }
@@ -238,7 +241,10 @@ function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_heade
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
     while( list($mail_to) = mysql_fetch_row($result) )
     {
-        mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        }
     }
     mysql_free_result($result);
 }
@@ -246,7 +252,10 @@ function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body,
 {
     for($i = 0; $i< sizeof($user_OBJ_array); $i++)
     {
-        mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+        }
     }
 }
 function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)

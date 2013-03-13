@@ -101,7 +101,10 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4)
         $file_obj = new FileData($lid, $GLOBALS['connection'], DB_NAME);
         $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
         $mail_to = $user_obj->getEmailAddress();
-        mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+        }
     }
 }
 if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) //do not show file

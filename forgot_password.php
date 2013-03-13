@@ -170,7 +170,10 @@ else if (isset($_POST['username']) && strlen($_POST['username']) > 0)
         $mail_body .= msg('area_admin') . "\n\n";
         
         // send the email
-        mail($email, msg('area_reset_password'), $mail_body, $mail_headers);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($email, msg('area_reset_password'), $mail_body, $mail_headers);
+        }
 
         $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_an_email_has_been_sent'));
         header("Location: $redirect");

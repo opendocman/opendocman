@@ -150,7 +150,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
-            mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+            if ($GLOBALS['CONFIG']['demo'] == 'False')
+            {
+                mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+            }
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid,'R');
@@ -238,7 +241,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
                 $mail_body1.=msg('email_thank_you') . ',' . "\n\n";
                 $mail_body1.=msg('email_automated_document_messenger') . "\n\n";
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
-                mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);               
+                if ($GLOBALS['CONFIG']['demo'] == 'False')
+                {
+                    mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+                }
             }
             
             $file_obj->Publishable(1);
