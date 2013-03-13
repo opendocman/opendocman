@@ -469,7 +469,7 @@ else
         }
 
         // Lets lookup the try mime type
-        $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
+        $file_mime = File::mime($_FILES['file']['tmp_name'][$count], $_FILES['file']['name'][$count]);
 
         // check file type
         foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {

@@ -18,17 +18,18 @@ class File
      *
      * $mime = File::mime($file);
      *
-     * @param string $filename file name or path
+     * @param string $filepath file name or path
+     * @param string $realname The real filename of the file (without the path)
      * @return string mime type on success
      * @return FALSE on failure
      */
-    public static function mime($filename)
+    public static function mime($filename, $realname)
     {
         // Get the complete path to the file
         $filename = realpath($filename);
 
         // Get the extension from the filename
-        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $extension = strtolower(pathinfo($realname, PATHINFO_EXTENSION));
 
         if (preg_match('/^(?:jpe?g|png|[gt]if|bmp|swf)$/', $extension)) {
             // Use getimagesize() to find the mime type on images
@@ -37,18 +38,22 @@ class File
             if (isset($file['mime']))
                 return $file['mime'];
         }
-
-        if (class_exists('finfo', FALSE)) {
+        
+        // First lets try finfo
+        if (class_exists('finfo')) {          
             if ($info = new finfo(defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME)) {
                 return $info->file($filename);
-            }
+            } else if ($info = new finfo(defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME, 'magic')) {
+                return $info->file($filename);
+            }      
         }
 
-        if (ini_get('mime_magic.magicfile') AND function_exists('mime_content_type')) {
-            // The mime_content_type function is only useful with a magic file
+        // No finfo, so lets try mime_content_type
+        if (function_exists('mime_content_type')) {           
             return mime_content_type($filename);
         }
 
+        // Nothing else has worked,lets try the mimetypes global array
         if (!empty($extension)) {
             return File::mime_by_ext($extension);
         }
@@ -68,10 +73,8 @@ class File
      */
     public static function mime_by_ext($extension)
     {
-        // Load all of the mime types
-        $mimes = Kohana::$config->load('mimes');
-
-        return isset($mimes[$extension]) ? $mimes[$extension][0] : FALSE;
+        $return = isset($GLOBALS['mimetypes'][$extension]) ? $GLOBALS['mimetypes'][$extension][0] : FALSE;       
+        return $return;
     }
 
     /**
@@ -83,10 +86,7 @@ class File
      */
     public static function mimes_by_ext($extension)
     {
-        // Load all of the mime types
-        $mimes = Kohana::$config->load('mimes');
-
-        return isset($mimes[$extension]) ? ( (array) $mimes[$extension]) : array();
+        return isset($GLOBALS['mimetypes'][$extension]) ? ( (array) $GLOBALS['mimetypes'][$extension]) : array();
     }
 
     /**
@@ -101,7 +101,7 @@ class File
 
         // Fill the static array
         if (empty($types)) {
-            foreach (Kohana::$config->load('mimes') as $ext => $mimes) {
+            foreach ($GLOBALS['mimetypes'] as $ext => $mimes) {
                 foreach ($mimes as $mime) {
                     if ($mime == 'application/octet-stream') {
                         // octet-stream is a generic binary

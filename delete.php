@@ -73,13 +73,12 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
                 $file_obj->temp_delete();
                 fmove($GLOBALS['CONFIG']['dataDir'] . $id . '.dat', $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat');
             }
+            AccessLog::addLogEntry($_REQUEST['id' . $i],'X');
         }
     }
     // delete from directory
     // clean up and back to main page
     $last_message = urlencode(msg('message_document_has_been_archived'));
-
-    AccessLog::addLogEntry($_REQUEST['id'],'X');
         
     // Call the plugin API call for this section
     callPluginMethod('onAfterArchiveFile');
