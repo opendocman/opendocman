@@ -44,6 +44,7 @@ include_once('secureurl.php');
 include('udf_functions.php');
 require_once('Category_class.php');
 include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
+require_once("File_class.php");
 
 /* Set language  vars */
 foreach($GLOBALS['lang'] as $key=>$value)
@@ -329,15 +330,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         if ($userAccessLevel >= $userperms_obj->READ_RIGHT)
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
-            if( !isset($GLOBALS['mimetypes']["$suffix"]) )
-            {
-                $lmimetype = $GLOBALS['mimetypes']['default'];
-            }
-            else
-            {
-                $lmimetype = $GLOBALS['mimetypes']["$suffix"];
-            }
-
+            $lmimetype = File::mime_by_ext($suffix);
             $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
         }
         else

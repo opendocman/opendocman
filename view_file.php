@@ -58,14 +58,9 @@ if(!isset($_GET['submit']))
         $prefix = (substr($realname,0,(strrpos($realname,"."))));
         $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
     }
-    if( !isset($GLOBALS['mimetypes']["$suffix"]) )
-    {
-        $lmimetype = $GLOBALS['mimetypes']['default'];
-    }
-    else
-    {
-        $lmimetype = $GLOBALS['mimetypes']["$suffix"];
-    }
+    
+    $lmimetype = File::mime_by_ext($suffix);
+    
     //echo "Realname is $realname<br>";
     //echo "prefix = $prefix<br>";
     //echo "suffix = $suffix<br>";
