@@ -65,7 +65,7 @@
               </li>
               {/if}
               <li><a href="{$g_base_url}/logout.php">{$g_lang_logout}</a></li>
-            </ul>
+            </ul>          
               <p class="navbar-text pull-right">
 Logged in as
 <a href="{$base_url}/profile.php">{$userName}</a>
@@ -75,7 +75,10 @@ Logged in as
       </div>
 
     </div>
-    <div class="container">
+{if $g_demo eq 'True'}
+    <h1>Demo resets once per hour</h1>
+{/if}
+      <div class="container">
         <div class="row">
             <div class="span4">
                 You are here: {$breadCrumb}

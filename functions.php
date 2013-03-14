@@ -44,6 +44,7 @@ include_once('secureurl.php');
 include('udf_functions.php');
 require_once('Category_class.php');
 include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
+require_once("File_class.php");
 
 /* Set language  vars */
 foreach($GLOBALS['lang'] as $key=>$value)
@@ -227,7 +228,10 @@ function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
     while( list($mail_to) = mysql_fetch_row($result) )
     {
-        mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        }
     }
     mysql_free_result($result);
 }
@@ -237,7 +241,10 @@ function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_heade
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
     while( list($mail_to) = mysql_fetch_row($result) )
     {
-        mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($mail_to, $mail_subject, $mail_body, $mail_header);
+        }
     }
     mysql_free_result($result);
 }
@@ -245,7 +252,10 @@ function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body,
 {
     for($i = 0; $i< sizeof($user_OBJ_array); $i++)
     {
-        mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+        if ($GLOBALS['CONFIG']['demo'] == 'False')
+        {
+            mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+        }
     }
 }
 function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)
@@ -329,15 +339,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         if ($userAccessLevel >= $userperms_obj->READ_RIGHT)
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
-            if( !isset($GLOBALS['mimetypes']["$suffix"]) )
-            {
-                $lmimetype = $GLOBALS['mimetypes']['default'];
-            }
-            else
-            {
-                $lmimetype = $GLOBALS['mimetypes']["$suffix"];
-            }
-
+            $lmimetype = File::mime_by_ext($suffix);
             $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
         }
         else

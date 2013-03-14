@@ -51,6 +51,9 @@
         </td>
     </tr>
 </table>
+{if $g_demo eq 'True'}
+    <h1>Demo resets once per hour</h1>
+{/if}
 <!-- ----------------end_draw_menu----------------- -->
 <link rel="stylesheet" type="text/css" href="{$g_base_url}/linkcontrol.css">
 <table width="100%" border="0" cellspacing="0" cellpadding="5">

@@ -144,14 +144,14 @@ else
     }
 
     // Check ini max upload size
-    if ($_FILES['file']['error'][$count] == 1) {
+    if ($_FILES['file']['error'] == 1) {
         $last_message = 'Upload Failed - check your upload_max_filesize directive in php.ini';
         header('Location: error.php?last_message=' . urlencode($last_message));
         exit;
     }
     
     // Lets try and determine the true file-type
-    $file_mime = File::mime($_FILES['file']['tmp_name'][$count]);
+    $file_mime = File::mime($_FILES['file']['tmp_name'], $_FILES['file']['name']);
     
     // check file type
     foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
