@@ -51,7 +51,7 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="{$g_base_url}/out.php">{$g_title}</a>
-          <div class="nav-collapse">
+          <div class="nav-collapse collapse">
             <ul class="nav">
 
               <li class="active"><a href="{$g_base_url}/out.php">Home</a></li>
