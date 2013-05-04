@@ -2,7 +2,7 @@
 /*
 details.php - display file information  check for session
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2012 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -329,13 +329,15 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) ) )
 	function sendFields()
 	{
 		mesg_window_frm = message_window.document.author_note_form;
-		mesg_window_frm.to.value = document.data.to.value;
-		mesg_window_frm.subject.value = document.data.subject.value;
-		mesg_window_frm.comments.value = document.data.comments.value;
+		if(mesg_window_frm) {
+                    mesg_window_frm.to.value = document.data.to.value;
+                    mesg_window_frm.subject.value = document.data.subject.value;
+                    mesg_window_frm.comments.value = document.data.comments.value;
+                }
 	}
 	function showMessage()
 	{
-		message_window = window.open('toBePublished.php?submit=comments', 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
+		message_window = window.open('<?php echo ($secureurl->encode('toBePublished.php?submit=comments&id=' . $_REQUEST['id']) ); ?>' , 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
 		message_window.focus();
 		setTimeout("sendFields();", 500);
 	}
