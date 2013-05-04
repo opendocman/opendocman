@@ -53,17 +53,20 @@ if( !defined('FileTypes_class') )
         */
         function save($data)
         {
+
             // First, uncheck all status values
             $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}filetypes SET active='0'";
-            $result = mysql_query($query) or die ('Failed to un-set filetypes active values: ' . mysql_error());
-            foreach ($data['types'] as $key=>$value)
-            {
-                //print_r($data['types']);exit;
-                $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}filetypes SET active='1' WHERE id='$value'";
-                //echo $query;exit;
-                $result = mysql_query($query) or die ('Failed to save filetypes: ' . mysql_error());
+            $result = mysql_query($query) or die('Failed to un-set filetypes active values: ' . mysql_error());
+            if (isset($data['types'])) {
+                foreach ($data['types'] as $key => $value) {
+                    //print_r($data['types']);exit;
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}filetypes SET active='1' WHERE id='$value'";
+                    //echo $query;exit;
+                    $result = mysql_query($query) or die('Failed to save filetypes: ' . mysql_error());
+                }
+                return TRUE;
             }
-            return TRUE;
+            return false;
         }
 
         /*
