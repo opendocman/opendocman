@@ -2,7 +2,7 @@
 /*
 toBePublished.php -  Display list of publishable files to reviewer
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -283,6 +283,14 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
         }
     }
     header('Location: out.php?last_message=' .urlencode(msg('message_file_authorized')));
+}
+elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'comments' && isset($_REQUEST['id'])) {
+    /*
+     * Used to display the reviewer comments in a popup
+     */
+    $file_id = (int) $_REQUEST['id'];
+    $file_obj = new FileData($file_id, $GLOBALS['connection'], DB_NAME); 
+    echo $file_obj->getReviewerComments();
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')
 {
