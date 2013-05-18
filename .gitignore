@@ -1,13 +1,8 @@
- .*.swp
- Thumbs.db
- /nbproject
-/class_tree
-/docs
-/images
-/includes
-/install
-/plug-ins
-/templates
-/templates_c
-config.php
+.DS_Store
+.svn
+._*
+~$*
+.*.swp
+Thumbs.db
+/nbproject
 .gitignore
