@@ -2,7 +2,7 @@
 /*
 search.php - main search logic
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ if(!isset($_GET['submit']))
             <tr>
                 <td valign="top"><b><?php echo msg('search');?></b></td>
                 <td><select name="where">
-                        <option value="author_only"><?php echo msg('author');?> (Last_name  First_name)</option>
+                        <option value="author_only"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";?></option>
                         <option value="department_only"><?php echo msg('department');?></option>
                         <option value="category_only"><?php echo msg('category');?></option>
                         <option value="descriptions_only"><?php echo msg('label_description');?></option>

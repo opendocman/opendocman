@@ -2,7 +2,7 @@
 /*
 functions.php - various utility functions
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -444,7 +444,32 @@ function sort_browser()
                             break;
                         }
                         category_option = select_box.options[select_box.selectedIndex].value;
-                        options_array[0] = new Option('Choose ' + category_option);
+						switch(category_option)
+						{
+							case 'author':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_author')."';\n");
+								?>
+								break;
+							case 'department':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_department')."';\n");
+								?>
+								break;
+							case 'category':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_category')."';\n");
+								?>
+								break;
+							default :
+								<?php
+								echo("\tcategory_option_msg = '".msg('label_empty')."';\n");
+								?>
+								break;
+						}
+						<?php
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);\n");
+						?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_author';
 
@@ -462,11 +487,13 @@ function sort_browser()
                         if(category_item_option == 'choose_an_author')
                             exit();
                         order_array = new Array();
-                        order_array[0] = new Array('Ascending', 0, 'asc');
-                        order_array[1] = new Array('Descending', 1, 'desc');
-                        options_array = document.forms['browser_sort'].elements['category_item_order'].options;
+						<?php
+                        echo("\torder_array[0] = new Array(\"".msg('outpage_ascending')."\", 0, \"asc\");\n");
+                        echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");\n");
+                        echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
 
-                        options_array[0] = new Option('Choose an Order');
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
+						?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
                         for(i=0; i< order_array.length; i++)

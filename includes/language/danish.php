@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Er admin';
 $lang['label_is_reviewer'] = 'Er Reviewer';
 $lang['label_last_name'] = 'Efternavn';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Godkendelse';
 $lang['label_modified_date'] = 'Ændringsdato';
 $lang['label_modify'] = 'Ændre';
@@ -342,7 +343,12 @@ $lang['message_your_password_has_been_changed'] = 'Dit password er blevet ændre
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'Ingen';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Afmarker alle';
@@ -354,7 +360,12 @@ $lang['editpage_assign_owner'] = 'Tilordnes til ejer';
 $lang['editpage_assign_department'] = 'Tilordnes til afdeling';
 $lang['editpage_filter'] = 'Filtrer:';
 $lang['editpage_keyword'] = 'Indtast nøgleord';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'Ingen';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Filen er slettet permanent';
@@ -373,6 +384,14 @@ $lang['detailspage_are_sure'] = 'Er du sikker?';
 
 // Out Page
 $lang['outpage_view'] = 'Vis';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // History Page
 $lang['historypage_category'] = 'Kategori:';

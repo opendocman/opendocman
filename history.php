@@ -2,7 +2,7 @@
 /*
 history.php - display revision history
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -68,11 +68,11 @@ $status = $datafile->getStatus();
 // corrections
 if ($description == '')
 { 
-    $description = 'No description available';
+    $description = msg('message_no_description_available');
 }
 if ($comments == '')
 { 
-    $comment = 'No author comments available';
+    $comments = msg('message_no_author_comments_available');
 }
 if($datafile->isArchived())
 {	
