@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'É Admin';
 $lang['label_is_reviewer'] = 'É Revisor';
 $lang['label_last_name'] = 'Sobrenome';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Moderação';
 $lang['label_modified_date'] = 'Data de Modificação';
 $lang['label_modify'] = 'Modificar';
@@ -341,7 +342,12 @@ $lang['message_your_password_has_been_changed'] = 'Sua senha foi alterada.';
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'None';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'desmarque todos';
@@ -353,7 +359,12 @@ $lang['editpage_assign_owner'] = 'Assign to owner';
 $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'None';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
@@ -372,6 +383,14 @@ $lang['detailspage_are_sure'] = 'Are you sure?';
 
 // Out Page
 $lang['outpage_view'] = 'View';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // History Page
 $lang['historypage_category'] = 'Category:';

@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2007 Stephen Lawrence Jr.
-Copyright (C) 2002-2012 Stephen Lawrence Jr.
+Copyright (C) 2002-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -280,7 +280,7 @@ if(!isset($_POST['submit']))
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
     while(list($RightId, $Description) = mysql_fetch_row($result))
     {
-        echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
+        echo msg('addpage_' . $Description) . '<input type ="radio" name ="' . $Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |' . "\n";
     }
     ?>
         <hr /></TD>

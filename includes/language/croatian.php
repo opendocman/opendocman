@@ -197,6 +197,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Administrator';
 $lang['label_is_reviewer'] = 'Pregledavač';
 $lang['label_last_name'] = 'Prezime';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Uređivanje';
 $lang['label_modified_date'] = 'Datum promjene';
 $lang['label_modify'] = 'Promjeni';
@@ -342,7 +343,12 @@ $lang['message_your_password_has_been_changed'] = 'Vaša lozinka je promjenjena.
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Zabranjeno';
 $lang['addpage_none'] = 'Nikakva';
+$lang['addpage_view'] = 'Prikaži';
+$lang['addpage_read'] = 'Čitaj';
+$lang['addpage_write'] = 'Piši';
+$lang['addpage_admin'] = 'Administrator';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
@@ -354,7 +360,12 @@ $lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
 $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
+$lang['editpage_forbidden'] = 'Zabranjeno';
 $lang['editpage_none'] = 'Nikakva';
+$lang['editpage_view'] = 'Prikaži';
+$lang['editpage_read'] = 'Čitaj';
+$lang['editpage_write'] = 'Piši';
+$lang['editpage_admin'] = 'Administrator';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
@@ -373,6 +384,14 @@ $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
 
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
+$lang['outpage_ascending'] = 'Rastuće';
+$lang['outpage_descending'] = 'padajuće';
+$lang['outpage_choose_an_order'] = 'Odaberi redoslijed';
+$lang['outpage_choose'] = 'Odaberi';
+$lang['category_option_author'] = 'Autor';
+$lang['category_option_department'] = 'Odjel';
+$lang['category_option_category'] = 'Kategorija datoteke';
+$lang['category_option_default'] = 'Prazno';
 
 // History Page
 $lang['historypage_category'] = 'Kategorija:';

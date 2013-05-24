@@ -2,7 +2,7 @@
 /*
 edit.php - edit file properties
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2012 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -287,7 +287,7 @@ if (!isset($_REQUEST['submit']))
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{
-      		echo $Description . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
+      		echo msg('editpage_' . $Description) . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
       	}
      
 	$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}department.name, {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id, {$GLOBALS['CONFIG']['db_prefix']}dept_perms.rights FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms, {$GLOBALS['CONFIG']['db_prefix']}department WHERE {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = {$GLOBALS['CONFIG']['db_prefix']}department.id and fid = ".$filedata->getId()." ORDER BY name";

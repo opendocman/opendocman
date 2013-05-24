@@ -1,6 +1,6 @@
 <?php
 // ITALIAN LANGUAGE FILE
-// (C) 20010-2011 Stephen Lawrence Jr.
+// (C) 2010-2013 Stephen Lawrence Jr.
 // Translated by: Mainieri Paolo
 /*
 This program is free software; you can redistribute it and/or
@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = '&egrave; amministratore';
 $lang['label_is_reviewer'] = '&egrave; un moderatore';
 $lang['label_last_name'] = 'Cognome';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Moderazione';
 $lang['label_modified_date'] = 'Data di Modifica';
 $lang['label_modify'] = 'Modifica';
@@ -341,7 +342,12 @@ $lang['message_your_password_has_been_changed'] = 'La tua password &egrave; stat
 $lang['view'] = $lang['label_view'];
 
 // Aggiungi File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'Nessuno';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleziona tutto';
@@ -353,7 +359,12 @@ $lang['editpage_assign_owner'] = 'Assegna al proprietario';
 $lang['editpage_assign_department'] = 'Assegna al dipartimento';
 $lang['editpage_filter'] = 'Filtro:';
 $lang['editpage_keyword'] = 'Inserisci parole chiave';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'Nessuno';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Cancella/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Il file &egrave; stato cancellato definitivamente';
@@ -372,6 +383,14 @@ $lang['detailspage_are_sure'] = 'Sei sicuro?';
 
 // Out Page
 $lang['outpage_view'] = 'Visualizza';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // Cronologia Page
 $lang['historypage_category'] = 'Categoria:';
