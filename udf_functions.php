@@ -2,7 +2,7 @@
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence Jr., Jonathan Miner
-Copyright (C) 2008-2012 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -271,7 +271,7 @@ if ( !defined('udf_functions') )
                     $subresult = mysql_query($query) or die ("Error in query171: $query. " . mysql_error());
 					
 					//CHM secondary values
-					if($_REQUEST['secondary'.$i] != '' && $row[1] == 4){
+					if( (isset($_REQUEST['secondary'.$i]) && $_REQUEST['secondary'.$i] != '') && $row[1] == 4){
 						$explode_row = explode('_',$row[2]);
 						$field_name = $explode_row[2];
 						
@@ -636,16 +636,17 @@ if ( !defined('udf_functions') )
         $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
         $result = mysql_query($query) or die ("Error in query369: $query. " . mysql_error());
         $row = mysql_fetch_row($result);
-        if ($row[1] == 1 || $row[1] == 2 || $row[1] = 4)
+
+        if ($row[1] == 1 || $row[1] == 2 || $row[1] == 4)
         {
             $lquery_pre .= ', ' . $row[0];
             $lquery .= $row[0] . '.value' . $lequate . '\'' . $lkeyword . '\'';
             $lquery .= ' AND ' . $GLOBALS['CONFIG']['db_prefix'] . 'data.' . $row[0] . ' = ' . $row[0] . '.id';
         }
         elseif ($row[1] == 3)
-        {
+        {           
             $lquery .= $row[0] . $lequate . '\'' . $lkeyword . '\'';
-        }
+        }       
         mysql_free_result($result) or die ("Error in query381: $query. " . mysql_error());
 
         return array($lquery_pre,$lquery);
