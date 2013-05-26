@@ -26,6 +26,12 @@ require_once("AccessLog_class.php");
  
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+{
+	header('Location:error.php?ec=2');
+  	exit;
+}
+
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -36,11 +42,6 @@ if (!isset($_SESSION['uid']))
   exit;
 }
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
-	header('Location:error.php?ec=2');
-  	exit;
-}
 
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
