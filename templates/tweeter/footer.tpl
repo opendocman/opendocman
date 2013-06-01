@@ -26,7 +26,7 @@
       </footer>
 
     </div> <!-- /container -->   
-    <script type="text/javascript" src="{$base_url}/templates/tweeter/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{$g_base_url}/templates/tweeter/js/bootstrap.min.js"></script>
 </body>
 </html>
 
