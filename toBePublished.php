@@ -33,7 +33,7 @@ if (!isset ($_SESSION['uid']))
 }
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-if(!$user_obj->isReviewer() && !$user_obj->isAdmin())
+if(!$user_obj->isReviewer())
 {
     header('Location:out.php?last_message=Access+denied');
 }

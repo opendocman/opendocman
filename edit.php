@@ -303,7 +303,7 @@ if (!isset($_REQUEST['submit']))
 	</tr>
 	<tr>
 	<td><a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a></td>
-	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo str_replace('"', '&quot;', $description); ?>"></td>
+	<td colspan="3"><textarea tabindex="5" name="description" rows="4" maxlength="255"><?php  echo str_replace('"', '&quot;', $description); ?></textarea></td>
 	</tr>
 	<tr>
 	<td><a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a></td>

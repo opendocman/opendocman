@@ -19,7 +19,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-//$_SESSION['uid']=102; $_REQUEST['id']=75;
 session_start();
 if (!isset($_SESSION['uid']))
 {
@@ -64,7 +63,7 @@ $user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], DB_NAME);
 $secureurl = new phpsecureurl;
 
 ?>
-<table border="0" width=80% cellspacing="4" cellpadding="1">
+<table border="0" width=100% cellspacing="4" cellpadding="1">
 <?php
 // display details
 $ownerId = $filedata->getOwner();
@@ -180,11 +179,11 @@ else
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('label_description')?>:</th><td> <?php echo $description; ?></td>
+    <th valign=top align=right><?php echo msg('label_description')?>:</th><td> <?php echo wordwrap($description, 50, '<br />'); ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('label_comment')?>:</th><td> <?php echo $comment; ?></td>
+    <th valign=top align=right><?php echo msg('label_comment')?>:</th><td> <?php echo wordwrap($comment, 50, '<br />'); ?></td>
 </tr>
 
 <tr>
