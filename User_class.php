@@ -188,15 +188,21 @@ if( !defined('User_class') )
         */
         function isReviewer()
         {
+            // If they are an admin, they can review
+            if($this->isAdmin()) {
+                return true;
+            }
+            
+            // Lets see if this non-admin user has a department they can review for, if so, they are a reviewer
             $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = " . $this->id;
             $result = mysql_query($query, $this->connection) or die('Error in query: '. $query . mysql_error());
             if(mysql_num_rows($result) > 0)
             {
-                return 1;
+                return true;
             }
             else
             {
-                return 0;
+                return false;
             }
         }
 

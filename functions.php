@@ -308,7 +308,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         }
         if ($description == '')
         {
-            $description = 'No description available';
+            $description = msg('message_no_description_available');
         }
         $description = substr($description, 0, 35);
         

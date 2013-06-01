@@ -289,14 +289,14 @@ if(!isset($_POST['submit']))
         <td>
             <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a>
         </td>
-        <td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
+        <td colspan="3"><textarea tabindex="5" name="description" rows="4" maxlength="255" ></textarea></td>
     </tr>
 
     <tr>
         <td>
             <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a>
         </td>
-        <td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
+        <td colspan="3"><textarea tabindex="6" name="comment" rows="4" maxlength="255" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
     </tr>
 
     <TABLE id="specificUserPerms" border="0" cellspacing="0" cellpadding="3" NOWRAP>

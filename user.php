@@ -409,7 +409,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 echo "<td>$isadmin</td>";
                 echo "</tr>";
                 $isreviewer = msg('userpage_no');
-                if($user_obj->isReviewer() == 1)
+                if($user_obj->isReviewer())
                 {
                         $isreviewer    = msg('userpage_yes');
                 }
