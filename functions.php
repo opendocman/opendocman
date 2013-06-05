@@ -310,7 +310,6 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $description = msg('message_no_description_available');
         }
-        $description = substr($description, 0, 35);
         
         // set filename for filesize() call below
         //$filename = $dataDir . $file_obj->getId() . '.dat';
