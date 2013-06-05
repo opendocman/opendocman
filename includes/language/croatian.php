@@ -1,6 +1,6 @@
 <?php
 //CROATIAN LANGUAGE FILE
-// (C) 20010-2012 Stephen Lawrence Jr.
+// (C) 20010-2013 Stephen Lawrence Jr.
 // Translated by: Mihovil Stanić
 /*
 This program is free software; you can redistribute it and/or
@@ -452,6 +452,7 @@ $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
 $lang['adminpage_reports'] = 'Izvještaji';
 $lang['adminpage_access_log'] = 'Popis pristupa';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Popis pristupa';

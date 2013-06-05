@@ -451,6 +451,7 @@ $lang['adminpage_edit_filetypes'] = 'Modifier les Types de Fichiers';
 $lang['adminpage_edit_settings'] = 'Modifier les Paramètres';
 $lang['adminpage_reports'] = 'Reports';
 $lang['adminpage_access_log'] = 'Access Log';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
