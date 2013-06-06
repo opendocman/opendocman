@@ -127,6 +127,7 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 </tr>
 <tr>
 <th valign=top align=right><?php echo msg('historypage_revision');?></th><td>
+    <div id="revision_current">
 <?php 
 if(isset($lrevision_id))
 {
@@ -144,6 +145,7 @@ else
     echo msg('historypage_latest');
 }
         ?>
+    </div>
 </td>
 </tr>
 
@@ -199,32 +201,26 @@ else
 	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
 	{
 
-	if ( isset($bgcolor) && $bgcolor == "#FCFCFC" )
-        {
-          $bgcolor="#E3E7F9";
-        }
-        else
-        {
-          $bgcolor="#FCFCFC";
-        }
+            if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
+                $bgcolor = "#E3E7F9";
+            } else {
+                $bgcolor = "#FCFCFC";
+            }
 
-	echo '<tr bgcolor=' . $bgcolor . '>';
+            echo '<tr bgcolor=' . $bgcolor . '>';
 
-	$extra_message = '';
-	if( is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat") )
-	{	
-            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state']-1) . '">' . ($revision_id +1). '</a>' . $extra_message;
-        }
-	else
-	{
-            echo '<td><font size="-1">' . $revision_id . $extra_message;
-        }
-?>
-	</font></td>
-	<td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
-	<td><font size="-1"><?php echo $last_name.', '.$first_name; ?></font></td>
-	<td><font size="-1"><?php echo $note; ?></font></td>
-	</tr>
+            $extra_message = '';
+            if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat")) {
+                echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision_id + 1) . '</div></a>' . $extra_message;
+            } else {
+                echo '<td><font size="-1">' . $revision_id . $extra_message;
+            }
+            ?>
+                    </font></td>
+                    <td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
+                    <td><font size="-1"><?php echo $last_name . ', ' . $first_name; ?></font></td>
+                    <td><font size="-1"><?php echo $note; ?></font></td>
+            </tr>
 <?php
 	}
 	// clean up
@@ -236,6 +232,8 @@ else
 
 </table>
 <?php
+// Call the plugin API
+callPluginMethod('onAfterHistory',$datafile->getId());
 draw_footer();
 }
 

@@ -285,8 +285,15 @@ if ( !defined('udf_functions') )
         mysql_free_result($result);
     }
 
+    /**
+     * Generate the UDF details display 
+     * @param type $fileId
+     * @return string
+     */
     function udf_details_display($fileId)
     {
+        $return_string = null;
+        
         $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $result = mysql_query($query) or die ("Error in query181: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
@@ -298,7 +305,7 @@ if ( !defined('udf_functions') )
                 if($subresult)
                 {
                     $subrow = mysql_fetch_row($subresult);
-                    echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
                     mysql_free_result($subresult);
                 }
             } 
@@ -309,7 +316,7 @@ if ( !defined('udf_functions') )
                 if ($subresult)
                 {
                     $subrow = mysql_fetch_row($subresult);
-                    echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    $return_string .=  '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
                     mysql_free_result($subresult);
                 }
 
@@ -322,7 +329,7 @@ if ( !defined('udf_functions') )
                 if ($subresult)
                 {
                     $subrow = mysql_fetch_row($subresult);
-                    echo '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
                     mysql_free_result($subresult);
                 }
 
@@ -330,6 +337,7 @@ if ( !defined('udf_functions') )
 			//CHM
         }
         mysql_free_result($result);
+        return $return_string;
     }
 
     function udf_admin_header()

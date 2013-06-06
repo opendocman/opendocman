@@ -182,6 +182,11 @@ class Plugin
     function onDuringDetails($fileid){}
 
     /*
+     * This function is run after the details view
+     */
+    function onAfterDetails($fileid){}
+    
+    /*
      * This function is run before the file list view
      */
     function onBeforeListFiles($fileList){}
@@ -222,4 +227,11 @@ class Plugin
      */
 
     function onDepartmentAddSave($deptId) {}    
+    
+    /*
+     * This function is run after the file history page is displayed
+     * @param int $file_id The new file id
+     */
+
+    function onAfterHistory($file_id) {} 
 }

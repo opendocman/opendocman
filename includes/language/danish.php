@@ -381,6 +381,7 @@ $lang['detailspage_edit'] = 'Editer';
 $lang['detailspage_delete'] = 'Slet';
 $lang['detailspage_history'] = 'Historik';
 $lang['detailspage_are_sure'] = 'Er du sikker?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Vis';
