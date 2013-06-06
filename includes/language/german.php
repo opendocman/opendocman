@@ -380,6 +380,7 @@ $lang['detailspage_edit'] = 'Editieren';
 $lang['detailspage_delete'] = 'Löschen';
 $lang['detailspage_history'] = 'Historie';
 $lang['detailspage_are_sure'] = 'Sind Sie sicher?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Anzeigen';
