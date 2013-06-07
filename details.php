@@ -151,11 +151,15 @@ if ($rows == 1 && !(isset($lrevision_id))) {
 
 $file_under_review = ( ($filedata->isPublishable() == -1) ? true : false);
 
+$to_value = (isset($reviewer_comments_fields[0]) ? (substr($reviewer_comments_fields[0], 3)) : '');
+$subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1],8)) : '');
+$comments_value = (isset($reviewer_comments_fields[2]) ? (substr($reviewer_comments_fields[2], 9)) : '');
+
 $file_detail = array(
     'file_unlocked' => $file_unlocked,
-    'to_value' => substr($reviewer_comments_fields[0], 3),
-    'subject_value' => substr($reviewer_comments_fields[1], 8),
-    'comments_value' => substr($reviewer_comments_fields[2], 9),
+    'to_value' => $subject_value,
+    'subject_value' => $subject_value,
+    'comments_value' => $comments_value,
     'realname' => $realname,
     'category' => $category,
     'filesize' => $filesize,
