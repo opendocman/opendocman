@@ -112,7 +112,7 @@ elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' |
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 {  
     $lto = isset($_POST['to'])?$_POST['to'] : '';
-    $lsubject = isset($_POST['subject'])?$_POST['subject'] : '';
+    $lsubject = isset($_POST['subject']) ? $_POST['subject'] : '';
     $lcheckbox = isset($_POST['checkbox'])?$_POST['checkbox'] : '';
 
     $mail_break = '--------------------------------------------------'."\n";
@@ -120,12 +120,11 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
-    $dept_id = $user_obj->getDeptId();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
-    $mail_subject= (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
+    $mail_subject= (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
     $mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
     $mail_body = $lcomments . "\n\n";
     $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
@@ -150,15 +149,32 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
-            if ($GLOBALS['CONFIG']['demo'] == 'False')
+            $dept_id = $file_obj->getDepartment();
+            // Build email for author notification
+            if(isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users']))
             {
-                mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+                // Lets unset this now so the new array will just be user_id's
+                $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
+                $mail_body1 = $lcomments . "\n\n";
+                $mail_body1.=msg('email_was_rejected_from_repository') . "\n\n";
+                $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
+                $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . "\n\n";
+                $mail_body1.=msg('date') . ': ' . $date . "\n\n";
+                $mail_body1.=msg('label_reviewer') . ': ' . $full_name . "\n\n";
+                $mail_body1.=msg('email_thank_you') . ',' . "\n\n";
+                $mail_body1.=msg('email_automated_document_messenger') . "\n\n";
+                $mail_body1.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+
+                if ($GLOBALS['CONFIG']['demo'] == 'False') {
+                    mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute), $mail_headers);
+                }
             }
+            
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid,'R');
             // Set up rejected email message to sent out
-            $mail_subject= isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' . msg('email_was_rejected_from_repository');
+            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_a_new_file_has_been_rejected'));
             $mail_body = $lcomments . "\n\n";
             $mail_body.=msg('email_a_new_file_has_been_rejected')."\n\n";
             $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . "\n\n";
@@ -171,17 +187,16 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 
             if(isset($_POST['send_to_all']))
             {
-                email_all($mail_from,$mail_subject,$mail_body,$mail_headers);
+                email_all($mail_subject,$mail_body,$mail_headers);
             }
 
-            if(isset($_POST['send_to_dept']))
-            {
-                email_dept($mail_from, $dept_id,$mail_subject ,$mail_body,$mail_headers);
+            if (isset($_POST['send_to_dept'])) {             
+                email_dept($dept_id, $mail_subject, $mail_body, $mail_headers);
             }
 
-            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0 && $_POST['send_to_users'][0]!= 0)
+            if(is_array($_POST['send_to_users']) && isset($_POST['send_to_users'][0]))
             {
-                email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
+                email_users_id($_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
             }
         }
         else
@@ -193,18 +208,17 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
-{         
+{       
     $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
     $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject = (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
+    $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from"."\r\n";
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
-    $dept_id = $user_obj->getDeptId();
 
     if($user_obj->isAdmin())
     {
@@ -226,6 +240,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);            
             $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
             $mail_to = $user_obj->getEmailAddress();
+            $dept_id = $file_obj->getDepartment();
             
             // Build email for author notification
             if(isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users']))
@@ -252,7 +267,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             AccessLog::addLogEntry($fileid,'Y');
             
             // Build email for general notices
-            $mail_subject = (isset($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
+            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
             $mail_body2=$lcomments . "\n\n";
             $mail_body2.=msg('email_a_new_file_has_been_added'). "\n\n";
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
@@ -265,15 +280,16 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 
             if(isset($_POST['send_to_all']))
             {
-                email_all($mail_from,$mail_subject,$mail_body2,$mail_headers);
+                email_all($mail_subject,$mail_body2,$mail_headers);
             }
+            
             if(isset($_POST['send_to_dept']))
-            {
-                email_dept($mail_from, $dept_id,$mail_subject ,$mail_body2,$mail_headers);
-            }
-            if(isset($_POST['send_to_users']) && sizeof($_POST['send_to_users']) > 0)
+            {         
+                email_dept($dept_id,$mail_subject ,$mail_body2,$mail_headers);
+            }           
+            if(is_array($_POST['send_to_users']) && $_POST['send_to_users'][0] > 0)
             {                     
-                email_users_id($mail_from, $_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
+                email_users_id($_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
             }           
         }
         else

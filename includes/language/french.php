@@ -348,6 +348,9 @@ $lang['addpage_view'] = 'View';
 $lang['addpage_read'] = 'Read';
 $lang['addpage_write'] = 'Write';
 $lang['addpage_admin'] = 'Admin';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Tout Déselectionner';
@@ -465,6 +468,9 @@ $lang['accesslogpage_file_deleted'] = 'File Deleted';
 $lang['accesslogpage_file_authorized'] = 'File Authorized';
 $lang['accesslogpage_file_rejected'] = 'File Rejected';
 $lang['accesslogpage_reserved'] = 'Reserved';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
