@@ -226,7 +226,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 <!-- ADD THE LIST OF FILES HERE -->
 <?php
     echo msg('categoryviewpage_list_of_files_title') . '<br />';
-    $query = "SELECT id, realname FROM `odm_data` WHERE category = '$category_id'";
+    $query = "SELECT id, realname FROM `{$GLOBALS['CONFIG']['db_prefix']}data` WHERE category = '$category_id'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     while(list($file_id, $file_name) = mysql_fetch_row($result)) {
         ?>

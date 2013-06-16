@@ -120,7 +120,7 @@ if ( !defined('udf_functions') )
 
                     //CHM
                     if (isset($_REQUEST['secondary' . $i]) && $_REQUEST['secondary' . $i] != '' && $row[1] == 4) {
-                        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET odm_udftbl_{$field_name}_secondary = '{$_REQUEST['secondary' . $i]}' WHERE id = '$fileId'";
+                        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}_secondary = '{$_REQUEST['secondary' . $i]}' WHERE id = '$fileId'";
                         mysql_query($query) or die("Error in query94: $query. " . mysql_error());
                         $i++;
                     }
@@ -223,7 +223,7 @@ if ( !defined('udf_functions') )
 				//secondary dropdown
                 echo '<tr><td>&nbsp;</td><td><div id="txtHint'.$field_name.'">';
 				
-                $query = "SELECT odm_udftbl_{$field_name}_secondary FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
+                $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}_secondary FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '{$_REQUEST['id']}'";
                 $subresult = mysql_query($query) or die ("Error in query116: $query. " . mysql_error());
                 $subrow = mysql_fetch_row($subresult);
                 $sel = $subrow[0];
@@ -232,9 +232,9 @@ if ( !defined('udf_functions') )
 				if($sel ==''){
 					echo 'Secondary items will show up here.';	
 				}else{
-					$query = "SELECT id, value FROM odm_udftbl_{$field_name}_secondary WHERE pr_id = '{$sel_pri}'";
+                                        $query = "SELECT id, value FROM {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}_secondary WHERE pr_id = '{$sel_pri}'";
 					$subresult = mysql_query($query) or die ("Error in query123: $query. " . mysql_error());
-					echo '<select id="odm_udftbl_'.$field_name.'_secondary" name="odm_udftbl_'.$field_name.'_secondary">';
+					echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary">';
 					while ($subrow = mysql_fetch_row($subresult))
 					{
 						if ( $row[1] == 4 )
@@ -275,7 +275,7 @@ if ( !defined('udf_functions') )
 						$explode_row = explode('_',$row[2]);
 						$field_name = $explode_row[2];
 						
-						$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `odm_udftbl_{$field_name}_secondary`='{$_REQUEST['secondary'.$i]}' WHERE id = {$_REQUEST['id']}";
+                                                $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET `{$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}_secondary`='{$_REQUEST['secondary'.$i]}' WHERE id = {$_REQUEST['id']}";
 						$subresult = mysql_query($query) or die ("Error in query171: $query. " . mysql_error());
 						$i++;
 					}
