@@ -372,6 +372,7 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/mspowerpoint', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/octet-stream', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);",
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/zip', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/tiff', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NUll, 'image/tif', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/vnd.ms-powerpoint', 1);",
