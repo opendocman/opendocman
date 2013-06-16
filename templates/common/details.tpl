@@ -38,7 +38,7 @@
         <th valign=top align=right>{$g_lang_label_description}:</th><td> {$file_detail.description}</td>
     </tr>
     <tr>
-        <th valign=top align=right>{$g_lang_label_comment}:</th><td> {$file_detail.comments_value}</td>
+        <th valign=top align=right>{$g_lang_label_comment}:</th><td> {$file_detail.comment}</td>
     </tr>
     <tr>
         <th valign=top align=right>{$g_lang_revision}:</th><td> <div id="details_revision">{$file_detail.revision}</div></td>

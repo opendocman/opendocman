@@ -55,18 +55,36 @@ header("Content-Disposition: attachment; filename=\"$filename\"");
 header("Content-Type: text/csv; charset=UTF-16LE");
 $out = fopen("php://output", 'w');
 $flag = false;
-$result = mysql_query("SELECT 
-            {$GLOBALS['CONFIG']['db_prefix']}data.realname, 
+$query = "SELECT 
+            {$GLOBALS['CONFIG']['db_prefix']}data.realname,
+            {$GLOBALS['CONFIG']['db_prefix']}data.description,
+            {$GLOBALS['CONFIG']['db_prefix']}data.publishable,
+            {$GLOBALS['CONFIG']['db_prefix']}data.status,    
             {$GLOBALS['CONFIG']['db_prefix']}data.id,
-            {$GLOBALS['CONFIG']['db_prefix']}data.created,
-            {$GLOBALS['CONFIG']['db_prefix']}user.username 
+            {$GLOBALS['CONFIG']['db_prefix']}user.username,
+            {$GLOBALS['CONFIG']['db_prefix']}log.revision,
+            CASE {$GLOBALS['CONFIG']['db_prefix']}data.publishable
+                WHEN -1 THEN 'Rejected'
+                WHEN 0 THEN 'Un-approved'
+                WHEN 1 THEN 'Active'
+                WHEN 2 THEN 'Archved'
+                WHEN -2 THEN 'Deleted'
+            END AS 'Publishing Status',
+            CASE {$GLOBALS['CONFIG']['db_prefix']}data.status
+                WHEN 1 THEN 'Checked Out'
+                WHEN 0 THEN 'Not Checked Out'
+            END AS 'Check-Out Status'
           FROM 
             {$GLOBALS['CONFIG']['db_prefix']}data 
           LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}user
             ON {$GLOBALS['CONFIG']['db_prefix']}user.id = {$GLOBALS['CONFIG']['db_prefix']}data.owner
-                
-          ") or die('Query failed!');
-            
+          LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}log
+              ON {$GLOBALS['CONFIG']['db_prefix']}log.id = {$GLOBALS['CONFIG']['db_prefix']}data.id
+          ORDER BY id
+          ";             
+
+$result = mysql_query($query) or die("Error in querying: $query" .mysql_error());
+           
 while (false !== ($row = mysql_fetch_assoc($result))) {
 // display field/column names as first row 
     if (!$flag) {
