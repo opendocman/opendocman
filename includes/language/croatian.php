@@ -349,6 +349,9 @@ $lang['addpage_view'] = 'Prikaži';
 $lang['addpage_read'] = 'Čitaj';
 $lang['addpage_write'] = 'Piši';
 $lang['addpage_admin'] = 'Administrator';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
@@ -381,6 +384,7 @@ $lang['detailspage_edit'] = 'Uredi';
 $lang['detailspage_delete'] = 'Obriši';
 $lang['detailspage_history'] = 'Povijest';
 $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
@@ -466,6 +470,9 @@ $lang['accesslogpage_file_deleted'] = 'Datoteka obrisana';
 $lang['accesslogpage_file_authorized'] = 'Datoteka odobrena';
 $lang['accesslogpage_file_rejected'] = 'Datoteka odbijena';
 $lang['accesslogpage_reserved'] = 'Rezervirano';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

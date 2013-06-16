@@ -222,7 +222,7 @@ function draw_footer()
     display_smarty_template('footer.tpl');
 }
 
-function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
+function email_all($mail_subject, $mail_body, $mail_header)
 {
     $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
@@ -235,20 +235,20 @@ function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
     }
     mysql_free_result($result);
 }
-function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
+function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
 {
-    $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
+    $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";    
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());   
     while( list($mail_to) = mysql_fetch_row($result) )
-    {
+    {            
         if ($GLOBALS['CONFIG']['demo'] == 'False')
         {
             mail($mail_to, $mail_subject, $mail_body, $mail_header);
         }
-    }
+    }   
     mysql_free_result($result);
 }
-function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body, $mail_header)
+function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_header)
 {
     for($i = 0; $i< sizeof($user_OBJ_array); $i++)
     {
@@ -258,15 +258,17 @@ function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body,
         }
     }
 }
-function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)
-{
+function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
+{      
     for($i = 0; $i<sizeof($user_ID_array); $i++)
     {
-        $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
-    }
-    email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-}
+        if(($user_ID_array[$i] > 0)) {
+            $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
+        }
+    }   
 
+    email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+}
 function getmicrotime()
 {
     list($usec, $sec) = explode(" ",microtime());
@@ -310,7 +312,6 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $description = msg('message_no_description_available');
         }
-        $description = substr($description, 0, 35);
         
         // set filename for filesize() call below
         //$filename = $dataDir . $file_obj->getId() . '.dat';

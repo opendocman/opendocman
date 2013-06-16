@@ -29,6 +29,10 @@ if (!isset($_SESSION['uid']))
 include('odm-load.php');
 require_once("AccessLog_class.php");
 require_once("File_class.php");
+require_once('Email_class.php');
+require_once('Reviewer_class.php');
+
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -174,8 +178,9 @@ else
 
     // query to ensure that user has modify rights
     $fileobj = new FileData($id, $GLOBALS['connection'], DB_NAME);
-    if($fileobj->getError() == '' and $fileobj->getStatus() == $_SESSION['uid'])
-    {
+
+    if($fileobj->getError() == '' && $fileobj->getStatus() == $_SESSION['uid'])
+    {     
         //look to see how many revision are there
         $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -220,7 +225,7 @@ else
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$_POST[id]'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$id'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
         // rename and save file
@@ -229,6 +234,39 @@ else
     
         AccessLog::addLogEntry($id,'I');
     
+        /**
+         * Send out email notifications to reviewers
+         */
+        $file_obj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+        $get_full_name = $user_obj->getFullName();
+        $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
+        
+        $department = $file_obj->getDepartment();
+        
+        $reviewer_obj = new Reviewer($id, $GLOBALS['connection'], DB_NAME);
+        $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
+
+        $date = date('Y-m-d H:i:s T');
+        
+        // Build email for general notices
+        $mail_subject = msg('checkinpage_file_was_checked_in');
+        $mail_body2 = msg('checkinpage_file_was_checked_in') . "\n\n";
+        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
+        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . "\n\n";
+        $mail_body2.=msg('date') . ': ' . $date . "\n\n";
+        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . "\n\n";
+        $mail_body2.=msg('email_thank_you') . ',' . "\n\n";
+        $mail_body2.=msg('email_automated_document_messenger') . "\n\n";
+        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+        
+        $email_obj = new Email();
+        $email_obj->setFullName($full_name);
+        $email_obj->setSubject($mail_subject);
+        $email_obj->setFrom($full_name . ' <' . $user_obj->getEmailAddress() . '>');
+        $email_obj->setRecipients($reviewer_list);
+        $email_obj->setBody($mail_body2);        
+        $email_obj->sendEmail();
+        
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');        
         header('Location: out.php?last_message=' . urlencode($last_message));

@@ -349,6 +349,9 @@ $lang['addpage_view'] = 'View';
 $lang['addpage_read'] = 'Read';
 $lang['addpage_write'] = 'Write';
 $lang['addpage_admin'] = 'Admin';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Afmarker alle';
@@ -381,6 +384,7 @@ $lang['detailspage_edit'] = 'Editer';
 $lang['detailspage_delete'] = 'Slet';
 $lang['detailspage_history'] = 'Historik';
 $lang['detailspage_are_sure'] = 'Er du sikker?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Vis';
@@ -466,6 +470,9 @@ $lang['accesslogpage_file_deleted'] = 'Fil slettet';
 $lang['accesslogpage_file_authorized'] = 'Fil godkendt';
 $lang['accesslogpage_file_rejected'] = 'Fil afvist';
 $lang['accesslogpage_reserved'] = 'Reserveret';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
