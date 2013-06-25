@@ -61,7 +61,7 @@ $q=$_GET["q"];
                           </tr>';
 
                     if ( ( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary' ) ) {
-                        $query = 'SELECT * FROM odm_udftbl_' . $field_name . $tablename;
+                        $query = 'SELECT * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
                        
                         $result = mysql_query($query);
                         while ($row = mysql_fetch_row($result)) {
@@ -96,10 +96,10 @@ $q=$_GET["q"];
 }
 
 if ($_GET["add_value"] == "add") {
-    $query = 'Select * FROM odm_udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
+    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
     $subresult = mysql_query($query);
 
-    echo '<select id="odm_udftbl_' . $_GET['table'] . '_secondary" name="odm_udftbl_' . $_GET['table'] . '_secondary">';
+    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary">';
     while ($subrow = mysql_fetch_row($subresult)) {
         echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
     }
@@ -107,10 +107,10 @@ if ($_GET["add_value"] == "add") {
 }
 
 if ($_GET["add_value"] == "edit") {
-    $query = 'Select * FROM odm_udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
+    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
     $subresult = mysql_query($query);
 
-    echo '<select id="odm_udftbl_' . $_GET['table'] . '_secondary" name="odm_udftbl_' . $_GET['table'] . '_secondary">';
+    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary">';
     while ($subrow = mysql_fetch_row($subresult)) {
         echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
     }
