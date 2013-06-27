@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// check for valid session 
+// check for valid session
 session_start();
 if (!isset($_SESSION['uid']))
 {
@@ -143,8 +143,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 elseif(isset($_REQUEST['deletecategory']))
 {
     // Delete category
-    // 
-    // 
+    //
+    //
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
@@ -157,7 +157,7 @@ elseif(isset($_REQUEST['deletecategory']))
     // Set all old category_id's to the new re-assigned category
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='{$_REQUEST['assigned_id']}' WHERE category = '{$_REQUEST['id']}'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to re-assigned category: $query. " . mysql_error());
-    
+
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
     header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
@@ -205,7 +205,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
     // query to show item
     draw_header(msg('area_view_category'), $last_message);
     $category_id = (int) $_REQUEST['item'];
-        
+
     // Select name
     $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$category_id'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -231,9 +231,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
     while(list($file_id, $file_name) = mysql_fetch_row($result)) {
         ?>
             <a href="edit.php?id=<?php echo $file_id; ?>&state=3">ID: <?php echo $file_id . ','; echo $file_name; ?></a><br />
-     <?php  
+     <?php
     }
-    
+
     draw_footer();
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
