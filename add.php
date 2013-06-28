@@ -485,7 +485,7 @@ else
         }
         
         // illegal file type!
-        if ($allowedFile != 1)
+        if (!isset($allowedFile) || $allowedFile != 1)
         {
             $last_message = 'MIMETYPE: ' . $file_mime . ' Failed';
             header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
