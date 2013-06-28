@@ -67,7 +67,7 @@ $query = "SELECT
                 WHEN -1 THEN 'Rejected'
                 WHEN 0 THEN 'Un-approved'
                 WHEN 1 THEN 'Active'
-                WHEN 2 THEN 'Archved'
+                WHEN 2 THEN 'Archived'
                 WHEN -2 THEN 'Deleted'
             END AS 'Publishing Status',
             CASE {$GLOBALS['CONFIG']['db_prefix']}data.status
