@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2007 Stephen Lawrence Jr.
-Copyright (C) 2002-2012 Stephen Lawrence Jr.
+Copyright (C) 2002-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@ include('odm-load.php');
 include('udf_functions.php');
 require_once("AccessLog_class.php");
 require_once("File_class.php");
+require_once('Reviewer_class.php');
+require_once('Email_class.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
@@ -280,7 +282,7 @@ if(!isset($_POST['submit']))
     $result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
     while(list($RightId, $Description) = mysql_fetch_row($result))
     {
-        echo $Description.'<input type ="radio" name ="'.$Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |'."\n";
+        echo msg('addpage_' . $Description) . '<input type ="radio" name ="' . $Description.'" value="' . $RightId . '" onClick="setData(this.name)"> |' . "\n";
     }
     ?>
         <hr /></TD>
@@ -289,14 +291,14 @@ if(!isset($_POST['submit']))
         <td>
             <a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a>
         </td>
-        <td colspan="3"><input tabindex="5" type="Text" name="description" size="50"></td>
+        <td colspan="3"><textarea tabindex="5" name="description" rows="4" maxlength="255" ></textarea></td>
     </tr>
 
     <tr>
         <td>
             <a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a>
         </td>
-        <td colspan="3"><textarea tabindex="6" name="comment" rows="4" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
+        <td colspan="3"><textarea tabindex="6" name="comment" rows="4" maxlength="255" onchange="this.value=enforceLength(this.value, 255);"></textarea></td>
     </tr>
 
     <TABLE id="specificUserPerms" border="0" cellspacing="0" cellpadding="3" NOWRAP>
@@ -666,15 +668,50 @@ else
 
         //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         
+        AccessLog::addLogEntry($fileId, 'A');
+        
         // back to main page
         $message = urlencode(msg('message_document_added'));
+        
+        /**
+         * Send out email notifications to reviewers
+         */
+        $file_obj = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+        $get_full_name = $user_obj->getFullName();
+        $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
+        $from = $user_obj->getEmailAddress();
+     
+        $department = $file_obj->getDepartment();
+        
+        $reviewer_obj = new Reviewer($fileId, $GLOBALS['connection'], DB_NAME);
+        $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
 
+        $date = date('Y-m-d H:i:s T');
+        
+        // Build email for general notices
+        $mail_subject = msg('addpage_new_file_added');
+        $mail_body2 = msg('email_a_new_file_has_been_added') . "\n\n";
+        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
+        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . "\n\n";
+        $mail_body2.=msg('date') . ': ' . $date . "\n\n";
+        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . "\n\n";
+        $mail_body2.=msg('email_thank_you') . ',' . "\n\n";
+        $mail_body2.=msg('email_automated_document_messenger') . "\n\n";
+        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+        
+        $email_obj = new Email();
+        $email_obj->setFullName($full_name);
+        $email_obj->setSubject($mail_subject);
+        $email_obj->setFrom($from);
+        $email_obj->setRecipients($reviewer_list);
+        $email_obj->setBody($mail_body2);           
+        $email_obj->sendEmail();
+    
+        //email_users_id($mail_from, $reviewer_list, $mail_subject, $mail_body2, $mail_headers);
         // Call the plugin API
         callPluginMethod('onAfterAdd', $fileId);
     }
         
-    AccessLog::addLogEntry($fileId, 'A');
-
     header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
     exit;
 }

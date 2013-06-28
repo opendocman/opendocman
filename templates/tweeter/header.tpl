@@ -54,7 +54,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
 
-              <li class="active"><a href="{$g_base_url}/out.php">Home</a></li>
+              <li class="active"><a href="{$g_base_url}/out.php">{$g_lang_home}</a></li>
               <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
               <li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>
               <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
@@ -67,7 +67,7 @@
               <li><a href="{$g_base_url}/logout.php">{$g_lang_logout}</a></li>
             </ul>          
               <p class="navbar-text pull-right">
-Logged in as
+{$g_lang_label_logged_in_as}
 <a href="{$base_url}/profile.php">{$userName}</a>
 </p>
           </div><!--/.nav-collapse -->

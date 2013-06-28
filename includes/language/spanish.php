@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Es Administrador';
 $lang['label_is_reviewer'] = 'Es Revisor';
 $lang['label_last_name'] = 'Ultimo Nombre';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Moderaci&oacute;n';
 $lang['label_modified_date'] = 'Fecha de Modificaci&oacute;n';
 $lang['label_modify'] = 'Modificar';
@@ -341,7 +342,15 @@ $lang['message_your_password_has_been_changed'] = 'Su contrase&ntilde;a ha sido 
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'None';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleccionar todo';
@@ -353,7 +362,12 @@ $lang['editpage_assign_owner'] = 'Asignar Propietario a';
 $lang['editpage_assign_department'] = 'Asignar al Area';
 $lang['editpage_filter'] = 'Filtro:';
 $lang['editpage_keyword'] = 'Palabras Clave';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'None';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'A department name is required';
@@ -369,9 +383,18 @@ $lang['detailspage_edit'] = 'Editar';
 $lang['detailspage_delete'] = 'Eliminar';
 $lang['detailspage_history'] = 'Historial';
 $lang['detailspage_are_sure'] = 'Esta Seguro?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Ver';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // History Page
 $lang['historypage_category'] = 'Categor&iacute;a:';
@@ -432,6 +455,7 @@ $lang['adminpage_edit_filetypes'] = 'Editar Tipo de Documentos';
 $lang['adminpage_edit_settings'] = 'Editar Configuraci&oacute;n';
 $lang['adminpage_reports'] = 'Reports';
 $lang['adminpage_access_log'] = 'Access Log';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
@@ -445,6 +469,9 @@ $lang['accesslogpage_file_deleted'] = 'File Deleted';
 $lang['accesslogpage_file_authorized'] = 'File Authorized';
 $lang['accesslogpage_file_rejected'] = 'File Rejected';
 $lang['accesslogpage_reserved'] = 'Reserved';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

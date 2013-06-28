@@ -1,6 +1,6 @@
 <?php
 //CROATIAN LANGUAGE FILE
-// (C) 20010-2012 Stephen Lawrence Jr.
+// (C) 20010-2013 Stephen Lawrence Jr.
 // Translated by: Mihovil Stanić
 /*
 This program is free software; you can redistribute it and/or
@@ -197,6 +197,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Administrator';
 $lang['label_is_reviewer'] = 'Pregledavač';
 $lang['label_last_name'] = 'Prezime';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Uređivanje';
 $lang['label_modified_date'] = 'Datum promjene';
 $lang['label_modify'] = 'Promjeni';
@@ -342,7 +343,15 @@ $lang['message_your_password_has_been_changed'] = 'Vaša lozinka je promjenjena.
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Zabranjeno';
 $lang['addpage_none'] = 'Nikakva';
+$lang['addpage_view'] = 'Prikaži';
+$lang['addpage_read'] = 'Čitaj';
+$lang['addpage_write'] = 'Piši';
+$lang['addpage_admin'] = 'Administrator';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
@@ -354,7 +363,12 @@ $lang['editpage_assign_owner'] = 'Dodjeli vlasništvo korisniku';
 $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
+$lang['editpage_forbidden'] = 'Zabranjeno';
 $lang['editpage_none'] = 'Nikakva';
+$lang['editpage_view'] = 'Prikaži';
+$lang['editpage_read'] = 'Čitaj';
+$lang['editpage_write'] = 'Piši';
+$lang['editpage_admin'] = 'Administrator';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
@@ -370,9 +384,18 @@ $lang['detailspage_edit'] = 'Uredi';
 $lang['detailspage_delete'] = 'Obriši';
 $lang['detailspage_history'] = 'Povijest';
 $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
+$lang['outpage_ascending'] = 'Rastuće';
+$lang['outpage_descending'] = 'padajuće';
+$lang['outpage_choose_an_order'] = 'Odaberi redoslijed';
+$lang['outpage_choose'] = 'Odaberi';
+$lang['category_option_author'] = 'Autor';
+$lang['category_option_department'] = 'Odjel';
+$lang['category_option_category'] = 'Kategorija datoteke';
+$lang['category_option_default'] = 'Prazno';
 
 // History Page
 $lang['historypage_category'] = 'Kategorija:';
@@ -433,6 +456,7 @@ $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
 $lang['adminpage_reports'] = 'Izvještaji';
 $lang['adminpage_access_log'] = 'Popis pristupa';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Popis pristupa';
@@ -446,6 +470,9 @@ $lang['accesslogpage_file_deleted'] = 'Datoteka obrisana';
 $lang['accesslogpage_file_authorized'] = 'Datoteka odobrena';
 $lang['accesslogpage_file_rejected'] = 'Datoteka odbijena';
 $lang['accesslogpage_reserved'] = 'Rezervirano';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

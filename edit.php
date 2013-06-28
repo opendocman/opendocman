@@ -2,7 +2,7 @@
 /*
 edit.php - edit file properties
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2012 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,6 +26,12 @@ require_once("AccessLog_class.php");
  
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
+{
+	header('Location:error.php?ec=2');
+  	exit;
+}
+
 if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
@@ -36,11 +42,6 @@ if (!isset($_SESSION['uid']))
   exit;
 }
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
-	header('Location:error.php?ec=2');
-  	exit;
-}
 
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
@@ -287,7 +288,7 @@ if (!isset($_REQUEST['submit']))
       	$result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
       	while(list($RightId, $Description) = mysql_fetch_row($result))
       	{
-      		echo $Description . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
+      		echo msg('editpage_' . $Description) . ' <input type="radio" name="' . $Description . '" value="' . $RightId . '" onClick="setData(this.name)"> | ' . "\n";
       	}
      
 	$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}department.name, {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id, {$GLOBALS['CONFIG']['db_prefix']}dept_perms.rights FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms, {$GLOBALS['CONFIG']['db_prefix']}department WHERE {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = {$GLOBALS['CONFIG']['db_prefix']}department.id and fid = ".$filedata->getId()." ORDER BY name";
@@ -302,7 +303,7 @@ if (!isset($_REQUEST['submit']))
 	</tr>
 	<tr>
 	<td><a class="body" href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_description')?></a></td>
-	<td colspan="3"><input type="Text" name="description" size="50" value="<?php  echo str_replace('"', '&quot;', $description); ?>"></td>
+	<td colspan="3"><textarea tabindex="5" name="description" rows="4" maxlength="255"><?php  echo str_replace('"', '&quot;', $description); ?></textarea></td>
 	</tr>
 	<tr>
 	<td><a class="body" href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" style="text-decoration:none"><?php echo msg('label_comment')?></a></td>

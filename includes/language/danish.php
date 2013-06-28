@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Er admin';
 $lang['label_is_reviewer'] = 'Er Reviewer';
 $lang['label_last_name'] = 'Efternavn';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Godkendelse';
 $lang['label_modified_date'] = 'Ændringsdato';
 $lang['label_modify'] = 'Ændre';
@@ -342,7 +343,15 @@ $lang['message_your_password_has_been_changed'] = 'Dit password er blevet ændre
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'Ingen';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Afmarker alle';
@@ -354,7 +363,12 @@ $lang['editpage_assign_owner'] = 'Tilordnes til ejer';
 $lang['editpage_assign_department'] = 'Tilordnes til afdeling';
 $lang['editpage_filter'] = 'Filtrer:';
 $lang['editpage_keyword'] = 'Indtast nøgleord';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'Ingen';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Filen er slettet permanent';
@@ -370,9 +384,18 @@ $lang['detailspage_edit'] = 'Editer';
 $lang['detailspage_delete'] = 'Slet';
 $lang['detailspage_history'] = 'Historik';
 $lang['detailspage_are_sure'] = 'Er du sikker?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Vis';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // History Page
 $lang['historypage_category'] = 'Kategori:';
@@ -433,6 +456,7 @@ $lang['adminpage_edit_filetypes'] = 'Editer filtyper';
 $lang['adminpage_edit_settings'] = 'Editer indstillinger';
 $lang['adminpage_reports'] = 'Rapporter';
 $lang['adminpage_access_log'] = 'Adgangs-log';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Adgangs-log';
@@ -446,6 +470,9 @@ $lang['accesslogpage_file_deleted'] = 'Fil slettet';
 $lang['accesslogpage_file_authorized'] = 'Fil godkendt';
 $lang['accesslogpage_file_rejected'] = 'Fil afvist';
 $lang['accesslogpage_reserved'] = 'Reserveret';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

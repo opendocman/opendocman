@@ -1,6 +1,6 @@
 <?php
 //FRENCH LANGUAGE FILE
-// (C) 20010-2012 Stephen Lawrence Jr.
+// (C) 20010-2013 Stephen Lawrence Jr.
 // Translated by: François Vallée, Peter Host
 /*
 This program is free software; you can redistribute it and/or
@@ -196,6 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Est Admin';
 $lang['label_is_reviewer'] = 'Est Relecteur';
 $lang['label_last_name'] = 'Nom de Famille';
+$lang['label_logged_in_as'] = 'Logged in as';
 $lang['label_moderation'] = 'Modération';
 $lang['label_modified_date'] = 'Date de Modification';
 $lang['label_modify'] = 'Modifier';
@@ -341,7 +342,15 @@ $lang['message_your_password_has_been_changed'] = 'Votre mot de passe a bien ét
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Forbidden';
 $lang['addpage_none'] = 'Aucun';
+$lang['addpage_view'] = 'View';
+$lang['addpage_read'] = 'Read';
+$lang['addpage_write'] = 'Write';
+$lang['addpage_admin'] = 'Admin';
+$lang['addpage_new_file_added'] = 'A new file has been added';
+$lang['addpage_new'] = 'New';
+$lang['addpage_uploader'] = 'Uploader';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Tout Déselectionner';
@@ -353,7 +362,12 @@ $lang['editpage_assign_owner'] = 'Assigné au propriétaire';
 $lang['editpage_assign_department'] = 'Assign au département';
 $lang['editpage_filter'] = 'Filtre:';
 $lang['editpage_keyword'] = 'Saisissez les Mots Clés';
+$lang['editpage_forbidden'] = 'Forbidden';
 $lang['editpage_none'] = 'Aucun';
+$lang['editpage_view'] = 'View';
+$lang['editpage_read'] = 'Read';
+$lang['editpage_write'] = 'Write';
+$lang['editpage_admin'] = 'Admin';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Ce fichier a été supprimé définitivement';
@@ -369,9 +383,18 @@ $lang['detailspage_edit'] = 'Modifier';
 $lang['detailspage_delete'] = 'Supprimer';
 $lang['detailspage_history'] = 'Historique';
 $lang['detailspage_are_sure'] = 'Êtes vous Certain(e)?';
+$lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Afficher';
+$lang['outpage_ascending'] = 'Ascending';
+$lang['outpage_descending'] = 'descending';
+$lang['outpage_choose_an_order'] = 'Choose an order';
+$lang['outpage_choose'] = 'Choose';
+$lang['category_option_author'] = 'Author';
+$lang['category_option_department'] = 'Department';
+$lang['category_option_category'] = 'File Category';
+$lang['category_option_default'] = 'Empty';
 
 // History Page
 $lang['historypage_category'] = 'Categorie:';
@@ -432,6 +455,7 @@ $lang['adminpage_edit_filetypes'] = 'Modifier les Types de Fichiers';
 $lang['adminpage_edit_settings'] = 'Modifier les Paramètres';
 $lang['adminpage_reports'] = 'Reports';
 $lang['adminpage_access_log'] = 'Access Log';
+$lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
@@ -445,6 +469,9 @@ $lang['accesslogpage_file_deleted'] = 'File Deleted';
 $lang['accesslogpage_file_authorized'] = 'File Authorized';
 $lang['accesslogpage_file_rejected'] = 'File Rejected';
 $lang['accesslogpage_reserved'] = 'Reserved';
+
+// Check-in Page
+$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';

@@ -2,7 +2,7 @@
 /*
 functions.php - various utility functions
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -222,7 +222,7 @@ function draw_footer()
     display_smarty_template('footer.tpl');
 }
 
-function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
+function email_all($mail_subject, $mail_body, $mail_header)
 {
     $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
@@ -235,20 +235,20 @@ function email_all($mail_from, $mail_subject, $mail_body, $mail_header)
     }
     mysql_free_result($result);
 }
-function email_dept($mail_from, $dept_id, $mail_subject, $mail_body, $mail_header)
+function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
 {
-    $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
+    $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE department = $dept_id";    
+    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());   
     while( list($mail_to) = mysql_fetch_row($result) )
-    {
+    {            
         if ($GLOBALS['CONFIG']['demo'] == 'False')
         {
             mail($mail_to, $mail_subject, $mail_body, $mail_header);
         }
-    }
+    }   
     mysql_free_result($result);
 }
-function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body, $mail_header)
+function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_header)
 {
     for($i = 0; $i< sizeof($user_OBJ_array); $i++)
     {
@@ -258,15 +258,17 @@ function email_users_obj($mail_from, $user_OBJ_array, $mail_subject, $mail_body,
         }
     }
 }
-function email_users_id($mail_from, $user_ID_array, $mail_subject, $mail_body, $mail_header)
-{
+function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
+{      
     for($i = 0; $i<sizeof($user_ID_array); $i++)
     {
-        $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
-    }
-    email_users_obj($mail_from, $OBJ_array, $mail_subject, $mail_body, $mail_header);
-}
+        if(($user_ID_array[$i] > 0)) {
+            $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
+        }
+    }   
 
+    email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+}
 function getmicrotime()
 {
     list($usec, $sec) = explode(" ",microtime());
@@ -308,9 +310,8 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         }
         if ($description == '')
         {
-            $description = 'No description available';
+            $description = msg('message_no_description_available');
         }
-        $description = substr($description, 0, 35);
         
         // set filename for filesize() call below
         //$filename = $dataDir . $file_obj->getId() . '.dat';
@@ -444,7 +445,32 @@ function sort_browser()
                             break;
                         }
                         category_option = select_box.options[select_box.selectedIndex].value;
-                        options_array[0] = new Option('Choose ' + category_option);
+						switch(category_option)
+						{
+							case 'author':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_author')."';\n");
+								?>
+								break;
+							case 'department':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_department')."';\n");
+								?>
+								break;
+							case 'category':
+								<?php
+								echo("\tcategory_option_msg = '".msg('category_option_category')."';\n");
+								?>
+								break;
+							default :
+								<?php
+								echo("\tcategory_option_msg = '".msg('label_empty')."';\n");
+								?>
+								break;
+						}
+						<?php
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);\n");
+						?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_author';
 
@@ -462,11 +488,13 @@ function sort_browser()
                         if(category_item_option == 'choose_an_author')
                             exit();
                         order_array = new Array();
-                        order_array[0] = new Array('Ascending', 0, 'asc');
-                        order_array[1] = new Array('Descending', 1, 'desc');
-                        options_array = document.forms['browser_sort'].elements['category_item_order'].options;
+						<?php
+                        echo("\torder_array[0] = new Array(\"".msg('outpage_ascending')."\", 0, \"asc\");\n");
+                        echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");\n");
+                        echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
 
-                        options_array[0] = new Option('Choose an Order');
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
+						?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
                         for(i=0; i< order_array.length; i++)
