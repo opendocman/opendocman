@@ -327,6 +327,8 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
             $modified_date = $created_date;
         }
 
+	$revisionNo = $file_obj->getRevisionNo();
+
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1] . ', ' . $full_name_array[0];
         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
@@ -386,6 +388,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
                 'rights'=>$rights,
                 'created_date'=>$created_date,
                 'modified_date'=>$modified_date,
+                'revision_no'=>$revisionNo,
                 'owner_name'=>$owner_name,
                 'dept_name'=>$dept_name,
                 'filesize'=>$filesize,

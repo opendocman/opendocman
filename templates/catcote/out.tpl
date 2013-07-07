@@ -9,12 +9,12 @@
             <th class="sorting">ID</th>
             <th>{$g_lang_label_view}</th>
             <th class="sorting">{$g_lang_label_description}</th>
+            <th class="sorting">{$g_lang_revision}</th>
             <th class="sorting">{$g_lang_label_modified_date}</th>
             <th class="sorting">{$g_lang_label_author}</th>
             <th class="sorting">{$g_lang_label_department}</th>
             <th class="sorting">{$g_lang_label_file_name}</th>
             <th class="sorting">{$g_lang_label_size}</th>
-            <th class="sorting">{$g_lang_label_created_date}</th>
             <th class="sorting">{$g_lang_label_rights}</th>
             <th class="">{$g_lang_label_status}</th>
         </tr>
@@ -33,14 +33,15 @@
                 {else}
                     <a href="{$item.view_link}">{$g_lang_outpage_view}</a></td>
                 {/if}
-            <td >{$item.description}</td>
+            <td ><a href="{$item.details_link}">{$item.description}</a></td>
+            <td ><a href="{$item.details_link}">{$item.revision_no}</a></td>
             <td>{$item.modified_date}</td>
             <td>{$item.owner_name}</td>
             <td>{$item.dept_name}</td>
             <td><a href="{$item.details_link}">{$item.filename}</a></td>
             <td >{$item.filesize}</td>
             <!--<td> {$file_detail.udf_details_display}</td>-->
-            <td>{$item.created_date}</td>
+            <!--<td>{$item.created_date}</td>-->
             <td class="center">{$item.rights[0][1]} | {$item.rights[1][1]} | {$item.rights[2][1]}</td>
             <td class="center">
                 {if $item.lock eq false}
@@ -60,12 +61,12 @@
             <th>ID</th>
             <th>{$g_lang_label_view}</th>
             <th>{$g_lang_label_description}</th>
+            <th>{$g_lang_revision}</th>
             <th>{$g_lang_label_modified_date}</th>
             <th>{$g_lang_label_author}</th>
             <th>{$g_lang_label_department}</th>
             <th>{$g_lang_label_file_name}</th>
             <th>{$g_lang_label_size}</th>
-            <th>{$g_lang_label_created_date}</th>
             <th>{$g_lang_label_rights}</th>
             <th>{$g_lang_label_status}</th>
         </tr>
