@@ -337,10 +337,12 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
 	$revisionNo = $file_obj->getRevisionNo();
 	$categoryNo = $file_obj->getCategory();
 	$category = $CatObj->getCatName($categoryNo);
-	error_log( "category=".$category);
+	//error_log( "category=".$category);
 
-	$udf = udf_details_display($fileid);
-	var_dump($udf);
+	$udfs = get_all_udf_values($fileid);
+	$udfKeys = array_keys($udfs);
+	//var_dump($udfs);
+	//var_dump($udfKeys);
 
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1] . ', ' . $full_name_array[0];
@@ -403,7 +405,8 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
                 'created_date'=>$created_date,
                 'modified_date'=>$modified_date,
                 'revision_no'=>$revisionNo,
-		'udf_details_display' => udf_details_display($fileid),
+		'udf0' => $udfs[$udfKeys[0]],
+		'udf1' => $udfs[$udfKeys[1]],
                 'owner_name'=>$owner_name,
                 'dept_name'=>$dept_name,
                 'filesize'=>$filesize,
