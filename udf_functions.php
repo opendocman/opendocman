@@ -306,7 +306,7 @@ if ( !defined('udf_functions') )
     function get_all_udf_values($fileId)
     {
         $return_string = null;
-	$retArr = [];
+	$retArr = Array();
         // get the list of available udf's
         $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $result = mysql_query($query) or die ("Error in query181: $query. " . mysql_error());

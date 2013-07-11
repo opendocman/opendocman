@@ -6,8 +6,8 @@
 
     <!-- Le styles -->
 
-    <link href="{$g_base_url}/templates/tweeter/css/bootstrap.css" rel="stylesheet">
-    <link href="{$g_base_url}/templates/tweeter/css/tweeter.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/bootstrap.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/tweeter.css" rel="stylesheet">
     <style type="text/css">
         {literal}
       body {
@@ -16,7 +16,7 @@
       }
       {/literal}
     </style>
-    <link href="{$g_base_url}/templates/tweeter/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -24,7 +24,7 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="{$g_base_url}/templates/tweeter/images/favicon.ico">
+    <link rel="shortcut icon" href="{$g_base_url}/templates/catcote/images/favicon.ico">
 
     <link rel="apple-touch-icon" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-72x72.png">
@@ -42,7 +42,8 @@
 
         <table cellspacing="0" cellpadding="0">
         <tr>
-        <td align="left"><img src="images/logo.gif" alt="Site Logo" border=0></td>
+        <td align="left"><img src="{$g_base_url}/templates/catcote/images/logo.png" alt="Site Logo" border=0></td>
+	<td><h1>Catcote Academy Document Management System</h1></td>
         </tr>
         </table>
 
