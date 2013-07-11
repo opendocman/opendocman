@@ -8,6 +8,7 @@
             {/if}
             <th class="sorting">ID</th>
             <th>{$g_lang_label_view}</th>
+	    <th class="sorting">DocNo</th>
             <th class="sorting">{$g_lang_label_description}</th>
             <th class="sorting">{$g_lang_revision}</th>
             <th class="sorting">{$g_lang_label_modified_date}</th>
@@ -33,6 +34,7 @@
                 {else}
                     <a href="{$item.view_link}">{$g_lang_outpage_view}</a></td>
                 {/if}
+	    <td>{$item.category}     <!--{$item.udf_details_display}--></td>
             <td ><a href="{$item.details_link}">{$item.description}</a></td>
             <td ><a href="{$item.details_link}">{$item.revision_no}</a></td>
             <td>{$item.modified_date}</td>
@@ -60,6 +62,7 @@
            {/if}
             <th>ID</th>
             <th>{$g_lang_label_view}</th>
+	    <th>DocNo</th>
             <th>{$g_lang_label_description}</th>
             <th>{$g_lang_revision}</th>
             <th>{$g_lang_label_modified_date}</th>

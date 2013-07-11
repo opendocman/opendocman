@@ -285,6 +285,19 @@ if ( !defined('udf_functions') )
         mysql_free_result($result);
     }
 
+
+    /**
+     * Get a particular UDF for a given fileId
+     * @param type $fileId
+     * @param type $udf_name
+     * @return string
+     */
+    function get_udf_value($fileId,$udf_name)
+    {
+      // FIXME!!!!
+      return null;
+    }
+
     /**
      * Generate the UDF details display 
      * @param type $fileId
