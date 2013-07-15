@@ -86,9 +86,9 @@
         </table>
         </td>
         <td valign="top">
-        {$g_lang_welcome}
-        <p>
-        {$g_lang_welcome2}
+        <p>Welcome to the Catcote Academy Document Management System.</p>
+        <p>Log in as user guest, password guest for read only access.</p>
+	<p>In case of problems, please contact <a href="mailto:graham.jones@catcotegb.co.uk">Graham Jones</a></p>
         </td>
         <td width="20%">
         &nbsp;
