@@ -42,7 +42,7 @@ draw_header(msg('label_file_listing'), $last_message);
 $filterStr = isset($_REQUEST['filterStr']) ? "'".$_REQUEST['filterStr']."'" : "''";
 echo "<script>filterStr = ".$filterStr.";</script>";
 
-sort_browser();
+// sort_browser();
 
 $secureurl_obj = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

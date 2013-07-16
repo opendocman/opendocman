@@ -1,3 +1,32 @@
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{$g_base_url}/out.php">All Docs</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/MSM">Management System</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/gov">Governance Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hr">HR Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hs">Health & Safety Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/fin">Finance Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/proc">Procedures</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/form">Forms</a></li>
+            </ul>          
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
+    </div>
+
+
 <div id="filetable_wrapper">
 <form name="table" method="post" action="{$smarty.server.PHP_SELF}">
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
