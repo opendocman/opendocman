@@ -33,9 +33,15 @@ if (!isset($_SESSION['uid']))
 $GLOBALS['state'] = 1;
 require_once 'odm-load.php';
 
+
 $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
 
 draw_header(msg('label_file_listing'), $last_message);
+
+// check for filterStr in URL - set it to a javascript variable if it is set.
+$filterStr = isset($_REQUEST['filterStr']) ? "'".$_REQUEST['filterStr']."'" : "''";
+echo "<script>filterStr = ".$filterStr.";</script>";
+
 sort_browser();
 
 $secureurl_obj = new phpsecureurl;
