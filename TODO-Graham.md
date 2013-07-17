@@ -16,6 +16,7 @@ The changes I intend to make are:
 3.  ~~Make User Defined Fields (UDFs) available to the main document list template (out.tpl) - DONE (11/07/2013)~~
 4.  Make it possible to view issued documents if not logged in - default screen when not logged in should be a file list, with a link to the login screen.
 5.  Store the issued version of files as PDFs and serve these when the 'view' action is used.   The native file should only be provided on check-out.
+6.  ~~Make it possible to apply filters to the file list screen as part of the URL - out.php?filterStr=xxx - DONE (16/07/2013)~~
 
 
 Graham Jones (grahamjones139@gmail.com), July 2013.  

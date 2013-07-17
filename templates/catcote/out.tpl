@@ -15,6 +15,7 @@
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/MSM">Management System</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/gov">Governance Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hr">HR Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/edu">Education Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hs">Health & Safety Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/fin">Finance Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/proc">Procedures</a></li>
