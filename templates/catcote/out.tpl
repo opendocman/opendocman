@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{$g_base_url}/out.php">All Docs</a>
+          <a class="brand" href="{$g_base_url}/out.php">All</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
 
@@ -16,7 +16,7 @@
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/gov">Governance Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hr">HR Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/edu">Education Policies</a></li>
-              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hs">Health & Safety Policies</a></li>
+              <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/hs">H & S Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/pol/fin">Finance Policies</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/proc">Procedures</a></li>
               <li class="active1"><a href="{$g_base_url}/out.php?filterStr=hat/form">Forms</a></li>
