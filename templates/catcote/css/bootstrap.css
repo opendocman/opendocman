@@ -212,7 +212,7 @@ body {
   background-color: #ffffff;
 }
 a {
-  color: #0088cc;
+  color: #0000ff;
   text-decoration: none;
 }
 a:hover {
@@ -3609,12 +3609,12 @@ input[type="submit"].btn.btn-mini {
   min-height: 40px;
   padding-left: 20px;
   padding-right: 20px;
-  background-color: #fafafa;
-  background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-  background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-  background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-  background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+  background-color: #0000ff;
+  background-image: -moz-linear-gradient(top, #dfdfff, #a2a2ff);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#dfdfff), to(#a2a2ff));
+  background-image: -webkit-linear-gradient(top, #dfdfff, #a2a2ff);
+  background-image: -o-linear-gradient(top, #dfdfff, #a2a2ff);
+  background-image: linear-gradient(to bottom, #dfdfff, #a2a2ff);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
   border: 1px solid #d4d4d4;
@@ -3649,7 +3649,7 @@ input[type="submit"].btn.btn-mini {
   margin-left: -20px;
   font-size: 20px;
   font-weight: 200;
-  color: #777777;
+  color: #0000ff;
   text-shadow: 0 1px 0 #ffffff;
 }
 .navbar .brand:hover {
@@ -3658,7 +3658,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-text {
   margin-bottom: 0;
   line-height: 40px;
-  color: #777777;
+  color: #202020;
 }
 .navbar-link {
   color: #777777;
@@ -3808,7 +3808,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .nav > li > a {
   float: none;
   padding: 10px 15px 10px;
-  color: #777777;
+  color: #0000ff;
   text-decoration: none;
   text-shadow: 0 1px 0 #ffffff;
 }
