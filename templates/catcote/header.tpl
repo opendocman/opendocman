@@ -9,8 +9,8 @@
 
     <!-- Le styles -->
 
-    <link href="{$g_base_url}/templates/tweeter/css/bootstrap.css" rel="stylesheet">
-    <link href="{$g_base_url}/templates/tweeter/css/tweeter.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/bootstrap.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/catcote.css" rel="stylesheet">
     <style type="text/css">
         {literal}
       body {
@@ -19,19 +19,19 @@
       }
       {/literal}
     </style>
-    <link href="{$g_base_url}/templates/tweeter/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{$g_base_url}/templates/catcote/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="{$g_base_url}/templates/tweeter/js/html5.js"></script>
+      <script src="{$g_base_url}/templates/catcote/js/html5.js"></script>
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="{$g_base_url}/templates/tweeter/images/favicon.ico">
+    <link rel="shortcut icon" href="{$g_base_url}/templates/catcote/images/favicon.ico">
 
-    <link rel="apple-touch-icon" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" href="{$g_base_url}/templates/catcote/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url}/templates/catcote/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url}/templates/catcote/images/apple-touch-icon-114x114.png">
     
     
     {* Must Include This Section *}
