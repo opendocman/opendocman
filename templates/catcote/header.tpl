@@ -50,14 +50,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{$g_base_url}/out.php">{$g_title}</a>
+          <a style="padding:0px;" class="brand" href="{$g_base_url}/out.php"><img style="padding:2px;" width=60 src="{$g_base_url}/templates/catcote/images/logo.png" alt="Site Logo" border=0></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
 
-              <li class="active"><a href="{$g_base_url}/out.php">{$g_lang_home}</a></li>
-              <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
-              <li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>
-              <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
+              <li class="active"><a href="{$g_base_url}/out.php">List Documents</a></li>
+              <li><a href="{$g_base_url}/in.php">Check-In Document</a></li>
+              <!--<li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>-->
+              <li><a href="{$g_base_url}/add.php">Add New Document</a></li>
               {if $isadmin eq 'yes'}
               <li>
                  
@@ -78,6 +78,7 @@
 {if $g_demo eq 'True'}
     <h1>Demo resets once per hour</h1>
 {/if}
+    <!--
       <div class="container">
         <div class="row">
             <div class="span4">
@@ -85,6 +86,7 @@
             </div>
         </div>
         <p></p>
+	-->
         {if $lastmessage ne ''}
             <div id="last_message">{$lastmessage}</div>
         {/if}
