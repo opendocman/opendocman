@@ -54,7 +54,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
 
-              <li class="active"><a href="{$g_base_url}/out.php">List Documents</a></li>
+              <li><a href="{$g_base_url}/out.php">List Documents</a></li>
               <li><a href="{$g_base_url}/in.php">Check-In Document</a></li>
               <!--<li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>-->
               <li><a href="{$g_base_url}/add.php">Add New Document</a></li>
@@ -64,11 +64,11 @@
                     <a href="{$g_base_url}/admin.php">{$g_lang_label_admin}</a>
               </li>
               {/if}
-              <li><a href="{$g_base_url}/logout.php">{$g_lang_logout}</a></li>
             </ul>          
               <p class="navbar-text pull-right">
 {$g_lang_label_logged_in_as}
 <a href="{$base_url}/profile.php">{$userName}</a>
+              (<a href="{$g_base_url}/logout.php">{$g_lang_logout}</a>)
 </p>
           </div><!--/.nav-collapse -->
         </div>
