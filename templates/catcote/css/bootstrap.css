@@ -3650,7 +3650,7 @@ input[type="submit"].btn.btn-mini {
   font-size: 20px;
   font-weight: 200;
   color: #0000ff;
-  text-shadow: 0 1px 0 #ffffff;
+  text-shadow: 0 1px 0 #000000;
 }
 .navbar .brand:hover {
   text-decoration: none;
@@ -3810,7 +3810,7 @@ input[type="submit"].btn.btn-mini {
   padding: 10px 15px 10px;
   color: #0000ff;
   text-decoration: none;
-  text-shadow: 0 1px 0 #ffffff;
+  text-shadow: 0 1px 0 #000000;
 }
 .navbar .nav .dropdown-toggle .caret {
   margin-top: 8px;
