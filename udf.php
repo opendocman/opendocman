@@ -436,24 +436,24 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         }
         if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "") {
             if ($type_pr_sec == 'primary') {
-                $query = 'INSERT INTO odm_udftbl_' . $field_name . $tablename . ' (value) VALUES ("' . $_REQUEST['newvalue'] . '")';
+                $query = 'INSERT INTO ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' (value) VALUES ("' . $_REQUEST['newvalue'] . '")';
                 //echo $query;
             } else {
-                $query = 'INSERT INTO odm_udftbl_' . $field_name . $tablename . ' (value, pr_id) VALUES ("' . $_REQUEST['newvalue'] . '", "' . $_REQUEST['primary_type'] . '")';
+                $query = 'INSERT INTO ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' (value, pr_id) VALUES ("' . $_REQUEST['newvalue'] . '", "' . $_REQUEST['primary_type'] . '")';
             }
             //echo $query;
             //exit;
             mysql_query($query);
         }
         // Do Deletes
-        $query = 'SELECT max(id) FROM odm_udftbl_' . $field_name . $tablename;
+        $query = 'SELECT max(id) FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
         $result = mysql_query($query);
         $row = mysql_fetch_row($result);
         $max = $row[0];
         mysql_free_result($result);
         while ($max > 0) {
             if (isset($_REQUEST['x' . $max]) && $_REQUEST['x' . $max] == "on") {
-                $query = 'DELETE FROM odm_udftbl_' . $field_name . $tablename . ' WHERE id = ' . $max;
+                $query = 'DELETE FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' WHERE id = ' . $max;
                 //echo $query;
                 mysql_query($query);
             }
