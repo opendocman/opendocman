@@ -57,6 +57,6 @@ if( !defined('Department_class') )
             return $departments;
         }
 
-    }
+        }
 
-}
+    }

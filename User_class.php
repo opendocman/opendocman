@@ -26,6 +26,15 @@ if( !defined('User_class') )
     class User extends databaseData
     {
         var $root_id;
+        var $id;
+        var $username;
+        var $first_name;
+        var $last_name;
+        var $email;
+        var $phone;
+        var $department;
+        var $pw_reset_code;
+       
         /**
          *
          *
@@ -40,6 +49,39 @@ if( !defined('User_class') )
 
             databaseData::setTableName($this->TABLE_USER);
             databaseData::databaseData($id, $connection, $database);
+
+            $query = "
+                    SELECT 
+                        id, 
+                        username, 
+                        department, 
+                        phone, 
+                        email, 
+                        last_name, 
+                        first_name, 
+                        pw_reset_code 
+                    FROM 
+                        {$GLOBALS['CONFIG']['db_prefix']}user 
+                    WHERE 
+                        id=".$this->id;
+            $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
+            if(mysql_num_rows($result) > 1)
+            {
+                echo('Non-unique key DB error');
+                exit;
+            }
+            list(
+                    $this->id, 
+                    $this->username, 
+                    $this->department,
+                    $this->phone,
+                    $this->email,
+                    $this->last_name,
+                    $this->first_name,
+                    $this->pw_reset_code
+                    ) = mysql_fetch_row($result);
+            mysql_free_result($result);
+         
         }
 
         /**
@@ -68,16 +110,7 @@ if( !defined('User_class') )
          */
         function getDeptId()
         {
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE {$GLOBALS['CONFIG']['db_prefix']}user.id = $this->id";
-            $result = mysql_query($query, $this->connection) or die("Error in query".mysql_error());
-
-            if (mysql_num_rows($result) == 1)
-            {
-                list($department) = mysql_fetch_row($result);
-                return $department;
-            }
-            $this->error = 'Non-unique id: '.$this->id;
-            return - 1;
+            return $this->department;
 
         }
 
@@ -347,47 +380,29 @@ if( !defined('User_class') )
         
         function getEmailAddress()
         {
-            $query = "SELECT Email FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=".$this->id;
-            $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-            if(mysql_num_rows($result) > 1)
-            {
-                echo('Non-unique key DB error');
-                exit;
-            }
-            list($email) = mysql_fetch_row($result);
-            mysql_free_result($result);
-            return $email;
+            return $this->email;
         }
 
         function getPhoneNumber()
         {
-            $query = "SELECT phone FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=".$this->id;
-            $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-            if(mysql_num_rows($result) > 1)
-            {
-                echo('Non-unique key DB error');
-                exit;
-            }
-            list($phone) = mysql_fetch_row($result);
-            mysql_free_result($result);
-            return $phone;
+            return $this->phone;
         }
         
         //Return full name array where array[0]=firstname and array[1]=lastname
         function getFullName()
         {
-            $query = "SELECT first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=".$this->id;
-            $result = mysql_query($query, $this->connection) or die("Error in query: $query" . mysql_error());
-            if(mysql_num_rows($result) > 1)
-            {
-                echo('Non-unique key DB error');
-                exit;
-            }
-            list($full_name[0], $full_name[1]) = mysql_fetch_row($result);
-            mysql_free_result($result);
+            $full_name[0] = $this->first_name;
+            $full_name[1] = $this->last_name;
+
             return $full_name;
         }
 
+        //Return username of current user
+        function getUserName()
+        {
+            return $this->username;
+        }
+        
         //Return list of checked out files to root
         function getCheckedOutFiles()
         {
