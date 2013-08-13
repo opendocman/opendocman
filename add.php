@@ -55,6 +55,7 @@ if(!isset($_POST['submit']))
     
     $i=0;
     
+    $t_name = array();
     // Set the values for the hidden sub-select fields
     while ($data = mysql_fetch_array($result)) {
         $explode_v = explode('_', $data['table_name']);
@@ -129,7 +130,7 @@ if(!isset($_POST['submit']))
 
 }
 else 
-{    
+{      
     //invalid file
     if (empty($_FILES))
     {
@@ -158,14 +159,14 @@ else
         // Lets lookup the try mime type
         $file_mime = File::mime($_FILES['file']['tmp_name'][$count], $_FILES['file']['name'][$count]);
 
+        $allowedFile = 0;
+        
         // check file type
         foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
           
             if ($file_mime == $thistype) {
                 $allowedFile = 1;
                 break;
-            } else {
-                $allowedFile = 0;
             }
         }           
 
@@ -308,32 +309,12 @@ else
         // Search for simular names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
         // Priority is in this order (admin, modify, read, view)
-        $filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+       
+        foreach ($_REQUEST['user_permission'] as $user_id => $permission) {
 
-        if  (isset ($_REQUEST['admin']))
-        {
-            $result_array = advanceCombineArrays($_REQUEST['admin'], $filedata->ADMIN_RIGHT, $_REQUEST['modify'], $filedata->WRITE_RIGHT);
-        }
-
-        if (isset ($_REQUEST['read']))
-        {
-            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['read'], $filedata->READ_RIGHT);
-        }
-
-        if (isset ($_REQUEST['view']))
-        {
-            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['view'], $filedata->VIEW_RIGHT);
-        }
-
-        if (isset ($_REQUEST['forbidden']))
-        {
-            $result_array = advanceCombineArrays($result_array, 'NULL', $_REQUEST['forbidden'], $filedata->FORBIDDEN_RIGHT);
-        }
-        // INSERT user permissions - view
-        for($i = 0; $i<sizeof($result_array); $i++)
-        {
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES('$fileId', '".$result_array[$i][0]."','". $result_array[$i][1]."')";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" .mysql_error());
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, $user_id, $permission)";           
+            //echo $query."<br>";
+            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" . mysql_error());
         }
 
         // use id to generate a file name

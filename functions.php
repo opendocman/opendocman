@@ -259,16 +259,19 @@ function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_heade
     }
 }
 function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
-{      
+{         
     for($i = 0; $i<sizeof($user_ID_array); $i++)
     {
         if(($user_ID_array[$i] > 0)) {
             $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
         }
     }   
-
-    email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+ 
+    if(count($OBJ_array) > 0) {
+        email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+    }
 }
+
 function getmicrotime()
 {
     list($usec, $sec) = explode(" ",microtime());
