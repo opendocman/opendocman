@@ -291,7 +291,7 @@ if ( !defined('User_Perms_class') )
             return $rightsListArray;
         }
 
-        public static function getPermissionForUser($user_id, $data_id)
+        public function getPermissionForUser($user_id, $data_id)
         {
             $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = $user_id and fid = $data_id";
             $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: .$query" . mysql_error());
