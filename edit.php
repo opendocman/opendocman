@@ -161,6 +161,7 @@ if (!isset($_REQUEST['submit'])) {
     callPluginMethod('onBeforeEditFileSaved');
 
     $filedata->setId($fileId);
+    $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
     foreach( $_REQUEST['user_permission'] as $permission ) {
