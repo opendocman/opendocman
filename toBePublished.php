@@ -194,7 +194,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
                 email_dept($dept_id, $mail_subject, $mail_body, $mail_headers);
             }
 
-            if(is_array($_POST['send_to_users']) && isset($_POST['send_to_users'][0]))
+            if(isset($_POST['send_to_users']) && is_array($_POST['send_to_users']) && isset($_POST['send_to_users'][0]))
             {
                 email_users_id($_POST['send_to_users'], $mail_subject,$mail_body,$mail_headers);
             }
@@ -287,7 +287,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             {         
                 email_dept($dept_id,$mail_subject ,$mail_body2,$mail_headers);
             }           
-            if(is_array($_POST['send_to_users']) && $_POST['send_to_users'][0] > 0)
+            if(isset($_POST['send_to_users']) && is_array($_POST['send_to_users']) && $_POST['send_to_users'][0] > 0)
             {                     
                 email_users_id($_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
             }           
