@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
+error_reporting(E_ALL);
 $DATADIR = "/home/graham/odm_git/pdfgen/data";
 
 // open connection
@@ -90,11 +90,16 @@ else
     fwrite($lfhandler, $lfcontent);
     fclose ($lfhandler);
 
+    //system("ls");
+    //echo "<br/>";
     // Do conversion to pdf using the libreoffice 'soffice' application.
-    $cmdline = "soffice ".$nativefname." -o ".$pdffname;
-    system($cmdline);
+    //$cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
+    $cmdline = "sh ".dirname(__FILE__)."/pdfgen.sh ".$DATADIR." ".$nativefname;
+    echo $cmdline."<br/>";
+    $retStr = system($cmdline, $retval);
+    echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
 
-    echo "Output will appear <a href='data/".$tmpfilename.".pdf'>here</a>";
+    echo "<p>Output will appear <a href='data/".$tmpfilename.".pdf'>here</a></p>";
 
- 
+   echo "<p>Using ", memory_get_peak_usage(1), " bytes of ram.</p>"; 
 }
