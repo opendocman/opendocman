@@ -49,8 +49,11 @@ class File
         }
 
         // No finfo, so lets try mime_content_type
-        if (function_exists('mime_content_type')) {           
-            return mime_content_type($filename);
+        if (function_exists('mime_content_type')) {     
+            $mimetype = mime_content_type($filename);
+            if($mimetype) {
+                return $mimetype;
+            }
         }
 
         // Nothing else has worked,lets try the mimetypes global array
