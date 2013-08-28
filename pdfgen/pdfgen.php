@@ -16,9 +16,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+INSTALLATION NOTES
+==================
+For this to work, $DATADIR (defined below) must be writable by the 
+web server process owner (usually www-data).
+Also ~www-data/.config must exist and be writable by www-data 
+(often /var/www/.config)
+
+The .config requirement is necessary to avoid an obscure '77' return code 
+with no helpful error message!
 */
 error_reporting(E_ALL);
-$DATADIR = "/home/graham/odm_git/pdfgen/data";
+#$DATADIR = "/home/graham/odm_git/pdfgen/data";
+$DATADIR = "/home/disk2/graham/opendocman-git/pdfgen/data";
 
 // open connection
 if (!isset($_POST['submit']))
@@ -93,8 +104,8 @@ else
     //system("ls");
     //echo "<br/>";
     // Do conversion to pdf using the libreoffice 'soffice' application.
-    //$cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
-    $cmdline = "sh ".dirname(__FILE__)."/pdfgen.sh ".$DATADIR." ".$nativefname;
+    $cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
+    //$cmdline = "sh ".dirname(__FILE__)."/pdfgen.sh ".$DATADIR." ".$nativefname;
     echo $cmdline."<br/>";
     $retStr = system($cmdline, $retval);
     echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
