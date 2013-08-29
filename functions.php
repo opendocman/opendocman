@@ -358,7 +358,8 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
             $lmimetype = File::mime_by_ext($suffix);
-            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
+            // $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
+            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid);
         }
         else
         {
