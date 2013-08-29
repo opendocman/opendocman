@@ -27,15 +27,22 @@ Also ~www-data/.config must exist and be writable by www-data
 The .config requirement is necessary to avoid an obscure '77' return code 
 with no helpful error message!
 */
-error_reporting(E_ALL);
-#$DATADIR = "/home/graham/odm_git/pdfgen/data";
-$DATADIR = "/home/disk2/graham/opendocman-git/pdfgen/data";
 
-// open connection
+///////////////////////////////////////////////////////////////////////
+// Configuration
+// set to True to enable detailed debugging output.
+$DEBUG = False;
+error_reporting(E_ALL);
+// Physical location of data directory.
+// $DATADIR = "/home/graham/odm_git/pdfgen/data";
+$DATADIR = "/home/disk2/graham/opendocman-git/pdfgen/data";
+// URI used to access this data directory.
+$DATAURL = "/odm/pdfgen/data";
+
+///////////////////////////////////////////////////////////
 if (!isset($_POST['submit']))
 {
     // form not yet submitted, display initial form
-
   ?>
   <form 
     action="<?php echo $_SERVER['PHP_SELF']; ?>" 
@@ -52,24 +59,10 @@ if (!isset($_POST['submit']))
     </table>
     </form>
 
-<script type="text/javascript">
-    function check(select, send_dept, send_all)
-    {
-        if(send_dept.checked || select.options[select.selectedIndex].value != "0")
-            send_all.disabled = true;
-        else
-        {
-            send_all.disabled = false;
-            for(var i = 1; i < select.options.length; i++)
-                select.options[i].selected = false;
-        }
-    }
-</script>
-        <?php
-
-}//end if (!$submit)
+<?php
+} //end if (!$submit)
 else
-{
+  {
     $realname = $_FILES['file']['name'];
     $rootname = (substr($realname,0,(strrpos($realname,"."))));
     $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
@@ -85,12 +78,12 @@ else
     $nativefname = $DATADIR . "/" . $tmpfilename. '.' . $suffix;
     $pdffname = $DATADIR . "/" . $tmpfilename. '.pdf';
 
-    echo "<h1>It worked!!! </h1>";
-    echo "<p>Filename = ".$realname."</p>";
-    echo "<p>Root Filename = ".$rootname." - suffix= ".$suffix."</p>";
-    echo "<p>Tmpfilename = ".$tmpfilename."</p>";
-    echo "<p>Nativefilename = ".$nativefname."</p>";
-    echo "<p>Pdffilename = ".$pdffname."</p>";
+    if ($DEBUG) echo "<h1>It worked!!! </h1>";
+    if ($DEBUG) echo "<p>Filename = ".$realname."</p>";
+    if ($DEBUG) echo "<p>Root Filename = ".$rootname." - suffix= ".$suffix."</p>";
+    if ($DEBUG) echo "<p>Tmpfilename = ".$tmpfilename."</p>";
+    if ($DEBUG) echo "<p>Nativefilename = ".$nativefname."</p>";
+    if ($DEBUG) echo "<p>Pdffilename = ".$pdffname."</p>";
 
     // copy temporary file to DATADIR and give it the correct suffix.
     $lfhandler = fopen ($tmpfilepath, "r");
@@ -101,16 +94,16 @@ else
     fwrite($lfhandler, $lfcontent);
     fclose ($lfhandler);
 
-    //system("ls");
-    //echo "<br/>";
     // Do conversion to pdf using the libreoffice 'soffice' application.
     $cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
-    //$cmdline = "sh ".dirname(__FILE__)."/pdfgen.sh ".$DATADIR." ".$nativefname;
-    echo $cmdline."<br/>";
-    $retStr = system($cmdline, $retval);
-    echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
+    if ($DEBUG) echo $cmdline."<br/>";
+    // Execute the external command.
+    $retStr = exec($cmdline, $retval);
+    if ($DEBUG) echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
 
-    echo "<p>Output will appear <a href='data/".$tmpfilename.".pdf'>here</a></p>";
+    $outURL = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/".$DATAURL."/".$tmpfilename.".pdf";
+    echo "<p>Output PDF file is at: <a href='".$outURL."'>".$outURL."</a></p>";
 
-   echo "<p>Using ", memory_get_peak_usage(1), " bytes of ram.</p>"; 
+
+   if ($DEBUG) echo "<p>Using ", memory_get_peak_usage(1), " bytes of ram.</p>"; 
 }
