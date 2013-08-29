@@ -111,7 +111,10 @@ else
     fwrite($lfhandler, $result);
     fclose ($lfhandler);
 
-    echo "<h1>Done!</h1>";
+    // clean up and back to main page
+    // TODO - check if it was successful or not!!!
+    $last_message = "PDF Generated ok.";        
+    header('Location: out.php?last_message=' . urlencode($last_message));
 
 }
 

@@ -41,36 +41,21 @@ if(strchr($_REQUEST['id'], '_') )
     $lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 
+
 if(!isset($_GET['submit']))
-{
+  {
     draw_header(msg('view') . ' ' . msg('file'),$last_message);
     $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
     $file_name = $file_obj->getName();
     $file_id = $file_obj->getId();
     $realname = $file_obj->getName();
 
-    // Get the suffix of the file so we can look it up
-    // in the $mimetypes array
-    $suffix = '';
-    if(strchr($realname, '.'))
-    {
-        // Fix by blackwes
-        $prefix = (substr($realname,0,(strrpos($realname,"."))));
-        $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
-    }
-    
-    $lmimetype = File::mime_by_ext($suffix);
-    
-    //echo "Realname is $realname<br>";
-    //echo "prefix = $prefix<br>";
-    //echo "suffix = $suffix<br>";
-    //echo "mime:$lmimetype";
     echo '<form action="view_file.php" name="view_file_form" method="get">';
     echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
-    echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
     echo '<BR>';
+    echo "<INPUT type='checkbox' name='native'> Download native (non-PDF) file?<br/>";
     // Present a link to allow for inline viewing
-    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id=' . urlencode($lrequest_id) . '&mimetype=' . urlencode("$lmimetype") . '">' . msg('button_click_here') . '</a><br><br>';
+    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id=' . urlencode($lrequest_id) . '">' . msg('button_click_here') . '</a><br><br>';
     echo '<div class="buttons"><button class="regular" type="submit" name="submit" value="Download">';
     echo msg('message_if_you_are_unable_to_view2');
     echo '</button></div>';
@@ -80,87 +65,89 @@ if(!isset($_GET['submit']))
     echo '</form>';
 
     draw_footer();
-}
-elseif ($_GET['submit'] == 'view')
-{
-    //echo "mimetype = $mimetype<br>";
-    //exit;
-    //echo "ID is $_REQUEST['id']";
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-    // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
-    $realname = $file_obj->getName();
-    if( isset($lrevision_id) )
-    {
-        $filename = $lrevision_dir . $lrequest_id . ".dat";
-    }
-    elseif( $file_obj->isArchived() )
-    {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
-    }
-    else
-    {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
-    }
+  }
+else {  // Submit is set
+  $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+  // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
+  checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
+  $realname = $file_obj->getName();
 
-    if ( file_exists($filename) )
+  // Get the suffix of the file so we can look it up
+  // in the $mimetypes array
+  $suffix = '';
+  if(strchr($realname, '.'))
     {
-        // send headers to browser to initiate file download
-        header('Content-Length: '.filesize($filename));
-        // Pass the mimetype so the browser can open it
-        header ('Cache-control: private');
-        header('Content-Type: ' . $_GET['mimetype']);
-        header('Content-Disposition: inline; filename="' . rawurlencode($realname) . '"');
-        // Apache is sending Last Modified header, so we'll do it, too
-        $modified=filemtime($filename);
-        header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
-        readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'],'V');
+      // Fix by blackwes
+      $prefix = (substr($realname,0,(strrpos($realname,"."))));
+      $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
     }
-    else
-    {
-        echo msg('message_file_does_not_exist');
-    }
-}
-elseif ($_GET['submit'] == 'Download')
-{
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-    // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
-    $realname = $file_obj->getName();
-    if( isset($lrevision_id) )
-    {
-        $filename = $lrevision_dir . $lrequest_id . ".dat";
-    }
-    elseif( $file_obj->isArchived() )
-    {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
-    }
-    else
-    {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
-    }
+    
+  $lmimetype = File::mime_by_ext($suffix);
 
-    if (file_exists($filename))
-    {
-        // send headers to browser to initiate file download
-        header('Cache-control: private');
-        header ('Content-Type: '.$_GET['mimetype']);
-        header ('Content-Disposition: attachment; filename="' . $realname . '"');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'],'D');
-    }
-    else
-    {
-        echo msg('message_file_does_not_exist');
-    }
 
-}
-else
-{
-    echo msg('message_nothing_to_do');
-    echo 'submit is ' . $_GET['submit'];
+  if (isset($_REQUEST['native'])) 
+    $native = True;
+  else
+    $native = False;
+  if( isset($lrevision_id) )
+    {
+      $filename_native = $lrevision_dir . $lrequest_id . ".dat";
+      $filename_pdf = $lrevision_dir . $lrequest_id . ".pdf";
+    }
+  elseif( $file_obj->isArchived() )
+    {
+      $filename_native = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
+      $filename_pdf = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".pdf";
+    }
+  else
+    {
+      $filename_native = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+      $filename_pdf = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".pdf";
+    }
+  
+  // Select the native or PDF filename.
+  if ($native)
+    $filename = $filename_native;
+  else
+    $filename = $filename_pdf;
+  
+  if ( file_exists($filename) )
+    {
+      // send headers to browser to initiate file download
+      header('Content-Length: '.filesize($filename));
+      // Pass the mimetype so the browser can open it
+      header ('Cache-control: private');
+      if ($native) {
+	header('Content-Type: ' . $lmimetype);
+	if ($_GET['submit'] == 'Download')
+	  header('Content-Disposition: inline; filename="' . rawurlencode($realname) . '"');
+	else
+	  header('Content-Disposition: attachment; filename="' . rawurlencode($realname) . '"');
+      }
+      else {
+	header('Content-Type: application/pdf');
+	if ($_GET['submit'] == 'Download')
+	  header('Content-Disposition: inline; filename="' . rawurlencode($_REQUEST['id'].".pdf") . '"');
+	else
+	  header('Content-Disposition: attachment; filename="' . rawurlencode($_REQUEST['id'].".pdf") . '"');
+      }
+      // Apache is sending Last Modified header, so we'll do it, too
+      $modified=filemtime($filename);
+      header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
+      readfile($filename);
+
+      // send headers to browser to initiate file download
+      //header('Cache-control: private');
+      //header ('Content-Type: '.$_GET['mimetype']);
+      //header ('Content-Disposition: attachment; filename="' . $realname . '"');
+      //header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+      //header('Pragma: public');
+      //readfile($filename);
+      //AccessLog::addLogEntry($_REQUEST['id'],'D');
+    }
+  else
+    {
+      echo msg('message_file_does_not_exist');
+    }
 }
 ?>
