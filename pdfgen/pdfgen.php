@@ -31,7 +31,7 @@ with no helpful error message!
 ///////////////////////////////////////////////////////////////////////
 // Configuration
 // set to True to enable detailed debugging output.
-$DEBUG = False;
+$DEBUG = True;
 error_reporting(E_ALL);
 // Physical location of data directory.
 // $DATADIR = "/home/graham/odm_git/pdfgen/data";
@@ -94,12 +94,17 @@ else
     fwrite($lfhandler, $lfcontent);
     fclose ($lfhandler);
 
-    // Do conversion to pdf using the libreoffice 'soffice' application.
-    $cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
-    if ($DEBUG) echo $cmdline."<br/>";
-    // Execute the external command.
-    $retStr = exec($cmdline, $retval);
-    if ($DEBUG) echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
+    if ($suffix=='pdf' || $suffix=='PDF') {
+      // Do nothing - it is already a PDF!
+      if ($DEBUG) echo "Suffix is .pdf, so not doing anything";
+    } else {
+      // Do conversion to pdf using the libreoffice 'soffice' application.
+      $cmdline = "/usr/bin/soffice --headless --convert-to pdf --outdir ".$DATADIR." ".$nativefname;
+      if ($DEBUG) echo $cmdline."<br/>";
+      // Execute the external command.
+      $retStr = exec($cmdline, $retval);
+      if ($DEBUG) echo "output=".$retStr.", retval=".var_dump($retval)."<br/>";
+    }
 
     $outURL = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT']."/".$DATAURL."/".$tmpfilename.".pdf";
     echo "<p>Output PDF file is at: <a href='".$outURL."'>".$outURL."</a></p>";
