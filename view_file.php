@@ -3,6 +3,7 @@
 view_file.php - draws screen which allows users to view files inline
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
 Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2013 Graham Jones
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,6 +19,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
+/*
+ * view_file.php
+ * Parameters (GET query strings):
+ *   id: id number of file to be viewed
+ *   submit: must be set to trigger download, otherwise form is displayed.  If submit='Download', the file is downloaded
+ *          rather than viewed in the browser window.
+ *   native: If set, the native (e.g. .doc) file is provided.  If native is not set or is 'False', the PDF version is provided.
+ */
 
 session_cache_limiter('private');
 session_start();
@@ -81,12 +91,15 @@ else {  // Submit is set
       $prefix = (substr($realname,0,(strrpos($realname,"."))));
       $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
     }
-    
   $lmimetype = File::mime_by_ext($suffix);
 
-
+  // Check if we have asked for the native (e.g. .doc) file.  If not, provide the PDF version.
+  // Select the correct filename depending on the file requested.
   if (isset($_REQUEST['native'])) 
-    $native = True;
+    if ($_REQUEST['native'] == 'False')
+      $native = False;
+    else
+      $native = True;
   else
     $native = False;
   if( isset($lrevision_id) )
@@ -111,6 +124,7 @@ else {  // Submit is set
   else
     $filename = $filename_pdf;
   
+  // If the file exists, send it to the browser.
   if ( file_exists($filename) )
     {
       // send headers to browser to initiate file download
@@ -135,15 +149,6 @@ else {  // Submit is set
       $modified=filemtime($filename);
       header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
       readfile($filename);
-
-      // send headers to browser to initiate file download
-      //header('Cache-control: private');
-      //header ('Content-Type: '.$_GET['mimetype']);
-      //header ('Content-Disposition: attachment; filename="' . $realname . '"');
-      //header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-      //header('Pragma: public');
-      //readfile($filename);
-      //AccessLog::addLogEntry($_REQUEST['id'],'D');
     }
   else
     {
