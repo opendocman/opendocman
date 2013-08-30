@@ -43,6 +43,7 @@ if (!isset($_SESSION['uid']))
     exit;
 }
 include('odm-load.php');
+include('create-pdf-funcs.php');
 require_once("AccessLog_class.php");
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
@@ -53,7 +54,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 // includes
 
 // open connection
-if (!isset($_POST['submit']))
+if (!isset($_REQUEST['submit']))
 {
     // form not yet submitted, display initial form
 ?>
@@ -70,46 +71,10 @@ if (!isset($_POST['submit']))
 else
 {
     // form has been submitted, process data
-    $id = (int) $_POST['id'];
+    $id = (int) $_REQUEST['id'];
     if ($DEBUG) echo "id=".$id."<br/>";
 
-    // Determine filename of our document.
-    $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
-    if ($DEBUG) echo "lfilename=".$lfilename."<br/>";
-    // TODO:  Check that the file actually exists!!
-
-    // Submit file to an external pdf generator service using curl.
-    $postData = array('file'=>'@'.$lfilename,'submit'=>'True'); 
-    $ch = curl_init(); 
-    curl_setopt($ch, CURLOPT_URL,"http://maps.webhop.net/odm/pdfgen/pdfgen.php"); 
-    curl_setopt($ch, CURLOPT_POST,1); 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, True); 
-    $result=curl_exec ($ch); 
-    curl_close ($ch); 
-    if ($DEBUG) echo "result=".$result."<br/>"; 
-
-    // The result contains a URL to the PDF file.
-    // Extract the 'href' from the html using regular expression
-    // from http://stackoverflow.com/questions/5397531/parsing-html-source-to-extract-anchor-and-link-tags-href-value
-    preg_match_all('/href=[\'"]?([^\s\>\'"]*)[\'"\>]/', $result, $matches);
-    $hrefs = ($matches[1] ? $matches[1] : false);
-    if ($DEBUG) var_dump($hrefs);
-
-    // Now use CURL to download the PDF file.
-    $ch = curl_init(); 
-    curl_setopt($ch, CURLOPT_URL,$hrefs[0]); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, True); 
-    $result=curl_exec ($ch); 
-    curl_close ($ch); 
-    if ($DEBUG) echo $result;
-
-    // Save result to PDF file in correct place
-    // copy temporary file to DATADIR and give it the correct suffix.
-    $pdfFname = $GLOBALS['CONFIG']['dataDir'] . $id .'.pdf';
-    $lfhandler = fopen ($pdfFname, "w");
-    fwrite($lfhandler, $result);
-    fclose ($lfhandler);
+    createPdf($id);
 
     // clean up and back to main page
     // TODO - check if it was successful or not!!!

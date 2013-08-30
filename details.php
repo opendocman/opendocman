@@ -4,6 +4,7 @@
   details.php - display file information  check for session
   Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
   Copyright (C) 2008-2013 Stephen Lawrence Jr.
+  Copyright (C) 2013  Graham Jones
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -19,6 +20,13 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+/*
+ * details.php
+ * Displays details of a file in the database.
+ * Parameters (GET or POST parameters):
+ *   id : the id number of the file for which details should be displayed.
+ */  
 
 session_start();
 if (!isset($_SESSION['uid'])) {
@@ -99,9 +107,10 @@ if (isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) 
 if ($filedata->isArchived()) {
     $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
     $filesize = display_filesize($filename);
+    $pdf_exists = (file_exists($GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.pdf') ? 'Yes' : 'No');
 } else {
     $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
-
+    $pdf_exists = (file_exists($GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.pdf') ? 'Yes' : 'No');
     if (!isset($filesize)) {
         $filesize = display_filesize($filename);
     }
@@ -163,6 +172,7 @@ $file_detail = array(
     'realname' => $realname,
     'category' => $category,
     'filesize' => $filesize,
+    'pdf_exists' => $pdf_exists,
     'created' => fix_date($created),
     'owner_email' => $user_obj->getEmailAddress(),
     'owner' => $owner,
@@ -212,6 +222,8 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) )) {
         // additional actions are available 
         $edit_link = $secureurl->encode("edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state'] + 1));
         $GLOBALS['smarty']->assign('edit_link', $edit_link);
+        $create_pdf_link = $secureurl->encode("create-pdf.php?submit&id=".$_REQUEST['id']);
+        $GLOBALS['smarty']->assign('create_pdf_link', $create_pdf_link);
     }
 }
 
