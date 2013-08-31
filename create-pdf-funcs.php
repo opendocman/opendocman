@@ -18,6 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+include('odm-load.php');
+
 /////////////////////////////////////////////////////
 // Configuration
 $DEBUG=False;
@@ -28,21 +30,58 @@ $DEBUG=False;
  *   which is hard coded into this function at the moment.
  */
 function createPdf($id) {
+  global $DEBUG;
     // Determine filename of our document.
     $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
     if ($DEBUG) echo "lfilename=".$lfilename."<br/>";
-    // TODO:  Check that the file actually exists!!
+
+    // if our file does not exist, exit with a non-zero error code.
+    if (!file_exists($lfilename)) {
+      echo "Error - ".$lfilename." does not exist.<br/>";
+      return (1);
+    }
+    else {
+	if ($DEBUG) echo "phew - ".$lfilename." exists.<br/>";
+    }
+
+    // create a link to the file in a temporary file with the correct suffix, 
+    // so that the pdf generator has a fighting chance of doing the conversion
+    // properly.
+    $suffix = getSuffix($id);
+    $ltmpfilename = sys_get_temp_dir().'/'.$id.'.'.$suffix;
+    if ($DEBUG) echo "ltmpfilename=".$ltmpfilename."<br/>";
+
+    // if our temporary file already exists, delete it.
+    if (file_exists($ltmpfilename))
+      unlink($ltmpfilename);
+
+    // Actually create the symbolic link.
+    if (!symlink($lfilename,$ltmpfilename)) {
+      echo "Error creating symbolic link ".$ltmpfilename.".<br/>";
+      return(1);   // exit if creating symlink fails.
+    } else {
+      if ($DEBUG) echo "Symbolic link ".$ltmpfilename." created ok.<br/>";
+    }
 
     // Submit file to an external pdf generator service using curl.
-    $postData = array('file'=>'@'.$lfilename,'submit'=>'True'); 
+    $postData = array('file'=>'@'.$ltmpfilename,'submit'=>'True'); 
     $ch = curl_init(); 
     curl_setopt($ch, CURLOPT_URL,"http://maps.webhop.net/odm/pdfgen/pdfgen.php"); 
     curl_setopt($ch, CURLOPT_POST,1); 
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData); 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, True); 
+    if ($DEBUG) echo "Using web service to generate PDF.....<br/>";
     $result=curl_exec ($ch); 
     curl_close ($ch); 
     if ($DEBUG) echo "result=".$result."<br/>"; 
+
+    if ($result == False) {
+      echo "Error from PDF creation web service.<br/>";
+      return(1);
+    }
+
+    // delete the symbolic link to the temporary file - no longer needed.
+    unlink($ltmpfilename);
 
     // The result contains a URL to the PDF file.
     // Extract the 'href' from the html using regular expression
@@ -58,15 +97,24 @@ function createPdf($id) {
     $result=curl_exec ($ch); 
     curl_close ($ch); 
     if ($DEBUG) echo $result;
+    if ($result == False) {
+      echo "Error downloading pdf from PDF creation web service.<br/>";
+      return(1);
+    }
 
     // Save result to PDF file in correct place
     // copy temporary file to DATADIR and give it the correct suffix.
     $pdfFname = $GLOBALS['CONFIG']['dataDir'] . $id .'.pdf';
     $lfhandler = fopen ($pdfFname, "w");
-    fwrite($lfhandler, $result);
+    if ($lfhandler == False) {
+      echo "Error opening file ".$pdfFname." for writing.<br/>";
+      return(1);
+    }
+    if (!fwrite($lfhandler, $result)) {
+      echo "Error writing data to file ".$pdfFname.".<br/>";
+      return(1);
+    }
     fclose ($lfhandler);
-
-    // TODO - Add error checking to determine if this has worked or not!
 
     return(0);
 }

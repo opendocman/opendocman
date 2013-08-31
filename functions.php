@@ -919,3 +919,21 @@ function xss_clean($str)
 
     return $str;
 }
+
+/**
+ * getSuffix($id)
+ * Returns the filename suffix (doc, docx, pdf etc.) of file number $id
+ * GJ 31 Aug 2013
+ */
+function getSuffix($id) {
+  $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+  $realname = $file_obj->getName();
+  $suffix = '';
+  if(strchr($realname, '.'))
+    {
+      // Fix by blackwes
+      $prefix = (substr($realname,0,(strrpos($realname,"."))));
+      $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
+    }
+  return($suffix);
+}

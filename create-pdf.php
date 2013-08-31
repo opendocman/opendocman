@@ -33,7 +33,7 @@ PDF for.
  */
 /////////////////////////////////////////////////////
 // Configuration
-$DEBUG=False;
+$DEBUG=True;
 
 // check for valid session and $id
 session_start();
@@ -58,6 +58,7 @@ if (!isset($_REQUEST['submit']))
 {
     // form not yet submitted, display initial form
 ?>
+  <h3><?php echo $last_message;?> </h3>
   <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
     Document ID: <input name="id" value="">
     <br/>
@@ -72,14 +73,18 @@ else
 {
     // form has been submitted, process data
     $id = (int) $_REQUEST['id'];
-    if ($DEBUG) echo "id=".$id."<br/>";
+    echo "id=".$id."<br/>";
 
-    createPdf($id);
+    $result = createPdf($id);
+    
+    echo "createPdf Result = ".$result.".<br/>";
 
     // clean up and back to main page
-    // TODO - check if it was successful or not!!!
-    $last_message = "PDF Generated ok.";        
-    header('Location: out.php?last_message=' . urlencode($last_message));
+    if ($result==0)
+      $last_message = "PDF Generated ok.";        
+    else
+      $last_message = "Error Creating PDF File.";
+    header('Location: create-pdf.php?last_message=' . urlencode($last_message));
 
 }
 
