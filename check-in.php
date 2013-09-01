@@ -31,6 +31,7 @@ require_once("AccessLog_class.php");
 require_once("File_class.php");
 require_once('Email_class.php');
 require_once('Reviewer_class.php');
+include('create-pdf-funcs.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
