@@ -31,6 +31,7 @@ require_once("AccessLog_class.php");
 require_once("File_class.php");
 require_once('Email_class.php');
 require_once('Reviewer_class.php');
+include('create-pdf-funcs.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
@@ -206,14 +207,25 @@ else
 
         }
         $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
+	$lpdffilename = $GLOBALS['CONFIG']['dataDir'] . $id . '.pdf';
+
+	// Copy the current version of the file into the revision directory.  Why do it this way and not use 'copy' or 'rename'?
         //read and close
-        $lfhandler = fopen ($lfilename, "r");
-        $lfcontent = fread($lfhandler, filesize ($lfilename));
-        fclose ($lfhandler);
-        //write and close
-        $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num - 1) . '.dat', "w");
-        fwrite($lfhandler, $lfcontent);
-        fclose ($lfhandler);
+	if ( file_exists($lfilename) ) {
+	  $lfhandler = fopen ($lfilename, "r");
+	  $lfcontent = fread($lfhandler, filesize ($lfilename));
+	  fclose ($lfhandler);
+	  //write and close
+	  $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num - 1) . '.dat', "w");
+	  fwrite($lfhandler, $lfcontent);
+	  fclose ($lfhandler);
+	}
+
+	// Move the current PDF version of the file into the revision directory
+	if ( file_exists($lpdffilename) )
+	  rename($lpdffilename, $GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num -1) .'.pdf');
+
+
         // all OK, proceed!
         $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id='{$_SESSION['uid']}'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
@@ -228,10 +240,14 @@ else
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$id'";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
 
+	// Copy the new file from the temporary upload directory into the main opendocman data directory.
         // rename and save file
         $newFileName = $id . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
     
+	// Create a PDF version of the new file.
+	createPdf($id);
+
         AccessLog::addLogEntry($id,'I');
     
         /**

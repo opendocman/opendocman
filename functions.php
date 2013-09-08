@@ -294,6 +294,13 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         return -1;
     }
 
+    $CatObj = new Category();
+    //$catArr = $CatObj->getAllCategories();
+    //foreach ($catArr as $cat) {
+    //  var_dump($cat);
+      //error_log($cat(0).'-'.$cat(1));
+    //}
+
     foreach($fileid_array as $fileid)
     {
         $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
@@ -327,6 +334,16 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
             $modified_date = $created_date;
         }
 
+	$revisionNo = $file_obj->getRevisionNo();
+	$categoryNo = $file_obj->getCategory();
+	$category = $CatObj->getCatName($categoryNo);
+	//error_log( "category=".$category);
+
+	$udfs = get_all_udf_values($fileid);
+	$udfKeys = array_keys($udfs);
+	//var_dump($udfs);
+	//var_dump($udfKeys);
+
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1] . ', ' . $full_name_array[0];
         //$user_obj = new User($file_obj->getOwner(), $file_obj->connection, $file_obj->database);
@@ -341,7 +358,8 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
         {
             $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
             $lmimetype = File::mime_by_ext($suffix);
-            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
+            // $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$lmimetype");
+            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid);
         }
         else
         {
@@ -382,10 +400,14 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
                 'view_link'=>$view_link,
                 'details_link'=>$details_link,
                 'filename'=>$realname,
+		'category'=>$category,
                 'description'=>$description,
                 'rights'=>$rights,
                 'created_date'=>$created_date,
                 'modified_date'=>$modified_date,
+                'revision_no'=>$revisionNo,
+		'udf0' => $udfs[$udfKeys[0]],
+		'udf1' => $udfs[$udfKeys[1]],
                 'owner_name'=>$owner_name,
                 'dept_name'=>$dept_name,
                 'filesize'=>$filesize,
@@ -896,4 +918,22 @@ function xss_clean($str)
     } while ($old !== $str);
 
     return $str;
+}
+
+/**
+ * getSuffix($id)
+ * Returns the filename suffix (doc, docx, pdf etc.) of file number $id
+ * GJ 31 Aug 2013
+ */
+function getSuffix($id) {
+  $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+  $realname = $file_obj->getName();
+  $suffix = '';
+  if(strchr($realname, '.'))
+    {
+      // Fix by blackwes
+      $prefix = (substr($realname,0,(strrpos($realname,"."))));
+      $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
+    }
+  return($suffix);
 }

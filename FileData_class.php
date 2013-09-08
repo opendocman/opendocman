@@ -360,6 +360,20 @@ if( !defined('FileData_class') )
             list($name) = mysql_fetch_row($result);
             return $name;
         }
+
+        // return the latest revision number of the file
+	// Because the latest revision is just called 'current' we can't use that.  Instead we return the number of rows returned
+	// by the query, which is the number of revisions that are recorded.
+        function getRevisionNo()
+        {
+            $query = "SELECT revision FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG WHERE id = '$this->id' ORDER BY revision;";
+            $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
+	    $rows = mysql_num_rows($result);  // number of rows returned.
+            //list($name) = mysql_fetch_row($result);
+            return $rows;
+        }
+
+
         // return the realname of the file
         function getRealName()
         {

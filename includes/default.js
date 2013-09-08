@@ -1,12 +1,25 @@
+var dataTable;
+
+setDataTableFilter = function(filterStr) {
+    dataTable.fnFilter(filterStr);	
+}
+
+
 $(document).ready(function() {
 		
-    $('#filetable').dataTable({
+    dataTable = $('#filetable').dataTable({
         "bStateSave": true,
         "sPaginationType": "full_numbers",
         "oLanguage": {
             "sUrl": "includes/language/DataTables/datatables." + langLanguage + ".txt"
         }
     });
+
+    // Set the table filter to the variable "filterStr" which is set in out.php
+    // from the URL query string ?filterStr=xxxx.
+    //alert("filterStr="+filterStr);
+    setDataTableFilter(filterStr);
+
 
     $("#checkall").live('click',function () {
         var checked_status = this.checked;       

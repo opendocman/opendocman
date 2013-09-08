@@ -28,6 +28,18 @@ if (!defined('Category_class'))
          * @returns array
          */
 
+      function __construct() {
+	$this->catArr = $this->getAllCategories();
+      }
+
+      function getCatName($catId) {
+	foreach ($this->catArr as $cat) {
+	  //error_log($cat["id"]." - ".$catId);
+	  if ($cat["id"] == $catId)  return($cat["name"]);
+	}
+	return("NULL");
+      }
+
         public static function getAllCategories()
         {
             // query to get a list of available users

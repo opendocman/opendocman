@@ -285,6 +285,81 @@ if ( !defined('udf_functions') )
         mysql_free_result($result);
     }
 
+
+    /**
+     * Get a particular UDF for a given fileId
+     * @param type $fileId
+     * @param type $udf_name
+     * @return string
+     */
+    function get_udf_value($fileId,$udf_name)
+    {
+      //FIXME
+      return null;
+    }
+
+    /**
+     * Get an array of all of the UDFs for the specified fileId.
+     * @param type $fileId
+     * @return string
+     */
+    function get_all_udf_values($fileId)
+    {
+        $return_string = null;
+	$retArr = Array();
+        // get the list of available udf's
+        $query = "SELECT display_name,field_type,table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
+        $result = mysql_query($query) or die ("Error in query181: $query. " . mysql_error());
+        while ($row = mysql_fetch_row($result))
+        {
+	  // is this udf a radio button or drop-down list?
+            if ( $row[1] == 1 || $row[1] == 2)
+            {
+                $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
+                $subresult = mysql_query($query) or die ("Error in query187: $query. " . mysql_error());
+                if($subresult)
+                {
+                    $subrow = mysql_fetch_row($subresult);
+		    $retArr[$row[0]] = $subrow[0];
+                    //$return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    mysql_free_result($subresult);
+                }
+            } 
+	    // or is it a text field?
+            elseif ($row[1] == 3)
+            {
+                $query = "SELECT {$row[2]} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId ";
+                $subresult = mysql_query($query) or die ("Error in query198: $query. " . mysql_error());
+                if ($subresult)
+                {
+                    $subrow = mysql_fetch_row($subresult);
+		    $retArr[$row[0]] = $subrow[0];
+                    //$return_string .=  '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    mysql_free_result($subresult);
+                }
+
+            }
+	    //CHM?? Not sure what this is (GJ)
+            elseif ($row[1] == 4)
+            {
+                $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = $fileId AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
+                $subresult = mysql_query($query) or die ("Error in query199: $query. " . mysql_error());
+                if ($subresult)
+                {
+                    $subrow = mysql_fetch_row($subresult);
+		    $retArr[$row[0]] = $subrow[0];
+                    //$return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $subrow[0] . '</td></tr>';
+                    mysql_free_result($subresult);
+                }
+
+            }
+			//CHM
+        }
+        mysql_free_result($result);
+        return $retArr;
+
+    }
+
     /**
      * Generate the UDF details display 
      * @param type $fileId
