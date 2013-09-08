@@ -39,9 +39,10 @@
             <th class="sorting">ID</th>
             <th>{$g_lang_label_view}</th>
 	    <th class="sorting">DocNo</th>
+	    <th class="sorting">Formal Issue</th>
 	    <th class="sorting">Type</th>
             <th class="sorting">{$g_lang_label_description}</th>
-            <th class="sorting">{$g_lang_revision}</th>
+            <th class="sorting">DMS Rev.</th>
             <th class="sorting">{$g_lang_label_modified_date}</th>
             <th class="sorting">{$g_lang_label_file_name}</th>
             <th class="sorting">{$g_lang_label_size}</th>
@@ -65,6 +66,7 @@
                 {/if}
 
 	    <td><a href="{$item.details_link}">{$item.udf0}</a></td>
+	    <td><a href="{$item.details_link}">{$item.udf1}</a></td>
 	    <td><a href="{$item.details_link}">{$item.category}</a></td>
             <td ><a href="{$item.details_link}">{$item.description}</a></td>
             <td ><a href="{$item.details_link}">{$item.revision_no}</a></td>
@@ -90,9 +92,10 @@
             <th>ID</th>
             <th>{$g_lang_label_view}</th>
 	    <th>DocNo</th>
+	    <th>Formal Issue</th>
 	    <th>Type</th>
             <th>{$g_lang_label_description}</th>
-            <th>{$g_lang_revision}</th>
+            <th>DMS Rev.</th>
             <th>{$g_lang_label_modified_date}</th>
             <th>{$g_lang_label_file_name}</th>
             <th>{$g_lang_label_size}</th>
