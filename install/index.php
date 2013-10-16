@@ -367,7 +367,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
 
                 include_once('../version.php');
     ?>
-            <h3>Welcome to the OpenDocMan Installer Tool</h3>
+            <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
         </div>
         <hr>
         <table>
@@ -381,7 +381,11 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 <td><strong>Please BACKUP all data and files before proceeding!</strong><br><br></td>
             </tr>
             <tr>
-                <td>Please choose one from the following based on your current version.<br><br></td>
+                <td>
+                    Please choose one from the following based on your current version.<br><br>
+                    Note: If you are updating and your current version # is higher than the newest upgrade listed below then you have no <br />
+                    database updates to perform (code only changes). <br /><br />
+                </td>
             </tr>
             <tr>
                 <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
