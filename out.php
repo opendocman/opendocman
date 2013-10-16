@@ -23,15 +23,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 //$_SESSION['uid']=102; $sort_by = 'author';
 //$start_time = time();
-if (!isset($_SESSION['uid']))
-{
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-    exit;
-}
 
 // includes
 $GLOBALS['state'] = 1;
 require_once 'odm-load.php';
+
+if (!isset($_SESSION['uid']))
+{
+    redirect_visitor();
+}
 
 $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
 

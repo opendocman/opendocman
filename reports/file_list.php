@@ -24,13 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for session and $_REQUEST['id']
 session_start();
-if (!isset($_SESSION['uid']))
-{
-    header('Location:../index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
-}
 
 include('../odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+    redirect_visitor('../index.php?redirection=reports/file_list.php');
+}
 
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

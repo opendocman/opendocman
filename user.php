@@ -27,13 +27,12 @@ session_start();
 
 include('odm-load.php');
 
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
-
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-    exit;
+    redirect_visitor();
 }
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 // includes
 $secureurl = new phpsecureurl;
@@ -52,10 +51,9 @@ if (isset($_SESSION['uid']) & isset($_GET['item']))
         exit;
     }
 }
-if(!isset($_REQUEST['caller']))
-{	
-    $_REQUEST['caller'] = 'admin.php';
-}
+	
+$redirect = 'admin.php';
+
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if($user_obj->isAdmin() == true)
@@ -485,7 +483,6 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                     draw_header(msg('userpage_update_user') . $user_obj->getName() ,$last_message);	
                     ?>
                         <form name="update" id="modifyUserForm" action="user.php" method="POST" enctype="multipart/form-data">
-                        <INPUT type="hidden" name="caller" value="<?php echo $_REQUEST['caller']; ?>">
                         <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
 
@@ -655,11 +652,6 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         $_POST['admin'] = '0';
     }
 
-    if(!isset($_POST['caller']) || $_POST['caller'] == '')
-    {
-        $_POST['caller'] = 'admin.php';
-    }
-
     // UPDATE admin info
     if($user_obj->isAdmin())
     {
@@ -725,13 +717,9 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     }
 
     // back to main page
-    if(!isset($_POST['caller']))
-    {
-        $_POST['caller'] = 'admin.php';
-    }
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
-    header('Location: ' . $_POST['caller'] . '?last_message=' . $last_message);
+    header('Location: ' . $redirect . '?last_message=' . $last_message);
         }
         // CHOOSE USER TO UPDATE
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick')

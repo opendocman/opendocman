@@ -21,13 +21,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for valid session 
 session_start();
+
+include('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-    exit;
+    redirect_visitor();
 }
-// includes
-include('odm-load.php');
+
 //Fb::log($_REQUEST);exit;
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
