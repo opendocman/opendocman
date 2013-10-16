@@ -21,6 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 session_start();
 include('odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+  redirect_visitor();
+}
+
 include('udf_functions.php');
 require_once("AccessLog_class.php");
  
@@ -36,12 +42,6 @@ if(strchr($_REQUEST['id'], '_') )
 {
 	    header('Location:error.php?ec=20');
 }
-if (!isset($_SESSION['uid']))
-{
-  header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-  exit;
-}
-
 
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 

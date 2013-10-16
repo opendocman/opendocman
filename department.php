@@ -20,14 +20,14 @@
 
 // check for valid session 
 session_start();
-if (!isset($_SESSION['uid']))
-{
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
-}
 
 // includes
 include('odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+    redirect_visitor();
+}
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 

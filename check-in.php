@@ -21,12 +21,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for valid session and $id
 session_start();
+
+include('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
+    redirect_visitor();
 }
-include('odm-load.php');
+
 require_once("AccessLog_class.php");
 require_once("File_class.php");
 require_once('Email_class.php');

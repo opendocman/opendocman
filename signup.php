@@ -80,11 +80,6 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
             $_REQUEST['admin'] = 'no';
         }
 
-        if(!isset($_REQUEST['caller']) || $_REQUEST['caller'] == '')
-        {
-            $_REQUEST['caller'] = 'admin.php';
-        }
-
         $user_obj = new User($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
         // UPDATE admin info
@@ -136,12 +131,9 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
             }
         }
         // back to main page
-        if(!isset($_REQUEST['caller']))
-        {
-            $_REQUEST['caller'] = 'admin.php';
-        }
+
         $_REQUEST['last_message'] = urlencode('User successfully updated');
-        header('Location: ' . $_REQUEST['caller'] . '?last_message=' . $_REQUEST['last_message']);
+        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
     }
     ?>
         <html>

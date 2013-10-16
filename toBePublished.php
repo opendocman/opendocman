@@ -22,15 +22,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 
 include('odm-load.php');
-require_once("AccessLog_class.php");
-
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if (!isset ($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-    exit;
+    redirect_visitor();
 }
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
+require_once("AccessLog_class.php");
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if(!$user_obj->isReviewer())

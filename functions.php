@@ -897,3 +897,25 @@ function xss_clean($str)
 
     return $str;
 }
+
+/**
+ * Custom redirection handler
+ * @param string $url the internal page to redirect them to
+ */
+function redirect_visitor($url='')
+{
+    if($url=='') {
+        header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
+        exit;
+    } else {
+        // Lets make sure its not an outside URL
+        if(!preg_match('#^(http|https|ftp)://#', $url)) {
+            header('Location:' . $url);
+            exit;
+        } else {
+            header('Location:index.php');
+            exit;
+        }
+    }
+
+}

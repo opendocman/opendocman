@@ -1,7 +1,7 @@
 <?php
 /*
 index.php - main login form
-Copyright (C) 2002-2011 Stephen Lawrence Jr.
+Copyright (C) 2002-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -52,11 +52,11 @@ if(isset($_SESSION['uid']))
         // redirect to main page
         if(isset($_REQUEST['redirection']))
         {
-            header('Location:' . $_REQUEST['redirection']);
+            redirect_visitor($_REQUEST['redirection']);
         }
         else
         {
-            header('Location:out.php');
+            redirect_visitor('out.php');
         }
 }
 
@@ -96,11 +96,11 @@ if(isset($_POST['login']))
         // redirect to main page
         if(isset($_REQUEST['redirection']))
         {
-            header('Location:' . $_REQUEST['redirection']);
+            redirect_visitor($_REQUEST['redirection']);
         }
         else
         {
-            header('Location:out.php');
+           redirect_visitor('out.php');
         }
         mysql_free_result ($result);
         // close connection

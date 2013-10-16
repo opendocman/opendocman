@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (C) 2012  Stephen Lawrence Jr.
+Copyright (C) 2012-2013  Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,13 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for session and $_REQUEST['id']
 session_start();
-if (!isset($_SESSION['uid']))
-{
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
-}
 
 include('odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+    redirect_visitor();
+}
+
 include('udf_functions.php');
 $secureurl = new phpsecureurl;
 

@@ -1,7 +1,7 @@
 <?php
 /*
 in.php - display files checked out to user, offer link to check back in
-Copyright (C) 2002-2011 Stephen Lawrence Jr.
+Copyright (C) 2002-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,16 +21,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check session
 session_start();
+
+// includes
+include('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
+    redirect_visitor();
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-// includes
-include('odm-load.php');
 draw_header(msg('button_check_in'), $last_message);
 
 // query to get list of documents checked out to this user
