@@ -24,12 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 session_start();
 ob_end_clean();		//Make sure there are no garbage in buffer.
 ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
+
+include_once('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
+    redirect_visitor();
 }
-include_once('odm-load.php');
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 

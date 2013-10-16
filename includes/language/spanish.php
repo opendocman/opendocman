@@ -1,22 +1,22 @@
 <?php
 //SPANISH LANGUAGE FILE
-//(C) 2010-2012 Stephen Lawrence Jr.
-// Translator:  Ernesto Parra <eparrarincon@gmail.com>
+//(C) 2010-2013 Stephen Lawrence Jr.
+// Translators:  Obed Alberto Castillo Reyes <obdcastillo@gmail.com>, Ernesto Parra <eparrarincon@gmail.com>
 /*
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 $lang = array();
 global $lang;
 
@@ -196,7 +196,7 @@ $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = 'Es Administrador';
 $lang['label_is_reviewer'] = 'Es Revisor';
 $lang['label_last_name'] = 'Ultimo Nombre';
-$lang['label_logged_in_as'] = 'Logged in as';
+$lang['label_logged_in_as'] = 'Conectado como: ';
 $lang['label_moderation'] = 'Moderaci&oacute;n';
 $lang['label_modified_date'] = 'Fecha de Modificaci&oacute;n';
 $lang['label_modify'] = 'Modificar';
@@ -235,13 +235,12 @@ $lang['label_users_in_department'] = 'Usuarios en esta Area';
 $lang['label_view'] = 'Ver';
 $lang['label_userid'] = 'User ID';
 $lang['label_fileid'] = 'File ID';
-$lang['label_username'] = 'User Name';
-$lang['label_action'] = 'Action';
-$lang['label_date'] = 'Date';
-$lang['label_type_pr_sec'] = 'Type'; //CHM
-$lang['label_primary_type'] = 'Primary'; //CHM
-$lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
-
+$lang['label_username'] = 'Nombre de usuario';
+$lang['label_action'] = 'Accion';
+$lang['label_date'] = 'Fecha';
+$lang['label_type_pr_sec'] = 'Tipo'; //CHM
+$lang['label_primary_type'] = 'Primario'; //CHM
+$lang['label_sub_select_list'] = 'Lista con Sub-Seleccion'; //CHM
 // Mensajes
 $lang['message_account_created'] = 'Su usuario ha sido creado. Por favor revise su e-mail por informaci&oacute;n requerida .';
 $lang['message_account_created_add_user'] = 'Su usuario ha sido creado.';
@@ -342,15 +341,15 @@ $lang['message_your_password_has_been_changed'] = 'Su contrase&ntilde;a ha sido 
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
-$lang['addpage_forbidden'] = 'Forbidden';
-$lang['addpage_none'] = 'None';
-$lang['addpage_view'] = 'View';
-$lang['addpage_read'] = 'Read';
-$lang['addpage_write'] = 'Write';
-$lang['addpage_admin'] = 'Admin';
-$lang['addpage_new_file_added'] = 'A new file has been added';
-$lang['addpage_new'] = 'New';
-$lang['addpage_uploader'] = 'Uploader';
+$lang['addpage_forbidden'] = 'Prohibido';
+$lang['addpage_none'] = 'Ninguno';
+$lang['addpage_view'] = 'Ver';
+$lang['addpage_read'] = 'Leer';
+$lang['addpage_write'] = 'Escribir';
+$lang['addpage_admin'] = 'Administrar';
+$lang['addpage_new_file_added'] = 'Un nuevo archivo ha sido añadido';
+$lang['addpage_new'] = 'Nuevo';
+$lang['addpage_uploader'] = 'Subi&oacute;';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleccionar todo';
@@ -362,19 +361,19 @@ $lang['editpage_assign_owner'] = 'Asignar Propietario a';
 $lang['editpage_assign_department'] = 'Asignar al Area';
 $lang['editpage_filter'] = 'Filtro:';
 $lang['editpage_keyword'] = 'Palabras Clave';
-$lang['editpage_forbidden'] = 'Forbidden';
-$lang['editpage_none'] = 'None';
-$lang['editpage_view'] = 'View';
-$lang['editpage_read'] = 'Read';
-$lang['editpage_write'] = 'Write';
-$lang['editpage_admin'] = 'Admin';
+$lang['editpage_forbidden'] = 'Prohibido';
+$lang['editpage_none'] = 'Ninguno';
+$lang['editpage_view'] = 'Ver';
+$lang['editpage_read'] = 'Leer';
+$lang['editpage_write'] = 'Escribir';
+$lang['editpage_admin'] = 'Administrar';
 
 // Departments Page
-$lang['departmentpage_department_name_required'] = 'A department name is required';
+$lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
 
 // Delete/Undeleta Admin Page
-$lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
-$lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';
+$lang['undeletepage_file_permanently_deleted'] = 'El archivo fue borrado permanentemente';
+$lang['undeletepage_file_undeleted'] = 'El archivo ha sido restaurado';
 
 // Details Page
 $lang['detailspage_view'] = 'Ver';
@@ -383,18 +382,18 @@ $lang['detailspage_edit'] = 'Editar';
 $lang['detailspage_delete'] = 'Eliminar';
 $lang['detailspage_history'] = 'Historial';
 $lang['detailspage_are_sure'] = 'Esta Seguro?';
-$lang['detailspage_file_checked_out_to'] = 'Checked out to';
+$lang['detailspage_file_checked_out_to'] = 'Suspendido por';
 
 // Out Page
 $lang['outpage_view'] = 'Ver';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
-$lang['outpage_choose_an_order'] = 'Choose an order';
-$lang['outpage_choose'] = 'Choose';
-$lang['category_option_author'] = 'Author';
-$lang['category_option_department'] = 'Department';
-$lang['category_option_category'] = 'File Category';
-$lang['category_option_default'] = 'Empty';
+$lang['outpage_ascending'] = 'Ascendente';
+$lang['outpage_descending'] = 'Descendente';
+$lang['outpage_choose_an_order'] = 'Escoja un orden';
+$lang['outpage_choose'] = 'Elija';
+$lang['category_option_author'] = 'Autor';
+$lang['category_option_department'] = 'Departamento';
+$lang['category_option_category'] = 'Categoria de Archivo';
+$lang['category_option_default'] = 'Vacio';
 
 // History Page
 $lang['historypage_category'] = 'Categor&iacute;a:';
@@ -453,25 +452,25 @@ $lang['userpage_yes'] = 'S&iacute;';
 // Admin Page
 $lang['adminpage_edit_filetypes'] = 'Editar Tipo de Documentos';
 $lang['adminpage_edit_settings'] = 'Editar Configuraci&oacute;n';
-$lang['adminpage_reports'] = 'Reports';
-$lang['adminpage_access_log'] = 'Access Log';
-$lang['adminpage_reports_file_list'] = 'File List Export';
+$lang['adminpage_reports'] = 'Reportes';
+$lang['adminpage_access_log'] = 'Registro de cambios';
+$lang['adminpage_reports_file_list'] = 'Exportar Lista de Archivos';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
-$lang['accesslogpage_file_added'] = 'File Added';
-$lang['accesslogpage_file_viewed'] = 'File Viewed';
-$lang['accesslogpage_file_downloaded'] = 'File Downloaded';
-$lang['accesslogpage_file_modified'] = 'File Modified';
-$lang['accesslogpage_file_checked_in'] = 'File Checked-in';
-$lang['accesslogpage_file_checked_out'] = 'File Checked-out';
-$lang['accesslogpage_file_deleted'] = 'File Deleted';
-$lang['accesslogpage_file_authorized'] = 'File Authorized';
-$lang['accesslogpage_file_rejected'] = 'File Rejected';
-$lang['accesslogpage_reserved'] = 'Reserved';
+$lang['accesslogpage_file_added'] = 'Archivo agregado';
+$lang['accesslogpage_file_viewed'] = 'Archivo Visto';
+$lang['accesslogpage_file_downloaded'] = 'Archivo Descargado';
+$lang['accesslogpage_file_modified'] = 'Archivo Modificado';
+$lang['accesslogpage_file_checked_in'] = 'Archivo Ingresado';
+$lang['accesslogpage_file_checked_out'] = 'Archivo Suspendido';
+$lang['accesslogpage_file_deleted'] = 'Archivo Borrado';
+$lang['accesslogpage_file_authorized'] = 'Archivo Autorizado';
+$lang['accesslogpage_file_rejected'] = 'Archivo Rechazado';
+$lang['accesslogpage_reserved'] = 'Reservado';
 
 // Check-in Page
-$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
+$lang['checkinpage_file_was_checked_in'] = 'Su archivo fue ingresado.';
 
 //Category View Page
-$lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
+$lang['categoryviewpage_list_of_files_title'] = 'Archivos Asignados a esta Categor&iacute;a:';

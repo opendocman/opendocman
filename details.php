@@ -21,11 +21,13 @@
  */
 
 session_start();
-if (!isset($_SESSION['uid'])) {
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-    exit;
-}
+
 include('odm-load.php');
+
+if (!isset($_SESSION['uid'])) {
+    redirect_visitor();
+}
+
 include('udf_functions.php');
 
 $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';

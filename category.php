@@ -20,13 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check for valid session 
 session_start();
-if (!isset($_SESSION['uid']))
-{
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-    exit;
-}
+
 // includes
 include('odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+    redirect_visitor();
+}
+
 $secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 // Check to see if user is admin

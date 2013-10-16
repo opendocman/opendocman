@@ -18,20 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-
-include('odm-load.php');
 session_start();
-//$_SESSION['uid'] = 102;
-//$_GET['submit'] = 'view_checkedout';
-//echo $_POST['submit'];
-
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+include('odm-load.php');
 
 if (!isset($_SESSION['uid']))
 {
-	header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']) );
-	exit;
+	redirect_visitor();
 }
+
+$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
