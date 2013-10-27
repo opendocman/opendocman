@@ -32,7 +32,7 @@ include('udf_functions.php');
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-/*$_GET['where']='department_only';
+/*$_GET['where']='department';
   $_GET['keyword']='Information Systems';
   $_SESSION['uid']=102;
   $_GET['submit']='submit';
@@ -59,17 +59,17 @@ if(!isset($_GET['submit']))
             <tr>
                 <td valign="top"><b><?php echo msg('search');?></b></td>
                 <td><select name="where">
-                        <option value="author_only"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";?></option>
-                        <option value="department_only"><?php echo msg('department');?></option>
-                        <option value="category_only"><?php echo msg('category');?></option>
-                        <option value="descriptions_only"><?php echo msg('label_description');?></option>
-                        <option value="filenames_only"><?php echo msg('label_filename');?></option>
-                        <option value="comments_only"><?php echo msg('label_comment');?></option>
-                        <option value="file_id_only"><?php echo msg('file');?> #</option>
+                        <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";?></option>
+                        <option value="department"><?php echo msg('department');?></option>
+                        <option value="category"><?php echo msg('category');?></option>
+                        <option value="descriptions"><?php echo msg('label_description');?></option>
+                        <option value="filenames"><?php echo msg('label_filename');?></option>
+                        <option value="comments"><?php echo msg('label_comment');?></option>
+                        <option value="file_id"><?php echo msg('file');?> #</option>
                             <?php
                             udf_functions_search_options();
                             ?>
-                        <option value="all" selected><?php echo msg('all');?></option>
+                        <option value="all" selected><?php echo msg('searchpage_all_meta');?></option>
                     </select></td>
             </tr>
 
@@ -126,12 +126,12 @@ else
 
             // Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
-            case 'category_only':
+            case 'category':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'category.name' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
             // Put all the author name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the author name array are synchronized.
-            case 'author_only':
+            case 'author':
                 if( $lexact_phrase=='on' )
                 {
                     $lquery .= $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
@@ -142,26 +142,26 @@ else
                 }
                 break;
             // Put all the department name for each of the OBJ in the OBJ array into an array
-            // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department_only':
-            case 'department_only':
+            // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department':
+            case 'department':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'department.name' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
             // Put all the description for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the description array are synchronized.
-            case 'descriptions_only':
+            case 'descriptions':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.description' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
             // Put all the file name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the file name array are synchronized.
-            case 'filenames_only':
+            case 'filenames':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.realname' . $lequate . '\'' . $lkeyword . '\'';
                 break;
             // Put all the comments for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the comments array are synchronized.
-            case 'comments_only':
+            case 'comments':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
                 break;
-            case 'file_id_only':
+            case 'file_id':
                 $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.id' . $lequate . '\'' . $lkeyword . '\'';
                 break;
             case 'all':
@@ -178,7 +178,7 @@ else
                 break;
 
         }
-        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";      
+        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";            
         $lresult = mysql_query($lquery_pre.$lquery);
 
         $lindex = 0;
