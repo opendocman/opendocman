@@ -161,7 +161,7 @@ if (!isset($_REQUEST['submit']))
 		<table border="0" cellspacing="5" cellpadding="5">
 		<form name=main action="<?php  echo $_SERVER['PHP_SELF']; ?>" method="POST" onsubmit="return checksec();">
         
-		<?
+		<?php
         //CHM
         $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
         $result = mysql_query($query) or die ("Error in query163: $query. " . mysql_error());
@@ -173,7 +173,7 @@ if (!isset($_REQUEST['submit']))
             ?>
             <input type="hidden" id="secondary<?=$i?>" name="secondary<?=$i?>" value="" /> <!-- CHM hidden and onsubmit added-->
             <input type="hidden" id="tablename<?=$i?>" name="tablename<?=$i?>" value="<?=$t_name?>" /> <!-- CHM hidden and onsubmit added-->
-         <? 
+         <?php
         $i++; 
         }?>
       <input id="i_value" type="hidden" name="i_value" value="<?=$i?>" /> <!-- CHM hidden and onsubmit added-->

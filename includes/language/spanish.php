@@ -474,3 +474,6 @@ $lang['checkinpage_file_was_checked_in'] = 'Su archivo fue ingresado.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Archivos Asignados a esta Categor&iacute;a:';
+
+//Search Page
+$lang['searchpage_all_meta'] = 'All non-udf metadata';

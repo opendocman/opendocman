@@ -630,18 +630,23 @@ if ( !defined('udf_functions') )
         while ($row = mysql_fetch_row($result))
         {
             $name = str_replace(' ', '_', $row[2]);
-            echo '<option value="'.$name.'">'.$name.' only</option>';
+            echo '<option value="'.$name.'">'.$name.'</option>';
         }
         mysql_free_result($result);
     }
 
+    /**
+     * Perform search on UDF fields
+     * @param type $lwhere
+     * @param string $lquery_pre
+     * @param type $lquery
+     * @param type $lequate
+     * @param type $lkeyword
+     * @return array
+     */
     function udf_functions_search($lwhere,$lquery_pre,$lquery,$lequate,$lkeyword)
     {
-        $tmp = $lwhere;
-       
-        $dn = str_replace('_', ' ', $tmp);
-
-        $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $dn . "\"";
+        $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = \"" . $lwhere . "\"";     
         $result = mysql_query($query) or die ("Error in query369: $query. " . mysql_error());
         $row = mysql_fetch_row($result);
 
