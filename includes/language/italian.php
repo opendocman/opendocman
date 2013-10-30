@@ -475,3 +475,6 @@ $lang['checkinpage_file_was_checked_in'] = 'Un file è stato caricato.';  // ema
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Documenti assegnati alla categoria: ';
+
+//Search Page
+$lang['searchpage_all_meta'] = 'All non-udf metadata';

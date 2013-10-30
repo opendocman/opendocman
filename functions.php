@@ -494,7 +494,7 @@ function sort_browser()
                         echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
 
                         echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
-						?>
+                    				?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
                         for(i=0; i< order_array.length; i++)
@@ -507,7 +507,7 @@ function sort_browser()
 
                     function load(select_box)
                     {
-                        window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option) + "&exact_phrase=on";
+                        window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option) + "&exact_phrase=on";
                     }
         <?php
         ///////////////////////////////FOR AUTHOR///////////////////////////////////////////
