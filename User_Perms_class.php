@@ -1,7 +1,7 @@
 <?php
 /*
 User_Perms_class.php - relates users to specific files
-Copyright (C) 2002-2012 Stephen Lawrence Jr.
+Copyright (C) 2002-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -257,7 +257,7 @@ if ( !defined('User_Perms_class') )
         {
             if($GLOBALS['CONFIG']['root_id'] == $this->user_obj->getId())
             {
-                return true;
+                return 4;
             }
 
             $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
@@ -289,6 +289,15 @@ if ( !defined('User_Perms_class') )
             }
             mysql_free_result($result);
             return $rightsListArray;
+        }
+
+        public function getPermissionForUser($user_id, $data_id)
+        {
+            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = $user_id and fid = $data_id";
+            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: .$query" . mysql_error());
+            list($permission) = mysql_fetch_row($result);
+
+            return $permission;
         }
 
     }
