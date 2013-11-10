@@ -123,7 +123,7 @@ if (!isset($_REQUEST['submit'])) {
             $avail_user_perms['first_name'] = $user['first_name'];
             $avail_user_perms['last_name'] = $user['last_name'];
             $avail_user_perms['id'] = $user['id'];
-            $avail_user_perms['rights'] = $user_perms_obj::getPermissionForUser($user['id'], $data_id);          
+            $avail_user_perms['rights'] = $user_perms_obj->getPermissionForUser($user['id'], $data_id);          
             array_push($user_perms_array, $avail_user_perms);
         }
      
