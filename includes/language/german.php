@@ -476,3 +476,6 @@ $lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Datei wurde einer Kategorie zugeordnet:';
+
+//Search Page
+$lang['searchpage_all_meta'] = 'All non-udf metadata';

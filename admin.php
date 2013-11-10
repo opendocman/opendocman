@@ -24,12 +24,13 @@ session_start();
 // check for valid session
 // includes
 include('odm-load.php');
-include('udf_functions.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode( $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] ) );
-    exit;
+    redirect_visitor();
 }
+
+include('udf_functions.php');
 
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);

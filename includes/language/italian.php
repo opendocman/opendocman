@@ -21,9 +21,9 @@ $lang = array();
 global $lang;
 
 // Login
-$lang['anonymous_link']  = 'Clicca qui per visualizzare i file pubblici in modo anonimo';
+$lang['anonymous_link'] = 'Clicca qui per visualizzare i file pubblici in modo anonimo';
 $lang['forgotpassword'] = 'Password dimenticata?';
-$lang['install_folder']  = 'Avviso di sicurezza: Se hai gi&agrave; installato/aggiornato dovresti rimuovere la cartella \'install\' prima di procedere';
+$lang['install_folder']  = 'Avviso di sicurezza: se hai gi&agrave; installato/aggiornato dovresti rimuovere la cartella \'install\' prima di procedere';
 $lang['signup'] = 'Registrati per un nuovo account';
 $lang['welcome'] = 'Benvenuto in OpenDocMan';
 $lang['welcome2'] = 'Accedi per iniziare ad usare i potenti strumenti di archiviazione, revisione e pubblicazione del sistema';
@@ -103,7 +103,7 @@ $lang['button_add_document'] = 'Aggiungi documento';
 $lang['button_authorize'] = 'Autorizza';
 $lang['button_back'] = 'Indietro';
 $lang['button_cancel'] = 'Annulla';
-$lang['button_check_in'] = 'Carica';
+$lang['button_check_in'] = 'Carico/Scarico';
 $lang['button_clear_status'] = 'Ripristina stato';
 $lang['button_click_here'] = 'Clicca qui';
 $lang['button_continue'] = 'Continua';
@@ -122,36 +122,36 @@ $lang['button_view_department'] = 'Visualizza Settore';
 $lang['button_yes'] = 'S&igrave;';
 
 //Email
-$lang['email_added_to_repository'] = 'aggiunto all\'archivio';
-$lang['email_a_new_file_has_been_added'] = 'Un nuovo documento &egrave; stato aggiunto';
-$lang['email_a_new_file_has_been_rejected'] = 'Un nuovo documento &egrave; stato respinto';
-$lang['email_automated_document_messenger'] = 'il Gestore Automatico Messaggi';
-$lang['email_because_you_did_not_revise'] = 'perch&egrave; non &egrave; stato revisionato da pi&ugrave; di';
-$lang['email_comments_regarding_review'] = 'Commenti che riguardano la sua revisione del documento';
-$lang['email_custom_comment'] = 'Commento (personalizza)';
-$lang['email_email_all_users'] = 'Manda una email a tutti gli utenti';
-$lang['email_email_these_users'] = 'Manda una email a questi utenti';
-$lang['email_email_whole_department'] = 'Manda una email a tutto il settore';
-$lang['email_file_expired'] = 'Un documento &egrave; scaduto';
-$lang['email_file_was_rejected_because'] = 'Il suo documento &egrave; stato respinto perch&egrave; non &egrave; stato revisionato da pi&ugrave; di';
-$lang['email_file_was_rejected_expired'] = 'Il suo documento &egrave; scaduto. E\' pregato di revisionare il documento il pi&ugrave; presto possibile. Il suo documento potrebbe essere inaccessibile fino alla revisione.';
-$lang['email_for_the_following_reasons'] = 'per le seguenti ragioni';
-$lang['email_greeting'] = 'Gentile Autore,';
-$lang['email_i_would_like_to_inform'] = 'la informo che';
-$lang['email_note_to_authors'] = 'Note agli autori';
-$lang['email_revision_days'] = 'Numero massimo di giorni prima della scadenza:';
-$lang['email_salute'] = 'Cordialmente';
-$lang['email_someone_has_requested_password'] = 'E\' stato richiesto il cambiamento della password. Per cambiare la password cliccate il link qui sotto. Se non intendete cambiare la password ignorate questo messaggio.';
-$lang['email_status_expired'] = 'Stato: Scaduto';
-$lang['email_subject_review_status'] = 'Stato revisione del documento ';
-$lang['email_subject'] = 'Oggetto (personalizza)';
-$lang['email_thank_you'] = 'Grazie';
-$lang['email_to'] = 'A (personalizza)';
-$lang['email_was_declined_for_publishing_at'] = 'E\' stata respinta la pubblicazione in';
-$lang['email_was_rejected_from_repository'] = 'E\' stato respinto dall\'archivio';
-$lang['email_you_can_now_login'] = 'Adesso pu&ograve; accedere con il suo account da questa pagina';
-$lang['email_your_account_created'] = 'il suo account di gestione del documento &egrave; stato creato in';
-$lang['email_your_file_has_been_authorized'] = 'Il suo documento &egrave; stato autorizzato per la pubblicazione';
+$lang['email_added_to_repository'] = 'aggiunto all\'archivio';  // email msg
+$lang['email_a_new_file_has_been_added'] = 'Un nuovo documento è stato aggiunto';  // email msg
+$lang['email_a_new_file_has_been_rejected'] = 'Un nuovo documento è stato respinto';  // email msg
+$lang['email_automated_document_messenger'] = 'il Gestore Automatico di Messaggi';  // email msg
+$lang['email_because_you_did_not_revise'] = 'perché non è stato revisionato da più di';  // email msg
+$lang['email_comments_regarding_review'] = 'Commenti che riguardano la sua revisione del documento';  // email msg
+$lang['email_custom_comment'] = 'Commento (personalizza)';  // email msg
+$lang['email_email_all_users'] = 'Manda una email a tutti gli utenti';  // email msg
+$lang['email_email_these_users'] = 'Manda una email a questi utenti';  // email msg
+$lang['email_email_whole_department'] = 'Manda una email a tutto il settore';  // email msg
+$lang['email_file_expired'] = 'Un documento è scaduto';  // email msg
+$lang['email_file_was_rejected_because'] = 'Il suo documento è stato respinto perché non è stato revisionato da più di';  // email msg
+$lang['email_file_was_rejected_expired'] = 'Il suo documento è scaduto. E\' pregato di revisionare il documento il più presto possibile. Il suo documento potrebbe essere inaccessibile fino alla revisione.';  // email msg
+$lang['email_for_the_following_reasons'] = 'per le seguenti ragioni';  // email msg
+$lang['email_greeting'] = 'Gentile Autore,';  // email msg
+$lang['email_i_would_like_to_inform'] = 'la informo che';  // email msg
+$lang['email_note_to_authors'] = 'Nota agli autori';  // email msg
+$lang['email_revision_days'] = 'Numero massimo di giorni prima della scadenza:';  // email msg
+$lang['email_salute'] = 'Cordialmente';  // email msg
+$lang['email_someone_has_requested_password'] = 'E\' stato richiesto il cambiamento della password. Per cambiare la password cliccate il link qui sotto. Se non intendete modificare la password potete ignorare questo messaggio.';  // email msg
+$lang['email_status_expired'] = 'Stato: Scaduto';  // email msg
+$lang['email_subject_review_status'] = 'Stato revisione del documento ';  // email msg
+$lang['email_subject'] = 'Oggetto (personalizza)';  // email msg
+$lang['email_thank_you'] = 'Grazie';  // email msg
+$lang['email_to'] = 'A (personalizza)';  // email msg
+$lang['email_was_declined_for_publishing_at'] = 'E\' stata respinta la pubblicazione in';  // email msg
+$lang['email_was_rejected_from_repository'] = 'E\' stato respinto dall\'archivio';  // email msg
+$lang['email_you_can_now_login'] = 'Adesso può accedere con il suo account da questa pagina';  // email msg
+$lang['email_your_account_created'] = 'il suo account di gestione del documento è stato creato in';  // email msg
+$lang['email_your_file_has_been_authorized'] = 'Il suo documento è stato autorizzato per la pubblicazione';  // email msg
 
 // Labels
 $lang['label_active'] = 'Attivo';
@@ -162,15 +162,15 @@ $lang['label_all_departments'] = 'Attribuisci a tutti i settori';
 $lang['label_assign_to'] = 'Assegna a';
 $lang['label_author'] = 'Autore';
 $lang['label_browse_by'] = 'Filtra per:';
-$lang['label_case_sensitive'] = 'Maiusc./minusc.';
+$lang['label_case_sensitive'] = 'Maiusc./minusc. ';
 $lang['label_checked_out_files'] = 'File scaricati';
 $lang['label_check_expiration'] = 'Controlla scadenza';
 $lang['label_comment'] = 'Commento';
 $lang['label_created_date'] = 'Data creazione';
-$lang['label_default_for_unset'] = 'Permessi predefiniti del settore';
+$lang['label_default_for_unset'] = 'Permessi per il settore predefinito';
 $lang['label_delete'] = 'Cancella';
 $lang['label_delete_undelete'] = 'Elimina/Ripristina';
-$lang['label_department_authority'] = 'Permessi specifici per il settore';
+$lang['label_department_authority'] = 'Permessi per il settore selezionato';
 $lang['label_department'] = 'Settore';
 $lang['label_departments'] = 'Settori';
 $lang['label_department_to_modify'] = 'Settori da modificare';
@@ -190,12 +190,13 @@ $lang['label_filetype'] = 'tipo di file';
 $lang['label_filetypes'] = 'tipi di file';
 $lang['label_file_name'] = 'Nome file';
 $lang['label_first_name'] = 'Nome';
-$lang['label_forbidden'] = 'Accesso negato';
+$lang['label_forbidden'] = 'Nega accesso';
 $lang['label_found_documents'] = 'documenti trovati';
 $lang['label_id'] = 'ID';
 $lang['label_is_admin'] = '&egrave; amministratore';
 $lang['label_is_reviewer'] = '&egrave; revisore';
 $lang['label_last_name'] = 'Cognome';
+$lang['label_logged_in_as'] = 'Accesso come: ';
 $lang['label_moderation'] = 'Revisione';
 $lang['label_modified_date'] = 'Data modifica';
 $lang['label_modify'] = 'Modifica';
@@ -208,13 +209,13 @@ $lang['label_phone_number'] = 'Numero di telefono';
 $lang['label_plugins'] = 'Plug-in';
 $lang['label_prev'] = 'Precedente';
 $lang['label_radio_button'] = 'Selettore multiplo';
-$lang['label_read'] = 'Leggi';
+$lang['label_read'] = 'Legge';
 $lang['label_reassign_to'] = 'Riassegna a';
 $lang['label_rejected_files'] = 'Respingi file';
 $lang['label_rejections'] = 'Respinti';
 $lang['label_reviewer_for'] = 'Revisore per il settore';
 $lang['label_reviewer'] = 'Revisore';
-$lang['label_reviews'] = 'Revisionati';
+$lang['label_reviews'] = 'In revisione';
 $lang['label_rights'] = 'Permessi';
 $lang['label_run_expiration'] = 'Esegui utility della scadenza';
 $lang['label_search_term'] = 'Termini di ricerca';
@@ -223,7 +224,7 @@ $lang['label_select_departments'] = 'Seleziona i settori';
 $lang['label_select_one'] = 'Seleziona ...';
 $lang['label_settings'] = 'Impostazioni';
 $lang['label_size'] = 'Dimensione';
-$lang['label_specific_permissions'] = 'Permessi specifici per gli utenti';
+$lang['label_specific_permissions'] = 'Permessi per l\'utente selezionato';
 $lang['label_status'] = 'Stato';
 $lang['label_text'] = 'Testo';
 $lang['label_update'] = 'Aggiorna';
@@ -320,7 +321,7 @@ $lang['message_this_file_cannot_be_uploaded'] = 'Questo file non pu&ograve; esse
 $lang['message_this_operation_cannot_be_done_file'] = 'Questa operazione non pu&ograve; essere effettuata su questo file';
 $lang['message_this_operation_cannot_be_done_rev'] = 'Questa operazione non pu&ograve; essere effettuata su una revisione del file';
 $lang['message_this_page_requires_root'] = 'Questa pagina necessita dei permessi da amministratore';
-$lang['message_this_site_has_high_security']  = 'Questo sito ha un alto livello di sicurezza e non &egrave; possibile recuperare la password. Puoi usare questo modulo per impostare una nuova password. Inserisci il nome utente e riceverai una email con un collegamento per il reset della password. A quel punto potrai cambiarla con il valore che desideri.';
+$lang['message_this_site_has_high_security'] = 'Questo sito ha un alto livello di sicurezza e non &egrave; possibile recuperare la password. Puoi usare questo modulo per impostare una nuova password. Inserisci il nome utente e riceverai una email con un collegamento per il reset della password. A quel punto potrai cambiarla come desideri.';
 $lang['message_to_view_your_file'] = 'Per visualizzare il file in una nuova finestra';
 $lang['message_udf_cannot_be_blank'] = 'Il nome UDF non pu&ograve; essere vuoto';
 $lang['message_udf_successfully_added'] = 'Campo definito dall utente aggiunto con successo';
@@ -341,14 +342,15 @@ $lang['message_your_password_has_been_changed'] = 'La tua password &egrave; stat
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
+$lang['addpage_forbidden'] = 'Non accede';
 $lang['addpage_none'] = 'Nessuno';
-$lang['addpage_view'] = 'View';
-$lang['addpage_read'] = 'Read';
-$lang['addpage_write'] = 'Write';
-$lang['addpage_admin'] = 'Admin';
-$lang['addpage_new_file_added'] = 'A new file has been added';
-$lang['addpage_new'] = 'New';
-$lang['addpage_uploader'] = 'Uploader';
+$lang['addpage_view'] = 'Visualizza';
+$lang['addpage_read'] = 'Legge';
+$lang['addpage_write'] = 'Modifica';
+$lang['addpage_admin'] = 'Gestisce';
+$lang['addpage_new_file_added'] = 'Nuovo file aggiunto';
+$lang['addpage_new'] = 'Nuovo';
+$lang['addpage_uploader'] = 'Carica';
 $lang['addpage_file_missing'] = 'Please select a file to upload';
 
 // Edit File Page
@@ -361,14 +363,14 @@ $lang['editpage_assign_owner'] = 'Assegna al proprietario';
 $lang['editpage_assign_department'] = 'Assegna al settore';
 $lang['editpage_filter'] = 'Filtro:';
 $lang['editpage_keyword'] = 'Inserisci parole chiave';
-$lang['editpage_forbidden'] = 'Forbidden';
+$lang['editpage_forbidden'] = 'Non accede';
 $lang['editpage_none'] = 'Nessuno';
-$lang['editpage_view'] = 'View';
-$lang['editpage_read'] = 'Read';
-$lang['editpage_write'] = 'Write';
-$lang['editpage_admin'] = 'Admin';
+$lang['editpage_view'] = 'Visualizza';
+$lang['editpage_read'] = 'Legge';
+$lang['editpage_write'] = 'Modifica';
+$lang['editpage_admin'] = 'Gestisce';
 
-// Delete/Undelete Admin Page
+// Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Il file &egrave; stato eliminato definitivamente';
 $lang['undeletepage_file_undeleted'] = 'Il file &egrave; stato ripristinato';
 
@@ -377,23 +379,23 @@ $lang['departmentpage_department_name_required'] = 'Il nome del settore &egrave;
 
 // Details Page
 $lang['detailspage_view'] = 'Visualizza';
-$lang['detailspage_check_out'] = 'Scarica';
+$lang['detailspage_check_out'] = 'Prendi in carico';
 $lang['detailspage_edit'] = 'Modifica';
 $lang['detailspage_delete'] = 'Cancella';
 $lang['detailspage_history'] = 'Cronologia';
 $lang['detailspage_are_sure'] = 'Sei sicuro?';
-$lang['detailspage_file_checked_out_to'] = 'Checked out to';
+$lang['detailspage_file_checked_out_to'] = 'In carico a';
 
 // Out Page
 $lang['outpage_view'] = 'Visualizza';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
-$lang['outpage_choose_an_order'] = 'Choose an order';
-$lang['outpage_choose'] = 'Choose';
-$lang['category_option_author'] = 'Author';
-$lang['category_option_department'] = 'Department';
-$lang['category_option_category'] = 'File Category';
-$lang['category_option_default'] = 'Empty';
+$lang['outpage_ascending'] = 'ascendente';
+$lang['outpage_descending'] = 'discendente';
+$lang['outpage_choose_an_order'] = 'Scegli un ordine';
+$lang['outpage_choose'] = 'Scegli';
+$lang['category_option_author'] = 'Autore';
+$lang['category_option_department'] = 'Settore';
+$lang['category_option_category'] = 'Categoria file';
+$lang['category_option_default'] = 'Vuoto';
 
 // History Page
 $lang['historypage_category'] = 'Categoria: ';
@@ -454,6 +456,7 @@ $lang['adminpage_edit_filetypes'] = 'Modifica i tipi di file';
 $lang['adminpage_edit_settings'] = 'Modifica le impostazioni';
 $lang['adminpage_reports'] = 'Report';
 $lang['adminpage_access_log'] = 'Registro attivit&agrave;';
+$lang['adminpage_reports_file_list'] = 'Esporta elenco file (csv)';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Registro attivit&agrave;';
@@ -469,7 +472,10 @@ $lang['accesslogpage_file_rejected'] = 'file respinto';
 $lang['accesslogpage_reserved'] = 'Riservato';
 
 // Check-in Page
-$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
+$lang['checkinpage_file_was_checked_in'] = 'Un file è stato caricato.';  // email msg
 
-// Category View Page
+//Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Documenti assegnati alla categoria: ';
+
+//Search Page
+$lang['searchpage_all_meta'] = 'All non-udf metadata';

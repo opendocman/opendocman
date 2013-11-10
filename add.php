@@ -26,12 +26,13 @@ setData(selected_rb_name) is invoked.  This function will set the data in the ap
 
 session_start();
 
+include('odm-load.php');
+
 if (!isset($_SESSION['uid']))
 {
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-    exit;
+    redirect_visitor();
 }
-include('odm-load.php');
+
 include('udf_functions.php');
 require_once("AccessLog_class.php");
 require_once("File_class.php");
@@ -170,7 +171,7 @@ else
         }           
 
         // illegal file type!
-        if ($allowedFile != 1)
+        if (!isset($allowedFile) || $allowedFile != 1)
         {
             $last_message = 'MIMETYPE: ' . $file_mime . ' Failed';
             header('Location:error.php?ec=13&last_message=' . urlencode($last_message));

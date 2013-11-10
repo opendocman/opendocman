@@ -2,7 +2,7 @@
 /*
 User_class.php - Container for user related info
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2013 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -169,7 +169,7 @@ if( !defined('User_class') )
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" . mysql_error() );
             if(mysql_num_rows($result) !=1 )
             {
-                header('Location:error.php?ec=14');
+                header('Location:' . $GLOBALS['CONFIG']['base_url'] . 'error.php?ec=14');
                 exit;
             }
             else

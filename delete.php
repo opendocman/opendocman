@@ -31,10 +31,7 @@ require_once("AccessLog_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if( !isset($_REQUEST['caller']) )
-{
-    $_REQUEST['caller'] = 'out.php';
-}
+$redirect = 'out.php';
 
 $userperm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
@@ -126,7 +123,7 @@ elseif(isset($_POST['submit']) && $_POST['submit']=='Delete file(s)')
             exit;
         }
     }
-    header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
+    header('Location:' . $redirect . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete')
 {
@@ -139,7 +136,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete')
             fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
         }
     }
-    header('Location:' . $_REQUEST['caller'] . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
+    header('Location:' . $redirect . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
 }
 
 draw_footer();

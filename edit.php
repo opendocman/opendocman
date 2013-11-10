@@ -22,6 +22,12 @@
 
 session_start();
 include('odm-load.php');
+
+if (!isset($_SESSION['uid']))
+{
+  redirect_visitor();
+}
+
 include('udf_functions.php');
 require_once("AccessLog_class.php");
 require_once("User_Perms_class.php");
@@ -38,11 +44,6 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
 if (strchr($_REQUEST['id'], '_')) {
     header('Location:error.php?ec=20');
 }
-if (!isset($_SESSION['uid'])) {
-    header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
-    exit;
-}
-
 
 $filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
 
