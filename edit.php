@@ -146,6 +146,7 @@ if (!isset($_REQUEST['submit'])) {
         $GLOBALS['smarty']->assign('pre_selected_department', $department);
         $GLOBALS['smarty']->assign('description', $description);
         $GLOBALS['smarty']->assign('comment', $comment);
+        $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
        
         display_smarty_template('edit.tpl');
         udf_edit_file_form();
@@ -214,8 +215,7 @@ if (!isset($_REQUEST['submit'])) {
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights = $dept_perm where fid=" . $filedata->getId() . " and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = $dept_id";
         mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
     }
-    // clean up
-    mysql_freeresult($result);
+
     $message = urlencode('Document successfully updated');
 
     AccessLog::addLogEntry($fileId, 'M');

@@ -4,6 +4,7 @@
 
 <!-- file upload formu using ENCTYPE -->
 <form name="main" action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
+    <input type="hidden" id="db_prefix" value="{$db_prefix}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    
 {foreach from=$t_name item=name name='loop1'}

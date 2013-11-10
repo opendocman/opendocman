@@ -118,7 +118,8 @@ if(!isset($_POST['submit']))
     $GLOBALS['smarty']->assign('cats_array', $cats_array);
     $GLOBALS['smarty']->assign('dept_perms_array', $dept_perms_array);
     $GLOBALS['smarty']->assign('user_id', $_SESSION['uid']);
-
+    $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
+    
     display_smarty_template('add.tpl');
 
     // Call the plugin API

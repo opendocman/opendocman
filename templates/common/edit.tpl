@@ -4,6 +4,7 @@
 
 <!-- file upload formu using ENCTYPE -->
 <form name="main" action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
+    <input type="hidden" id="db_prefix" value="{$db_prefix}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    
 {foreach from=$t_name item=name name='loop1'}
@@ -11,7 +12,7 @@
     <input type="hidden" id="tablename{$i}" name="tablename{$i}" value="{$name}" /> <!-- CHM hidden and onsubmit added-->
     {assign var='i' value=$i+1}
 {/foreach}
-    <input type="hidden" name="id" value="{$file_id}" />
+    <input type="hidden" id="id" name="id" value="{$file_id}" />
     <input id="i_value" type="hidden" name="i_value" value="{$i}" /> <!-- CHM hidden and onsubmit added-->
     <tr>
 		<td>{$g_lang_label_name}</td>
