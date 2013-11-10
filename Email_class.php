@@ -96,7 +96,7 @@ class Email
     }
 
     public function setRecipients($recipients)
-    {
+    {      
         if(!is_array($recipients)) {
             return false;
         }
@@ -104,9 +104,12 @@ class Email
     }
 
     public function sendEmail()
-    {        
-        $this->setHeaders();       
-        email_users_id($this->getRecipients(), $this->getSubject(), $this->getBody(), $this->getHeaders());
+    {
+        if ((count($this->getRecipients()) > 0)) {
+            $this->setHeaders();
+            email_users_id($this->getRecipients(), $this->getSubject(), $this->getBody(), $this->getHeaders());
+        }
+        return true;
     }
 
 }

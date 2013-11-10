@@ -85,6 +85,8 @@ if (!isset($_REQUEST['submit'])) {
         $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
         $result = mysql_query($query) or die("Error in query163: $query. " . mysql_error());
         $num_rows = mysql_num_rows($result);
+        
+        $t_name = array();
         $i = 0;
         while ($data = mysql_fetch_array($result)) {
             $explode_v = explode('_', $data['table_name']);
@@ -127,7 +129,7 @@ if (!isset($_REQUEST['submit'])) {
             $avail_user_perms['rights'] = $user_perms_obj->getPermissionForUser($user['id'], $data_id);          
             array_push($user_perms_array, $avail_user_perms);
         }
-     
+    
         // Call Plugin API
         callPluginMethod('onBeforeEditFile', $data_id);
 
@@ -161,6 +163,7 @@ if (!isset($_REQUEST['submit'])) {
     callPluginMethod('onBeforeEditFileSaved');
 
     $filedata->setId($fileId);
+    $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
     foreach( $_REQUEST['user_permission'] as $permission ) {
