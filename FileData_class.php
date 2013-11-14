@@ -480,6 +480,28 @@ if( !defined('FileData_class') )
             
             return $did;
         }
+        
+        /**
+         * Return the dept rights on this file for a given department
+         * @param type $dept_id
+         * @return int
+         */
+        function getDeptRights($dept_id)
+        {
+            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights
+                        FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
+			WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $this->id 
+	  		AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $dept_id";
+            $result = mysql_query($query, $this->connection) or die("Error in query: " .$query . mysql_error() );  
+            
+            for($i = 0; $i<mysql_num_rows($result); $i++)
+            {
+                list($rights) = mysql_fetch_row($result);
+            }
+            mysql_free_result($result);
+            
+            return $rights;            
+        }
 
         // convert a an array of user id into an array of user object
         function toUserOBJs($uid_array)
