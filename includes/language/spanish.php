@@ -351,6 +351,7 @@ $lang['addpage_new_file_added'] = 'Un nuevo archivo ha sido añadido';
 $lang['addpage_new'] = 'Nuevo';
 $lang['addpage_uploader'] = 'Subi&oacute;';
 $lang['addpage_file_missing'] = 'Please select a file to upload';    
+$lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleccionar todo';
