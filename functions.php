@@ -259,16 +259,19 @@ function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_heade
     }
 }
 function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
-{      
+{         
     for($i = 0; $i<sizeof($user_ID_array); $i++)
     {
         if(($user_ID_array[$i] > 0)) {
             $OBJ_array[$i] = new User($user_ID_array[$i], $GLOBALS['connection'], DB_NAME);
         }
     }   
-
-    email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+ 
+    if(count($OBJ_array) > 0) {
+        email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+    }
 }
+
 function getmicrotime()
 {
     list($usec, $sec) = explode(" ",microtime());
@@ -494,7 +497,7 @@ function sort_browser()
                         echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
 
                         echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
-						?>
+                    				?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
                         for(i=0; i< order_array.length; i++)
@@ -507,7 +510,7 @@ function sort_browser()
 
                     function load(select_box)
                     {
-                        window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "_only&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option) + "&exact_phrase=on";
+                        window.location = "search.php?submit=submit&sort_by=id&where=" + category_option + "&sort_order=" + select_box.options[select_box.selectedIndex].value + "&keyword=" + escape(category_item_option) + "&exact_phrase=on";
                     }
         <?php
         ///////////////////////////////FOR AUTHOR///////////////////////////////////////////

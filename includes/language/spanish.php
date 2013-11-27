@@ -350,6 +350,7 @@ $lang['addpage_admin'] = 'Administrar';
 $lang['addpage_new_file_added'] = 'Un nuevo archivo ha sido añadido';
 $lang['addpage_new'] = 'Nuevo';
 $lang['addpage_uploader'] = 'Subi&oacute;';
+$lang['addpage_file_missing'] = 'Please select a file to upload';    
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleccionar todo';
@@ -474,3 +475,6 @@ $lang['checkinpage_file_was_checked_in'] = 'Su archivo fue ingresado.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Archivos Asignados a esta Categor&iacute;a:';
+
+//Search Page
+$lang['searchpage_all_meta'] = 'All non-udf metadata';
