@@ -409,7 +409,7 @@ if( !defined('User_class') )
             if ($this->isRoot())
             {
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status>0";
-                $result = mysql_query($query) or die("Error trying to create checked out files list: $lquery" . mysql_error());
+                $result = mysql_query($query) or die("Error trying to create checked out files list: $query" . mysql_error());
                 $llen = mysql_num_rows($result);
                 $file_data = array();
                 for ($index = 0; $index < $llen; $index++)

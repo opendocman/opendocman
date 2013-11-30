@@ -479,3 +479,8 @@ $lang['checkinpage_file_was_checked_in'] = 'Um arquivo foi checked in.';
 $lang['categoryviewpage_list_of_files_title'] = 'Arquivos atribuídos a esta categoria:';
 
 $lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';
