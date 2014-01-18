@@ -23,7 +23,7 @@
         </td>
     </tr>
     
-    {if $is_admin == true }
+{if $is_admin == true }
     <tr>
 
         <td>
@@ -37,10 +37,7 @@
             </select>
         </td>
     </tr>
-
-{/if}
-
- <tr>
+    <tr>
         <td>
             {$g_lang_editpage_assign_department}
         </td>
@@ -53,6 +50,7 @@
             </select>
         </td>
     </tr>
+{/if}    
     <tr>
         <td>
             <a class="body" href="help.html#Add_File_-_Category"  onClick="return popup(this, 'Help')" style="text-decoration:none">{$g_lang_category}</a>
