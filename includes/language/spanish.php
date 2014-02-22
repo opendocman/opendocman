@@ -351,6 +351,7 @@ $lang['addpage_new_file_added'] = 'Un nuevo archivo ha sido añadido';
 $lang['addpage_new'] = 'Nuevo';
 $lang['addpage_uploader'] = 'Subi&oacute;';
 $lang['addpage_file_missing'] = 'Please select a file to upload';    
+$lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleccionar todo';
@@ -368,6 +369,10 @@ $lang['editpage_view'] = 'Ver';
 $lang['editpage_read'] = 'Leer';
 $lang['editpage_write'] = 'Escribir';
 $lang['editpage_admin'] = 'Administrar';
+
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
@@ -478,3 +483,8 @@ $lang['categoryviewpage_list_of_files_title'] = 'Archivos Asignados a esta Categ
 
 //Search Page
 $lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

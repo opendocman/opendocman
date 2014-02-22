@@ -23,8 +23,7 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Kliknite ovdje kako biste anonimno gledali javne datoteke';
 $lang['forgotpassword'] = 'Zaboravili ste lozinku?';
-$lang['install_folder']  = 'Sigurnosno upozorenje: Ako ste već instalirali/nadogradili program, trebali bi ste izbrisati \'install\' direktorij prije nego nastavite dalje';
-
+$lang['install_folder']  = 'Sigurnosno upozorenje: Ako ste već instalirali/nadogradili program, trebali biste izbrisati \'install\' direktorij prije nego nastavite dalje';
 $lang['signup'] = 'Registrirajte račun';
 $lang['welcome'] = 'Dobro došli u OpenDocMan.';
 $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku pohranu podataka, objavljivanje i kontrolu promjena nad datotekama.';
@@ -32,7 +31,7 @@ $lang['welcome_anonymous_title'] = 'OpenDocMan Anonimna Stranica: Prikaži sve';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonimna Stranica';
 
 //GLOBAL TERMS
-$lang['action'] = 'Akcija';
+$lang['action'] = 'Radnja';
 $lang['all'] = 'Sve';
 $lang['anonymous'] = 'Anonimno';
 $lang['author'] = 'Autor';
@@ -239,9 +238,9 @@ $lang['label_fileid'] = 'ID datoteke';
 $lang['label_username'] = 'Korisničko ime';
 $lang['label_action'] = 'Radnja';
 $lang['label_date'] = 'Datum';
-$lang['label_type_pr_sec'] = 'Type'; //CHM
-$lang['label_primary_type'] = 'Primary'; //CHM
-$lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
+$lang['label_type_pr_sec'] = 'Tip';
+$lang['label_primary_type'] = 'Primarno';
+$lang['label_sub_select_list'] = 'Popis za pododabir';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Vaš račun je stvoren.';
@@ -349,10 +348,12 @@ $lang['addpage_view'] = 'Prikaži';
 $lang['addpage_read'] = 'Čitaj';
 $lang['addpage_write'] = 'Piši';
 $lang['addpage_admin'] = 'Administrator';
-$lang['addpage_new_file_added'] = 'A new file has been added';
-$lang['addpage_new'] = 'New';
-$lang['addpage_uploader'] = 'Uploader';
-$lang['addpage_file_missing'] = 'Please select a file to upload';
+$lang['addpage_new_file_added'] = 'Dodana je nova datoteka';
+$lang['addpage_new'] = 'Nova';
+$lang['addpage_uploader'] = 'Prenositelj';
+$lang['addpage_file_missing'] = 'Odaberite datoteku za prijenos';
+
+$lang['addpage_permissions'] = 'Dozvole';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Odznači sve';
@@ -371,6 +372,10 @@ $lang['editpage_read'] = 'Čitaj';
 $lang['editpage_write'] = 'Piši';
 $lang['editpage_admin'] = 'Administrator';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
 $lang['undeletepage_file_undeleted'] = 'Datoteka je vraćena';
@@ -385,7 +390,7 @@ $lang['detailspage_edit'] = 'Uredi';
 $lang['detailspage_delete'] = 'Obriši';
 $lang['detailspage_history'] = 'Povijest';
 $lang['detailspage_are_sure'] = 'Jeste li sigurni?';
-$lang['detailspage_file_checked_out_to'] = 'Checked out to';
+$lang['detailspage_file_checked_out_to'] = 'Odjavljeno';
 
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
@@ -435,7 +440,7 @@ $lang['userpage_email'] = 'Adresa e-pošte';
 $lang['userpage_first_name'] = 'Ime';
 $lang['userpage_id'] = 'ID';
 $lang['userpage_last_name'] = 'Prezime';
-$lang['userpage_leave_empty'] = 'Ostavite prazno ako se ne mijenja';
+$lang['userpage_leave_empty'] = 'Ostavite prazno ukoliko se ne mijenja';
 $lang['userpage_modify_user'] = 'Izmjenite korisnika';
 $lang['userpage_no'] = 'Ne';
 $lang['userpage_password'] = 'Lozinka';
@@ -457,7 +462,7 @@ $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
 $lang['adminpage_reports'] = 'Izvještaji';
 $lang['adminpage_access_log'] = 'Popis pristupa';
-$lang['adminpage_reports_file_list'] = 'File List Export';
+$lang['adminpage_reports_file_list'] = 'Izvoz popisa datoteka';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Popis pristupa';
@@ -473,10 +478,15 @@ $lang['accesslogpage_file_rejected'] = 'Datoteka odbijena';
 $lang['accesslogpage_reserved'] = 'Rezervirano';
 
 // Check-in Page
-$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
+$lang['checkinpage_file_was_checked_in'] = 'Datoteka je prijavljena.';
 
 //Category View Page
-$lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
+$lang['categoryviewpage_list_of_files_title'] = 'Datoteka dodjeljena ovoj kategoriji:';
 
 //Search Page
-$lang['searchpage_all_meta'] = 'All non-udf metadata';
+$lang['searchpage_all_meta'] = 'Svi ne-udf meta podaci';
+
+// Footer
+$lang['footer_support'] = 'Podrška';
+$lang['footer_feedback'] = 'Povratna informacija';
+$lang['footer_bugs'] = 'Greške';

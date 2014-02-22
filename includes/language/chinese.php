@@ -353,6 +353,8 @@ $lang['addpage_new'] = 'New';
 $lang['addpage_uploader'] = 'Uploader';
 $lang['addpage_file_missing'] = 'Please select a file to upload';
 
+$lang['addpage_permissions'] = 'Permissions';
+
 // Edit File Page
 $lang['editpage_uncheck_all'] = '全部取消';
 $lang['editpage_check_all'] = '检查所有';
@@ -369,6 +371,10 @@ $lang['editpage_view'] = 'View';
 $lang['editpage_read'] = 'Read';
 $lang['editpage_write'] = 'Write';
 $lang['editpage_admin'] = 'Admin';
+
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
@@ -479,3 +485,8 @@ $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category
 
 //Search Page
 $lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

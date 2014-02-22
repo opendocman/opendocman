@@ -352,6 +352,7 @@ $lang['addpage_new_file_added'] = 'Nuovo file aggiunto';
 $lang['addpage_new'] = 'Nuovo';
 $lang['addpage_uploader'] = 'Carica';
 $lang['addpage_file_missing'] = 'Please select a file to upload';
+$lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Deseleziona tutto';
@@ -369,6 +370,10 @@ $lang['editpage_view'] = 'Visualizza';
 $lang['editpage_read'] = 'Legge';
 $lang['editpage_write'] = 'Modifica';
 $lang['editpage_admin'] = 'Gestisce';
+
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Il file &egrave; stato eliminato definitivamente';
@@ -479,3 +484,8 @@ $lang['categoryviewpage_list_of_files_title'] = 'Documenti assegnati alla catego
 
 //Search Page
 $lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';
