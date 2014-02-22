@@ -5,14 +5,14 @@
 		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico" />
 		
 		<title>DataTables example</title>
-		<style type="text/css" title="currentStyle">
+		<style type="text/css">
 			@import "../../media/css/demo_page.css";
 			@import "../../media/css/demo_table.css";
-			td { white-space: nowrap; }
+			@import "media/css/dataTables.scroller.css";
 		</style>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
-		<script type="text/javascript" language="javascript" src="media/js/Scroller.js"></script>
+		<script type="text/javascript" language="javascript" src="media/js/dataTables.scroller.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				$('#example').dataTable( {
@@ -21,7 +21,7 @@
 					"sDom": "frtiS",
 					"bDeferRender": true,
 					"fnInitComplete": function () {
-						this.oScroller.fnScrollToRow( 1000 );
+						this.fnSettings().oScroller.fnScrollToRow( 1000 );
 					}
 				} );
 			} );
@@ -61,7 +61,7 @@
 		"sDom": "frtiS",
 		"bDeferRender": true,
 		"fnInitComplete": function () {
-			this.oScroller.fnScrollToRow( 1000 );
+			this.fnSettings().oScroller.fnScrollToRow( 1000 );
 		}
 	} );
 } );</pre>

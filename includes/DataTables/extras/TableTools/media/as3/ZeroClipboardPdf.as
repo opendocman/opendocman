@@ -61,35 +61,27 @@ package {
 				clickHandler(event);
 			} );
 			button.addEventListener(MouseEvent.MOUSE_OVER, function(event:Event):void {
-				ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'mouseOver', null );
+				ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'mouseOver', null );
 			} );
 			button.addEventListener(MouseEvent.MOUSE_OUT, function(event:Event):void {
-				ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'mouseOut', null );
+				ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'mouseOut', null );
 			} );
 			button.addEventListener(MouseEvent.MOUSE_DOWN, function(event:Event):void {
-				ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'mouseDown', null );
+				ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'mouseDown', null );
 			} );
 			button.addEventListener(MouseEvent.MOUSE_UP, function(event:Event):void {
-				ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'mouseUp', null );
+				ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'mouseUp', null );
 			} );
 			
-			/* External functions
-			 * This is extremely nasty, and I'm far from proud of this, however, when a Flash
-			 * movie is hidden in IE (i.e. display:none) then all callbacks are removed, and there
-			 * is no way to tell that this has happened! Javascript can't tell us since there are
-			 * no callbacks - so we need to add them again and again... Fortunatly Flash doesn't
-			 * allow multiple callback functions to be used with each callback name, it just uses
-			 * the provided function, so the only thing we use for this workaround is a couple of
-			 * clock cycles.
-			 */
+			// External functions - readd whenever the stage is made active for IE
 			addCallbacks();
-			setInterval( addCallbacks, 1000 );
-			
+			stage.addEventListener(Event.ACTIVATE, addCallbacks);
+
 			// signal to the browser that we are ready
-			ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'load', null );
+			ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'load', null );
 		}
 		
-		public function addCallbacks ():void {
+		public function addCallbacks (evt:Event = null):void {
 			ExternalInterface.addCallback("setHandCursor", setHandCursor);
 			ExternalInterface.addCallback("clearText", clearText);
 			ExternalInterface.addCallback("setText", setText);
@@ -158,13 +150,13 @@ package {
 			} else {
 				/* Copy the text to the clipboard. Note charset and BOM have no effect here */
 				System.setClipboard( clipText );
-				ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'complete', clipText );
+				ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'complete', clipText );
 			}
 		}
 		
 		
 		private function saveComplete(event:Event):void {
-			ExternalInterface.call( 'ZeroClipboard.dispatch', domId, 'complete', clipText );
+			ExternalInterface.call( 'ZeroClipboard_TableTools.dispatch', domId, 'complete', clipText );
 		}
 		
 		
