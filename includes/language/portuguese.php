@@ -351,6 +351,8 @@ $lang['addpage_admin'] = 'Admin';
 $lang['addpage_new_file_added'] = 'Um novo arquivo foi adicionado';
 $lang['addpage_new'] = 'Novo';
 $lang['addpage_uploader'] = 'Enviador';
+$lang['addpage_file_missing'] = 'Please select a file to upload';
+$lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'desmarque todos';
@@ -475,3 +477,10 @@ $lang['checkinpage_file_was_checked_in'] = 'Um arquivo foi checked in.';
 
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Arquivos atribuídos a esta categoria:';
+
+$lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

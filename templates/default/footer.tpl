@@ -19,9 +19,9 @@
     <a href="http://www.opendocman.com/" target="_new">OpenDocMan</a><br />
     Copyright &copy; 2000-2014 Stephen Lawrence Jr.<br />
     <p>
-        <a href="http://www.opendocman.com/forum/" target="_new">Support</a> |
-        <a href="http://opendocman.uservoice.com" target="_new">Feedback</a> |
-        <a href="https://github.com/opendocman/opendocman/issues" target="_new">Bugs</a> |
+        <a href="http://www.opendocman.com/forum/" target="_new">{$g_lang_footer_support}</a> |
+        <a href="http://opendocman.uservoice.com" target="_new">{$g_lang_footer_feedback}</a> |
+        <a href="https://github.com/opendocman/opendocman/issues" target="_new">{$g_lang_footer_bugs}</a> |
     </p>
 </body>
 </html>

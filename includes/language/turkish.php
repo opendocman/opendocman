@@ -375,6 +375,7 @@ $lang['addpage_new_file_added'] = 'A new file has been added';
 $lang['addpage_new'] = 'New';
 $lang['addpage_uploader'] = 'Uploader';
 $lang['addpage_file_missing'] = 'Please select a file to upload';
+$lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'Tüm kaldırın';
@@ -502,3 +503,8 @@ $lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category
 
 //Search Page
 $lang['searchpage_all_meta'] = 'All non-udf metadata';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';
