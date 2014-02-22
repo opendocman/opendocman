@@ -9,7 +9,7 @@ $(document).ready( function () {
 
 	var n = $('div.nav_blocker')[0];
 	n.style.height = $(jqNav).outerHeight()+"px";
-	n.style.width = $(jqNav).outerWidth()+"px";
+	n.style.width = ($(jqNav).outerWidth()+20)+"px";
 
 	SyntaxHighlighter.highlight();
 

@@ -15,29 +15,15 @@
 		<script type="text/javascript" charset="utf-8" src="media/js/ZeroClipboard.js"></script>
 		<script type="text/javascript" charset="utf-8" src="media/js/TableTools.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			TableTools.BUTTONS.copy_to_div = {
-				"sAction": "text",
-				"sFieldBoundary": "",
-				"sFieldSeperator": "\t",
+			TableTools.BUTTONS.copy_to_div = $.extend( true, TableTools.buttonBase, {
 				"sNewLine": "<br>",
-				"sToolTip": "",
-				"sButtonClass": "DTTT_button_text",
-				"sButtonClassHover": "DTTT_button_text_hover",
 				"sButtonText": "Copy to element",
-				"mColumns": "all",
-				"bHeader": true,
-				"bFooter": true,
 				"sDiv": "",
-				"fnMouseover": null,
-				"fnMouseout": null,
 				"fnClick": function( nButton, oConfig ) {
 					document.getElementById(oConfig.sDiv).innerHTML = 
 						this.fnGetTableData(oConfig);
-				},
-				"fnSelect": null,
-				"fnComplete": null,
-				"fnInit": null
-			};
+				}
+			} );
 			
 			$(document).ready( function () {
 				$('#example').dataTable( {
@@ -62,7 +48,8 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Plug-ins in TableTools take the form of additional buttons types, which provide extra options and flexibility for TableTools. This example shows how a plug-in button type can be defined then used in the TableTools initialisation. Plug-ins for TableTools can be found <a href="http://datatables.net/extras/tabletools/plug-ins">on the DataTables.net site</a>. The example plug-in here shows a button which is used to insert the data from the table into a given element.</p>
+			<p>Plug-ins in TableTools take the form of additional buttons types, which provide extra options and flexibility for TableTools. This example shows how a plug-in button type can be defined and then used in the TableTools initialisation. Note that the <i>TableTools.buttonBase</i> object is extended with our required parameters - this base object provides default values for all of the options TableTools can work with, so they don't all have to be defined in our button.</p>
+			<p>Additional plug-ins for TableTools can be found <a href="http://datatables.net/extras/tabletools/plug-ins">on the DataTables.net site</a>. The example plug-in here shows a button which is used to insert the data from the table into a given element.</p>
 			
 			<h1>Live example</h1>
 			
@@ -494,29 +481,15 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>TableTools.BUTTONS.copy_to_div = {
-	"sAction": "text",
-	"sFieldBoundary": "",
-	"sFieldSeperator": "\t",
+			<pre>TableTools.BUTTONS.copy_to_div = $.extend( true, TableTools.buttonBase, {
 	"sNewLine": "&lt;br&gt;",
-	"sToolTip": "",
-	"sButtonClass": "DTTT_button_text",
-	"sButtonClassHover": "DTTT_button_text_hover",
 	"sButtonText": "Copy to element",
-	"mColumns": "all",
-	"bHeader": true,
-	"bFooter": true,
 	"sDiv": "",
-	"fnMouseover": null,
-	"fnMouseout": null,
 	"fnClick": function( nButton, oConfig ) {
 		document.getElementById(oConfig.sDiv).innerHTML = 
 			this.fnGetTableData(oConfig);
-	},
-	"fnSelect": null,
-	"fnComplete": null,
-	"fnInit": null
-};
+	}
+} );
 
 $(document).ready( function () {
 	$('#example').dataTable( {
@@ -542,6 +515,7 @@ $(document).ready( function () {
 				<li><a href="button_text.html">Button text alteration</a></li>
 				<li><a href="collection.html">Using button collections</a></li>
 				<li><a href="theme.html">Using jQuery UI themes</a></li>
+				<li><a href="bootstrap.html">Styling with Twitter Bootstrap</a></li>
 				<li><a href="multi_instance.html">Multiple TableTools toolbars for a single table</a></li>
 				<li><a href="multiple_tables.html">Multiple DataTables with a single initialisation</a></li>
 				<li><a href="select_multi.html">User selectable rows (multiple rows)</a></li>

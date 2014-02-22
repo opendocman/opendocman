@@ -162,7 +162,7 @@ deny from all
 		</tr>
                 <tr>
 			<th scope="row"><label for="adminpass">Administrator Password</label></th>
-			<td><input name="adminpass" id="adminpass" type="text" value="" size="8" class="required" minlength="6"/></td>
+			<td><input name="adminpass" id="adminpass" type="text" value="" size="8" class="required" minlength="5"/></td>
 			<td>Enter an administrator password here. Write it down! (only used for new installs)</td>
 		</tr>
 		<tr>

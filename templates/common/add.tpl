@@ -3,7 +3,7 @@
 <script type="text/javascript" src="functions.js"></script>
 
 <!-- file upload formu using ENCTYPE -->
-<form name="main" action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
+<form id="addeditform" name="main" action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
     <input type="hidden" id="db_prefix" value="{$db_prefix}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    
@@ -12,7 +12,6 @@
     <input type="hidden" id="tablename{$i}" name="tablename{$i}" value="{$name}" /> <!-- CHM hidden and onsubmit added-->
     {assign var='i' value=$i+1}
 {/foreach}
-
     <input id="i_value" type="hidden" name="i_value" value="{$i}" /> <!-- CHM hidden and onsubmit added-->
     <tr>
         <td>

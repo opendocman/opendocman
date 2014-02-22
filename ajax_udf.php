@@ -1,7 +1,6 @@
 <?php
-/*
-ajax_udf.php 
-Copyright (C) 2012 Stephen Lawrence Jr.
+/* 
+Copyright (C) 2014 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,65 +19,80 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 include('odm-load.php');
 
-$q=$_GET["q"];
+if(isset($_GET['q'])) {
+    $q=preg_replace('/ /', '', $_GET['q']);
+}
+
+if(isset($_GET['add_value'])) {
+    $add_value = preg_replace('/ /', '', $_GET['add_value']);
+}
+
+if(isset($_GET['table'])) {
+    $tablename = preg_replace('/ /', '', $_GET['table']);
+}
 ?>
     <table border="0">
         <tr>
 <?php
-    if($q != "" && $_GET["add_value"] != "add" && $_GET["add_value"] != "edit"){
+if($q != "" && $add_value != "add" && $add_value != "edit"){
 ?>
             <td>
-<?php 
-                    $explode_add_value = explode('_', $_GET["add_value"]);
-                    $field_name = $explode_add_value[2];
+<?php
+    $explode_add_value = explode('_', $add_value);
+    if (isset($explode_add_value[2])) {
+        $field_name = $explode_add_value[2];
+    } else {
+        $field_name = '';
+    }
+    if ($add_value != '' && $field_name != '') {
+        $query = 'SELECT * FROM ' . $add_value;
+        $result = mysql_query($query);
 
-                    $query = 'SELECT * FROM ' . $_GET["add_value"];
-                    $result = mysql_query($query);
+        if ($result && $q != 'primary') {
+            echo '<table>';
+            echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . $add_value . '\')">';
+            echo '<option value="0">Please select one</option>';
+            while ($row = mysql_fetch_row($result)) {
+                echo '<option value=' . $row[0] . ' ' . ($row[0] == $q ? "selected" : "") . '>' . $row[1] . '</option>'; //CHM
+            }
+            echo '</select></td></tr>';
+            echo '</table>';
+        }
 
-                    if ($result && $q != 'primary') {
-                        echo '<table>';
-                        echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . $_GET["add_value"] . '\')">';
-                        echo '<option value="0">Please select one</option>';
-                        while ($row = mysql_fetch_row($result)) {
-                            echo '<option value=' . $row[0] . ' ' . ($row[0] == $q ? "selected" : "") . '>' . $row[1] . '</option>'; //CHM
-                        }
-                        echo '</select></td></tr>';
-                        echo '</table>';
-                    }
-                  
-                    if ($q == 'secondary') {
-                        $tablename = '_secondary';
-                    } elseif ($q == 'primary') {
-                        $tablename = '_primary';
-                    } else {
-                        $tablename = '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
-                    }
+        if ($q == 'secondary') {
+            $tablename = '_secondary';
+        } elseif ($q == 'primary') {
+            $tablename = '_primary';
+        } else {
+            $tablename = '_secondary WHERE pr_id = "' . $q . '"';
+        }
 
-                    echo '<table>';
-                    echo '<tr bgcolor="83a9f7">
+        echo '<table>';
+        echo '<tr bgcolor="83a9f7">
                             <th>' . msg('button_delete') . '?</th>
                             <th>' . msg('value') . '</th>
                           </tr>';
 
-                    if ( ( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary' ) ) {
-                        $query = 'SELECT * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
-                       
-                        $result = mysql_query($query);
-                        while ($row = mysql_fetch_row($result)) {
-                            if (isset($bg) && $bg == "FCFCFC") {
-                                $bg = "E3E7F9";
-                            } else {
-                                $bg = "FCFCFC";
-                            }
-                            echo '<tr bgcolor="' . $bg . '">
+        if (( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary')) {
+            $query = 'SELECT * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
+
+            $result = mysql_query($query);
+            while ($row = mysql_fetch_row($result)) {
+                if (isset($bg) && $bg == "FCFCFC") {
+                    $bg = "E3E7F9";
+                } else {
+                    $bg = "FCFCFC";
+                }
+                echo '<tr bgcolor="' . $bg . '">
                                     <td align=center><input type=checkbox name=x' . $row[0] . '></td>
                                         <td>' . $row[1] . '</td>
                                   </tr>';
-                        }
-                        mysql_free_result($result);
-                    }
+            }
+            mysql_free_result($result);
+        }
+    
 
-                    echo '<tr>
+    echo '<tr>
                             <th align=right>' . msg('new') . ':</th>
                             <td><input type=textbox maxlength="16" name="newvalue"></td>
                           </tr>';
@@ -93,24 +107,25 @@ $q=$_GET["q"];
                         </table>
 <?php 
     draw_footer();
+    }
 }
 
-if ($_GET["add_value"] == "add") {
-    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
+if ($add_value == "add") {
+    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary WHERE pr_id = "' . $q . '"';
     $subresult = mysql_query($query);
 
-    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary">';
+    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
     while ($subrow = mysql_fetch_row($subresult)) {
         echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
     }
     echo '</select>';
 }
 
-if ($_GET["add_value"] == "edit") {
-    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary WHERE pr_id = "' . $_GET['q'] . '"';
+if ($add_value == "edit") {
+    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary WHERE pr_id = "' . $q . '"';
     $subresult = mysql_query($query);
 
-    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_GET['table'] . '_secondary">';
+    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
     while ($subrow = mysql_fetch_row($subresult)) {
         echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
     }

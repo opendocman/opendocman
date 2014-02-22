@@ -16,8 +16,8 @@
 {/if}
 <hr>
     <a href="mailto:{$g_site_mail}">{$g_title}</a><p />
-    <a href="http://www.opendocman.com/" target="_new">OpenDocMan v{$g_current_version}</a><br />
-    Copyright &copy; 2000-2013 Stephen Lawrence Jr.<br />
+    <a href="http://www.opendocman.com/" target="_new">OpenDocMan</a><br />
+    Copyright &copy; 2000-2014 Stephen Lawrence Jr.<br />
     <p>
         <a href="http://www.opendocman.com/forum/" target="_new">Support</a> |
         <a href="http://opendocman.uservoice.com" target="_new">Feedback</a> |

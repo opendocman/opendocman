@@ -27,6 +27,7 @@
 					$(nCell).editable( function (sVal) {
 						/* Submit function (local only) - unblock KeyTable */
 						keys.block = false;
+						$(nCell).editable('destroy');
 						return sVal;
 					}, { 
 						"onblur": 'submit', 
@@ -34,6 +35,7 @@
 							/* Unblock KeyTable, but only after this 'esc' key event has finished. Otherwise
 							 * it will 'esc' KeyTable as well
 							 */
+							$(nCell).editable('destroy');
 							setTimeout( function () {keys.block = false;}, 0); 
 						}
 					} );

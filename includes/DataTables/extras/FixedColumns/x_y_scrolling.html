@@ -22,11 +22,14 @@
 					"sScrollXInner": "150%",
 					"bScrollCollapse": true,
 					"bPaginate": false,
-					"fnDrawCallback": function ( oSettings ) {
+					"fnPreDrawCallback": function ( oSettings ) {
 						/* Need to redo the counters if filtered or sorted */
 						if ( oSettings.bSorted || oSettings.bFiltered ) {
 							for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ ) {
-								$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+								var nTr = oSettings.aoData[ oSettings.aiDisplay[i] ].nTr;
+
+								// Update the index column and do so without redrawing the table
+								this.fnUpdate( i+1, nTr, 0, false, false );
 							}
 						}
 					},
@@ -540,7 +543,10 @@
 			/* Need to redo the counters if filtered or sorted */
 			if ( oSettings.bSorted || oSettings.bFiltered ) {
 				for ( var i=0, iLen=oSettings.aiDisplay.length ; i&lt;iLen ; i++ ) {
-					$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+					var nTr = oSettings.aoData[ oSettings.aiDisplay[i] ].nTr;
+
+					// Update the index column and do so without redrawing the table
+					this.fnUpdate( i+1, nTr, 0, false, false );
 				}
 			}
 		},
