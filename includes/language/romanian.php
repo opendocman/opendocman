@@ -371,6 +371,10 @@ $lang['editpage_read'] = 'Citire';
 $lang['editpage_write'] = 'Scriere';
 $lang['editpage_admin'] = 'Administrare';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Fisierul a fost sters definitiv';
 $lang['undeletepage_file_undeleted'] = 'Stergerea fisierului a fost anulata';
