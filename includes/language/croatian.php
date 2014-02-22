@@ -372,6 +372,10 @@ $lang['editpage_read'] = 'Čitaj';
 $lang['editpage_write'] = 'Piši';
 $lang['editpage_admin'] = 'Administrator';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
 $lang['undeletepage_file_undeleted'] = 'Datoteka je vraćena';

@@ -372,6 +372,10 @@ $lang['editpage_read'] = 'Read';
 $lang['editpage_write'] = 'Write';
 $lang['editpage_admin'] = 'Admin';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
 $lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';

@@ -29,7 +29,7 @@
 {/literal}
 
 <dl class="accordion">
-    <dt><a href="">Edit Department Permissions</a></dt>
+    <dt><a href="">{$g_lang_filepermissionspage_edit_department_permissions}</a></dt>
     <dd>
         <table id="department_permissions_table" class="display">
             <thead>
@@ -65,12 +65,12 @@
         </table>
     </dd>
     <hr />
-    <dt><a>Edit User Permissions</a></dt>
+    <dt><a>{$g_lang_filepermissionspage_edit_user_permissions}</a></dt>
     <dd>
         <table id="user_permissions_table" class="display">
             <thead>
                 <tr>
-                    <td>Department</td>
+                    <td>User</td>
                     <td>Forbidden</td>
                     <td>View</td>
                     <td>Read</td>

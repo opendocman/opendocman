@@ -370,6 +370,10 @@ $lang['editpage_read'] = 'Leer';
 $lang['editpage_write'] = 'Escribir';
 $lang['editpage_admin'] = 'Administrar';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
 
