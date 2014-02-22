@@ -64,6 +64,7 @@
             </tbody>
         </table>
     </dd>
+    <hr />
     <dt><a>Edit User Permissions</a></dt>
     <dd>
         <table id="user_permissions_table" class="display">
@@ -101,27 +102,40 @@
     $(document).ready(function() {
         
         (function($) {
-
-            var allPanels = $('.accordion > dd').hide();
-            
+            var allPanels = $('.accordion > dd').hide();           
             $('.accordion > dt > a').click(function() {
                 allPanels.slideUp();
                 $(this).parent().next().slideDown();
                 return false;
                 });
-
          })(jQuery);
-         
-        $('#department_permissions_table').dataTable(
-        {
-            "bAutoWidth": false
-        });
-        
-         $('#user_permissions_table').dataTable(
-        {
-            "bAutoWidth": false
-        });
+
+    $department_permissions_table = $('#department_permissions_table');
     
+    if ($department_permissions_table && $department_permissions_table.length > 0) {
+       var oTable = $department_permissions_table.dataTable({
+            "sScrollY": "300px",
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sUrl": "includes/language/DataTables/datatables." + langLanguage + ".txt"
+            }
+        });
+    }
+    
+    $user_permissions_table = $('#user_permissions_table');
+    if ($user_permissions_table && $user_permissions_table.length > 0) {
+       var oTable2 = $user_permissions_table.dataTable({
+            "sScrollY": "300px",
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "oLanguage": {
+                "sUrl": "includes/language/DataTables/datatables." + langLanguage + ".txt"
+            }
+        });
+
+    }
     } );
+
 </script>
 {/literal}

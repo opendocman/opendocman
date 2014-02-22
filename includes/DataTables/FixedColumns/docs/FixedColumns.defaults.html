@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Namespace: defaults - documentation</title>
+  
+		<style type="text/css" media="screen">
+			@import "media/css/doc.css";
+			@import "media/css/shCore.css";
+			@import "media/css/shThemeDataTables.css";
+		</style>
+	
+		<script type="text/javascript" src="media/js/shCore.js"></script>
+		<script type="text/javascript" src="media/js/shBrushJScript.js"></script>
+		<script type="text/javascript" src="media/js/jquery.js"></script>
+		<script type="text/javascript" src="media/js/doc.js"></script>
+	</head>
+	<body>
+		<div class="fw_container">
+			
+				<a name="top"></a>
+				<div class="fw_header">
+					<h1 class="page-title">Namespace: defaults</h1>
+					<h2 class="ancestors">Ancestry: <span class="ancestors"><a href="FixedColumns.html">FixedColumns</a>.</span> » defaults</h2>
+					<div class="page-info">
+						FixedColumns v3.0.0 documentation
+					</div>
+				</div>
+
+				
+
+				<div class="fw_nav">
+					<h2>Navigation</h2>
+					<ul>
+					<li><a href="#top">Overview</a></li>
+					<li><a href="#summary">Summary</a><div><table cellpadding="5" border="0" cellspacing="0" width="100%"><tbody><tr><td>Classes (0)</td><td>Namespaces (0)</td></tr><tr><td>Properties (0)</td><td><a href="#summary_properties_static">Static properties (4)</a></td></tr><tr><td>Methods (0)</td><td>Static methods (0)</td></tr><tr><td>Events (0)</td><td></td></tr></tbody></table></div></li><li><a href="#details">Details</a><div><table cellpadding="5" border="0" cellspacing="0" width="100%"><tbody><tr><td>Properties (0)</td><td><a href="#summary_properties_static">Static properties (4)</a></td></tr><tr><td>Methods (0)</td><td>Static methods (0)</td></tr><tr><td>Events (0)</td><td></td></tr></tbody></table></div></li></ul>
+					<div style="margin-top: 10px;">
+						<input type="hidden" name="show_private" value="0">
+						<span id="private_label">Hiding</span> private elements 
+							(<a id="private_toggle" href="">toggle</a>)
+						</span>
+					</div>
+					<div>
+						<input type="hidden" name="show_extended" value="1">
+						<span id="extended_label">Showing</span> extended elements 
+							(<a id="extended_toggle" href="">toggle</a>)
+						</span>
+					</div>
+				</div>
+
+				<div class="fw_content">
+					<a name="overview"></a>
+					<div class="doc_overview">
+						<div class="nav_blocker"></div>
+						<p>FixedColumns default settings for initialisation</p><dl class="details">
+	
+</dl>
+
+					</div>
+
+					
+					<div class="doc_summary">
+						<a name="summary"></a>
+						<h2>Summary</h2>
+
+						<div class="doc_group"><a name="summary_properties_static"></a><h3 class="subsection-title">Properties - static</h3>
+
+<dl>
+    <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#fnDrawCallback">fnDrawCallback</a></span><span class="type-sig"><span class="type-signature"> :function(object, object):void</span></span></dt><dd class="  even"><p>Draw callback function which is called when FixedColumns has redrawn the fixed assets</p></dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p>Number of left hand columns to fix in position</p></dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p>Number of right hand columns to fix in position</p></dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p>Height matching algorthim to use. This can be "none" which will result in no height
+matching being applied by FixedColumns (height matching could be forced by CSS in this
+case), "semiauto" whereby the height calculation will be performed once, and the result
+cached to be used again (fnRecalculateHeight can be used to force recalculation), or
+"auto" when height matching is performed on every draw (slowest but must accurate)</p></dd>
+</dl></div>
+					</div>
+					
+
+
+					
+					<div class="doc_details">
+						<a name="details"></a>
+						<h2>Details</h2>
+						<div class="doc_group"><a name="details_properties"></a><h3 class="subsection-title">Properties - static</h3>
+<dl>
+    <dt class="  even"><a name="fnDrawCallback"></a><a name="fnDrawCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#fnDrawCallback">fnDrawCallback</a></span><span class="type-sig"><span class="type-signature"> :function(object, object):void</span></span></dt><dd class="  even"><p>Draw callback function which is called when FixedColumns has redrawn the fixed assets</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Example</h5>
+    <div class="example-code">
+    	<pre class="brush: js">     var table = $('#example').dataTable( {
+         "scrollX": "100%"
+     } );
+     new $.fn.dataTable.fixedColumns( table, {
+         "drawCallback": function () {
+	            alert( "FixedColumns redraw" );
+	        }
+     } );</pre>
+    </div>
+</div></dd><dt class="  odd"><a name="iLeftColumns"></a><a name="iLeftColumns_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p>Number of left hand columns to fix in position</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Example</h5>
+    <div class="example-code">
+    	<pre class="brush: js">     var  = $('#example').dataTable( {
+         "scrollX": "100%"
+     } );
+     new $.fn.dataTable.fixedColumns( table, {
+         "leftColumns": 2
+     } );</pre>
+    </div>
+</div></dd><dt class="  even"><a name="iRightColumns"></a><a name="iRightColumns_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p>Number of right hand columns to fix in position</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Example</h5>
+    <div class="example-code">
+    	<pre class="brush: js">     var table = $('#example').dataTable( {
+         "scrollX": "100%"
+     } );
+     new $.fn.dataTable.fixedColumns( table, {
+         "rightColumns": 1
+     } );</pre>
+    </div>
+</div></dd><dt class="  odd"><a name="sHeightMatch"></a><a name="sHeightMatch_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p>Height matching algorthim to use. This can be "none" which will result in no height
+matching being applied by FixedColumns (height matching could be forced by CSS in this
+case), "semiauto" whereby the height calculation will be performed once, and the result
+cached to be used again (fnRecalculateHeight can be used to force recalculation), or
+"auto" when height matching is performed on every draw (slowest but must accurate)</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Example</h5>
+    <div class="example-code">
+    	<pre class="brush: js">     var table = $('#example').dataTable( {
+         "scrollX": "100%"
+     } );
+     new $.fn.dataTable.fixedColumns( table, {
+         "heightMatch": "auto"
+     } );</pre>
+    </div>
+</div></dd>
+</dl></div>
+   					</div>
+				
+		</div>
+
+		<div class="fw_footer">
+			FixedColumns: Copyright 2010-2014 SpryMedia Ltd<br>
+
+			Documentation generated by <a href="https://github.com/micmath/JSDoc">JSDoc 3</a> on
+			30th Jan 2014 - 08:49
+			with the <a href="http://datatables.net/">DataTables</a> template.
+		</div>
+	</body>
+</html>

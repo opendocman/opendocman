@@ -2,7 +2,7 @@
 /*
 add.php - adds files to the repository
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Jon Miner
-Copyright (C) 2008-2011 Stephen Lawrence Jr.
+Copyright (C) 2008-2014 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -47,21 +47,6 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
             $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
             // INSERT into admin
             $userid = mysql_insert_id($GLOBALS['connection']);
-            if (!isset($_REQUEST['admin']))
-            {
-                $_REQUEST['admin']='';
-            }
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_REQUEST[admin]')";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-            if(isset($_REQUEST['reviewer']))
-            {
-                for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
-                {
-                    $dept_rev=$_REQUEST['department_review'][$i];
-                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', $userid)";
-                    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-                }
-            }
 
             // mail user telling him/her that his/her account has been created.
             echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
@@ -72,68 +57,6 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
                 exit;
             }
         }
-    }
-    elseif(isset($_REQUEST['updateuser']))
-    {
-        if(!isset($_REQUEST['admin']) || $_REQUEST['admin'] == '')
-        {
-            $_REQUEST['admin'] = 'no';
-        }
-
-        $user_obj = new User($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-
-        // UPDATE admin info
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_REQUEST['admin'] . "' where id = '".$_REQUEST['id']."'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        // UPDATE into user
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET username='". addslashes($_POST['username']) ."',";
-        if (!empty($_REQUEST['password']))
-        {
-            $query .= "password = md5('". addslashes($_REQUEST['password']) ."'), ";
-        }
-        if( isset( $_REQUEST['department'] ) )
-        {
-            $query.= 'department="' . addslashes($_REQUEST['department']) . '",';
-        }
-        if( isset( $_REQUEST['phonenumber'] ) )
-        {
-            $query.= 'phone="' . addslashes($_REQUEST['phonenumber']) . '",';
-        }
-        if( isset( $_REQUEST['Email'] ) )
-        {
-            $query.= 'Email="' . addslashes($_REQUEST['Email']) . '" ,';
-        }
-        if( isset( $_REQUEST['last_name'] ) )
-        {
-            $query.= 'last_name="' . addslashes($_REQUEST['last_name']) . '",';
-        }
-        if( isset( $_REQUEST['first_name'] ) )
-        {
-            $query.= 'first_name="' . addslashes($_REQUEST['first_name']) . '" ';
-        }
-        $query.= 'WHERE id="' . $_REQUEST['id'] . '"';
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-
-        // UPDATE into dept_reviewer
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = '$_REQUEST[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        if(isset($_REQUEST['reviewer']))
-        {
-            //Remove all entry for $id
-            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = $_REQUEST[id]";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-            $depts_rev = $_REQUEST['department_review'];
-            for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
-            {
-                $dept_rev=$depts_rev[$i];
-                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', $_REQUEST[id])";
-                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-            }
-        }
-        // back to main page
-
-        $_REQUEST['last_message'] = urlencode('User successfully updated');
-        header('Location: admin.php?last_message=' . $_REQUEST['last_message']);
     }
     ?>
         <html>
