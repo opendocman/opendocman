@@ -154,6 +154,19 @@ draw_header(msg('label_admin'), $last_message);
              </tr>
          </table>
      </td>
+     <td>
+         <table>
+             <tr>
+                 <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('message_latest_version');?></font></th>
+             </tr>
+             <tr>
+                 <td><b><?php echo $GLOBALS['CONFIG']['current_version']; ?></b></td>
+             </tr>
+             <tr>
+                 <td>&nbsp;</td>
+             </tr>
+         </table>
+     </td>
 </tr>
 
     <?php } ?>
