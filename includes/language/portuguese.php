@@ -204,7 +204,7 @@ $lang['label_name'] = 'Nome';
 $lang['label_new_password'] = 'Nova Senha';
 $lang['label_next'] = 'Seguinte';
 $lang['label_note_for_revision_log'] = 'Nota para registo de revisão';
-$lang['label_page'] = 'Pagina';
+$lang['label_page'] = 'Página';
 $lang['label_phone_number'] = 'Numero de telefone';
 $lang['label_plugins'] = 'Plug-Ins';
 $lang['label_prev'] = 'Anterior';
@@ -239,7 +239,7 @@ $lang['label_username'] = 'Nome do Usuário';
 $lang['label_action'] = 'Ação';
 $lang['label_date'] = 'Data';
 $lang['label_type_pr_sec'] = 'Tipo'; //CHM
-$lang['label_primary_type'] = 'Primaria'; //CHM
+$lang['label_primary_type'] = 'Primária'; //CHM
 $lang['label_sub_select_list'] = 'Lista Sub-Seleção'; //CHM
 
 // Messages
@@ -351,8 +351,8 @@ $lang['addpage_admin'] = 'Admin';
 $lang['addpage_new_file_added'] = 'Um novo arquivo foi adicionado';
 $lang['addpage_new'] = 'Novo';
 $lang['addpage_uploader'] = 'Enviador';
-$lang['addpage_file_missing'] = 'Please select a file to upload';
-$lang['addpage_permissions'] = 'Permissions';
+$lang['addpage_file_missing'] = 'Por favor selecione o arquivo para enviar';
+$lang['addpage_permissions'] = 'Permissões';
 
 // Edit File Page
 $lang['editpage_uncheck_all'] = 'desmarque todos';
@@ -372,8 +372,8 @@ $lang['editpage_write'] = 'Escrever';
 $lang['editpage_admin'] = 'Admin';
 
 // File Permissions Page
-$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
-$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+$lang['filepermissionspage_edit_department_permissions'] = 'Editar Permissões de Departamento';
+$lang['filepermissionspage_edit_user_permissions'] = 'Editar Permissões de Usuário';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'O arquivo foi excluído permanentemente';
@@ -482,9 +482,9 @@ $lang['checkinpage_file_was_checked_in'] = 'Um arquivo foi checked in.';
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Arquivos atribuídos a esta categoria:';
 
-$lang['searchpage_all_meta'] = 'All non-udf metadata';
+$lang['searchpage_all_meta'] = 'Todos os metadados não udf';
 
 // Footer
-$lang['footer_support'] = 'Support';
+$lang['footer_support'] = 'Suporte';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
