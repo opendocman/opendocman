@@ -19,21 +19,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 include('odm-load.php');
 
+$pdo = $GLOBALS['pdo'];
+
 if(isset($_GET['q'])) {
-    $q=preg_replace('/ /', '', $_GET['q']);
+    $q=mysql_real_escape_string($_GET['q']);
 }
 
 if(isset($_GET['add_value'])) {
-    $add_value = preg_replace('/ /', '', $_GET['add_value']);
+    //$add_value = preg_replace('/ /', '', $_GET['add_value']);
+    $add_value = mysql_real_escape_string($_GET['add_value']);
 }
 
 if(isset($_GET['table'])) {
-    $tablename = preg_replace('/ /', '', $_GET['table']);
+    $tablename = mysql_real_escape_string($_GET['table']);
 }
 ?>
     <table border="0">
         <tr>
 <?php
+
+        
+// Find out if the passed argument matches an actual tablename 
+$udf_table_names = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf";
+$stmt = $pdo->prepare($udf_table_names);
+$stmt->execute();
+$udf_tables_names_result = $stmt->fetchAll();
+
 if($q != "" && $add_value != "add" && $add_value != "edit"){
 ?>
             <td>
@@ -45,54 +56,77 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
         $field_name = '';
     }
     if ($add_value != '' && $field_name != '') {
-        $query = 'SELECT * FROM ' . $add_value;
-        $result = mysql_query($query);
-
-        if ($result && $q != 'primary') {
-            echo '<table>';
-            echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . $add_value . '\')">';
-            echo '<option value="0">Please select one</option>';
-            while ($row = mysql_fetch_row($result)) {
-                echo '<option value=' . $row[0] . ' ' . ($row[0] == $q ? "selected" : "") . '>' . $row[1] . '</option>'; //CHM
+        
+        $whitelisted = false;
+        foreach ($udf_tables_names_result as $whitelist) {
+            if($add_value == $whitelist['table_name']) {
+                $whitelisted = true;              
             }
-            echo '</select></td></tr>';
-            echo '</table>';
         }
+        reset($udf_tables_names_result);
+        
+        if($whitelisted) {
+     
+            $stmt = $pdo->prepare("SELECT * FROM $add_value");
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
-        if ($q == 'secondary') {
-            $tablename = '_secondary';
-        } elseif ($q == 'primary') {
-            $tablename = '_primary';
-        } else {
-            $tablename = '_secondary WHERE pr_id = "' . $q . '"';
-        }
-
-        echo '<table>';
-        echo '<tr bgcolor="83a9f7">
-                            <th>' . msg('button_delete') . '?</th>
-                            <th>' . msg('value') . '</th>
-                          </tr>';
-
-        if (( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary')) {
-            $query = 'SELECT * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
-
-            $result = mysql_query($query);
-            while ($row = mysql_fetch_row($result)) {
-                if (isset($bg) && $bg == "FCFCFC") {
-                    $bg = "E3E7F9";
-                } else {
-                    $bg = "FCFCFC";
+            if ($result && $q != 'primary') {
+                echo '<table>';
+                echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . $add_value . '\')">';
+                echo '<option value="0">Please select one</option>';
+                foreach ($result as $row) {
+                    echo '<option value=' . $row[0] . ' ' . ($row[0] == $q ? "selected" : "") . '>' . $row[1] . '</option>'; //CHM
                 }
-                echo '<tr bgcolor="' . $bg . '">
+                echo '</select></td></tr>';
+                echo '</table>';
+            }
+
+            if ($q == 'secondary') {
+                $tablename = '_secondary';
+            } elseif ($q == 'primary') {
+                $tablename = '_primary';
+            } else {
+                $tablename = '_secondary WHERE pr_id = "' . $q . '"';
+            }
+
+            echo '<table>';
+            echo '<tr bgcolor="83a9f7">
+                  <th>' . msg('button_delete') . '?</th>
+                  <th>' . msg('value') . '</th>
+                  </tr>';
+
+            if (( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary')) {
+                // Find out if the passed argument matches an actual tablename 
+
+                $full_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
+                $whitelisted = false;
+                foreach ($udf_tables_names_result as $whitelist) {
+                    if ($full_table_name == $whitelist['table_name']) {
+                        $whitelisted = true;
+                    }
+                }
+                if ($whitelist) {
+                    $stmt = $pdo->prepare("SELECT * FROM $full_table_name");
+                    $stmt->execute();
+                    $result = $stmt->fetchAll();
+                    foreach ($result as $row) {
+                        if (isset($bg) && $bg == "FCFCFC") {
+                            $bg = "E3E7F9";
+                        } else {
+                            $bg = "FCFCFC";
+                        }
+                        echo '<tr bgcolor="' . $bg . '">
                                     <td align=center><input type=checkbox name=x' . $row[0] . '></td>
                                         <td>' . $row[1] . '</td>
                                   </tr>';
+                    }
+                }
             }
-            mysql_free_result($result);
         }
-    
 
-    echo '<tr>
+
+        echo '<tr>
                             <th align=right>' . msg('new') . ':</th>
                             <td><input type=textbox maxlength="16" name="newvalue"></td>
                           </tr>';
@@ -111,27 +145,53 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
 }
 
 if ($add_value == "add") {
-    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary WHERE pr_id = "' . $q . '"';
-    $subresult = mysql_query($query);
 
-    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
-    while ($subrow = mysql_fetch_row($subresult)) {
-        echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+    $add_tablename = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary';
+
+    $whitelisted = false;
+    foreach ($udf_tables_names_result as $whitelist) {
+        if ($add_tablename == $whitelist['table_name']) {
+            $whitelisted = true;
+        }
     }
-    echo '</select>';
+    if ($whitelist) {
+        $stmt = $pdo->prepare("SELECT * FROM $add_tablename WHERE pr_id = :q");
+        $stmt->bindParam(':q', $q);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
+        foreach ($result as $subrow) {
+            echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+        }
+        echo '</select>';
+    }
 }
 
 if ($add_value == "edit") {
-    $query = 'Select * FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary WHERE pr_id = "' . $q . '"';
-    $subresult = mysql_query($query);
 
-    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
-    while ($subrow = mysql_fetch_row($subresult)) {
-        echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+    $edit_tablename = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary';
+    $whitelisted = false;
+    foreach ($udf_tables_names_result as $whitelist) {
+        if ($edit_tablename == $whitelist['table_name']) {
+            $whitelisted = true;
+        }
     }
-    echo '</select>';
+    if ($whitelist) {
+
+        $stmt = $pdo->prepare("Select * FROM $edit_tablename WHERE pr_id = :q");
+        $stmt->bindParam(':q', $q);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
+        foreach ($result as $subrow) {
+            echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+        }
+        echo '</select>';
+    }
 }
-?>
+        ?>
                     
     </tr>
 </table>
