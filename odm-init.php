@@ -32,6 +32,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 $GLOBALS['connection'] = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect: " . mysql_error());
 $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
 
+$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+try {
+    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
+}
+
+$GLOBALS['pdo'] = $pdo;
+
+ob_start();
+include('includes/FirePHPCore/fb.php');
+
 /*
 /*
  * Load the Settings class

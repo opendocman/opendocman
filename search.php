@@ -183,9 +183,14 @@ else
 
         $lindex = 0;
         $lid_array = array();
-        $llen = mysql_num_rows($lresult);
-        while( $lindex < $llen )
-        {
+    
+        if ($lresult) {
+            $llen = mysql_num_rows($lresult);
+        } else {
+            $llen = 0;
+        }
+        
+        while ($lindex < $llen) {
             list($lid_array[$lindex++]) = mysql_fetch_row($lresult);
         }
         if(@$l_remain != '' && $lexact_phrase != "on")
