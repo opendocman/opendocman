@@ -5,4 +5,4 @@
 .*.swp
 Thumbs.db
 /nbproject
-.gitignore
+config.php
