@@ -75,3 +75,4 @@ $_GET = sanitizeme($_GET);
 $_REQUEST = sanitizeme($_REQUEST);
 $_POST = sanitizeme($_POST);
 $_SERVER = sanitizeme($_SERVER);
+$_FILES = sanitizeme($_FILES);
