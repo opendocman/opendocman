@@ -322,13 +322,14 @@ else
         // use id to generate a file name
         // save uploaded file with new name
         $newFileName = $fileId . '.dat';
-
-        if (!is_uploaded_file($_FILES['file']['tmp_name'][$count]))
+        // Get realpath of temp file, to account for case-sensitive filesystems.
+        $uploaded_file = realpath($_FILES['file']['tmp_name'][$count]);
+        if (!is_uploaded_file($uploaded_file))
         {
             header('Location: error.php?ec=18');
             exit;
         }
-        move_uploaded_file($_FILES['file']['tmp_name'][$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+        move_uploaded_file($uploaded_file, $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
 
         //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         
