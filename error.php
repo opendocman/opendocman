@@ -27,7 +27,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 draw_header(msg('error'), $last_message);
 
-if(isset($_REQUEST['ec']) && (int) $_REQUEST['ec'])
+if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
 {
     switch ($_REQUEST['ec'])
     {
