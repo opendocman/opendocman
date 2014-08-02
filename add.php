@@ -41,6 +41,10 @@ require_once('Email_class.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
+if(!$user_obj->canAdd()){
+    redirect_visitor('out.php');
+}
+
 if(!isset($_POST['submit'])) 
 {
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');

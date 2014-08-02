@@ -36,6 +36,10 @@ require_once('Reviewer_class.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
+if(!$user_obj->canCheckIn()){
+    redirect_visitor('out.php');
+}
+
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')

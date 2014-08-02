@@ -39,9 +39,13 @@
         <td align="right" >
             <p>
                 <div class="buttons">
+                    {if $can_checkin || $isadmin eq 'yes'}
                 <a href="{$g_base_url}/in.php" class="regular"><img src="{$g_base_url}/images/import-2.png" alt="check in"/>{$g_lang_button_check_in}</a>
+                {/if}
                 <a href="{$g_base_url}/search.php" class="regular"><img src="{$g_base_url}/images/find-new-users.png" alt="search"/>{$g_lang_search}</a>
-                <a href="{$g_base_url}/add.php" class="regular"><img src="{$g_base_url}/images/plus.png" alt="add file"/>{$g_lang_button_add_document}</a>
+                {if $can_add || $isadmin eq 'yes'}
+                    <a href="{$g_base_url}/add.php" class="regular"><img src="{$g_base_url}/images/plus.png" alt="add file"/>{$g_lang_button_add_document}</a>
+                {/if}
             {if $isadmin eq 'yes'}
                 <a href="{$g_base_url}/admin.php" class="positive"><img src="{$g_base_url}/images/control.png" alt="admin"/>{$g_lang_label_admin}</a>
             {/if}

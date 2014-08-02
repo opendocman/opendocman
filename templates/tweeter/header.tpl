@@ -55,9 +55,13 @@
             <ul class="nav">
 
               <li class="active"><a href="{$g_base_url}/out.php">{$g_lang_home}</a></li>
-              <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
+              {if $can_checkin || $isadmin eq 'yes'}
+                <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
+              {/if}
               <li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>
-              <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
+              {if $can_add || $isadmin eq 'yes'} 
+                <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
+              {/if}
               {if $isadmin eq 'yes'}
               <li>
                  
