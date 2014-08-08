@@ -100,6 +100,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
                 // User has version 11rc1 and is upgrading
                 case "update_11rc1":
@@ -115,6 +116,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 11rc2 and is upgrading
@@ -130,6 +132,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 11 and is upgrading
@@ -144,6 +147,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 12rc1 and is upgrading
@@ -157,6 +161,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 12p1 and is upgrading
@@ -169,6 +174,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 12p3 and is upgrading
@@ -180,6 +186,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 124 and is upgrading
@@ -190,6 +197,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 1252 and is upgrading
@@ -199,6 +207,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 1256 and is upgrading
@@ -207,6 +216,7 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
 
                 // User has version 1257 or 126beta and is upgrading
@@ -214,18 +224,25 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     do_update_1257();
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
       
                 // User has version 1261 and is upgrading
                 case "update_1261":
                     do_update_1261();
                     do_update_1262();
+                    do_update_1263();
                     break;
        
                 // User has version 1262 and is upgrading
                 case "update_1262":
                     do_update_1262();
-                    break;               
+                    do_update_1263();
+                    break; 
+                // User has version 1262 and is upgrading
+                case "update_1263":
+                    do_update_1263();
+                    break;
                 default:
                     print_intro();
                     break;
@@ -361,7 +378,14 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                 include("../config.php");
                 include("upgrade_1262.php");
                 echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-            }               
+            }     
+            function do_update_1263()
+            {
+                echo 'Updating from versions 1.2.6.3 through 1.2.7.3<br />';
+                include("../config.php");
+                include("upgrade_1263.php");
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
+            }  
             function print_intro()
             {
 
@@ -390,6 +414,9 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
             <tr>
                 <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
             </tr>
+            <tr>
+                <td><a href="index.php?op=update_1263">Upgrade from versions 1.2.6.3 Through 1.2.7.3</a><br><br></td>
+            </tr> 
             <tr>
                 <td><a href="index.php?op=update_1262">Upgrade from version 1.2.6.2</a><br><br></td>
             </tr>           

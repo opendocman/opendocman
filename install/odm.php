@@ -239,13 +239,15 @@ CREATE TABLE {$dbprefix}user (
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
+  can_add tinyint(1) NULL DEFAULT 1,
+  can_checkin tinyint(1) NULL DEFAULT 1,
   PRIMARY KEY  (id)
 ) ENGINE = MYISAM
         ") or die("<br>Could not create {$dbprefix}user table. Error was:" .  mysql_error());
 
 // Create admin user
 $result = mysql_query("
-INSERT INTO {$dbprefix}user VALUES (NULL,'admin',md5('{$adminpass}'),'1','5555551212','admin@example.com','User','Admin','')
+INSERT INTO {$dbprefix}user VALUES (NULL,'admin',md5('{$adminpass}'),'1','5555551212','admin@example.com','User','Admin','',1,1)
         ") or die("<br>Could not add user. Error was:" .  mysql_error());
 
 // User permissions table
@@ -293,7 +295,7 @@ CREATE TABLE IF NOT EXISTS {$dbprefix}odmsys
 
 // Create version number in db
 $result = mysql_query("
-INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.6.3')
+INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.8')
         ") or die("<br>Could not insert new version into {$dbprefix}odmsys. Error was:" .  mysql_error());
 
                 $result = mysql_query("

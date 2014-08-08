@@ -162,6 +162,18 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 </TD>
 </TR>
 <tr>
+                <td><b><?php echo msg('userpage_can_add')?>?</b></td>
+                <td>
+                <input name="can_add" type="checkbox" value="1" id="cb_can_add"  checked="checked">
+                </td>
+                </tr>
+                <tr>
+                <td><b><?php echo msg('userpage_can_checkin')?>?</b></td>
+                <td>
+                <input name="can_checkin" type="checkbox" value="1" id="cb_can_checkin"  checked="checked">
+                </td>
+                </tr>
+<tr>
     <td align="center">
         <div class="buttons">
             <button id="submitButton" class="positive" type="Submit" name="submit" value="Add User"><?php echo msg('userpage_button_add_user')?></button>
@@ -205,9 +217,42 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
     else
     {
         $phonenumber = @$_POST['phonenumber'];
+        
+        if(!isset($_POST['can_add'])) {
+            $_POST['can_add'] = 0;
+        }
+        if(!isset($_POST['can_checkin'])) {
+            $_POST['can_checkin'] = 0;
+        }
+        
         // INSERT into user
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_POST['password']) ."'), '" . addslashes($_POST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_POST['Email'])."', '" . addslashes($_POST['last_name']) . "', '" . addslashes($_POST['first_name']) . '\' )';
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user
+                    (username, password, department, phone, Email,last_name, first_name, can_add, can_checkin)
+                    VALUES(
+                        :username,
+                        md5(:password),
+                        :department,
+                        :phonenumber,
+                        :email,
+                        :lastname,
+                        :firstname,
+                        :can_add,
+                        :can_checkin
+                )";
+
+        $stmt = $pdo->prepare($query);
+        
+        $stmt->bindParam(':username', $_POST['username']);
+        $stmt->bindParam(':password', $_POST['password']);
+        $stmt->bindParam(':department', $_POST['department']);
+        $stmt->bindParam(':phonenumber', $phonenumber);
+        $stmt->bindParam(':email', $_POST['Email']);
+        $stmt->bindParam(':lastname', $_POST['last_name']);
+        $stmt->bindParam(':firstname', $_POST['first_name']);
+        $stmt->bindParam(':can_add', $_POST['can_add']);
+        $stmt->bindParam(':can_checkin', $_POST['can_checkin']);
+        $stmt->execute();
+
         // INSERT into admin
         $userid = mysql_insert_id($GLOBALS['connection']);
         if (!isset($_POST['admin']))
@@ -616,6 +661,28 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 ?>
                         </SELECT>
                         </TD></TR>
+                <?php
+                $can_add = '';
+                $can_checkin = '';
+                if($user_obj->can_add == 1) {
+                    $can_add = "checked";
+                }
+                if($user_obj->can_checkin == 1) {
+                    $can_checkin = "checked";
+                }
+                ?>
+                <tr>
+                    <td><?php echo msg('userpage_can_add')?>?</td>
+                    <td>
+                        <input name="can_add" type="checkbox" value="1" <?php echo $can_add; ?> id="cb_can_add"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td><?php echo msg('userpage_can_checkin')?>?</td>
+                    <td>
+                        <input name="can_checkin" type="checkbox" value="1" <?php echo $can_checkin; ?> id="cb_can_checkin"></input>
+                    </td>
+                </tr>
                         <tr>
                         <td align="center">
                         <INPUT type="hidden" name="set_password" value="0">
@@ -652,6 +719,15 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         $_POST['admin'] = '0';
     }
 
+    if(!isset($_POST['can_add']) || $_POST['can_add'] == '')
+    {
+        $_POST['can_add'] = '0';
+    }
+    if(!isset($_POST['can_checkin']) || $_POST['can_checkin'] == '')
+    {
+        $_POST['can_checkin'] = '0';
+    }
+    
     // UPDATE admin info
     if($user_obj->isAdmin())
     {
@@ -664,6 +740,8 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     if($user_obj->isAdmin())
     {
         $query .= "username='". addslashes($_POST['username']) ."',";
+        $query .= "can_add=". addslashes($_POST['can_add']) .",";
+        $query .= "can_checkin=". addslashes($_POST['can_checkin']) .",";
     }
     
     if (!empty($_POST['password']))

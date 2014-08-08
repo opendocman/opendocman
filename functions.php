@@ -178,6 +178,8 @@ function draw_header($pageTitle, $lastmessage='')
     {
         $current_user_obj = new User($uid, $GLOBALS['connection'], DB_NAME);
         $GLOBALS['smarty']->assign('userName', $current_user_obj->getName());
+        $GLOBALS['smarty']->assign('can_add', $current_user_obj->can_add);
+        $GLOBALS['smarty']->assign('can_checkin', $current_user_obj->can_checkin);
     }
     
     // Are they an Admin?
@@ -197,7 +199,7 @@ function draw_header($pageTitle, $lastmessage='')
     $crumb = new crumb();
     $crumb->addCrumb($_REQUEST['state'], $pageTitle, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
     $breadCrumb = $crumb->printTrail($_REQUEST['state']);
-        
+    
     $GLOBALS['smarty']->assign('breadCrumb', $breadCrumb);
     $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
     $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);

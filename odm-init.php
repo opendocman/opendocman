@@ -39,7 +39,8 @@ try {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();
 }
-
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+ 
 $GLOBALS['pdo'] = $pdo;
 
 ob_start();

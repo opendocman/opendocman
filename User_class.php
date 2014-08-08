@@ -34,6 +34,8 @@ if( !defined('User_class') )
         var $phone;
         var $department;
         var $pw_reset_code;
+        var $can_add;
+        var $can_checkin;
        
         /**
          *
@@ -59,7 +61,9 @@ if( !defined('User_class') )
                         email, 
                         last_name, 
                         first_name, 
-                        pw_reset_code 
+                        pw_reset_code,
+                        can_add,
+                        can_checkin
                     FROM 
                         {$GLOBALS['CONFIG']['db_prefix']}user 
                     WHERE 
@@ -78,7 +82,9 @@ if( !defined('User_class') )
                     $this->email,
                     $this->last_name,
                     $this->first_name,
-                    $this->pw_reset_code
+                    $this->pw_reset_code,
+                    $this->can_add,
+                    $this->can_checkin
                     ) = mysql_fetch_row($result);
             mysql_free_result($result);
          
@@ -161,6 +167,34 @@ if( !defined('User_class') )
         function isRoot()
         {
             return ($this->root_id == $this->getId());
+        }
+
+        /**
+        * @return boolean
+        */
+        function canAdd()
+        {
+            if($this->isAdmin()) {
+                return true;
+            }
+            if($this->can_add) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+        * @return boolean
+        */
+        function canCheckIn()
+        {
+            if($this->isAdmin()) {
+                return true;
+            }
+            if($this->can_checkin) {
+                return true;
+            }
+            return false;
         }
 
         function getPassword()
