@@ -164,13 +164,13 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
 <tr>
                 <td><b><?php echo msg('userpage_can_add')?>?</b></td>
                 <td>
-                <input name="can_add" type="checkbox" value="1" id="cb_can_add">
+                <input name="can_add" type="checkbox" value="1" id="cb_can_add"  checked="checked">
                 </td>
                 </tr>
                 <tr>
                 <td><b><?php echo msg('userpage_can_checkin')?>?</b></td>
                 <td>
-                <input name="can_checkin" type="checkbox" value="1" id="cb_can_checkin">
+                <input name="can_checkin" type="checkbox" value="1" id="cb_can_checkin"  checked="checked">
                 </td>
                 </tr>
 <tr>

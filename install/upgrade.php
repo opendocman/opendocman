@@ -122,3 +122,11 @@ function do_upgrade1262 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
     mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">do_upgrade1262 error: Unable to select database.</font>");
     include("install/upgrade_1262.php");
 }
+/*** This function calls the upgrade from odm 1.2.6.3 ***/
+function do_upgrade1263 ($dbhost, $dbuname, $dbpass, $dbname, $prefix, $dbtype)
+{
+    global $dbconn;
+    mysql_connect($dbhost, $dbuname, $dbpass);
+    mysql_select_db("$dbname") or die ("<br><font class=\"pn-failed\">do_upgrade1263 error: Unable to select database.</font>");
+    include("install/upgrade_1263.php");
+}
