@@ -30,6 +30,12 @@ if (!isset($_SESSION['uid']))
     redirect_visitor();
 }
 
+$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+
+if(!$user_obj->canCheckIn()){
+    redirect_visitor('out.php');
+}
+
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 draw_header(msg('button_check_in'), $last_message);

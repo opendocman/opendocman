@@ -41,6 +41,10 @@ require_once('Email_class.php');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 
+if(!$user_obj->canAdd()){
+    redirect_visitor('out.php');
+}
+
 if(!isset($_POST['submit'])) 
 {
     $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
@@ -141,6 +145,7 @@ else
     }
 
     $numberOfFiles = count($_FILES['file']['name']);
+    $tmp_name = array();
     
     // First we need to make sure all files are allowed types
     for ($count = 0; $count < $numberOfFiles; $count++) {
@@ -158,8 +163,9 @@ else
             exit;
         }
 
+        $tmp_name[$count] = realpath($_FILES['file']['tmp_name'][$count]);
         // Lets lookup the try mime type
-        $file_mime = File::mime($_FILES['file']['tmp_name'][$count], $_FILES['file']['name'][$count]);
+        $file_mime = File::mime($tmp_name[$count], $_FILES['file']['name'][$count]);
 
         $allowedFile = 0;
         
@@ -323,13 +329,12 @@ else
         // save uploaded file with new name
         $newFileName = $fileId . '.dat';
 
-        if (!is_uploaded_file($_FILES['file']['tmp_name'][$count]))
+        if (!is_uploaded_file($tmp_name[$count]))
         {
             header('Location: error.php?ec=18');
             exit;
         }
-        move_uploaded_file($_FILES['file']['tmp_name'][$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
-
+        move_uploaded_file($tmp_name[$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         
         AccessLog::addLogEntry($fileId, 'A');
@@ -379,4 +384,4 @@ else
     header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
     exit;
 }
-    draw_footer();
+draw_footer();
