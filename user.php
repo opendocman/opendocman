@@ -254,12 +254,12 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         $stmt->execute();
 
         // INSERT into admin
-        $userid = mysql_insert_id($GLOBALS['connection']);
+        $userid = $pdo->lastInsertId();;
         if (!isset($_POST['admin']))
         {
             $_POST['admin']='0';
         }
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '$_POST[admin]')";
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '{$_POST['admin']}')";
         $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
         if(isset($_POST['department_review']))
         {
@@ -601,9 +601,6 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 <td><b><?php echo msg('userpage_admin');?></b></td>
                 <td colspan=1>
 <?php
-                // query to get a list of departments
-                $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
-                //if ($adminvalue=='1')
                 if($user_obj->isAdmin())
                 {
                         echo '<input name="admin" type="checkbox" value="1" checked '.$mode.' id="cb_admin"></input>'."\n";
