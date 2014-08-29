@@ -78,6 +78,7 @@ $mimetypes = array(
 'dotx' => array('application/vnd.openxmlformats-officedocument.wordprocessingml.template'),
 'dtd' => array('text/xml'),
 'dvi' => array('application/x-dvi'),
+'dwg' => array('application/acad', 'application/x-acad', 'application/autocad_dwg', 'image/x-dwg', 'application/dwg', 'application/x-dwg', 'application/x-autocad', 'image/vnd.dwg', 'drawing/dwg'),
 'dxr' => array('application/x-director'),
 'eml' => array('message/rfc822'),
 'eps' => array('application/postscript'),
