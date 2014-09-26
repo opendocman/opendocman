@@ -179,6 +179,8 @@ CREATE TABLE odm_user (
   last_name varchar(255) default NULL,
   first_name varchar(255) default NULL,
   pw_reset_code char(32) default NULL,
+  can_add tinyint(1) NULL DEFAULT 1,
+  can_checkin tinyint(1) NULL DEFAULT 1,
   PRIMARY KEY  (id)
 ) ENGINE = MYISAM;
 
@@ -186,7 +188,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','');
+INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
