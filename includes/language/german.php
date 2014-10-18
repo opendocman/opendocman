@@ -1,6 +1,6 @@
 <?php
 // GERMAN LANGUAGE FILE
-// (C) 2012 Stephen Lawrence Jr.
+// (C) 2012-14 Stephen Lawrence Jr.
 // Translated by: Martin Waiss
 /*
     This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> Datei wird auf den Rechner g
 $lang['message_initial_import'] = 'Erstimport';
 $lang['message_last_message'] = 'Aktuelle Nachricht';
 $lang['message_latest_version'] = 'Aktuelle Version';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Mindestens ein Bereich wird benötigt';
 $lang['message_no_author_comments_available'] = 'Keine Autorenkommentare verfügbar';
 $lang['message_no_description_available'] = 'Keine Beschreibung verfügbar';

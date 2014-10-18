@@ -94,7 +94,8 @@ if ( !defined('User_Perms_class') )
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
                         WHERE
-                            d.publishable = 1";
+                            d.publishable = 1 "
+                                    . "LIMIT {$GLOBALS['CONFIG']['max_query']}";
             }
             elseif ($this->user_obj->isReviewer())
             {
@@ -108,7 +109,8 @@ if ( !defined('User_Perms_class') )
                         AND
                             dr.dept_id = d.department
                         AND
-                            dr.user_id = $this->id";
+                            dr.user_id = $this->id"
+                                    . " LIMIT {$GLOBALS['CONFIG']['max_query']}";
             }
             else
             {
@@ -125,7 +127,7 @@ if ( !defined('User_Perms_class') )
                                     up.rights>=$right
                                 AND
                                     d.publishable = 1
-                              )";
+                              ) LIMIT {$GLOBALS['CONFIG']['max_query']}";
             }
             //$start = getmicrotime();
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());

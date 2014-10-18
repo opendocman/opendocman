@@ -74,4 +74,7 @@
     {/if}
 </table>
 </div>
+{if $limit_reached}
+    <div class="text-warning">{$g_lang_message_max_number_of_results}</div>
+{/if}
 <br />

@@ -1,6 +1,6 @@
 <?php
 //Turkish LANGUAGE FILE
-//(C) 2010-2012 Stephen Lawrence Jr.
+//(C) 2010-2014 Stephen Lawrence Jr.
 // Translator:  "A. Murat Ergin" <murat.ergin@ege.edu.tr>
 /*
 This program is free software; you can redistribute it and/or
@@ -160,6 +160,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> to begin downloading it to y
 $lang['message_initial_import'] = "Ba&#351;lang&#305;&#231; i&#231;eri aktarmas&#305;";
 $lang['message_last_message'] = "Son mesaj:";
 $lang['message_latest_version'] = 'Latest version';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'You need at least one department';
 $lang['message_no_author_comments_available'] = 'No author comments available';
 $lang['message_no_description_available'] = "Tan&#305;mlama yok";
