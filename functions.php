@@ -399,9 +399,14 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
                 'rejectpage'=>$rejectpage
         );
         //print_r($file_list_arr);exit;
-
     }
-
+    
+    $limit_reached = false;
+    if(count($file_list_arr) >= $GLOBALS['CONFIG']['max_query']) {
+        $limit_reached = true;
+    }
+    
+    $GLOBALS['smarty']->assign('limit_reached', $limit_reached);
     $GLOBALS['smarty']->assign('showCheckBox', $showCheckBox);
     //print_r($file_list_arr);exit;
     $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);

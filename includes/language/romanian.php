@@ -1,6 +1,6 @@
 <?php
 //ROMANIAN LANGUAGE FILE
-// (C) 20010-2013 Stephen Lawrence Jr.
+// (C) 20010-2014 Stephen Lawrence Jr.
 // Translated by: Radu Toma
 /*
 This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = 'pentru a incepe descarcarea pe co
 $lang['message_initial_import'] = 'Incarcarea initiala';
 $lang['message_last_message'] = 'Ultimu mesaj';
 $lang['message_latest_version'] = 'Ultima versiune';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Trebuie sa selectezi cel putin un Departament';
 $lang['message_no_author_comments_available'] = 'Nu sunt comentarii disponibile';
 $lang['message_no_description_available'] = 'Nu exista descriere disponibila';

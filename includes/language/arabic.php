@@ -287,7 +287,8 @@ $lang['message_if_you_are_unable_to_view2'] = 'تتزيل الملف';
 $lang['message_if_you_are_unable_to_view3'] = '<br> لبدء تحميله إلى محطة العمل المحلية للحصول على عرض محلي.';//Abduh says :this value must be changed
 $lang['message_initial_import'] = 'استيراد اولي';
 $lang['message_last_message'] = 'اخر رسالة';
-$lang['message_latest_version'] = 'احدث اصدار'; 
+$lang['message_latest_version'] = 'احدث اصدار';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'انت تحتاج على الاقل على ادارة واحدة'; //Abduh says :this value must be changed
 $lang['message_no_author_comments_available'] = 'لايوجد تعليقات متاحة';
 $lang['message_no_description_available'] = 'لايوجد وصف متاح';

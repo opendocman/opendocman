@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.6.3');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.9');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -266,6 +266,7 @@ INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password
 INSERT INTO `odm_settings` VALUES(NULL,'theme', 'tweeter', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
 INSERT INTO `odm_settings` VALUES(NULL,'base_url', 'http://localhost/opendocman', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');
+INSERT INTO `odm_settings` VALUES(NULL,'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing.', 'num');
 
 CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,

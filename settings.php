@@ -1,7 +1,7 @@
 <?php
 /*
    settings.php - Administer Settings
-   Copyright (C) 2011 Stephen Lawrence Jr.
+   Copyright (C) 2011-2014 Stephen Lawrence Jr.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     {
         $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_writable'];
     }
-    elseif((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration'])) )
+    elseif((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration']) || (!is_numeric($_POST['max_query'])) ) )
     {
         $_POST['last_message'] = $GLOBALS['lang']['message_config_value_problem'];
     }

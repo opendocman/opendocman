@@ -2,7 +2,7 @@
 /*
 Dept_Perms_class.php - Dept_Perms is designed to handle permission settings of each department.
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2014 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -90,7 +90,8 @@ if( !defined('Dept_Perms_class') )
                     AND
                             data.id=deptperms.fid
                     AND
-                            data.publishable=1";
+                            data.publishable=1"
+                                . " LIMIT {$GLOBALS['CONFIG']['max_query']}";
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
             //$fileid_array[$index][0] ==> fid
             //$fileid_array[$index][1] ==> owner
