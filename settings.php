@@ -55,6 +55,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 {
     draw_header(msg('label_settings'), $last_message);
 
+    // Clean up the datadir a bit to make sure it ends with slash
+    if (!empty($_POST['dataDir'])) {
+        if (substr($_POST['dataDir'], -1) != '/') {
+            $_POST['dataDir'] .= '/';
+        }
+    }
+
     // Perform Input Validation
     if(!is_dir($_POST['dataDir']))
     {
