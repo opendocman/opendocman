@@ -1,6 +1,6 @@
 <?php
 //FRENCH LANGUAGE FILE
-// (C) 20010-2013 Stephen Lawrence Jr.
+// (C) 20010-2014 Stephen Lawrence Jr.
 // Translated by: François Vallée, Peter Host
 /*
 This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> pour commencer le téléchar
 $lang['message_initial_import'] = 'Import Initial';
 $lang['message_last_message'] = 'Dernier Message';
 $lang['message_latest_version'] = 'Dernière version';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Il doit y avoir à minima Un département';
 $lang['message_no_author_comments_available'] = 'Pas de commentaires de l\'auteur pour l\'instant';
 $lang['message_no_description_available'] = 'Pas de Description disponible';

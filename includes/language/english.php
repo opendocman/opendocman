@@ -1,6 +1,6 @@
 <?php
 //ENGLISH LANGUAGE FILE
-// (C) 20010-2013 Stephen Lawrence Jr.
+// (C) 20010-2014 Stephen Lawrence Jr.
 // Translated by: Stephen Lawrence Jr.
 /*
 This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> to begin downloading it to y
 $lang['message_initial_import'] = 'Initial Import';
 $lang['message_last_message'] = 'Last Message';
 $lang['message_latest_version'] = 'Latest version';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'You need at least one department';
 $lang['message_no_author_comments_available'] = 'No author comments available';
 $lang['message_no_description_available'] = 'No description available';
