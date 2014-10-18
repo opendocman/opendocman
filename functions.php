@@ -193,7 +193,7 @@ function draw_header($pageTitle, $lastmessage='')
         $_REQUEST['state']=1;
     }      
     
-    $lastmessage = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+    $lastmessage = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : $lastmessage);
 
     // Set up the breadcrumbs
     $crumb = new crumb();
