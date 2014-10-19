@@ -78,7 +78,7 @@ if($llen > 0)
 //set values
 $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 //$start_P = getmicrotime();
-$file_id_array = $user_perms->getViewableFileIds();
+$file_id_array = $user_perms->getViewableFileIds(true);
 //$end_P = getmicrotime();
 
 

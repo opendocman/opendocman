@@ -51,43 +51,48 @@ if ( !defined('User_Perms_class') )
             $this->deptperms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection, $database);
         }
         // return an array of user whose permission is >= view_right
-        function getCurrentViewOnly()
+        function getCurrentViewOnly($limit = true)
         {
-            return $this->loadData_UserPerm($this->VIEW_RIGHT);
+            return $this->loadData_UserPerm($this->VIEW_RIGHT, $limit);
         }
         // return an array of user whose permission is >= none_right
-        function getCurrentNoneRight()
+        function getCurrentNoneRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->NONE_RIGHT);
+            return $this->loadData_UserPerm($this->NONE_RIGHT, $limit);
         }
         // return an array of user whose permission is >= read_right
-        function getCurrentReadRight()
+        function getCurrentReadRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->READ_RIGHT);
+            return $this->loadData_UserPerm($this->READ_RIGHT, $limit);
         }
         // return an array of user whose permission is >= write_right
-        function getCurrentWriteRight()
+        function getCurrentWriteRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->WRITE_RIGHT);
+            return $this->loadData_UserPerm($this->WRITE_RIGHT, $limit);
         }
         // return an array of user whose permission is >= admin_right
-        function getCurrentAdminRight()
+        function getCurrentAdminRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->ADMIN_RIGHT);
+            return $this->loadData_UserPerm($this->ADMIN_RIGHT, $limit);
         }
         function getId()
         {
             return $this->id;
         }
 
-        /*
+        /**
          * All of the functions above provide an abstraction for loadData_UserPerm($right).
-         * If your user doesn't want to or does not know the numeric value for permission,
+         * If your user does not want to or does not know the numeric value for permission,
          * use the function above.  LoadData_UserPerm($right) can be invoke directly.
-         * @param integer $right The "Right" that is bein checked.
+         * @param integer $right The "Right" that is being checked.
+         * @param $right The permissions level you are checking for
+         * @param $limit boolean Should we limit the query to max_query size?
+         * @return array
          */
-        function loadData_UserPerm($right)
+        function loadData_UserPerm($right, $limit)
         {
+            $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
+
             if($this->user_obj->isAdmin())
             {
                 $query = "SELECT d.id
@@ -95,7 +100,7 @@ if ( !defined('User_Perms_class') )
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
                         WHERE
                             d.publishable = 1 "
-                                    . "LIMIT {$GLOBALS['CONFIG']['max_query']}";
+                                    . $limit_query;
             }
             elseif ($this->user_obj->isReviewer())
             {
@@ -109,8 +114,8 @@ if ( !defined('User_Perms_class') )
                         AND
                             dr.dept_id = d.department
                         AND
-                            dr.user_id = $this->id"
-                                    . " LIMIT {$GLOBALS['CONFIG']['max_query']}";
+                            dr.user_id = $this->id "
+                                    . $limit_query;
             }
             else
             {
@@ -127,7 +132,7 @@ if ( !defined('User_Perms_class') )
                                     up.rights>=$right
                                 AND
                                     d.publishable = 1
-                              ) LIMIT {$GLOBALS['CONFIG']['max_query']}";
+                              ) $limit_query";
             }
             //$start = getmicrotime();
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
