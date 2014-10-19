@@ -13,6 +13,7 @@
       body {
         padding-top: 60px;
         padding-bottom: 40px;
+	margin-left: 10px;
       }
       {/literal}
     </style>
@@ -37,7 +38,6 @@
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>{$g_title}</title>
         </head>
-
         <body bgcolor="White">
 
         <table cellspacing="0" cellpadding="0">

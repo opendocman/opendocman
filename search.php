@@ -178,8 +178,9 @@ else
                 break;
 
         }
-        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";            
-        $lresult = mysql_query($lquery_pre.$lquery);
+        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";
+        $final_query = $lquery_pre . $lquery;
+        $lresult = mysql_query($final_query);
 
         $lindex = 0;
         $lid_array = array();
@@ -209,7 +210,7 @@ else
     }
     else
     {
-        $view_able_files_id = $current_user_permission->getViewableFileIds();
+        $view_able_files_id = $current_user_permission->getViewableFileIds(false);
     }
     //$e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);

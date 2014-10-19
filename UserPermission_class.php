@@ -53,19 +53,19 @@ if( !defined('UserPermission_class') )
             $this->ADMIN_RIGHT = $this->userperm_obj->ADMIN_RIGHT;
         }
         // return an array of all the Allowed files ( right >= view_right) ID
-        function getAllowedFileIds()
+        function getAllowedFileIds($limit)
         {
-            $viewable_array = $this->getViewableFileIds();
-            $readable_array = $this->getReadableFileIds();
-            $writeable_array = $this->getWriteableFileIds();
-            $adminable_array = $this->getAdminableFileIds();
+            $viewable_array = $this->getViewableFileIds($limit);
+            $readable_array = $this->getReadableFileIds($limit);
+            $writeable_array = $this->getWriteableFileIds($limit);
+            $adminable_array = $this->getAdminableFileIds($limit);
             $result_array = array_values( array_unique( array_merge($viewable_array, $readable_array, $writeable_array, $adminable_array) ) );
             return $result_array;
         }
         // return an array of all the Allowed files ( right >= view_right) object
-        function getAllowedFileOBJs()
+        function getAllowedFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ( $this->getAllowedFileIds() );
+            return $this->convertToFileDataOBJ( $this->getAllowedFileIds($limit) );
         }
         // // return an array of all the Allowed files ( right >= view_right) ID
         // One might ask why getViewableFileIds() doesn't return the combined
@@ -94,12 +94,12 @@ if( !defined('UserPermission_class') )
 		$result_array = array_values($total_listing);
 		return $result_array;
 	}*/
-        function getViewableFileIds()
+        function getViewableFileIds($limit = true)
         {
             $array = array();
             //These 2 below takes half of the execution time for this function
-            $userperm_filearray = ($this->userperm_obj->getCurrentViewOnly());
-            $deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly());
+            $userperm_filearray = ($this->userperm_obj->getCurrentViewOnly($limit));
+            $deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly($limit));
             $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA,
                     {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE ({$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->uid
 				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid
@@ -120,51 +120,51 @@ if( !defined('UserPermission_class') )
             return $total_listing;
         }
 // return an array of all the Allowed files ( right >= view_right) OBJ 
-        function getViewableFileOBJs()
+        function getViewableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getViewableFileIds());
+            return $this->convertToFileDataOBJ($this->getViewableFileIds($limit));
         }
         // return an array of all the Allowed files ( right >= read_right) ID
-        function getReadableFileIds()
+        function getReadableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentReadRight();
-            $deptperm_filearray = $this->deptperm_obj->getCurrentReadRight();
+            $userperm_filearray = $this->userperm_obj->getCurrentReadRight($limit);
+            $deptperm_filearray = $this->deptperm_obj->getCurrentReadRight($limit);
             $published_filearray = $this->user_obj->getPublishedData(1);
             $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
             return $result_array;
         }
         //// return an array of all the Allowed files ( right >= read_right) OBJ
-        function getReadableFileOBJs()
+        function getReadableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getReadableFileIds());
+            return $this->convertToFileDataOBJ($this->getReadableFileIds($limit));
         }
         // return an array of all the Allowed files ( right >= write_right) ID
-        function getWriteableFileIds()
+        function getWriteableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentWriteRight();
-            $deptperm_filearray = $this->deptperm_obj->getCurrentWriteRight();
+            $userperm_filearray = $this->userperm_obj->getCurrentWriteRight($limit);
+            $deptperm_filearray = $this->deptperm_obj->getCurrentWriteRight($limit);
             $published_filearray = $this->user_obj->getPublishedData(1);
             $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
             return $result_array;
         }
         // return an array of all the Allowed files ( right >= write_right) ID
-        function getWriteableFileOBJs()
+        function getWriteableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getWriteableFileIds());
+            return $this->convertToFileDataOBJ($this->getWriteableFileIds($limit));
         }
         // return an array of all the Allowed files ( right >= admin_right) ID
-        function getAdminableFileIds()
+        function getAdminableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentAdminRight();
-            $deptperm_filearray = $this->deptperm_obj->getCurrentAdminRight();
+            $userperm_filearray = $this->userperm_obj->getCurrentAdminRight($limit);
+            $deptperm_filearray = $this->deptperm_obj->getCurrentAdminRight($limit);
             $published_filearray = $this->user_obj->getPublishedData(1);
             $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
             return $result_array;
         }
         // return an array of all the Allowed files ( right >= admin_right) OBJ
-        function getAdminableFileOBJs()
+        function getAdminableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getAdminableFileIds());
+            return $this->convertToFileDataOBJ($this->getAdminableFileIds($limit));
         }
 
         function combineArrays($high_priority_array, $low_priority_array)

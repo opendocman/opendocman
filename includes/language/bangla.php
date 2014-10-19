@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '। <br> স্থানীয়
 $lang['message_initial_import'] = 'প্রাথমিক আমদানি';
 $lang['message_last_message'] = 'সর্বশেষ বার্তা';
 $lang['message_latest_version'] = 'সর্বশেষ ভার্সন';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'অন্ততঃ একটি বিভাগ প্রয়োজন ';
 $lang['message_no_author_comments_available'] = 'লেখকের কোন মন্তব্য উপলভ্য নয়';
 $lang['message_no_description_available'] = 'কোন বিবরণ উপলভ্য নয়';

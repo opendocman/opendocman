@@ -2,7 +2,7 @@
 /*
 Dept_Perms_class.php - Dept_Perms is designed to handle permission settings of each department.
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2014 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -48,25 +48,25 @@ if( !defined('Dept_Perms_class') )
             $this->connection = $connection;
             $this->database = $database;
         }
-        function getCurrentViewOnly()
+        function getCurrentViewOnly($limit = true)
         {
-            return $this->loadData_UserPerm($this->VIEW_RIGHT);
+            return $this->loadData_UserPerm($this->VIEW_RIGHT, $limit);
         }
-        function getCurrentNoneRight()
+        function getCurrentNoneRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->NONE_RIGHT);
+            return $this->loadData_UserPerm($this->NONE_RIGHT, $limit);
         }
-        function getCurrentReadRight()
+        function getCurrentReadRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->READ_RIGHT);
+            return $this->loadData_UserPerm($this->READ_RIGHT, $limit);
         }
-        function getCurrentWriteRight()
+        function getCurrentWriteRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->WRITE_RIGHT);
+            return $this->loadData_UserPerm($this->WRITE_RIGHT, $limit);
         }
-        function getCurrentAdminRight()
+        function getCurrentAdminRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->ADMIN_RIGHT);
+            return $this->loadData_UserPerm($this->ADMIN_RIGHT, $limit);
         }
         function getId()
         {
@@ -75,8 +75,10 @@ if( !defined('Dept_Perms_class') )
         /* loadData_userPerm($right) return a list of files that
 	the department that this OBJ represents has authority >=
 	than $right */
-        function loadData_UserPerm($right)
+        function loadData_UserPerm($right, $limit = true)
         {
+            $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
+
             //$s1 = getmicrotime();
             $fileid_array = array();
             $query = "SELECT deptperms.fid
@@ -90,7 +92,8 @@ if( !defined('Dept_Perms_class') )
                     AND
                             data.id=deptperms.fid
                     AND
-                            data.publishable=1";
+                            data.publishable=1 "
+                                . $limit_query;
             $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
             //$fileid_array[$index][0] ==> fid
             //$fileid_array[$index][1] ==> owner

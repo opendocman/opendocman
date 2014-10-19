@@ -1,6 +1,6 @@
 <?php
 //CROATIAN LANGUAGE FILE
-// (C) 20010-2013 Stephen Lawrence Jr.
+// (C) 20010-2014 Stephen Lawrence Jr.
 // Translated by: Mihovil Stanić
 /*
 This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> kako biste preuzeli odabrani
 $lang['message_initial_import'] = 'Početni uvoz';
 $lang['message_last_message'] = 'Posljednja poruka';
 $lang['message_latest_version'] = 'Najnovija inačica';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Odaberite barem jedan odjel';
 $lang['message_no_author_comments_available'] = 'Autorov komentar nije dostupan';
 $lang['message_no_description_available'] = 'Opis nije dostupan';
