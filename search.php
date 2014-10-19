@@ -209,7 +209,7 @@ else
     }
     else
     {
-        $view_able_files_id = $current_user_permission->getViewableFileIds();
+        $view_able_files_id = $current_user_permission->getViewableFileIds(false);
     }
     //$e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
