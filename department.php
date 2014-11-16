@@ -192,7 +192,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     $showpick='';
 ?>
                             <table border="0" cellspacing="5" cellpadding="5">
-                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
+                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo htmlspecialchars($last_message); ?>" method="POST" enctype="multipart/form-data">
                                     <tr>
                                     <input type="hidden" name="state" value="<?php echo ($_GET['state']+1); ?>">
                                     <td><b><?php echo msg('department')?></b></td>

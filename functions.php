@@ -100,10 +100,6 @@ function space_to_underscore($string)
 // Draw the status bar for each page
 function draw_status_bar()
 {
-    //echo '<td bgcolor="#0000A0" align="left" valign="middle" width="110">'."\n";
-    //echo '<b><font size="-2" face="Arial" color="White">'."\n";
-    //echo $message;
-    //echo '</font></b></td>'."\n";
     return;
 }
 
@@ -204,7 +200,7 @@ function draw_header($pageTitle, $lastmessage='')
     $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
     $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
-    $GLOBALS['smarty']->assign('lastmessage', $lastmessage);
+    $GLOBALS['smarty']->assign('lastmessage', htmlspecialchars($lastmessage));
     display_smarty_template('header.tpl');
     
     if (is_dir('install'))
@@ -216,7 +212,7 @@ function draw_header($pageTitle, $lastmessage='')
 
 function draw_error($message)
 {
-    echo '<div id="last_message">' . $message . '</div>';
+    echo '<div id="last_message">' . htmlspecialchars($message) . '</div>';
 }
 
 function draw_footer()
@@ -782,9 +778,6 @@ function msg($s)
         }
         else
         {
-            //error_log("l10n error:LANG:" .
-            //    $GLOBALS['CONFIG']['language']. ",message:'$s'");
-
             return $s;
         }
     }

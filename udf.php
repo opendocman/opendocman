@@ -29,8 +29,7 @@ if (!isset($_SESSION['uid']))
     redirect_visitor();
 }
 
-//Fb::log($_REQUEST);exit;
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+$last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
 
 $secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
