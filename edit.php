@@ -60,9 +60,13 @@ if (!isset($_REQUEST['submit'])) {
 
     $data_id = $_REQUEST['id'];
     // includes
-    $query = "SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=$_SESSION[uid]";
-    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-    if (mysql_num_rows($result) != 1) {
+    $department_query = "SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=:user_id";
+    $department_stmt = $pdo->prepare($department_query);   
+    $department_stmt->bindParam(':user_id', $_SESSION['uid']);
+    $department_stmt->execute();
+    $result = $department_stmt->fetchAll();
+
+    if ($department_stmt->rowCount() != 1) {
         header('Location:error.php?ec=14');
         exit; //non-unique error
     }
@@ -82,13 +86,16 @@ if (!isset($_REQUEST['submit'])) {
         $department = $filedata->getDepartment();
 
         //CHM
-        $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
-        $result = mysql_query($query) or die("Error in query163: $query. " . mysql_error());
-        $num_rows = mysql_num_rows($result);
+        $table_name_query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
+        $table_name_stmt = $pdo->prepare($table_name_query);
+        $table_name_stmt->execute();
+        $result = $table_name_stmt->fetchAll();
+
+        $num_rows = $table_name_stmt->rowCount();
         
         $t_name = array();
         $i = 0;
-        while ($data = mysql_fetch_array($result)) {
+        foreach($result as $data) {
             $explode_v = explode('_', $data['table_name']);
             $t_name = $explode_v[2];
             $i++;
@@ -202,21 +209,48 @@ if (!isset($_REQUEST['submit'])) {
     udf_edit_file_update();
 
     // clean out old permissions
-    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$fileId'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+    $del_user_perms_query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = :file_id";
+    $del_user_perms_stmt = $pdo->prepare($del_user_perms_query);
+    $del_user_perms_stmt->bindParam(':file_id', $fileId);
+    $del_user_perms_stmt->execute();
+    
     $result_array = array(); // init;
     
     foreach($_REQUEST['user_permission'] as $user_id=>$permission) {
        
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, $user_id, $permission)";
+        $insert_user_perms_query = "
+            INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms 
+            (
+                fid, 
+                uid, 
+                rights
+            ) VALUES(
+                :file_id, 
+                :user_id, 
+                :permission
+            )";
         //echo $query."<br>";
-        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" . mysql_error());
+        $insert_user_perms_stmt = $pdo->prepare($insert_user_perms_query);
+        $insert_user_perms_stmt->bindParam(':file_id', $fileId);
+        $insert_user_perms_stmt->bindParam(':user_id', $user_id);
+        $insert_user_perms_stmt->bindParam(':permission', $permission);
+        $insert_user_perms_stmt->execute();
     }
 
     //UPDATE Department Rights into dept_perms
     foreach ($_POST['department_permission'] as $dept_id => $dept_perm) {
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}dept_perms SET rights = $dept_perm where fid=" . $filedata->getId() . " and {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = $dept_id";
-        mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+        $update_dept_perms_query = "
+            UPDATE 
+                {$GLOBALS['CONFIG']['db_prefix']}dept_perms
+            SET 
+                rights = :dept_perm 
+            WHERE 
+                fid={$filedata->getId()}
+            AND 
+                {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = $dept_id";
+        $update_dept_perms_stmt = $pdo->prepare($update_dept_perms_query);
+        $update_dept_perms_stmt->bindParam(':dept_perm', $dept_perm);
+        $update_dept_perms_stmt->execute();
     }
 
     $message = urlencode('Document successfully updated');
