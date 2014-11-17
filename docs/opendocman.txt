@@ -218,7 +218,6 @@ Below are some of the configurable options:
 
 * authorization [On, Off] - Turn file moderation on or off.
 
-* secureurl [On,Off] - Hide the URL contents from prying
 
 * theme [default="default"] - which theme to use? Smarty-based
   themes are located in templates/ folder. Look at default for example.

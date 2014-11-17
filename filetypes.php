@@ -32,13 +32,12 @@ if (!isset($_SESSION['uid']))
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$secureurl = new phpsecureurl;
 $filetypes = new FileTypes_class();
 
 //If the user is not an admin error out.
 if(!$user_obj->isRoot() == true)
 {
-    header('Location:' . $secureurl->encode('error.php?ec=24'));
+    header('Location: error.php?ec=24');
     exit;
 }
 
@@ -66,7 +65,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_action_cancelled'))));
+    header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
 }
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNew')
 {
@@ -115,6 +114,6 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 }
 else
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_nothing_to_do'))));
+    header('Location: admin.php?last_message=' . urlencode(msg('message_nothing_to_do')));
 }
 

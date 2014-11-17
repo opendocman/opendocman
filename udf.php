@@ -31,11 +31,10 @@ if (!isset($_SESSION['uid']))
 
 $last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
 
-$secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 if(!$user_obj->isAdmin())
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location: error.php?ec=4');
     exit;
 }
 
@@ -97,14 +96,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Fiel
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
     udf_functions_add_udf();
 
     $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
 {
@@ -153,14 +152,14 @@ elseif(isset($_REQUEST['deleteudf']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     udf_functions_delete_udf();
 
     // back to main page
     $last_message = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {

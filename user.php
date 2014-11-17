@@ -35,7 +35,6 @@ if (!isset($_SESSION['uid']))
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 // includes
-$secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
@@ -47,7 +46,7 @@ if (isset($_SESSION['uid']) & isset($_GET['item']))
 {
     if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 }
@@ -66,7 +65,7 @@ else
 }
 if($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['uid'])
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location: error.php?ec=4');
     exit;
 }
 
@@ -201,7 +200,7 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
 {
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     // Check to make sure user does not already exist
@@ -211,7 +210,7 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
     // If the above statement returns more than 0 rows, the user exists, so display error
     if(mysql_num_rows($result) > 0)
     {
-        header('Location:' . $secureurl->encode('error.php?ec=3'));
+        header('Location: error.php?ec=3');
         exit;
     }
     else
@@ -302,7 +301,7 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         // Call the plugin API call for this section
         callPluginMethod('onAfterAddUser');
 
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        header('Location: admin.php?last_message=' . $last_message);
     }
 }
 // Delete USER from DB
@@ -311,7 +310,7 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
@@ -334,7 +333,7 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
 
     // back to main page
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
-    header('Location:' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 // DELETE USER
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
@@ -707,7 +706,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     // Check to make sue they are either the user being modified or an admin
     if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
@@ -806,7 +805,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
                 if(mysql_num_rows($result) <= 0)
                 {
-                        header('Location:' . $secureurl->encode('error.php?ec=4'));
+                        header('Location: error.php?ec=4');
                         exit;
                 }
                 ?>
@@ -918,9 +917,9 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel')
         {
                 $last_message="Action Cancelled";
-                header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));
+                header('Location: admin.php?last_message='.$last_message);
         }
         else 
         {	
-        	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));
+                header('Location: admin.php?last_message=' . urlencode('Unrecognizalbe action'));
         }

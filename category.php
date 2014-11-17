@@ -29,12 +29,11 @@ if (!isset($_SESSION['uid']))
     redirect_visitor();
 }
 
-$secureurl = new phpsecureurl;
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location:error.php?ec=4');
     exit;
 }
 
@@ -75,14 +74,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category')
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location:error.php?ec=4');
         exit;
     }
     $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_added'));
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location:admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
@@ -150,7 +149,7 @@ elseif(isset($_REQUEST['deletecategory']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location:error.php?ec=4');
         exit;
     }
     $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
@@ -162,7 +161,7 @@ elseif(isset($_REQUEST['deletecategory']))
     
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
@@ -362,14 +361,14 @@ elseif(isset($_REQUEST['updatecategory']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel')
 {

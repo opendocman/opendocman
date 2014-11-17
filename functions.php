@@ -39,8 +39,6 @@ foreach($GLOBALS['CONFIG'] as $key => $value)
 include_once('classHeaders.php');
 include_once('mimetypes.php');
 require_once('crumb.php');
-require_once('secureurl.class.php');
-include_once('secureurl.php');
 include('udf_functions.php');
 require_once('Category_class.php');
 include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
@@ -288,7 +286,6 @@ function getmicrotime()
 function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'false', $rejectpage = 'false')
 {
     //      print_r($fileid_array);exit;
-    $secureurl= new phpsecureurl;
     if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
     {
         echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . "\n";
@@ -349,7 +346,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = 'fa
             $view_link = 'none';
         }
 
-        $details_link = $secureurl->encode('details.php?id=' . $fileid . '&state=' . ($_REQUEST['state']+1));
+        $details_link = 'details.php?id=' . $fileid . '&state=' . ($_REQUEST['state']+1);
 
         $read = array($userperms_obj->READ_RIGHT, 'r');
         $write = array($userperms_obj->WRITE_RIGHT, 'w');

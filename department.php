@@ -33,12 +33,12 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 // Make sure user is admin
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$secureurl = new phpsecureurl;
+
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if(!$user_obj->isAdmin() == true)
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location:error.php?ec=4');
     exit;
 }
 
@@ -92,7 +92,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location:error.php?ec=4');
         exit;
     }
 
@@ -100,7 +100,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
     if($department == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        header('Location: admin.php?last_message=' . $last_message);
         exit;
     }
     //Check to see if this department is already in DB
@@ -108,7 +108,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
-        header('Location:' . $secureurl->encode(' error.php?ec=3&message=' . $department . ' already exist in the database'));
+        header('Location: error.php?ec=3&message=' . $department . ' already exist in the database');
         exit;
     }
     $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}department (name) VALUES ('" . addslashes($department) . '\')';
@@ -134,7 +134,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
     $num_rows = mysql_num_rows($result);
     if( $num_rows != 1 )
     {
-        header('Location: ' . $secureurl->encode('error.php?ec=14&message=unable to identify ' . $department));
+        header('Location: error.php?ec=14&message=unable to identify ' . $department);
         exit;
     }
 
@@ -150,7 +150,7 @@ elseif(isset($_POST['submit']) && 'Add Department' == $_POST['submit'])
     // Call the plugin API
     callPluginMethod('onDepartmentAddSave', $newly_added_dept_id);
   
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_POST['submit']) && $_POST['submit'] == 'Show Department')
 {
@@ -339,7 +339,7 @@ elseif(isset($_REQUEST['deletedepartment']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
@@ -367,7 +367,7 @@ elseif(isset($_REQUEST['deletedepartment']))
 
     // back to main page
     $last_message = urlencode(msg('message_all_actions_successfull') . ' id:' . $_REQUEST['id']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify')
 {
@@ -468,7 +468,7 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     
@@ -476,7 +476,7 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     if($name == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        header('Location: admin.php?last_message=' . $last_message);
         exit;
     }
     
@@ -485,7 +485,7 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
     if(mysql_num_rows($result) != 0)
     {
-        header('Location: ' . $secureurl->encode('error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database'));
+        header('Location: error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database');
         exit;
     }
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}department SET name='" . addslashes($name) ."' where id='$_POST[id]'";
@@ -496,15 +496,15 @@ elseif(isset($_POST['submit']) && 'Update Department' == $_POST['submit'])
     // Call the plugin API
     callPluginMethod('onDepartmentModifySave', $_REQUEST);
     
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_action_cancelled'))));
+    header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
 }
 else
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_nothing_to_do'))));
+    header('Location: admin.php?last_message="' . urlencode(msg('message_nothing_to_do')));
 }
 
 

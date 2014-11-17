@@ -28,7 +28,6 @@ if (!isset($_SESSION['uid']))
 }
 
 include('udf_functions.php');
-$secureurl = new phpsecureurl;
 
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
@@ -73,7 +72,7 @@ $accesslog_array = array();
 
 while ($row = mysql_fetch_array($result))
 {
-    $details_link = $secureurl->encode('details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1));
+    $details_link = 'details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1);
 
     $accesslog_array[] = array(
         'user_id' => $row['user_id'],

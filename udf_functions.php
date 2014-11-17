@@ -343,17 +343,17 @@ if ( !defined('udf_functions') )
         echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' .msg('label_user_defined_fields'). '</font></th>';
     }
 
-    function udf_admin_menu($secureurl)
+    function udf_admin_menu()
     {
         echo '<td valign=top><table border=0>';
-        echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=add&state=' . ($_REQUEST['state']+1)).'">' .msg('label_add'). '</a></b></td></tr>';
-        echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1)).'">' .msg('label_delete'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=add&state=' . ($_REQUEST['state']+1).'">' .msg('label_add'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1).'">' .msg('label_delete'). '</a></b></td></tr>';
         echo '<tr><td><hr></td></tr>';
         $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $result = mysql_query($query) or die ("Error in query223: $query. " . mysql_error());
         while ($row = mysql_fetch_row($result))
         {
-            echo '<tr><td><b><a href="'.$secureurl->encode('udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1)).'">'.$row[2].'</a></b></td></tr>';
+            echo '<tr><td><b><a href="udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1).'">'.$row[2].'</a></b></td></tr>';
         }
         mysql_free_result($result);
         echo '</table></td>';
@@ -417,15 +417,13 @@ if ( !defined('udf_functions') )
     {
         if(empty($_REQUEST['table_name']))
         {
-            $secureurl = new phpsecureurl;
-            header('Location: ' . $secureurl->encode('admin.php?last_message=' . msg('message_udf_cannot_be_blank') ));
+            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank') );
             exit;
         }
 
         if(empty($_REQUEST['display_name']))
         {
-            $secureurl = new phpsecureurl;
-            header('Location: ' . $secureurl->encode('admin.php?last_message=' . msg('message_udf_cannot_be_blank') ));
+            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank') );
             exit;
         }
         
@@ -433,8 +431,7 @@ if ( !defined('udf_functions') )
 
         if(!preg_match('/^\w+$/',$table_name))
         {
-            $secureurl = new phpsecureurl;
-            header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)'));
+            header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
             exit;
         }
 
@@ -453,8 +450,7 @@ if ( !defined('udf_functions') )
                 $result = mysql_query($query);
                 if (!$result)
                 {
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Alter'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
                     exit;
                 }
 
@@ -467,8 +463,7 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
                     $result = mysql_query($query);
                     
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Create'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Create');
                     exit;
                 }
 
@@ -484,8 +479,7 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
                     $result = mysql_query($query);
 
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+INSERT'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
                     exit;
                 }
             } 
@@ -501,8 +495,7 @@ if ( !defined('udf_functions') )
                 $result = mysql_query($query);
                 if (!$result)
                 {
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Alter'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
                     exit;
                 }
 
@@ -515,9 +508,8 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name . '_primary';
                     //$query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name . '_primary, DROP COLUMN ' . $table_name . '_secondary';
                     $result = mysql_query($query);
-                    
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Create'));
+
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Create');
                     exit;
                 }
 				
@@ -529,8 +521,7 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name . '_secondary';
                     $result = mysql_query($query);
                     
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Create'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Create');
                     exit;
                 }
 
@@ -550,8 +541,7 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name . '_primary, DROP COLUMN ' . $table_name . '_secondary';
                     $result = mysql_query($query);
 
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+INSERT'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
                     exit;
                 }
 			}
@@ -564,8 +554,7 @@ if ( !defined('udf_functions') )
                 $result = mysql_query($query);
                 if (!$result)
                 {
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+Alter'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
                     exit;
                 }
 
@@ -577,16 +566,14 @@ if ( !defined('udf_functions') )
                     $query = 'ALTER TABLE ' . $GLOBALS['CONFIG']['db_prefix'] . 'data DROP COLUMN ' . $table_name;
                     $result = mysql_query($query);
                     
-                    $secureurl = new phpsecureurl;
-                    header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Problem+With+INSERT'));
+                    header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
                     exit;
                 }
             }
         } 
         else
         {
-            $secureurl = new phpsecureurl;
-            header('Location: ' . $secureurl->encode('admin.php?last_message=Error+:+Duplicate+Table+Name'));
+            header('Location: admin.php?last_message=Error+:+Duplicate+Table+Name');
             exit;
         }
     }
