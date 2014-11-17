@@ -55,14 +55,17 @@ if(!isset($_POST['submit']))
 
     //CHM - Pull in the sub-select values
     $query = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE field_type = '4'";
-    $result = mysql_query($query) or die ("Error in query163: $query. " . mysql_error());
-    $num_rows = mysql_num_rows($result);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    
+    $num_rows = $stmt->rowCount();
     
     $i=0;
     
     $t_name = array();
     // Set the values for the hidden sub-select fields
-    while ($data = mysql_fetch_array($result)) {
+    foreach ($result as $data) {
         $explode_v = explode('_', $data['table_name']);
         $t_name[] = $explode_v[2];
         $i++;
@@ -259,7 +262,7 @@ else
         }
         
         // INSERT file info into data table
-        $query = "INSERT INTO 
+        $file_data_query = "INSERT INTO 
         {$GLOBALS['CONFIG']['db_prefix']}data (
             status,
             category,
@@ -275,44 +278,75 @@ else
             VALUES
         (
             0,
-            '" . addslashes($_REQUEST['category']) . "',
-            '" . addslashes($owner_id) . "',
-            '" . addslashes($_FILES['file']['name'][$count]) . "',
+            :category,
+            :owner_id,
+            :realname,
             NOW(),
-            '" . addslashes($_REQUEST['description']) . "',
-            '" . addslashes($current_user_dept) . "',
-            '" . addslashes($_REQUEST['comment']) . "',
+            :description,
+            :current_user_dept,
+            :comment,
             0,
             $lpublishable
         )";
 
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $file_data_stmt = $pdo->prepare($file_data_query);
+        
+        $file_data_stmt->bindParam(':category', $_REQUEST['category']);
+        $file_data_stmt->bindParam(':owner_id', $owner_id);
+        $file_data_stmt->bindParam(':realname', $_FILES['file']['name'][$count]);
+        $file_data_stmt->bindParam(':description', $_REQUEST['description']);
+        $file_data_stmt->bindParam(':current_user_dept', $current_user_dept);
+        $file_data_stmt->bindParam(':comment', $_REQUEST['comment']);
+        
+        $file_data_stmt->execute();
+
         // get id from INSERT operation
-        $fileId = mysql_insert_id($GLOBALS['connection']);
+        $fileId = $pdo->lastInsertId();
 
         udf_add_file_insert($fileId);
 
         $username = $user_obj->getUserName();
         
         // Add a file history entry
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id,modified_on, modified_by, note, revision) VALUES ( '$fileId', NOW(), '" . addslashes($username) . "', 'Initial import', 'current')";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-
+        $history_query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log 
+            (
+                id,
+                modified_on, 
+                modified_by,
+                note,
+                revision
+            ) VALUES ( 
+                '$fileId',
+                NOW(),
+                :username,
+                'Initial import',
+                'current'
+            )";
+        
+        $history_stmt = $pdo->prepare($history_query);
+        $history_stmt->bindParam(':username', $username);
+        $history_stmt->execute();
+        
         //Insert Department Rights into dept_perms
         foreach ($_POST['department_permission'] as $dept_id=>$dept_perm) {
-            $query = "
+            $dept_perms_query = "
                 INSERT INTO 
-                    {$GLOBALS['CONFIG']['db_prefix']}dept_perms (
+                    {$GLOBALS['CONFIG']['db_prefix']}dept_perms 
+                    (
                         fid, 
                         rights, 
                         dept_id
-                        ) 
-                VALUES(
+                    ) VALUES (
                         $fileId, 
-                        $dept_perm, 
-                        $dept_id)";
+                        :dept_perm, 
+                        :dept_id
+                    )";
                 
-            mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error() );
+            $dept_perms_stmt = $pdo->prepare($dept_perms_query);
+            $dept_perms_stmt->bindParam(':dept_perm', $dept_perm);
+            $dept_perms_stmt->bindParam(':dept_id', $dept_id);
+            $dept_perms_stmt->execute();
+            
         }
         // Search for simular names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
@@ -320,9 +354,13 @@ else
        
         foreach ($_REQUEST['user_permission'] as $user_id => $permission) {
 
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, $user_id, $permission)";           
-            //echo $query."<br>";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query" . mysql_error());
+            $user_perms_query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, :user_id, :permission)";
+            
+            $user_perms_stmt = $pdo->prepare($user_perms_query);
+            $user_perms_stmt->bindParam(':user_id', $user_id);
+            $user_perms_stmt->bindParam(':permission', $permission);
+            $user_perms_stmt->execute();
+
         }
 
         // use id to generate a file name
