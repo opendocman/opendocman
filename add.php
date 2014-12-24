@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 							ADD.PHP DOCUMENTATION
 This page will allow user to set rights to every department.  It uses javascript to handle client-side data-storing and data-swapping.  Each time the data is stored, it is stored onto an array of objects of class Deparments.  It is also stored onto hidden form field in the page for php to access since php and javascript do not communicate (server-side and client-side share different environment).
-As the user choose a deparment from the drop box named dept_drop_box, loadData(_selectedIndex) function is invoked.
-After the data is loaded for the chosen deparment, if the user changes the right setting (right radio button e.g. "view", "read")
-setData(selected_rb_name) is invoked.  This function will set the data in the appropriate deparment[] and it will set the hidden field as wel.  The connection between hidden field and department[] is the hidden field's name and the deparment[].getName().  The department names in the array is populated with the correct department names from the database.  This will lead to problems.  There will be deparment names of more than one word eg. "Information Systems".  The hidden field's accessible name cannot be more than one word.  PHP cannot access multiple word variables.  Therefore, javascript spTo_(string) (space to underscore) will go through and subtitude all the spaces with the underscore character. */
+As the user choose a department from the drop box named dept_drop_box, loadData(_selectedIndex) function is invoked.
+After the data is loaded for the chosen department, if the user changes the right setting (right radio button e.g. "view", "read")
+setData(selected_rb_name) is invoked.  This function will set the data in the appropriate department[] and it will set the hidden field as wel.  The connection between hidden field and department[] is the hidden field's name and the department[].getName().  The department names in the array is populated with the correct department names from the database.  This will lead to problems.  There will be department names of more than one word eg. "Information Systems".  The hidden field's accessible name cannot be more than one word.  PHP cannot access multiple word variables.  Therefore, javascript spTo_(string) (space to underscore) will go through and subtitude all the spaces with the underscore character. */
 
 session_start();
 
@@ -39,7 +39,7 @@ require_once("File_class.php");
 require_once('Reviewer_class.php');
 require_once('Email_class.php');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 if(!$user_obj->canAdd()){
     redirect_visitor('out.php');
@@ -74,7 +74,7 @@ if(!isset($_POST['submit']))
     // We need to set a form value for the current user so that
     // they can be pre-selected on the form
     
-    $avail_users = $user_obj->getAllUsers();
+    $avail_users = $user_obj->getAllUsers($pdo);
 
     $users_array = array();
     foreach($avail_users as $avail_user) {
@@ -89,7 +89,7 @@ if(!isset($_POST['submit']))
         
     // We need to set a form value for the current department so that
     // it can be pre-selected on the form
-    $avail_departments = Department::getAllDepartments();
+    $avail_departments = Department::getAllDepartments($pdo);
     
     $depts_array = array();
     foreach($avail_departments as $avail_department) {
@@ -101,7 +101,7 @@ if(!isset($_POST['submit']))
         array_push($depts_array, $avail_department);
     }
 
-    $avail_categories = Category::getAllCategories();
+    $avail_categories = Category::getAllCategories($pdo);
     
     $cats_array = array();
     foreach($avail_categories as $avail_category) {
@@ -116,7 +116,7 @@ if(!isset($_POST['submit']))
         array_push($dept_perms_array, $avail_dept_perms);
     }
   
-    $allDepartments = Department::getAllDepartments();
+    $allDepartments = Department::getAllDepartments($pdo);
     $GLOBALS['smarty']->assign('allDepartments', $allDepartments);
     $GLOBALS['smarty']->assign('current_user_dept', $current_user_dept);
     $GLOBALS['smarty']->assign('t_name', $t_name);
@@ -375,7 +375,7 @@ else
         move_uploaded_file($tmp_name[$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         
-        AccessLog::addLogEntry($fileId, 'A');
+        AccessLog::addLogEntry($fileId, 'A', $pdo);
         
         // back to main page
         $message = urlencode(msg('message_document_added'));
@@ -383,14 +383,14 @@ else
         /**
          * Send out email notifications to reviewers
          */
-        $file_obj = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+        $file_obj = new FileData($fileId, $pdo);
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
         $from = $user_obj->getEmailAddress();
      
         $department = $file_obj->getDepartment();
         
-        $reviewer_obj = new Reviewer($fileId, $GLOBALS['connection'], DB_NAME);
+        $reviewer_obj = new Reviewer($fileId, $pdo);
         $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
 
         $date = date('Y-m-d H:i:s T');

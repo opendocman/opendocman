@@ -32,18 +32,18 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 require_once("AccessLog_class.php");
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 if(!$user_obj->isReviewer())
 {
     header('Location:out.php?last_message=Access+denied');
 }
 
-$lcomments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) : '';
+$comments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) : '';
 
 if(!isset($_REQUEST['submit']))
 {
     draw_header(msg('message_documents_waiting'), $last_message);
-    $userpermission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $userpermission = new UserPermission($_SESSION['uid'], $pdo);
   
     if($user_obj->isAdmin())
     {
@@ -69,7 +69,7 @@ elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' |
 
     draw_header(msg('label_comment'), $last_message);
     
-    $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
+    $checkbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
 /*    if($mode == 'reviewer')
     {
         $access_mode = 'enabled';
@@ -93,31 +93,33 @@ elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' |
         $submit_value='None';
     }
 
-    $query = "SELECT id, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query . " . mysql_error());
-    $count = mysql_num_rows($result);
-    $index = 0;
-    while($index < $count)
-    {
-        $user_info[] = list($id, $first_name, $last_name) = mysql_fetch_array($result);
-        $index++;
-    }
+    $query = "
+      SELECT
+        id,
+        first_name,
+        last_name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}user
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array());
+    $result = $stmt->fetchAll();
 
-    $GLOBALS['smarty']->assign('user_info',$user_info);
-    $GLOBALS['smarty']->assign('submit_value',$submit_value);
-    $GLOBALS['smarty']->assign('checkbox',$lcheckbox);
+    $GLOBALS['smarty']->assign('user_info', $result);
+    $GLOBALS['smarty']->assign('submit_value', $submit_value);
+    $GLOBALS['smarty']->assign('checkbox', $checkbox);
     display_smarty_template('commentform.tpl');
 
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 {  
-    $lto = isset($_POST['to'])?$_POST['to'] : '';
-    $lsubject = isset($_POST['subject']) ? $_POST['subject'] : '';
-    $lcheckbox = isset($_POST['checkbox'])?$_POST['checkbox'] : '';
+    $to = isset($_POST['to']) ? $_POST['to'] : '';
+    $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
+    $checkbox = isset($_POST['checkbox']) ? $_POST['checkbox'] : '';
 
     $mail_break = '--------------------------------------------------'."\n";
-    $reviewer_comments = "To=$lto;Subject=$lsubject;Comments=$lcomments;";
-    $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
+    $user_obj = new user($_SESSION['uid'], $pdo);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
@@ -126,7 +128,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
     $mail_headers .="Content-Type: text/plain; charset=UTF-8"."\r\n";
     $mail_subject= (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
     $mail_greeting=msg('email_greeting'). ":\n\r\t" . msg('email_i_would_like_to_inform');
-    $mail_body = $lcomments . "\n\n";
+    $mail_body = $comments . "\n\n";
     $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'."\n\n".$mail_break.$_REQUEST['comments']."\n".$mail_break;
     $mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
 
@@ -139,15 +141,15 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
         $id_array = $user_obj->getRevieweeIds();
     }
 
-    $idfield=explode(' ',trim($lcheckbox));
-    foreach($idfield as $key=>$value)
+    $id_field = explode(' ', trim($checkbox));
+    foreach($id_field as $key=>$value)
     {
         // Check to make sure the current file_id is in their list of rejectable ID's
         if(in_array($value, $id_array))
         {
             $fileid = $value;
-            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
-            $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
+            $file_obj = new FileData($fileid, $pdo);
+            $user_obj = new User($file_obj->getOwner(), $pdo);
             $mail_to = $user_obj->getEmailAddress();
             $dept_id = $file_obj->getDepartment();
             // Build email for author notification
@@ -155,7 +157,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             {
                 // Lets unset this now so the new array will just be user_id's
                 $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
-                $mail_body1 = $lcomments . "\n\n";
+                $mail_body1 = $comments . "\n\n";
                 $mail_body1.=msg('email_was_rejected_from_repository') . "\n\n";
                 $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
                 $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . "\n\n";
@@ -172,10 +174,10 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
             
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
-            AccessLog::addLogEntry($fileid,'R');
+            AccessLog::addLogEntry($fileid, 'R', $pdo);
             // Set up rejected email message to sent out
             $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_a_new_file_has_been_rejected'));
-            $mail_body = $lcomments . "\n\n";
+            $mail_body = $comments . "\n\n";
             $mail_body.=msg('email_a_new_file_has_been_rejected')."\n\n";
             $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . "\n\n";
             $mail_body.=msg('label_status').': ' .msg('message_rejected'). "\n\n";
@@ -209,9 +211,9 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject')
 }
 elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
 {       
-    $lcheckbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
+    $checkbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
     $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
-    $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $user_obj = new User($_SESSION['uid'], $pdo);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
@@ -230,15 +232,15 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
     }
 
 
-    $idfield=explode(' ',trim($lcheckbox));
-    foreach($idfield as $key=>$value)
+    $id_field=explode(' ', trim($checkbox));
+    foreach($id_field as $key=>$value)
     {
         // Check to make sure the current file_id is in their list of reviewable ID's
         if(in_array($value, $id_array))
         {
             $fileid = $value;
-            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);            
-            $user_obj = new User($file_obj->getOwner(), $GLOBALS['connection'], DB_NAME);
+            $file_obj = new FileData($fileid, $pdo);
+            $user_obj = new User($file_obj->getOwner(), $pdo);
             $mail_to = $user_obj->getEmailAddress();
             $dept_id = $file_obj->getDepartment();
             
@@ -247,7 +249,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             {
                 // Lets unset this now so the new array will just be user_id's
                 $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
-                $mail_body1 = $lcomments . "\n\n";
+                $mail_body1 = $comments . "\n\n";
                 $mail_body1.=msg('email_your_file_has_been_authorized') . "\n\n";
                 $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
                 $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . "\n\n";
@@ -264,11 +266,11 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
-            AccessLog::addLogEntry($fileid,'Y');
+            AccessLog::addLogEntry($fileid, 'Y', $pdo);
             
             // Build email for general notices
             $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
-            $mail_body2=$lcomments . "\n\n";
+            $mail_body2=$comments . "\n\n";
             $mail_body2.=msg('email_a_new_file_has_been_added'). "\n\n";
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . "\n\n";
             $mail_body2.=msg('label_status'). ': New'. "\n\n";
@@ -287,7 +289,7 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize')
             {         
                 email_dept($dept_id,$mail_subject ,$mail_body2,$mail_headers);
             }           
-            if(isset($_POST['send_to_users']) && is_array($_POST['send_to_users']) && $_POST['send_to_users'][0] > 0)
+            if(!empty($_POST['send_to_users'][0]) && is_array($_POST['send_to_users']) && $_POST['send_to_users'][0] > 0)
             {                     
                 email_users_id($_POST['send_to_users'], $mail_subject,$mail_body2,$mail_headers);
             }           
@@ -305,7 +307,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'comments' && isset(
      * Used to display the reviewer comments in a popup
      */
     $file_id = (int) $_REQUEST['id'];
-    $file_obj = new FileData($file_id, $GLOBALS['connection'], DB_NAME); 
+    $file_obj = new FileData($file_id, $pdo);
     echo $file_obj->getReviewerComments();
 }
 elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel')

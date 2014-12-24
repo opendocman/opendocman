@@ -1,7 +1,7 @@
 <?php
 /*
 Reviewer_class.php - relates reviewers
-Copyright (C) 2013 Stephen Lawrence Jr.
+Copyright (C) 2014 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -18,33 +18,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 class Reviewer extends databaseData
 {
-    function Reviewer ($id, $connection, $database)
+    protected $connection;
+
+    function Reviewer ($id, PDO $pdo)
     {
-        $this->connection = $connection;
-        $this->database = $database;
+        $this->id = $id;
+        $this->connection = $pdo;
     }
     function getReviewersForDepartment($dept_id)
     {
         $reviewers = array();
-        $query = "SELECT
-                            dr.user_id
-                      FROM
-                            {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
-                      WHERE
-                            
-                            dr.dept_id = $dept_id
-                            ";                         
-        $result = mysql_query($query, $this->connection) or die("Error in query during isReviewerForFile call: " . mysql_error());
+        $query = "
+          SELECT
+            dr.user_id
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer as dr
+          WHERE
+            dr.dept_id = :dept_id
+        ";
+        $stmt = $this->connection->prepare($query);
+        $stmt->execute(array(
+            ':dept_id' => $dept_id
+        ));
+        $result = $stmt->fetchAll();
 
-        $num_rows = mysql_num_rows($result);
+        $num_rows = $stmt->rowCount();
 
         if ($num_rows < 1) {
             return false;
         }
         
         $count = 0;
-        while (list($reviewer) = mysql_fetch_row($result)) {
-            $reviewers[$count] = $reviewer;
+        foreach($result as $row) {
+            $reviewers[$count] = $row['user_id'];
             $count++;
         }
 

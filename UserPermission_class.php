@@ -26,10 +26,9 @@ if( !defined('UserPermission_class') )
     {
         var $connection;
         var $uid;
-        var $database;
         var $user_obj;
-        var $userperm_obj;
-        var $deptperm_obj;
+        var $user_perms_obj;
+        var $dept_perms_obj;
         var $FORBIDDEN_RIGHT;
         var $NONE_RIGHT;
         var $VIEW_RIGHT;
@@ -37,22 +36,30 @@ if( !defined('UserPermission_class') )
         var $WRITE_RIGHT;
         var $ADMIN_RIGHT;
 
-        function UserPermission($uid, $connection, $database)
+        /**
+         * @param int $uid
+         * @param PDO $connection
+         */
+        function UserPermission($uid, PDO $connection)
         {
             $this->uid = $uid;
             $this->connection = $connection;
-            $this->database = $database;
-            $this->user_obj = new User($this->uid, $this->connection, $this->database);
-            $this->userperm_obj = new User_Perms($this->user_obj->getId(), $connection, $database);
-            $this->deptperm_obj = new Dept_Perms($this->user_obj->getDeptId(), $connection, $database);
-            $this->FORBIDDEN_RIGHT = $this->userperm_obj->FORBIDDEN_RIGHT;
-            $this->NONE_RIGHT = $this->userperm_obj->NONE_RIGHT;
-            $this->VIEW_RIGHT = $this->userperm_obj->VIEW_RIGHT;
-            $this->READ_RIGHT = $this->userperm_obj->READ_RIGHT;
-            $this->WRITE_RIGHT = $this->userperm_obj->WRITE_RIGHT;
-            $this->ADMIN_RIGHT = $this->userperm_obj->ADMIN_RIGHT;
+            $this->user_obj = new User($this->uid, $this->connection);
+            $this->user_perms_obj = new User_Perms($this->user_obj->getId(), $connection);
+            $this->dept_perms_obj = new Dept_Perms($this->user_obj->getDeptId(), $connection);
+            $this->FORBIDDEN_RIGHT = $this->user_perms_obj->FORBIDDEN_RIGHT;
+            $this->NONE_RIGHT = $this->user_perms_obj->NONE_RIGHT;
+            $this->VIEW_RIGHT = $this->user_perms_obj->VIEW_RIGHT;
+            $this->READ_RIGHT = $this->user_perms_obj->READ_RIGHT;
+            $this->WRITE_RIGHT = $this->user_perms_obj->WRITE_RIGHT;
+            $this->ADMIN_RIGHT = $this->user_perms_obj->ADMIN_RIGHT;
         }
-        // return an array of all the Allowed files ( right >= view_right) ID
+
+        /**
+         * return an array of all the Allowed files ( right >= view_right) ID
+         * @param bool $limit
+         * @return array
+         */
         function getAllowedFileIds($limit)
         {
             $viewable_array = $this->getViewableFileIds($limit);
@@ -62,175 +69,176 @@ if( !defined('UserPermission_class') )
             $result_array = array_values( array_unique( array_merge($viewable_array, $readable_array, $writeable_array, $adminable_array) ) );
             return $result_array;
         }
-        // return an array of all the Allowed files ( right >= view_right) object
+
+        /**
+         * return an array of all the Allowed files ( right >= view_right) object
+         * @param bool $limit
+         * @return array
+         */
         function getAllowedFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ( $this->getAllowedFileIds($limit) );
         }
-        // // return an array of all the Allowed files ( right >= view_right) ID
-        // One might ask why getViewableFileIds() doesn't return the combined
-        // result of User_perm and Dept_Perm classes.  User_Perm_class only know
-        // of it self and the same goes with Dept_Perms.
-        /*function getViewableFileIds2()
-	{	
-		$array = array();
-		//These 2 below takes half of the execution time for this function
-		$userperm_filearray = ($this->userperm_obj->getCurrentViewOnly());
-		$deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly());
-		$query = "SELECT $this->TABLE_USER_PERMS.fid FROM $this->TABLE_DATA, 
-			$this->TABLE_USER_PERMS WHERE ($this->TABLE_USER_PERMS.uid = $this->uid 
-			AND $this->TABLE_DATA.id = $this->TABLE_USER_PERMS.fid 
-			AND $this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT 
-			AND $this->TABLE_DATA.publishable = 1)";
-		$result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query . 'Error: ' . mysql_error());
-		$len = mysql_num_rows($result);
-		for($index=0; $index < $len; $index++)
-		{
-			list($array[$index]) = mysql_fetch_row($result);
-		}
-		$deptperm_filearray = array_diff($deptperm_filearray, $array); 
-		$total_listing = array_merge($userperm_filearray , $deptperm_filearray);
-		$total_listing = array_unique( $total_listing);
-		$result_array = array_values($total_listing);
-		return $result_array;
-	}*/
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
         function getViewableFileIds($limit = true)
         {
-            $array = array();
             //These 2 below takes half of the execution time for this function
-            $userperm_filearray = ($this->userperm_obj->getCurrentViewOnly($limit));
-            $deptperm_filearray = ($this->deptperm_obj->getCurrentViewOnly($limit));
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA,
-                    {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE ({$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->uid
-				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.id = {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid
-				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights < $this->VIEW_RIGHT
-				AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA.publishable = 1)";
-            $result = mysql_query($query, $this->connection) or die('Unable to query: ' . $query .
-                    'Error: ' . mysql_error());
-            $len = mysql_num_rows($result);
-            for($index=0; $index < $len; $index++)
-            {
-                list($array[$index]) = mysql_fetch_row($result);
-            }
-            $deptperm_filearray = array_diff($deptperm_filearray, $array);
-            $deptperm_filearray = array_diff($deptperm_filearray, $userperm_filearray);
-            $total_listing = array_merge($userperm_filearray , $deptperm_filearray);
+            $user_perms_file_array = ($this->user_perms_obj->getCurrentViewOnly($limit));
+            $dept_perms_file_array = ($this->dept_perms_obj->getCurrentViewOnly($limit));
+
+            $query = "
+              SELECT
+                up.fid
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA d,
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS up
+              WHERE
+                (
+                  up.uid = :uid
+				  AND d.id = up.fid
+				  AND up.rights < :view_right
+				  AND d.publishable = 1
+				  )
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':uid' => $this->uid,
+                ':view_right' => $this->VIEW_RIGHT
+            ));
+            $array = $stmt->fetchAll();
+
+            $dept_perms_file_array = array_diff($dept_perms_file_array, $array);
+            $dept_perms_file_array = array_diff($dept_perms_file_array, $user_perms_file_array);
+            $total_listing = array_merge($user_perms_file_array , $dept_perms_file_array);
             //$total_listing = array_unique( $total_listing);
             //$result_array = array_values($total_listing);
             return $total_listing;
         }
-// return an array of all the Allowed files ( right >= view_right) OBJ 
+
+        /**
+         * return an array of all the Allowed files ( right >= view_right) OBJ
+         * @param bool $limit
+         * @return array
+         */
         function getViewableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getViewableFileIds($limit));
         }
-        // return an array of all the Allowed files ( right >= read_right) ID
+
+        /**
+         * return an array of all the Allowed files ( right >= read_right) ID
+         * @param bool $limit
+         * @return array
+         */
         function getReadableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentReadRight($limit);
-            $deptperm_filearray = $this->deptperm_obj->getCurrentReadRight($limit);
-            $published_filearray = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
+            $user_perms_file_array = $this->user_perms_obj->getCurrentReadRight($limit);
+            $dept_perms_file_array = $this->dept_perms_obj->getCurrentReadRight($limit);
+            $published_file_array = $this->user_obj->getPublishedData(1);
+            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
             return $result_array;
         }
-        //// return an array of all the Allowed files ( right >= read_right) OBJ
+
+        /**
+         * return an array of all the Allowed files ( right >= read_right) OBJ
+         * @param bool $limit
+         * @return array
+         */
         function getReadableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getReadableFileIds($limit));
         }
-        // return an array of all the Allowed files ( right >= write_right) ID
+
+        /**
+         * return an array of all the Allowed files ( right >= write_right) ID
+         * @param bool $limit
+         * @return array
+         */
         function getWriteableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentWriteRight($limit);
-            $deptperm_filearray = $this->deptperm_obj->getCurrentWriteRight($limit);
-            $published_filearray = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
+            $user_perms_file_array = $this->user_perms_obj->getCurrentWriteRight($limit);
+            $dept_perms_file_array = $this->dept_perms_obj->getCurrentWriteRight($limit);
+            $published_file_array = $this->user_obj->getPublishedData(1);
+            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
             return $result_array;
         }
-        // return an array of all the Allowed files ( right >= write_right) ID
+
+        /**
+         * return an array of all the Allowed files ( right >= write_right) ID
+         * @param bool $limit
+         * @return array
+         */
         function getWriteableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getWriteableFileIds($limit));
         }
-        // return an array of all the Allowed files ( right >= admin_right) ID
+
+        /**
+         * return an array of all the Allowed files ( right >= admin_right) ID
+         * @param bool $limit
+         * @return array
+         */
         function getAdminableFileIds($limit = true)
         {
-            $userperm_filearray = $this->userperm_obj->getCurrentAdminRight($limit);
-            $deptperm_filearray = $this->deptperm_obj->getCurrentAdminRight($limit);
-            $published_filearray = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_filearray, $userperm_filearray, $deptperm_filearray) ) );
+            $user_perms_file_array = $this->user_perms_obj->getCurrentAdminRight($limit);
+            $dept_perms_file_array = $this->dept_perms_obj->getCurrentAdminRight($limit);
+            $published_file_array = $this->user_obj->getPublishedData(1);
+            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
             return $result_array;
         }
-        // return an array of all the Allowed files ( right >= admin_right) OBJ
+
+        /**
+         * return an array of all the Allowed files ( right >= admin_right) OBJ
+         * @param bool $limit
+         * @return array
+         */
         function getAdminableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getAdminableFileIds($limit));
         }
 
+        /**
+         * Combine a high priority array with a low priority array
+         * @param array $high_priority_array
+         * @param array $low_priority_array
+         * @return array
+         */
         function combineArrays($high_priority_array, $low_priority_array)
         {
-            /*$found = false;
-		$result_array = array();
-		$result_array = $high_priority_array;
-		$result_array_index = sizeof($high_priority_array);
-		for($l = 0 ; $l<sizeof($low_priority_array); $l++)
-		{
-			for($r = 0; $r<sizeof($result_array); $r++)
-			{
-				if($result_array[$r] == $low_priority_array[$l])
-				{
-					$r = sizeof($result_array);
-					$found = true;
-				}
-			}
-			if(!$found)
-			{
-				$result_array[$result_array_index++] = $low_priority_array[$l];
-			}
-			$found = false;
-		}*/
-            //return $result_array;
             return databaseData::combineArrays($high_priority_array, $low_priority_array);
         }
-        // convert an array of file id into an array of file Obj correspondent to
-        // the ids in the id array.
-        /*function convertToFileDataOBJ($fid_array)
-	{
-		$filedata_array = array();
-		for($i = 0; $i<sizeof($fid_array); $i++)
-		{
-			$filedata_array[$i] = new FileData($fid_array[$i], $this->connection, $this->database, "data");
-		}
-		return $filedata_array;
-	}*/
 
-        /*
+        /**
          * getAuthority
          * Return the authority that this user have on file data_id
-         * by combining and prioritizing user and deparment right
-         * @param $data_id int
-         * @param $file_obj object current file object
+         * by combining and prioritizing user and department right
+         * @param int $data_id
+         * @return int
          */
         function getAuthority($data_id)
         {
             $data_id = (int) $data_id;
-            $fileData = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
-            if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
-            {
+            $fileData = new FileData($data_id, $this->connection);
+
+            if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id)) {
                 return $this->ADMIN_RIGHT;
             }
-            if ($fileData->isOwner($this->uid) && $fileData->isLocked())
-            {
+
+            if ($fileData->isOwner($this->uid) && $fileData->isLocked()) {
                 return $this->WRITE_RIGHT;
             }
-            $uperm = $this->userperm_obj->getPermission($data_id);
-            $dperm = $this->deptperm_obj->getPermission($data_id);
-            if ($uperm >= $this->userperm_obj->NONE_RIGHT and $uperm <= $this->userperm_obj->ADMIN_RIGHT)
-            {
-                return $uperm;
-            } else
-            {
-                return $dperm;
+
+            $user_permissions = $this->user_perms_obj->getPermission($data_id);
+            $department_permissions = $this->dept_perms_obj->getPermission($data_id);
+
+            if ($user_permissions >= $this->user_perms_obj->NONE_RIGHT and $user_permissions <= $this->user_perms_obj->ADMIN_RIGHT) {
+                return $user_permissions;
+            } else {
+                return $department_permissions;
             }
         }
 

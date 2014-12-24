@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 include('odm-load.php');
 session_start();
 
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+$last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
 
 draw_header(msg('error'), $last_message);
 
@@ -33,12 +33,12 @@ if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
     {
         // login failure
         case 0:
-            $message = msg('message_there_was_an_error_loggin_you_in') . ' <a href="'.$GLOBALS['CONFIG']['base_url'].'">' .msg('login') . '</a>';
+            $message = msg('message_there_was_an_error_loggin_you_in');
             break;
 
         // session problem
         case 1:
-            $message = msg('message_session_error') . '<a href='.$GLOBALS['CONFIG']['base_url'].'>' . msg('login') . '</a>';
+            $message = msg('message_session_error');
             break;
 
         // malformed variable/failed query
@@ -58,12 +58,12 @@ if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
 
         // Category exists
         case 5:
-            $message = msg('message_record_exists').':'.$_REQUEST['category'].' <a href=out.php>Back</a>';
+            $message = msg('message_record_exists').':'.$_REQUEST['category'];
             break;
 
         // Input Field Blank
         case 6:
-            $message = msg('message_you_did_not_enter_value') .' <a href=out.php>Back</a>';
+            $message = msg('message_you_did_not_enter_value');
             break;
 
 
@@ -110,7 +110,7 @@ if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
             break;
         //no account in ODM
         case 19:
-            $message = msg('message_you_do_not_have_an_account') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '"> ' . $GLOBALS['CONFIG']['site_mail'] . '</a>';
+            $message = msg('message_you_do_not_have_an_account');
             break;
         // cannot do this on revision
         case 20:
@@ -141,7 +141,7 @@ if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
             break;
         //default
         default:
-            $message = msg('message_there_was_an_error_performing_the_action') .' ' . msg('please') . ' <a href='.$GLOBALS['CONFIG']['base_url'].'>' . msg('login') . '</a>';
+            $message = msg('message_there_was_an_error_performing_the_action');
             break;
     }
     draw_error($message);

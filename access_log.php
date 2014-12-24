@@ -30,7 +30,7 @@ if (!isset($_SESSION['uid']))
 include('udf_functions.php');
 
 // open a connection to the database
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
@@ -43,17 +43,19 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 draw_header(msg('accesslogpage_access_log'), $last_message);
 
 $query = "SELECT 
-            {$GLOBALS['CONFIG']['db_prefix']}access_log.*, 
-            {$GLOBALS['CONFIG']['db_prefix']}data.realname, 
-            {$GLOBALS['CONFIG']['db_prefix']}user.username
+            a.*,
+            d.realname,
+            u.username
           FROM 
-            {$GLOBALS['CONFIG']['db_prefix']}access_log 
+            {$GLOBALS['CONFIG']['db_prefix']}access_log a
           INNER JOIN 
-            {$GLOBALS['CONFIG']['db_prefix']}data ON {$GLOBALS['CONFIG']['db_prefix']}access_log.file_id={$GLOBALS['CONFIG']['db_prefix']}data.id
+            {$GLOBALS['CONFIG']['db_prefix']}data AS d ON a.file_id = d.id
           INNER JOIN 
-            {$GLOBALS['CONFIG']['db_prefix']}user ON {$GLOBALS['CONFIG']['db_prefix']}access_log.user_id = {$GLOBALS['CONFIG']['db_prefix']}user.id
+            {$GLOBALS['CONFIG']['db_prefix']}user AS u ON a.user_id = u.id
         ";
-$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll();
 
 $actions_array = array(
     "A" => msg('accesslogpage_file_added'),
@@ -70,8 +72,7 @@ $actions_array = array(
     );
 $accesslog_array = array();
 
-while ($row = mysql_fetch_array($result))
-{
+foreach($result as $row) {
     $details_link = 'details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1);
 
     $accesslog_array[] = array(

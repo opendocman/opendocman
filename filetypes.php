@@ -31,8 +31,8 @@ if (!isset($_SESSION['uid']))
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$filetypes = new FileTypes_class();
+$user_obj = new User($_SESSION['uid'], $pdo);
+$filetypes = new FileTypes_class($pdo);
 
 //If the user is not an admin error out.
 if(!$user_obj->isRoot() == true)

@@ -18,13 +18,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 echo 'Creating udf table<br />';
-$result = mysql_query("
-CREATE TABLE IF NOT EXISTS udf
+$query = "CREATE TABLE IF NOT EXISTS udf
 (
     id  int(11) auto_increment unique,
     table_name  varchar(16),
     display_name    varchar(16),
     field_type  int
-) ENGINE = MYISAM
-") or die("<br>Could not update" . mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();

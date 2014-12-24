@@ -30,8 +30,8 @@ if (!isset($_SESSION['uid']))
     
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$settings = new Settings();
+$user_obj = new User($_SESSION['uid'], $pdo);
+$settings = new Settings($pdo);
 
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.

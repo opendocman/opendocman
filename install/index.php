@@ -55,8 +55,15 @@ else
 }
 
 // Lets get a connection going
-$GLOBALS['connection'] = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly? " . mysql_error());
-$db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
+
+$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+try {
+    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . " - Please make sure you have created a database<br/>";
+    die();
+}
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -291,6 +298,8 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
             
             function do_install()
             {
+                global $pdo;
+
                 define('ODM_INSTALLING', 'true');
                 echo 'Checking that templates_c folder is writeable...<br />';
                 if(!is_writeable('../templates_c'))
@@ -303,15 +312,12 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
                     echo 'OK<br />';
                 }
                 echo '<br />installing...<br>';
-
                 // Create database
-                $result = mysql_query("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "`")
-                        or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-
+                $query = "CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "`";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
                 echo 'Database Created<br />';
-                mysql_select_db(DB_NAME) or die (mysql_error() . "<br>Unable to select database.</font>");
 
-                echo 'Database Selected<br />';
                 include('../config.php');
                 include_once("odm.php");
                 echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password (WRITE IT DOWN): ' . $_SESSION['adminpass'] . '</strong></p></br />Click <a href="../settings.php?submit=update">HERE</a> to edit your site settings';
@@ -446,14 +452,18 @@ $db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
 
             function print_intro()
             {
+                global $pdo;
                 include_once('../version.php');
 
-                $query1 = "SELECT 1 FROM {$_SESSION['db_prefix']}odmsys LIMIT 1";
-                $table_exists = @mysql_query($query1);
-                if($table_exists) {
+                $query1 = "SHOW TABLES LIKE :table";
+                $stmt = $pdo->prepare($query1);
+                $stmt->execute(array(':table' => $_SESSION['db_prefix'] . 'odmsys'));
+
+                if($stmt->rowCount() > 0) {
                     $query2 = "SELECT sys_value from {$_SESSION['db_prefix']}odmsys WHERE sys_name='version'";
-                    $result = mysql_query($query2) or die("<br>Could not query {$_SESSION['db_prefix']}odmsys table. Error was:" . mysql_error());
-                    $result_array = mysql_fetch_assoc($result);
+                    $stmt = $pdo->prepare($query2);
+                    $stmt->execute();
+                    $result_array = $stmt->fetch();
                 }
                 $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
                 //print_r($current_db_version);exit;

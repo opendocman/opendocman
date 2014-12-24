@@ -32,7 +32,7 @@ include('udf_functions.php');
 require_once("AccessLog_class.php");
 require_once("User_Perms_class.php");
 
-$user_perms_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_perms_obj = new User_Perms($_SESSION['uid'], $pdo);
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
@@ -45,7 +45,7 @@ if (strchr($_REQUEST['id'], '_')) {
     header('Location:error.php?ec=20');
 }
 
-$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+$filedata = new FileData($_REQUEST['id'], $pdo);
 
 if ($filedata->isArchived()) {
     header('Location:error.php?ec=21');
@@ -71,7 +71,7 @@ if (!isset($_REQUEST['submit'])) {
         exit; //non-unique error
     }
 
-    $filedata = new FileData($data_id, $GLOBALS['connection'], DB_NAME);
+    $filedata = new FileData($data_id, $pdo);
 
     // error check
     if (!$filedata->exists()) {
@@ -102,14 +102,14 @@ if (!isset($_REQUEST['submit'])) {
         }
 
         // For the User dropdown
-        $avail_users = $user_perms_obj->user_obj->getAllUsers();
+        $avail_users = $user_perms_obj->user_obj->getAllUsers($pdo);
         
         // We need to set a form value for the current department so that
         // it can be pre-selected on the form
-        $avail_departments = Department::getAllDepartments();
+        $avail_departments = Department::getAllDepartments($pdo);
 
 
-        $avail_categories = Category::getAllCategories();
+        $avail_categories = Category::getAllCategories($pdo);
 
         $cats_array = array();
         foreach ($avail_categories as $avail_category) {
@@ -164,7 +164,7 @@ if (!isset($_REQUEST['submit'])) {
 } else { 
     // form submitted, process data
     $fileId = $_REQUEST['id'];
-    $filedata = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+    $filedata = new FileData($fileId, $pdo);
 
     // Call the plugin API
     callPluginMethod('onBeforeEditFileSaved');
@@ -193,14 +193,14 @@ if (!isset($_REQUEST['submit'])) {
     }
 
     // update category
-    $filedata->setCategory(mysql_real_escape_string($_REQUEST['category']));
-    $filedata->setDescription(mysql_real_escape_string($_REQUEST['description']));
-    $filedata->setComment(mysql_real_escape_string($_REQUEST['comment']));
+    $filedata->setCategory($_REQUEST['category']);
+    $filedata->setDescription($_REQUEST['description']);
+    $filedata->setComment($_REQUEST['comment']);
     if (isset($_REQUEST['file_owner'])) {
-        $filedata->setOwner(mysql_real_escape_string($_REQUEST['file_owner']));
+        $filedata->setOwner($_REQUEST['file_owner']);
     }
     if (isset($_REQUEST['file_department'])) {
-        $filedata->setDepartment(mysql_real_escape_string($_REQUEST['file_department']));
+        $filedata->setDepartment($_REQUEST['file_department']);
     }
 
     // Update the file with the new values
@@ -255,7 +255,7 @@ if (!isset($_REQUEST['submit'])) {
 
     $message = urlencode('Document successfully updated');
 
-    AccessLog::addLogEntry($fileId, 'M');
+    AccessLog::addLogEntry($fileId, 'M', $pdo);
 
     // Call the plugin API
     callPluginMethod('onAfterEditFile', $fileId);

@@ -18,33 +18,47 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 echo 'Fixing any broken revision numbers...<br />';
-$sql = "SELECT id, revision from {$GLOBALS['CONFIG']['db_prefix']}log WHERE revision LIKE '%(%'";
-$result = mysql_query($sql);
-while(list($id,$revision) = mysql_fetch_row($result))
-{
-    $rev_array = explode("-", $revision);
+$query = "SELECT id, revision from {$GLOBALS['CONFIG']['db_prefix']}log WHERE revision LIKE '%(%'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll();
+foreach($result as $row) {
+    $rev_array = explode("-", $row['revision']);
     $rev_left = ltrim($rev_array[0], "(");
     $rev_right = rtrim($rev_array[1], ")");
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision=" . intval($rev_left-$rev_right) . " WHERE id='$id' AND revision='$revision'";
-    $result2 = mysql_query($query);
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :new_revision WHERE id = :row_id AND revision= :revision";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':new_revision' => intval($rev_left-$rev_right),
+        ':row_id' => $row['id'],
+        ':revision' => $row['revision']
+    ));
 }
 
 echo 'Updating db version...<br />';
-$result = mysql_query("UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.5.7' WHERE sys_name='version'")
-        or die("<br>Could not update version number" . mysql_error());
+$query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}odmsys SET sys_value='1.2.5.7' WHERE sys_name='version'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 echo 'Updating UDF Table Names...<br />';
 $query = "SELECT table_name from {$GLOBALS['CONFIG']['db_prefix']}udf";
-$result = mysql_query($query) or die("<br>Could not select UDF table names" . mysql_error());
-while(list($table_name) = mysql_fetch_row($result))
-{
-    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data CHANGE $table_name {$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name int(11)";
-    $result1 = mysql_query($query) or die ("<br>Could not change UDF table names from data table" . mysql_error());
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll();
 
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET table_name = '{$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name' WHERE table_name = '$table_name'";
-    $result2 = mysql_query($query) or die ("<br>Could not update UDF table names in udf table " . mysql_error());
+foreach($result as $row) {
+    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data CHANGE {$row['table_name']} {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']} int(11)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 
-    $query = "ALTER TABLE $table_name RENAME {$GLOBALS['CONFIG']['db_prefix']}udftbl_$table_name";
-    $result3 = mysql_query($query) or die("<br>Could rename table " . mysql_error());
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET table_name = '{$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']}' WHERE table_name = '{$row['table_name']}'";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+
+    $query = "ALTER TABLE $table_name RENAME {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']}";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 }

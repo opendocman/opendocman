@@ -38,7 +38,7 @@ $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '
 draw_header(msg('label_file_listing'), $last_message);
 sort_browser();
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 if ($user_obj->isAdmin())
 {   
@@ -75,7 +75,7 @@ if($llen > 0)
 
 
 //set values
-$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_perms = new UserPermission($_SESSION['uid'], $pdo);
 //$start_P = getmicrotime();
 $file_id_array = $user_perms->getViewableFileIds(true);
 //$end_P = getmicrotime();

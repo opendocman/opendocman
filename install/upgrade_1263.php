@@ -18,18 +18,21 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 echo 'Altering the user table...<br />';
 
- $result = mysql_query("
-     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}user ADD COLUMN can_add tinyint(1) NULL DEFAULT 1")
-        or die("<br>Could not update {$_SESSION['db_prefix']}user table. Error was:" .  mysql_error());
+$query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}user ADD COLUMN can_add tinyint(1) NULL DEFAULT 1";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-     ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}user ADD COLUMN can_checkin tinyint(1) NULL DEFAULT 1")
-        or die("<br>Could not update {$_SESSION['db_prefix']}user table. Error was:" .  mysql_error());
-        
+$query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}user ADD COLUMN can_checkin tinyint(1) NULL DEFAULT 1";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+
 echo 'Updating db version...<br />';
-$result = mysql_query("UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.8' WHERE sys_name='version'")
-        or die("<br>Could not update version number: " . mysql_error());
+$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.8' WHERE sys_name='version'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 echo 'Database update 1.2.8 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';

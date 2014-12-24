@@ -33,7 +33,7 @@ if (!isset($_SESSION['uid']))
 include('udf_functions.php');
 
 // open a connection to the database
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 // Check to see if user is admin
 if(!$user_obj->isAdmin())

@@ -30,73 +30,77 @@ if(!isset($_SESSION['adminpass']))
 }
 $adminpass = $_SESSION['adminpass'];
 
+global $pdo;
+
 // Access Log Table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}access_log
-        ") or die("<br>Could not create {$dbprefix}access_log table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}access_log";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
         
-$result = mysql_query("
+$query = "
 CREATE TABLE `{$dbprefix}access_log` (
   `file_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
-) ENGINE = MYISAM
-    ") or die("<br>Could not create {$dbprefix}access_log table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Admin table    
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}admin
-        ") or die("<br>Could not create {$dbprefix}admin table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}admin";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
+$query = "
 CREATE TABLE {$dbprefix}admin (
   id int(11) unsigned default NULL,
   admin tinyint(4) default NULL
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}admin table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Admin user
-$result = mysql_query("
-INSERT INTO {$dbprefix}admin VALUES (1,1)
-        ") or die("<br>Could not create {$dbprefix}admin user. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}admin VALUES (1,1)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Category table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}category
-        ") or die("<br>Could not create {$dbprefix}category table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}category";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
+$query = "
 CREATE TABLE {$dbprefix}category (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}category table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-INSERT INTO {$dbprefix}category VALUES (NULL,'SOP')
-        ") or die("<br>Could not create {$dbprefix}category. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}category VALUES (NULL,'SOP')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}category VALUES (NULL,'Training Manual')
-        ") or die("<br>Could not create {$dbprefix}category. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}category VALUES (NULL,'Training Manual')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}category VALUES (NULL,'Letter')
-        ") or die("<br>Could not create {$dbprefix}category. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}category VALUES (NULL,'Letter')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}category VALUES (NULL,'Presentation')
-        ") or die("<br>Could not create {$dbprefix}category. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}category VALUES (NULL,'Presentation')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Data table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}data
-        ") or die("<br>Could not create {$dbprefix}data table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}data";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}data (
+$query = "CREATE TABLE {$dbprefix}data (
   id int(11) unsigned NOT NULL auto_increment,
   category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
@@ -116,66 +120,66 @@ CREATE TABLE {$dbprefix}data (
   KEY id_2 (id),
   KEY publishable (publishable),
   KEY description (description)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}data table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Department Table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}department
-        ") or die("<br>Could not create {$dbprefix}department table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}department";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}department (
+$query = "CREATE TABLE {$dbprefix}department (
   id int(11) unsigned NOT NULL auto_increment,
   name varchar(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}department table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-INSERT INTO {$dbprefix}department VALUES (NULL,'Information Systems')
-        ") or die("<br>Could not {$dbprefix}add department. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}department VALUES (NULL,'Information Systems')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Department Permissions table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}dept_perms
-        ") or die("<br>Could not create {$dbprefix}dept_perms table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}dept_perms";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}dept_perms (
+$query = "CREATE TABLE {$dbprefix}dept_perms (
   fid int(11) unsigned default NULL,
   dept_id int(11) unsigned default NULL,
   rights tinyint(4) NOT NULL default '0',
   KEY rights (rights),
   KEY dept_id (dept_id),
   KEY fid (fid)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}dept_perms table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Department Reviewer table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}dept_reviewer
-        ") or die("<br>Could not create {$dbprefix}dept_reviewer table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}dept_reviewer";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}dept_reviewer (
+$query = "CREATE TABLE {$dbprefix}dept_reviewer (
   dept_id int(11) unsigned default NULL,
   user_id int(11) unsigned default NULL
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}dept_reviewer table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // data for table 'dept_reviewer'
-$result = mysql_query("
-INSERT INTO {$dbprefix}dept_reviewer VALUES (1,1)
-        ") or die("<br>Could add to {$dbprefix}dept_reviewer table. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}dept_reviewer VALUES (1,1)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Log table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}log
-        ") or die("<br>Could not create {$dbprefix}log table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}log";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}log (
+$query = "CREATE TABLE {$dbprefix}log (
   id int(11) unsigned NOT NULL default '0',
   modified_on datetime NOT NULL default '0000-00-00 00:00:00',
   modified_by varchar(25) default NULL,
@@ -183,53 +187,53 @@ CREATE TABLE {$dbprefix}log (
   revision varchar(255) default NULL,
   KEY id (id),
   KEY modified_on (modified_on)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}log table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Rights table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}rights
-        ") or die("<br>Could not create {$dbprefix}rights table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}rights";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}rights (
+$query = "CREATE TABLE {$dbprefix}rights (
   RightId tinyint(4) default NULL,
   Description varchar(255) default NULL
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}rights table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Rights values
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (0,'none')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (0,'none')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (1,'view')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (1,'view')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (-1,'forbidden')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (-1,'forbidden')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (2,'read')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (2,'read')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (3,'write')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (3,'write')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
- INSERT INTO {$dbprefix}rights VALUES (4,'admin')
-        ") or die("<br>Could not add {$dbprefix}rights entry. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}rights VALUES (4,'admin')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // User table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}user
-        ") or die("<br>Could not create {$dbprefix}user table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}user";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE {$dbprefix}user (
+$query = "CREATE TABLE {$dbprefix}user (
   id int(11) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
   password varchar(50) NOT NULL default '',
@@ -242,21 +246,21 @@ CREATE TABLE {$dbprefix}user (
   can_add tinyint(1) NULL DEFAULT 1,
   can_checkin tinyint(1) NULL DEFAULT 1,
   PRIMARY KEY  (id)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}user table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Create admin user
-$result = mysql_query("
-INSERT INTO {$dbprefix}user VALUES (NULL,'admin',md5('{$adminpass}'),'1','5555551212','admin@example.com','User','Admin','',1,1)
-        ") or die("<br>Could not add user. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}user VALUES (NULL,'admin',md5('{$adminpass}'),'1','5555551212','admin@example.com','User','Admin','',1,1)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // User permissions table
-$result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}user_perms
-        ") or die("<br>Could not create {$dbprefix}user_perms table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}user_perms";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE IF NOT EXISTS {$dbprefix}user_perms (
+$query = "CREATE TABLE IF NOT EXISTS {$dbprefix}user_perms (
   fid int(11) unsigned default NULL,
   uid int(11) unsigned NOT NULL default '0',
   rights tinyint(4) NOT NULL default '0',
@@ -264,48 +268,47 @@ CREATE TABLE IF NOT EXISTS {$dbprefix}user_perms (
   KEY fid (fid),
   KEY uid (uid),
   KEY rights (rights)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}user_perms table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-        $result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}udf
-        ") or die("<br>Could not drop {$dbprefix}udf table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}udf";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE IF NOT EXISTS {$dbprefix}udf (
+$query = "CREATE TABLE IF NOT EXISTS {$dbprefix}udf (
     id  int auto_increment unique,
     table_name varchar(50),
     display_name varchar(16),
     field_type int
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}udf table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-        $result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}odmsys
-        ") or die("<br>Could not drop {$dbprefix}odmsys table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}odmsys";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-CREATE TABLE IF NOT EXISTS {$dbprefix}odmsys
+$query = "CREATE TABLE IF NOT EXISTS {$dbprefix}odmsys
 (
     id  int(11) auto_increment unique,
     sys_name  varchar(16),
     sys_value    varchar(255)
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}odmsys table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Create version number in db
-$result = mysql_query("
-INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.9.1')
-        ") or die("<br>Could not insert new version into {$dbprefix}odmsys. Error was:" .  mysql_error());
+$query = "INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.9.1')";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-                $result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}settings
-        ") or die("<br>Could not drop {$dbprefix}settings table. Error was:" .  mysql_error());
-
+$query = "DROP TABLE IF EXISTS {$dbprefix}settings";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Create the settings table
-$result = mysql_query("
-CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 `name` VARCHAR( 255 ) NOT NULL ,
 `value` VARCHAR( 255 ) NOT NULL ,
@@ -313,8 +316,9 @@ CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 UNIQUE ( `name` )
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$dbprefix}settings table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Populate the setttings table with default values
 $sql_operations = array(
@@ -340,21 +344,22 @@ $sql_operations = array(
 
 foreach($sql_operations as $query)
 {
-    $result = mysql_query($query) or die('Died while inserting into settings table: ' . $query . ' ' . mysql_error());
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 }
 
-        $result = mysql_query("
-DROP TABLE IF EXISTS {$dbprefix}filetypes
-        ") or die("<br>Could not drop {$dbprefix}filetypes table. Error was:" .  mysql_error());
+$query = "DROP TABLE IF EXISTS {$dbprefix}filetypes";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Create the filetypes table
-$result = mysql_query("
-CREATE  TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
+$query = "CREATE  TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
 `type` VARCHAR(255) NOT NULL ,
 `active` TINYINT(4) NOT NULL ,
-PRIMARY KEY (`id`) ) ENGINE = MYISAM
-    ") or die("<br>Could not create {$dbprefix}filetypes table. Error was:" .  mysql_error());
+PRIMARY KEY (`id`) ) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 // Create the filetypes data
 $sql_operations=array(
@@ -407,5 +412,6 @@ $sql_operations=array(
         );
 foreach($sql_operations as $query)
 {
-    $result = mysql_query($query) or die('Died while inserting to filetypes table: ' . mysql_error());
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 }
