@@ -898,8 +898,8 @@ if ( !defined('udf_functions') )
     {
         global $pdo;
 
-        $query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = :where ";
-        $stmt = $pdo->prepare($query);
+        $lookup_query = "SELECT table_name,field_type FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE display_name = :display_name ";
+        $stmt = $pdo->prepare($lookup_query);
         $stmt->execute(array(
             ':display_name' => $where
         ));
@@ -914,7 +914,7 @@ if ( !defined('udf_functions') )
         elseif ($row[1] == 3)
         {           
             $query .= $row[0] . $equate . '\'' . $keyword . '\'';
-        }       
+        }
 
         return array($query_pre,$query);
     }
