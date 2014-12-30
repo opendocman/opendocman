@@ -4,8 +4,7 @@
         <title>{$g_title}</title>
         </head>
 
-        <body bgcolor="White">
-
+        <body bgcolor="White" style="margin-left:10px;">
         <table cellspacing="0" cellpadding="0">
         <tr>
         <td align="left"><img src="images/logo.gif" alt="Site Logo" border=0></td>

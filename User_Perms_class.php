@@ -28,11 +28,11 @@ if ( !defined('User_Perms_class') )
         var $id;
         var $rights;
         var $user_obj;
-        var $deptperms_obj;
+        var $dept_perms_obj;
         var $file_obj;
         var $error;
         var $chosen_mode;
-        var $connection, $database;
+        var $connection;
 
         var $NONE_RIGHT = 0;
         var $VIEW_RIGHT = 1;
@@ -42,59 +42,101 @@ if ( !defined('User_Perms_class') )
         var $FORBIDDEN_RIGHT = -1;
         var $USER_MODE = 0;
         var $FILE_MODE = 1;
-        function User_Perms($id, $connection, $database)
+
+        /**
+         * @param int $id
+         * @param PDO $connection
+         */
+        function User_Perms($id, PDO $connection)
         {
             $this->id = $id;  // this can be fid or uid
+            $this->user_obj = new User($id, $connection);
+            $this->dept_perms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection);
             $this->connection = $connection;
-            $this->database = $database;
-            $this->user_obj = new User($id, $connection, $database);
-            $this->deptperms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection, $database);
         }
-        // return an array of user whose permission is >= view_right
-        function getCurrentViewOnly()
+
+        /**
+         * return an array of user whose permission is >= view_right
+         * @param bool $limit
+         * @return array
+         */
+        function getCurrentViewOnly($limit = true)
         {
-            return $this->loadData_UserPerm($this->VIEW_RIGHT);
+            return $this->loadData_UserPerm($this->VIEW_RIGHT, $limit);
         }
-        // return an array of user whose permission is >= none_right
-        function getCurrentNoneRight()
+
+        /**
+         * return an array of user whose permission is >= none_right
+         * @param bool $limit
+         * @return array
+         */
+        function getCurrentNoneRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->NONE_RIGHT);
+            return $this->loadData_UserPerm($this->NONE_RIGHT, $limit);
         }
-        // return an array of user whose permission is >= read_right
-        function getCurrentReadRight()
+
+        /**
+         * return an array of user whose permission is >= read_right
+         * @param bool $limit
+         * @return array
+         */
+        function getCurrentReadRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->READ_RIGHT);
+            return $this->loadData_UserPerm($this->READ_RIGHT, $limit);
         }
-        // return an array of user whose permission is >= write_right
-        function getCurrentWriteRight()
+
+        /**
+         * return an array of user whose permission is >= write_right
+         * @param bool $limit
+         * @return array
+         */
+        function getCurrentWriteRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->WRITE_RIGHT);
+            return $this->loadData_UserPerm($this->WRITE_RIGHT, $limit);
         }
-        // return an array of user whose permission is >= admin_right
-        function getCurrentAdminRight()
+
+        /**
+         * return an array of user whose permission is >= admin_right
+         * @param bool $limit
+         * @return array
+         */
+        function getCurrentAdminRight($limit = true)
         {
-            return $this->loadData_UserPerm($this->ADMIN_RIGHT);
+            return $this->loadData_UserPerm($this->ADMIN_RIGHT, $limit);
         }
+
+        /**
+         * @return int
+         */
         function getId()
         {
             return $this->id;
         }
 
-        /*
+        /**
          * All of the functions above provide an abstraction for loadData_UserPerm($right).
-         * If your user doesn't want to or does not know the numeric value for permission,
+         * If your user does not want to or does not know the numeric value for permission,
          * use the function above.  LoadData_UserPerm($right) can be invoke directly.
-         * @param integer $right The "Right" that is bein checked.
+         * @param integer $right The "Right" that is being checked.
+         * @param integer $right The permissions level you are checking for
+         * @param boolean $limit boolean Should we limit the query to max_query size?
+         * @return array
          */
-        function loadData_UserPerm($right)
+        function loadData_UserPerm($right, $limit)
         {
+            $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
+
             if($this->user_obj->isAdmin())
             {
                 $query = "SELECT d.id
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
                         WHERE
-                            d.publishable = 1";
+                            d.publishable = 1 "
+                                    . $limit_query;
+                $stmt =  $this->connection->prepare($query);
+                $stmt->execute();
+                $result = $stmt->fetchAll();
             }
             elseif ($this->user_obj->isReviewer())
             {
@@ -108,46 +150,65 @@ if ( !defined('User_Perms_class') )
                         AND
                             dr.dept_id = d.department
                         AND
-                            dr.user_id = $this->id";
+                            dr.user_id = :id "
+                                    . $limit_query;
+                $stmt =  $this->connection->prepare($query);
+                $stmt->execute(array(
+                    ':id' => $this->id
+                ));
+                $result = $stmt->fetchAll();
             }
             else
             {
                 //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
-                $query = "SELECT up.fid
-                        FROM
-                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
-                            {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as up
-                        WHERE (
-                                    up.uid = $this->id
-				AND 
-                                    d.id = up.fid
-                                AND
-                                    up.rights>=$right
-                                AND
-                                    d.publishable = 1
-                              )";
+                $query = "
+                  SELECT
+                    up.fid
+                  FROM
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as up
+                  WHERE (
+                    up.uid = :id
+				    AND
+                    d.id = up.fid
+                    AND
+                    up.rights >= :right
+                    AND
+                    d.publishable = 1
+                  ) $limit_query";
+                $stmt =  $this->connection->prepare($query);
+                $stmt->execute(array(
+                    ':right' => $right,
+                    ':id' => $this->id
+                ));
+                $result = $stmt->fetchAll();
             }
-            //$start = getmicrotime();
-            $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
+
             $index = 0;
             $fileid_array = array();
             //$fileid_array[$index][0] ==> fid
             //$fileid_array[$index][1] ==> owner
             //$fileid_array[$index][2] ==> username
-            $llen = mysql_num_rows($result);
-            while($index< $llen )
+            $llen = $stmt->rowCount();
+            while($index < $llen )
             {
-                list($fileid_array[++$index] ) = mysql_fetch_row($result);
+                list($fileid_array[$index] ) = $result[$index];
+                $index++;
             }
             return $fileid_array;
         }
-        // return whether if this user can view $data_id
+
+        /**
+         * return whether if this user can view $data_id
+         * @param int $data_id
+         * @return bool
+         */
         function canView($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
+            $filedata = new FileData($data_id, $this->connection);
             if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
             {
-                if($this->canUser($data_id, $this->VIEW_RIGHT) or $this->deptperms_obj->canView($data_id)or $this->canAdmin($data_id))
+                if($this->canUser($data_id, $this->VIEW_RIGHT) or $this->dept_perms_obj->canView($data_id)or $this->canAdmin($data_id))
                 {
                     return true;
                 }
@@ -157,13 +218,18 @@ if ( !defined('User_Perms_class') )
                 }
             }
         }
-        // return whether if this user can read $data_id
+
+        /**
+         * return whether if this user can read $data_id
+         * @param $data_id
+         * @return bool
+         */
         function canRead($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
+            $filedata = new FileData($data_id, $this->connection);
             if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
             {
-                if($this->canUser($data_id, $this->READ_RIGHT) or $this->deptperms_obj->canRead($data_id) or $this->canAdmin($data_id) )
+                if($this->canUser($data_id, $this->READ_RIGHT) or $this->dept_perms_obj->canRead($data_id) or $this->canAdmin($data_id) )
                 {
                     return true;
                 }
@@ -174,13 +240,18 @@ if ( !defined('User_Perms_class') )
             }
 
         }
-        // return whether if this user can modify $data_id
+
+        /**
+         * return whether if this user can modify $data_id
+         * @param $data_id
+         * @return bool
+         */
         function canWrite($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
+            $filedata = new FileData($data_id, $this->connection);
             if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
             {
-                if($this->canUser($data_id, $this->WRITE_RIGHT) or $this->deptperms_obj->canWrite($data_id) or $this->canAdmin($data_id) )
+                if($this->canUser($data_id, $this->WRITE_RIGHT) or $this->dept_perms_obj->canWrite($data_id) or $this->canAdmin($data_id) )
                 {
                     return true;
                 }
@@ -191,13 +262,18 @@ if ( !defined('User_Perms_class') )
             }
 
         }
-        // return whether if this user can admin $data_id
+
+        /**
+         * return whether if this user can admin $data_id
+         * @param $data_id
+         * @return bool
+         */
         function canAdmin($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
+            $filedata = new FileData($data_id, $this->connection);
             if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
             {
-                if($this->canUser($data_id, $this->ADMIN_RIGHT) or $this->deptperms_obj->canAdmin($data_id) or $filedata->isOwner($this->id))
+                if($this->canUser($data_id, $this->ADMIN_RIGHT) or $this->dept_perms_obj->canAdmin($data_id) or $filedata->isOwner($this->id))
                 {
                     return true;
                 }
@@ -207,15 +283,32 @@ if ( !defined('User_Perms_class') )
                 }
             }
         }
-        // return whether if this user is forbidden to have acc
+
+        /**
+         * return whether if this user is forbidden to have acc
+         * @param $data_id
+         * @return bool
+         */
         function isForbidden($data_id)
         {
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id";
-            $result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
-            if(mysql_num_rows($result) ==1)
+            $query = "
+              SELECT
+                rights
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS
+              WHERE
+                uid = :id
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':id' => $this->id
+            ));
+            $result = $stmt->fetch();
+
+            if($stmt->rowCount() == 1)
             {
-                list ($right) = mysql_fetch_row($result);
-                if($right==$this->FORBIDDEN_RIGHT)
+                list ($right) = $result[0];
+                if($right == $this->FORBIDDEN_RIGHT)
                 {
                     return true;
                 }
@@ -226,7 +319,7 @@ if ( !defined('User_Perms_class') )
             }
         }
         
-        /*
+        /**
          * This function is used by all the canRead, canView, etc... abstract functions.
          * Users may invoke this function directly if they are familiar of the numeric permision values.
          * If they are an "Admin" or "Reviewer" for this file return true right away
@@ -240,9 +333,27 @@ if ( !defined('User_Perms_class') )
             {
                 return true;
             }
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.uid = $this->id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.fid = $data_id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights>=$right";
-            $result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
-            switch(mysql_num_rows($result) )
+            $query = "
+              SELECT
+                *
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS
+              WHERE
+                uid = :id
+              AND
+                fid = :data_id
+              AND
+                rights >= :right
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':right' => $right,
+                ':data_id' => $data_id,
+                ':id' => $this->id
+            ));
+
+
+            switch($stmt->rowCount() )
             {
                 case 1: return true;
                     break;
@@ -252,7 +363,12 @@ if ( !defined('User_Perms_class') )
                     break;
             }
         }
-        // return this user's permission on the file $data_id
+
+        /**
+         * return this user's permission on the file $data_id
+         * @param int $data_id
+         * @return int|string
+         */
         function getPermission($data_id)
         {
             if($GLOBALS['CONFIG']['root_id'] == $this->user_obj->getId())
@@ -260,44 +376,58 @@ if ( !defined('User_Perms_class') )
                 return 4;
             }
 
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS WHERE uid = $this->id and fid = $data_id";
-            $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
-            if(mysql_num_rows($result) == 1)
+            $query = "
+              SELECT
+                rights
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS
+              WHERE
+                uid = :id
+              AND
+                fid = :data_id
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':data_id' => $data_id,
+                ':id' => $this->id
+            ));
+            $result = $stmt->fetchColumn();
+
+            if($stmt->rowCount() == 1)
             {
-                list($permission) = mysql_fetch_row($result);
-                return $permission;
+                return $result;
             }
-            elseif (mysql_num_rows($result) == 0)
+            elseif ($stmt->rowCount() == 0)
             {
                 return -999;
             }
         }
-        
-        /*
-         * getAllRights - Returns an array of all the available rights values
-         * @returns array
+
+        /**
+         * @param int $user_id
+         * @param int $data_id
+         * @return string
          */
-
-        public static function getAllRights()
-        {
-            // query to get a list of available users
-            $query = "SELECT RightId, Description FROM {$GLOBALS['CONFIG']['db_prefix']}rights order by RightId";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in querry: $query. " . mysql_error());
-            while ($row = mysql_fetch_assoc($result))
-            {
-                $rightsListArray[] = $row;
-            }
-            mysql_free_result($result);
-            return $rightsListArray;
-        }
-
         public function getPermissionForUser($user_id, $data_id)
         {
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = $user_id and fid = $data_id";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: .$query" . mysql_error());
-            list($permission) = mysql_fetch_row($result);
+            $query = "
+              SELECT
+                rights
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}user_perms
+              WHERE
+                uid = :user_id
+              AND
+                fid = :data_id
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':user_id' => $user_id,
+                ':data_id' => $data_id
+            ));
+            $result = $stmt->fetchColumn();
 
-            return $permission;
+            return $result;
         }
 
     }

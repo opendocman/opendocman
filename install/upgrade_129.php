@@ -1,7 +1,7 @@
 <?php
 /*
-upgrade_12rc1.php - Database upgrades for users upgrading from 1.2rc1
-Copyright (C) 2002-2010 Stephen Lawrence Jr.
+upgrade_129.php - For users upgrading from DB version 1.2.9 to 1.2.9.1
+Copyright (C) 2014 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,7 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 global $pdo;
 
-//$query = "ALTER IGNORE TABLE data
-//    DROP filesize";
-//$stmt = $pdo->prepare($query);
-//$stmt->execute();
+echo 'Altering the settings table...<br />';
+$query = "DELETE FROM `{$_SESSION['db_prefix']}settings` WHERE name = 'secureurl'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+            
+echo 'Updating db version...<br />';
+$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.9.1' WHERE sys_name='version'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+
+echo 'Database update 1.2.9.1 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';

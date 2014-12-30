@@ -201,12 +201,16 @@ deny from all
 	define('DB_HOST', trim($_POST['dbhost']));
 
 	// We'll fail here if the values are no good.
-        $connection = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect to database! Are you sure that you entered the database information correctly?" . mysql_error());
-        $result = mysql_query("CREATE DATABASE IF NOT EXISTS `". DB_NAME . "`")
-                        or die("<br>Unable to Create Database - Error in query:" . mysql_error());
-        $db = mysql_select_db(DB_NAME, $connection) or die ("Can't select database. We have connected to the database so we know the username and password are correct, but we were unable to select the database name you gave us. Are you sure it exists? You might still need to create the database.");
+		$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+		try {
+			$pdo = new PDO($dsn, DB_USER, DB_PASS);
+		} catch (PDOException $e) {
+			print "Error!: " . $e->getMessage() . "<br/>";
+			die();
+		}
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	$dbname  = sanitizeme(trim($_POST['dbname']));
+		$dbname  = sanitizeme(trim($_POST['dbname']));
 	$uname   = sanitizeme(trim($_POST['uname']));
 	$passwrd = sanitizeme(trim($_POST['pwd']));
 	$dbhost  = sanitizeme(trim($_POST['dbhost']));

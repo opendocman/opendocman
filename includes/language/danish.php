@@ -1,6 +1,6 @@
 <?php
 //DANISH LANGUAGE FILE
-// (C) 2013 Stephen Lawrence Jr.
+// (C) 2013-14 Stephen Lawrence Jr.
 // Translated by: Lars J. Helbo
 /*
 This program is free software; you can redistribute it and/or
@@ -288,6 +288,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> for at downlode den til din 
 $lang['message_initial_import'] = 'Oprindelig import';
 $lang['message_last_message'] = 'Sidste besked';
 $lang['message_latest_version'] = 'Nyeste version';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Du skal mindst bruge en afdeling';
 $lang['message_no_author_comments_available'] = 'Ingen forfatterkommentar tilgængelig';
 $lang['message_no_description_available'] = 'Ingen beskrivelse tilgængelig';

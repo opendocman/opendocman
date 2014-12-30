@@ -1,6 +1,6 @@
 <?php
 //CZECH LANGUAGE FILE
-// (C) 2013 Stephen Lawrence Jr.
+// (C) 2013-14 Stephen Lawrence Jr.
 // Translated by: The Opice
 /*
 This program is free software; you can redistribute it and/or
@@ -287,6 +287,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> které zahájí stahování 
 $lang['message_initial_import'] = 'Úvodní import';
 $lang['message_last_message'] = 'Poslední zpráva';
 $lang['message_latest_version'] = 'Aktuální verze';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Je potřeba alespoň jedno oddělení';
 $lang['message_no_author_comments_available'] = 'Poznámky nejsou dostupné';
 $lang['message_no_description_available'] = 'Popis není dostupný';

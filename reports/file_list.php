@@ -33,7 +33,7 @@ if (!isset($_SESSION['uid']))
 }
 
 // open a connection to the database
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
@@ -82,11 +82,12 @@ $query = "SELECT
               ON {$GLOBALS['CONFIG']['db_prefix']}log.id = {$GLOBALS['CONFIG']['db_prefix']}data.id
           ORDER BY id
           ";             
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$result = mysql_query($query) or die("Error in querying: $query" .mysql_error());
-           
-while (false !== ($row = mysql_fetch_assoc($result))) {
-// display field/column names as first row 
+foreach($result as $row) {
+// display field/column names as first row
     if (!$flag) {
 
         fputcsv($out, array_keys($row), ',', '"');

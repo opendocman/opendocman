@@ -46,9 +46,9 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
 the server
 */
-$fileobj = new FileData($_GET['id'], $GLOBALS['connection'], DB_NAME);
-$fileobj->setId($_GET['id']);
-if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isArchived())
+$file_data_obj = new FileData($_GET['id'], $pdo);
+$file_data_obj->setId($_GET['id']);
+if ($file_data_obj->getError() != NULL || $file_data_obj->getStatus() > 0  || $file_data_obj->isArchived())
 {
     header('Location:error.php?ec=2');
     exit;
@@ -58,7 +58,7 @@ if (!isset($_GET['submit']))
     draw_header(msg('area_check_out_file'), $last_message);
     // form not yet submitted
     // display information on how to initiate download
-    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
+    checkUserPermission($_REQUEST['id'], $file_data_obj->WRITE_RIGHT, $file_data_obj);
     ?>
 
 
@@ -76,29 +76,35 @@ if (!isset($_GET['submit']))
 // form submitted - download
 else
 {
-    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
-    $realname = $fileobj->getName();
+    $id = (int) $_REQUEST['id'];
+
+    checkUserPermission($id, $file_data_obj->WRITE_RIGHT, $file_data_obj);
+    $real_name = $file_data_obj->getName();
     if($_GET['access_right'] == 'modify')
     {
         // since this user has checked it out and will modify it
         // update db to reflect new status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = :uid WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':uid' => $_SESSION['uid'],
+            ':id' => $id
+        ));
     }
     // calculate filename
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $_GET['id'] . '.dat';
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 
     if (file_exists($filename))
     {
         // send headers to browser to initiate file download
         header ('Content-Type: application/octet-stream');
-        header ('Content-Disposition: attachment; filename="' . $realname . '"');
+        header ('Content-Disposition: attachment; filename="' . $real_name . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);
         
-        AccessLog::addLogEntry($_REQUEST['id'],'O');
-        AccessLog::addLogEntry($_REQUEST['id'],'D');
+        AccessLog::addLogEntry($id, 'O', $pdo);
+        AccessLog::addLogEntry($id, 'D', $pdo);
     }
     else
     {

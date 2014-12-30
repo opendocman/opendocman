@@ -33,7 +33,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 $redirect = 'out.php';
 
-$userperm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$userperm_obj = new User_Perms($_SESSION['uid'], $pdo);
 
 // User has requested a deletion from the file detail page
 if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
@@ -43,7 +43,6 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
         $_REQUEST['num_checkboxes'] =1;
     }
     // all ok, proceed!
-    //mysql_free_result($result);
     if( !is_dir($GLOBALS['CONFIG']['archiveDir']) )
     {
         // Make sure directory is writeable
@@ -66,11 +65,11 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
             }
             if($userperm_obj->canAdmin($id))
             {
-                $file_obj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+                $file_obj = new FileData($id, $pdo);
                 $file_obj->temp_delete();
                 fmove($GLOBALS['CONFIG']['dataDir'] . $id . '.dat', $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat');
             }
-            AccessLog::addLogEntry($_REQUEST['id' . $i],'X');
+            AccessLog::addLogEntry($_REQUEST['id' . $i], 'X', $pdo);
         }
     }
     // delete from directory
@@ -87,21 +86,25 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
     isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
     
     //publishable=2 for archive deletion
-    $lquery = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";
-    $lresult = mysql_query($lquery, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
     $array_id = array();
-    for($i = 0; $i < mysql_num_rows($lresult); $i++)
-    {
-        list($array_id[$i]) = mysql_fetch_row($lresult);
+    $i = 0;
+    foreach($result as $row) {
+        $array_id[$i] = $row['id'];
+        $i++;
     }
-    $luserperm_obj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    //$lfileobj_array = $luserperm_obj->convertToFileDataOBJ($array_id)
+
+    $luserperm_obj = new UserPermission($_SESSION['uid'], $pdo);
     
     draw_header(msg('area_deleted_files'), $last_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
 
-    $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $user_obj = new User($_SESSION['uid'], $pdo);
+    $userperms = new UserPermission($_SESSION['uid'], $pdo);
 
     $list_status = list_files($array_id, $userperms, $GLOBALS['CONFIG']['archiveDir'], true);
 
@@ -131,7 +134,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete')
     {
         foreach ($_REQUEST['checkbox'] as $fileId)
         {
-            $file_obj = new FileData($fileId, $GLOBALS['connection'], DB_NAME);
+            $file_obj = new FileData($fileId, $pdo);
             $file_obj->undelete();
             fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
         }
@@ -147,7 +150,9 @@ draw_footer();
  */
 function pmt_delete($id)
 {
-    $userperm_obj = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    global $pdo;
+
+    $userperm_obj = new User_Perms($_SESSION['uid'], $pdo);
     
     if( !$userperm_obj->user_obj->isRoot() )
     {
@@ -155,7 +160,6 @@ function pmt_delete($id)
         exit;
     }
     // all ok, proceed!
-    //mysql_free_result($result);
     if(isset($id))
     {
         if(strchr($id, '_') )
@@ -165,18 +169,23 @@ function pmt_delete($id)
         if($userperm_obj->canAdmin($id))
         {
             // delete from db
-            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$id'";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':id' => $id));
 
             // delete from db
-            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = '$id'";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':id' => $id));
 
-            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = '$id'";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':id' => $id));
 
-            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());            
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':id' => $id));
+
             $filename = $id . ".dat";
             unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);            
             if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )

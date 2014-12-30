@@ -92,116 +92,142 @@ if(!isset($_GET['submit']))
 }
 else
 {
-    function search($lwhere, $lkeyword, $lexact_phrase, $lcase_sensitivity, $lsearch_array)
+    function search($where, $keyword, $exact_phrase, $case_sensitivity, $search_array)
     {
-        $lequate = '=';
-        $l_remain ='';
-        if( $lexact_phrase != 'on' )
+        global $pdo;
+
+        $remain ='';
+        if( $exact_phrase != 'on' )
         {
-            $lkeyword = '%' . $lkeyword . '%';
+            $keyword = '%' . $keyword . '%';
         }
-        if($lcase_sensitivity != 'on')
+        if($case_sensitivity != 'on')
         {
-            $lequate = ' LIKE ';
+            $equate = ' LIKE ';
         }
         else
         {
-            $lequate = ' COLLATE latin1_general_cs LIKE ';
+            $equate = ' LIKE BINARY ';
         }
 
-        $lkeyword = addslashes($lkeyword);
+        $query_pre = "
+          SELECT
+            d.id
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}data as d,
+            {$GLOBALS['CONFIG']['db_prefix']}user as u,
+            {$GLOBALS['CONFIG']['db_prefix']}department dept,
+            {$GLOBALS['CONFIG']['db_prefix']}category as c ";
 
-        $lquery_pre = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user, {$GLOBALS['CONFIG']['db_prefix']}department, {$GLOBALS['CONFIG']['db_prefix']}category";
-        $lquery = " WHERE {$GLOBALS['CONFIG']['db_prefix']}data.owner = {$GLOBALS['CONFIG']['db_prefix']}user.id
-					AND {$GLOBALS['CONFIG']['db_prefix']}data.department={$GLOBALS['CONFIG']['db_prefix']}department.id 
-					AND {$GLOBALS['CONFIG']['db_prefix']}data.category = {$GLOBALS['CONFIG']['db_prefix']}category.id AND (";
-        $larray_len = sizeof($lsearch_array);
-        switch($lwhere)
+        $query = "
+            WHERE
+                d.owner = u.id
+            AND
+                d.department = dept.id
+            AND
+                d.category = c.id AND (
+        ";
+
+        $author_first_name = '';
+        $author_last_name = '';
+        $use_uid = false;
+        switch($where)
         {
             // Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'author_locked_files':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.status' . $lequate  . '\'' . $lkeyword . '\' AND '.$GLOBALS['CONFIG']['db_prefix'].'data.owner=\'' . $_SESSION['uid'] . '\'';
+                $use_uid = true;
+                $query .= "d.status $equate :keyword AND d.owner = :uid ";
                 break;
 
             // Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'category':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'category.name' . $lequate  . '\'' . $lkeyword . '\'';
+                $query .= "c.name $equate :keyword ";
                 break;
             // Put all the author name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author':
-                if( $lexact_phrase=='on' )
-                {
-                    $lquery .= $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate . '\'' . substr($lkeyword, strpos($lkeyword, ' ')+1 ) . '\' AND ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name' . $lequate . '\'' . substr($lkeyword, 0, strpos($lkeyword, ' ')) . '\'';
-                }
-                else
-                {
-                    $lquery .= $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name' . $lequate . '\'' . $lkeyword . '\'';
+                if( $exact_phrase=='on' )  {
+                    $author_first_name = substr($keyword, strpos($keyword, ' ') +1 );
+                    $author_last_name = substr($keyword, 0, strpos($keyword, ' '));
+                    $query .= " u.first_name $equate :author_first_name AND u.last_name  $equate :author_last_name ";
+                } else {
+                    $query .= " u.first_name $equate  :keyword OR u.last_name $equate :keyword ";
                 }
                 break;
             // Put all the department name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the department name array are synchronized.case 'department':
             case 'department':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'department.name' . $lequate  . '\'' . $lkeyword . '\'';
+                $query .= "dept.name $equate  :keyword ";
                 break;
             // Put all the description for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the description array are synchronized.
             case 'descriptions':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.description' . $lequate  . '\'' . $lkeyword . '\'';
+                $query .= "d.description $equate :keyword ";
                 break;
             // Put all the file name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the file name array are synchronized.
             case 'filenames':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.realname' . $lequate . '\'' . $lkeyword . '\'';
+                $query .= "d.realname $equate :keyword ";
                 break;
             // Put all the comments for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the comments array are synchronized.
             case 'comments':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $query .= "d.comment $equate :keyword ";
                 break;
             case 'file_id':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'data.id' . $lequate . '\'' . $lkeyword . '\'';
+                $query .= "d.id $equate :keyword ";
                 break;
             case 'all':
-                $lquery .= $GLOBALS['CONFIG']['db_prefix'].'category.name' . $lequate  . '\'' . $lkeyword . '\' OR ' .
-                        $GLOBALS['CONFIG']['db_prefix'].'user.first_name' . $lequate  . '\'' . $lkeyword . '\' OR ' . $GLOBALS['CONFIG']['db_prefix'].'user.last_name ' . $lequate  . '\'' . $lkeyword . '\' OR ' .
-                        $GLOBALS['CONFIG']['db_prefix'].'department.name' . $lequate  . '\'' . $lkeyword . '\' OR ' .
-                        $GLOBALS['CONFIG']['db_prefix'].'data.description' . $lequate  . '\'' . $lkeyword . '\' OR ' .
-                        $GLOBALS['CONFIG']['db_prefix'].'data.realname' . $lequate  . '\'' . $lkeyword . '\' OR ' .
-                        $GLOBALS['CONFIG']['db_prefix'].'data.comment' . $lequate  . '\'' . $lkeyword . '\'';
+                $query .= "c.name $equate  :keyword OR " .
+                        "u.first_name $equate :keyword OR u.last_name $equate :keyword OR " .
+                        "dept.name $equate :keyword OR " .
+                        "d.description $equate :keyword OR " .
+                        "d.realname $equate :keyword OR " .
+                        "d.comment $equate :keyword ";
                 break;
 
             default :
-                list($lquery_pre,$lquery) = udf_functions_search($lwhere,$lquery_pre,$lquery,$lequate,$lkeyword);
+                list($query_pre, $query) = udf_functions_search($where, $query_pre, $query, $equate, $keyword);
                 break;
 
         }
-        $lquery .= ") ORDER BY {$GLOBALS['CONFIG']['db_prefix']}data.id ASC";            
-        $lresult = mysql_query($lquery_pre.$lquery);
 
-        $lindex = 0;
-        $lid_array = array();
-    
-        if ($lresult) {
-            $llen = mysql_num_rows($lresult);
-        } else {
-            $llen = 0;
+        $query .= ") ORDER BY d.id ASC";
+
+        $final_query = $query_pre . $query;
+
+        $stmt = $pdo->prepare($final_query);
+        $stmt->bindParam(':keyword', $keyword);
+        if(!empty($use_uid)) {
+            $stmt->bindParam(':uid', $_SESSION['uid']);
         }
-        
-        while ($lindex < $llen) {
-            list($lid_array[$lindex++]) = mysql_fetch_row($lresult);
+        if(!empty($author_first_name)) {
+            $stmt->bindParam(':author_first_name', $author_first_name);
         }
-        if(@$l_remain != '' && $lexact_phrase != "on")
+        if(!empty($author_last_name)) {
+            $stmt->bindParam(':author_last_name', $author_last_name);
+        }
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+
+        $index = 0;
+        $id_array = array();
+
+        foreach($result as $row) {
+            $id_array[$index++] = $row['id'];
+            $index++;
+        }
+        if(@$remain != '' && $exact_phrase != "on")
         {
-            return array_values( array_unique( array_merge($lid_array, search($lwhere, substr($l_remain, 1), $lexact_phrase, $lcase_sensitivity, $lsearch_array) ) ) );
+            return array_values( array_unique( array_merge($id_array, search($where, substr($remain, 1), $exact_phrase, $case_sensitivity, $search_array) ) ) );
         }
-        return array_values( array_intersect($lid_array, $lsearch_array) );
+        return array_values( array_intersect($id_array, $search_array) );
     }
-    $current_user = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $user_perms = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $current_user_permission = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $current_user = new User($_SESSION['uid'], $pdo);
+    $user_perms = new User_Perms($_SESSION['uid'], $pdo);
+    $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
     //$s_getFTime = getmicrotime();
     if($_GET['where'] == 'author_locked_files')
     {
@@ -209,19 +235,17 @@ else
     }
     else
     {
-        $view_able_files_id = $current_user_permission->getViewableFileIds();
+        $view_able_files_id = $current_user_permission->getViewableFileIds(false);
     }
     //$e_getFTime = getmicrotime();
     $id_array_len = sizeof($view_able_files_id);
     $query_array = array();
     $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
-    //echo 'khoa' . sizeof($search_result);
-    $sorted_result = my_sort($search_result);
 
     // Call the plugin API
     callPluginMethod('onSearch');
 
-    list_files($sorted_result,  $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false,false);
+    list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false,false);
     echo '<br />';
     draw_footer();
     //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';

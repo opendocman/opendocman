@@ -35,19 +35,18 @@ if (!isset($_SESSION['uid']))
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 // includes
-$secureurl = new phpsecureurl;
 ///////////////////////////////////////////////////////////////////////////
 // Any person who is accessing this page, if they access their own account, then it's ok.
 // If they are not accessing their own account, then they have to be an admin.
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 // Make sure the item and uid are set, then check to make sure they are the same and they have admin privs, otherwise, user is not able to modify another users' info
 if (isset($_SESSION['uid']) & isset($_GET['item']))
 {
     if($_SESSION['uid'] != $_GET['item'] && $user_obj->isAdmin() != true )
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 }
@@ -66,7 +65,7 @@ else
 }
 if($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['uid'])
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location: error.php?ec=4');
     exit;
 }
 
@@ -129,14 +128,14 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <?php			
                 // query to get a list of departments
                 $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array());
+                $result = $stmt->fetchAll();
 
-        while(list($id, $name) = mysql_fetch_row($result))
-        {
-                echo '<option value=' . $id . '>' . $name . '</option>';
+        foreach($result as $row) {
+                echo '<option value=' . $row['id'] . '>' . $row['name'] . '</option>';
         }
 
-        mysql_free_result ($result);
         ?>
                 </select>
                 </td>
@@ -152,10 +151,11 @@ if(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser')
                 <SELECT class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" />
                 <?php 
         $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
-        while(list($dept_id, $dept_name) = mysql_fetch_row($result))
-        {
-                echo '<OPTION value="' . $dept_id . '">' . $dept_name . '</OPTION>' . "\n";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array());
+        $result = $stmt->fetchAll();
+        foreach($result as $row) {
+                echo '<OPTION value="' . $row['id'] . '">' . $row['name'] . '</OPTION>' . "\n";
         }
 ?>
 </SELECT>
@@ -201,17 +201,20 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
 {
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     // Check to make sure user does not already exist
-    $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '" . addslashes($_POST['username']) . "'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = :username ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':username' => $_POST['username']
+    ));
 
     // If the above statement returns more than 0 rows, the user exists, so display error
-    if(mysql_num_rows($result) > 0)
+    if($stmt->rowCount() > 0)
     {
-        header('Location:' . $secureurl->encode('error.php?ec=3'));
+        header('Location: error.php?ec=3');
         exit;
     }
     else
@@ -241,17 +244,17 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
                 )";
 
         $stmt = $pdo->prepare($query);
-        
-        $stmt->bindParam(':username', $_POST['username']);
-        $stmt->bindParam(':password', $_POST['password']);
-        $stmt->bindParam(':department', $_POST['department']);
-        $stmt->bindParam(':phonenumber', $phonenumber);
-        $stmt->bindParam(':email', $_POST['Email']);
-        $stmt->bindParam(':lastname', $_POST['last_name']);
-        $stmt->bindParam(':firstname', $_POST['first_name']);
-        $stmt->bindParam(':can_add', $_POST['can_add']);
-        $stmt->bindParam(':can_checkin', $_POST['can_checkin']);
-        $stmt->execute();
+        $stmt->execute(array(
+            ':username' => $_POST['username'],
+            ':password' => $_POST['password'],
+            ':department' => $_POST['department'],
+            ':phonenumber' => $phonenumber,
+            ':email' => $_POST['Email'],
+            ':lastname' => $_POST['last_name'],
+            ':firstname' => $_POST['first_name'],
+            ':can_add' => $_POST['can_add'],
+            ':can_checkin' => $_POST['can_checkin']
+        ));
 
         // INSERT into admin
         $userid = $pdo->lastInsertId();;
@@ -259,21 +262,30 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         {
             $_POST['admin']='0';
         }
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES('$userid', '{$_POST['admin']}')";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}admin (id, admin) VALUES(:user_id, :admin)";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':user_id' => $userid,
+            ':admin' => $_POST['admin']
+        ));
+
         if(isset($_POST['department_review']))
         {
             for($i = 0; $i<sizeof($_POST['department_review']); $i++)
             {
                 $dept_rev=$_POST['department_review'][$i];
-                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values('$dept_rev', '$userid')";
-                $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+                $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id, user_id) values(:dept_rev, :user_id)";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ':dept_rev' => $dept_rev,
+                    ':user_id' => $userid
+                ));
             }
         }
 
         // mail user telling him/her that his/her account has been created.
-        $user_obj = new user($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-        $new_user_obj = new User($userid, $GLOBALS['connection'], DB_NAME);
+        $user_obj = new user($_SESSION['uid'], $pdo);
+        $new_user_obj = new User($userid, $pdo);
         $date = date('Y-m-d H:i:s T'); //locale insensitive
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0].' '.$get_full_name[1];
@@ -302,7 +314,7 @@ elseif(isset($_POST['submit']) && 'Add User' == $_POST['submit'])
         // Call the plugin API call for this section
         callPluginMethod('onAfterAddUser');
 
-        header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+        header('Location: admin.php?last_message=' . $last_message);
     }
 }
 // Delete USER from DB
@@ -311,30 +323,34 @@ elseif(isset($_POST['submit']) && 'Delete User' == $_POST['submit'])
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
     // form has been submitted -> process data
     // DELETE admin info
-    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_POST['id']}'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = :id ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':id' => $_POST['id']));
 
     // DELETE user info
-    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = '$_POST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':id' => $_POST['id']));
 
     // DELETE perms info
-    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = '$_POST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE uid = :id ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':id' => $_POST['id']));
 
     // Change data info to nobody
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' where owner = '$_POST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' WHERE owner = :id ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':id' => $_POST['id']));
 
     // back to main page
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
-    header('Location:' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 // DELETE USER
 elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
@@ -348,7 +364,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         exit;
     }
     $delete='';
-    $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
+    $user_obj = new User($_POST['item'], $pdo);
     draw_header(msg('userpage_status_delete')  . $user_obj->getName(), $last_message);
     ?>
                         
@@ -359,13 +375,13 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 						<input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
                         <?php
                         $query = "SELECT id, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id='{$_POST['item']}'";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                while(list($id, $first_name, $last_name) = mysql_fetch_row($result))
-                {
-                        echo $first_name.' '.$last_name;
-                }
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute(array());
+                        $result = $stmt->fetchAll();
+                        foreach($result as $row) {
+                            echo $row['first_name'] . ' ' .  $row['last_name'];
+                         }
 
-                mysql_free_result ($result);
                 ?> 
                         ?
                         </td>
@@ -397,14 +413,15 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         <td colspan=3>
                         <select name="item">
                         <?php
-                        $query = "SELECT id,username, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                while(list($id, $username,$last_name, $first_name) = mysql_fetch_row($result))
-                {
-                        echo '<option value=' . $id . '>' . $last_name . ', ' . $first_name . ' - ' . $username . '</option>';
-                }
+            $query = "SELECT id,username, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
-                mysql_free_result ($result);
+            foreach($result as $row) {
+                echo '<option value=' . $row['id'] . '>' . $row['last_name'] . ', ' . $row['first_name'] . ' - ' . $row['username'] . '</option>';
+            }
+
                 $deletepick="";
                 ?>
                         </select>
@@ -425,7 +442,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User')
         {
                 // query to show item
-                $user_obj = new User($_POST['item'], $GLOBALS['connection'], DB_NAME);
+                $user_obj = new User($_POST['item'], $pdo);
                 draw_header(msg('userpage_show_user') . $user_obj->getName(), $last_message);
                 ?>
                         <table border=0>
@@ -484,13 +501,13 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         <td colspan=3>
                         <select name="item">
                         <?php
-                        $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                $result = mysql_query($query) or die ("Error in query: $query. " . mysql_error());
-                while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
-                {
-                        echo '<option value="' . $id . '">' . $last_name . ',' . $first_name . ' - ' . $username . '</option>';
-                }
-                mysql_free_result ($result);
+            $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array());
+            $result = $stmt->fetchAll();
+            foreach($result as $row) {
+                echo '<option value="' . $row['id'] . '">' . $row['last_name'] . ',' . $row['first_name'] . ' - ' . $row['username'] . '</option>';
+            }
                 ?>
                         </select>
                         </td>
@@ -524,7 +541,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 else
                 {
                     // Begin Not Demo Mode
-                    $user_obj = new User($_REQUEST['item'], $GLOBALS['connection'], DB_NAME);
+                    $user_obj = new User($_REQUEST['item'], $pdo);
                     draw_header(msg('userpage_update_user') . $user_obj->getName() ,$last_message);	
                     ?>
                         <form name="update" id="modifyUserForm" action="user.php" method="POST" enctype="multipart/form-data">
@@ -532,18 +549,20 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                         <tr>
 
                         <?php
-                $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user where id='" . $_REQUEST['item'] . "' ORDER BY username";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                list($id,$username, $password, $department, $phonenumber, $Email, $last_name, $first_name) = mysql_fetch_row($result);
-                echo '<td><b>'.msg('userpage_id').'</b></td><td colspan=4>'.$id.'</td>';
-                echo '<input type=hidden name=id value="'.$id.'">';
+                        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id ";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute(array(':id' => $_REQUEST['item']));
+                        $row = $stmt->fetch();
+
+                echo '<td><b>'.msg('userpage_id').'</b></td><td colspan=4>' . $row['id'] . '</td>';
+                echo '<input type=hidden name=id value="' . $row['id'] . '">';
                 echo '</tr>';
                 echo '<tr>';
-                echo '<td><b>'.msg('userpage_last_name').'</b></td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="'.$last_name.'" class="required" minlength="2" maxlength="255"></td></TR>';
-                echo '<td><b>'.msg('userpage_first_name').'</b></td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="'.$first_name.'" class="required" minlength="2" maxlength="255"></td></TR>';
-                echo '<td><b>'.msg('userpage_username').'</b></td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'.$username.'" class="required" minlength="2" maxlength="25"></td></TR>';
+                echo '<td><b>'.msg('userpage_last_name').'</b></td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="' . $row['last_name'] . '" class="required" minlength="2" maxlength="255"></td></TR>';
+                echo '<td><b>'.msg('userpage_first_name').'</b></td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="' . $row['first_name'] . '" class="required" minlength="2" maxlength="255"></td></TR>';
+                echo '<td><b>'.msg('userpage_username').'</b></td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="'. $row['username'] . '" class="required" minlength="2" maxlength="25"></td></TR>';
                 echo "<tr>";
-                echo ("<td><b>".msg('userpage_phone_number')."</b></td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"$phonenumber\" maxlegnth=\"20\"></td>");
+                echo ("<td><b>".msg('userpage_phone_number')."</b></td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"{$row['phone']}\" maxlegnth=\"20\"></td>");
                 // If mysqlauthentication, then ask for password
                 if( $GLOBALS["CONFIG"]["authen"] =='mysql')
                 {
@@ -562,13 +581,10 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 <tr>
                 <td><b><?php echo msg('userpage_email');?></td>
                 <td colspan=4>
-                <input name="Email" type="text" value="<?php echo $Email; ?>" class="email required" maxlength="50"></td>
+                <input name="Email" type="text" value="<?php echo $row['Email']; ?>" class="email required" maxlength="50"></td>
                 </tr>
           		<tr>
-   		
-<?php
-				mysql_free_result ($result);
-?>
+
                 </tr>
                 <tr>
                 <td><b><?php echo msg('userpage_department');?></b></td>
@@ -576,23 +592,23 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 
                 <select name="department" <?php echo $mode; ?>>
 <?php
+                $user_department = $user_obj->getDeptID();
                 // query to get a list of departments
                 $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                $userdepartment = $user_obj->getDeptID();
-                while(list($id, $name) = mysql_fetch_row($result))
-                {
-                        if ($id==$userdepartment)
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array());
+                $result = $stmt->fetchAll();
+
+                foreach($result as $row) {
+                        if ($row['id'] == $user_department)
                         {
-                                echo '<option selected value="' . $id . '">' . $name . '</option>';
+                                echo '<option selected value="' . $row['id'] . '">' . $row['name'] . '</option>';
                         }
                         else
                         {
-                                echo '<option value="' . $id . '">' . $name . '</option>';
+                                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                         }
                 }
-
-                mysql_free_result ($result);
 ?>
                 </select>
                 </td>
@@ -616,24 +632,32 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 <TD id="userReviewDepartmentListTd">
                 <SELECT class="multiView" id="userReviewDepartmentsList" name='department_review[]' multiple="multiple" <?php echo $mode; ?>>
 <?php
-                $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = '{$_REQUEST['item']}'";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                $user_department = $user_obj->getDeptID();
+                $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = :user_id";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(':user_id' => $_REQUEST['item']));
+                $result = $stmt->fetchAll();
+
                 $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                $result2 = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                $hits = mysql_num_rows($result);
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array());
+                $result2 = $stmt->fetchAll();
+
                 //for dept that this user is reviewing for
-                for($i = 0; $i< $hits; $i++)
-               	{
-               		list($department_reviewer[$i][0], $department_reviewer[$i][1]) = mysql_fetch_row($result);
+                $i = 0;
+                foreach($result as $row) {
+               		$department_reviewer[$i][0] = $row[0];
+                    $department_reviewer[$i][1] = $row[1];
+                    $i++;
                	}
                 // for all depts
-               	$hits = mysql_num_rows($result2);
-                for($i=0; $i<$hits; $i++)
-                {
-                	list( $all_department[$i][0], $all_department[$i][1]) = mysql_fetch_row($result2);
+                $i = 0;
+               	foreach($result2 as $row) {
+                	$all_department[$i][0] = $row[0];
+                    $all_department[$i][1] = $row[1];
+                    $i++;
                 }
-                mysql_free_result($result);
-                mysql_free_result($result2);
+
                 for($d= 0; $d<sizeof($all_department); $d++)
                 {
                     $found = false;
@@ -707,7 +731,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     // Check to make sue they are either the user being modified or an admin
     if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
@@ -728,65 +752,100 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
     // UPDATE admin info
     if($user_obj->isAdmin())
     {
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin='". $_POST['admin'] . "' where id = '".$_POST['id']."'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}admin set admin = :admin WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':admin' => $_POST['admin'],
+            ':id' => $_POST['id']
+        ));
     }
     // UPDATE into user
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET ";
 
     if($user_obj->isAdmin())
     {
-        $query .= "username='". addslashes($_POST['username']) ."',";
-        $query .= "can_add=". addslashes($_POST['can_add']) .",";
-        $query .= "can_checkin=". addslashes($_POST['can_checkin']) .",";
+        $query .= " username = :username, ";
+        $query .= " can_add = :can_add, ";
+        $query .= " can_checkin = :can_checkin, ";
     }
     
     if (!empty($_POST['password']))
     {
-        $query .= "password = md5('". addslashes($_POST['password']) ."'), ";
+        $query .= " password = md5(:password), ";
     }
     if ($user_obj->isAdmin())
     {
         if( isset( $_POST['department'] ) )
         {
-            $query.= 'department="' . addslashes($_POST['department']) . '",';
+            $query .= " department = :department, ";
         }
     }
     if( isset( $_POST['phonenumber'] ) )
     {
-        $query.= 'phone="' . addslashes($_POST['phonenumber']) . '",';
+        $query .= " phone = :phonenumber, ";
     }
 
     if( isset( $_POST['Email'] ) )
     {
-        $query.= 'Email="' . addslashes($_POST['Email']) . '" ,';
+        $query .= " Email = :Email, ";
     }
 
     if( isset( $_POST['last_name'] ) )
     {
-        $query.= 'last_name="' . addslashes($_POST['last_name']) . '",';
+        $query .= " last_name = :last_name, ";
     }
 
     if( isset( $_POST['first_name'] ) )
     {
-        $query.= 'first_name="' . addslashes($_POST['first_name']) . '" ';
+        $query .= " first_name = :first_name ";
     }
+    $query .= " WHERE id = :id ";
 
-    $query.= 'WHERE id="' . $_POST['id'] . '"';
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $stmt = $pdo->prepare($query);
+            if (!empty($_POST['password'])) {
+                $stmt->bindParam(':password', $_POST['password']);
+            }
+            if ($user_obj->isAdmin()) {
+                if (isset($_POST['department'])) {
+                    $stmt->bindParam(':department', $_POST['department']);
+                }
+                $stmt->bindParam(':username', $_POST['username']);
+                $stmt->bindParam(':can_add', $_POST['can_add']);
+                $stmt->bindParam(':can_checkin', $_POST['can_checkin']);
+            }
+            if (isset($_POST['phonenumber'])) {
+                $stmt->bindParam(':phonenumber', $_POST['phonenumber']);
+            }
+            if (isset($_POST['Email'])) {
+                $stmt->bindParam(':Email', $_POST['Email']);
+            }
+            if (isset($_POST['last_name'])) {
+                $stmt->bindParam(':last_name', $_POST['last_name']);
+            }
+            if (isset($_POST['first_name'])) {
+                $stmt->bindParam(':first_name', $_POST['first_name']);
+            }
+            $stmt->bindParam(':id', $_POST['id']);
+            $stmt->execute();
+
+
 
     if ($user_obj->isAdmin())
     {
-        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer WHERE user_id = '{$_POST['id']}'";
-        $result = mysql_query($query, $GLOBALS['connection'])
-                or die("Error in query: $query". mysql_error());
+        $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer WHERE user_id = :user_id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':user_id' => $_POST['id']));
+
             if(isset($_REQUEST['department_review']))
             {
                 for($i = 0; $i<sizeof($_REQUEST['department_review']); $i++)
                 {
-                    $dept_rev = addslashes($_REQUEST['department_review'][$i]);
-                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id,user_id) VALUES('$dept_rev', '{$_POST['id']}')";
-                    $result = mysql_query($query,$GLOBALS['connection']) or die("Error in query: $query". mysql_error());
+                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer (dept_id,user_id) VALUES(:dept_id, :user_id)";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute(array(
+                        ':dept_id' => $_REQUEST['department_review'][$i],
+                        ':user_id' => $_POST['id']
+                    ));
                 }
             }
     }
@@ -802,11 +861,15 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
                 draw_header(msg('userpage_modify_user'),$last_message);
 
                 // Check to see if user is admin
-                $query = "SELECT admin FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = '{$_SESSION['uid']}' and admin = '1'";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                if(mysql_num_rows($result) <= 0)
+                $query = "SELECT admin FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = :uid and admin = '1'";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ':uid' => $_SESSION['uid']
+                ));
+
+                if($stmt->rowCount() <= 0)
                 {
-                        header('Location:' . $secureurl->encode('error.php?ec=4'));
+                        header('Location: error.php?ec=4');
                         exit;
                 }
                 ?>
@@ -820,15 +883,14 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
 
                         // query to get a list of users
                         $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
+                        $result = $stmt->fetchAll();
 
-
-                while(list($id, $username, $first_name, $last_name) = mysql_fetch_row($result))
-                {
-                        echo '<option value="' . $id . '">' . $last_name . ', ' . $first_name . ' - ' . $username . '</option>';
+                foreach($result as $row) {
+                        echo '<option value="' . $row['id'] . '">' . $row['last_name'] . ', ' . $row['first_name'] . ' - ' . $row['username'] . '</option>';
                 }
 
-                mysql_free_result ($result);                
                 ?>
                         </td>
                         <td>
@@ -846,7 +908,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick')
         {
                 draw_header('Change password', $last_message);
-                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+                $user_obj = new User($_SESSION['uid'], $pdo);
                 $submit_message = 'Changing password';
 
 ?>
@@ -882,7 +944,7 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick')
         {
                 draw_header('Change password', $last_message);
-                $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+                $user_obj = new User($_SESSION['uid'], $pdo);
                 $cancel_message = 'Password alteration had been canceled';
                 $submit_message = 'Changing password';
                 // If demo mode, don't allow them to update the demo account
@@ -918,9 +980,9 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
         elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel')
         {
                 $last_message="Action Cancelled";
-                header('Location:' . $secureurl->encode('admin.php?last_message='.$last_message));
+                header('Location: admin.php?last_message='.$last_message);
         }
         else 
         {	
-        	header('Location:' . $secureurl->encode('admin.php?last_message=' . urlencode('Unrecognizalbe action')));
+                header('Location: admin.php?last_message=' . urlencode('Unrecognizalbe action'));
         }

@@ -29,12 +29,11 @@ if (!isset($_SESSION['uid']))
     redirect_visitor();
 }
 
-$secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
 if(!$user_obj->isAdmin())
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location:error.php?ec=4');
     exit;
 }
 
@@ -75,14 +74,17 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category')
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location:error.php?ec=4');
         exit;
     }
-    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES ('". addslashes($_REQUEST['category']) ."')";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES (:category)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':category' => $_REQUEST['category']));
+
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_added'));
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location:admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
 {
@@ -96,18 +98,21 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
     }
 
     draw_header(msg('area_delete_category'), $last_message);
+
+    $item = (int) $_REQUEST['item'];
+
     // query to show item
     echo '<table border=0>';
-    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id={$_REQUEST['item']}";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($lid, $lname) = mysql_fetch_row($result))
-    {
-        echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . $lid . '</td></tr>';
-        echo '<tr><td>'.msg('label_name').' :</td><td>' . $lname . '</td></tr>';
-    }
+    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id = :item";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':item' => $_REQUEST['item']));
+    $result = $stmt->fetch();
+
+    echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . $result['id'] . '</td></tr>';
+    echo '<tr><td>'.msg('label_name').' :</td><td>' . $result['name'] . '</td></tr>';
     ?>
     <form action="category.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
+        <input type="hidden" name="id" value="<?php echo $item; ?>">
         <tr>
             <td>
                 <?php echo msg('label_reassign_to');?>:
@@ -115,13 +120,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete')
             <td>
                   <select name="assigned_id">
                             <?php
-                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id != '{$_REQUEST['item']}' ORDER BY name";
-                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                            while(list($lid, $lname) = mysql_fetch_row($result))
-                            {
-                                echo '<option value="' . $lid . '">' . $lname . '</option>';
+                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id != :item  ORDER BY name";
+                            $stmt = $pdo->prepare($query);
+                            $stmt->execute(array(':item' => $_REQUEST['item']));
+                            $result = $stmt->fetchAll();
+
+                            foreach($result as $row) {
+                                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                             }
-                            mysql_free_result ($result);
                             ?>
                     </select>
             </td>
@@ -148,21 +154,26 @@ elseif(isset($_REQUEST['deletecategory']))
     // 
     // 
     // Make sure they are an admin
-    if (!$user_obj->isAdmin())
-    {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+    if (!$user_obj->isAdmin()) {
+        header('Location:error.php?ec=4');
         exit;
     }
-    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$_REQUEST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+
+    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id=:id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':id' => $_REQUEST[id]));
 
     // Set all old category_id's to the new re-assigned category
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category='{$_REQUEST['assigned_id']}' WHERE category = '{$_REQUEST['id']}'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error when updating old category ID to re-assigned category: $query. " . mysql_error());
-    
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category = :assigned_id WHERE category = :id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':assigned_id' => $_REQUEST['assigned_id'],
+        ':id' => $_REQUEST[id]
+    ));
+
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
@@ -177,14 +188,15 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
                 <td colspan=3><select name="item">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                            while(list($lid, $lname) = mysql_fetch_row($result))
-                            {
-                                $str = '<option value="' . $lid . '"';
-                                $str .= '>' . $lname . '</option>';
+                            $stmt = $pdo->prepare($query);
+                            $stmt->execute();
+                            $result = $stmt->fetchAll();
+
+                            foreach($result as $row) {
+                                $str = '<option value="' . $row['id'] . '"';
+                                $str .= '>' . $row['name'] . '</option>';
                                 echo $str;
                             }
-                            mysql_free_result ($result);
                             $deletepick='';
                             ?>
                     </select></td>
@@ -209,15 +221,21 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
     $category_id = (int) $_REQUEST['item'];
         
     // Select name
-    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='$category_id'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id = :category_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':category_id' => $category_id
+    ));
+    $result = $stmt->fetchAll();
+
     echo('<table name="main" cellspacing="15" border="0">');
-    list($lcategory) = mysql_fetch_row($result);
-    echo '<th>' .msg('label_name'). '</th><th>' .msg('label_id'). '</th>';
-    echo '<tr>';
-    echo '<td>' . $lcategory . '</td>';
-    echo '<td>' . $category_id . '</td>';
-    echo '</tr>';
+    foreach($result as $row) {
+        echo '<th>' . msg('label_name') . '</th><th>' . msg('label_id') . '</th>';
+        echo '<tr>';
+        echo '<td>' . $row['name'] . '</td>';
+        echo '<td>' . $category_id . '</td>';
+        echo '</tr>';
+    }
     ?>
 <form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
     <tr>
@@ -228,12 +246,15 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category')
 <!-- ADD THE LIST OF FILES HERE -->
 <?php
     echo msg('categoryviewpage_list_of_files_title') . '<br />';
-    $query = "SELECT id, realname FROM `{$GLOBALS['CONFIG']['db_prefix']}data` WHERE category = '$category_id'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($file_id, $file_name) = mysql_fetch_row($result)) {
-        ?>
-            <a href="edit.php?id=<?php echo $file_id; ?>&state=3">ID: <?php echo $file_id . ','; echo $file_name; ?></a><br />
-     <?php  
+    $query = "SELECT id, realname FROM `{$GLOBALS['CONFIG']['db_prefix']}data` WHERE category = :category_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':category_id' => $category_id
+    ));
+    $result = $stmt->fetchAll();
+
+    foreach($result as $row) {
+        echo '<a href="edit.php?id=' . $row['id'] . '&state=3">ID: ' . $row['id'] . ',' . $row['realname'] . '</a><br />';
     }
     
     draw_footer();
@@ -250,12 +271,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                 <td colspan="3"><select name="item">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                            while(list($lid, $lname) = mysql_fetch_row($result))
-                            {
-                                echo '<option value="' . $lid . '">' . $lname . '</option>';
+                            $stmt = $pdo->prepare($query);
+                            $stmt->execute();
+                            $result = $stmt->fetchAll();
+
+                            foreach($result as $row) {
+                                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                             }
-                            mysql_free_result ($result);
                             ?>
                     </select></td>
 
@@ -281,19 +303,22 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
 <form id="updateCategoryForm" action="category.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
-                       <?php
-                // query to get a list of users
-                $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
-                $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                while(list($lid, $lname) = mysql_fetch_row($result))
-                {
-                    echo '<tr>';
-                    echo '<td colspan="2">' . msg('category') .': <input type="textbox" name="name" value="' . $lname . '" class="required" maxlength="40"></td>';
-                    echo '<input type="hidden" name="id" value="' . $lid . '">';
+<?php
+    $item = (int)$_REQUEST['item'];
+    // query to get a list of users
+    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id = :item";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':item' => $item
+    ));
+    $result = $stmt->fetchAll();
 
-                }
-                mysql_free_result ($result);
-                ?>
+    foreach ($result as $row) {
+        echo '<tr>';
+        echo '<td colspan="2">' . msg('category') . ': <input type="textbox" name="name" value="' . $row['name'] . '" class="required" maxlength="40"></td>';
+        echo '<input type="hidden" name="id" value="' . $row['id'] . '">';
+    }
+    ?>
 
 
             <td align="center">
@@ -331,12 +356,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                             <?php
                             // query to get a list of users
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-                            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-                            while(list($lid, $lname) = mysql_fetch_row($result))
-                            {
-                                echo '<option value="' . $lid . '">' . $lname . '</option>';
+                            $stmt = $pdo->prepare($query);
+                            $stmt->execute();
+                            $result = $stmt->fetchAll();
+
+                            foreach($result as $row) {
+                                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
                             }
-                            mysql_free_result ($result);
                             ?>
                 </td>
 
@@ -362,14 +388,21 @@ elseif(isset($_REQUEST['updatecategory']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name='". addslashes($_REQUEST['name']) ."' where id='$_REQUEST[id]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $id = (int) $_REQUEST['id'];
+
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}category SET name = :name where id = :id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':name' => $_REQUEST['name'],
+        ':id' => $id
+    ));
+
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel')
 {

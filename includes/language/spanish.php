@@ -1,6 +1,6 @@
 <?php
 //SPANISH LANGUAGE FILE
-//(C) 2010-2013 Stephen Lawrence Jr.
+//(C) 2010-2014 Stephen Lawrence Jr.
 // Translators:  Obed Alberto Castillo Reyes <obdcastillo@gmail.com>, Ernesto Parra <eparrarincon@gmail.com>
 /*
   This program is free software; you can redistribute it and/or
@@ -286,6 +286,7 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> Iniciar la descarga del docu
 $lang['message_initial_import'] = 'Importaci&oacute;n Inicial';
 $lang['message_last_message'] = '&Uacute;ltimo Mensaje:';
 $lang['message_latest_version'] = 'Esta es la Versi&oacute;n mas Reciente';
+$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
 $lang['message_need_one_department'] = 'Usted requiere por lo menos un Area';
 $lang['message_no_author_comments_available'] = 'El autor no gener&oacute; comentarios';
 $lang['message_no_description_available'] = 'Descripci&oacute;n no disponible';

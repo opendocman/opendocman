@@ -1,7 +1,7 @@
 <?php
 /*
 Email_class.php - relates email notifications
-Copyright (C) 2013 Stephen Lawrence Jr.
+Copyright (C) 2013-2015 Stephen Lawrence Jr.
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -33,6 +33,9 @@ class Email
         
     }
 
+    /**
+     * @return string
+     */
     public function getFullName()
     {
         if(!isset($this->full_name)){
@@ -41,46 +44,73 @@ class Email
         return $this->full_name;
     }
 
+    /**
+     * @param string $full_name
+     */
     public function setFullName($full_name)
     {
         $this->full_name = $full_name;
     }
 
+    /**
+     * @return string
+     */
     public function getFrom()
     {
         return $this->from;
     }
 
+    /**
+     * @param string $from
+     */
     public function setFrom($from)
     {       
         $this->from = $from;
     }
 
+    /**
+     * @return string
+     */
     public function getSubject()
     {
         return $this->subject;
     }
 
+    /**
+     * @param string $subject
+     */
     public function setSubject($subject)
     {
         $this->subject = $subject;
     }
 
+    /**
+     * @return string
+     */
     public function getBody()
     {
         return $this->body;
     }
 
+    /**
+     * @param string $body
+     */
     public function setBody($body)
     {
         $this->body = $body;
     }
 
+    /**
+     * @return string
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     *
+     */
     private function setHeaders()
     {
         if(isset($this->from)) {
@@ -90,11 +120,18 @@ class Email
         }
     }
 
+    /**
+     * @return string
+     */
     public function getRecipients()
     {
         return $this->recipients;
     }
 
+    /**
+     * @param string $recipients
+     * @return bool
+     */
     public function setRecipients($recipients)
     {      
         if(!is_array($recipients)) {
@@ -103,6 +140,9 @@ class Email
         $this->recipients = $recipients;
     }
 
+    /**
+     * @return bool
+     */
     public function sendEmail()
     {
         if ((count($this->getRecipients()) > 0)) {

@@ -29,14 +29,12 @@ if (!isset($_SESSION['uid']))
     redirect_visitor();
 }
 
-//Fb::log($_REQUEST);exit;
-$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+$last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
 
-$secureurl = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 if(!$user_obj->isAdmin())
 {
-    header('Location:' . $secureurl->encode('error.php?ec=4'));
+    header('Location: error.php?ec=4');
     exit;
 }
 
@@ -98,14 +96,14 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Fiel
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
 
     udf_functions_add_udf();
 
     $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
 {
@@ -124,13 +122,23 @@ draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_
 // query to show item
 echo '<form action="udf.php" method="POST" enctype="multipart/form-data">';
 echo '<table border=0>';
-$query = "SELECT table_name, display_name, field_type  FROM {$GLOBALS['CONFIG']['db_prefix']}udf where table_name='{$_REQUEST['item']}'";
-$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-while(list($lid, $lname, $ltype) = mysql_fetch_row($result))
-{  
-    echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $lid . '</td></tr>';
-    echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $lname . '</td></tr>';
-    echo '<input type="hidden" name="type" value="' . $ltype . '">';
+    $query = "
+      SELECT
+        table_name,
+        display_name,
+        field_type
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}udf
+      WHERE
+        table_name = :item
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':item' => $_REQUEST['item']));
+    $result = $stmt->fetchAll();
+foreach($result as $row) {
+    echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $row['table_name'] . '</td></tr>';
+    echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $row['display_name'] . '</td></tr>';
+    echo '<input type="hidden" name="type" value="' . $row['field_type'] . '">';
 }
     ?>
             <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
@@ -154,14 +162,14 @@ elseif(isset($_REQUEST['deleteudf']))
     // Make sure they are an admin
     if (!$user_obj->isAdmin())
     {
-        header('Location:' . $secureurl->encode('error.php?ec=4'));
+        header('Location: error.php?ec=4');
         exit;
     }
     udf_functions_delete_udf();
 
     // back to main page
     $last_message = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
-    header('Location: ' . $secureurl->encode('admin.php?last_message=' . $last_message));
+    header('Location: admin.php?last_message=' . $last_message);
 }
 elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
 {
@@ -176,15 +184,24 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
                                 <td><b><?php echo msg('label_user_defined_field')?></b></td>
                                 <td colspan=3><select name="item">
 <?php
-        $query = "SELECT table_name,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        while(list($lid, $lname) = mysql_fetch_row($result))
-        {
-                $str = '<option value="' . $lid . '"';
-                $str .= '>' . $lname . '</option>';
+    $query = "
+      SELECT
+        table_name,
+        display_name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}udf
+      ORDER BY
+        id
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array());
+    $result = $stmt->fetchAll();
+
+        foreach($result as $row) {
+                $str = '<option value="' . $row['table_name'] . '"';
+                $str .= '>' . $row['display_name'] . '</option>';
                 echo $str;
         }
-        mysql_free_result ($result);
         $deletepick='';
 ?>
         </select>
@@ -213,13 +230,22 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
     draw_header(msg('label_display') . ' ' . msg('label_user_defined_field'), $last_message);
     
     // Select name
-    $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "
+      SELECT
+        name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}category
+      WHERE
+        id = :item
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':item' => $_REQUEST['item']));
+    $result = $stmt->fetchColumn();
+
     echo('<table name="main" cellspacing="15" border="0">');
-    list($lcategory) = mysql_fetch_row($result);
     echo '<th>' . msg('name') . '</th><th>ID</th>';
     echo '<tr>';
-    echo '<td>' . $lcategory . '</td>';
+    echo '<td>' . $result . '</td>';
     echo '<td>' . $_REQUEST['item'] . '</td>';
     echo '</tr>';
 ?>
@@ -245,13 +271,22 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                         <td><b>User Defined Field</b></td>
                         <td colspan="3"><select name="item">
 <?php
-    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-    while(list($lid, $lname) = mysql_fetch_row($result))
-    {
-        echo '<option value="' . $lid . '">' . $lname . '</option>';
+    $query = "
+      SELECT
+        id,
+        name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}category
+      ORDER BY
+        name
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+    foreach($result as $row) {
+        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
     }
-    mysql_free_result ($result);
     ?>
                 </select></td>
                 <tr>
@@ -274,16 +309,25 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
                         <tr>
                 <form action="commitchange.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
 <?php
-        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category where id='{$_REQUEST['item']}'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        while(list($lid, $lname) = mysql_fetch_row($result))
-        {
+    $query = "
+      SELECT
+        id,
+        name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}category
+      WHERE
+        id = :item
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':item' => $_REQUEST['item']));
+    $result = $stmt->fetchAll();
+
+        foreach($result as $row) {
                 echo '<tr>';
-                echo '<td><input maxlength="16" type="textbox" name="name" value="' . $lname . '"></td>';
-                echo '<td><input type="hidden" name="id" value="' . $lid . '"></td>';
+                echo '<td><input maxlength="16" type="textbox" name="name" value="' . $row['name'] . '"></td>';
+                echo '<td><input type="hidden" name="id" value="' . $row['id'] . '"></td>';
                 echo '</tr>';
         }
-        mysql_free_result ($result);
 ?>
                 <td>
                         <input type="Submit" name="updatecategory" value="Modify User Defined Field">
@@ -309,13 +353,22 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
                                 <td colspan="3"><select name="item">
 <?php
         // query to get a list of users
-        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        while(list($lid, $lname) = mysql_fetch_row($result))
-        {
-                echo '<option value="' . $lid . '">' . $lname . '</option>';
+    $query = "
+      SELECT
+        id,
+        name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}category
+      ORDER BY
+        name
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+
+        foreach($result as $row) {
+                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
         }
-        mysql_free_result ($result);
 ?>
                 </td>
         </tr>
@@ -341,35 +394,83 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 {
     
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
-    
-    $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name = '{$_REQUEST['udf']}'";
-    $result = mysql_query($query);
-    $row = mysql_fetch_row($result);
-    $display_name = $row[2];
-    $field_type = $row[1];
-    mysql_free_result($result);
+
+    if(!empty($_REQUEST['udf']) && !preg_match('/^\w+$/', $_REQUEST['udf']))
+    {
+        header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
+        exit;
+    }
+
+    $query = "
+      SELECT
+        table_name,
+        field_type,
+        display_name
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}udf
+      WHERE
+        table_name = :udf
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':udf' => $_REQUEST['udf']));
+    $result = $stmt->fetch();
+
+    $display_name = $result[2];
+    $field_type = $result[1];
+
     if ( $field_type == 1 || $field_type == 2) {
         // Do Updates
-        if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "" ) {
-            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";
-            mysql_query($query);
+        if (!empty($_REQUEST['display_name'])) {
+            $query = "
+              UPDATE
+                {$GLOBALS['CONFIG']['db_prefix']}udf
+              SET
+                display_name = :display_name
+              WHERE
+                table_name = :udf
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(
+                ':display_name' => $_REQUEST['display_name'],
+                ':udf' => $_REQUEST['udf']
+            ));
             $display_name = $_REQUEST['display_name'];
         }
         // Do Inserts
-        if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "" ) {
-            $query = 'INSERT INTO '.$_REQUEST['udf'].' (value) VALUES ("'.$_REQUEST['newvalue'].'")';
-            mysql_query($query);
+        if (!empty($_REQUEST['newvalue'])) {
+
+            $query = "
+              INSERT INTO {$_REQUEST['udf']}
+                (value)
+              VALUES
+                (:newvalue)
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':newvalue' => $_REQUEST['newvalue']));
         }
         // Do Deletes
-        $query = 'SELECT max(id) FROM '.$_REQUEST['udf'];
-        $result = mysql_query($query);
-        $row = mysql_fetch_row($result);
-        $max = $row[0];
-        mysql_free_result($result);
+        $query = "
+          SELECT
+            max(id)
+          FROM
+            {$_REQUEST['udf']}
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchColumn();
+
+        $max = $result;
+
         while ( $max > 0 ) {
             if ( isset($_REQUEST['x'.$max]) && $_REQUEST['x'.$max] == "on" ) {
-                $query = 'DELETE FROM '.$_REQUEST['udf'].' WHERE id = '.$max;
-                mysql_query($query);
+                $query = "
+                  DELETE FROM
+                    {$_REQUEST['udf']}
+                  WHERE
+                    id = $max
+                ";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
             }
             $max--;
         }
@@ -382,16 +483,25 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         echo '</table>';
         echo '<table>';
         echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
-        $query = 'SELECT id,value FROM '.$_REQUEST['udf'];
-        $result = mysql_query($query);
-        while ($row = mysql_fetch_row($result)) {
+
+        $query = "
+          SELECT
+            id,
+            value
+          FROM
+            {$_REQUEST['udf']}
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array());
+        $result = $stmt->fetchAll();
+
+        foreach($result as $row) {
             if ( isset($bg) && $bg == "FCFCFC" )
                 $bg = "E3E7F9";
             else
                 $bg = "FCFCFC";
             echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
         }
-        mysql_free_result($result);
         echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
         echo '<tr><td colspan="2">';
         echo '<div class="buttons"><button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
@@ -420,8 +530,20 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
           $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
 
         if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "") {
-            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}udf SET display_name='{$_REQUEST['display_name']}' WHERE table_name = '{$_REQUEST['udf']}'";
-            mysql_query($query);
+            $query = "
+              UPDATE
+                {$GLOBALS['CONFIG']['db_prefix']}udf
+              SET
+                display_name = :display_name
+              WHERE
+                table_name = :udf
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(
+                ':display_name' => $_REQUEST['display_name'],
+                ':udf' => $_REQUEST['udf']
+            ));
+
             $display_name = $_REQUEST['display_name'];
         }
 
@@ -435,28 +557,60 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             $tablename = '_secondary';
             $sec_values = 'pr_id';
         }
+        $udf_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
+
         if (isset($_REQUEST['newvalue']) && $_REQUEST['newvalue'] != "") {
             if ($type_pr_sec == 'primary') {
-                $query = 'INSERT INTO ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' (value) VALUES ("' . $_REQUEST['newvalue'] . '")';
-                //echo $query;
+                $query = "
+                  INSERT INTO $udf_table_name
+                    (value)
+                  VALUES
+                    (:newvalue)
+                ";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(':newvalue' => $_REQUEST['newvalue']));
             } else {
-                $query = 'INSERT INTO ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' (value, pr_id) VALUES ("' . $_REQUEST['newvalue'] . '", "' . $_REQUEST['primary_type'] . '")';
+                $query = "
+                  INSERT INTO $udf_table_name
+                  (
+                    value,
+                    pr_id
+                  ) VALUES (
+                    :newvalue,
+                    :primary_type
+                  )
+                ";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ':newvalue' => $_REQUEST['newvalue'],
+                    ':primary_type' => $_REQUEST['primary_type']
+                ));
             }
-            //echo $query;
-            //exit;
-            mysql_query($query);
+
         }
         // Do Deletes
-        $query = 'SELECT max(id) FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
-        $result = mysql_query($query);
-        $row = mysql_fetch_row($result);
-        $max = $row[0];
-        mysql_free_result($result);
+
+        $query = "
+          SELECT
+            max(id)
+          FROM
+            $udf_table_name
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchColumn();
+        $max = $result;
+
         while ($max > 0) {
             if (isset($_REQUEST['x' . $max]) && $_REQUEST['x' . $max] == "on") {
-                $query = 'DELETE FROM ' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename . ' WHERE id = ' . $max;
-                //echo $query;
-                mysql_query($query);
+                $query = "
+                  DELETE FROM
+                    {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}{$tablename}
+                  WHERE
+                    id = $max
+                ";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute();
             }
             $max--;
         }
@@ -476,17 +630,24 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             <?php
 			echo '<table>';
 			echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
-			$query = 'SELECT * FROM ' . $_REQUEST['udf'];
+			$query = "
+              SELECT
+                *
+              FROM
+                {$_REQUEST['udf']}
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
-			$result = mysql_query($query);
-			while ($row = mysql_fetch_row($result)) {
+			foreach($result as $row) {
 				if ( isset($bg) && $bg == "FCFCFC" )
 					$bg = "E3E7F9";
 				else
 					$bg = "FCFCFC";
 				echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
 			}
-			mysql_free_result($result);
+
 			echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
 			echo '</div>';
 			echo '<tr><td colspan="2">';

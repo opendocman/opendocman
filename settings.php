@@ -1,7 +1,7 @@
 <?php
 /*
    settings.php - Administer Settings
-   Copyright (C) 2011 Stephen Lawrence Jr.
+   Copyright (C) 2011-2014 Stephen Lawrence Jr.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -30,15 +30,14 @@ if (!isset($_SESSION['uid']))
     
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$secureurl = new phpsecureurl;
-$settings = new Settings();
+$user_obj = new User($_SESSION['uid'], $pdo);
+$settings = new Settings($pdo);
 
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
 if(!$user_obj->isRoot() == true)
 {
-    header('Location:' . $secureurl->encode('error.php?ec=24'));
+    header('Location: error.php?ec=24');
     exit;
 }
 
@@ -55,6 +54,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 {
     draw_header(msg('label_settings'), $last_message);
 
+    // Clean up the datadir a bit to make sure it ends with slash
+    if (!empty($_POST['dataDir'])) {
+        if (substr($_POST['dataDir'], -1) != '/') {
+            $_POST['dataDir'] .= '/';
+        }
+    }
+
     // Perform Input Validation
     if(!is_dir($_POST['dataDir']))
     {
@@ -64,7 +70,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     {
         $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_writable'];
     }
-    elseif((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration'])) )
+    elseif((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration']) || (!is_numeric($_POST['max_query'])) ) )
     {
         $_POST['last_message'] = $GLOBALS['lang']['message_config_value_problem'];
     }
@@ -91,10 +97,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
 }
 elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_action_cancelled'))));
+    header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
 }
 else
 {
-    header('Location: ' . $secureurl->encode("admin.php?last_message=" . urlencode(msg('message_nothing_to_do'))));
+    header('Location: admin.php?last_message=' . urlencode(msg('message_nothing_to_do')));
 }
 

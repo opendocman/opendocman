@@ -23,21 +23,22 @@ if (!defined('Category_class'))
 
     class Category
     {
-        /*
+        /**
          * getAllCategories - Returns an array of all the categories
+         * @param PDO $pdo
          * @returns array
          */
-
-        public static function getAllCategories()
+        public static function getAllCategories(PDO $pdo)
         {
             // query to get a list of available users
             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-            while ($row = mysql_fetch_assoc($result))
-            {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            foreach($result as $row) {
                 $categoryListArray[] = $row;
             }
-            mysql_free_result ($result);
             return $categoryListArray;
         }
 

@@ -28,6 +28,13 @@ session_start();
 
 if(!file_exists('config.php'))
 {
+    if (
+        !extension_loaded('pdo')
+        || !extension_loaded('pdo_mysql')
+    ) {
+        echo "<p>PHP pdo Extensions not loaded. <a href='./'>try again</a>.</p>";
+        exit;
+    }
     // A config file doesn't exist
     ?>
     <html><head><link rel="stylesheet" href="templates/common/css/install.css" type="text/css" /></head>
@@ -73,20 +80,56 @@ if(isset($_POST['login']))
 
     // check login and md5()
     // connect and execute query
-    $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = md5('$frmpass')";
-    $result = mysql_query("$query") or die ("Error in query. Is the database created ?: $query. " . mysql_error());
-    if(mysql_num_rows($result) != 1)
+    $query = "
+      SELECT
+        id,
+        username,
+        password
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}user
+      WHERE
+        username = :frmuser
+      AND
+        password = md5(:frmpass)
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':frmuser' => $frmuser,
+        ':frmpass' => $frmpass
+    ));
+    $result = $stmt->fetch();
+
+    if($stmt->rowCount() != 1)
     {
         // Check old password() method
-        $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = password('$frmpass')";
-        $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+        $query = "
+          SELECT
+            id,
+            username,
+            password
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}user
+          WHERE
+            username = :frmuser
+          AND
+            password = password(:frmpass)
+            ";
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':frmuser' => $frmuser,
+            ':frmpass' => $frmpass
+        ));
     }
 
     // if row exists - login/pass is correct
-    if (mysql_num_rows($result) == 1)
+    if ($stmt->rowCount() == 1)
     {        
         // register the user's ID
-        list($id, $username, $password) = mysql_fetch_row($result);
+        $id = $result['id'];
+        $username = $result['username'];
+        $password = $result['password'];
+
         // initiate a session
         $_SESSION['uid'] = $id;
 
@@ -102,13 +145,11 @@ if(isset($_POST['login']))
         {
            redirect_visitor('out.php');
         }
-        mysql_free_result ($result);
         // close connection
     }
     else
     {
         // Login Failed
-        mysql_free_result ($result);
         // redirect to error page
         
         // Call the plugin API
