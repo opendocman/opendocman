@@ -299,7 +299,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 // Create version number in db
-$query = "INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.2.9.1')";
+$query = "INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.3.0')";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 

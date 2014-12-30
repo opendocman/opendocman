@@ -620,7 +620,7 @@ if ( !defined('udf_functions') )
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(':table_name' => $table_name));
 
-        if ($stmt->rowCount() == "0")
+        if ($stmt->rowCount() == 0)
         {
             if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
             {               
@@ -686,54 +686,62 @@ if ( !defined('udf_functions') )
                     header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
                     exit;
                 }
-            } elseif($_REQUEST['field_type'] == 4) {
+            } elseif ($_REQUEST['field_type'] == 4) {
                 // They have chosen Select list of Radio list
-                // 
-                // First we add a new column in the data table
-                $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data
+                //
+                $primary_table_name = "{$table_name}_primary";
+
+                $query = "SHOW COLUMNS FROM {$GLOBALS['CONFIG']['db_prefix']}data LIKE :primary_table_name";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ':primary_table_name' => $primary_table_name
+                ));
+                $count = $stmt->rowCount();
+
+                if ($count == 0) {
+
+                    // First we add a new column in the data table
+                    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data
                           ADD COLUMN
                             {$table_name}_primary int AFTER category,
 						  ADD COLUMN
 						    {$table_name}_secondary int AFTER {$table_name}_primary";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute();
-                if (!$stmt)
-                {
-                    header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
-                    exit;
-                }
-
-                // Now we need to create a new table to store the UDF Info
-                $query = "CREATE TABLE {$table_name}_primary ( id int auto_increment unique, value varchar(64) )";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute();
-                if (!$stmt)
-                {
-                    // If the CREATE fails, rollback the ALTER
-                    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_primary";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute();
+                    if (!$stmt) {
+                        header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
+                        exit;
+                    }
 
-                    header('Location: admin.php?last_message=Error+:+Problem+With+Create');
-                    exit;
-                }
-				
-                $query = "CREATE TABLE {$table_name}_secondary ( id int auto_increment unique, value varchar(64), pr_id int )";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute();
-                if (!$stmt)
-                {
-                    // If the CREATE fails, rollback the ALTER
-                    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_secondary";
+                    // Now we need to create a new table to store the UDF Info
+                    $query = "CREATE TABLE {$table_name}_primary ( id int auto_increment unique, value varchar(64) )";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute();
-                    
-                    header('Location: admin.php?last_message=Error+:+Problem+With+Create');
-                    exit;
-                }
+                    if (!$stmt) {
+                        // If the CREATE fails, rollback the ALTER
+                        $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_primary";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
 
-                // And finally, add an entry into the udf table
-                $query = "
+                        header('Location: admin.php?last_message=Error+:+Problem+With+Create');
+                        exit;
+                    }
+
+                    $query = "CREATE TABLE {$table_name}_secondary ( id int auto_increment unique, value varchar(64), pr_id int )";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute();
+                    if (!$stmt) {
+                        // If the CREATE fails, rollback the ALTER
+                        $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_secondary";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
+
+                        header('Location: admin.php?last_message=Error+:+Problem+With+Create');
+                        exit;
+                    }
+
+                    // And finally, add an entry into the udf table
+                    $query = "
                   INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}udf
                       (
                         table_name,
@@ -745,28 +753,31 @@ if ( !defined('udf_functions') )
                         :field_type
                       )
                 ";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute(array(
-                    ':table_name' => $table_name . '_primary',
-                    ':display_name' => $_REQUEST['display_name'],
-                    ':field_type' => $_REQUEST['field_type']
-                ));
-                if (!$stmt)
-                {
-                    // If the INSERT fails, rollback the CREATE and ALTER
-                    $query = "DROP TABLE {$table_name}_primary";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute();
-					
-                    $query = "DROP TABLE {$table_name}_secondary";
-                    $stmt = $pdo->prepare($query);
-                    $stmt->execute();
+                    $stmt->execute(array(
+                        ':table_name' => $table_name . '_primary',
+                        ':display_name' => $_REQUEST['display_name'],
+                        ':field_type' => $_REQUEST['field_type']
+                    ));
+                    if (!$stmt) {
+                        // If the INSERT fails, rollback the CREATE and ALTER
+                        $query = "DROP TABLE {$table_name}_primary";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
 
-                    $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_primary, DROP COLUMN {$table_name}_secondary";
-                    $stmt = $pdo->prepare($query);
-                    $stmt->execute();
+                        $query = "DROP TABLE {$table_name}_secondary";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
 
-                    header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
+                        $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}_primary, DROP COLUMN {$table_name}_secondary";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute();
+
+                        header('Location: admin.php?last_message=Error+:+Problem+With+INSERT');
+                        exit;
+                    }
+                } else {
+                    header('Location: admin.php?last_message=Error+:+Duplicate+UDF+Name');
                     exit;
                 }
 			} elseif ($_REQUEST['field_type'] == 3) {

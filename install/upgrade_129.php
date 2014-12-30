@@ -1,7 +1,7 @@
 <?php
 /*
-upgrade_129.php - For users upgrading from DB version 1.2.9 to 1.2.9.1
-Copyright (C) 2014 Stephen Lawrence Jr.
+upgrade_129.php - For users upgrading from DB version 1.2.9 to 1.3.0
+Copyright (C) 2015 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,8 +26,8 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
             
 echo 'Updating db version...<br />';
-$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.9.1' WHERE sys_name='version'";
+$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.3.0' WHERE sys_name='version'";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-echo 'Database update 1.2.9.1 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
+echo 'Database update 1.3.0 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
