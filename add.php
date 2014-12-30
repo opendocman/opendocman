@@ -1,7 +1,7 @@
 <?php
 /*
 add.php - adds files to the repository
-Copyright (C) 2002-2013 Stephen Lawrence Jr.
+Copyright (C) 2002-2015 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,13 +16,27 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
 
-
+/*
 							ADD.PHP DOCUMENTATION
-This page will allow user to set rights to every department.  It uses javascript to handle client-side data-storing and data-swapping.  Each time the data is stored, it is stored onto an array of objects of class Deparments.  It is also stored onto hidden form field in the page for php to access since php and javascript do not communicate (server-side and client-side share different environment).
-As the user choose a department from the drop box named dept_drop_box, loadData(_selectedIndex) function is invoked.
-After the data is loaded for the chosen department, if the user changes the right setting (right radio button e.g. "view", "read")
-setData(selected_rb_name) is invoked.  This function will set the data in the appropriate department[] and it will set the hidden field as wel.  The connection between hidden field and department[] is the hidden field's name and the department[].getName().  The department names in the array is populated with the correct department names from the database.  This will lead to problems.  There will be department names of more than one word eg. "Information Systems".  The hidden field's accessible name cannot be more than one word.  PHP cannot access multiple word variables.  Therefore, javascript spTo_(string) (space to underscore) will go through and subtitude all the spaces with the underscore character. */
+This page will allow user to set rights to every department. It uses javascript
+to handle client-side data-storing and data-swapping. Each time the data is stored,
+it is stored onto an array of objects of class Departments. It is also stored onto
+hidden form field in the page for php to access since php and javascript do not
+communicate (server-side and client-side share different environment).
+As the user choose a department from the drop box named dept_drop_box, loadData(_selectedIndex)
+function is invoked. After the data is loaded for the chosen department, if the user
+changes the right setting (right radio button e.g. "view", "read") setData(selected_rb_name)
+is invoked.  This function will set the data in the appropriate department[] and it will
+set the hidden field as well. The connection between hidden field and department[] is
+the hidden field's name and the department[].getName(). The department names in the
+array is populated with the correct department names from the database. This will lead to
+problems. There will be department names of more than one word eg. "Information Systems".
+The hidden field's accessible name cannot be more than one word. PHP cannot access multiple word variables.
+Therefore, javascript spTo_(string) (space to underscore) will go through and substitute
+all the spaces with the underscore character.
+*/
 
 session_start();
 
@@ -47,8 +61,8 @@ if(!$user_obj->canAdd()){
 
 if(!isset($_POST['submit'])) 
 {
-    $llast_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message']:'');
-    draw_header(msg('area_add_new_file'), $llast_message);
+    $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+    draw_header(msg('area_add_new_file'), $last_message);
     $current_user_dept = $user_obj->getDeptId();
 
     $index = 0;
@@ -91,14 +105,14 @@ if(!isset($_POST['submit']))
     // it can be pre-selected on the form
     $avail_departments = Department::getAllDepartments($pdo);
     
-    $depts_array = array();
+    $departments_array = array();
     foreach($avail_departments as $avail_department) {
         if ($avail_department['id'] == $current_user_dept) {
             $avail_department['selected'] = 'selected';
         } else {
             $avail_department['selected'] = '';
         }
-        array_push($depts_array, $avail_department);
+        array_push($departments_array, $avail_department);
     }
 
     $avail_categories = Category::getAllCategories($pdo);
@@ -110,7 +124,7 @@ if(!isset($_POST['submit']))
     
     //////Populate department perm list/////////////////
     $dept_perms_array = array();
-    foreach($depts_array as $dept) {
+    foreach($departments_array as $dept) {
         $avail_dept_perms['name'] = $dept['name'];
         $avail_dept_perms['id'] = $dept['id'];
         array_push($dept_perms_array, $avail_dept_perms);
@@ -122,7 +136,7 @@ if(!isset($_POST['submit']))
     $GLOBALS['smarty']->assign('t_name', $t_name);
     $GLOBALS['smarty']->assign('is_admin', $user_obj->isAdmin());
     $GLOBALS['smarty']->assign('avail_users', $users_array);
-    $GLOBALS['smarty']->assign('avail_depts', $depts_array);
+    $GLOBALS['smarty']->assign('avail_depts', $departments_array);
     $GLOBALS['smarty']->assign('cats_array', $cats_array);
     $GLOBALS['smarty']->assign('dept_perms_array', $dept_perms_array);
     $GLOBALS['smarty']->assign('user_id', $_SESSION['uid']);
@@ -173,9 +187,9 @@ else
         $allowedFile = 0;
         
         // check file type
-        foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
+        foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $allowed_type) {
           
-            if ($file_mime == $thistype) {
+            if ($file_mime == $allowed_type) {
                 $allowedFile = 1;
                 break;
             }
@@ -196,11 +210,11 @@ else
         
         if ($GLOBALS['CONFIG']['authorization'] == 'True')
         {
-            $lpublishable = '0';
+            $publishable = '0';
         }
         else
         {
-            $lpublishable= '1';
+            $publishable= '1';
         }
         $result_array = array();
         
@@ -245,6 +259,14 @@ else
                 exit;
             }
         }
+
+        // We need to verify that the temporary upload is there before we continue
+        if (!is_uploaded_file($tmp_name[$count]))
+        {
+            header('Location: error.php?ec=18');
+            exit;
+        }
+
         // all checks completed, proceed!
 
         // Run the onDuringAdd() plugin function
@@ -286,7 +308,7 @@ else
             :current_user_dept,
             :comment,
             0,
-            $lpublishable
+            $publishable
         )";
 
         $file_data_stmt = $pdo->prepare($file_data_query);
@@ -348,7 +370,7 @@ else
             $dept_perms_stmt->execute();
             
         }
-        // Search for simular names in the two array (merge the array.  repetitions are deleted)
+        // Search for similar names in the two array (merge the array.  repetitions are deleted)
         // In case of repetitions, higher priority ones stay.
         // Priority is in this order (admin, modify, read, view)
        
@@ -367,11 +389,6 @@ else
         // save uploaded file with new name
         $newFileName = $fileId . '.dat';
 
-        if (!is_uploaded_file($tmp_name[$count]))
-        {
-            header('Location: error.php?ec=18');
-            exit;
-        }
         move_uploaded_file($tmp_name[$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
         
