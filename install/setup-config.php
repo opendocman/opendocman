@@ -343,7 +343,7 @@ function sanitizeme($input)
         $input = strip_tags($input); // Remove HTML
         $input = htmlspecialchars($input); // Convert characters
         $input = trim(rtrim(ltrim($input))); // Remove spaces
-        $input = mysql_real_escape_string($input); // Prevent SQL Injection
+        $input = $input; // Prevent SQL Injection
         $output=$input;
     }
     if(isset($output) && $output != '')

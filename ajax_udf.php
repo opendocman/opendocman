@@ -22,16 +22,16 @@ include('odm-load.php');
 $pdo = $GLOBALS['pdo'];
 
 if(isset($_GET['q'])) {
-    $q = mysql_real_escape_string($_GET['q']);
+    $q = $_GET['q'];
 }
 
 if(isset($_GET['add_value'])) {
     //$add_value = preg_replace('/ /', '', $_GET['add_value']);
-    $add_value = mysql_real_escape_string($_GET['add_value']);
+    $add_value = $_GET['add_value'];
 }
 
 if(isset($_GET['table'])) {
-    $table_name = mysql_real_escape_string($_GET['table']);
+    $table_name = $_GET['table'];
 }
 ?>
     <table border="0">

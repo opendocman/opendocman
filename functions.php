@@ -760,7 +760,7 @@ function sanitizeme($input)
         //echo "Raw Input:" . $input . "<br />";
         $input  = cleanInput($input);
         //echo "Clean Input:" . $input . "<br />";
-        $output = mysql_real_escape_string($input);
+        $output = $input;
         //echo "mysql_escape output" . $output . "<br />";
 
     }
