@@ -880,8 +880,7 @@ if ( !defined('udf_functions') )
 
         foreach($result as $row)
         {
-            $name = str_replace(' ', '_', $row[2]);
-            echo '<option value="'.$name.'">'.$name.'</option>';
+            echo '<option value="'.$row[2].'">'.$row[2].'</option>';
         }
     }
 
@@ -909,7 +908,7 @@ if ( !defined('udf_functions') )
         {
             $query_pre .= ', ' . $row[0];
             $query .= $row[0] . '.value' . $equate . '\'' . $keyword . '\'';
-            $query .= ' AND ' . $GLOBALS['CONFIG']['db_prefix'] . 'data.' . $row[0] . ' = ' . $row[0] . '.id';
+            $query .= ' AND d.' . $row[0] . ' = ' . $row[0] . '.id';
         }
         elseif ($row[1] == 3)
         {           
