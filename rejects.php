@@ -39,8 +39,8 @@ if(!isset($_POST['submit']))
     draw_header(msg('message_documents_rejected'), $last_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
-    $user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    $userperms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+    $user_obj = new User($_SESSION['uid'], $pdo);
+    $user_perms_obj = new UserPermission($_SESSION['uid'], $pdo);
     if($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root')
     {
         $fileid_array = $user_obj->getAllRejectedFileIds();
@@ -64,7 +64,7 @@ if(!isset($_POST['submit']))
         <td>
 
 <?php
-$list_status = list_files($fileid_array, $userperms, $GLOBALS['CONFIG']['dataDir'], true, true);
+$list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
 
 
 ?>
@@ -102,10 +102,7 @@ elseif(isset($_POST['submit']) && $_POST['submit'] == 'resubmit')
         foreach($_POST['checkbox'] as $cbox)
         {
             $fileid = $cbox;
-            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
-            //$user_obj = new User($file_obj->getOwner(), $connection, DB_NAME);
-            //$mail_to = $user_obj->getEmailAddress();
-            //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+            $file_obj = new FileData($fileid, $pdo);
             $file_obj->Publishable(0);
         }
     }

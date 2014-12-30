@@ -2,7 +2,7 @@
 /*
 file_ops.php - admin file operations
 Copyright (C) 2002-2004 Stephen Lawrence Jr, Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2015 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 // get a list of documents the user has "view" permission for
 // get current user's information-->department
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 if(!$user_obj->isRoot())
 {
 	header('Location:error.php?ec=24');
@@ -42,11 +42,11 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 	echo "\n" . '<input name="submit" type="hidden" value="Clear Status">';
 	draw_header(msg('label_checked_out_files'), $last_message);
         
-        $fileid_array = $user_obj->getCheckedOutFiles();
+        $file_id_array = $user_obj->getCheckedOutFiles();
 
-	$lpage_url = $_SERVER['PHP_SELF'] . '?';
-	$userpermission = new UserPermission($_SESSION['uid'], $connection, DB_NAME);
-	$list_status = list_files($fileid_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true, true);
+	$page_url = $_SERVER['PHP_SELF'] . '?';
+	$user_perm_obj = new UserPermission($_SESSION['uid'], $pdo);
+	$list_status = list_files($file_id_array, $user_perm_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
 	if($list_status != -1 )
 	{
 		echo "\n" . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
@@ -60,11 +60,8 @@ elseif (isset($_POST['submit']) && $_POST['submit'] == 'Clear Status')
     {
         foreach($_POST['checkbox'] as $cbox)
         {
-            $fileid = $cbox;
-            $file_obj = new FileData($fileid, $GLOBALS['connection'], DB_NAME);
-            //$user_obj = new User($file_obj->getOwner(), $connection, DB_NAME);
-            //$mail_to = $user_obj->getEmailAddress();
-            //mail($mail_to, $mail_subject. $file_obj->getName(), ($mail_greeting.$file_obj->getName().' '.$mail_body.$mail_salute), $mail_headers);
+            $file_id = $cbox;
+            $file_obj = new FileData($file_id, $pdo);
             $file_obj->setStatus(0);
         }
 

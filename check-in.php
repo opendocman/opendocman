@@ -34,7 +34,7 @@ require_once("File_class.php");
 require_once('Email_class.php');
 require_once('Reviewer_class.php');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 if(!$user_obj->canCheckIn()){
     redirect_visitor('out.php');
@@ -54,14 +54,21 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 // open connection
 if (!isset($_POST['submit']))
 {
+    $id = (int) $_REQUEST['id'];
+
     // form not yet submitted, display initial form
 
     // pre-fill the form with some information so that user knows which file is being updated
-    $query = "SELECT description, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT description, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = :id AND status = :uid";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':id' => $id,
+        ':uid' => $_SESSION['uid']
+    ));
+    $result = $stmt->fetch();
 
     // in case script is directly accessed, query above will return 0 rows
-    if (mysql_num_rows($result) <= 0)
+    if ($stmt->rowCount() <= 0)
     {
         $last_message='Failed';
         header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
@@ -69,17 +76,15 @@ if (!isset($_POST['submit']))
     }
     else
     {
-        // get result data
-        list($description, $realname) = mysql_fetch_row($result);
         draw_header(msg('button_check_in'),$last_message);
-        // correction
+        $description = $result['description'];
+        $real_name = $result['realname'];
+
         if($description == '')
         {
             $description = msg('message_no_description_available');
         }
 
-        // clean up
-        mysql_free_result($result);
         // start displaying form
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
@@ -87,7 +92,7 @@ if (!isset($_POST['submit']))
         <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
         <tr>
             <td><b><?php echo msg('label_filename');?></b></td>
-            <td><b><?php echo $realname; ?></b></td>
+            <td><b><?php echo $real_name; ?></b></td>
         </tr>
 
         <tr>
@@ -134,11 +139,11 @@ else
 {
     if ($GLOBALS['CONFIG']['authorization'] == 'True')
     {
-        $lpublishable = '0';
+        $publishable = '0';
     }
     else
     {
-        $lpublishable= '1';
+        $publishable= '1';
     }
     // form has been submitted, process data
     $id = (int) $_POST['id'];
@@ -164,9 +169,9 @@ else
     $file_mime = File::mime($_FILES['file']['tmp_name'], $_FILES['file']['name']);
     
     // check file type
-    foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
+    foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $this_type) {
 
-        if ($file_mime == $thistype) {
+        if ($file_mime == $this_type) {
             $allowedFile = 1;
             break;
         } else {
@@ -183,14 +188,20 @@ else
     }
 
     // query to ensure that user has modify rights
-    $fileobj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+    $file_data_obj = new FileData($id, $pdo);
 
-    if($fileobj->getError() == '' && $fileobj->getStatus() == $_SESSION['uid'])
+    if($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid'])
     {     
         //look to see how many revision are there
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        $lrevision_num = mysql_num_rows($result);
+        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id
+        ));
+        $result = $stmt->fetchAll();
+
+        $revision_number = $stmt->rowCount();
+
         // if dir not available, create it
         if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
         {
@@ -211,45 +222,64 @@ else
             }
 
         }
-        $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
+        $file_name = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
         //read and close
-        $lfhandler = fopen ($lfilename, "r");
-        $lfcontent = fread($lfhandler, filesize ($lfilename));
-        fclose ($lfhandler);
+        $file_handler = fopen ($file_name, "r");
+        $file_content = fread($file_handler, filesize ($file_name));
+        fclose ($file_handler);
         //write and close
-        $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num - 1) . '.dat', "w");
-        fwrite($lfhandler, $lfcontent);
-        fclose ($lfhandler);
+        $file_handler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($revision_number - 1) . '.dat', "w");
+        fwrite($file_handler, $file_content);
+        fclose ($file_handler);
         // all OK, proceed!
-        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id='{$_SESSION['uid']}'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        list($username) = mysql_fetch_row($result);
+
+        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':uid' => $_SESSION['uid']));
+        $result = $stmt->fetch();
+
+        $username = $result['username'];
+
         // update revision log
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($lrevision_num) - 1)) . "' WHERE id = '{$id}' and revision = 'current'";
-        mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($revision_number) - 1)) . "' WHERE id = :id and revision = 'current'";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id
+        ));
+
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id,
+            ':username' => $username,
+            ':note' => $_POST['note']
+        ));
 
         // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$id'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable, realname = :filename WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':publishable' => $publishable,
+            ':filename' => $filename,
+            ':id' => $id
+        ));
 
         // rename and save file
         $newFileName = $id . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
     
-        AccessLog::addLogEntry($id,'I');
+        AccessLog::addLogEntry($id, 'I', $pdo);
     
         /**
          * Send out email notifications to reviewers
          */
-        $file_obj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+        $file_obj = new FileData($id, $pdo);
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
         
         $department = $file_obj->getDepartment();
         
-        $reviewer_obj = new Reviewer($id, $GLOBALS['connection'], DB_NAME);
+        $reviewer_obj = new Reviewer($id, $pdo);
         $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
 
         $date = date('Y-m-d H:i:s T');

@@ -42,9 +42,9 @@ draw_header(msg('area_view_history'), $last_message);
 //revision parsing
 if(strchr($_REQUEST['id'], '_') )
 {
-    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
+    list($_REQUEST['id'], $revision_id) = explode('_' , $_REQUEST['id']);
 }
-$datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+$datafile = new FileData($_REQUEST['id'], $pdo);
 // verify
 if ($datafile->getError() != NULL)
 {
@@ -55,9 +55,9 @@ else
 {
 // obtain data from resultset
 
-$owner_fullname = $datafile->getOwnerFullName();
-$owner = $owner_fullname[1].', '.$owner_fullname[0];
-$realname = $datafile->getRealName();
+$owner_full_name = $datafile->getOwnerFullName();
+$owner = $owner_full_name[1].', '.$owner_full_name[0];
+$real_name = $datafile->getRealName();
 $category = $datafile->getCategoryName();
 $created = $datafile->getCreatedDate();
 $description = $datafile->getDescription();
@@ -97,7 +97,7 @@ else
     echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
 }
 echo '</td>';
-echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
+echo '<td align="left"><font size="+1">'.$real_name.'</font></td>';
 ?>
 </tr>
 
@@ -128,15 +128,15 @@ echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
 <th valign=top align=right><?php echo msg('historypage_revision');?></th><td>
     <div id="revision_current">
 <?php 
-if(isset($lrevision_id))
+if(isset($revision_id))
 {
-    if( $lrevision_id == 0)
+    if( $revision_id == 0)
     {
         echo msg('historypage_original_revision');
     }
     else
     {
-        echo $lrevision_id;
+        echo $revision_id;
     }
 }
 else
@@ -169,36 +169,69 @@ else
 <?php
 	// query to obtain a list of modifications
 	
-	if( isset($lrevision_id) )
+	if( isset($revision_id) )
 	{
-		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-						{$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.note, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.revision 
-						FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-						WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-						AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-						AND {$GLOBALS['CONFIG']['db_prefix']}log.revision <= $lrevision_id 
-						ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+		$query = "
+          SELECT
+            u.last_name,
+            uuser.first_name,
+			l.modified_on,
+			l.note,
+			l.revision
+		  FROM
+		    {$GLOBALS['CONFIG']['db_prefix']}log l,
+		    {$GLOBALS['CONFIG']['db_prefix']}user u
+		  WHERE
+		    l.id = :id
+          AND
+            u.username = l.modified_by
+		  AND
+		    l.revision <= :revision_id
+		  ORDER BY
+		    l.modified_on DESC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $_REQUEST['id'],
+            ':revision_id'=> $revision_id
+        ));
+        $result = $stmt->fetchAll();
 	}
 	else
 	{
-		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-					{$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.note, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.revision 
-					FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-					WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-					AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-					ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+		$query = "
+          SELECT
+            u.last_name,
+            u.first_name,
+			l.modified_on,
+			l.note,
+			l.revision
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}log l,
+			{$GLOBALS['CONFIG']['db_prefix']}user u
+		  WHERE
+			l.id = :id
+          AND
+            u.username = l.modified_by
+          ORDER BY
+            l.modified_on DESC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $_REQUEST['id']
+        ));
+        $result = $stmt->fetchAll();
 	}
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	$current_revision = mysql_num_rows($result);
+
+
+    $current_revision = $stmt->rowCount();
 	// iterate through resultset
-	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
-	{
+    foreach($result as $row) {
+        $last_name = $row['last_name'];
+        $first_name = $row['first_name'];
+        $modified_on = $row['modified_on'];
+        $note = $row['note'];
+        $revision = $row['revision'];
 
             if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
                 $bgcolor = "#E3E7F9";
@@ -209,10 +242,10 @@ else
             echo '<tr bgcolor=' . $bgcolor . '>';
 
             $extra_message = '';
-            if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat")) {
-                echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision_id + 1) . '</div></a>' . $extra_message;
+            if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision.dat")) {
+                echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
             } else {
-                echo '<td><font size="-1">' . $revision_id . $extra_message;
+                echo '<td><font size="-1">' . $revision . $extra_message;
             }
             ?>
                     </font></td>
@@ -223,7 +256,6 @@ else
 <?php
 	}
 	// clean up
-	mysql_free_result($result);
 ?>
 	</table>
 </td>

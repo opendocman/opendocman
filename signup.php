@@ -30,11 +30,20 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
     if(isset($_REQUEST['adduser']))
     {
         // Check to make sure user does not already exist
-        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '" . addslashes($_POST['username']) . '\'';
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "
+          SELECT
+            username
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}user
+          WHERE
+            username = :username
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':username', $_POST['username']);
+        $stmt->execute();
 
         // If the above statement returns more than 0 rows, the user exists, so display error
-        if(mysql_num_rows($result) > 0)
+        if($stmt->rowCount() > 0)
         {
             echo msg('message_user_exists');
             exit;
@@ -43,10 +52,40 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
         {
             $phonenumber = (!empty($_REQUEST['phonenumber']) ? $_REQUEST['phonenumber'] : '');
             // INSERT into user
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user (username, password, department, phone, Email,last_name, first_name) VALUES('". addslashes($_POST['username'])."', md5('". addslashes(@$_REQUEST['password']) ."'), '" . addslashes($_REQUEST['department'])."' ,'" . addslashes($phonenumber) . "','". addslashes($_REQUEST['Email'])."', '" . addslashes($_REQUEST['last_name']) . "', '" . addslashes($_REQUEST['first_name']) . '\' )';
-            $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+            $query = "
+              INSERT INTO
+                {$GLOBALS['CONFIG']['db_prefix']}user
+                (
+                  username,
+                  password,
+                  department,
+                  phone,
+                  Email,
+                  last_name,
+                  first_name
+                ) VALUES (
+                  :username,
+                  md5(:password),
+                  :department,
+                  :phonenumber,
+                  :email,
+                  :last_name,
+                  :first_name
+                  )";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':username', $_POST['username']);
+            $stmt->execute(array(
+                ':username' => $_POST['username'],
+                ':password' => $_POST['password'],
+                ':department' => $_POST['department'],
+                ':phonenumber' => $phonenumber,
+                ':email' => $_POST['Email'],
+                ':last_name' => $_POST['last_name'],
+                ':first_name' => $_POST['first_name']
+            ));
+
             // INSERT into admin
-            $userid = mysql_insert_id($GLOBALS['connection']);
+            $userid = $pdo->lastInsertId();
 
             // mail user telling him/her that his/her account has been created.
             echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
@@ -110,15 +149,23 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
         <select name="department">
         <?php			
         // query to get a list of departments
-        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "
+          SELECT
+            id,
+            name
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}department
+          ORDER BY
+            name
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
 
-    while(list($id, $name) = mysql_fetch_row($result))
-    {
-        echo '<option value=' . $id . '>' . $name . '</option>';
-    }
+        foreach ($result as $row) {
+            echo '<option value=' . $row['id'] . '>' . $row['name'] . '</option>';
+        }
 
-    mysql_free_result ($result);
     ?>
         </select>
         </td>

@@ -38,8 +38,7 @@ $last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '
 draw_header(msg('label_file_listing'), $last_message);
 sort_browser();
 
-$secureurl_obj = new phpsecureurl;
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
 if ($user_obj->isAdmin())
 {   
@@ -54,7 +53,7 @@ elseif( $user_obj->isReviewer())
     
 if($reviewIdCount > 0)
 {
-    echo '<img src="images/exclamation.gif" /> <a href="' . $secureurl_obj->encode('toBePublished.php?state=1') . '">'.msg('message_documents_waiting'). '</a>: ' . $reviewIdCount  . '</a><br />';
+    echo '<img src="images/exclamation.gif" /> <a href="toBePublished.php?state=1">'.msg('message_documents_waiting'). '</a>: ' . $reviewIdCount  . '</a><br />';
 
 }
 
@@ -62,7 +61,7 @@ $rejected_files_obj = $user_obj->getRejectedFileIds();
 
 if(isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null)
 {
-    echo '<img src="images/exclamation_red.gif" /> <a href="' . $secureurl_obj->encode('rejects.php?state=1') . '">'. msg('message_documents_rejected') . '</a>: ' .sizeof($rejected_files_obj) . '<br />';
+    echo '<img src="images/exclamation_red.gif" /> <a href="rejects.php?state=1">'. msg('message_documents_rejected') . '</a>: ' .sizeof($rejected_files_obj) . '<br />';
 }
 
 $llen = $user_obj->getNumExpiredFiles();
@@ -76,7 +75,7 @@ if($llen > 0)
 
 
 //set values
-$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_perms = new UserPermission($_SESSION['uid'], $pdo);
 //$start_P = getmicrotime();
 $file_id_array = $user_perms->getViewableFileIds(true);
 //$end_P = getmicrotime();

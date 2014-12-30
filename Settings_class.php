@@ -1,7 +1,7 @@
 <?php
 /*
 Settings_class.php - Container for settings related info
-Copyright (C) 2010-2011 Stephen Lawrence Jr.
+Copyright (C) 2010-2014 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,18 +22,20 @@ if( !defined('Settings_class') )
 {
     define('Settings_class', 'true', false);
 
-   /*
-    * Class that handles the opendocman settings values
-    */
-
     /**
-     * Description of Settings_class
+     * Class that handles the opendocman settings values
      *
      * @author Stephen J. Lawrence Jr.
      */
     class Settings
     {
-       /*
+        protected $connection;
+        
+        public function Settings(PDO $pdo){
+            $this->connection = $pdo;
+        }
+
+       /**
         * Get value for a specific setting based on the key
         * @param string $key
         */
@@ -41,78 +43,105 @@ if( !defined('Settings_class') )
         {
 
         }
-       /*
+
+       /**
         * Save all the settings
-        * @param array $settings Array of values to be saved ($key,$value)
+        * @param array $data Array of values to be saved ($key,$value)
+        * @return bool
         */
         function save($data)
         {
             foreach ($data as $key=>$value)
             {
-                $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}settings SET value='$value' WHERE name='$key'";
-                $result = mysql_query($query) or die ('Failed to save settings: ' . mysql_error());
+                $query = "
+                  UPDATE
+                    {$GLOBALS['CONFIG']['db_prefix']}settings
+                  SET VALUE = '$value'
+                  WHERE
+                    name = '$key'
+                ";
+                $stmt = $this->connection->prepare($query);
+                $stmt->execute(array(
+                    ':value' => $value,
+                    ':key' => $key
+                ));
+
             }
-            return TRUE;
+            return true;
         }
-        /*
+        /**
         * Load settings to an array
         * return array
         */
         function load()
         {
-            $sql = "SELECT name,value FROM {$GLOBALS['CONFIG']['db_prefix']}settings";
-            $result = mysql_query($sql) or die ('Getting settings failed: ' . mysql_error());
-            while(list($key, $value) = mysql_fetch_row($result))
-            {
-                $GLOBALS['CONFIG'][$key] = $value;
+            $query = "
+              SELECT
+                name,
+                value
+            FROM
+              {$GLOBALS['CONFIG']['db_prefix']}settings
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            foreach ($result as $row) {
+                $GLOBALS['CONFIG'][$row['name']] = $row['value'];
             }
 
         }
 
-        /*
+        /**
          * Show the settings edit form
-        */
+         */
         function edit()
         {
-            $settings_arr = array();
             $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}settings";
-            $result = mysql_query($query) or die('Failed to edit settings: ' . mysql_error());
-            while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-            {
-                $settings_arr[] = $row;
-            }
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
             $GLOBALS['smarty']->assign('themes', $this->getThemes());
             $GLOBALS['smarty']->assign('languages', $this->getLanguages());
             $GLOBALS['smarty']->assign('useridnums', $this->getUserIdNums());
-            $GLOBALS['smarty']->assign('settings_array',$settings_arr);
+            $GLOBALS['smarty']->assign('settings_array', $result);
             display_smarty_template('settings.tpl');
         }
-        /*
-        * Validate a specific setting based on its validation type
-        * @param string $key The name of the setting to be tested
-        * @param string $value The value of the setting to be tested
-        */
-        function validate($data,$value)
+
+        /**
+         * Validate a specific setting based on its validation type
+         * @param string $key The name of the setting to be tested
+         * @param string $value The value of the setting to be tested
+         */
+        function validate($key, $value)
         {
             // NOT IMPLEMENTED
         }
-        /*
+
+        /**
          * This function will return an array of the possible theme names found in the /templates folder
          * for use in the settings form
-        */
+         */
         function getThemes()
         {
             $themes = $this->getFolders( ABSPATH . 'templates');
             return $themes;
         }
 
+        /**
+         * @return mixed
+         */
         function getLanguages()
         {
             $languages = $this->getFolders( ABSPATH . 'includes/language');
             return str_replace('.php','',$languages);
         }
 
+        /**
+         * @param string $path
+         * @return array
+         */
         function getFolders($path = '.')
         {
             $file_list=array();
@@ -131,19 +160,24 @@ if( !defined('Settings_class') )
             return $file_list;
         }
 
-        /*
+        /**
          * Return an array of user names
+         * @return array
          */
         function getUserIdNums()
         {
-            $query = "SELECT id,username from {$GLOBALS['CONFIG']['db_prefix']}user";
-            $result = mysql_query($query) or die('Failed to read user names for settings: ' . mysql_error());
-            $useridnums_arr = array();
-            while($row = mysql_fetch_array($result))
-            {
-                array_push($useridnums_arr,$row);
-            }
-            return $useridnums_arr;
+            $query = "
+              SELECT
+                id,
+                username
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}user
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            return $result;
         }
 
     }

@@ -18,7 +18,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 // was tinyint(4)
-$result = mysql_query("
-ALTER TABLE data CHANGE COLUMN category category smallint(5) unsigned NOT NULL default '0'
-") or die("<br>Could not update" . mysql_error());
+$query = "
+ALTER TABLE data CHANGE COLUMN category category smallint(5) unsigned NOT NULL default '0'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
