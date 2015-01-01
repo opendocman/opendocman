@@ -136,9 +136,6 @@ if (!isset($_REQUEST['submit'])) {
             $avail_user_perms['rights'] = $user_perms_obj->getPermissionForUser($user['id'], $data_id);          
             array_push($user_perms_array, $avail_user_perms);
         }
-    
-        // Call Plugin API
-        callPluginMethod('onBeforeEditFile', $data_id);
 
         $GLOBALS['smarty']->assign('file_id', $filedata->getId());
         $GLOBALS['smarty']->assign('realname', $filedata->name);
@@ -159,6 +156,10 @@ if (!isset($_REQUEST['submit'])) {
        
         display_smarty_template('edit.tpl');
         udf_edit_file_form();
+
+        // Call Plugin API
+        callPluginMethod('onBeforeEditFile', $data_id);
+
         display_smarty_template('_edit_footer.tpl');
     }//end else
 } else { 

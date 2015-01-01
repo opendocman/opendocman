@@ -144,11 +144,11 @@ if(!isset($_POST['submit']))
     
     display_smarty_template('add.tpl');
 
+    udf_add_file_form();
+
     // Call the plugin API
     callPluginMethod('onBeforeAdd');
-    
-    udf_add_file_form();
-    
+
     display_smarty_template('_add_footer.tpl');
 
 }
