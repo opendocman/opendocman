@@ -97,9 +97,9 @@ if(isset($_POST['login']))
         ':frmuser' => $frmuser,
         ':frmpass' => $frmpass
     ));
-    $result = $stmt->fetch();
+    $result = $stmt->fetchAll();
 
-    if($stmt->rowCount() != 1)
+    if(count($result) != 1)
     {
         // Check old password() method
         $query = "
@@ -120,13 +120,14 @@ if(isset($_POST['login']))
             ':frmuser' => $frmuser,
             ':frmpass' => $frmpass
         ));
+    	$result = $stmt->fetchAll();
     }
 
     // if row exists - login/pass is correct
-    if ($stmt->rowCount() == 1)
+    if (count($result) == 1)
     {        
         // register the user's ID
-        $id = $result['id'];
+        $id = $result[0]['id'];
         $username = $result['username'];
         $password = $result['password'];
 

@@ -270,11 +270,11 @@ if( !defined('Dept_Perms_class') )
                 ':data_id' => $data_id,
                 ':id' => $this->id
             ));
-            $result = $stmt->fetchAll();
+            $result = $stmt->fetch();
 
             if($stmt->rowCount() == 1)
             {
-                if($result['right'] == $this->FORBIDDEN_RIGHT)
+                if($result['rights'] == $this->FORBIDDEN_RIGHT)
                 {
                     return true;
                 }
@@ -353,12 +353,12 @@ if( !defined('Dept_Perms_class') )
                 ':data_id' => $data_id,
                 ':id' => $this->id
             ));
-            $results = $stmt->fetchAll();
+            $results = $stmt->fetch();
 
             $num_results = $stmt->rowCount();
             if($num_results == 1)
             {
-                $permission = $results['right'];
+                $permission = $results['rights'];
                 return $permission;
             }
             else if ($num_results == 0)
