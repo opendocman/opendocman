@@ -434,40 +434,45 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 include("upgrade_1263.php");
                 echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
             }  
-	    function do_update_128()
-	    {
-		echo 'Updating from DB versions 1.2.8...<br />';
-		include("../config.php");
-		include("upgrade_128.php");
-		echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-	    }
+            function do_update_128()
+            {
+                echo 'Updating from DB versions 1.2.8...<br />';
+                include("../config.php");
+                include("upgrade_128.php");
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
+            }
 
             function do_update_129()
-	    {
-		echo 'Updating from DB versions 1.2.9...<br />';
-		include("../config.php");
-		include("upgrade_129.php");
-		echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-	    }
+            {
+                echo 'Updating from DB versions 1.2.9...<br />';
+                include("../config.php");
+                include("upgrade_129.php");
+                echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
+            }
 
             function print_intro()
             {
                 global $pdo;
                 include_once('../version.php');
 
-                $query1 = "SHOW TABLES LIKE :table";
-                $stmt = $pdo->prepare($query1);
-                $stmt->execute(array(':table' => $_SESSION['db_prefix'] . 'odmsys'));
+                $query = "SHOW TABLES LIKE :table";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute(array(
+                    ":table" =>  $_SESSION['db_prefix'] . 'odmsys'
+                ));
+                $result = $stmt->fetchAll();
 
-                if($stmt->rowCount() > 0) {
+                if (count($result) == 0) {
+                    $db_version = 'Unknown';
+                } else {
+                    // Ok, db is there. Lets check the db version now
                     $query2 = "SELECT sys_value from {$_SESSION['db_prefix']}odmsys WHERE sys_name='version'";
                     $stmt = $pdo->prepare($query2);
                     $stmt->execute();
                     $result_array = $stmt->fetch();
+                    $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
                 }
-                $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
-                //print_r($current_db_version);exit;
-    ?>
+            ?>
                 <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
         </div>
         <hr>

@@ -188,7 +188,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','', 1, 1);
+INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
@@ -290,6 +290,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'text/richtxt', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/mspowerpoint', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/octet-stream', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/tiff', 1);
 INSERT INTO `odm_filetypes` VALUES(NUll, 'image/tif', 1);
