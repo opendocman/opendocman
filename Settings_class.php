@@ -56,9 +56,9 @@ if( !defined('Settings_class') )
                 $query = "
                   UPDATE
                     {$GLOBALS['CONFIG']['db_prefix']}settings
-                  SET VALUE = '$value'
+                  SET VALUE = :value
                   WHERE
-                    name = '$key'
+                    name = :key
                 ";
                 $stmt = $this->connection->prepare($query);
                 $stmt->execute(array(
