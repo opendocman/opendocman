@@ -2,7 +2,7 @@
 /*
 view_file.php - draws screen which allows users to view files inline
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2015 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -58,33 +58,17 @@ if(!isset($_GET['submit']))
         $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
     }
     
-    $lmimetype = File::mime_by_ext($suffix);
-    
-    //echo "Realname is $realname<br>";
-    //echo "prefix = $prefix<br>";
-    //echo "suffix = $suffix<br>";
-    //echo "mime:$lmimetype";
-    echo '<form action="view_file.php" name="view_file_form" method="get">';
-    echo '<INPUT type="hidden" name="id" value="'.$request_id.'">';
-    echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
-    echo '<BR>';
-    // Present a link to allow for inline viewing
-    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id=' . urlencode($request_id) . '&mimetype=' . urlencode("$lmimetype") . '">' . msg('button_click_here') . '</a><br><br>';
-    echo '<div class="buttons"><button class="regular" type="submit" name="submit" value="Download">';
-    echo msg('message_if_you_are_unable_to_view2');
-    echo '</button></div>';
-    echo msg('message_if_you_are_unable_to_view1');
-    echo msg('message_if_you_are_unable_to_view2');
-    echo msg('message_if_you_are_unable_to_view3');
-    echo '</form>';
+    $mimetype = File::mime_by_ext($suffix);
 
+    $GLOBALS['smarty']->assign('mimetype', $mimetype);
+    $GLOBALS['smarty']->assign('file_id', $file_id);
+
+    // drw form
+    display_smarty_template('view_file.tpl');
     draw_footer();
 }
 elseif ($_GET['submit'] == 'view')
 {
-    //echo "mimetype = $mimetype<br>";
-    //exit;
-    //echo "ID is $_REQUEST['id']";
     $file_obj = new FileData($_REQUEST['id'], $pdo);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
@@ -125,9 +109,12 @@ elseif ($_GET['submit'] == 'view')
 elseif ($_GET['submit'] == 'Download')
 {
     $file_obj = new FileData($_REQUEST['id'], $pdo);
+    
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
+    
     $realname = $file_obj->getName();
+    
     if( isset($revision_id) )
     {
         $filename = $revision_dir . $request_id . ".dat";
@@ -163,4 +150,3 @@ else
     echo msg('message_nothing_to_do');
     echo 'submit is ' . $_GET['submit'];
 }
-?>

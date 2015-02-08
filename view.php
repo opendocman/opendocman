@@ -2,7 +2,7 @@
 /*
 view.php - performs download without updating database
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2015 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,11 +19,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+// Deprecated
 
 // check for session and $id
 session_start();
-ob_end_clean();		//Make sure there are no garbage in buffer.
-ob_start("callback");  	//Buffer oupt so there won't be accidental header problems
 
 include_once('odm-load.php');
 
@@ -67,18 +66,12 @@ else
     // display information on how to initiate download
     if (!isset($submit))
     {
-        draw_header('Add New User', $last_message);
-        ?>
-			<p>
+        draw_header('View File', $last_message);
 
-			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-			<input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
-			<input type="submit" name="submit" value="Click here"> to begin downloading the selected document to your local workstation.
-			</form>
-			Once the document has completed downloading, you may <a href="out.php">continue browsing</a>.
-			<?php	
-
-			draw_footer();
+        $GLOBALS['smarty']->assign('file_id', $filedata->getId());
+        display_smarty_template('view.tpl');
+        
+		draw_footer();
 
     }
     // form submitted - begin download
@@ -105,8 +98,6 @@ else
         {
             echo 'File not readable...';
         }
-
-        ob_end_flush();		//Flush buffer;
-        ob_end_clean();		//Clean up
+        
     }
 }
