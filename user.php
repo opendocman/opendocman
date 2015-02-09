@@ -247,7 +247,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
     $user_list = $stmt->fetchAll();
-    
+
     $GLOBALS['smarty']->assign('user_list', $user_list);
     display_smarty_template('user_delete_pick.tpl');
     draw_footer();
@@ -279,7 +279,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $GLOBALS['smarty']->assign('user_list', $user_list);
     $GLOBALS['smarty']->assign('state', $state);
     display_smarty_template('user_show_pick.tpl');
-    
+
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
     // If demo mode, don't allow them to update the demo account
@@ -292,188 +292,81 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         // Begin Not Demo Mode
         $user_obj = new User($_REQUEST['item'], $pdo);
         draw_header(msg('userpage_update_user') . $user_obj->getName(), $last_message);
-        ?>
-        <form name="update" id="modifyUserForm" action="user.php" method="POST" enctype="multipart/form-data">
-            <table border="0" cellspacing="5" cellpadding="5">
-                <tr>
 
-                    <?php
-                    $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id ";
-                    $stmt = $pdo->prepare($query);
-                    $stmt->execute(array(':id' => $_REQUEST['item']));
-                    $row = $stmt->fetch();
+        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':id' => $_REQUEST['item']));
+        $user = $stmt->fetch();
 
-                    echo '<td><b>' . msg('userpage_id') . '</b></td><td colspan=4>' . $row['id'] . '</td>';
-                    echo '<input type=hidden name=id value="' . $row['id'] . '">';
-                    echo '</tr>';
-                    echo '<tr>';
-                    echo '<td><b>' . msg('userpage_last_name') . '</b></td><td colspan=4><INPUT NAME="last_name" TYPE="text" VALUE="' . $row['last_name'] . '" class="required" minlength="2" maxlength="255"></td></TR>';
-                    echo '<td><b>' . msg('userpage_first_name') . '</b></td><td colspan=4><INPUT NAME="first_name" TYPE="text" VALUE="' . $row['first_name'] . '" class="required" minlength="2" maxlength="255"></td></TR>';
-                    echo '<td><b>' . msg('userpage_username') . '</b></td><td colspan=4><INPUT NAME="username" TYPE="text" VALUE="' . $row['username'] . '" class="required" minlength="2" maxlength="25"></td></TR>';
-                    echo "<tr>";
-                    echo("<td><b>" . msg('userpage_phone_number') . "</b></td><td colspan=4><input name=\"phonenumber\" type=\"text\" value=\"{$row['phone']}\" maxlegnth=\"20\"></td>");
-                    // If mysqlauthentication, then ask for password
-                    if ($GLOBALS["CONFIG"]["authen"] == 'mysql')
-                    {
-                    ?>
-                <tr>
-                    <td><b><?php echo msg('userpage_password');?></b></td>
-                    <td>
-                        <input name="password" type="password" maxlength="10">
-                        <font size="1"><?php echo msg('userpage_leave_empty');?></font>
-                    </td>
-                </tr>
-                </tr>
-                <?php
-                }//endif
-                ?>
-                <tr>
-                    <td><b><?php echo msg('userpage_email');?></td>
-                    <td colspan=4>
-                        <input name="Email" type="text" value="<?php echo $row['Email']; ?>" class="email required"
-                               maxlength="50"></td>
-                </tr>
-                <tr>
+        $display_reviewer_row = $user_obj->isAdmin() ? true : false;
 
-                </tr>
-                <tr>
-                    <td><b><?php echo msg('userpage_department');?></b></td>
-                    <td colspan=3>
+        $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = :user_id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':user_id' => $_REQUEST['item']));
+        $dept_reviewer = $stmt->fetchAll();
 
-                        <select name="department" <?php echo $mode; ?>>
-                            <?php
-                            $user_department = $user_obj->getDeptID();
-                            // query to get a list of departments
-                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                            $stmt = $pdo->prepare($query);
-                            $stmt->execute(array());
-                            $result = $stmt->fetchAll();
+        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array());
+        $department_list = $stmt->fetchAll();
 
-                            foreach ($result as $row) {
-                                if ($row['id'] == $user_department) {
-                                    echo '<option selected value="' . $row['id'] . '">' . $row['name'] . '</option>';
-                                } else {
-                                    echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-                                }
-                            }
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b><?php echo msg('userpage_admin');?></b></td>
-                    <td colspan=1>
-                        <?php
-                        if ($user_obj->isAdmin()) {
-                            echo '<input name="admin" type="checkbox" value="1" checked ' . $mode . ' id="cb_admin"></input>' . "\n";
-                        } else {
-                            echo '<input name="admin" type="checkbox" value="1"  ' . $mode . ' id="cb_admin"></input>' . "\n";
-                        }
-                        ?>
-                </TR>
-                <TR id="userReviewDepartmentRow" <?php if ($user_obj->isAdmin()) {
-                    echo 'style="display: none;"';
-                } ?>>
-                    <TD id="userReviewDepartmentLabelTd"><?php echo msg('userpage_reviewer_for');?></TD>
-                    <TD id="userReviewDepartmentListTd">
-                        <SELECT class="multiView" id="userReviewDepartmentsList" name='department_review[]'
-                                multiple="multiple" <?php echo $mode; ?>>
-                            <?php
-                            $user_department = $user_obj->getDeptID();
-                            $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = :user_id";
-                            $stmt = $pdo->prepare($query);
-                            $stmt->execute(array(':user_id' => $_REQUEST['item']));
-                            $result = $stmt->fetchAll();
+        //for dept that this user is reviewing for
+        $i = 0;
+        foreach ($dept_reviewer as $row) {
+            $department_reviewer[$i][0] = $row[0];
+            $department_reviewer[$i][1] = $row[1];
+            $i++;
+        }
+        // for all depts
+        $i = 0;
+        foreach ($department_list as $row) {
+            $all_departments[$i][0] = $row[0];
+            $all_departments[$i][1] = $row[1];
+            $i++;
+        }
 
-                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-                            $stmt = $pdo->prepare($query);
-                            $stmt->execute(array());
-                            $result2 = $stmt->fetchAll();
+        $department_select_options = array();
 
-                            //for dept that this user is reviewing for
-                            $i = 0;
-                            foreach ($result as $row) {
-                                $department_reviewer[$i][0] = $row[0];
-                                $department_reviewer[$i][1] = $row[1];
-                                $i++;
-                            }
-                            // for all depts
-                            $i = 0;
-                            foreach ($result2 as $row) {
-                                $all_department[$i][0] = $row[0];
-                                $all_department[$i][1] = $row[1];
-                                $i++;
-                            }
-
-                            for ($d = 0; $d < sizeof($all_department); $d++) {
-                                $found = false;
-                                if (isset($department_reviewer)) {
-                                    for ($r = 0; $r < sizeof($department_reviewer); $r++) {
-                                        if ($all_department[$d][0] == $department_reviewer[$r][0]) {
-                                            echo("<option value=\"" . $all_department[$d][0] . "\" selected> " . $all_department[$d][1] . "</option>\n");
-                                            $found = true;
-                                            $r = sizeof($department_reviewer);
-                                        }
-                                    }
-                                }
-                                if (!$found) {
-                                    echo("<option VALUE=\"" . $all_department[$d][0] . "\">" . $all_department[$d][1] . "</option>\n");
-                                }
-                            }
-
-                            ?>
-                        </SELECT>
-                    </TD>
-                </TR>
-                <?php
-                $can_add = '';
-                $can_checkin = '';
-                if ($user_obj->can_add == 1) {
-                    $can_add = "checked";
+        for ($d = 0; $d < sizeof($all_departments); $d++) {
+            $found = false;
+            if (isset($department_reviewer)) {
+                for ($r = 0; $r < sizeof($department_reviewer); $r++) {
+                    if ($all_departments[$d][0] == $department_reviewer[$r][0]) {
+                        $department_select_options[] = '<option value="' . $all_departments[$d][0] . '" selected>' . $all_departments[$d][1] . '</option>';
+                        $found = true;
+                        $r = sizeof($department_reviewer);
+                    }
                 }
-                if ($user_obj->can_checkin == 1) {
-                    $can_checkin = "checked";
-                }
-                ?>
-                <tr>
-                    <td><?php echo msg('userpage_can_add')?>?</td>
-                    <td>
-                        <input name="can_add" type="checkbox" value="1" <?php echo $can_add; ?> id="cb_can_add"></input>
-                    </td>
-                </tr>
-                <tr>
-                    <td><?php echo msg('userpage_can_checkin')?>?</td>
-                    <td>
-                        <input name="can_checkin" type="checkbox" value="1" <?php echo $can_checkin; ?>
-                               id="cb_can_checkin"></input>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center">
-                        <INPUT type="hidden" name="set_password" value="0">
+            }
+            if (!$found) {
+                $department_select_options[] = '<option value="' . $all_departments[$d][0] . '">' . $all_departments[$d][1] . '</option>';
+            }
+        }
 
-                        <div class="buttons">
-                            <button class="positive" type="Submit" name="submit"
-                                    value="Update User"><?php echo msg('userpage_button_update')?></button>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="buttons">
-                            <button class="negative cancel" type="Submit" name="cancel"
-                                    value="Cancel"><?php echo msg('userpage_button_cancel')?></button>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <script>
-            $(document).ready(function () {
-                $('#modifyUserForm').validate();
-            });
-        </script>
-    <?php
-    } // End Not Demo mode
+        $can_add = '';
+        $can_checkin = '';
+        if ($user_obj->can_add == 1) {
+            $can_add = "checked";
+        }
+        if ($user_obj->can_checkin == 1) {
+            $can_checkin = "checked";
+        }
+
+        $GLOBALS['smarty']->assign('user', $user_obj);
+        $GLOBALS['smarty']->assign('mysql_auth', $GLOBALS["CONFIG"]["authen"] == 'mysql');
+        $GLOBALS['smarty']->assign('mode', $mode);
+        $GLOBALS['smarty']->assign('user_department', $user_obj->getDeptID());
+        $GLOBALS['smarty']->assign('display_reviewer_row', $display_reviewer_row);
+        $GLOBALS['smarty']->assign('is_admin', $user_obj->isAdmin());
+        $GLOBALS['smarty']->assign('department_list', $department_list);
+        $GLOBALS['smarty']->assign('department_select_options', $department_select_options);
+        $GLOBALS['smarty']->assign('can_add', $can_add);
+        $GLOBALS['smarty']->assign('can_checkin', $can_checkin);
+        display_smarty_template('user/edit.tpl');
+    }
+
     draw_footer();
+
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
 
     // Check to make sue they are either the user being modified or an admin
@@ -585,8 +478,9 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
     header('Location: ' . $redirect . '?last_message=' . $last_message);
-} // CHOOSE USER TO UPDATE
-elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
+
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
+
     draw_header(msg('userpage_modify_user'), $last_message);
 
     // Check to see if user is admin
@@ -600,135 +494,18 @@ elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
         header('Location: error.php?ec=4');
         exit;
     }
-    ?>
-    <form action="user.php" method="POST" enctype="multipart/form-data">
-        <INPUT type="hidden" name="state" value="<?php echo($_REQUEST['state'] + 1); ?>"/>
-        <table border="0" cellspacing="5" cellpadding="5">
-            <tr>
-                <td><b><?php echo msg('userpage_user');?></b></td>
-                <td colspan=3><select name="item">
-                        <?php
 
-                        // query to get a list of users
-                        $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-                        $stmt = $pdo->prepare($query);
-                        $stmt->execute();
-                        $result = $stmt->fetchAll();
+    $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $users = $stmt->fetchAll();
 
-                        foreach ($result as $row) {
-                            echo '<option value="' . $row['id'] . '">' . $row['last_name'] . ', ' . $row['first_name'] . ' - ' . $row['username'] . '</option>';
-                        }
+    $GLOBALS['smarty']->assign('state', (int)$_REQUEST['state'] + 1);
+    $GLOBALS['smarty']->assign('users', $users);
+    display_smarty_template('user/edit_pick.tpl');
 
-                        ?>
-                </td>
-                <td>
-                    <div class="buttons">
-                        <button class="positive" type="Submit" name="submit"
-                                value="Modify User"><?php echo msg('userpage_button_modify')?></button>
-                    </div>
-                </td>
-                <td>
-                    <div class="buttons">
-                        <button class="negative" type="Submit" name="cancel"
-                                value="Cancel"><?php echo msg('userpage_button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </form>
-    <?php
     draw_footer();
-} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_password_pick') {
-    draw_header('Change password', $last_message);
-    $user_obj = new User($_SESSION['uid'], $pdo);
-    $submit_message = 'Changing password';
 
-    ?>
-    <br>
-    <script type="text/javascript">
-        function Validate(dataform) {
-            if (dataform.new_password.value != dataform.confirm_password.value) {
-                alert("The two password fields do not match.  Please recheck.")
-                return false
-            }
-            else {
-                return true
-            }
-        }
-        function redirect(url_location) {
-            window.location = url_location
-        }
-
-    </script>
-    <form action="commitchange.php" method="post" enctype="multipart/form-data">
-        <table name="header" align="center" border="1">
-            <tr>
-                <td align="center" bgcolor="teal"><b>User Information</b></td>
-            </tr>
-        </table>
-        <table name="list" align="center" border="1">
-            <tr>
-                <td align="left">ID</td>
-                <td align="left"><?php echo $user_obj->getDeptId(); ?></td>
-            </tr>
-            <tr>
-                <td align="left">Username</td>
-                <td align="left"><?php echo $user_obj->getName(); ?></td>
-            </tr>
-            <tr>
-                <td align="left">Department</td>
-                <td align="left"><?php echo $user_obj->getDeptName(); ?></td>
-            </tr>
-        </table>
-        <br>
-    </form>
-<?php
-} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'change_personal_info_pick') {
-    draw_header('Change password', $last_message);
-    $user_obj = new User($_SESSION['uid'], $pdo);
-    $cancel_message = 'Password alteration had been canceled';
-    $submit_message = 'Changing password';
-    // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'True') {
-        echo 'Sorry, demo mode only, you can\'t do that';
-        draw_footer();
-        exit;
-    }
-    ?>
-    <br>
-    <script type="text/javascript">
-        function redirect(url_location) {
-            window.location = url_location
-        }
-
-    </script>
-    <form action="commitchange.php" method="post" enctype="multipart/form-data">
-        <table name="header" align="center" border="1">
-            <tr>
-                <td align="center" bgcolor="teal"><b>User Information</b></td>
-            </tr>
-        </table>
-        <table name="list" align="center" border="1">
-            <tr>
-                <td align="left">ID</td>
-                <td align="left"><?php echo $user_obj->getDeptId(); ?></td>
-            </tr>
-            <tr>
-                <td align="left">Username</td>
-                <td align="left"><input type="text" name="username" value="<?php echo $user_obj->getName(); ?>"></td>
-            </tr>
-            <tr>
-                <td align="left">Department</td>
-                <td align="left"><?php echo $user_obj->getDeptName(); ?></td>
-            </tr>
-        </table>
-        <br>
-        <input type="hidden" name="submit" value="change_personal_info">
-        <input type="Submit" name="change_personal_info" value="Submit">
-        <input type="Button" name="cancel" value="Cancel"
-               onclick="redirect('profile.php?last_message=Personal Info alteration canceled')">
-    </form>
-<?php
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
     header('Location: admin.php?last_message=' . $last_message);
