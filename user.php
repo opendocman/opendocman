@@ -477,7 +477,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     // back to main page
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
-    header('Location: ' . $redirect . '?last_message=' . $last_message);
+    header('Location: out.php?last_message=' . $last_message);
 
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
 
