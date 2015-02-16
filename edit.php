@@ -214,6 +214,12 @@ if (!isset($_REQUEST['submit'])) {
     $del_user_perms_stmt = $pdo->prepare($del_user_perms_query);
     $del_user_perms_stmt->bindParam(':file_id', $fileId);
     $del_user_perms_stmt->execute();
+
+    // clean out old permissions
+    $del_dept_perms_query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = :file_id";
+    $del_dept_perms_stmt = $pdo->prepare($del_dept_perms_query);
+    $del_dept_perms_stmt->bindParam(':file_id', $fileId);
+    $del_dept_perms_stmt->execute();
     
     $result_array = array(); // init;
     
@@ -241,16 +247,24 @@ if (!isset($_REQUEST['submit'])) {
     //UPDATE Department Rights into dept_perms
     foreach ($_POST['department_permission'] as $dept_id => $dept_perm) {
         $update_dept_perms_query = "
-            UPDATE 
+            INSERT INTO
                 {$GLOBALS['CONFIG']['db_prefix']}dept_perms
-            SET 
-                rights = :dept_perm 
-            WHERE 
-                fid={$filedata->getId()}
-            AND 
-                {$GLOBALS['CONFIG']['db_prefix']}dept_perms.dept_id = $dept_id";
+            (
+                fid,
+                dept_id,
+                rights
+            )
+            VALUES
+             (
+                :file_id,
+                :dept_id,
+                :dept_perm
+             )
+             ";
         $update_dept_perms_stmt = $pdo->prepare($update_dept_perms_query);
         $update_dept_perms_stmt->bindParam(':dept_perm', $dept_perm);
+        $update_dept_perms_stmt->bindParam(':dept_id', $dept_id);
+        $update_dept_perms_stmt->bindParam(':file_id', $filedata->getId());
         $update_dept_perms_stmt->execute();
     }
 

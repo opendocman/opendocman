@@ -199,16 +199,17 @@ else
         $final_query = $query_pre . $query;
 
         $stmt = $pdo->prepare($final_query);
-        $stmt->bindParam(':keyword', $keyword);
+        
         if(!empty($use_uid)) {
             $stmt->bindParam(':uid', $_SESSION['uid']);
-        }
-        if(!empty($author_first_name)) {
+            $stmt->bindParam(':keyword', $keyword);
+        } elseif (!empty($author_last_name) && $exact_phrase == 'on') {
             $stmt->bindParam(':author_first_name', $author_first_name);
-        }
-        if(!empty($author_last_name)) {
             $stmt->bindParam(':author_last_name', $author_last_name);
+        } else {
+            $stmt->bindParam(':keyword', $keyword);
         }
+
         $stmt->execute();
         $result = $stmt->fetchAll();
 
