@@ -68,13 +68,13 @@
         <tr>
             <td>{$g_lang_userpage_can_add}?</td>
             <td>
-                <input name="can_add" type="checkbox" value="1" {$can_add} id="cb_can_add" />
+                <input name="can_add" type="checkbox" value="1" {$can_add} {$mode} id="cb_can_add" />
             </td>
         </tr>
         <tr>
             <td>{$g_lang_userpage_can_checkin}?</td>
             <td>
-                <input name="can_checkin" type="checkbox" value="1" {$can_checkin} id="cb_can_checkin" />
+                <input name="can_checkin" type="checkbox" value="1" {$can_checkin} {$mode} id="cb_can_checkin" />
             </td>
         </tr>
         <tr>
