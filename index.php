@@ -128,8 +128,6 @@ if(isset($_POST['login']))
     {        
         // register the user's ID
         $id = $result[0]['id'];
-        $username = $result['username'];
-        $password = $result['password'];
 
         // initiate a session
         $_SESSION['uid'] = $id;
