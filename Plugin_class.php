@@ -54,7 +54,7 @@ class Plugin
         {
             while (false !== ($file = readdir($handle)))
             {
-                if ($file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && is_file('plug-ins/' . $file . '/' . $file . '_class.php'))
+                if ($file != 'index.html' && $file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && $file != '.git' && is_file('plug-ins/' . $file . '/' . $file . '_class.php'))
                 {
                     array_push($pluginslist, $file);
                 }
