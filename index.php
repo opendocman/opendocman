@@ -78,6 +78,15 @@ if(isset($_POST['login']))
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
 
+    // Check for LDAP users enabled
+    if($GLOBALS['CONFIG']['ldap_enable']) {
+	require 'ldap-users.inc';
+	$ldap_success = ldap_login($frmuser, $frmpass);
+	if(!empty($ldap_success)) {
+		add_or_modify($frmuser, $frmpass);
+	}
+    }
+    
     // check login and md5()
     // connect and execute query
     $query = "
@@ -128,8 +137,8 @@ if(isset($_POST['login']))
     {        
         // register the user's ID
         $id = $result[0]['id'];
-        $username = $result['username'];
-        $password = $result['password'];
+        $username = $result[0]['username'];
+        $password = $result[0]['password'];
 
         // initiate a session
         $_SESSION['uid'] = $id;
