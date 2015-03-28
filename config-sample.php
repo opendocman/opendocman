@@ -50,6 +50,18 @@ define('DB_HOST', 'localhost');
  */
 $GLOBALS['CONFIG']['db_prefix'] = 'odm_';
 
+/**
+ * LDAP integration options.  See README.LDAP for details.
+ */
+$GLOBALS['CONFIG']['ldap_enable'] = FALSE;
+$GLOBALS['CONFIG']['ldap_host'] = 'my.ldaphost.com';
+$GLOBALS['CONFIG']['ldap_port'] = '389';
+
+$GLOBALS['CONFIG']['base_dn'] = "ou=People,dc=mydomain,dc=com";
+$GLOBALS['CONFIG']['searchfilter'] = "(&(uid=%uid))";
+$GLOBALS['CONFIG']['bind_dn'] = "cn=Manager,dc=mydomain,dc=com";
+$GLOBALS['CONFIG']['bind_pw'] = "managers_password";
+
 /*** DO NOT EDIT BELOW THIS LINE ***/
 
 
