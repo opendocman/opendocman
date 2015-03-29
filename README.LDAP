@@ -10,12 +10,10 @@
 	- If a user exists in LDAP, but not in ODM, an ODM user will be created
 	- If the user exists in ODM, that user's ODM password will be relplaced
 	with their LDAP password
-	- When a new user is created, mostly default values are filled in (for now)
+	- When a new user is created, values can be pulled from LDAP attributes 
 	- If the user does not exist in LDAP, authentication will fall through to ODM
 
 	Therefore, you *can* have user accounts in ODM that are not in LDAP.
-
-	Coming soon: pull more attributes from LDAP to better populate defaults in ODM entry.
 
 	What you'll need to use LDAP (besides the ODM prerequisites):
 
@@ -29,5 +27,7 @@
 values in ldap_host, ldap_port, base_dn (the container where user accounts are stored), searchfilter (filter
 for searching for the unique usernames in that container), bind_dn (a user with the rights to bind to and read
 the user entries in the directory), and bind_pw (the bind_user's password).
+
+	Next, fill out the ODM-DB->LDAP attribute mappings in the config file.
 
 	That's it, for now.  Comments, bug reports and suggestions appreciated.
