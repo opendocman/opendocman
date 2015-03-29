@@ -50,6 +50,65 @@ define('DB_HOST', 'localhost');
  */
 $GLOBALS['CONFIG']['db_prefix'] = 'odm_';
 
+/**
+ * LDAP integration options.  See README.LDAP for details.
+ */
+
+// Enable LDAP?  Query which host?  What port?
+// (port 389 is standard, port 636 for SSL) 
+$GLOBALS['CONFIG']['ldap_enable'] = FALSE;
+$GLOBALS['CONFIG']['ldap_host'] = 'my.ldaphost.com';
+$GLOBALS['CONFIG']['ldap_port'] = '389';
+
+// Which base dn do I search for users?
+// Active Directory Hint: You might want something like...
+// "ou=Users,dc=mydomain,dc=rootforest,dc=com"...
+$GLOBALS['CONFIG']['base_dn'] = "cn=People,dc=mydomain,dc=com";
+
+// What are the credentials of a user with rights to search the directory?
+// AD Hint: You might ant a bind_dn like...
+// "MYDOMAIN\user.name"
+$GLOBALS['CONFIG']['bind_dn'] = "cn=Manager,dc=mydomain,dc=com";
+$GLOBALS['CONFIG']['bind_pw'] = "managers_password";
+
+// What search filter do I apply to find users?
+// %uid will be replaced with the user name that's logging in.
+//
+// *** CAUTION ***
+// User names must be unique!  Don't use search terms or a base dn
+// that returns multiple instances of the same person (if you have
+// such a thing).
+//
+// Examples:
+//
+// ((uid=%uid))				[...if all user's username are in the uid attribute]
+// (|(uid=%uid)(cn=%uid))		[...if user's username can be uid *or* in cn]
+// (&(gecos=%uid)(objectClass=account))	[...if all user's usernames are in gecos *and* are accounts]
+//
+// AD Hint: You might want to try...
+// (&(sAMAccountname=%uid)(objectClass=user)) 
+$GLOBALS['CONFIG']['searchfilter'] = "(&(uid=%uid)(objectClass=inetOrgPerson))";
+
+
+// Which attributes hold the account details?
+// Any can be null except 'ldap_username'.  'ldap_department' should
+// be an atttribute that contains a department number that 
+// corresponds to an ODM department number.
+$GLOBALS['CONFIG']['ldap_username'] = 'uid'; 			// AD: Try 'sAMAccountName'
+$GLOBALS['CONFIG']['ldap_department'] = 'departmentNumber';	// AD: Try 'department'
+$GLOBALS['CONFIG']['ldap_phone'] = 'telephoneNumber';		// AD: Try 'telephoneNumber'
+$GLOBALS['CONFIG']['ldap_Email'] = 'mail';			// AD: Try 'mail'
+$GLOBALS['CONFIG']['ldap_last_name'] = 'sn';			// AD: Try 'SN'
+$GLOBALS['CONFIG']['ldap_first_name'] = 'givenName';		// AD: Try 'givenName'
+
+// Default department number to assign if none is found in LDAP/AD
+$GLOBALS['CONFIG']['ldap_default_dept'] = '1';
+
+// Default permissions to assign when creating a user in the database.
+// You must set these to true (1) or false (0);
+$GLOBALS['CONFIG']['ldap_can_add'] = '0';
+$GLOBALS['CONFIG']['ldap_can_checkin'] = '0';
+
 /*** DO NOT EDIT BELOW THIS LINE ***/
 
 
