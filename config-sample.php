@@ -53,14 +53,49 @@ $GLOBALS['CONFIG']['db_prefix'] = 'odm_';
 /**
  * LDAP integration options.  See README.LDAP for details.
  */
+
+// Enable LDAP?  Query which host?  What port? 
 $GLOBALS['CONFIG']['ldap_enable'] = FALSE;
 $GLOBALS['CONFIG']['ldap_host'] = 'my.ldaphost.com';
 $GLOBALS['CONFIG']['ldap_port'] = '389';
 
+// Which base dn do I search for users?
 $GLOBALS['CONFIG']['base_dn'] = "ou=People,dc=mydomain,dc=com";
-$GLOBALS['CONFIG']['searchfilter'] = "(&(uid=%uid))";
+
+// What are the credentials of a user with rights to search the directory?
 $GLOBALS['CONFIG']['bind_dn'] = "cn=Manager,dc=mydomain,dc=com";
 $GLOBALS['CONFIG']['bind_pw'] = "managers_password";
+
+// What search filter do I apply to find users?
+// %uid will be replaced with the user name that's logging in.
+//
+// *** CAUTION ***
+// User names must be unique!  Don't use search terms or a base dn
+// that returns multiple instances of the same person (if you have
+// such a thing).
+//
+// Examples:
+//
+// ((uid=%uid))				[...if all user's username are in the uid attribute]
+// (|(uid=%uid)(cn=%uid))		[...if user's username can be uid *or* in cn]
+// (&(gecos=%uid)(objectClass=account))	[...if all user's usernames are in gecos *and* are accounts] 
+$GLOBALS['CONFIG']['searchfilter'] = "(&(uid=%uid)(objectClass=inetOrgPerson))";
+
+// Which attributes hold the account details?
+// Any can be null except 'ldap_username'.  'ldap_department' should
+// be an atttribute that contains a department number that 
+// corresponds to an ODM department number.
+$GLOBALS['CONFIG']['ldap_username'] = 'uid';
+$GLOBALS['CONFIG']['ldap_department'] = 'departmentNumber';
+$GLOBALS['CONFIG']['ldap_phone'] = 'telephoneNumber';
+$GLOBALS['CONFIG']['ldap_Email'] = 'mail';
+$GLOBALS['CONFIG']['ldap_last_name'] = 'sn';
+$GLOBALS['CONFIG']['ldap_first_name'] = 'givenName';
+
+// Default permissions to assign when creating a user in the database.
+// You must set these to true (1) or false (0);
+$GLOBALS['CONFIG']['ldap_can_add'] = '0';
+$GLOBALS['CONFIG']['ldap_can_checkin'] = '0';
 
 /*** DO NOT EDIT BELOW THIS LINE ***/
 
