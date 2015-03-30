@@ -8,7 +8,6 @@
  * @package OpenDocMan
  * @subpackage Administration
  */
-session_start();
 /**
  * We are installing.
  *
@@ -88,6 +87,7 @@ switch($step) {
 	<li>Database host</li>
 	<li>Table prefix (if you want to run more than one OpenDocMan in a single database) </li>
 </ol>
+<p><strong>If you plan on using LDAP/Active Directory, you should have bind and attribute information ready.</strong></p>
 <p><strong>You will also need to create a directory (your "dataDir") where you plan to store your uploaded files on the server.</strong> This directory must be writable by the web server but preferably NOT inside your public html folder. The main reason for locating the folder outside or your web document root is so that people won't be able to guess at a URL to directly access your files, bypassing the access restrictions that OpenDocMan puts in place.</p>
 <p>You can update your web server configuration file to prevent visitors from browsing your files directly.
 
@@ -122,15 +122,116 @@ deny from all
     </p>
 
 <p>If for any reason this automatic file creation doesn't work, don't worry. All this does is fill in the database information to a configuration file. You may also simply open <code>config-sample.php</code> in a text editor, fill in your information, and save it as <code>config.php</code> and import the <code>database.sql</code> file into your database.</p>
-
 <p class="step"><a href="setup-config.php?step=1" class="button">Let&#8217;s go!</a></p>
 <?php
 	break;
 
 	case 1:
 		display_header();
+		session_start();
 	?>
-<form method="post" id="configform" action="setup-config.php?step=2">
+
+<form method="post" id="ldapform" action="setup-config.php?step=2">
+        <p>Below you should enter your LDAP (or Active Directory) details, if enabled.</p>
+        <table class="form-table">
+                <tr>
+                        <th scope="row"><label for="ldap_enable">Enable LDAP?</label></th>
+                        <td><input name="ldap_enable" id="ldap_enable" type="checkbox" onchange="toggleDisabled(this.checked)" value="TRUE">Check to enable</td>
+                </tr>
+                <tr>
+                        <th scope="row"><label for="ldap_host">LDAP Host</label></th>
+                        <td><input name="ldap_host" id="ldap_host" type="text" disabled="disabled" size="25" value="my.ldaphost.com" class="required" minlength="2"/></td>
+                </tr>
+                <tr>
+                        <th scope="row"><label for="ldap_port">LDAP Port</label></th>
+                        <td><input name="ldap_port" id="ldap_port" type="text" disabled="disabled" size="5" value="389" /></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="base_dn">Base DN</label></th>
+                        <td><input name="base_dn" id="base_dn" type="text" disabled="disabled" size="60" value="ou=People,dc=mydomain,dc=com" /></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="bind_dn">Bind DN</label></th>
+                        <td><input name="bind_dn" id="bind_dn" type="text" disabled="disabled" size="60" value="cn=Manager,dc=mydomain,dc=com" /></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="bind_pw">Bind Password</label></th>
+                        <td><input name="bind_pw" id="bind_pw" type="text" disabled="disabled" size="30" value="managers_password" /></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="searchfilter">Search Filter</label></th>
+                        <td><input name="searchfilter" id="searchfilter" type="text" disabled="disabled" size="60" value="(uid=%uid)" /></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_username">Attribute Containing User Names</label></th>
+                        <td><input name="ldap_username" id="ldap_username" type="text" disabled="disabled" size="30" value="uid"/></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_department">Attribute Containing Department Number</label></th>
+                        <td><input name="ldap_department" id="ldap_department" type="text" disabled="disabled" size="30" value="departmentNumber"/></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_phone">Attribute Containing Phone Number</label></th>
+                        <td><input name="ldap_phone" id="ldap_phone" type="text" disabled="disabled" size="30" value="telephoneNumber"/></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_Email">Attribute Containing Email Address</label></th>
+                        <td><input name="ldap_Email" id="ldap_Email" type="text" disabled="disabled" size="30" value="mail"/></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_last_name">Attribute Containing Surname</label></th>
+                        <td><input name="ldap_last_name" id="ldap_last_name" type="text" disabled="disabled" size="30" value="sn"/></td>
+                </tr>
+		<tr>
+                        <th scope="row"><label for="ldap_first_name">Attribute Containing Given Name</label></th>
+                        <td><input name="ldap_first_name" id="ldap_first_name" type="text" disabled="disabled" size="30" value="givenName"/></td>
+                </tr>	
+       </table>
+       <p class="step"><input name="submit" type="submit" value="Submit" class="button" /></p>
+</form>
+<script>
+function toggleDisabled(_checked) {
+    document.getElementById('ldap_host').disabled = _checked ? false : true;
+    document.getElementById('ldap_port').disabled = _checked ? false : true;
+    document.getElementById('base_dn').disabled = _checked ? false : true;
+    document.getElementById('bind_dn').disabled = _checked ? false : true;
+    document.getElementById('bind_pw').disabled = _checked ? false : true;
+    document.getElementById('searchfilter').disabled = _checked ? false : true;
+    document.getElementById('ldap_username').disabled = _checked ? false : true;
+    document.getElementById('ldap_department').disabled = _checked ? false : true;
+    document.getElementById('ldap_phone').disabled = _checked ? false : true;
+    document.getElementById('ldap_Email').disabled = _checked ? false : true;
+    document.getElementById('ldap_last_name').disabled = _checked ? false : true;
+    document.getElementById('ldap_first_name').disabled = _checked ? false : true;
+}
+</script>
+<script>
+    $("#ldapform").validate();
+</script>
+<?php
+	break;
+
+	case 2:
+		session_start();
+
+		// LDAP vars
+        	$_SESSION['ldap_enable'] = $_POST['ldap_enable'];
+        	$_SESSION['ldap_host'] = $_POST['ldap_host'];
+        	$_SESSION['ldap_port'] = $_POST['ldap_port'];
+        	$_SESSION['base_dn'] = $_POST['base_dn'];
+        	$_SESSION['bind_dn'] = $_POST['bind_dn'];
+        	$_SESSION['bind_pw'] = $_POST['bind_pw'];
+        	$_SESSION['searchfilter'] = $_POST['searchfilter'];
+        	$_SESSION['ldap_username'] = $_POST['ldap_username'];
+        	$_SESSION['ldap_department'] = $_POST['ldap_department'];
+        	$_SESSION['ldap_phone'] = $_POST['ldap_phone'];
+        	$_SESSION['ldap_Email'] = $_POST['ldap_Email'];
+        	$_SESSION['ldap_last_name'] = $_POST['ldap_last_name'];
+        	$_SESSION['ldap_first_name'] = $_POST['ldap_first_name'];
+
+		display_header();
+	?>
+<form method="post" id="configform" action="setup-config.php?step=3">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
 	<table class="form-table">
 		<tr>
@@ -190,7 +291,9 @@ deny from all
 <?php
 	break;
 
-	case 2:
+	case 3:
+	session_start();
+
         // Test the db connection.
 	/**#@+
 	 * @ignore
@@ -218,7 +321,22 @@ deny from all
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
-        
+      
+	// LDAP Vars
+	$ldap_enable = $_SESSION['ldap_enable'];
+        $ldap_host = $_SESSION['ldap_host'];
+        $ldap_port = $_SESSION['ldap_port'];
+        $base_dn = $_SESSION['base_dn'];
+        $bind_dn = $_SESSION['bind_dn'];
+        $bind_pw = $_SESSION['bind_pw'];
+        $searchfilter = $_SESSION['searchfilter'];
+        $ldap_username = $_SESSION['ldap_username'];
+        $ldap_department = $_SESSION['ldap_department'];
+        $ldap_phone = $_SESSION['ldap_phone'];
+        $ldap_Email = $_SESSION['ldap_Email'];
+        $ldap_last_name = $_SESSION['ldap_last_name'];
+        $ldap_first_name = $_SESSION['ldap_first_name'];
+ 
         // Clean up the datadir a bit to make sure it ends with slash
         if(substr($datadir,-1) != '/')
         {
@@ -257,28 +375,71 @@ deny from all
             echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writeable by the web server';
         }
 
-        // We also need to guess at their base_url value
+	// We also need to guess at their base_url value
 
-        // Now replace the default config values with the real ones
-	foreach ($configFile as $line_num => $line) {
-		switch (substr($line,0,16)) {
-			case "define('DB_NAME'":
-				$configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
+	// Now replace the default config values with the real ones
+        foreach ($configFile as $line_num => $line) {
+                switch (substr($line,0,16)) {
+                        case "define('DB_NAME'":
+                                $configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
+                                break;
+                        case "define('DB_USER'":
+                                $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
+                                break;
+                        case "define('DB_PASS'":
+                                $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
+                                break;
+                        case "define('DB_HOST'":
+                                $configFile[$line_num] = str_replace("localhost", $dbhost, $line);
+                                break;
+                }
+		// Now iterate through for equations to substitute provided values in
+		$eqkey = substr($line,18);
+		switch ($eqkey) {
+			case (preg_match("/^\[\'db_prefix\'\].*$/", $eqkey) ? TRUE : FALSE) :
+				$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'db_prefix\']', "odm_", $prefix);
 				break;
-			case "define('DB_USER'":
-				$configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
+			case (preg_match("/^\[\'ldap_enable\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_enable\']', "FALSE", $ldap_enable);
 				break;
-			case "define('DB_PASS'":
-				$configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
+			case (preg_match("/^\[\'ldap_host\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_host\']', "my.ldaphost.com", $ldap_host);
 				break;
-			case "define('DB_HOST'":
-				$configFile[$line_num] = str_replace("localhost", $dbhost, $line);
+			case (preg_match("/^\[\'ldap_port\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_port\']', "389", $ldap_port);
 				break;
-			case '$GLOBALS[\'CONFIG':
-				$configFile[$line_num] = str_replace('odm_', $prefix, $line);
+			case (preg_match("/^\[\'base_dn\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'base_dn\']', "ou=People,dc=mydomain,dc=com", $base_dn);
+				break;
+			case (preg_match("/^\[\'bind_dn\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'bind_dn\']', "cn=Manager,dc=mydomain,dc=com", $bind_dn);
+				break;
+			case (preg_match("/^\[\'bind_pw\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'bind_pw\']', "managers_password", $bind_pw);
+				break;
+			case (preg_match("/^\[\'searchfilter\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'searchfilter\']', "(uid=%uid)", $searchfilter);
+				break;
+			case (preg_match("/^\[\'ldap_username\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_username\']', "uid", $ldap_username);
+				break;
+			case (preg_match("/^\[\'ldap_department\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_department\']', "departmentNumber", $ldap_department);
+				break;
+			case (preg_match("/^\[\'ldap_phone\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_phone\']', "telephoneNumber", $ldap_phone);
+				break;
+			case (preg_match("/^\[\'ldap_Email\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_Email\']', "mail", $ldap_Email);
+				break;
+			case (preg_match("/^\[\'ldap_last_name\'\].*$/", $eqkey) ? TRUE : FALSE) :
+                		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_last_name\']', "sn", $ldap_last_name);
+				break;
+			case (preg_match("/^\[\'ldap_first_name\'\].*$/", $eqkey) ? TRUE : FALSE) :
+       	        		$configFile[$line_num] = equation_filter($line, '$GLOBALS[\'CONFIG\'][\'ldap_first_name\']', "givenName", $ldap_first_name);
 				break;
 		}
-	}
+        }
 	if ( ! is_writable(ABSPATH) ) {
 		display_header();
 ?>
@@ -355,6 +516,39 @@ function sanitizeme($input)
         return false;
     }
 }
+
+function equation_filter($line, $key, $search, $replace) {
+	// Skip comments
+	if(substr($line,0,2) == "//" || substr($line,0,2) == "/*") {
+		return $line;
+	} else {
+		// Try to split equations
+		if(strpos($line, $key) !== FALSE) {
+			list($subject, $predicate) = array_pad(preg_split("~=~", $line, 2), 2, null);
+			// Print if split worked...
+			if(!is_null($predicate)) {
+				$output = "$subject=";
+				$subbed_predicate = str_replace($search, $replace, $predicate);
+				// Print substitution if it occurred...
+				if(!is_null($subbed_predicate)) {
+					$output = $output . $subbed_predicate;
+				// ...else just print the predicate
+				} else {
+					$output = $output . $predicate;
+				}
+			// ...if split didn't work, $line wasn't an equation
+			} else {
+				return $line;
+			}
+		} else {
+			// Not an equation
+			return $line;
+		}
+	}
+	
+	return $output;
+}
+
 ?>
 </body>
 </html>
