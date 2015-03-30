@@ -1,0 +1,35 @@
+//
+// LDAP/Active Directory extensions for OpenDocMan
+//
+// Initial release - John E.P. Hynes, HyTronix [03/29/2015]
+// john@hytronix.com
+//
+	In this initial release, this is what the LDAP extensions do:
+
+	- If a user exists in LDAP, but not in ODM, an ODM user will be created
+	- If the user exists in ODM, that user's ODM data will be updated from LDAP 
+	- When a new user is created, values can be pulled from LDAP attributes 
+	- If the user does not exist in LDAP, authentication will fall through to ODM
+
+	Therefore, you *can* have user accounts in ODM that are not in LDAP.
+
+	What you'll need to use LDAP (besides the ODM prerequisites):
+
+	1) PHP LDAP extensions
+	2) An accessible LDAP directory
+	3) Knowledge of where the user accounts are in the directory, and how to find them
+	4) PHP SSL extensions, if you're going to use LDAPS
+
+	SETUP:
+
+	First, enable LDAP by setting $GLOBALS['CONFIG']['ldap_enable'] to TRUE.  Fill in the correct
+values in ldap_host, ldap_port, base_dn (the container where user accounts are stored), searchfilter 
+(filter for searching for the unique usernames in that container), bind_dn (a user with the rights 
+to bind to and read the user entries in the directory), and bind_pw (the bind_user's password).
+
+	Next, fill out the ODM-DB->LDAP attribute mappings in the config file, if you didn't during install.  They're all explained in further detail there.
+
+	One note - if you delete a user from LDAP, the user wil still exist in ODM if they've ever
+logged in.  If this is a problem, they can be removed in several ways - if you need/want that feature, drop me a line.
+
+	That's it, for now.  Comments, bug reports and suggestions appreciated.
