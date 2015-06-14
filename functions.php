@@ -901,6 +901,9 @@ function xss_clean($str)
     // Remove namespaced elements (we do not need them)
     $str = preg_replace('#</*\w+:\w[^>]*+>#i', '', $str);
 
+    // Remove any attempts to pass-in a script tag obfuscated by spaces
+    $str = preg_replace('/<\s+s\s+c\s+r\s+i\s+p\s+t/', '', $str);
+
     do {
         // Remove really unwanted tags
         $old = $str;
