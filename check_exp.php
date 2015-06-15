@@ -124,9 +124,9 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4) {
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: $mail_from";
     $mail_subject=msg('email_subject_review_status');
-    $mail_greeting=msg('email_greeting') . ":\n\r\t" . msg('email_i_would_like_to_inform');
+    $mail_greeting=msg('email_greeting') . ":". PHP_EOL . "\t" . msg('email_i_would_like_to_inform');
     $mail_body = msg('email_was_declined_for_publishing_at') . ' ' .$time.' on '.$date.' ' . msg('email_because_you_did_not_revise') . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' '. msg('days');
-    $mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
+    $mail_salute=PHP_EOL . PHP_EOL . msg('email_salute') . ",". PHP_EOL . $full_name";
     foreach($data_result as $row) {
         $file_obj = new FileData($row['id'], $pdo);
         $user_obj = new User($file_obj->getOwner(), $pdo);

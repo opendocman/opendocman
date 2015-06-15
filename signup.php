@@ -91,7 +91,7 @@ if($GLOBALS['CONFIG']['allow_signup'] == 'True')
             echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
             if($GLOBALS['CONFIG']['authen'] == 'mysql')
             {
-                echo msg('message_account_created_password') . ': '.$_REQUEST['password']."\n\n";
+                echo msg('message_account_created_password') . ': '.$_REQUEST['password'].PHP_EOL . PHP_EOL;
                 echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">' . msg('login'). '</a>';
                 exit;
             }

@@ -38,8 +38,8 @@ if(!$user_obj->isRoot())
 $flag = 0;
 if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 {
-	echo "\n" . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">'; 
-	echo "\n" . '<input name="submit" type="hidden" value="Clear Status">';
+	echo PHP_EOL . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">'; 
+	echo PHP_EOL . '<input name="submit" type="hidden" value="Clear Status">';
 	draw_header(msg('label_checked_out_files'), $last_message);
         
         $file_id_array = $user_obj->getCheckedOutFiles();
@@ -49,8 +49,8 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout')
 	$list_status = list_files($file_id_array, $user_perm_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
 	if($list_status != -1 )
 	{
-		echo "\n" . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
-		echo "\n" . '</form>';
+		echo PHP_EOL . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
+		echo PHP_EOL . '</form>';
 	}
 	draw_footer();
 }

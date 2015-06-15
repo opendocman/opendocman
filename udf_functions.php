@@ -2,7 +2,7 @@
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence Jr., Jonathan Miner
-Copyright (C) 2008-2013 Stephen Lawrence Jr.
+Copyright (C) 2008-2015 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -539,9 +539,9 @@ if ( !defined('udf_functions') )
         foreach($result as $row) {
             if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3 )
             {
-                echo "case '".$row[2]."':\n";
-                echo "      info_Array = ".$row[0]."_array;\n";
-                echo "      break;\n";
+                echo "case '".$row[2]."':".PHP_EOL;
+                echo "      info_Array = ".$row[0]."_array;".PHP_EOL;
+                echo "      break;".PHP_EOL;
             }
         }
     }
@@ -563,10 +563,10 @@ if ( !defined('udf_functions') )
                 $stmt->execute(array());
                 $sub_result = $stmt->fetchAll();
 
-                echo $row[0] . "_array = new Array();\n";              
+                echo $row[0] . "_array = new Array();".PHP_EOL;              
                 $index = 0;
                 foreach($sub_result as $sub_row) {
-                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $sub_row[1] . "\", " . $sub_row[0] . ");\n";
+                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $sub_row[1] . "\", " . $sub_row[0] . ");".PHP_EOL;
                     $index++;
                 }
             }
@@ -609,7 +609,7 @@ if ( !defined('udf_functions') )
         
         $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
 
-        if(!preg_match('/^\w+$/', $table_name))
+        if(!is_valid_udf_name($table_name))
         {
             header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
             exit;
@@ -831,10 +831,17 @@ if ( !defined('udf_functions') )
     {
         global $pdo;
 
+        if(!is_valid_udf_name($_REQUEST['id'])) {
+            header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
+            exit;
+        }
+        
+        $request = $_REQUEST['id'];
+        
         // If we are deleting a sub-select, we have two entries to delete
         // , a _primary, and a _secondary
         if(isset($_REQUEST['type']) && $_REQUEST['type'] == 4) {
-            $explode_row = explode('_', $_REQUEST['id']);
+            $explode_row = explode('_', $request);
            
             $subselect_table_name = $explode_row[2];
             foreach (array('primary', 'secondary') as $loop) {
@@ -853,17 +860,18 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
             }
         } else {
+
             $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name = :id ";
             $stmt = $pdo->prepare($query);
             $stmt->execute(array(
-                ':id' => $_REQUEST['id']
+                ':id' => $request
             ));
 
-            $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$_REQUEST['id']}";
+            $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN $request";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
 
-            $query = "DROP TABLE IF EXISTS {$_REQUEST['id']}";
+            $query = "DROP TABLE IF EXISTS $request";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
         }
@@ -889,7 +897,7 @@ if ( !defined('udf_functions') )
      * @param string $where
      * @param string $query_pre
      * @param string $query
-     * @param stting $equate
+     * @param string $equate
      * @param string $keyword
      * @return array
      */
@@ -916,5 +924,14 @@ if ( !defined('udf_functions') )
         }
 
         return array($query_pre,$query);
+    }
+
+    /**
+     * @param string $name
+     * @return int
+     */
+    function is_valid_udf_name($name) 
+    {
+        return preg_match('/^\w+$/', $name);
     }
 }

@@ -287,7 +287,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
     //      print_r($fileid_array);exit;
     if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
     {
-        echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . "\n";
+        echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . PHP_EOL;
         return -1;
     }
 
@@ -445,27 +445,27 @@ function sort_browser()
 						{
 							case 'author':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_author')."';\n");
+								echo("\tcategory_option_msg = '".msg('category_option_author')."';".PHP_EOL);
 								?>
 								break;
 							case 'department':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_department')."';\n");
+								echo("\tcategory_option_msg = '".msg('category_option_department')."';".PHP_EOL);
 								?>
 								break;
 							case 'category':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_category')."';\n");
+								echo("\tcategory_option_msg = '".msg('category_option_category')."';".PHP_EOL);
 								?>
 								break;
 							default :
 								<?php
-								echo("\tcategory_option_msg = '".msg('label_empty')."';\n");
+								echo("\tcategory_option_msg = '".msg('label_empty')."';".PHP_EOL);
 								?>
 								break;
 						}
 						<?php
-                        echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);\n");
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);".PHP_EOL);
 						?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_author';
@@ -485,11 +485,11 @@ function sort_browser()
                             exit();
                         order_array = new Array();
 						<?php
-                        echo("\torder_array[0] = new Array(\"".msg('outpage_ascending')."\", 0, \"asc\");\n");
-                        echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");\n");
-                        echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
+                        echo("\torder_array[0] = new Array(\"".msg('outpage_ascending')."\", 0, \"asc\");".PHP_EOL);
+                        echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");".PHP_EOL);
+                        echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;".PHP_EOL);
 
-                        echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
+                        echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');".PHP_EOL);
                     				?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
@@ -522,12 +522,12 @@ function sort_browser()
         $result = $stmt->fetchAll();
 
         $index = 0;
-        echo("author_array = new Array();\n");
+        echo("author_array = new Array();".PHP_EOL);
         foreach($result as $row) {
             $last_name = $row['last_name'];
             $first_name = $row['first_name'];
             $id = $row['id'];
-            echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);\n");
+            echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);".PHP_EOL);
             $index++;
         }
 
@@ -546,11 +546,11 @@ function sort_browser()
         $result = $stmt->fetchAll();
 
         $index = 0;
-        echo("department_array = new Array();\n");
+        echo("department_array = new Array();".PHP_EOL);
         foreach($result as $row) {
             $dept = $row['name'];
             $id = $row['id'];
-            echo("\tdepartment_array[$index] = new Array(\"$dept\", $id);\n");
+            echo("\tdepartment_array[$index] = new Array(\"$dept\", $id);".PHP_EOL);
             $index++;
         }
 
@@ -569,16 +569,16 @@ function sort_browser()
         $result = $stmt->fetchAll();
 
         $index = 0;
-        echo("category_array = new Array();\n");
+        echo("category_array = new Array();".PHP_EOL);
         foreach($result as $row) {
             $category = $row['name'];
             $id = $row['id'];
-            echo("\tcategory_array[$index] = new Array(\"$category\", $id);\n");
+            echo("\tcategory_array[$index] = new Array(\"$category\", $id);".PHP_EOL);
             $index++;
         }
         udf_functions_java_array();
         ///////////////////////////////////////////////////////////////////////
-        echo '</script>'."\n";
+        echo '</script>'.PHP_EOL;
         ?>
                         <form name="browser_sort">
 			<table name="browser" border="0" cellspacing="1">
@@ -655,7 +655,7 @@ function checkUserPermission($file_id, $permittable_right, $obj)
     $userperm_obj = new UserPermission($_SESSION['uid'], $pdo);
     if(!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id, $obj) < $permittable_right)
     {
-        echo msg('error').': '.msg('message_unable_to_find_file') . "\n";
+        echo msg('error').': '.msg('message_unable_to_find_file') . PHP_EOL;
         echo '       ' . msg('message_please_email') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">' . msg('area_admin') . '</a>';
         exit();
     }

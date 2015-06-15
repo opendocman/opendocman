@@ -114,8 +114,8 @@ class Email
     private function setHeaders()
     {
         if(isset($this->from)) {
-            $mail_headers = "From: {$this->getFrom()}" . "\r\n";
-            $mail_headers .="Content-Type: text/plain; charset=UTF-8" . "\r\n";
+            $mail_headers = "From: {$this->getFrom()}" . PHP_EOL;
+            $mail_headers .="Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
             $this->headers = $mail_headers;
         }
     }

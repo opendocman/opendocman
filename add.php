@@ -414,14 +414,14 @@ else
         
         // Build email for general notices
         $mail_subject = msg('addpage_new_file_added');
-        $mail_body2 = msg('email_a_new_file_has_been_added') . "\n\n";
-        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
-        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . "\n\n";
-        $mail_body2.=msg('date') . ': ' . $date . "\n\n";
-        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . "\n\n";
-        $mail_body2.=msg('email_thank_you') . ',' . "\n\n";
-        $mail_body2.=msg('email_automated_document_messenger') . "\n\n";
-        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+        $mail_body2 = msg('email_a_new_file_has_been_added') . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
+        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
         
         $email_obj = new Email();
         $email_obj->setFullName($full_name);
