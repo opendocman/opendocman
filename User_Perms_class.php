@@ -18,36 +18,35 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if ( !defined('User_Perms_class') )
-{
+if (!defined('User_Perms_class')) {
     define('User_Perms_class', 'true', false);
 
     class User_Perms extends databaseData
     {
-        var $fid;
-        var $id;
-        var $rights;
-        var $user_obj;
-        var $dept_perms_obj;
-        var $file_obj;
-        var $error;
-        var $chosen_mode;
-        var $connection;
+        public $fid;
+        public $id;
+        public $rights;
+        public $user_obj;
+        public $dept_perms_obj;
+        public $file_obj;
+        public $error;
+        public $chosen_mode;
+        public $connection;
 
-        var $NONE_RIGHT = 0;
-        var $VIEW_RIGHT = 1;
-        var $READ_RIGHT = 2;
-        var $WRITE_RIGHT = 3;
-        var $ADMIN_RIGHT = 4;
-        var $FORBIDDEN_RIGHT = -1;
-        var $USER_MODE = 0;
-        var $FILE_MODE = 1;
+        public $NONE_RIGHT = 0;
+        public $VIEW_RIGHT = 1;
+        public $READ_RIGHT = 2;
+        public $WRITE_RIGHT = 3;
+        public $ADMIN_RIGHT = 4;
+        public $FORBIDDEN_RIGHT = -1;
+        public $USER_MODE = 0;
+        public $FILE_MODE = 1;
 
         /**
          * @param int $id
          * @param PDO $connection
          */
-        function User_Perms($id, PDO $connection)
+        public function User_Perms($id, PDO $connection)
         {
             $this->id = $id;  // this can be fid or uid
             $this->user_obj = new User($id, $connection);
@@ -60,7 +59,7 @@ if ( !defined('User_Perms_class') )
          * @param bool $limit
          * @return array
          */
-        function getCurrentViewOnly($limit = true)
+        public function getCurrentViewOnly($limit = true)
         {
             return $this->loadData_UserPerm($this->VIEW_RIGHT, $limit);
         }
@@ -70,7 +69,7 @@ if ( !defined('User_Perms_class') )
          * @param bool $limit
          * @return array
          */
-        function getCurrentNoneRight($limit = true)
+        public function getCurrentNoneRight($limit = true)
         {
             return $this->loadData_UserPerm($this->NONE_RIGHT, $limit);
         }
@@ -80,7 +79,7 @@ if ( !defined('User_Perms_class') )
          * @param bool $limit
          * @return array
          */
-        function getCurrentReadRight($limit = true)
+        public function getCurrentReadRight($limit = true)
         {
             return $this->loadData_UserPerm($this->READ_RIGHT, $limit);
         }
@@ -90,7 +89,7 @@ if ( !defined('User_Perms_class') )
          * @param bool $limit
          * @return array
          */
-        function getCurrentWriteRight($limit = true)
+        public function getCurrentWriteRight($limit = true)
         {
             return $this->loadData_UserPerm($this->WRITE_RIGHT, $limit);
         }
@@ -100,7 +99,7 @@ if ( !defined('User_Perms_class') )
          * @param bool $limit
          * @return array
          */
-        function getCurrentAdminRight($limit = true)
+        public function getCurrentAdminRight($limit = true)
         {
             return $this->loadData_UserPerm($this->ADMIN_RIGHT, $limit);
         }
@@ -108,7 +107,7 @@ if ( !defined('User_Perms_class') )
         /**
          * @return int
          */
-        function getId()
+        public function getId()
         {
             return $this->id;
         }
@@ -122,12 +121,11 @@ if ( !defined('User_Perms_class') )
          * @param boolean $limit boolean Should we limit the query to max_query size?
          * @return array
          */
-        function loadData_UserPerm($right, $limit)
+        public function loadData_UserPerm($right, $limit)
         {
             $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
 
-            if($this->user_obj->isAdmin())
-            {
+            if ($this->user_obj->isAdmin()) {
                 $query = "SELECT d.id
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d
@@ -137,9 +135,7 @@ if ( !defined('User_Perms_class') )
                 $stmt =  $this->connection->prepare($query);
                 $stmt->execute();
                 $result = $stmt->fetchAll();
-            }
-            elseif ($this->user_obj->isReviewer())
-            {
+            } elseif ($this->user_obj->isReviewer()) {
                 // If they are a reviewer, let them see files in all departments they are a reviewer for
                 $query = "SELECT d.id
                         FROM
@@ -157,9 +153,7 @@ if ( !defined('User_Perms_class') )
                     ':id' => $this->id
                 ));
                 $result = $stmt->fetchAll();
-            }
-            else
-            {
+            } else {
                 //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
                 $query = "
                   SELECT
@@ -190,9 +184,8 @@ if ( !defined('User_Perms_class') )
             //$fileid_array[$index][1] ==> owner
             //$fileid_array[$index][2] ==> username
             $llen = $stmt->rowCount();
-            while($index < $llen )
-            {
-                list($fileid_array[$index] ) = $result[$index];
+            while ($index < $llen) {
+                list($fileid_array[$index]) = $result[$index];
                 $index++;
             }
             return $fileid_array;
@@ -203,17 +196,13 @@ if ( !defined('User_Perms_class') )
          * @param int $data_id
          * @return bool
          */
-        function canView($data_id)
+        public function canView($data_id)
         {
             $filedata = new FileData($data_id, $this->connection);
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
-                if($this->canUser($data_id, $this->VIEW_RIGHT) or $this->dept_perms_obj->canView($data_id)or $this->canAdmin($data_id))
-                {
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
+                if ($this->canUser($data_id, $this->VIEW_RIGHT) or $this->dept_perms_obj->canView($data_id)or $this->canAdmin($data_id)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
@@ -224,21 +213,16 @@ if ( !defined('User_Perms_class') )
          * @param $data_id
          * @return bool
          */
-        function canRead($data_id)
+        public function canRead($data_id)
         {
             $filedata = new FileData($data_id, $this->connection);
-            if(!$this->isForbidden($data_id) or !$filedata->i->isPublishable() )
-            {
-                if($this->canUser($data_id, $this->READ_RIGHT) or $this->dept_perms_obj->canRead($data_id) or $this->canAdmin($data_id) )
-                {
+            if (!$this->isForbidden($data_id) or !$filedata->i->isPublishable()) {
+                if ($this->canUser($data_id, $this->READ_RIGHT) or $this->dept_perms_obj->canRead($data_id) or $this->canAdmin($data_id)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
-
         }
 
         /**
@@ -246,21 +230,16 @@ if ( !defined('User_Perms_class') )
          * @param $data_id
          * @return bool
          */
-        function canWrite($data_id)
+        public function canWrite($data_id)
         {
             $filedata = new FileData($data_id, $this->connection);
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
-                if($this->canUser($data_id, $this->WRITE_RIGHT) or $this->dept_perms_obj->canWrite($data_id) or $this->canAdmin($data_id) )
-                {
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
+                if ($this->canUser($data_id, $this->WRITE_RIGHT) or $this->dept_perms_obj->canWrite($data_id) or $this->canAdmin($data_id)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
-
         }
 
         /**
@@ -268,17 +247,13 @@ if ( !defined('User_Perms_class') )
          * @param $data_id
          * @return bool
          */
-        function canAdmin($data_id)
+        public function canAdmin($data_id)
         {
             $filedata = new FileData($data_id, $this->connection);
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
-                if($this->canUser($data_id, $this->ADMIN_RIGHT) or $this->dept_perms_obj->canAdmin($data_id) or $filedata->isOwner($this->id))
-                {
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
+                if ($this->canUser($data_id, $this->ADMIN_RIGHT) or $this->dept_perms_obj->canAdmin($data_id) or $filedata->isOwner($this->id)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
@@ -289,7 +264,7 @@ if ( !defined('User_Perms_class') )
          * @param $data_id
          * @return bool
          */
-        function isForbidden($data_id)
+        public function isForbidden($data_id)
         {
             $query = "
               SELECT
@@ -305,15 +280,11 @@ if ( !defined('User_Perms_class') )
             ));
             $result = $stmt->fetch();
 
-            if($stmt->rowCount() == 1)
-            {
-                list ($right) = $result[0];
-                if($right == $this->FORBIDDEN_RIGHT)
-                {
+            if ($stmt->rowCount() == 1) {
+                list($right) = $result[0];
+                if ($right == $this->FORBIDDEN_RIGHT) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
             }
@@ -327,10 +298,9 @@ if ( !defined('User_Perms_class') )
          * @param integer $right The number of the "right" ID that is being checked
          * @return true They CAN perform the right
          */
-        function canUser($data_id, $right)
+        public function canUser($data_id, $right)
         {
-            if($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id))
-            {
+            if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id)) {
                 return true;
             }
             $query = "
@@ -353,8 +323,7 @@ if ( !defined('User_Perms_class') )
             ));
 
 
-            switch($stmt->rowCount() )
-            {
+            switch ($stmt->rowCount()) {
                 case 1: return true;
                     break;
                 case 0: return false;
@@ -369,10 +338,9 @@ if ( !defined('User_Perms_class') )
          * @param int $data_id
          * @return int|string
          */
-        function getPermission($data_id)
+        public function getPermission($data_id)
         {
-            if($GLOBALS['CONFIG']['root_id'] == $this->user_obj->getId())
-            {
+            if ($GLOBALS['CONFIG']['root_id'] == $this->user_obj->getId()) {
                 return 4;
             }
 
@@ -393,12 +361,9 @@ if ( !defined('User_Perms_class') )
             ));
             $result = $stmt->fetchColumn();
 
-            if($stmt->rowCount() == 1)
-            {
+            if ($stmt->rowCount() == 1) {
                 return $result;
-            }
-            elseif ($stmt->rowCount() == 0)
-            {
+            } elseif ($stmt->rowCount() == 0) {
                 return -999;
             }
         }
@@ -429,6 +394,5 @@ if ( !defined('User_Perms_class') )
 
             return $result;
         }
-
     }
 }

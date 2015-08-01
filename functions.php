@@ -31,9 +31,8 @@ $GLOBALS['smarty']->template_dir = dirname(__FILE__) . '/templates/' . $GLOBALS[
 $GLOBALS['smarty']->compile_dir = dirname(__FILE__) . '/templates_c/';
 
 /**** SET g_ vars from Global Config arr ***/
-foreach($GLOBALS['CONFIG'] as $key => $value)
-{
-    $GLOBALS['smarty']->assign('g_' . $key,$value);
+foreach ($GLOBALS['CONFIG'] as $key => $value) {
+    $GLOBALS['smarty']->assign('g_' . $key, $value);
 }
 
 include_once('classHeaders.php');
@@ -45,18 +44,14 @@ include_once('includes/language/' . $GLOBALS['CONFIG']['language'] . '.php');
 require_once("File_class.php");
 
 /* Set language  vars */
-foreach($GLOBALS['lang'] as $key=>$value)
-{
+foreach ($GLOBALS['lang'] as $key=>$value) {
     $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
 }
 
 // Check if dataDir is working
-if(!is_dir($GLOBALS['CONFIG']['dataDir']))
-{
+if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {
     echo $GLOBALS['lang']['message_datadir_problem_exists'] . ' <a href="settings.php?submit=update"> ' . $GLOBALS['lang']['label_settings'] . '</a><br />';
-}
-elseif(!is_writable($GLOBALS['CONFIG']['dataDir']))
-{
+} elseif (!is_writable($GLOBALS['CONFIG']['dataDir'])) {
     echo $GLOBALS['lang']['message_datadir_problem_writable'] . ' <a href="settings.php?submit=update"> ' . $GLOBALS['lang']['label_settings'] . '</a><br />';
 }
 
@@ -66,16 +61,13 @@ elseif(!is_writable($GLOBALS['CONFIG']['dataDir']))
 function fix_date($val)
 {
     //split it up into components
-    if( $val != 0 )
-    {
+    if ($val != 0) {
         $arr = explode(' ', $val);
         $timearr = explode(':', $arr[1]);
         $datearr = explode('-', $arr[0]);
         // create a timestamp with mktime(), format it with date()
         return date('d M Y (H:i)', mktime($timearr[0], $timearr[1], $timearr[2], $datearr[1], $datearr[2], $datearr[0]));
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
@@ -85,10 +77,8 @@ function space_to_underscore($string)
 {
     $string_len = strlen($string);
     $index = 0;
-    while( $index< $string_len )
-    {
-        if($string[$index] == ' ')
-        {
+    while ($index< $string_len) {
+        if ($string[$index] == ' ') {
             $string[$index]= '_';
         }
         $index++;
@@ -118,8 +108,7 @@ function draw_header($pageTitle, $lastmessage='')
     $uid = (isset($_SESSION['uid']) ? $_SESSION['uid'] : '');
     
     // Is the uid set?
-    if ($uid != NULL)
-    {
+    if ($uid != null) {
         $current_user_obj = new User($uid, $pdo);
         $GLOBALS['smarty']->assign('userName', $current_user_obj->getName());
         $GLOBALS['smarty']->assign('can_add', $current_user_obj->can_add);
@@ -127,15 +116,13 @@ function draw_header($pageTitle, $lastmessage='')
     }
     
     // Are they an Admin?
-    if ($uid != NULL && $current_user_obj->isAdmin())
-    {
+    if ($uid != null && $current_user_obj->isAdmin()) {
         $GLOBALS['smarty']->assign('isadmin', 'yes');
     }
     
-    if(!isset($_REQUEST['state'])) 
-    {
+    if (!isset($_REQUEST['state'])) {
         $_REQUEST['state']=1;
-    }      
+    }
     
     $lastmessage = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : $lastmessage);
 
@@ -151,11 +138,9 @@ function draw_header($pageTitle, $lastmessage='')
     $GLOBALS['smarty']->assign('lastmessage', htmlspecialchars($lastmessage));
     display_smarty_template('header.tpl');
     
-    if (is_dir('install'))
-    {
+    if (is_dir('install')) {
         echo '<span style="color: red;">' . msg('install_folder') . '</span>';
     }
-
 }
 
 function draw_error($message)
@@ -187,9 +172,8 @@ function email_all($mail_subject, $mail_body, $mail_header)
     $stmt->execute();
     $result = $stmt->fetchColumn();
 
-    foreach($result as $row) {
-        if ($GLOBALS['CONFIG']['demo'] == 'False')
-        {
+    foreach ($result as $row) {
+        if ($GLOBALS['CONFIG']['demo'] == 'False') {
             mail($row['Email'], $mail_subject, $mail_body, $mail_header);
         }
     }
@@ -219,7 +203,7 @@ function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
     ));
     $result = $stmt->fetchAll();
 
-    foreach($result as $row) {
+    foreach ($result as $row) {
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
             mail($row['Email'], $mail_subject, $mail_body, $mail_header);
         }
@@ -234,10 +218,8 @@ function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
  */
 function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_header)
 {
-    for($i = 0; $i< sizeof($user_OBJ_array); $i++)
-    {
-        if ($GLOBALS['CONFIG']['demo'] == 'False')
-        {
+    for ($i = 0; $i< sizeof($user_OBJ_array); $i++) {
+        if ($GLOBALS['CONFIG']['demo'] == 'False') {
             mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
         }
     }
@@ -253,21 +235,20 @@ function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
 {
     global $pdo;
 
-    for($i = 0; $i<sizeof($user_ID_array); $i++)
-    {
-        if(($user_ID_array[$i] > 0)) {
+    for ($i = 0; $i<sizeof($user_ID_array); $i++) {
+        if (($user_ID_array[$i] > 0)) {
             $OBJ_array[$i] = new User($user_ID_array[$i], $pdo);
         }
-    }   
+    }
  
-    if(count($OBJ_array) > 0) {
+    if (count($OBJ_array) > 0) {
         email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
     }
 }
 
 function getmicrotime()
 {
-    list($usec, $sec) = explode(" ",microtime());
+    list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
 }
 
@@ -285,34 +266,27 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
     global $pdo;
 
     //      print_r($fileid_array);exit;
-    if(sizeof($fileid_array)==0 || !isset($fileid_array[0]))
-    {
+    if (sizeof($fileid_array)==0 || !isset($fileid_array[0])) {
         echo'<img src="images/exclamation.gif">' . msg('message_no_files_found') . "\n";
         return -1;
     }
 
-    foreach($fileid_array as $fileid)
-    {
+    foreach ($fileid_array as $fileid) {
         $file_obj = new FileData($fileid, $pdo);
-        $userAccessLevel = $userperms_obj->getAuthority($fileid,$file_obj);
+        $userAccessLevel = $userperms_obj->getAuthority($fileid, $file_obj);
         $description = $file_obj->getDescription();
         
-        if ($file_obj->getStatus() == 0 and $userAccessLevel >= $userperms_obj->VIEW_RIGHT)
-        {
+        if ($file_obj->getStatus() == 0 and $userAccessLevel >= $userperms_obj->VIEW_RIGHT) {
             $lock = false;
-        }
-        else
-        {
+        } else {
             $lock = true;
         }
-        if ($description == '')
-        {
+        if ($description == '') {
             $description = msg('message_no_description_available');
         }
 
         $created_date = fix_date($file_obj->getCreatedDate());
-        if ($file_obj->getModifiedDate())
-        {
+        if ($file_obj->getModifiedDate()) {
             $modified_date = fix_date($file_obj->getModifiedDate());
         } else {
             $modified_date = $created_date;
@@ -326,14 +300,11 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         //Get the file size in bytes.
         $filesize = display_filesize($dataDir . $fileid . '.dat');
 
-        if ($userAccessLevel >= $userperms_obj->READ_RIGHT)
-        {
-            $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
+        if ($userAccessLevel >= $userperms_obj->READ_RIGHT) {
+            $suffix = strtolower((substr($realname, ((strrpos($realname, ".")+1)))));
             $mimetype = File::mime_by_ext($suffix);
             $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid).'&mimetype='.urlencode("$mimetype");
-        }
-        else
-        {
+        } else {
             $view_link = 'none';
         }
 
@@ -347,23 +318,19 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         //$rights[max][0] = admin, $rights[max-1][0]=write, ..., $right[min][0]=view
         //if $userright matches with $rights[max][0], then this user has all the rights of $rights[max][0]
         //and everything below it.
-        for($i = sizeof($rights)-1; $i>=0; $i--)
-        {
-            if($userAccessLevel==$rights[$i][0])
-            {
+        for ($i = sizeof($rights)-1; $i>=0; $i--) {
+            if ($userAccessLevel==$rights[$i][0]) {
                 $index_found = $i;
                 $i = 0;
             }
         }
 
         //Found the user right, now bold every below it.  For those that matches, make them different.
-        for($i = $index_found; $i>=0; $i--)
-        {
+        for ($i = $index_found; $i>=0; $i--) {
             $rights[$i][1]='<b>'. $rights[$i][1] . '</b>';
         }
         //For everything above it, blank out
-        for($i = $index_found+1; $i<sizeof($rights); $i++)
-        {
+        for ($i = $index_found+1; $i<sizeof($rights); $i++) {
             $rights[$i][1] = '-';
         }
         $file_list_arr[] = array(
@@ -386,7 +353,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
     }
     
     $limit_reached = false;
-    if(count($file_list_arr) >= $GLOBALS['CONFIG']['max_query']) {
+    if (count($file_list_arr) >= $GLOBALS['CONFIG']['max_query']) {
         $limit_reached = true;
     }
     
@@ -433,7 +400,7 @@ function sort_browser()
                 break;
         <?php
         udf_functions_java_menu();
-        ?>
+    ?>
                         default :
                             order_array = document.forms['browser_sort'].elements['category_item_order'].options;
                             info_Array = new Array();
@@ -445,28 +412,28 @@ function sort_browser()
 						{
 							case 'author':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_author')."';\n");
-								?>
+                                echo("\tcategory_option_msg = '".msg('category_option_author')."';\n");
+    ?>
 								break;
 							case 'department':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_department')."';\n");
-								?>
+                                echo("\tcategory_option_msg = '".msg('category_option_department')."';\n");
+    ?>
 								break;
 							case 'category':
 								<?php
-								echo("\tcategory_option_msg = '".msg('category_option_category')."';\n");
-								?>
+                                echo("\tcategory_option_msg = '".msg('category_option_category')."';\n");
+    ?>
 								break;
 							default :
 								<?php
-								echo("\tcategory_option_msg = '".msg('label_empty')."';\n");
-								?>
+                                echo("\tcategory_option_msg = '".msg('label_empty')."';\n");
+    ?>
 								break;
 						}
 						<?php
                         echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);\n");
-						?>
+    ?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_author';
 
@@ -486,11 +453,11 @@ function sort_browser()
                         order_array = new Array();
 						<?php
                         echo("\torder_array[0] = new Array(\"".msg('outpage_ascending')."\", 0, \"asc\");\n");
-                        echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");\n");
-                        echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
+    echo("\torder_array[1] = new Array(\"".msg('outpage_descending')."\", 0, \"desc\");\n");
+    echo("\toptions_array = document.forms['browser_sort'].elements['category_item_order'].options;\n");
 
-                        echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
-                    				?>
+    echo("\toptions_array[0] = new Option('".msg('outpage_choose_an_order')."');\n");
+    ?>
                         options_array[0].id= 0;
                         options_array[0].value = 'choose_an_order';
                         for(i=0; i< order_array.length; i++)
@@ -517,19 +484,19 @@ function sort_browser()
           ORDER BY
             last_name ASC
         ";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
 
-        $index = 0;
-        echo("author_array = new Array();\n");
-        foreach($result as $row) {
-            $last_name = $row['last_name'];
-            $first_name = $row['first_name'];
-            $id = $row['id'];
-            echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);\n");
-            $index++;
-        }
+    $index = 0;
+    echo("author_array = new Array();\n");
+    foreach ($result as $row) {
+        $last_name = $row['last_name'];
+        $first_name = $row['first_name'];
+        $id = $row['id'];
+        echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);\n");
+        $index++;
+    }
 
         ///////////////////////////////FOR DEPARTMENT//////////////////////////
         $query = "
@@ -541,18 +508,18 @@ function sort_browser()
           ORDER BY
             name ASC
         ";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
 
-        $index = 0;
-        echo("department_array = new Array();\n");
-        foreach($result as $row) {
-            $dept = $row['name'];
-            $id = $row['id'];
-            echo("\tdepartment_array[$index] = new Array(\"$dept\", $id);\n");
-            $index++;
-        }
+    $index = 0;
+    echo("department_array = new Array();\n");
+    foreach ($result as $row) {
+        $dept = $row['name'];
+        $id = $row['id'];
+        echo("\tdepartment_array[$index] = new Array(\"$dept\", $id);\n");
+        $index++;
+    }
 
         ///////////////////////////////FOR FILE CATEGORY////////////////////////////////////////
         $query = "
@@ -564,66 +531,71 @@ function sort_browser()
           ORDER BY
             name ASC
         ";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
 
-        $index = 0;
-        echo("category_array = new Array();\n");
-        foreach($result as $row) {
-            $category = $row['name'];
-            $id = $row['id'];
-            echo("\tcategory_array[$index] = new Array(\"$category\", $id);\n");
-            $index++;
-        }
-        udf_functions_java_array();
+    $index = 0;
+    echo("category_array = new Array();\n");
+    foreach ($result as $row) {
+        $category = $row['name'];
+        $id = $row['id'];
+        echo("\tcategory_array[$index] = new Array(\"$category\", $id);\n");
+        $index++;
+    }
+    udf_functions_java_array();
         ///////////////////////////////////////////////////////////////////////
         echo '</script>'."\n";
-        ?>
+    ?>
                         <form name="browser_sort">
 			<table name="browser" border="0" cellspacing="1">
-			<tr><td><?php echo msg('label_browse_by');?></td>
+			<tr><td><?php echo msg('label_browse_by');
+    ?></td>
 				<td NOWRAP ROWSPAN="0">
 					<select name='category' onChange='loadItem(this)' width='0' size='1'>
-                                                        <option id='0' selected><?php echo msg('label_select_one');?></option>
-                                                        <option id='1' value='author'><?php echo msg('author');?></option>
-                                                        <option id='2' value='department'><?php echo msg('label_department');?></option>
-                                                        <option id='3' value='category'><?php echo msg('label_file_category');?></option>
+                                                        <option id='0' selected><?php echo msg('label_select_one');
+    ?></option>
+                                                        <option id='1' value='author'><?php echo msg('author');
+    ?></option>
+                                                        <option id='2' value='department'><?php echo msg('label_department');
+    ?></option>
+                                                        <option id='3' value='category'><?php echo msg('label_file_category');
+    ?></option>
         <?php
         udf_functions_java_options(4);
-        ?>
+    ?>
                         </select>
                         </td>
 				<td>
 					<select name='category_item' onChange='loadOrder(this)'>
-                                                        <option id='0' selected><?php echo msg('label_empty');?></option>
+                                                        <option id='0' selected><?php echo msg('label_empty');
+    ?></option>
                                                         </select>
                                                         </td>
 				<td>
 					<select name='category_item_order' onChange='load(this)'>
-                                                        <option id='0' selected><?php echo msg('label_empty');?></option>
+                                                        <option id='0' selected><?php echo msg('label_empty');
+    ?></option>
                                                         </select>
                                                         </td>
                                                         </tr>
                                                         </table>
                                                         </form>
     <?php
+
 }
 
 /////////////////////////////////////////////////Debuging function/////////////////////////////////
 function display_array($array)
 {
-    for($i=0; $i<sizeof($array); $i++)
-    {
+    for ($i=0; $i<sizeof($array); $i++) {
         echo($i.":".$array[$i]."<br>");
     }
 }
 function display_array2D($array)
 {
-    for($i=0; $i<sizeof($array); $i++)
-    {
-        for($j=0; $j<sizeof($array[$i]); $j++)
-        {
+    for ($i=0; $i<sizeof($array); $i++) {
+        for ($j=0; $j<sizeof($array[$i]); $j++) {
             echo($i.":"."$j".":".$array[$i][$j]."<br>");
         }
     }
@@ -634,8 +606,7 @@ function makeRandomPassword()
     $salt = 'abchefghjkmnpqrstuvw3456789';
     srand((double)microtime()*1000000);
     $i = 0;
-    while ($i <= 7)
-    {
+    while ($i <= 7) {
         $num = rand() % 33;
         $tmp = substr($salt, $num, 1);
         $pass = $pass . $tmp;
@@ -653,8 +624,7 @@ function checkUserPermission($file_id, $permittable_right, $obj)
     global $pdo;
 
     $userperm_obj = new UserPermission($_SESSION['uid'], $pdo);
-    if(!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id, $obj) < $permittable_right)
-    {
+    if (!$userperm_obj->user_obj->isAdmin() && $userperm_obj->getAuthority($file_id, $obj) < $permittable_right) {
         echo msg('error').': '.msg('message_unable_to_find_file') . "\n";
         echo '       ' . msg('message_please_email') . ' <a href="mailto:' . $GLOBALS['CONFIG']['site_mail'] . '">' . msg('area_admin') . '</a>';
         exit();
@@ -663,13 +633,13 @@ function checkUserPermission($file_id, $permittable_right, $obj)
 function fmove($source_file, $destination_file)
 {
     //read and close
-    $fhandler = fopen ($source_file, "r");
-    $fcontent = fread($fhandler, filesize ($source_file));
-    fclose ($fhandler);
+    $fhandler = fopen($source_file, "r");
+    $fcontent = fread($fhandler, filesize($source_file));
+    fclose($fhandler);
     //write and close
-    $fhandler = fopen ($destination_file, "w");
+    $fhandler = fopen($destination_file, "w");
     fwrite($fhandler, $fcontent);
-    fclose ($fhandler);
+    fclose($fhandler);
     //delete source file
     unlink($source_file);
 }
@@ -677,8 +647,7 @@ function fmove($source_file, $destination_file)
 function display_filesize($file)
 {
     // Does the file exist?
-    if(is_file($file))
-    {
+    if (is_file($file)) {
 
         //Setup some common file size measurements.
         $kb=1024;
@@ -691,38 +660,28 @@ function display_filesize($file)
 
         //Format file size
 
-        if($size < $kb)
-        {
+        if ($size < $kb) {
             return $size." B";
+        } elseif ($size < $mb) {
+            return round($size/$kb, 2)." KB";
+        } elseif ($size < $gb) {
+            return round($size/$mb, 2)." MB";
+        } elseif ($size < $tb) {
+            return round($size/$gb, 2)." GB";
+        } else {
+            return round($size/$tb, 2)." TB";
         }
-        elseif($size < $mb)
-        {
-            return round($size/$kb,2)." KB";
-        }
-        elseif($size < $gb)
-        {
-            return round($size/$mb,2)." MB";
-        }
-        elseif($size < $tb)
-        {
-            return round($size/$gb,2)." GB";
-        }
-        else
-        {
-            return round($size/$tb,2)." TB";
-        }
-    }
-    else
-    {
+    } else {
         return "X";
     }
 }
 function valid_username($username)
 {
-    if(preg_match('/^\w+$/',$username))
+    if (preg_match('/^\w+$/', $username)) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 
@@ -744,17 +703,12 @@ function cleanInput($input)
 
 function sanitizeme($input)
 {
-    if (is_array($input))
-    {
-        foreach($input as $var=>$val)
-        {
+    if (is_array($input)) {
+        foreach ($input as $var=>$val) {
             $output[$var] = sanitizeme($val);
         }
-    }
-    else
-    {
-        if (get_magic_quotes_gpc())
-        {
+    } else {
+        if (get_magic_quotes_gpc()) {
             $input = stripslashes($input);
         }
         //echo "Raw Input:" . $input . "<br />";
@@ -762,14 +716,10 @@ function sanitizeme($input)
         //echo "Clean Input:" . $input . "<br />";
         $output = $input;
         //echo "mysql_escape output" . $output . "<br />";
-
     }
-    if(isset($output) && $output != '')
-    {
+    if (isset($output) && $output != '') {
         return $output;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -781,15 +731,12 @@ function sanitizeme($input)
  */
 function msg($s)
 {
-        if (isset($GLOBALS['lang'][$s]))
-        {
-            return $GLOBALS['lang'][$s];
-        }
-        else
-        {
-            return $s;
-        }
+    if (isset($GLOBALS['lang'][$s])) {
+        return $GLOBALS['lang'][$s];
+    } else {
+        return $s;
     }
+}
 
 /*
  * This function will check for the existence of a template file
@@ -800,12 +747,9 @@ function msg($s)
 function display_smarty_template($template_file)
 {
     /* @var $template_file string */
-    if(file_exists(ABSPATH . '/templates/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file))
-    {
+    if (file_exists(ABSPATH . '/templates/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
         $GLOBALS['smarty']->display($template_file);
-    }
-    else
-    {
+    } else {
         $GLOBALS['smarty']->display(ABSPATH . '/templates/common/' . $template_file);
     }
 }
@@ -868,7 +812,7 @@ function xss_clean($str)
     //   * Made some quantifiers possessive
     // * Handle arrays recursively
 
-    if (is_array($str) OR is_object($str)) {
+    if (is_array($str) or is_object($str)) {
         foreach ($str as $k => $s) {
             $str[$k] = xss_clean($s);
         }
@@ -916,12 +860,12 @@ function xss_clean($str)
  */
 function redirect_visitor($url='')
 {
-    if($url=='') {
+    if ($url=='') {
         header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
         exit;
     } else {
         // Lets make sure its not an outside URL
-        if(!preg_match('#^(http|https|ftp)://#', $url)) {
+        if (!preg_match('#^(http|https|ftp)://#', $url)) {
             header('Location:' . $url);
             exit;
         } else {
@@ -929,5 +873,4 @@ function redirect_visitor($url='')
             exit;
         }
     }
-
 }

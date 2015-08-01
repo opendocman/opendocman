@@ -19,29 +19,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('User_class') )
-{
+if (!defined('User_class')) {
     define('User_class', 'true', false);
 
     class User extends databaseData
     {
-        var $root_id;
-        var $id;
-        var $username;
-        var $first_name;
-        var $last_name;
-        var $email;
-        var $phone;
-        var $department;
-        var $pw_reset_code;
-        var $can_add;
-        var $can_checkin;
+        public $root_id;
+        public $id;
+        public $username;
+        public $first_name;
+        public $last_name;
+        public $email;
+        public $phone;
+        public $department;
+        public $pw_reset_code;
+        public $can_add;
+        public $can_checkin;
 
         /**
          * @param int $id
          * @param PDO $connection
          */
-        function User($id, PDO $connection)
+        public function User($id, PDO $connection)
         {
             $this->root_id = $GLOBALS['CONFIG']['root_id'];
             $this->field_name = 'username';
@@ -73,8 +72,8 @@ if( !defined('User_class') )
             $result = $stmt->fetch();
 
             list(
-                    $this->id, 
-                    $this->username, 
+                    $this->id,
+                    $this->username,
                     $this->department,
                     $this->phone,
                     $this->email,
@@ -90,7 +89,7 @@ if( !defined('User_class') )
          * Return department name for current user
          * @return string
          */
-        function getDeptName()
+        public function getDeptName()
         {
             $query = "
               SELECT
@@ -115,10 +114,9 @@ if( !defined('User_class') )
          * Return department ID for current user
          * @return string
          */
-        function getDeptId()
+        public function getDeptId()
         {
             return $this->department;
-
         }
 
         /**
@@ -126,7 +124,7 @@ if( !defined('User_class') )
          * @return array
          * @param object $publishable
          */
-        function getPublishedData($publishable)
+        public function getPublishedData($publishable)
         {
             $data_published = array();
             $index = 0;
@@ -149,7 +147,7 @@ if( !defined('User_class') )
             ));
             $result = $stmt->fetchAll();
 
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $data_published[$index] = $row;
                 $index++;
             }
@@ -160,10 +158,9 @@ if( !defined('User_class') )
          * Check whether user from object has Admin rights
          * @return Boolean
          */
-        function isAdmin()
+        public function isAdmin()
         {
-            if ($this->isRoot())
-            {
+            if ($this->isRoot()) {
                 return true;
             }
             $query = "
@@ -180,8 +177,7 @@ if( !defined('User_class') )
             ));
             $result = $stmt->fetchColumn();
 
-            if($stmt->rowCount() !=1 )
-            {
+            if ($stmt->rowCount() !=1) {
                 return false;
             }
 
@@ -192,7 +188,7 @@ if( !defined('User_class') )
          * Check whether user from object is root
          * @return bool
          */
-        function isRoot()
+        public function isRoot()
         {
             return ($this->root_id == $this->getId());
         }
@@ -200,12 +196,12 @@ if( !defined('User_class') )
         /**
         * @return boolean
         */
-        function canAdd()
+        public function canAdd()
         {
-            if($this->isAdmin()) {
+            if ($this->isAdmin()) {
                 return true;
             }
-            if($this->can_add) {
+            if ($this->can_add) {
                 return true;
             }
             return false;
@@ -214,12 +210,12 @@ if( !defined('User_class') )
         /**
         * @return boolean
         */
-        function canCheckIn()
+        public function canCheckIn()
         {
-            if($this->isAdmin()) {
+            if ($this->isAdmin()) {
                 return true;
             }
-            if($this->can_checkin) {
+            if ($this->can_checkin) {
                 return true;
             }
             return false;
@@ -228,7 +224,7 @@ if( !defined('User_class') )
         /**
          * @return string
          */
-        function getPassword()
+        public function getPassword()
         {
             $query = "
               SELECT
@@ -242,21 +238,19 @@ if( !defined('User_class') )
             $stmt->execute(array(':id' => $this->id));
             $result = $stmt->fetchColumn();
 
-            if($stmt->rowCount() !=1 )
-            {
+            if ($stmt->rowCount() !=1) {
                 header('Location:' . $GLOBALS['CONFIG']['base_url'] . 'error.php?ec=14');
                 exit;
             }
 
             return $result;
-
         }
 
         /**
          * @param string $non_encrypted_password
          * @return bool
          */
-        function changePassword($non_encrypted_password)
+        public function changePassword($non_encrypted_password)
         {
             $query = "
               UPDATE
@@ -278,7 +272,7 @@ if( !defined('User_class') )
          * @param string $non_encrypted_password
          * @return bool
          */
-        function validatePassword($non_encrypted_password)
+        public function validatePassword($non_encrypted_password)
         {
             $query = "
               SELECT
@@ -295,7 +289,7 @@ if( !defined('User_class') )
                 ':non_encrypted_password' => $non_encrypted_password,
                 ':id' => $this->id
             ));
-            if($stmt->rowCount() == 1) {
+            if ($stmt->rowCount() == 1) {
                 return true;
             } else {
                 // Check the old password() style user password
@@ -314,7 +308,7 @@ if( !defined('User_class') )
                     ':non_encrypted_password' => $non_encrypted_password,
                     ':id' => $this->id
                 ));
-                if($stmt->rowCount() == 1) {
+                if ($stmt->rowCount() == 1) {
                     return true;
                 }
             }
@@ -325,7 +319,7 @@ if( !defined('User_class') )
          * @param string $new_name
          * @return bool
          */
-        function changeName($new_name)
+        public function changeName($new_name)
         {
             $query = "
               UPDATE
@@ -347,10 +341,10 @@ if( !defined('User_class') )
         *   Determine if the current user is a reviewer or not
         *   @return boolean
         */
-        function isReviewer()
+        public function isReviewer()
         {
             // If they are an admin, they can review
-            if($this->isAdmin()) {
+            if ($this->isAdmin()) {
                 return true;
             }
             
@@ -367,7 +361,7 @@ if( !defined('User_class') )
             $stmt->execute(array(
                 ':id' => $this->id
             ));
-            if($stmt->rowCount() > 0) {
+            if ($stmt->rowCount() > 0) {
                 return true;
             } else {
                 return false;
@@ -379,9 +373,9 @@ if( !defined('User_class') )
         * @param int $file_id
         * @return boolean
         */
-        function isReviewerForFile($file_id)
+        public function isReviewerForFile($file_id)
         {
-             $query = "SELECT
+            $query = "SELECT
                             d.id
                       FROM
                             {$GLOBALS['CONFIG']['db_prefix']}data as d,
@@ -400,8 +394,7 @@ if( !defined('User_class') )
             ));
 
             $num_rows = $stmt->rowCount();
-            if($num_rows < 1)
-            {
+            if ($num_rows < 1) {
                 return false;
             }
             return true;
@@ -411,10 +404,9 @@ if( !defined('User_class') )
          * this functions assume that you are an admin thus allowing you to review all departments
          * @return array
          */
-        function getAllRevieweeIds() 
+        public function getAllRevieweeIds()
         {
-            if($this->isAdmin())
-            {
+            if ($this->isAdmin()) {
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE publishable = 0";
                 $stmt = $this->connection->prepare($query);
                 $stmt->execute(array());
@@ -422,7 +414,7 @@ if( !defined('User_class') )
 
                 $file_data = array();
                 $index = 0;
-                foreach($result as $row) {
+                foreach ($result as $row) {
                     $file_data[$index] = $row[0];
                     $index++;
                 }
@@ -435,10 +427,9 @@ if( !defined('User_class') )
          * getRevieweeIds - Return an array of files that need reviewing under this person
          * @return array
          */
-        function getRevieweeIds() 
+        public function getRevieweeIds()
         {
-            if($this->isReviewer())
-            {
+            if ($this->isReviewer()) {
                 // Which departments can this user review?
                 $query = "SELECT dept_id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_REVIEWER WHERE user_id = :id";
                 $stmt = $this->connection->prepare($query);
@@ -451,14 +442,11 @@ if( !defined('User_class') )
                 $index = 0;
                 // Build the query
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE (";
-                foreach($result as $row) {
+                foreach ($result as $row) {
                     $dept = $row['dept_id'];
-                    if($index != $num_depts -1)
-                    {
+                    if ($index != $num_depts -1) {
                         $query = $query . " department = :dept OR ";
-                    }
-                    else
-                    {
+                    } else {
                         $query = $query . " department = :dept )";
                     }
                     $index++;
@@ -472,8 +460,7 @@ if( !defined('User_class') )
                 $file_data = array();
                 $num_files = $stmt->rowCount();
 
-                for($index = 0; $index< $num_files; $index++)
-                {
+                for ($index = 0; $index< $num_files; $index++) {
                     $fid = $result[$index]['id'];
                     $file_data[$index] = $fid;
                 }
@@ -484,7 +471,7 @@ if( !defined('User_class') )
         /**
          * @return array
          */
-        function getAllRejectedFileIds()
+        public function getAllRejectedFileIds()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA WHERE publishable = '-1'";
             $stmt = $this->connection->prepare($query);
@@ -494,8 +481,7 @@ if( !defined('User_class') )
             $file_data = array();
             $num_files = $stmt->rowCount();
 
-            for($index = 0; $index< $num_files; $index++)
-            {
+            for ($index = 0; $index< $num_files; $index++) {
                 list($fid) = $result[$index];
                 $file_data[$index] = $fid;
             }
@@ -505,7 +491,7 @@ if( !defined('User_class') )
         /**
          * @return array
          */
-        function getRejectedFileIds()
+        public function getRejectedFileIds()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable = '-1' and owner = :id";
             $stmt = $this->connection->prepare($query);
@@ -517,8 +503,7 @@ if( !defined('User_class') )
             $file_data = array();
             $num_files = $stmt->rowCount();
 
-            for($index = 0; $index< $num_files; $index++)
-            {
+            for ($index = 0; $index< $num_files; $index++) {
                 list($fid) = $result[$index];
                 $file_data[$index] = $fid;
             }
@@ -528,7 +513,7 @@ if( !defined('User_class') )
         /**
          * @return array
          */
-        function getExpiredFileIds()
+        public function getExpiredFileIds()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status = -1 AND owner = :id";
             $stmt = $this->connection->prepare($query);
@@ -540,8 +525,7 @@ if( !defined('User_class') )
             $len = $stmt->rowCount();
             $file_data = array();
 
-            for($index = 0; $index< $len; $index++)
-            {
+            for ($index = 0; $index< $len; $index++) {
                 list($fid) = $result[$index];
                 $file_data[$index] = $fid;
             }
@@ -551,7 +535,7 @@ if( !defined('User_class') )
         /**
          * @return int
          */
-        function getNumExpiredFiles()
+        public function getNumExpiredFiles()
         {
             $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status =- 1 AND owner = :id";
             $stmt = $this->connection->prepare($query);
@@ -564,7 +548,7 @@ if( !defined('User_class') )
         /**
          * @return mixed
          */
-        function getEmailAddress()
+        public function getEmailAddress()
         {
             return $this->email;
         }
@@ -572,7 +556,7 @@ if( !defined('User_class') )
         /**
          * @return mixed
          */
-        function getPhoneNumber()
+        public function getPhoneNumber()
         {
             return $this->phone;
         }
@@ -581,7 +565,7 @@ if( !defined('User_class') )
          * /Return full name array where array[0]=firstname and array[1]=lastname
          * @return mixed
          */
-        function getFullName()
+        public function getFullName()
         {
             $full_name[0] = $this->first_name;
             $full_name[1] = $this->last_name;
@@ -593,7 +577,7 @@ if( !defined('User_class') )
          * Return username of current user
          * @return mixed
          */
-        function getUserName()
+        public function getUserName()
         {
             return $this->username;
         }
@@ -602,10 +586,9 @@ if( !defined('User_class') )
          * Return list of checked out files to root
          * @return array
          */
-        function getCheckedOutFiles()
+        public function getCheckedOutFiles()
         {
-            if ($this->isRoot())
-            {
+            if ($this->isRoot()) {
                 $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE status > 0";
                 $stmt = $this->connection->prepare($query);
                 $stmt->execute();
@@ -613,8 +596,7 @@ if( !defined('User_class') )
 
                 $len = $stmt->rowCount();
                 $file_data = array();
-                for ($index = 0; $index < $len; $index++)
-                {
+                for ($index = 0; $index < $len; $index++) {
                     list($fid) = $result[$index];
                     $file_data[$index] = $fid;
                 }
@@ -633,11 +615,10 @@ if( !defined('User_class') )
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll();
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $userListArray[] = $row;
             }
             return $userListArray;
         }
-
     }
 }

@@ -48,19 +48,19 @@ include('includes/FirePHPCore/fb.php');
 /*
  * Load the Settings class
  */
-require_once ( 'Settings_class.php');
+require_once('Settings_class.php');
 $settings = new Settings($pdo);
 $settings->load();
 
 /*
  * Common functions
  */
-require_once( 'functions.php' );
+require_once('functions.php');
 
 /*
  * Load the allowed file types list
  */
-require_once ( 'FileTypes_class.php' );
+require_once('FileTypes_class.php');
 $filetypes = new FileTypes_class($pdo);
 $filetypes->load();
 

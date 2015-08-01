@@ -18,8 +18,6 @@
 
 class crumb
 {
-
-
     /**
      * @return void
      * @param level int
@@ -28,32 +26,26 @@ class crumb
      * @param post boolean
      * @desc Add a bread crumb to the session array. If post is true add the $_POST args to the URL.
      */
-    function addCrumb($level, $title, $url, $post = false)
+    public function addCrumb($level, $title, $url, $post = false)
     {
-
         $tstr = "";
 
-        if (isset($_SESSION['crumbs'][$level]))
-        {
+        if (isset($_SESSION['crumbs'][$level])) {
             unset($_SESSION['crumbs'][$level]);
         }
 
-        if($post)
-        {
-            if(strpos($url,"?"))
-            {
+        if ($post) {
+            if (strpos($url, "?")) {
                 $tstr = "&";
-            }else
-            {
+            } else {
                 $tstr = "?";
             }
 
-            foreach($_POST as $key => $value)
-            {
+            foreach ($_POST as $key => $value) {
                 $tstr.=$key."=".urlencode($value)."&";
             }
             // pop off the last &
-            $tstr = rtrim ($tstr, "&");
+            $tstr = rtrim($tstr, "&");
         }
 
 
@@ -67,10 +59,9 @@ class crumb
      * @param level int
      * @desc Deletes a bread crumb.
      */
-    function delCrumb($level)
+    public function delCrumb($level)
     {
-        if (isset($_SESSION['crumbs'][$level]))
-        {
+        if (isset($_SESSION['crumbs'][$level])) {
             unset($_SESSION['crumbs'][$level]);
         }
     } //end delCrumb()
@@ -81,26 +72,20 @@ class crumb
      * @param cur_level int
      * @desc Print out the current crumb trail from $cur_level on down.
      */
-    function printTrail($cur_level)
+    public function printTrail($cur_level)
     {
         $trail = "<span class=\"crumb\">";
-        for ($i=1; $i != $cur_level+1; $i++)
-        {
-
-            if (isset($_SESSION['crumbs'][$i]))
-            {
-                if ($i != $cur_level)
-                {
+        for ($i=1; $i != $cur_level+1; $i++) {
+            if (isset($_SESSION['crumbs'][$i])) {
+                if ($i != $cur_level) {
                     $trail .= "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
                     $trail .= $_SESSION['crumbs'][$i]['title'];
                     $trail .= "</a>";
-                }else
-                {
+                } else {
                     $trail .= '<span class="statusbar">' . $_SESSION['crumbs'][$i]['title'] . '</span>';
                     $trail .= "</span>";
                 }
-                if ($i != $cur_level)
-                {
+                if ($i != $cur_level) {
                     $trail .= "<FONT class=\"statusbar\">&nbsp;&gt;&nbsp;</FONT>";
                 }
             }
@@ -109,7 +94,6 @@ class crumb
         
         return $trail;
     } // end printTrail()
-
 } //end class crumb
 
 // #################  Example #############################

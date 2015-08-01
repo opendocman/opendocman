@@ -24,32 +24,29 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
 
 $user_obj = new User($_SESSION['uid'], $pdo);
-if(!$user_obj->isAdmin())
-{
+if (!$user_obj->isAdmin()) {
     header('Location: error.php?ec=4');
     exit;
 }
 
-if(isset($_REQUEST['cancel']) and $_REQUEST['cancel'] != 'Cancel')
-{
+if (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] != 'Cancel') {
     draw_menu($_SESSION['uid']);
 }
 
-if(isset($_GET['submit']) && $_GET['submit'] == 'add')
-{
+if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_udf'), $last_message);
     
     // Check to see if user is admin
     ?>
-<form id="udfAddForm" action="udf.php?last_message=<?php echo $last_message; ?>" method="GET" enctype="multipart/form-data">
+<form id="udfAddForm" action="udf.php?last_message=<?php echo $last_message;
+    ?>" method="GET" enctype="multipart/form-data">
 <table border="0" cellspacing="5" cellpadding="5">
         <tr>
                 <td><b><?php echo msg('label_name')?>(limit 5)</b></td>
@@ -63,9 +60,12 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
                 <td><b><?php echo msg('type')?></b></td>
                 <td colspan="3"><select name="field_type">
                 <option value=1><?php echo msg('select') . ' ' . msg('list')?></option>
-                <option value=4><?php echo msg('label_sub_select_list'); ?></option>
-                <option value=2><?php echo msg('label_radio_button'); ?></option>
-                <option value=3><?php echo msg('label_text'); ?></option>               
+                <option value=4><?php echo msg('label_sub_select_list');
+    ?></option>
+                <option value=2><?php echo msg('label_radio_button');
+    ?></option>
+                <option value=3><?php echo msg('label_text');
+    ?></option>               
                 </select>
                 </td>
         </tr>
@@ -90,12 +90,9 @@ if(isset($_GET['submit']) && $_GET['submit'] == 'add')
   </script>
 <?php
 draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Field')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Field') {
     // Make sure they are an admin
-    if (!$user_obj->isAdmin())
-    {
+    if (!$user_obj->isAdmin()) {
         header('Location: error.php?ec=4');
         exit;
     }
@@ -104,24 +101,20 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add User Defined Fiel
 
     $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
     header('Location: admin.php?last_message=' . $last_message);
-}
-elseif(isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item'])))
-{
-// If demo mode, don't allow them to update the demo account
-if (@$GLOBALS['CONFIG']['demo'] == 'True')
-{
-    
-    draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields') ,$last_message);
+} elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item']))) {
+    // If demo mode, don't allow them to update the demo account
+if (@$GLOBALS['CONFIG']['demo'] == 'True') {
+    draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
     echo msg('message_sorry_demo_mode');
     draw_footer();
     exit;
 }
-$delete='';
+    $delete='';
 
-draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
+    draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
 // query to show item
 echo '<form action="udf.php" method="POST" enctype="multipart/form-data">';
-echo '<table border=0>';
+    echo '<table border=0>';
     $query = "
       SELECT
         table_name,
@@ -135,13 +128,14 @@ echo '<table border=0>';
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':item' => $_REQUEST['item']));
     $result = $stmt->fetchAll();
-foreach($result as $row) {
-    echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $row['table_name'] . '</td></tr>';
-    echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $row['display_name'] . '</td></tr>';
-    echo '<input type="hidden" name="type" value="' . $row['field_type'] . '">';
-}
+    foreach ($result as $row) {
+        echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $row['table_name'] . '</td></tr>';
+        echo '<tr><th align=right>' . msg('label_display') . ':</th><td>' . $row['display_name'] . '</td></tr>';
+        echo '<input type="hidden" name="type" value="' . $row['field_type'] . '">';
+    }
     ?>
-            <input type="hidden" name="id" value="<?php echo $_REQUEST['item']; ?>">
+            <input type="hidden" name="id" value="<?php echo $_REQUEST['item'];
+    ?>">
             
                 <tr>
                     <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
@@ -156,12 +150,9 @@ foreach($result as $row) {
     </form>
 <?php
         draw_footer();
-}
-elseif(isset($_REQUEST['deleteudf']))
-{
+} elseif (isset($_REQUEST['deleteudf'])) {
     // Make sure they are an admin
-    if (!$user_obj->isAdmin())
-    {
+    if (!$user_obj->isAdmin()) {
         header('Location: error.php?ec=4');
         exit;
     }
@@ -170,16 +161,16 @@ elseif(isset($_REQUEST['deleteudf']))
     // back to main page
     $last_message = urlencode(msg('message_udf_successfully_deleted'). ': id=' . $_REQUEST['id']);
     header('Location: admin.php?last_message=' . $last_message);
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     $deletepick='';
     draw_header(msg('select') . ' ' . msg('label_user_defined_fields'), $last_message);
     ?>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo $_SERVER['PHP_SELF'];
+    ?>" method="POST" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
 
-        <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
+        <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+    ?>">
                         <tr>
                                 <td><b><?php echo msg('label_user_defined_field')?></b></td>
                                 <td colspan=3><select name="item">
@@ -197,13 +188,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
     $stmt->execute(array());
     $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-                $str = '<option value="' . $row['table_name'] . '"';
-                $str .= '>' . $row['display_name'] . '</option>';
-                echo $str;
-        }
-        $deletepick='';
-?>
+    foreach ($result as $row) {
+        $str = '<option value="' . $row['table_name'] . '"';
+        $str .= '>' . $row['display_name'] . '</option>';
+        echo $str;
+    }
+    $deletepick='';
+    ?>
         </select>
                 </td>
                 <td align="center">
@@ -222,11 +213,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick')
     </form>
 <?php
         draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined Field')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined Field') {
     // query to show item
-    
+
     draw_header(msg('label_display') . ' ' . msg('label_user_defined_field'), $last_message);
     
     // Select name
@@ -248,8 +237,9 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
     echo '<td>' . $result . '</td>';
     echo '<td>' . $_REQUEST['item'] . '</td>';
     echo '</tr>';
-?>
-        <form action="admin.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
+    ?>
+        <form action="admin.php?last_message=<?php echo $last_message;
+    ?>" method="POST" enctype="multipart/form-data">
                 <tr>
                         <td colspan="4" align="center"><input type="Submit" name="" value="Back"></td>
                 </tr>
@@ -258,15 +248,16 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show User Defined F
 <?php
 
         draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
-{      
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick') {
     draw_header(msg('user_defined_field'), $last_message);
     $showpick='';
     ?>
                         <table border="0" cellspacing="5" cellpadding="5">
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
+                        <form action="<?php echo $_SERVER['PHP_SELF'];
+    ?>?last_message=<?php echo $last_message;
+    ?>" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+    ?>">
                         <tr>
                         <td><b>User Defined Field</b></td>
                         <td colspan="3"><select name="item">
@@ -284,7 +275,7 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
     $stmt->execute();
     $result = $stmt->fetchAll();
 
-    foreach($result as $row) {
+    foreach ($result as $row) {
         echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
     }
     ?>
@@ -300,14 +291,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick')
                 </table>
 <?php
         draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header('Update User Defined Field', $last_message);
     ?>
                 <table border="0" cellspacing="5" cellpadding="5">
                         <tr>
-                <form action="commitchange.php?last_message=<?php echo $last_message; ?>" method="POST" enctype="multipart/form-data">
+                <form action="commitchange.php?last_message=<?php echo $last_message;
+    ?>" method="POST" enctype="multipart/form-data">
 <?php
     $query = "
       SELECT
@@ -322,17 +312,19 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
     $stmt->execute(array(':item' => $_REQUEST['item']));
     $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-                echo '<tr>';
-                echo '<td><input maxlength="16" type="textbox" name="name" value="' . $row['name'] . '"></td>';
-                echo '<td><input type="hidden" name="id" value="' . $row['id'] . '"></td>';
-                echo '</tr>';
-        }
-?>
+    foreach ($result as $row) {
+        echo '<tr>';
+        echo '<td><input maxlength="16" type="textbox" name="name" value="' . $row['name'] . '"></td>';
+        echo '<td><input type="hidden" name="id" value="' . $row['id'] . '"></td>';
+        echo '</tr>';
+    }
+    ?>
                 <td>
                         <input type="Submit" name="updatecategory" value="Modify User Defined Field">
         </form>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>?last_message=<?php echo $last_message; ?>">
+        <form action="<?php echo $_SERVER['PHP_SELF'];
+    ?>?last_message=<?php echo $last_message;
+    ?>">
                 <input type="Submit" name="cancel" value="Cancel">
         </form>
                         </td>
@@ -340,13 +332,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update')
         </table>
 <?php
 draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header('User Defined Field Selection', $last_message);
     ?>
-                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="state" value="<?php echo ($_REQUEST['state']+1); ?>">
+                <form action="<?php echo $_SERVER['PHP_SELF'];
+    ?>" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+    ?>">
                         <table border="0">
                                 <tr>
                                 <td><b>User Defined Field to modify:</b></td>
@@ -366,10 +358,10 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
     $stmt->execute();
     $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
-        }
-?>
+    foreach ($result as $row) {
+        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+    }
+    ?>
                 </td>
         </tr>
         <tr>
@@ -384,19 +376,13 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick')
         </table>
 <?php
         draw_footer();
-}
-elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel')
-{
+} elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
     $last_message=urlencode('Action canceled');
-    header ('Location: admin.php?last_message=' . $last_message);
-}
-elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
-{
-    
+    header('Location: admin.php?last_message=' . $last_message);
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit') {
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
 
-    if(!empty($_REQUEST['udf']) && !preg_match('/^\w+$/', $_REQUEST['udf']))
-    {
+    if (!empty($_REQUEST['udf']) && !preg_match('/^\w+$/', $_REQUEST['udf'])) {
         header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
         exit;
     }
@@ -418,7 +404,7 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
     $display_name = $result[2];
     $field_type = $result[1];
 
-    if ( $field_type == 1 || $field_type == 2) {
+    if ($field_type == 1 || $field_type == 2) {
         // Do Updates
         if (!empty($_REQUEST['display_name'])) {
             $query = "
@@ -438,7 +424,6 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         }
         // Do Inserts
         if (!empty($_REQUEST['newvalue'])) {
-
             $query = "
               INSERT INTO {$_REQUEST['udf']}
                 (value)
@@ -461,8 +446,8 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 
         $max = $result;
 
-        while ( $max > 0 ) {
-            if ( isset($_REQUEST['x'.$max]) && $_REQUEST['x'.$max] == "on" ) {
+        while ($max > 0) {
+            if (isset($_REQUEST['x'.$max]) && $_REQUEST['x'.$max] == "on") {
                 $query = "
                   DELETE FROM
                     {$_REQUEST['udf']}
@@ -495,11 +480,12 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
         $stmt->execute(array());
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-            if ( isset($bg) && $bg == "FCFCFC" )
+        foreach ($result as $row) {
+            if (isset($bg) && $bg == "FCFCFC") {
                 $bg = "E3E7F9";
-            else
+            } else {
                 $bg = "FCFCFC";
+            }
             echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
         }
         echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
@@ -520,14 +506,14 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
   });
   </script>
 <?php
-    }
-        if($field_type == 3)
-        {
-          echo msg('message_nothing_to_do');
-        }
 
-	if ( $field_type == 4) {
-          $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
+    }
+    if ($field_type == 3) {
+        echo msg('message_nothing_to_do');
+    }
+
+    if ($field_type == 4) {
+        $type_pr_sec = isset($_REQUEST['type_pr_sec']) ? $_REQUEST['type_pr_sec'] : '';
 
         if (isset($_REQUEST['display_name']) && $_REQUEST['display_name'] != "") {
             $query = "
@@ -586,7 +572,6 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
                     ':primary_type' => $_REQUEST['primary_type']
                 ));
             }
-
         }
         // Do Deletes
 
@@ -615,44 +600,46 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
             $max--;
         }
 
-			echo '<form id="editUdfForm" method="POST">';
-			echo '<input type=hidden name=submit value="edit">';
-			echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
-			echo '<table>';
-			echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $_REQUEST['udf'] . '</td></tr>';
-			echo '<tr><th align=right>' . msg('label_display') . ' ' . msg('label_name') . ':</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'" class="required"></td></tr>';
-			echo '<tr><th align=right>' . msg('label_type_pr_sec') .  ':</th><td><select name="type_pr_sec" class="required" onchange="showdivs(this.value,\'' . $_REQUEST['udf'] . '\')"><option value="primary">Primary Items</option><option value="secondary">Secondary Items</option></select></td></tr>'; //CHM
-			
-			echo '</table>'; ?>
+        echo '<form id="editUdfForm" method="POST">';
+        echo '<input type=hidden name=submit value="edit">';
+        echo '<input type=hidden name=udf value="'.$_REQUEST['udf'].'">';
+        echo '<table>';
+        echo '<tr><th align=right>' . msg('label_name') . ':</th><td>' . $_REQUEST['udf'] . '</td></tr>';
+        echo '<tr><th align=right>' . msg('label_display') . ' ' . msg('label_name') . ':</th><td><input type=textbox maxlength="16" name=display_name value="'.$display_name.'" class="required"></td></tr>';
+        echo '<tr><th align=right>' . msg('label_type_pr_sec') .  ':</th><td><select name="type_pr_sec" class="required" onchange="showdivs(this.value,\'' . $_REQUEST['udf'] . '\')"><option value="primary">Primary Items</option><option value="secondary">Secondary Items</option></select></td></tr>'; //CHM
+
+            echo '</table>';
+        ?>
 			
 			<div id="txtHint">
             
             <?php
-			echo '<table>';
-			echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
-			$query = "
+            echo '<table>';
+        echo '<tr bgcolor="83a9f7"><th>' .msg('button_delete') . '?</th><th>' .msg('value')  . ' </th></tr>';
+        $query = "
               SELECT
                 *
               FROM
                 {$_REQUEST['udf']}
             ";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute();
-            $result = $stmt->fetchAll();
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
 
-			foreach($result as $row) {
-				if ( isset($bg) && $bg == "FCFCFC" )
-					$bg = "E3E7F9";
-				else
-					$bg = "FCFCFC";
-				echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
-			}
+        foreach ($result as $row) {
+            if (isset($bg) && $bg == "FCFCFC") {
+                $bg = "E3E7F9";
+            } else {
+                $bg = "FCFCFC";
+            }
+            echo '<tr bgcolor="'.$bg.'"><td align=center><input type=checkbox name=x'.$row[0].'></td><td>'.$row[1].'</td></tr>';
+        }
 
-			echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
-			echo '</div>';
-			echo '<tr><td colspan="2">';
-			echo '<div class="buttons"><button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
-			?>
+        echo '<tr><th align=right>' . msg('new') . ':</th><td><input type=textbox maxlength="16" name="newvalue"></td></tr>';
+        echo '</div>';
+        echo '<tr><td colspan="2">';
+        echo '<div class="buttons"><button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
+        ?>
 					<button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
 				</div>
 	
@@ -666,13 +653,12 @@ elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit')
 	  });
 	  </script>
 	<?php
-		}
-		//CHM
-		
+
+    }
+        //CHM
+
     draw_footer();
-}
-else
-{
+} else {
     draw_header(msg('label_user_defined_field'), $last_message);
     draw_footer();
 }

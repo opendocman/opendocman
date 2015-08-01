@@ -21,8 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('Department_class') )
-{
+if (!defined('Department_class')) {
     define('Department_class', 'true', false);
     class Department extends databaseData
     {
@@ -31,7 +30,7 @@ if( !defined('Department_class') )
          * @param int $id
          * @param PDO $connection
          */
-        function Department($id, PDO $connection)
+        public function Department($id, PDO $connection)
         {
             $this->field_name = 'name';
             $this->field_id = 'id';
@@ -47,7 +46,7 @@ if( !defined('Department_class') )
          * @param PDO $pdo
          * @returns array
          */
-        static function getAllDepartments(PDO $pdo)
+        public static function getAllDepartments(PDO $pdo)
         {
             $departments = array();
             $query = "SELECT name, id FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER by name";
@@ -63,7 +62,5 @@ if( !defined('Department_class') )
             }
             return $departments;
         }
-
-        }
-
     }
+}

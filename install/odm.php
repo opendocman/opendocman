@@ -23,8 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Added for automated script installers
 $dbprefix = isset($GLOBALS['CONFIG']['db_prefix']) ? $GLOBALS['CONFIG']['db_prefix'] : $_SESSION['db_prefix'];
-if(!isset($_SESSION['adminpass'])) 
-{
+if (!isset($_SESSION['adminpass'])) {
     echo 'No Admin Pass!';
     exit;
 }
@@ -342,8 +341,7 @@ $sql_operations = array(
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num');"
 );
 
-foreach($sql_operations as $query)
-{
+foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 }
@@ -410,8 +408,7 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/svg', 1);"
         );
-foreach($sql_operations as $query)
-{
+foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 }

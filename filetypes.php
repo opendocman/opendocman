@@ -24,8 +24,7 @@ session_start();
 // includes
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -35,52 +34,36 @@ $user_obj = new User($_SESSION['uid'], $pdo);
 $filetypes = new FileTypes_class($pdo);
 
 //If the user is not an admin error out.
-if(!$user_obj->isRoot() == true)
-{
+if (!$user_obj->isRoot() == true) {
     header('Location: error.php?ec=24');
     exit;
 }
 
-if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='update')
-{
+if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     draw_header(msg('label_filetypes'), $last_message);
     $filetypes->edit();
     draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
     draw_header(msg('label_filetypes'), $last_message);
 
-    if($filetypes->save($_POST))
-    {
+    if ($filetypes->save($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
-    }
-    else
-    {
+    } else {
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
     $filetypes->edit();
     draw_footer();
-}
-elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
-{
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
     header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
-}
-elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNew')
-{
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNew') {
     draw_header(msg('label_filetypes'), $last_message);
     display_smarty_template('filetype_add.tpl');
     draw_footer();
-}
-elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave')
-{
-    if($filetypes->add($_POST))
-    {
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave') {
+    if ($filetypes->add($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
-    }
-    else
-    {
+    } else {
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
@@ -89,31 +72,21 @@ elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave')
 
     $filetypes->edit();
     draw_footer();
-}
-elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'DeleteSelect')
-{
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'DeleteSelect') {
     draw_header(msg('label_filetypes'), $last_message);
 
     $filetypes->deleteSelect();
     draw_footer();
-}
-elseif(isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete')
-{
-    if($filetypes->delete($_POST))
-    {
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
+    if ($filetypes->delete($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
-    }
-    else
-    {
+    } else {
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
     draw_header(msg('label_filetypes'), $last_message);
     $filetypes->edit();
     draw_footer();
-}
-else
-{
+} else {
     header('Location: admin.php?last_message=' . urlencode(msg('message_nothing_to_do')));
 }
-

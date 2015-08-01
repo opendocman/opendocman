@@ -43,16 +43,13 @@ $stmt->execute(array(
 ));
 $user_result = $stmt->fetch();
 
-if($stmt->rowCount() != 1)
-{	
+if ($stmt->rowCount() != 1) {
     header('location:error.php?ec=22');
-}
-else
-{	
+} else {
     $root_id = $user_result['id'];
 }
 // calculate current date
-$current_date = date ('Y-m-d');
+$current_date = date('Y-m-d');
 $current_year = intval(date('Y)'));
 $current_month = intval(date('m'));
 $current_day = intval(date('d'));
@@ -64,14 +61,12 @@ $exp_months = floor($remainder/30);
 $exp_days = $remainder -  $exp_months*30;
 
 // calculate oldest non-expired date
-if($current_day < $exp_days)
-{
+if ($current_day < $exp_days) {
     --$current_month;
     $current_day += 30;
 }
 $ok_day = $current_day - $exp_days;
-if($current_month < $exp_months)
-{
+if ($current_month < $exp_months) {
     --$current_year;
     $current_month += 12;
 }
@@ -109,12 +104,12 @@ $data_result = $stmt->fetchAll();
 echo msg('message_rejecting_files'). ' ' . $expired_revision . '<br>';
 echo msg('message_rejected') . ' ' . $stmt->rowCount() . ' file(s)<br>';
 $count = 0;
-foreach($data_result as $row) {
+foreach ($data_result as $row) {
     echo '&nbsp;&nbsp;' . $count . ' File ID: ' . $row['id'] . '<br>';
     $count++;
 }
 // Notify owner
-if($GLOBALS['CONFIG']['file_expired_action'] != 4) {
+if ($GLOBALS['CONFIG']['file_expired_action'] != 4) {
     $reviewer_comments = 'To=' . msg('author') . ';Subject=' . msg('message_file_expired') . ';Comments=' . msg('email_file_was_rejected_because'). ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' ' .msg('days') . ';';
     $user_obj = new user($root_id, $pdo);
     $date = date("D F d Y");
@@ -127,7 +122,7 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4) {
     $mail_greeting=msg('email_greeting') . ":\n\r\t" . msg('email_i_would_like_to_inform');
     $mail_body = msg('email_was_declined_for_publishing_at') . ' ' .$time.' on '.$date.' ' . msg('email_because_you_did_not_revise') . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' '. msg('days');
     $mail_salute="\n\r\n\r" . msg('email_salute') . ",\n\r$full_name";
-    foreach($data_result as $row) {
+    foreach ($data_result as $row) {
         $file_obj = new FileData($row['id'], $pdo);
         $user_obj = new User($file_obj->getOwner(), $pdo);
         $mail_to = $user_obj->getEmailAddress();
@@ -138,9 +133,9 @@ if($GLOBALS['CONFIG']['file_expired_action'] != 4) {
 }
 
 //do not show file
-if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) {
+if ($GLOBALS['CONFIG']['file_expired_action'] == 1) {
     $reviewer_comments = 'To=' . msg('author') . ';Subject=' . msg('message_file_expired') . ';Comments=' . msg('email_file_was_rejected_because'). ' ' .$GLOBALS['CONFIG']['revision_expiration'] . ' ' . msg('days');
-    foreach($data_result as $row) {
+    foreach ($data_result as $row) {
         $file_obj = new FileData($row['id'], $pdo);
         $file_obj->Publishable(-1);
         $file_obj->setReviewerComments($reviewer_comments);
@@ -148,8 +143,8 @@ if($GLOBALS['CONFIG']['file_expired_action'] == 1 ) {
 }
 
 //lock file, not check-outable
-if( $GLOBALS['CONFIG']['file_expired_action'] == 2 ) {
-    foreach($data_result as $row) {
+if ($GLOBALS['CONFIG']['file_expired_action'] == 2) {
+    foreach ($data_result as $row) {
         $file_obj = new FileData($row['id'], $pdo);
         $file_obj->setStatus(-1);
     }

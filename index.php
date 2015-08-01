@@ -26,8 +26,7 @@ session_start();
  * Test to see if we have the config.php file. If not, must not be installed yet.
 */
 
-if(!file_exists('config.php'))
-{
+if (!file_exists('config.php')) {
     if (
         !extension_loaded('pdo')
         || !extension_loaded('pdo_mysql')
@@ -44,33 +43,26 @@ if(!file_exists('config.php'))
     exit;
 }
 
-require_once ('odm-load.php');
+require_once('odm-load.php');
 
-if (!isset($_REQUEST['last_message']))
-{
+if (!isset($_REQUEST['last_message'])) {
     $_REQUEST['last_message'] = '';
 }
 
 // Call the plugin API
 callPluginMethod('onBeforeLogin');
 
-if(isset($_SESSION['uid']))
-{
-        // redirect to main page
-        if(isset($_REQUEST['redirection']))
-        {
+if (isset($_SESSION['uid'])) {
+    // redirect to main page
+        if (isset($_REQUEST['redirection'])) {
             redirect_visitor($_REQUEST['redirection']);
-        }
-        else
-        {
+        } else {
             redirect_visitor('out.php');
         }
 }
 
-if(isset($_POST['login']))
-{
-    if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
-    {
+if (isset($_POST['login'])) {
+    if (!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir'])) {
         echo "<font color=red>" . msg('message_datadir_problem'). "</font>";
         exit;
     }
@@ -99,8 +91,7 @@ if(isset($_POST['login']))
     ));
     $result = $stmt->fetchAll();
 
-    if(count($result) != 1)
-    {
+    if (count($result) != 1) {
         // Check old password() method
         $query = "
           SELECT
@@ -120,12 +111,11 @@ if(isset($_POST['login']))
             ':frmuser' => $frmuser,
             ':frmpass' => $frmpass
         ));
-    	$result = $stmt->fetchAll();
+        $result = $stmt->fetchAll();
     }
 
     // if row exists - login/pass is correct
-    if (count($result) == 1)
-    {        
+    if (count($result) == 1) {
         // register the user's ID
         $id = $result[0]['id'];
 
@@ -136,36 +126,27 @@ if(isset($_POST['login']))
         callPluginMethod('onAfterLogin');
         
         // redirect to main page
-        if(isset($_REQUEST['redirection']))
-        {
+        if (isset($_REQUEST['redirection'])) {
             redirect_visitor($_REQUEST['redirection']);
-        }
-        else
-        {
-           redirect_visitor('out.php');
+        } else {
+            redirect_visitor('out.php');
         }
         // close connection
-    }
-    else
-    {
+    } else {
         // Login Failed
         // redirect to error page
-        
+
         // Call the plugin API
         callPluginMethod('onFailedLogin');
         
         header('Location: error.php?ec=0');
     }
-}
-elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
-{    
+} elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
     
     $GLOBALS['smarty']->assign('redirection', $redirection);
     display_smarty_template('login.tpl');
-}
-else
-{
-        echo 'Check your config';
+} else {
+    echo 'Check your config';
 }
         draw_footer();

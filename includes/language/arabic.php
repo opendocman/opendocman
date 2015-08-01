@@ -294,7 +294,7 @@ $lang['message_no_author_comments_available'] = 'لايوجد تعليقات م�
 $lang['message_no_description_available'] = 'لايوجد وصف متاح';
 $lang['message_no_documents_checked_out'] = 'لايوجد اي وثيقة للتفحص حاليا';
 $lang['message_no_files_found'] = 'لا توجد ملفات';
-$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة '; 
+$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة ';
 $lang['message_non_unique_account'] = 'حساب غير وحيد'; //Abduh says :this value must be changed
 $lang['message_non_unique_key'] = 'مفتاح غير وحيد في قاعدة البيانات'; //Abduh says :this value must be changed
 $lang['message_nothing_to_do'] = 'لا توجد علاقة'; //Abduh says :this value must be changed
@@ -485,4 +485,3 @@ $lang['categoryviewpage_list_of_files_title'] = 'الملفات المخصصة �
 
 //Search Page
 $lang['searchpage_all_meta'] = 'بحث في الحقول الرئيسية';
-

@@ -23,9 +23,8 @@
 session_start();
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
-  redirect_visitor();
+if (!isset($_SESSION['uid'])) {
+    redirect_visitor();
 }
 
 include('udf_functions.php');
@@ -61,7 +60,7 @@ if (!isset($_REQUEST['submit'])) {
     $data_id = $_REQUEST['id'];
     // includes
     $department_query = "SELECT department FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id=:user_id";
-    $department_stmt = $pdo->prepare($department_query);   
+    $department_stmt = $pdo->prepare($department_query);
     $department_stmt->bindParam(':user_id', $_SESSION['uid']);
     $department_stmt->execute();
     $result = $department_stmt->fetchAll();
@@ -95,7 +94,7 @@ if (!isset($_REQUEST['submit'])) {
         
         $t_name = array();
         $i = 0;
-        foreach($result as $data) {
+        foreach ($result as $data) {
             $explode_v = explode('_', $data['table_name']);
             $t_name = $explode_v[2];
             $i++;
@@ -119,7 +118,7 @@ if (!isset($_REQUEST['submit'])) {
 
         //////Populate department perm list/////////////////
         $dept_perms_array = array();
-        foreach ($avail_departments as $dept) {            
+        foreach ($avail_departments as $dept) {
             $avail_dept_perms['name'] = $dept['name'];
             $avail_dept_perms['id'] = $dept['id'];
             $avail_dept_perms['rights'] = $filedata->getDeptRights($dept['id']);
@@ -128,12 +127,12 @@ if (!isset($_REQUEST['submit'])) {
         
         //////Populate users perm list/////////////////
         $user_perms_array = array();
-        foreach ($avail_users as $user) {                 
+        foreach ($avail_users as $user) {
             $avail_user_perms['fid'] = $data_id;
             $avail_user_perms['first_name'] = $user['first_name'];
             $avail_user_perms['last_name'] = $user['last_name'];
             $avail_user_perms['id'] = $user['id'];
-            $avail_user_perms['rights'] = $user_perms_obj->getPermissionForUser($user['id'], $data_id);          
+            $avail_user_perms['rights'] = $user_perms_obj->getPermissionForUser($user['id'], $data_id);
             array_push($user_perms_array, $avail_user_perms);
         }
 
@@ -162,7 +161,7 @@ if (!isset($_REQUEST['submit'])) {
 
         display_smarty_template('_edit_footer.tpl');
     }//end else
-} else { 
+} else {
     // form submitted, process data
     $fileId = $_REQUEST['id'];
     $filedata = new FileData($fileId, $pdo);
@@ -174,14 +173,13 @@ if (!isset($_REQUEST['submit'])) {
     $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
-    foreach( $_REQUEST['user_permission'] as $permission ) {
-    
+    foreach ($_REQUEST['user_permission'] as $permission) {
         if ($permission > 2) {
             $perms_error = true;
         }
     }
      
-    if(!$perms_error) {
+    if (!$perms_error) {
         header("Location:error.php?ec=12");
         exit;
     }
@@ -222,9 +220,8 @@ if (!isset($_REQUEST['submit'])) {
     $del_dept_perms_stmt->execute();
     
     $result_array = array(); // init;
-    
-    foreach($_REQUEST['user_permission'] as $user_id=>$permission) {
-       
+
+    foreach ($_REQUEST['user_permission'] as $user_id=>$permission) {
         $insert_user_perms_query = "
             INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms 
             (

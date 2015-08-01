@@ -18,8 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('FileTypes_class') )
-{
+if (!defined('FileTypes_class')) {
     define('FileTypes_class', 'true', false);
 
     /**
@@ -27,10 +26,10 @@ if( !defined('FileTypes_class') )
      */
     class FileTypes_class
     {
-
         protected $connection;
 
-        public function FileTypes_class(PDO $pdo) {
+        public function FileTypes_class(PDO $pdo)
+        {
             $this->connection = $pdo;
         }
 
@@ -38,9 +37,8 @@ if( !defined('FileTypes_class') )
         * Get value for a specific file type based on the key
         * @param string $data
         */
-        function get($data)
+        public function get($data)
         {
-
         }
 
         /**
@@ -48,7 +46,7 @@ if( !defined('FileTypes_class') )
          * @param string $data
          * @return bool
          */
-        function add($data)
+        public function add($data)
         {
             $query = "
               INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}filetypes
@@ -59,7 +57,7 @@ if( !defined('FileTypes_class') )
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(':data' => $data['filetype']));
 
-            return TRUE;
+            return true;
         }
 
         /**
@@ -67,7 +65,7 @@ if( !defined('FileTypes_class') )
          * @param array $data Array of values to be saved ($key,$value)
          * @return bool
          */
-        function save($data)
+        public function save($data)
         {
             // First, uncheck all status values
             $query = "
@@ -91,9 +89,8 @@ if( !defined('FileTypes_class') )
                     ";
                     $stmt = $this->connection->prepare($query2);
                     $stmt->execute(array(':value' => $value));
-
                 }
-                return TRUE;
+                return true;
             }
             return false;
         }
@@ -101,7 +98,7 @@ if( !defined('FileTypes_class') )
         /**
          * Load active file types into a global array
          */
-        function load()
+        public function load()
         {
             $GLOBALS['CONFIG']['allowedFileTypes'] = array();
             $query = "
@@ -116,7 +113,7 @@ if( !defined('FileTypes_class') )
             $stmt->execute();
             $result = $stmt->fetchAll();
 
-           foreach($result as $row) {
+            foreach ($result as $row) {
                 array_push($GLOBALS['CONFIG']['allowedFileTypes'], $row['type']);
             }
         }
@@ -124,7 +121,7 @@ if( !defined('FileTypes_class') )
         /*
          * Show the file types edit form
         */
-        function edit()
+        public function edit()
         {
             $filetypes_arr = array();
             $query = "
@@ -137,18 +134,18 @@ if( !defined('FileTypes_class') )
             $stmt->execute();
             $result = $stmt->fetchAll();
 
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $filetypes_arr[] = $row;
             }
 
-            $GLOBALS['smarty']->assign('filetypes_array',$filetypes_arr);
+            $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
             display_smarty_template('filetypes.tpl');
         }
 
         /*
          * Show the form in order to Delete a filetype
         */
-        function deleteSelect()
+        public function deleteSelect()
         {
             $filetypes_arr = array();
             $query = "
@@ -161,18 +158,17 @@ if( !defined('FileTypes_class') )
             $stmt->execute();
             $result = $stmt->fetchAll();
 
-            foreach($result as $row) {
+            foreach ($result as $row) {
                 $filetypes_arr[] = $row;
             }
 
-            $GLOBALS['smarty']->assign('filetypes_array',$filetypes_arr);
+            $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
             display_smarty_template('filetypes_deleteshow.tpl');
         }
 
-        function delete($data)
+        public function delete($data)
         {
-            foreach($data['types'] as $id)
-            {
+            foreach ($data['types'] as $id) {
                 $query = "
                   DELETE FROM
                     {$GLOBALS['CONFIG']['db_prefix']}filetypes
@@ -182,7 +178,7 @@ if( !defined('FileTypes_class') )
                 $stmt = $this->connection->prepare($query);
                 $stmt->execute(array(':id' => $id));
             }
-            return TRUE;
+            return true;
         }
     }
 }

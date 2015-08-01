@@ -25,14 +25,13 @@ session_start();
 // includes
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 $user_obj = new User($_SESSION['uid'], $pdo);
 
-if(!$user_obj->canCheckIn()){
+if (!$user_obj->canCheckIn()) {
     redirect_visitor('out.php');
 }
 
@@ -66,12 +65,9 @@ $result = $stmt->fetchAll();
 
 // how many records?
 $count = $stmt->rowCount();
-if ($count == 0)
-{
+if ($count == 0) {
     echo '<img src="images/exclamation.gif"> ' . msg('message_no_documents_checked_out');
-}
-else
-{
+} else {
     echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1">';
     echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . $count . '</caption>';
     echo '<tr bgcolor="#83a9f7">';
@@ -85,7 +81,7 @@ else
 
     $row_color = "#FCFCFC";
     // iterate through resultset
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $id = $row['id'];
         $last_name = $row['last_name'];
         $first_name = $row['first_name'];
@@ -95,8 +91,7 @@ else
         $status = $row['status'];
 
         // correction
-        if ($description == '')
-        {
+        if ($description == '') {
             $description = msg('message_no_information_available');
         }
         $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
@@ -113,12 +108,9 @@ else
         echo '<td class="listtable">' . display_filesize($filename) . '</td> ';
         echo '</tr>';
 
-        if ( $row_color == "#FCFCFC" )
-        {
+        if ($row_color == "#FCFCFC") {
             $row_color = "#E3E7F9";
-        }
-        else
-        {
+        } else {
             $row_color = "#FCFCFC";
         }
     }

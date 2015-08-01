@@ -22,14 +22,12 @@
 
 include_once('odm-load.php');
 
-if(isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'True')
-{
+if (isset($GLOBALS['CONFIG']['allow_password_reset']) && $GLOBALS['CONFIG']['allow_password_reset'] != 'True') {
     echo msg('message_sorry_not_allowed');
     exit;
 }
 
-if (!isset($_REQUEST['last_message']))
-{
+if (!isset($_REQUEST['last_message'])) {
     $_REQUEST['last_message']='';
 }
 
@@ -101,14 +99,11 @@ if (
         ':code' => $code
     ));
 
-    if ($stmt->rowCount() < 1)
-    {
+    if ($stmt->rowCount() < 1) {
         $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_the_code_you_are_using'));
         header("Location: $redirect");
         exit;
-    }
-    else 
-    {
+    } else {
         $userInfo = $stmt->fetch();
         $user_id = $userInfo['id'];
         // build the header and navigation
@@ -124,17 +119,21 @@ if (
 
 
          */
-        if (strlen($_REQUEST['last_message']))
+        if (strlen($_REQUEST['last_message'])) {
             draw_error($_REQUEST['last_message']);
+        }
         ?>
 
             <p><?php echo msg('message_set_your_new_password')?></p>
 
             <form action="forgot_password.php" method="post">
             <input type="hidden" name="action" value="forgot">
-            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-            <input type="hidden" name="username" value="<?php echo $username; ?>">
-            <input type="hidden" name="code" value="<?php echo $code; ?>">
+            <input type="hidden" name="user_id" value="<?php echo $user_id;
+        ?>">
+            <input type="hidden" name="username" value="<?php echo $username;
+        ?>">
+            <input type="hidden" name="code" value="<?php echo $code;
+        ?>">
             <table>
             <tr>
             <th><?php echo msg('label_new_password')?>:</th>
@@ -162,9 +161,7 @@ if (
 
              */
     }
-}
-else if (isset($_POST['username']) && strlen($_POST['username']) > 0) 
-{	
+} elseif (isset($_POST['username']) && strlen($_POST['username']) > 0) {
     // they have sent an username
     $username = trim($_POST['username']);
 
@@ -182,14 +179,11 @@ else if (isset($_POST['username']) && strlen($_POST['username']) > 0)
     $stmt->execute(array(':username' => $username));
 
     // send them back if we didn't find the username
-    if ($stmt->rowCount() == 0)
-    {
+    if ($stmt->rowCount() == 0) {
         $redirect = 'forgot_password.php?last_message=' . urlencode(msg('message_the_username_you_entered'));
         header("Location: $redirect");
         exit;
-    }
-    else 
-    {
+    } else {
         $user_info = $stmt->fetch();
         $user_id = $user_info['id'];
         $email = $user_info['Email'];
@@ -198,8 +192,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']) > 0)
         $salt = "abcdefghjkmnpqrstuvwxyz23456789ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         $i = 0;
         $randstring = '';
-        while ($i <= 7) 
-        {
+        while ($i <= 7) {
             $num = rand() % 63;
             $tmp = substr($salt, $num, 1);
             $randstring .= $tmp;
@@ -232,8 +225,7 @@ else if (isset($_POST['username']) && strlen($_POST['username']) > 0)
         $mail_body .= msg('area_admin') . "\n\n";
         
         // send the email
-        if ($GLOBALS['CONFIG']['demo'] == 'False')
-        {
+        if ($GLOBALS['CONFIG']['demo'] == 'False') {
             mail($email, msg('area_reset_password'), $mail_body, $mail_headers);
         }
 
@@ -244,10 +236,10 @@ else if (isset($_POST['username']) && strlen($_POST['username']) > 0)
 }
 
 // default form
-else 
-{
-    if (strlen($_REQUEST['last_message']))
+else {
+    if (strlen($_REQUEST['last_message'])) {
         draw_error($_REQUEST['last_message']);
+    }
     ?>
 
         <p><?php echo msg('message_this_site_has_high_security')?></p>
@@ -267,4 +259,5 @@ else
         </form>
 
         <?php
+
 }

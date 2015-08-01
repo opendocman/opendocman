@@ -18,8 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('Settings_class') )
-{
+if (!defined('Settings_class')) {
     define('Settings_class', 'true', false);
 
     /**
@@ -31,7 +30,8 @@ if( !defined('Settings_class') )
     {
         protected $connection;
         
-        public function Settings(PDO $pdo){
+        public function Settings(PDO $pdo)
+        {
             $this->connection = $pdo;
         }
 
@@ -39,9 +39,8 @@ if( !defined('Settings_class') )
         * Get value for a specific setting based on the key
         * @param string $key
         */
-        function get($key)
+        public function get($key)
         {
-
         }
 
        /**
@@ -49,10 +48,9 @@ if( !defined('Settings_class') )
         * @param array $data Array of values to be saved ($key,$value)
         * @return bool
         */
-        function save($data)
+        public function save($data)
         {
-            foreach ($data as $key=>$value)
-            {
+            foreach ($data as $key=>$value) {
                 $query = "
                   UPDATE
                     {$GLOBALS['CONFIG']['db_prefix']}settings
@@ -65,7 +63,6 @@ if( !defined('Settings_class') )
                     ':value' => $value,
                     ':key' => $key
                 ));
-
             }
             return true;
         }
@@ -73,7 +70,7 @@ if( !defined('Settings_class') )
         * Load settings to an array
         * return array
         */
-        function load()
+        public function load()
         {
             $query = "
               SELECT
@@ -89,13 +86,12 @@ if( !defined('Settings_class') )
             foreach ($result as $row) {
                 $GLOBALS['CONFIG'][$row['name']] = $row['value'];
             }
-
         }
 
         /**
          * Show the settings edit form
          */
-        function edit()
+        public function edit()
         {
             $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}settings";
             $stmt = $this->connection->prepare($query);
@@ -114,7 +110,7 @@ if( !defined('Settings_class') )
          * @param string $key The name of the setting to be tested
          * @param string $value The value of the setting to be tested
          */
-        function validate($key, $value)
+        public function validate($key, $value)
         {
             // NOT IMPLEMENTED
         }
@@ -123,35 +119,32 @@ if( !defined('Settings_class') )
          * This function will return an array of the possible theme names found in the /templates folder
          * for use in the settings form
          */
-        function getThemes()
+        public function getThemes()
         {
-            $themes = $this->getFolders( ABSPATH . 'templates');
+            $themes = $this->getFolders(ABSPATH . 'templates');
             return $themes;
         }
 
         /**
          * @return mixed
          */
-        function getLanguages()
+        public function getLanguages()
         {
-            $languages = $this->getFolders( ABSPATH . 'includes/language');
-            return str_replace('.php','',$languages);
+            $languages = $this->getFolders(ABSPATH . 'includes/language');
+            return str_replace('.php', '', $languages);
         }
 
         /**
          * @param string $path
          * @return array
          */
-        function getFolders($path = '.')
+        public function getFolders($path = '.')
         {
             $file_list=array();
-            if ($handle = opendir($path))
-            {
-                while (false !== ($file = readdir($handle)))
-                {
+            if ($handle = opendir($path)) {
+                while (false !== ($file = readdir($handle))) {
                     // Filter out any other types of folders that might be in here
-                    if ($file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh' && $file != 'common' && $file != 'DataTables')
-                    {
+                    if ($file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh' && $file != 'common' && $file != 'DataTables') {
                         array_push($file_list, $file);
                     }
                 }
@@ -164,7 +157,7 @@ if( !defined('Settings_class') )
          * Return an array of user names
          * @return array
          */
-        function getUserIdNums()
+        public function getUserIdNums()
         {
             $query = "
               SELECT
@@ -179,6 +172,5 @@ if( !defined('Settings_class') )
 
             return $result;
         }
-
     }
 }

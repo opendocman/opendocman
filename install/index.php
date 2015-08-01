@@ -18,8 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // Sanity check.
-if ( false ) {
-?>
+if (false) {
+    ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
@@ -38,19 +38,15 @@ exit;
 
 session_start();
 
-if ( file_exists('../config.php') && (!isset($_SESSION['datadir']) ) )
-{
+if (file_exists('../config.php') && (!isset($_SESSION['datadir']))) {
     echo "<p>Looks like the file 'config.php' already exists. If you need to re-install, please delete it or rename it first. You may then <a href='./'>try again</a>.</p>";
     exit;
 }
 // Search for the config file in parent folder
 // If not found, redirect to index for install routine
-if(file_exists('../config.php'))
-{
+if (file_exists('../config.php')) {
     include('../config.php');
-}
-else
-{
+} else {
     Header('Location: ../index.php');
 }
 
@@ -77,14 +73,12 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         <div id="content">
             <img src="../images/logo.gif"><br>
             <?php
-            
-            if(!isset($_REQUEST['op']))
-            {
+
+            if (!isset($_REQUEST['op'])) {
                 $_REQUEST['op'] = '';
             }
 
-            switch($_REQUEST['op'])
-            {
+            switch ($_REQUEST['op']) {
                 case "install":
                     do_install();
                     break;
@@ -108,7 +102,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
                 // User has version 11rc1 and is upgrading
@@ -126,7 +120,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -144,7 +138,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -161,7 +155,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -177,7 +171,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -192,7 +186,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -206,7 +200,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -219,7 +213,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -231,7 +225,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -242,7 +236,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
 
@@ -252,7 +246,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
       
@@ -261,7 +255,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     do_update_1261();
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
        
@@ -269,27 +263,27 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 case "update_1262":
                     do_update_1262();
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
-                    break; 
+                    break;
 
                 // User has version 1262 and is upgrading
                 case "update_1263":
                     do_update_1263();
-	 	    do_update_128();
+            do_update_128();
                     do_update_129();
                     break;
-		
-		// User has DB version 128 and is upgrading
-		case "update_128":
-		   do_update_128();
+        
+        // User has DB version 128 and is upgrading
+        case "update_128":
+           do_update_128();
                    do_update_129();
-		   break;
+           break;
 
                // User has DB version 129 and is upgrading
-		case "update_129":
+        case "update_129":
                    do_update_129();
-		   break;
+           break;
 
                 default:
                     print_intro();
@@ -302,13 +296,10 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                 define('ODM_INSTALLING', 'true');
                 echo 'Checking that templates_c folder is writeable...<br />';
-                if(!is_writeable('../templates_c'))
-                {
+                if (!is_writeable('../templates_c')) {
                     echo 'templates_c folder is <strong>Not writeable</strong> - Fix and go <a href="javascript: history.back()" class="button">Back</a><br />';
                     exit;
-                }
-                else
-                {
+                } else {
                     echo 'OK<br />';
                 }
                 echo '<br />installing...<br>';
@@ -419,7 +410,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 include("../config.php");
                 include("upgrade_1261.php");
                 echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-            }  
+            }
             function do_update_1262()
             {
                 echo 'Updating from DB version 1.2.6.2...<br />';
@@ -433,7 +424,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 include("../config.php");
                 include("upgrade_1263.php");
                 echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-            }  
+            }
             function do_update_128()
             {
                 echo 'Updating from DB versions 1.2.8...<br />';
@@ -472,7 +463,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $result_array = $stmt->fetch();
                     $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
                 }
-            ?>
+                ?>
                 <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
         </div>
         <hr>
@@ -494,13 +485,15 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 </td>
             </tr>
             <tr>
-                <td>Your current DB version: <strong><?php echo $db_version; ?></strong><br /><br /></td>
+                <td>Your current DB version: <strong><?php echo $db_version;
+                ?></strong><br /><br /></td>
             </tr>
             <tr>
                 <td>1) New Installation<br /><br /></td>
             </tr>
             <tr>
-                <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version']; ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
+                <td><a href="index.php?op=install" onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">New installation of the v<?php echo $GLOBALS['CONFIG']['current_version'];
+                ?> release of OpenDocMan (Will wipe any current data!)</a><br><br></td>
             </tr>
 	    <tr>
 		<td><a href="index.php?op=update_129">Upgrade from version version 1.2.9</a><br><br></td>
@@ -558,7 +551,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             </tr>
         </table>
             <?php
-        }
+
+            }
 
 ?>
     </body>
