@@ -172,5 +172,26 @@ if (!defined('Settings_class')) {
 
             return $result;
         }
+
+        public static function get_db_version($prefix = '')
+        {
+            global $pdo;
+            if(empty($prefix)) {
+                $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
+            }
+            $query1 = "SHOW TABLES LIKE :table";
+            $stmt = $pdo->prepare($query1);
+            $stmt->execute(array(':table' => $prefix . 'odmsys'));
+
+            if ($stmt->rowCount() > 0) {
+                $query2 = "SELECT sys_value from {$prefix}odmsys WHERE sys_name='version'";
+                $stmt = $pdo->prepare($query2);
+                $stmt->execute();
+                $result_array = $stmt->fetch();
+            }
+
+            $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
+            return $db_version;
+        }
     }
 }

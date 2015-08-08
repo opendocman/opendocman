@@ -36,8 +36,13 @@ if (!file_exists('config.php')) {
     }
     // A config file doesn't exist
     ?>
-    <html><head><link rel="stylesheet" href="templates/common/css/install.css" type="text/css" /></head>
-        <body>Looks like this is a new installation because we did not find a config.php file. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a Configuration File</a></p></body>
+    <html>
+    <head>
+        <link rel="stylesheet" href="templates/common/css/install.css" type="text/css"/>
+    </head>
+    <body>Looks like this is a new installation because we did not find a config.php file or we cannot locate the
+    database. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a
+            Configuration File</a></p></body>
     </html>
     <?php
     exit;
@@ -54,16 +59,16 @@ callPluginMethod('onBeforeLogin');
 
 if (isset($_SESSION['uid'])) {
     // redirect to main page
-        if (isset($_REQUEST['redirection'])) {
-            redirect_visitor($_REQUEST['redirection']);
-        } else {
-            redirect_visitor('out.php');
-        }
+    if (isset($_REQUEST['redirection'])) {
+        redirect_visitor($_REQUEST['redirection']);
+    } else {
+        redirect_visitor('out.php');
+    }
 }
 
 if (isset($_POST['login'])) {
     if (!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir'])) {
-        echo "<font color=red>" . msg('message_datadir_problem'). "</font>";
+        echo "<font color=red>" . msg('message_datadir_problem') . "</font>";
         exit;
     }
 
@@ -124,7 +129,7 @@ if (isset($_POST['login'])) {
 
         // Run the plugin API
         callPluginMethod('onAfterLogin');
-        
+
         // redirect to main page
         if (isset($_REQUEST['redirection'])) {
             redirect_visitor($_REQUEST['redirection']);
@@ -138,15 +143,15 @@ if (isset($_POST['login'])) {
 
         // Call the plugin API
         callPluginMethod('onFailedLogin');
-        
+
         header('Location: error.php?ec=0');
     }
-} elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql') {
+} elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] == 'mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
-    
+
     $GLOBALS['smarty']->assign('redirection', $redirection);
     display_smarty_template('login.tpl');
 } else {
     echo 'Check your config';
 }
-        draw_footer();
+draw_footer();

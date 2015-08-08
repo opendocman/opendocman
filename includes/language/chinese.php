@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = '匿名查看公共文件点这里';
 $lang['forgotpassword'] = '忘记密码？';
-$lang['install_folder']  = '安全注意：如果你已完成安装或升级请移除install目录';
 $lang['signup'] = '申请账号';
 $lang['welcome'] = '欢迎进入OpenDocMan';
 $lang['welcome2'] = '登录进来开始使用本系统强大的文档存储，发布和版本控制功能';
@@ -461,6 +460,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';

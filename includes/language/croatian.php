@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Kliknite ovdje kako biste anonimno gledali javne datoteke';
 $lang['forgotpassword'] = 'Zaboravili ste lozinku?';
-$lang['install_folder']  = 'Sigurnosno upozorenje: Ako ste već instalirali/nadogradili program, trebali biste izbrisati \'install\' direktorij prije nego nastavite dalje';
 $lang['signup'] = 'Registrirajte račun';
 $lang['welcome'] = 'Dobro došli u OpenDocMan.';
 $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku pohranu podataka, objavljivanje i kontrolu promjena nad datotekama.';
@@ -461,6 +460,9 @@ $lang['userpage_username'] = 'Korisničko ime';
 $lang['userpage_yes'] = 'Da';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
 $lang['adminpage_reports'] = 'Izvještaji';

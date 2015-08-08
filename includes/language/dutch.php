@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klik hier om de bestanden te bekijken waarvoor u niet hoeft in te loggen';
 $lang['forgotpassword'] = 'Wachtwoord vergeten?';
-$lang['install_folder']  = 'LET OP: Als u al geïnstalleerd/ge-updated hebt, verwijder dan de map \'install\' voordat u verder gaat';
 $lang['signup'] = 'Meld u aan voor een account';
 $lang['welcome'] = 'Welkom bij OpenDocMan';
 $lang['welcome2'] = 'Log in met uw gebruikersnaam om de krachtige opslag-, versiecontrole- en redactiemogelijkheden van OpenDocMan te benutten.';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';
