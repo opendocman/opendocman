@@ -24,7 +24,7 @@
             <tr>
                 <td><b>{$g_lang_userpage_password}</b></td>
                 <td>
-                    <input name="password" type="password" maxlength="10">
+                    <input name="password" type="password" maxlength="32">
                     {$g_lang_userpage_leave_empty}
                 </td>
             </tr>
