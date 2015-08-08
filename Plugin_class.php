@@ -51,7 +51,7 @@ class Plugin
         $curdir = dirname(__FILE__);
         if ($handle = opendir($curdir . '/plug-ins')) {
             while (false !== ($file = readdir($handle))) {
-                if (file != 'index.html' && $file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && is_file('plug-ins/' . $file . '/' . $file . '_class.php')) {
+                if ($file != 'index.html' && $file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && is_file('plug-ins/' . $file . '/' . $file . '_class.php')) {
                     array_push($pluginslist, $file);
                 }
             }

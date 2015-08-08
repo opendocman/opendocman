@@ -137,10 +137,7 @@ function draw_header($pageTitle, $lastmessage='')
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
     $GLOBALS['smarty']->assign('lastmessage', htmlspecialchars($lastmessage));
     display_smarty_template('header.tpl');
-    
-    if (is_dir('install')) {
-        echo '<span style="color: red;">' . msg('install_folder') . '</span>';
-    }
+
 }
 
 function draw_error($message)

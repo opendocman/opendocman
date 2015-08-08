@@ -24,7 +24,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'انقر هنالعرض الملفات العامة';
 $lang['forgotpassword'] = 'تغيير كلمة المرور';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'إنشاء حساب جديد';
 $lang['welcome'] = 'نظام التوثيق الآلي';
 $lang['welcome2'] = 'الدخول للنظام';
@@ -374,6 +373,10 @@ $lang['editpage_read'] = 'قراءة';
 $lang['editpage_write'] = 'كتابة';
 $lang['editpage_admin'] = 'مسئول';
 
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'تم حذف الملف بشكل نهائي';
 $lang['undeletepage_file_undeleted'] = 'تم إلغاء حذف الملف';
@@ -458,6 +461,9 @@ $lang['userpage_username'] = 'إسم المستخدم';
 $lang['userpage_yes'] = 'نعم';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'تحرير نوعية الملف';
 $lang['adminpage_edit_settings'] = 'تحرير الاعدادات';
 $lang['adminpage_reports'] = 'تقارير';
@@ -485,3 +491,8 @@ $lang['categoryviewpage_list_of_files_title'] = 'الملفات المخصصة �
 
 //Search Page
 $lang['searchpage_all_meta'] = 'بحث في الحقول الرئيسية';
+
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

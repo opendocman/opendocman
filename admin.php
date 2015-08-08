@@ -173,12 +173,16 @@ draw_header(msg('label_admin'), $last_message);
      <td>
          <table>
              <tr>
-                 <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('message_latest_version');
+                 <th bgcolor ="#83a9f7"><font color="#FFFFFF"><?php echo msg('adminpage_about_section_title');
     ?></font></th>
              </tr>
              <tr>
-                 <td><b><?php echo $GLOBALS['CONFIG']['current_version'];
+                 <td><b><?php echo msg('adminpage_about_section_app_version') . ": " . $GLOBALS['CONFIG']['current_version'];
     ?></b></td>
+             </tr>
+             <tr>
+                 <td><b><?php echo msg('adminpage_about_section_db_version') . ": " . Settings::get_db_version();
+                         ?></b></td>
              </tr>
              <tr>
                  <td>&nbsp;</td>

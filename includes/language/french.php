@@ -1,6 +1,6 @@
 <?php
 //FRENCH LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: François Vallée, Peter Host
 /*
 This program is free software; you can redistribute it and/or
@@ -22,24 +22,23 @@ global $lang;
 
 //Login
 $lang['anonymous_link'] = 'Cliquez ici pour accéder aux fichiers publics anonymement';
-$lang['forgotpassword'] = 'Vous avez oublié votre mot de passe?';
-$lang['install_folder']  = 'Note de Sécurité: Si vous avez déjà installé/mis à jour l\'application, vous devriez supprimer le répertoire \'install\' avant d\'aller plus loin';
+$lang['forgotpassword'] = 'Mot de passe Oublié ?';
 $lang['signup'] = 'Ouvrir un compte';
-$lang['welcome'] = 'Bienvenue sur OpenDocMan';
-$lang['welcome2'] = 'Veuilez vous identifier pour commencer à utiliser les capacités puissantes de stockage, publication et contrôle de révisions du système.';
-$lang['welcome_anonymous_title'] = 'Consultation anonyme d\'OpenDocMan : Tout aficher';
-$lang['welcome_anonymous_h1'] = 'Page anonyme d\'OpenDocMan';
+$lang['welcome'] = 'Bienvenue.';
+$lang['welcome2'] = 'Veuillez vous identifier pour commencer.';
+$lang['welcome_anonymous_title'] = 'Consultation anonyme: Tout aficher';
+$lang['welcome_anonymous_h1'] = 'Page anonyme';
 
 //GLOBAL TERMS
 $lang['action'] = 'Action';
 $lang['all'] = 'Tout';
 $lang['anonymous'] = 'Anonyme';
 $lang['author'] = 'Auteur';
-$lang['category'] = 'Categorie';
+$lang['category'] = 'Catégorie';
 $lang['choose'] = 'Choisir';
 $lang['date'] = 'Date';
 $lang['days'] = 'jours';
-$lang['department'] = 'Départmeent';
+$lang['department'] = 'Département';
 $lang['edit'] = 'Modifier';
 $lang['enter'] = 'Entrer';
 $lang['error'] = 'Erreur';
@@ -58,7 +57,7 @@ $lang['please'] = 'Merci de';
 $lang['profile'] = 'Profil';
 $lang['public'] = 'Publique';
 $lang['revision'] = 'Révision';
-$lang['search'] = 'Recherche';
+$lang['search'] = 'Rechercher';
 $lang['select'] = 'Selectionner';
 $lang['sincerely'] = 'Sincèrement';
 $lang['submit'] = 'Soumettre';
@@ -68,7 +67,7 @@ $lang['updated'] = 'Mis à jour';
 $lang['username'] = 'Nom d\'utilisateur';
 $lang['users'] = 'Utilisateurs';
 $lang['value'] = 'Valeur';
-$lang['view'] = 'Cobsulter';
+$lang['view'] = 'Consulter';
 
 // Areas
 $lang['area_add_new_category'] = 'Ajouter une Nouvelle Catégorie';
@@ -80,26 +79,26 @@ $lang['area_admin'] = 'Administration';
 $lang['area_check_in_file'] = 'Déverrouiller le Fichier';
 $lang['area_check_out_file'] = 'Verrouiller le Fichier';
 $lang['area_choose_department'] = 'Choisir un Département';
-$lang['area_delete_category'] = 'Supprimer une Categorie';
+$lang['area_delete_category'] = 'Supprimer une Catégorie';
 $lang['area_deleted_files'] = 'Fichiers Supprimés';
 $lang['area_department_information'] = 'Informations sur le Département';
 $lang['area_display_category'] = 'Afficher tous les Fichiers dans cette Catégorie';
 $lang['area_document_listing'] = 'Liste des Documents';
 $lang['area_file_delete'] = 'Supprimer le Fichier';
-$lang['area_file_details'] = 'Details du Fichier';
+$lang['area_file_details'] = 'Détails du Fichier';
 $lang['area_file_expiration'] = 'Expiration du Fichier';
 $lang['area_personal_profile'] = 'Profil Utilisateur';
 $lang['area_reset_password'] = 'Ré-initialiser le Mot de Passe';
 $lang['area_update_category'] = 'Mettre à jour la Catégorie';
-$lang['area_update_department'] = 'Mettre à jour le Départment';
+$lang['area_update_department'] = 'Mettre à jour le Department';
 $lang['area_update_file'] = 'Mettre à jour le Fichier';
 $lang['area_view_category'] = 'Afficher la Catégorie';
 $lang['area_view_history'] = 'Historique';
 
 // Buttons
-$lang['button_add_category'] = 'Ajout Catégorie';
-$lang['button_add_department'] = 'Ajout Département';
-$lang['button_add_document'] = 'Ajout Document';
+$lang['button_add_category'] = 'Ajouter une Catégorie';
+$lang['button_add_department'] = 'Ajouter un Département';
+$lang['button_add_document'] = 'Ajouter un Document';
 $lang['button_authorize'] = 'Autoriser';
 $lang['button_back'] = 'Revenir';
 $lang['button_cancel'] = 'Annuler';
@@ -110,7 +109,7 @@ $lang['button_continue'] = 'Continuer';
 $lang['button_delete'] = 'Supprimer';
 $lang['button_delete_files'] = 'Supprimer Fichier';
 $lang['button_display_category'] = 'Afficher tous les Fichiers dans cette Catégorie';
-$lang['button_modify_category'] = 'Modifier Categorie';
+$lang['button_modify_category'] = 'Modifier Catégorie';
 $lang['button_modify_department'] = 'Modifier Département';
 $lang['button_reject'] = 'Refuser';
 $lang['button_reset'] = 'Ré-initialiser';
@@ -169,11 +168,11 @@ $lang['label_comment'] = 'Commentaire';
 $lang['label_created_date'] = 'Date de Création';
 $lang['label_default_for_unset'] = 'Permissions par Défaut pour le Département';
 $lang['label_delete'] = 'Supprimer';
-$lang['label_delete_undelete'] = 'Supprimer/Restaurer';
+$lang['label_delete_undelete'] = 'Supprimer / Restaurer';
 $lang['label_department_authority'] = 'Permissions Spécifiques au Département:';
-$lang['label_department'] = 'Departement';
-$lang['label_departments'] = 'Departements';
-$lang['label_department_to_modify'] = 'Departement à modifier';
+$lang['label_department'] = 'Département';
+$lang['label_departments'] = 'Départements';
+$lang['label_department_to_modify'] = 'Département à modifier';
 $lang['label_description'] = 'Description';
 $lang['label_display'] = 'Afficher';
 $lang['label_email_address'] = 'Adresse E-Mail';
@@ -181,8 +180,8 @@ $lang['label_empty'] = 'Vide';
 $lang['label_exact_phrase'] = 'Phrase Exacte';
 $lang['label_example'] = 'Exemple';
 $lang['label_file_archive'] = 'Archive du Fichiers';
-$lang['label_file_category'] = 'Categorie du Fichier';
-$lang['label_file_listing'] = 'Liste des Fichiers';
+$lang['label_file_category'] = 'Catégorie du Fichier';
+$lang['label_file_listing'] = 'Liste des Fichiers.';
 $lang['label_file_location'] = 'Localisation du Fichier';
 $lang['label_file_maintenance'] = 'Maintenance du Fichier';
 $lang['label_filename'] = 'Nom de Fichier';
@@ -193,10 +192,10 @@ $lang['label_first_name'] = 'Prénom';
 $lang['label_forbidden'] = 'Interdit';
 $lang['label_found_documents'] = 'trouvé les document(s)';
 $lang['label_id'] = 'ID';
-$lang['label_is_admin'] = 'Est Admin';
+$lang['label_is_admin'] = 'Est Administrateur ';
 $lang['label_is_reviewer'] = 'Est Relecteur';
 $lang['label_last_name'] = 'Nom de Famille';
-$lang['label_logged_in_as'] = 'Logged in as';
+$lang['label_logged_in_as'] = 'Connecté en tant que';
 $lang['label_moderation'] = 'Modération';
 $lang['label_modified_date'] = 'Date de Modification';
 $lang['label_modify'] = 'Modifier';
@@ -213,7 +212,7 @@ $lang['label_read'] = 'Lu';
 $lang['label_reassign_to'] = 'Ré-assigné à';
 $lang['label_rejected_files'] = 'Fichiers Refusés';
 $lang['label_rejections'] = 'Refus';
-$lang['label_reviewer_for'] = 'Relecteur du Dept. pour';
+$lang['label_reviewer_for'] = 'Relecteur de Département Pour ';
 $lang['label_reviewer'] = 'Relecteur';
 $lang['label_reviews'] = 'Relectures';
 $lang['label_rights'] = 'Droits';
@@ -233,9 +232,9 @@ $lang['label_user_defined_field'] = 'Champ défini par l\'Utilisateur';
 $lang['label_users_in_department'] = 'Utilisateurs dans ce Département';
 $lang['label_user'] = 'Utilisateur';
 $lang['label_view'] = 'Afficher';
-$lang['label_userid'] = 'User ID';
-$lang['label_fileid'] = 'File ID';
-$lang['label_username'] = 'User Name';
+$lang['label_userid'] = 'ID Utilisateur';
+$lang['label_fileid'] = 'ID Fichier';
+$lang['label_username'] = 'Nom d\'utilisateur';
 $lang['label_action'] = 'Action';
 $lang['label_date'] = 'Date';
 $lang['label_type_pr_sec'] = 'Type'; //CHM
@@ -252,16 +251,16 @@ $lang['message_an_email_has_been_sent'] = 'Un email vient d\'être envoyé à l\
 $lang['message_anonymous_view'] = 'Vous venez de passer en mode Consultation Publique';
 $lang['message_are_you_sure_remove'] = 'Êtes vous certain de vouloir supprimer cela?';
 $lang['message_authorized'] = 'Autorisé';
-$lang['message_category_successfully_added'] = 'Categories ajoutée avec succès';
-$lang['message_category_successfully_deleted'] = 'Categories ajoutées avec succès';
-$lang['message_category_successfully_updated'] = 'Categorie mise à jour avec succès';
+$lang['message_category_successfully_added'] = 'Catégories ajoutée avec succès';
+$lang['message_category_successfully_deleted'] = 'Catégories ajoutées avec succès';
+$lang['message_category_successfully_updated'] = 'Catégorie mise à jour avec succès';
 $lang['message_click_to_checkout_document'] = 'Cliquez pour verrouiller le document sélectionné et commencer son téléchargement sur votre disque local';
 $lang['message_config_value_problem'] = 'L\'un des paramètres de configuration pose problème. Merci de vérifier.';
 $lang['message_current'] = 'Courant';
 $lang['message_datadir_problem'] = 'Il y a un problème avec votre répertoire de stockage (dataDir). Vérifiez qu\'il existe bien et est accessible en écriture';
 $lang['message_datadir_problem_exists'] = 'Il y a un problème avec le paramétrage de votre répertoire de stockage (dataDir). Il ne semble pas exister.';
 $lang['message_datadir_problem_writable'] = 'Il y a un problème avec le paramétrage de votre répertoire de stockage (dataDir). Il ne semble pas être accessible en écriture pour le serveur web.';
-$lang['message_department_successfully_added'] = 'Départment ajouté avec succès';
+$lang['message_department_successfully_added'] = 'Département ajouté avec succès';
 $lang['message_department_successfully_updated'] = 'Département mis à jour avec succès';
 $lang['message_directory_creation_failed'] = 'La Création du Répertoire a échoué';
 $lang['message_document_added'] = 'Document ajouté avec succès';
@@ -287,12 +286,12 @@ $lang['message_if_you_are_unable_to_view3'] = '<br> pour commencer le téléchar
 $lang['message_initial_import'] = 'Import Initial';
 $lang['message_last_message'] = 'Dernier Message';
 $lang['message_latest_version'] = 'Dernière version';
-$lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
-$lang['message_need_one_department'] = 'Il doit y avoir à minima Un département';
+$lang['message_max_number_of_results'] = 'Il y a trop de réponses merci d\'utiliser la page <a href="search.php">Rechercher</a> pour affiner vos résultats.';
+$lang['message_need_one_department'] = 'Il doit y avoir à minima un département';
 $lang['message_no_author_comments_available'] = 'Pas de commentaires de l\'auteur pour l\'instant';
 $lang['message_no_description_available'] = 'Pas de Description disponible';
 $lang['message_no_documents_checked_out'] = 'Vous n\'avez actuellement verrouillé aucun document.';
-$lang['message_no_files_found'] = 'Aucun Fichier Trouvé';
+$lang['message_no_files_found'] = 'Aucun Fichier Disponible Actuellement.';
 $lang['message_no_information_available'] = 'Pas d\'information disponible';
 $lang['message_non_unique_account'] = 'Compte Non-Unique';
 $lang['message_non_unique_key'] = 'Clé Non-Unique dans la base de données.';
@@ -316,13 +315,13 @@ $lang['message_the_file_is_too_large'] = 'Ce fichier est trop volumineux. Vérif
 $lang['message_the_file_is_too_large_php_ini'] = 'Ce fichier est trop volumineux pour votre serveur php. Vérifiez le fichier de configuration php.ini et modifiez la valeur max upload/post/memory. La taille maximale autorisée est actuellement de: ';
 $lang['message_there_was_an_error_loggin_you_in'] = 'Une erreur est survenue lors de votre identification. Merci de ré-essayer.';
 $lang['message_there_was_an_error_performing_the_action'] = 'Une erreur est survenue lors de l\'exécution de votre requête.';
-$lang['message_the_username_you_entered'] = 'Le nom d\'utilisateur que vous avez fourni n\'est pas enregistré dans notre base. Contactez nous si vous avez oublié votre nom d\'utilisateur.';
+$lang['message_the_username_you_entered'] = "Le nom utilisateur que vous avez fourni est absent de notre base de données.<br>Contactez nous si vous avez oublié votre nom utilisateur.";
 $lang['message_this_file_cannot_be_checked_in'] = 'Ce fichier ne peut être déverrouillé';
 $lang['message_this_file_cannot_be_uploaded'] = 'Impossible d\'importer correctement ce fichier';
 $lang['message_this_operation_cannot_be_done_file'] = 'Cette opération ne peut pas être effectuée sur ce fichier';
 $lang['message_this_operation_cannot_be_done_rev'] = 'Cette opération ne peut pas être effectuée sur une révision d\'un fichier';
 $lang['message_this_page_requires_root'] = 'Cette page n\'est accessible qu\'au compte administrateur';
-$lang['message_this_site_has_high_security'] = 'Ce site possède un haut niveau de sécurité et nous ne pouvons pas retrouver votre mot de passe pour vous (nous ne les stockons pas). Vous pouvez utiliser le formulaire suivant afin de ré-initialiser votre mot de passe.  Saisissez votre nom d\'utilisateur, puis un email vous sera envoyé à l\'adresse enregistrée pour ce compte dans notre base, avec un lien à cliquer afin de réinitialiser votre mot de passe.  Ensuite, vous pourrez choisir le mot de passe que vous souhaitez.';
+$lang['message_this_site_has_high_security'] = 'Ce site possède un haut niveau de sécurité et nous ne pouvons pas retrouver votre mot de passe pour vous (nous ne les stockons pas).<br>Vous pouvez utiliser le formulaire suivant afin de ré-initialiser votre mot de passe.<br>Saisissez votre nom d\'utilisateur, puis un email vous sera envoyé à l\'adresse enregistrée pour ce compte dans notre base, avec un lien à cliquer afin de réinitialiser votre mot de passe.<br>Ensuite, vous pourrez choisir le mot de passe que vous souhaitez.';
 $lang['message_to_view_your_file'] = 'Afficher le fichier dans une nouvelle fenêtre';
 $lang['message_udf_cannot_be_blank'] = 'Le nom CDU (Champ Défini par l\'Utilisateur) ne peut pas être vide';
 $lang['message_udf_successfully_added'] = 'Champ Défini par l\'Utilisateur CDU() ajouté avec succès.';
@@ -331,8 +330,8 @@ $lang['message_unable_to_determine_root'] = 'Impossible de déterminer le nom d\
 $lang['message_unable_to_find_file'] = 'Impossible de trouver le fichier demandé';
 $lang['message_user_exists'] = 'Ce nom d\'utilisateur existe déjà. Merci <a href=\'signup.php\'>de bien vouloir réessayer</a>';
 $lang['message_user_successfully_added'] = 'Utilisateur ajouté avec succès';
-$lang['message_user_successfully_deleted'] = 'Ustilisateur supprimé avec succès';
-$lang['message_user_successfully_updated'] = 'Utilisateur mis ç jour avec succès';
+$lang['message_user_successfully_deleted'] = 'Utilisateur supprimé avec succès';
+$lang['message_user_successfully_updated'] = 'Utilisateur mis à jour avec succès';
 $lang['message_wrong_file_checkin'] = 'Mauvais Fichier! Merci de déverrouiller le bon fichier.';
 $lang['message_you_are_not_administrator'] = 'Vous n\'avez pas les droits Administrateur';
 $lang['message_you_did_not_enter_value'] = 'Vous n\'avez saisi aucune valeur!';
@@ -343,16 +342,16 @@ $lang['message_your_password_has_been_changed'] = 'Votre mot de passe a bien ét
 $lang['view'] = $lang['label_view'];
 
 // Add File Page
-$lang['addpage_forbidden'] = 'Forbidden';
+$lang['addpage_forbidden'] = 'Interdit';
 $lang['addpage_none'] = 'Aucun';
-$lang['addpage_view'] = 'View';
-$lang['addpage_read'] = 'Read';
-$lang['addpage_write'] = 'Write';
-$lang['addpage_admin'] = 'Admin';
-$lang['addpage_new_file_added'] = 'A new file has been added';
-$lang['addpage_new'] = 'New';
+$lang['addpage_view'] = 'Visible';
+$lang['addpage_read'] = 'Lecture';
+$lang['addpage_write'] = 'Ecriture';
+$lang['addpage_admin'] = 'Administrer';
+$lang['addpage_new_file_added'] = 'Un nouveau fichier à été ajouté.';
+$lang['addpage_new'] = 'Nouveau';
 $lang['addpage_uploader'] = 'Uploader';
-$lang['addpage_file_missing'] = 'Please select a file to upload';
+$lang['addpage_file_missing'] = 'Merci de choisir un fichier à uploader.';
 $lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
@@ -361,20 +360,20 @@ $lang['editpage_check_all'] = 'Tout Sélectionner';
 $lang['editpage_of'] = 'sur';
 $lang['editpage_selected'] = 'sélectionné';
 $lang['editpage_none_selected'] = 'Sélectionner les options';
-$lang['editpage_assign_owner'] = 'Assigné au propriétaire';
-$lang['editpage_assign_department'] = 'Assign au département';
+$lang['editpage_assign_owner'] = 'Propriétaire';
+$lang['editpage_assign_department'] = 'Département';
 $lang['editpage_filter'] = 'Filtre:';
 $lang['editpage_keyword'] = 'Saisissez les Mots Clés';
-$lang['editpage_forbidden'] = 'Forbidden';
+$lang['editpage_forbidden'] = 'Interdit';
 $lang['editpage_none'] = 'Aucun';
-$lang['editpage_view'] = 'View';
-$lang['editpage_read'] = 'Read';
-$lang['editpage_write'] = 'Write';
-$lang['editpage_admin'] = 'Admin';
+$lang['editpage_view'] = 'Visible';
+$lang['editpage_read'] = 'Lecture';
+$lang['editpage_write'] = 'Ecriture';
+$lang['editpage_admin'] = 'Administrer';
 
 // File Permissions Page
-$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
-$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
+$lang['filepermissionspage_edit_department_permissions'] = 'Editer les Permissions Département';
+$lang['filepermissionspage_edit_user_permissions'] = 'Editer les Permissions Utilisateur';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Ce fichier a été supprimé définitivement';
@@ -394,17 +393,17 @@ $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Afficher';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
-$lang['outpage_choose_an_order'] = 'Choose an order';
-$lang['outpage_choose'] = 'Choose';
-$lang['category_option_author'] = 'Author';
-$lang['category_option_department'] = 'Department';
-$lang['category_option_category'] = 'File Category';
-$lang['category_option_default'] = 'Empty';
+$lang['outpage_ascending'] = 'Montant';
+$lang['outpage_descending'] = 'Descendant';
+$lang['outpage_choose_an_order'] = 'Choix du Classement';
+$lang['outpage_choose'] = 'Choix ';
+$lang['category_option_author'] = 'Auteur';
+$lang['category_option_department'] = 'Département';
+$lang['category_option_category'] = 'Catégorie de Fichier';
+$lang['category_option_default'] = 'Vide';
 
 // History Page
-$lang['historypage_category'] = 'Categorie:';
+$lang['historypage_category'] = 'Catégorie:';
 $lang['historypage_file_size'] = 'Taille du fichier:';
 $lang['historypage_creation_date'] = 'Date de création:';
 $lang['historypage_owner'] = 'Propriétaire:';
@@ -432,9 +431,9 @@ $lang['userpage_button_delete'] = 'Supprimer';
 $lang['userpage_button_modify'] = 'Modifier Utilisateur';
 $lang['userpage_button_show'] = 'Afficher Utilisateur';
 $lang['userpage_button_update'] = 'Mettre à Jour Utilisateur';
-$lang['userpage_can_add'] = 'Can Add Documents';
-$lang['userpage_can_checkin'] = 'Can Check-In Documents';
-$lang['userpage_choose_departments'] = 'Choisir le(s) départment(s)';
+$lang['userpage_can_add'] = 'Peut Ajouter des Documents ';
+$lang['userpage_can_checkin'] = 'Peut Valider des Documents ';
+$lang['userpage_choose_departments'] = 'Choisir le(s) Département(s)';
 $lang['userpage_choose_user'] = 'Sélectionnez Profil Utilisateur à Afficher';
 $lang['userpage_confirm_password'] = 'Confirmer le Mot de Passe';
 $lang['userpage_department'] = 'Département';
@@ -456,39 +455,43 @@ $lang['userpage_update_user_demo'] = 'Désolé, mode démonstration seulement, v
 $lang['userpage_user'] = 'Utilisateur';
 $lang['userpage_user_delete'] = 'Choisissez un profil utilisateur à Supprimer';
 $lang['userpage_user_info'] = 'Informations sur l\'Utilisateur';
-$lang['userpage_username'] = 'Nom d\'Utilisateur';
+$lang['userpage_username'] = 'Nom d\'utilisateur';
 $lang['userpage_yes'] = 'Oui';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Modifier les Types de Fichiers';
 $lang['adminpage_edit_settings'] = 'Modifier les Paramètres';
-$lang['adminpage_reports'] = 'Reports';
-$lang['adminpage_access_log'] = 'Access Log';
-$lang['adminpage_reports_file_list'] = 'File List Export';
+$lang['adminpage_reports'] = 'Rapports';
+$lang['adminpage_access_log'] = 'Journal d\'accés';
+$lang['adminpage_reports_file_list'] = 'Exporter la liste des Fichiers';
 
 // Access Log page
-$lang['accesslogpage_access_log'] = 'Access Log';
-$lang['accesslogpage_file_added'] = 'File Added';
-$lang['accesslogpage_file_viewed'] = 'File Viewed';
-$lang['accesslogpage_file_downloaded'] = 'File Downloaded';
-$lang['accesslogpage_file_modified'] = 'File Modified';
-$lang['accesslogpage_file_checked_in'] = 'File Checked-in';
-$lang['accesslogpage_file_checked_out'] = 'File Checked-out';
-$lang['accesslogpage_file_deleted'] = 'File Deleted';
-$lang['accesslogpage_file_authorized'] = 'File Authorized';
-$lang['accesslogpage_file_rejected'] = 'File Rejected';
-$lang['accesslogpage_reserved'] = 'Reserved';
+$lang['accesslogpage_access_log'] = 'Journal d\'accés.';
+$lang['accesslogpage_file_added'] = 'Fichier Ajouté';
+$lang['accesslogpage_file_viewed'] = 'Fichier Lu.';
+$lang['accesslogpage_file_downloaded'] = 'Fichier Téléchargé.';
+$lang['accesslogpage_file_modified'] = 'Fichier Modifié.';
+$lang['accesslogpage_file_checked_in'] = 'Fichier Enregistré';
+$lang['accesslogpage_file_checked_out'] = 'Fichier Vérifié';
+$lang['accesslogpage_file_deleted'] = 'Fichier Effacé.';
+$lang['accesslogpage_file_authorized'] = 'Fichier Autorisé.';
+$lang['accesslogpage_file_rejected'] = 'Fichier Rejeté.';
+$lang['accesslogpage_reserved'] = 'Réservé.';
 
 // Check-in Page
-$lang['checkinpage_file_was_checked_in'] = 'A file has been checked in.';
+$lang['checkinpage_file_was_checked_in'] = 'Un fichier a été enregistré.';
 
 //Category View Page
-$lang['categoryviewpage_list_of_files_title'] = 'Files assigned to this category:';
+$lang['categoryviewpage_list_of_files_title'] = 'Fichiers assignée à cette catégorie:';
 
 //Search Page
-$lang['searchpage_all_meta'] = 'All non-udf metadata';
+$lang['searchpage_all_meta'] = 'Toutes les Méta-donnés';
 
 // Footer
 $lang['footer_support'] = 'Support';
-$lang['footer_feedback'] = 'Feedback';
+$lang['footer_feedback'] = 'Rapport';
 $lang['footer_bugs'] = 'Bugs';
+

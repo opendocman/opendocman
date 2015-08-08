@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Apasati aici pentru a vizualiza fisierele publice in mod anonim';
 $lang['forgotpassword'] = 'Ati uitat parola?';
-$lang['install_folder'] = 'Atentionare de securitate: Daca ati instalat/actualizat deja atunci trebuie sa eliminati folderul \'install\' innainte de a continua';
 $lang['signup'] = 'Creati un cont';
 $lang['welcome'] = 'Bun venit la Sistemul de Management al Documentelor OpenDocMan';
 $lang['welcome2'] = 'Conectati-va pentru a incepe utilizarea sistemului.';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Nume utilizator';
 $lang['userpage_yes'] = 'Da';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Modificare tipuri fisiere';
 $lang['adminpage_edit_settings'] = 'Modificare setari sistem';
 $lang['adminpage_reports'] = 'Rapoarte';
