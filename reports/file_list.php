@@ -27,22 +27,20 @@ session_start();
 
 include('../odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor('../index.php?redirection=reports/file_list.php');
 }
 
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
-if(!$user_obj->isAdmin())
-{
+if (!$user_obj->isAdmin()) {
     header('Location:../error.php?ec=4');
     exit;
 }
 
 function cleanExcelData(&$str)
-{    
+{
     if (strstr($str, '"')) {
         $str = '"' . str_replace('"', '""', $str) . '"';
     }
@@ -81,15 +79,14 @@ $query = "SELECT
           LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}log
               ON {$GLOBALS['CONFIG']['db_prefix']}log.id = {$GLOBALS['CONFIG']['db_prefix']}data.id
           ORDER BY id
-          ";             
+          ";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach($result as $row) {
-// display field/column names as first row
+foreach ($result as $row) {
+    // display field/column names as first row
     if (!$flag) {
-
         fputcsv($out, array_keys($row), ',', '"');
         $flag = true;
     }

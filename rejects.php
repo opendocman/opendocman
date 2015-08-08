@@ -22,10 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //print_r($_REQUEST);
 session_start();
 
-include ('./odm-load.php');
+include('./odm-load.php');
 
-if (!isset ($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -34,28 +33,21 @@ $with_caption = false;
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if(!isset($_POST['submit']))
-{
+if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_rejected'), $last_message);
     $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $pdo);
     $user_perms_obj = new UserPermission($_SESSION['uid'], $pdo);
-    if($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root')
-    {
+    if ($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root') {
         $fileid_array = $user_obj->getAllRejectedFileIds();
-    }
-    else
-    {
+    } else {
         $fileid_array = $user_obj->getRejectedFileIds();
     }
 
-    if(@$_REQUEST['mode']=='root')
-    {
+    if (@$_REQUEST['mode']=='root') {
         echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' method="post">';
-    }
-    else
-    {
+    } else {
         echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
     }
     ?>
@@ -67,62 +59,54 @@ if(!isset($_POST['submit']))
 $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
 
 
-?>
+    ?>
         </td>
     </tr>
 <?php
-            if($list_status != -1)
-            {
-?>
+            if ($list_status != -1) {
+                ?>
     <tr>
         <td>
                 <div class="buttons">
-                    <button class="positive" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review'); ?></button>
-                    <button class="negative" type="submit" name="submit" value="delete"><?php echo msg('button_delete'); ?></button>
+                    <button class="positive" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review');
+                ?></button>
+                    <button class="negative" type="submit" name="submit" value="delete"><?php echo msg('button_delete');
+                ?></button>
                 </div>
 <?php
+
             }
-?>
+    ?>
 </table>
 </form>
 
 <?php
            draw_footer();
-}
-elseif(isset($_POST['submit']) && $_POST['submit'] == 'resubmit')
-{
-    if(!isset($_REQUEST['checkbox']))
-    {
+} elseif (isset($_POST['submit']) && $_POST['submit'] == 'resubmit') {
+    if (!isset($_REQUEST['checkbox'])) {
         header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;
     }
     
-    if(isset($_POST["checkbox"]))
-    {
-        foreach($_POST['checkbox'] as $cbox)
-        {
+    if (isset($_POST["checkbox"])) {
+        foreach ($_POST['checkbox'] as $cbox) {
             $fileid = $cbox;
             $file_obj = new FileData($fileid, $pdo);
             $file_obj->Publishable(0);
         }
     }
     header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
-}
-elseif($_POST['submit'] == 'delete')
-{
-    if(!isset($_REQUEST['checkbox']))
-    {
+} elseif ($_POST['submit'] == 'delete') {
+    if (!isset($_REQUEST['checkbox'])) {
         header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;
     }
     
     $url = 'delete.php?mode=tmpdel&';
     $id = 0;
-    if(isset($_POST["checkbox"]))
-    {
+    if (isset($_POST["checkbox"])) {
         $loop = 0;
-        foreach($_POST['checkbox'] as $num=>$cbox)
-        {
+        foreach ($_POST['checkbox'] as $num=>$cbox) {
             $fileid = $cbox;
             $url .= 'id'.  $num . '='.$fileid.'&';
             $id ++;

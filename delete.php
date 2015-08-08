@@ -21,8 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // check session
 session_start();
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     header('Location:error.php?ec=1');
     exit;
 }
@@ -36,35 +35,27 @@ $redirect = 'out.php';
 $userperm_obj = new User_Perms($_SESSION['uid'], $pdo);
 
 // User has requested a deletion from the file detail page
-if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
-{
-    if(!isset($_REQUEST['num_checkboxes'] ))
-    {
+if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
+    if (!isset($_REQUEST['num_checkboxes'])) {
         $_REQUEST['num_checkboxes'] =1;
     }
     // all ok, proceed!
-    if( !is_dir($GLOBALS['CONFIG']['archiveDir']) )
-    {
+    if (!is_dir($GLOBALS['CONFIG']['archiveDir'])) {
         // Make sure directory is writeable
-        if(!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775))
-        {
+        if (!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775)) {
             $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
             header('Location:error.php?ec=23&last_message=' .$last_message);
             exit;
         }
     }
     
-    for($i = 0; $i<$_REQUEST['num_checkboxes']; $i++)
-    {
-        if(isset($_REQUEST['id' . $i]))
-        {
+    for ($i = 0; $i<$_REQUEST['num_checkboxes']; $i++) {
+        if (isset($_REQUEST['id' . $i])) {
             $id = $_REQUEST['id' . $i];
-            if(strchr($id, '_') )
-            {
+            if (strchr($id, '_')) {
                 header('Location:error.php?ec=20');
             }
-            if($userperm_obj->canAdmin($id))
-            {
+            if ($userperm_obj->canAdmin($id)) {
                 $file_obj = new FileData($id, $pdo);
                 $file_obj->temp_delete();
                 fmove($GLOBALS['CONFIG']['dataDir'] . $id . '.dat', $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat');
@@ -80,9 +71,7 @@ if( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel' )
     callPluginMethod('onAfterArchiveFile');
     
     header('Location: out.php?last_message=' . $last_message);
-}
-elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
-{
+} elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive') {
     isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
     
     //publishable=2 for archive deletion
@@ -93,7 +82,7 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 
     $array_id = array();
     $i = 0;
-    foreach($result as $row) {
+    foreach ($result as $row) {
         $array_id[$i] = $row['id'];
         $i++;
     }
@@ -108,32 +97,23 @@ elseif( isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive' )
 
     $list_status = list_files($array_id, $userperms, $GLOBALS['CONFIG']['archiveDir'], true);
 
-    if( $list_status != -1 )
-    {
+    if ($list_status != -1) {
         $GLOBALS['smarty']->assign('lmode', '');
         display_smarty_template('deleteview.tpl');
     }
-}
-elseif(isset($_POST['submit']) && $_POST['submit']=='Delete file(s)')
-{
+} elseif (isset($_POST['submit']) && $_POST['submit']=='Delete file(s)') {
     isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
 
-    foreach($_REQUEST['checkbox'] as $value)
-    {
-        if(!pmt_delete($value))
-        {
+    foreach ($_REQUEST['checkbox'] as $value) {
+        if (!pmt_delete($value)) {
             header('Location: error.php?ec=21');
             exit;
         }
     }
     header('Location:' . $redirect . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete')
-{
-    if(isset($_REQUEST['checkbox']))
-    {
-        foreach ($_REQUEST['checkbox'] as $fileId)
-        {
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete') {
+    if (isset($_REQUEST['checkbox'])) {
+        foreach ($_REQUEST['checkbox'] as $fileId) {
             $file_obj = new FileData($fileId, $pdo);
             $file_obj->undelete();
             fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
@@ -154,20 +134,16 @@ function pmt_delete($id)
 
     $userperm_obj = new User_Perms($_SESSION['uid'], $pdo);
     
-    if( !$userperm_obj->user_obj->isRoot() )
-    {
+    if (!$userperm_obj->user_obj->isRoot()) {
         header('Location: error.php?ec=4');
         exit;
     }
     // all ok, proceed!
-    if(isset($id))
-    {
-        if(strchr($id, '_') )
-        {
+    if (isset($id)) {
+        if (strchr($id, '_')) {
             header('Location:error.php?ec=20');
         }
-        if($userperm_obj->canAdmin($id))
-        {
+        if ($userperm_obj->canAdmin($id)) {
             // delete from db
             $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = :id";
             $stmt = $pdo->prepare($query);
@@ -187,17 +163,13 @@ function pmt_delete($id)
             $stmt->execute(array(':id' => $id));
 
             $filename = $id . ".dat";
-            unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);            
-            if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )
-            {
+            unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
+            if (is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/')) {
                 $dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
-                if( is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/') )
-                {
+                if (is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/')) {
                     $dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
-                    while($lreadfile = readdir($dir))
-                    {
-                        if(is_file($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile"))
-                        {
+                    while ($lreadfile = readdir($dir)) {
+                        if (is_file($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile")) {
                             unlink($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile");
                         }
                     }

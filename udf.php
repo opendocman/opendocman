@@ -137,7 +137,6 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $field_type = $result[1];
 
     if ($field_type == 1 || $field_type == 2) {
-
         // Do Updates
         if (!empty($_REQUEST['display_name'])) {
             $query = "
@@ -158,7 +157,6 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
         // Do Inserts
         if (!empty($_REQUEST['newvalue'])) {
-
             $query = "
               INSERT INTO {$_REQUEST['udf']}
                 (value)
@@ -277,7 +275,6 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                     ':primary_type' => $_REQUEST['primary_type']
                 ));
             }
-
         }
 
         // Do Deletes

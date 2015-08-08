@@ -23,12 +23,11 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Click here to view public files anonymously';
 $lang['forgotpassword'] = 'Forgot your password?';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'Sign-up for an account';
-$lang['welcome'] = 'Welcome to OpenDocMan';
-$lang['welcome2'] = 'Log in to begin using the system\'s powerful storage, publishing and revision control features.';
-$lang['welcome_anonymous_title'] = 'OpenDocMan Anonymous Page: List All';
-$lang['welcome_anonymous_h1'] = 'OpenDocMan Anonymous Page';
+$lang['welcome'] = 'Welcome.';
+$lang['welcome2'] = 'Log in to begin.';
+$lang['welcome_anonymous_title'] = 'Anonymous Page: List All';
+$lang['welcome_anonymous_h1'] = 'Anonymous Page';
 
 //GLOBAL TERMS
 $lang['action'] = 'Action';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';

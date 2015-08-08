@@ -60,8 +60,7 @@ $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'base_url', '{$_SESSION['baseurl']}', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');"
 );
 
-foreach($sql_operations as $query)
-{
+foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 }
@@ -121,8 +120,7 @@ $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);"
         );
 
-foreach($sql_operations as $query)
-{
+foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 }

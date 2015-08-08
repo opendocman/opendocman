@@ -41,7 +41,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Anonim dosyalar&#305; g&#246;rmek i&#231;in buraya t&#305;klay&#305;n&#305;z.';
 $lang['forgotpassword'] = 'Forgot your password?';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'Sign-up for an account';
 $lang['welcome'] = "OpenDocMan'a ho&#351;geldiniz";
 $lang['welcome2'] = "G&#252;&#231;l&#252; depolama, yay&#305;nlama ve uyarlama kontrol &#246;zellikli sistemi kullanmak i&#231;in oturum a&#231;&#305;n&#305;z.";
@@ -483,6 +482,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';

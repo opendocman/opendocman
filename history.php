@@ -25,125 +25,118 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     header('Location:error.php?ec=2');
     exit;
 }
 
 draw_header(msg('area_view_history'), $last_message);
 //revision parsing
-if(strchr($_REQUEST['id'], '_') )
-{
-    list($_REQUEST['id'], $revision_id) = explode('_' , $_REQUEST['id']);
+if (strchr($_REQUEST['id'], '_')) {
+    list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
 }
 $datafile = new FileData($_REQUEST['id'], $pdo);
 // verify
-if ($datafile->getError() != NULL)
-{
+if ($datafile->getError() != null) {
     header('Location:error.php?ec=2');
     exit;
-}
-else
-{
-// obtain data from resultset
+} else {
+    // obtain data from resultset
 
 $owner_full_name = $datafile->getOwnerFullName();
-$owner = $owner_full_name[1].', '.$owner_full_name[0];
-$real_name = $datafile->getRealName();
-$category = $datafile->getCategoryName();
-$created = $datafile->getCreatedDate();
-$description = $datafile->getDescription();
-$comments = $datafile->getComment();
-$status = $datafile->getStatus();
+    $owner = $owner_full_name[1].', '.$owner_full_name[0];
+    $real_name = $datafile->getRealName();
+    $category = $datafile->getCategoryName();
+    $created = $datafile->getCreatedDate();
+    $description = $datafile->getDescription();
+    $comments = $datafile->getComment();
+    $status = $datafile->getStatus();
 
 // corrections
-if ($description == '')
-{ 
+if ($description == '') {
     $description = msg('message_no_description_available');
 }
-if ($comments == '')
-{ 
-    $comments = msg('message_no_author_comments_available');
-}
-if($datafile->isArchived())
-{	
-    $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
-}
-else
-{	
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
-}
-?>
+    if ($comments == '') {
+        $comments = msg('message_no_author_comments_available');
+    }
+    if ($datafile->isArchived()) {
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
+    } else {
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+    }
+    ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
 
 <tr>
 <td align="right">
 <?php
 // check file status, display appropriate icon
-if ($status == 0)
-{ 
+if ($status == 0) {
     echo '<img src="images/file_unlocked.png" alt="" border=0 align="absmiddle">';
-} 
-else
-{ 
+} else {
     echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
 }
-echo '</td>';
-echo '<td align="left"><font size="+1">'.$real_name.'</font></td>';
-?>
+    echo '</td>';
+    echo '<td align="left"><font size="+1">'.$real_name.'</font></td>';
+    ?>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_category');?></th><td><?php echo $category; ?></td>
+<th valign=top align=right><?php echo msg('historypage_category');
+    ?></th><td><?php echo $category;
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_file_size');?></th><td> <?php echo display_filesize($filename); ?></td>
+<th valign=top align=right><?php echo msg('historypage_file_size');
+    ?></th><td> <?php echo display_filesize($filename);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_creation_date');?></th><td> <?php echo fix_date($created); ?></td>
+<th valign=top align=right><?php echo msg('historypage_creation_date');
+    ?></th><td> <?php echo fix_date($created);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_owner');?></th><td> <?php echo $owner; ?></td>
+<th valign=top align=right><?php echo msg('historypage_owner');
+    ?></th><td> <?php echo $owner;
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_description');?></th><td> <?php echo $description; ?></td>
+<th valign=top align=right><?php echo msg('historypage_description');
+    ?></th><td> <?php echo $description;
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_comment');?></th><td> <?php echo $comments; ?></td>
+<th valign=top align=right><?php echo msg('historypage_comment');
+    ?></th><td> <?php echo $comments;
+    ?></td>
 </tr>
 <tr>
-<th valign=top align=right><?php echo msg('historypage_revision');?></th><td>
+<th valign=top align=right><?php echo msg('historypage_revision');
+    ?></th><td>
     <div id="revision_current">
 <?php 
-if(isset($revision_id))
-{
-    if( $revision_id == 0)
-    {
+if (isset($revision_id)) {
+    if ($revision_id == 0) {
         echo msg('historypage_original_revision');
-    }
-    else
-    {
+    } else {
         echo $revision_id;
     }
-}
-else
-{
+} else {
     echo msg('historypage_latest');
 }
-        ?>
+    ?>
     </div>
 </td>
 </tr>
@@ -153,7 +146,8 @@ else
 <td align="right">
 <img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">
 </td>
-<td><?php echo msg('historypage_history');?></td>
+<td><?php echo msg('historypage_history');
+    ?></td>
 </td>
 </tr>
 
@@ -161,17 +155,20 @@ else
 <td colspan="2" align="center">
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr bgcolor="#83a9f7">
-	<th><font size=-1><?php echo msg('historypage_version');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_modification');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_by');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_note');?></font></th>
+	<th><font size=-1><?php echo msg('historypage_version');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_modification');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_by');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_note');
+    ?></font></th>
 	</tr>
 <?php
-	// query to obtain a list of modifications
-	
-	if( isset($revision_id) )
-	{
-		$query = "
+    // query to obtain a list of modifications
+
+    if (isset($revision_id)) {
+        $query = "
           SELECT
             u.last_name,
             uuser.first_name,
@@ -196,10 +193,8 @@ else
             ':revision_id'=> $revision_id
         ));
         $result = $stmt->fetchAll();
-	}
-	else
-	{
-		$query = "
+    } else {
+        $query = "
           SELECT
             u.last_name,
             u.first_name,
@@ -221,41 +216,45 @@ else
             ':id' => $_REQUEST['id']
         ));
         $result = $stmt->fetchAll();
-	}
+    }
 
 
     $current_revision = $stmt->rowCount();
-	// iterate through resultset
-    foreach($result as $row) {
+    // iterate through resultset
+    foreach ($result as $row) {
         $last_name = $row['last_name'];
         $first_name = $row['first_name'];
         $modified_on = $row['modified_on'];
         $note = $row['note'];
         $revision = $row['revision'];
 
-            if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
-                $bgcolor = "#E3E7F9";
-            } else {
-                $bgcolor = "#FCFCFC";
-            }
+        if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
+            $bgcolor = "#E3E7F9";
+        } else {
+            $bgcolor = "#FCFCFC";
+        }
 
-            echo '<tr bgcolor=' . $bgcolor . '>';
+        echo '<tr bgcolor=' . $bgcolor . '>';
 
-            $extra_message = '';
-            if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision.dat")) {
-                echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
-            } else {
-                echo '<td><font size="-1">' . $revision . $extra_message;
-            }
-            ?>
+        $extra_message = '';
+        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision.dat")) {
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
+        } else {
+            echo '<td><font size="-1">' . $revision . $extra_message;
+        }
+        ?>
                     </font></td>
-                    <td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
-                    <td><font size="-1"><?php echo $last_name . ', ' . $first_name; ?></font></td>
-                    <td><font size="-1"><?php echo $note; ?></font></td>
+                    <td><font size="-1"><?php echo fix_date($modified_on);
+        ?></font></td>
+                    <td><font size="-1"><?php echo $last_name . ', ' . $first_name;
+        ?></font></td>
+                    <td><font size="-1"><?php echo $note;
+        ?></font></td>
             </tr>
 <?php
-	}
-	// clean up
+
+    }
+    // clean up
 ?>
 	</table>
 </td>
@@ -264,7 +263,6 @@ else
 </table>
 <?php
 // Call the plugin API
-callPluginMethod('onAfterHistory',$datafile->getId());
-draw_footer();
+callPluginMethod('onAfterHistory', $datafile->getId());
+    draw_footer();
 }
-

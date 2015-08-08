@@ -136,7 +136,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         ));
 
         // INSERT into admin
-        $user_id = $pdo->lastInsertId();;
+        $user_id = $pdo->lastInsertId();
+        ;
         if (!isset($_POST['admin'])) {
             $_POST['admin'] = '0';
         }
@@ -254,7 +255,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     display_smarty_template('user_delete_pick.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
-
     $user_obj = new User($_POST['item'], $pdo);
     draw_header(msg('userpage_show_user') . $user_obj->getName(), $last_message);
 
@@ -368,7 +368,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     }
 
     draw_footer();
-
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
 
     // Check to make sue they are either the user being modified or an admin
@@ -480,9 +479,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
     header('Location: out.php?last_message=' . $last_message);
-
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
-
     draw_header(msg('userpage_modify_user'), $last_message);
 
     // Check to see if user is admin
@@ -507,7 +504,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     display_smarty_template('user/edit_pick.tpl');
 
     draw_footer();
-
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
     header('Location: admin.php?last_message=' . $last_message);

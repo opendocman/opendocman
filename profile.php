@@ -23,8 +23,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset ($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 

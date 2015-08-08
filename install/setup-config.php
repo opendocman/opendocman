@@ -28,38 +28,37 @@ define('ODM_SETUP_CONFIG', true);
  */
 error_reporting(0);
 
-define( 'ABSPATH', dirname(dirname(__FILE__)) . '/' );
+define('ABSPATH', dirname(dirname(__FILE__)) . '/');
 
 /**#@-*/
 
-if (!file_exists(ABSPATH . 'config-sample.php'))
-{
-	echo ('Sorry, I need a config-sample.php file to work from. Please re-upload this file from your OpenDocMan installation.');
-        exit;
+if (!file_exists(ABSPATH . 'config-sample.php')) {
+    echo('Sorry, I need a config-sample.php file to work from. Please re-upload this file from your OpenDocMan installation.');
+    exit;
 }
 
 $configFile = file(ABSPATH . 'config-sample.php');
 
 // Check if config.php has been created
-if (file_exists(ABSPATH . 'config.php'))
-{
-	echo ("<p>The file 'config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='./'>installing now</a>.</p>");
-        exit;
-
+if (file_exists(ABSPATH . 'config.php')) {
+    echo("<p>The file 'config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='./'>installing now</a>.</p>");
+    exit;
 }
 
-if (isset($_GET['step']))
-	$step = $_GET['step'];
-else
-	$step = 0;
+if (isset($_GET['step'])) {
+    $step = $_GET['step'];
+} else {
+    $step = 0;
+}
 
 /**
  * Display setup config.php file header.
  *
  */
-function display_header() {
-	header( 'Content-Type: text/html; charset=utf-8' );
-?>
+function display_header()
+{
+    header('Content-Type: text/html; charset=utf-8');
+    ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -73,11 +72,12 @@ function display_header() {
 <body>
 <h1 id="logo"><img alt="OpenDocMan" src="../images/logo.gif" /></h1>
 <?php
+
 }//end function display_header();
 
-switch($step) {
-	case 0:
-		display_header();
+switch ($step) {
+    case 0:
+        display_header();
 ?>
 
 <p>Welcome to OpenDocMan. Before getting started, we need some information on the database. You will need to know the following items before proceeding.</p>
@@ -125,11 +125,11 @@ deny from all
 
 <p class="step"><a href="setup-config.php?step=1" class="button">Let&#8217;s go!</a></p>
 <?php
-	break;
+    break;
 
-	case 1:
-		display_header();
-	?>
+    case 1:
+        display_header();
+    ?>
 <form method="post" id="configform" action="setup-config.php?step=2">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
 	<table class="form-table">
@@ -188,131 +188,127 @@ deny from all
     $("#configform").validate();
 </script>
 <?php
-	break;
+    break;
 
-	case 2:
+    case 2:
         // Test the db connection.
-	/**#@+
-	 * @ignore
-	 */
-	define('DB_NAME', trim($_POST['dbname']));
-	define('DB_USER', trim($_POST['uname']));
-	define('DB_PASS', trim($_POST['pwd']));
-	define('DB_HOST', trim($_POST['dbhost']));
+    /**#@+
+     * @ignore
+     */
+    define('DB_NAME', trim($_POST['dbname']));
+    define('DB_USER', trim($_POST['uname']));
+    define('DB_PASS', trim($_POST['pwd']));
+    define('DB_HOST', trim($_POST['dbhost']));
 
-	// We'll fail here if the values are no good.
-		$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
-		try {
-			$pdo = new PDO($dsn, DB_USER, DB_PASS);
-		} catch (PDOException $e) {
-			print "Error!: " . $e->getMessage() . "<br/>";
-			die();
-		}
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // We'll fail here if the values are no good.
+        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+        try {
+            $pdo = new PDO($dsn, DB_USER, DB_PASS);
+        } catch (PDOException $e) {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            die();
+        }
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$dbname  = sanitizeme(trim($_POST['dbname']));
-	$uname   = sanitizeme(trim($_POST['uname']));
-	$passwrd = sanitizeme(trim($_POST['pwd']));
-	$dbhost  = sanitizeme(trim($_POST['dbhost']));
-	$prefix  = sanitizeme(trim($_POST['prefix']));
+        $dbname  = sanitizeme(trim($_POST['dbname']));
+    $uname   = sanitizeme(trim($_POST['uname']));
+    $passwrd = sanitizeme(trim($_POST['pwd']));
+    $dbhost  = sanitizeme(trim($_POST['dbhost']));
+    $prefix  = sanitizeme(trim($_POST['prefix']));
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
         
         // Clean up the datadir a bit to make sure it ends with slash
-        if(substr($datadir,-1) != '/')
-        {
+        if (substr($datadir, -1) != '/') {
             $datadir .= '/';
         }
 
         // If no prefix is set, use default
-        if ( empty($prefix) )
-		$prefix = 'odm_';
+        if (empty($prefix)) {
+            $prefix = 'odm_';
+        }
 
         // Require values from form fields
-	// Validate $prefix: it can only contain letters, numbers and underscores
-	if ( preg_match( '|[^a-z0-9_]|i', $prefix ) )
-		die('<strong>ERROR</strong>: "Table Prefix" can only contain numbers, letters, and underscores.' );
+    // Validate $prefix: it can only contain letters, numbers and underscores
+    if (preg_match('|[^a-z0-9_]|i', $prefix)) {
+        die('<strong>ERROR</strong>: "Table Prefix" can only contain numbers, letters, and underscores.');
+    }
          $_SESSION['db_prefix'] = $prefix;
          $_SESSION['datadir'] = $datadir;
          $_SESSION['baseurl'] = $baseurl;
          $_SESSION['adminpass'] = $adminpass;
          
         // Here we check their datadir value and try to create the folder. If we cannot, we will warn them.
-        if(!is_dir($datadir))
-        {
-            if(!mkdir($datadir))
-            {
+        if (!is_dir($datadir)) {
+            if (!mkdir($datadir)) {
                 echo 'Sorry, we were unable to create the data directory folder. You will need to create it manually at ' . $datadir;
             }
-        }
-        elseif(!is_writable($datadir))
-        {
+        } elseif (!is_writable($datadir)) {
             echo 'The data directory exists, but your web server cannot write to it. Please verify the folder permissions are correct on ' . $datadir;
         }
 
         // Verify the templates_c is writeable
-        if(!is_writable(ABSPATH . '/templates_c'))
-        {
+        if (!is_writable(ABSPATH . '/templates_c')) {
             echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writeable by the web server';
         }
 
         // We also need to guess at their base_url value
 
         // Now replace the default config values with the real ones
-	foreach ($configFile as $line_num => $line) {
-		switch (substr($line,0,16)) {
-			case "define('DB_NAME'":
-				$configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
-				break;
-			case "define('DB_USER'":
-				$configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
-				break;
-			case "define('DB_PASS'":
-				$configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
-				break;
-			case "define('DB_HOST'":
-				$configFile[$line_num] = str_replace("localhost", $dbhost, $line);
-				break;
-			case '$GLOBALS[\'CONFIG':
-				$configFile[$line_num] = str_replace('odm_', $prefix, $line);
-				break;
-		}
-	}
-	if ( ! is_writable(ABSPATH) ) {
-		display_header();
-?>
+    foreach ($configFile as $line_num => $line) {
+        switch (substr($line, 0, 16)) {
+            case "define('DB_NAME'":
+                $configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
+                break;
+            case "define('DB_USER'":
+                $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
+                break;
+            case "define('DB_PASS'":
+                $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
+                break;
+            case "define('DB_HOST'":
+                $configFile[$line_num] = str_replace("localhost", $dbhost, $line);
+                break;
+            case '$GLOBALS[\'CONFIG':
+                $configFile[$line_num] = str_replace('odm_', $prefix, $line);
+                break;
+        }
+    }
+    if (! is_writable(ABSPATH)) {
+        display_header();
+        ?>
 <p>Sorry, but I can't write the <code>config.php</code> file.</p>
 <p>You can create the <code>config.php</code> manually and paste the following text into it.</p>
 <textarea cols="98" rows="15" class="code"><?php
-		foreach( $configFile as $line ) {
-			echo htmlentities($line, ENT_COMPAT, 'UTF-8');
-		}
-?></textarea>
+        foreach ($configFile as $line) {
+            echo htmlentities($line, ENT_COMPAT, 'UTF-8');
+        }
+        ?></textarea>
 <p>After you've done that, click "Proceed to the installer."</p>
 <p class="step"><a href="index.php" class="button">Proceed to the installer</a></p>
 <?php
-        }else {
-            
-		$handle = fopen(ABSPATH . 'config.php', 'w');
-		foreach( $configFile as $line ) {
-			fwrite($handle, $line);
-		}
-		fclose($handle);
-		chmod(ABSPATH . 'config.php', 0666);
-		display_header();
-?>
+
+    } else {
+        $handle = fopen(ABSPATH . 'config.php', 'w');
+        foreach ($configFile as $line) {
+            fwrite($handle, $line);
+        }
+        fclose($handle);
+        chmod(ABSPATH . 'config.php', 0666);
+        display_header();
+        ?>
 <p>Great! You've made it through this part of the installation. OpenDocMan can now communicate with your database. If you are ready, time now to&hellip;</p>
 
 <p class="step"><a href="index.php" class="button">Run the install</a></p>
 <?php
-        }
-	break;
+
+    }
+    break;
 }
 
 function cleanInput($input)
 {
-
     $search = array(
             '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
             '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags
@@ -325,17 +321,12 @@ function cleanInput($input)
 
 function sanitizeme($input)
 {
-    if (is_array($input))
-    {
-        foreach($input as $var=>$val)
-        {
+    if (is_array($input)) {
+        foreach ($input as $var=>$val) {
             $output[$var] = sanitizeme($val);
         }
-    }
-    else
-    {
-        if (get_magic_quotes_gpc())
-        {
+    } else {
+        if (get_magic_quotes_gpc()) {
             $input = stripslashes($input);
         }
         //echo "Raw Input:" . $input . "<br />";
@@ -346,12 +337,9 @@ function sanitizeme($input)
         $input = $input; // Prevent SQL Injection
         $output=$input;
     }
-    if(isset($output) && $output != '')
-    {
+    if (isset($output) && $output != '') {
         return $output;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }

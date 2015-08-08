@@ -21,17 +21,16 @@
  *
  * @author Stephen J. Lawrence Jr.
  */
-class Plugin 
+class Plugin
 {
-
-    var $name = '';
-    var $version = '';
-    var $author = '';
-    var $homepage = '';
-    var $description = '';
-    var $pluginslist = '';
+    public $name = '';
+    public $version = '';
+    public $author = '';
+    public $homepage = '';
+    public $description = '';
+    public $pluginslist = '';
     
-    function Plugin()
+    public function Plugin()
     {
         $name = $this->name;
         $version = $this->version;
@@ -46,16 +45,13 @@ class Plugin
      * INCLUDE ALL PLUGINS
      * @return array $pluginslist An array of plugin names currently in the plug-ins folder
      */
-    function getPluginsList()
+    public function getPluginsList()
     {
         $pluginslist = array();
         $curdir = dirname(__FILE__);
-        if ($handle = opendir($curdir . '/plug-ins'))
-        {
-            while (false !== ($file = readdir($handle)))
-            {
-                if ($file != 'index.html' && $file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && $file != '.git' && is_file('plug-ins/' . $file . '/' . $file . '_class.php'))
-                {
+        if ($handle = opendir($curdir . '/plug-ins')) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != 'index.html' && $file != '.htaccess' && $file != "." && $file != ".." && $file != '.svn' && is_file('plug-ins/' . $file . '/' . $file . '_class.php')) {
                     array_push($pluginslist, $file);
                 }
             }
@@ -67,7 +63,7 @@ class Plugin
     /*
      * Set the value for the pluginslist variable
      */
-    function setPluginsList($var)
+    public function setPluginsList($var)
     {
         $this->pluginslist = $var;
     }
@@ -76,10 +72,9 @@ class Plugin
      * Include all the plugin class files
      * @return true
      */
-    function loadPlugins()
+    public function loadPlugins()
     {
-        foreach($this->getPluginsList() as $file)
-        {
+        foreach ($this->getPluginsList() as $file) {
             include_once('plug-ins/' . $file . '/' . $file . '_class.php');
         }
         return true;
@@ -88,150 +83,206 @@ class Plugin
     /*
      * This function allows for new admin menu items to display for your plugin
      */
-    function onAdminMenu() {}
+    public function onAdminMenu()
+    {
+    }
 
     /*
      * This function is run on the Add File page
      */
-    function onBeforeAdd() {}
+    public function onBeforeAdd()
+    {
+    }
 
     /*
      * This function is run on while the file is being added to the database
      */
-    function onDuringAdd($fileid) {}
+    public function onDuringAdd($fileid)
+    {
+    }
 
     /*
      * This function is run after a new file is added
      */
-    function onAfterAdd($fileid) {}
+    public function onAfterAdd($fileid)
+    {
+    }
 
     /*
      * This function is run before the edit file form is finished being rendered
      */
-    function onBeforeEditFile($fileid) {}
+    public function onBeforeEditFile($fileid)
+    {
+    }
 
     /*
      * This function is run after the user saves and change to a file
      */
-    function onAfterEditFile($fileid) {}
+    public function onAfterEditFile($fileid)
+    {
+    }
 
     /*
      * This function is run after the user deletes a file (aka archive)
      */
-    function onAfterArchiveFile() {}
+    public function onAfterArchiveFile()
+    {
+    }
 
     /*
      * This function is run after the admin permanently deletes a file
      */
-    function onAfterDeleteFile() {}
+    public function onAfterDeleteFile()
+    {
+    }
 
     /*
      * This function is run before a user is logged in
      */
-    function onBeforeLogin() {}
+    public function onBeforeLogin()
+    {
+    }
 
     /*
      * This function is run after a user is logged in
      */
-    function onAfterLogin() {}
+    public function onAfterLogin()
+    {
+    }
 
     /*
      * This function is run after the user session is cleared
      */
 
-    function onAfterLogout(){}
+    public function onAfterLogout()
+    {
+    }
 
     /*
      * This function is called after a failed login
      */
-    function onFailedLogin(){}
+    public function onFailedLogin()
+    {
+    }
 
     /*
      * This function is called after the user views a file
      */
-    function onViewFile() {}
+    public function onViewFile()
+    {
+    }
 
     /*
      * This function is performed after a search has been initiated
      */
-    function onSearch() {}
+    public function onSearch()
+    {
+    }
 
     /*
      * This function is run at the top of the add user form
      */
-    function onBeforeAddUser() {}
+    public function onBeforeAddUser()
+    {
+    }
 
     /*
      * This function is run after the add user form is saved
      */
-    function onAfterAddUser() {}
+    public function onAfterAddUser()
+    {
+    }
 
     /*
      * This function allows for setting of class settings
      */
-    function setProperties(){}
+    public function setProperties()
+    {
+    }
 
     /*
      * This function allows for getting of class settings
      */
-    function getProperties(){}
+    public function getProperties()
+    {
+    }
 
     /*
      * This function is run during the details view
      */
-    function onDuringDetails($fileid){}
+    public function onDuringDetails($fileid)
+    {
+    }
 
     /*
      * This function is run after the details view
      */
-    function onAfterDetails($fileid){}
+    public function onAfterDetails($fileid)
+    {
+    }
     
     /*
      * This function is run before the file list view
      */
-    function onBeforeListFiles($fileList){}
+    public function onBeforeListFiles($fileList)
+    {
+    }
 
     /*
      * This function is run after the file list view is drawn
      */
-    function onAfterListFiles() {}
+    public function onAfterListFiles()
+    {
+    }
 
     /*
      * This function is run before the edited file object is saved to the db
      */
-    function onBeforeEditFileSaved() {}
+    public function onBeforeEditFileSaved()
+    {
+    }
         
      /*
      * This function is run while the add department form is being drawn
      */
 
-    function onDepartmentAddForm() {}
+    public function onDepartmentAddForm()
+    {
+    }
 
     /*
      * This function is run while the edit department form is being drawn
      * @param int $deptId The ID for the department being edited
      */
 
-    function onDepartmentEditForm($deptId) {}
+    public function onDepartmentEditForm($deptId)
+    {
+    }
 
     /*
      * This function is run while the edit department form is being drawn
      * @param array $formData The _REQUEST passed in
      */
 
-    function onDepartmentModifySave($formData) {}
+    public function onDepartmentModifySave($formData)
+    {
+    }
     
     /*
      * This function is run while the add department form is being submitted
      * @param int $deptId The new department ID
      */
 
-    function onDepartmentAddSave($deptId) {}    
+    public function onDepartmentAddSave($deptId)
+    {
+    }
     
     /*
      * This function is run after the file history page is displayed
      * @param int $file_id The new file id
      */
 
-    function onAfterHistory($file_id) {} 
+    public function onAfterHistory($file_id)
+    {
+    }
 }

@@ -18,12 +18,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if ( !isset($odm_did_header) ) {
+if (!isset($odm_did_header)) {
+    $odm_did_header = true;
 
-	$odm_did_header = true;
-
-	require_once( dirname(__FILE__) . '/odm-load.php' );
-
+    require_once(dirname(__FILE__) . '/odm-load.php');
 }
-
-?>
