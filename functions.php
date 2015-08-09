@@ -538,68 +538,35 @@ function sort_browser()
         udf_functions_java_array();
         ///////////////////////////////////////////////////////////////////////
         echo '</script>'.PHP_EOL;
-        ?>
-        <
-        form
-        name = "browser_sort" >
-            < table
-        name = "browser"
-        border = "0"
-        cellspacing = "1" >
-            < tr > < td ><?php echo msg('label_browse_by');
-    ?> < / td >
-            < td
-        NOWRAP
-        ROWSPAN = "0" >
-            < select
-        name = 'category'
-        onChange = 'loadItem(this)'
-        width = '0'
-        size = '1' >
-            < option
-        id = '0'
-        selected ><?php echo msg('label_select_one');
-    ?> < / option >
-        < option
-        id = '1'
-        value = 'author' ><?php echo msg('author');
-    ?> < / option >
-            < option
-        id = '2'
-        value = 'department' ><?php echo msg('label_department');
-    ?> < / option >
-            < option
-        id = '3'
-        value = 'category' ><?php echo msg('label_file_category');
-    ?> < / option >
+?>
+        <form name = "browser_sort">
+            <table name = "browser" border = "0" cellspacing = "1">
+            <tr>
+              <td><?php echo msg('label_browse_by');?></td>
+              <td nowrap rowspan="0">
+                <select name="category" onChange="loadItem(this)" width="0" size="1">
+                    <option id="0" selected ><?php echo msg('label_select_one');?> </option>
+                    <option id="1" value="author"><?php echo msg('author');?> </option>
+                    <option id="2" value="department"><?php echo msg('label_department');?></option>
+                    <option id="3" value="category"><?php echo msg('label_file_category');?></option>
             <?php
             udf_functions_java_options(4);
         ?>
-            < / select >
-            < / td >
-            < td >
-            < select
-        name = 'category_item'
-        onChange = 'loadOrder(this)' >
-            < option
-        id = '0'
-        selected ><?php echo msg('label_empty');
-    ?> < / option >
-        < / select >
-        < / td >
-        < td >
-        < select
-        name = 'category_item_order'
-        onChange = 'load(this)' >
-            < option
-        id = '0'
-        selected ><?php echo msg('label_empty');
-    ?> < / option >
-        < / select >
-        < / td >
-        < / tr >
-        < / table >
-        < / form >
+                </select>
+            </td>
+            <td>
+                <select name="category_item" onChange="loadOrder(this)">
+                    <option id="0" selected ><?php echo msg('label_empty');?></option>
+                </select>
+            </td>
+            <td>
+                <select name="category_item_order" onChange="load(this)">
+                    <option id="0" selected ><?php echo msg('label_empty');?></option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</form >
     <?php
 
 }

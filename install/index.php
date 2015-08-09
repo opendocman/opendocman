@@ -517,10 +517,10 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             <td>New Installation (Will wipe any current data!)<br/><br/></td>
         </tr>
         <tr>
-        <td><a href="index.php?op=install" class="button"
-               onclick="javascript:return confirm('are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.');">
-                Click HERE To set up database for v<?php echo $GLOBALS['CONFIG']['current_version'];
-                ?> release of OpenDocMan </a><br /><br /></td>
+        <td>
+            <a href="index.php?op=install" class="button" onclick="return confirm('Are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.')">
+                Click HERE To set up database for v<?php echo $GLOBALS['CONFIG']['current_version'];?> release of OpenDocMan </a><br /><br />
+        </td>
         <?php
     } elseif ($is_upgrade) {
         ?>

@@ -108,7 +108,7 @@ if (!defined('UserPermission_class')) {
                 ':uid' => $this->uid,
                 ':view_right' => $this->VIEW_RIGHT
             ));
-            $array = $stmt->fetchAll();
+            $array = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             $dept_perms_file_array = array_diff($dept_perms_file_array, $array);
             $dept_perms_file_array = array_diff($dept_perms_file_array, $user_perms_file_array);
