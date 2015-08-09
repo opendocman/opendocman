@@ -483,14 +483,14 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 
     function print_intro()
     {
-    include_once('../version.php');
-    include_once('../Settings_class.php');
+        include_once('../version.php');
+        include_once('../Settings_class.php');
 
-    $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
-    $db_version = Settings::get_db_version($prefix);
-    $is_upgrade = ($db_version != REQUIRED_VERSION);
+        $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
+        $db_version = Settings::get_db_version($prefix);
+        $is_upgrade = ($db_version != REQUIRED_VERSION);
 
-    ?>
+        ?>
     <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
 </div>
 <hr>
@@ -512,22 +512,25 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </td>
     </tr>
     <?php if ($db_version == 'Unknown') {
-        ?>
+    ?>
         <tr>
             <td>New Installation (Will wipe any current data!)<br/><br/></td>
         </tr>
         <tr>
         <td>
             <a href="index.php?op=install" class="button" onclick="return confirm('Are you sure? This will modify the database you have configured in config.php. Only use this option for a FRESH INSTALL.')">
-                Click HERE To set up database for v<?php echo $GLOBALS['CONFIG']['current_version'];?> release of OpenDocMan </a><br /><br />
+                Click HERE To set up database for v<?php echo $GLOBALS['CONFIG']['current_version'];
+    ?> release of OpenDocMan </a><br /><br />
         </td>
         <?php
-    } elseif ($is_upgrade) {
-        ?>
+
+} elseif ($is_upgrade) {
+    ?>
         <tr>
             <td>Your current Database schema version: <strong><?php echo $db_version;
-                    ?></strong><br/><br/>
-                Required Database schema version: <?php echo REQUIRED_VERSION; ?><br/><br />
+    ?></strong><br/><br/>
+                Required Database schema version: <?php echo REQUIRED_VERSION;
+    ?><br/><br />
             </td>
         </tr>
         <tr>
@@ -582,8 +585,9 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             <td><a href="index.php?op=update_10">Upgrade from DB schema version 1.0</a><br><br></td>
         </tr>
         <?php
-    } else {
-        ?>
+
+} else {
+    ?>
         <tr>
             <td>
                 Nothing to update<br><br>
@@ -591,12 +595,13 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             </td>
         </tr>
         <?php
-    }
-    ?>
+
+}
+        ?>
 </table>
 <?php
 
-}
+    }
 ?>
 </body>
 </html>
