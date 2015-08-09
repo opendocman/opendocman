@@ -19,8 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 // Eliminate multiple inclusion of config.php
-if( !defined('config') )
-{
+if (!defined('config')) {
     define('config', 'true', false);
 
 // config.php - useful variables/functions
@@ -55,6 +54,7 @@ $GLOBALS['CONFIG']['db_prefix'] = 'odm_';
 
 
 /** Absolute path to the OpenDocMan directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+if (!defined('ABSPATH')) {
+    define('ABSPATH', dirname(__FILE__) . '/');
+}
 }

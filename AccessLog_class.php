@@ -25,15 +25,16 @@
  * @author Stephen Lawrence Jr.
  * @param string $accesslog
  */
-class AccessLog extends Plugin {
+class AccessLog extends Plugin
+{
+    public $accesslog='';
     
-    var $accesslog='';
-    
-    /*
+    /**
      * AccessLog constructor for the AccessLog plugin
-     * @param string $_AccessLog Message to display
+     * @param string $_accesslog Message to display
      */
-    function AccessLog($_accesslog='') {
+    public function AccessLog($_accesslog='')
+    {
         $this->name = 'AccessLog';
         $this->author = 'Stephen Lawrence Jr';
         $this->version = '1.0';
@@ -43,45 +44,54 @@ class AccessLog extends Plugin {
         $this->accesslog = $_accesslog;
     }
 
-    /*
+    /**
      * @param string $_var The string to display
      */
-    function setAccessLog($_var) {
+    public function setAccessLog($_var)
+    {
         $this->accesslog = $_var;
     }
 
-    /*
+    /**
      * @returns string $var Get the value of accesslog var
      */
-    function getAccessLog() {
+    public function getAccessLog()
+    {
         $var = $this->accesslog;
         return $var;
     }
     
-    /*
+    /**
      * Draw the admin menu
      * Required if you want an admin menu to show for your plugin
      */
-    function onAdminMenu()
+    public function onAdminMenu()
     {
         $curdir = dirname(__FILE__);
         $GLOBALS['smarty']->display('file:' . $curdir . '/templates/accesslog.tpl');
     }
 
-    /*
+    /**
      * Create the entry into the access_log database
      * @param int $fileId
      * @param string $type The type of entry to describe what happened
+     * @param PDO $pdo
      */
-    static function addLogEntry($fileId, $type)
+    public static function addLogEntry($fileId, $type, PDO $pdo)
     {
-        if ($fileId == 0)
-        {
+        if ($fileId == 0) {
             global $id;
             $fileId = $id;
         }
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}access_log (file_id,user_id,timestamp,action) VALUES ( '$fileId', '$_SESSION[uid]',NOW(), '$type')";
-        $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-    }
 
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}access_log (file_id,user_id,timestamp,action) VALUES ( :file_id, :uid, NOW(), :type)";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(
+            array(
+                ':file_id' => $fileId,
+                ':uid' => $_SESSION['uid'],
+                ':type' => $type
+            )
+        );
+    }
 }

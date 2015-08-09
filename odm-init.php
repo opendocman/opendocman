@@ -29,8 +29,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 /*
  * Connect to Database
  */
-$GLOBALS['connection'] = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die ("Unable to connect: " . mysql_error());
-$db = mysql_select_db(DB_NAME, $GLOBALS['connection']);
 
 $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
 try {
@@ -50,20 +48,20 @@ include('includes/FirePHPCore/fb.php');
 /*
  * Load the Settings class
  */
-require_once ( 'Settings_class.php');
-$settings = new Settings();
+require_once('Settings_class.php');
+$settings = new Settings($pdo);
 $settings->load();
 
 /*
  * Common functions
  */
-require_once( 'functions.php' );
+require_once('functions.php');
 
 /*
  * Load the allowed file types list
  */
-require_once ( 'FileTypes_class.php' );
-$filetypes = new FileTypes_class();
+require_once('FileTypes_class.php');
+$filetypes = new FileTypes_class($pdo);
 $filetypes->load();
 
 // Set the revision directory. (relative to $dataDir)

@@ -18,7 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-include ('odm-load.php');
+include('odm-load.php');
 
 // If kerbauth, then display warning about shutting down browser
 session_start();
@@ -26,9 +26,7 @@ session_start();
 $_SESSION = array();
 // Finally, destroy the session.
 session_destroy();
-if($GLOBALS["CONFIG"]["authen"] =='kerbauth')
-{
-
+if ($GLOBALS["CONFIG"]["authen"] =='kerbauth') {
     ?>
 	<html>
 	 <BODY bgcolor="#FFFFFF" link="#000000" vlink="#000000" background="images/background_blue.gif">
@@ -68,16 +66,12 @@ if($GLOBALS["CONFIG"]["authen"] =='kerbauth')
         </FORM>
 <?php	
 draw_footer();
-}
-else
-// mysql auth, so just kill session and show login prompt
-{
+} else {// mysql auth, so just kill session and show login prompt
         session_start();
-        unset($_SESSION['uid']);
+    unset($_SESSION['uid']);
 
         // Call the plugin API
         callPluginMethod('onAfterLogout');
 
-        header('Location:index.php');
+    header('Location:index.php');
 }
-

@@ -18,7 +18,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 echo 'Updating user table<br />';
-$result = mysql_query("
-ALTER TABLE user ADD pw_reset_code CHAR(32) default NULL 
-") or die("<br>Could not update" . mysql_error());
+$query = "ALTER TABLE user ADD pw_reset_code CHAR(32) default NULL";
+$stmt = $pdo->prepare($query);
+$stmt->execute();

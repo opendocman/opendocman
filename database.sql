@@ -188,7 +188,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','', 1, 1);
+INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.9');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.3.0');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -259,7 +259,6 @@ INSERT INTO `odm_settings` VALUES(NULL,'max_filesize', '5000000', 'Set the maxim
 INSERT INTO `odm_settings` VALUES(NULL,'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255');
 INSERT INTO `odm_settings` VALUES(NULL,'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num');
 INSERT INTO `odm_settings` VALUES(NULL,'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool');
-INSERT INTO `odm_settings` VALUES(NULL,'secureurl', 'True', 'Secure URL control: On or Off (case sensitive). When set to \"On\", all urls will be secured. When set to \"Off\", all urls are normal and readable', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');
@@ -291,6 +290,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'text/richtxt', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/mspowerpoint', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/octet-stream', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/tiff', 1);
 INSERT INTO `odm_filetypes` VALUES(NUll, 'image/tif', 1);

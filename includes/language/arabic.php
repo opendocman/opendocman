@@ -24,7 +24,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'انقر هنالعرض الملفات العامة';
 $lang['forgotpassword'] = 'تغيير كلمة المرور';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'إنشاء حساب جديد';
 $lang['welcome'] = 'نظام التوثيق الآلي';
 $lang['welcome2'] = 'الدخول للنظام';
@@ -294,7 +293,7 @@ $lang['message_no_author_comments_available'] = 'لايوجد تعليقات م�
 $lang['message_no_description_available'] = 'لايوجد وصف متاح';
 $lang['message_no_documents_checked_out'] = 'لايوجد اي وثيقة للتفحص حاليا';
 $lang['message_no_files_found'] = 'لا توجد ملفات';
-$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة '; 
+$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة ';
 $lang['message_non_unique_account'] = 'حساب غير وحيد'; //Abduh says :this value must be changed
 $lang['message_non_unique_key'] = 'مفتاح غير وحيد في قاعدة البيانات'; //Abduh says :this value must be changed
 $lang['message_nothing_to_do'] = 'لا توجد علاقة'; //Abduh says :this value must be changed
@@ -373,6 +372,10 @@ $lang['editpage_view'] = 'عرض';
 $lang['editpage_read'] = 'قراءة';
 $lang['editpage_write'] = 'كتابة';
 $lang['editpage_admin'] = 'مسئول';
+
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'تم حذف الملف بشكل نهائي';
@@ -458,6 +461,9 @@ $lang['userpage_username'] = 'إسم المستخدم';
 $lang['userpage_yes'] = 'نعم';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'تحرير نوعية الملف';
 $lang['adminpage_edit_settings'] = 'تحرير الاعدادات';
 $lang['adminpage_reports'] = 'تقارير';
@@ -486,3 +492,7 @@ $lang['categoryviewpage_list_of_files_title'] = 'الملفات المخصصة �
 //Search Page
 $lang['searchpage_all_meta'] = 'بحث في الحقول الرئيسية';
 
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

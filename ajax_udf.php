@@ -21,17 +21,17 @@ include('odm-load.php');
 
 $pdo = $GLOBALS['pdo'];
 
-if(isset($_GET['q'])) {
-    $q=mysql_real_escape_string($_GET['q']);
+if (isset($_GET['q'])) {
+    $q = $_GET['q'];
 }
 
-if(isset($_GET['add_value'])) {
+if (isset($_GET['add_value'])) {
     //$add_value = preg_replace('/ /', '', $_GET['add_value']);
-    $add_value = mysql_real_escape_string($_GET['add_value']);
+    $add_value = $_GET['add_value'];
 }
 
-if(isset($_GET['table'])) {
-    $tablename = mysql_real_escape_string($_GET['table']);
+if (isset($_GET['table'])) {
+    $table_name = $_GET['table'];
 }
 ?>
     <table border="0">
@@ -45,8 +45,8 @@ $stmt = $pdo->prepare($udf_table_names);
 $stmt->execute();
 $udf_tables_names_result = $stmt->fetchAll();
 
-if($q != "" && $add_value != "add" && $add_value != "edit"){
-?>
+if ($q != "" && $add_value != "add" && $add_value != "edit") {
+    ?>
             <td>
 <?php
     $explode_add_value = explode('_', $add_value);
@@ -56,17 +56,15 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
         $field_name = '';
     }
     if ($add_value != '' && $field_name != '') {
-        
-        $whitelisted = false;
-        foreach ($udf_tables_names_result as $whitelist) {
-            if($add_value == $whitelist['table_name']) {
-                $whitelisted = true;              
+        $white_listed = false;
+        foreach ($udf_tables_names_result as $white_list) {
+            if ($add_value == $white_list['table_name']) {
+                $white_listed = true;
             }
         }
         reset($udf_tables_names_result);
         
-        if($whitelisted) {
-     
+        if ($white_listed) {
             $stmt = $pdo->prepare("SELECT * FROM $add_value");
             $stmt->execute();
             $result = $stmt->fetchAll();
@@ -83,11 +81,11 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
             }
 
             if ($q == 'secondary') {
-                $tablename = '_secondary';
+                $table_name = '_secondary';
             } elseif ($q == 'primary') {
-                $tablename = '_primary';
+                $table_name = '_primary';
             } else {
-                $tablename = '_secondary WHERE pr_id = "' . $q . '"';
+                $table_name = '_secondary WHERE pr_id = "' . $q . '"';
             }
 
             echo '<table>';
@@ -96,17 +94,17 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
                   <th>' . msg('value') . '</th>
                   </tr>';
 
-            if (( ( (int) $q == $q && (int) $q > 0 ) || $q == 'primary')) {
+            if ((((int) $q == $q && (int) $q > 0) || $q == 'primary')) {
                 // Find out if the passed argument matches an actual tablename 
 
-                $full_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $tablename;
-                $whitelisted = false;
-                foreach ($udf_tables_names_result as $whitelist) {
-                    if ($full_table_name == $whitelist['table_name']) {
-                        $whitelisted = true;
+                $full_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $table_name;
+                $white_listed = false;
+                foreach ($udf_tables_names_result as $white_list) {
+                    if ($full_table_name == $white_list['table_name']) {
+                        $white_listed = true;
                     }
                 }
-                if ($whitelist) {
+                if ($white_list) {
                     $stmt = $pdo->prepare("SELECT * FROM $full_table_name");
                     $stmt->execute();
                     $result = $stmt->fetchAll();
@@ -130,10 +128,10 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
                             <th align=right>' . msg('new') . ':</th>
                             <td><input type=textbox maxlength="16" name="newvalue"></td>
                           </tr>';
-                    echo '<tr><td colspan="2">';
-                    echo '<div class="buttons">
+        echo '<tr><td colspan="2">';
+        echo '<div class="buttons">
                             <button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
-?>
+        ?>
                             <button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
                           </div>
                         </td>
@@ -145,22 +143,20 @@ if($q != "" && $add_value != "add" && $add_value != "edit"){
 }
 
 if ($add_value == "add") {
+    $add_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary';
 
-    $add_tablename = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary';
-
-    $whitelisted = false;
-    foreach ($udf_tables_names_result as $whitelist) {
-        if ($add_tablename == $whitelist['table_name']) {
-            $whitelisted = true;
+    $white_listed = false;
+    foreach ($udf_tables_names_result as $white_list) {
+        if ($add_table_name == $white_list['table_name']) {
+            $white_listed = true;
         }
     }
-    if ($whitelist) {
-        $stmt = $pdo->prepare("SELECT * FROM $add_tablename WHERE pr_id = :q");
-        $stmt->bindParam(':q', $q);
-        $stmt->execute();
+    if ($white_list) {
+        $stmt = $pdo->prepare("SELECT * FROM $add_table_name WHERE pr_id = :q");
+        $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
+        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary">';
         foreach ($result as $subrow) {
             echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
         }
@@ -169,22 +165,19 @@ if ($add_value == "add") {
 }
 
 if ($add_value == "edit") {
-
-    $edit_tablename = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary';
-    $whitelisted = false;
-    foreach ($udf_tables_names_result as $whitelist) {
-        if ($edit_tablename == $whitelist['table_name']) {
-            $whitelisted = true;
+    $edit_tablename = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary';
+    $white_listed = false;
+    foreach ($udf_tables_names_result as $white_list) {
+        if ($edit_tablename == $white_list['table_name']) {
+            $white_listed = true;
         }
     }
-    if ($whitelist) {
-
+    if ($white_list) {
         $stmt = $pdo->prepare("Select * FROM $edit_tablename WHERE pr_id = :q");
-        $stmt->bindParam(':q', $q);
-        $stmt->execute();
+        $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $tablename . '_secondary">';
+        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary">';
         foreach ($result as $subrow) {
             echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
         }

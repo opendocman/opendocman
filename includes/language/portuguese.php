@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Clique aqui para ler arquivos públicos anonimamente';
 $lang['forgotpassword'] = 'Esqueceu-se da palavra-passe?';
-$lang['install_folder']  = 'Nota de segurança: Se você já instalou / atualizou então você deve remover a pasta \'install\' antes de prosseguir';
 $lang['signup'] = 'Entre com uma conta';
 $lang['welcome'] = 'Bem vindo ao opendocman';
 $lang['welcome2'] = 'Entre para começar a usar o sistema com recursos poderosos de armazenamento, edição e controle de revisão.';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Nome do Usuário';
 $lang['userpage_yes'] = 'Sim';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Editar tipos de arquivo';
 $lang['adminpage_edit_settings'] = 'Editar configurações';
 $lang['adminpage_reports'] = 'Relatórios';

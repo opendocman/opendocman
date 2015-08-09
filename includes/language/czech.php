@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klikněte zde pro prohlížení veřejných souborů';
 $lang['forgotpassword'] = 'Zapoměli jste heslo?';
-$lang['install_folder']  = 'Varování: Pokud jste instalovali/updatovali OpenDocMan měli by jste odebrat adresář \'install\' před další prací';
 $lang['signup'] = 'Vytvořit účet';
 $lang['welcome'] = 'Vítejte ve správě dokumentů';
 $lang['welcome2'] = 'Přihlaste se pro použití systému.';
@@ -461,6 +460,9 @@ $lang['userpage_username'] = 'Uživatelské jméno';
 $lang['userpage_yes'] = 'Ano';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Upravit typy souborů';
 $lang['adminpage_edit_settings'] = 'Upravit nastavení';
 $lang['adminpage_reports'] = 'Záznamy';

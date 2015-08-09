@@ -18,14 +18,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+global $pdo;
+
 echo 'Updating db version...<br />';
-$result = mysql_query("UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.6' WHERE sys_name='version'")
-        or die("<br>Could not update version number: " . mysql_error());
+$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.2.6' WHERE sys_name='version'";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 echo 'Adding the settings table...<br />';
  // Create the settings table
- $result = mysql_query("
-        CREATE TABLE IF NOT EXISTS `{$_SESSION['db_prefix']}settings` (
+ $query = "CREATE TABLE IF NOT EXISTS `{$_SESSION['db_prefix']}settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 `name` VARCHAR( 255 ) NOT NULL ,
 `value` VARCHAR( 255 ) NOT NULL ,
@@ -33,8 +35,9 @@ echo 'Adding the settings table...<br />';
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
 UNIQUE ( `name` )
-) ENGINE = MYISAM
-        ") or die("<br>Could not create {$_SESSION['db_prefix']}settings table. Error was:" .  mysql_error());
+) ENGINE = MYISAM";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');",
@@ -57,19 +60,19 @@ $sql_operations = array(
 "INSERT INTO `{$_SESSION['db_prefix']}settings` VALUES(NULL,'base_url', '{$_SESSION['baseurl']}', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');"
 );
 
-foreach($sql_operations as $query)
-{
-    $result = mysql_query($query) or die('Died while inserting to settings table. Are you already running a version greater than 1.2.5.7?: ' . mysql_error());
+foreach ($sql_operations as $query) {
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 }
 
 echo 'Adding the filetypes table...<br />';
-$result = mysql_query("
-CREATE  TABLE IF NOT EXISTS `{$_SESSION['db_prefix']}filetypes` (
+$query = "CREATE  TABLE IF NOT EXISTS `{$_SESSION['db_prefix']}filetypes` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `type` VARCHAR(255) NOT NULL ,
   `active` TINYINT(4) NOT NULL ,
-  PRIMARY KEY (`id`) )
-    ") or die("<br>Could not create {$_SESSION['db_prefix']}filetypes table. Error was:" .  mysql_error());
+  PRIMARY KEY (`id`) )";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
 $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'image/gif', 1);",
@@ -117,9 +120,9 @@ $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);"
         );
 
-foreach($sql_operations as $query)
-{
-    $result = mysql_query($query) or die('Died while inserting to filetypes table: ' . mysql_error());
+foreach ($sql_operations as $query) {
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
 }
 
 echo 'Update to 1.2.6 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';

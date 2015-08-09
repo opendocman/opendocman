@@ -17,30 +17,28 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-if (!defined('Category_class'))
-{
+if (!defined('Category_class')) {
     define('Category_class', 'true', false);
 
     class Category
     {
-        /*
+        /**
          * getAllCategories - Returns an array of all the categories
+         * @param PDO $pdo
          * @returns array
          */
-
-        public static function getAllCategories()
+        public static function getAllCategories(PDO $pdo)
         {
             // query to get a list of available users
             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
-            $result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-            while ($row = mysql_fetch_assoc($result))
-            {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            foreach ($result as $row) {
                 $categoryListArray[] = $row;
             }
-            mysql_free_result ($result);
             return $categoryListArray;
         }
-
     }
-
 }

@@ -26,45 +26,49 @@ session_start();
  * Test to see if we have the config.php file. If not, must not be installed yet.
 */
 
-if(!file_exists('config.php'))
-{
+if (!file_exists('config.php')) {
+    if (
+        !extension_loaded('pdo')
+        || !extension_loaded('pdo_mysql')
+    ) {
+        echo "<p>PHP pdo Extensions not loaded. <a href='./'>try again</a>.</p>";
+        exit;
+    }
     // A config file doesn't exist
     ?>
-    <html><head><link rel="stylesheet" href="templates/common/css/install.css" type="text/css" /></head>
-        <body>Looks like this is a new installation because we did not find a config.php file. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a Configuration File</a></p></body>
+    <html>
+    <head>
+        <link rel="stylesheet" href="templates/common/css/install.css" type="text/css"/>
+    </head>
+    <body>Looks like this is a new installation because we did not find a config.php file or we cannot locate the
+    database. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a
+            Configuration File</a></p></body>
     </html>
     <?php
     exit;
 }
 
-require_once ('odm-load.php');
+require_once('odm-load.php');
 
-if (!isset($_REQUEST['last_message']))
-{
+if (!isset($_REQUEST['last_message'])) {
     $_REQUEST['last_message'] = '';
 }
 
 // Call the plugin API
 callPluginMethod('onBeforeLogin');
 
-if(isset($_SESSION['uid']))
-{
-        // redirect to main page
-        if(isset($_REQUEST['redirection']))
-        {
-            redirect_visitor($_REQUEST['redirection']);
-        }
-        else
-        {
-            redirect_visitor('out.php');
-        }
+if (isset($_SESSION['uid'])) {
+    // redirect to main page
+    if (isset($_REQUEST['redirection'])) {
+        redirect_visitor($_REQUEST['redirection']);
+    } else {
+        redirect_visitor('out.php');
+    }
 }
 
-if(isset($_POST['login']))
-{
-    if(!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir']))
-    {
-        echo "<font color=red>" . msg('message_datadir_problem'). "</font>";
+if (isset($_POST['login'])) {
+    if (!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir'])) {
+        echo "<font color=red>" . msg('message_datadir_problem') . "</font>";
         exit;
     }
 
@@ -73,59 +77,81 @@ if(isset($_POST['login']))
 
     // check login and md5()
     // connect and execute query
-    $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = md5('$frmpass')";
-    $result = mysql_query("$query") or die ("Error in query. Is the database created ?: $query. " . mysql_error());
-    if(mysql_num_rows($result) != 1)
-    {
+    $query = "
+      SELECT
+        id,
+        username,
+        password
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}user
+      WHERE
+        username = :frmuser
+      AND
+        password = md5(:frmpass)
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':frmuser' => $frmuser,
+        ':frmpass' => $frmpass
+    ));
+    $result = $stmt->fetchAll();
+
+    if (count($result) != 1) {
         // Check old password() method
-        $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = '$frmuser' AND password = password('$frmpass')";
-        $result = mysql_query("$query") or die ("Error in query: $query. " . mysql_error());
+        $query = "
+          SELECT
+            id,
+            username,
+            password
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}user
+          WHERE
+            username = :frmuser
+          AND
+            password = password(:frmpass)
+            ";
+
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':frmuser' => $frmuser,
+            ':frmpass' => $frmpass
+        ));
+        $result = $stmt->fetchAll();
     }
 
     // if row exists - login/pass is correct
-    if (mysql_num_rows($result) == 1)
-    {        
+    if (count($result) == 1) {
         // register the user's ID
-        list($id, $username, $password) = mysql_fetch_row($result);
+        $id = $result[0]['id'];
+
         // initiate a session
         $_SESSION['uid'] = $id;
 
         // Run the plugin API
         callPluginMethod('onAfterLogin');
-        
+
         // redirect to main page
-        if(isset($_REQUEST['redirection']))
-        {
+        if (isset($_REQUEST['redirection'])) {
             redirect_visitor($_REQUEST['redirection']);
+        } else {
+            redirect_visitor('out.php');
         }
-        else
-        {
-           redirect_visitor('out.php');
-        }
-        mysql_free_result ($result);
         // close connection
-    }
-    else
-    {
+    } else {
         // Login Failed
-        mysql_free_result ($result);
         // redirect to error page
-        
+
         // Call the plugin API
         callPluginMethod('onFailedLogin');
-        
+
         header('Location: error.php?ec=0');
     }
-}
-elseif(!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] =='mysql')
-{    
+} elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] == 'mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
-    
+
     $GLOBALS['smarty']->assign('redirection', $redirection);
     display_smarty_template('login.tpl');
+} else {
+    echo 'Check your config';
 }
-else
-{
-        echo 'Check your config';
-}
-        draw_footer();
+draw_footer();

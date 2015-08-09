@@ -18,7 +18,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-$result = mysql_query("
+global $pdo;
+
+$query = "
 ALTER TABLE `data`
     MODIFY category tinyint(4) unsigned NOT NULL DEFAULT '0',
     MODIFY status smallint(6) NULL DEFAULT NULL,
@@ -31,26 +33,27 @@ ALTER TABLE `data`
 #    data.category changed from smallint(5) unsigned NOT NULL DEFAULT '0' to tinyint(4) unsigned NOT NULL DEFAULT '0'.
 #    data.status changed from smallint(6) unsigned NULL DEFAULT NULL to smallint(6) NULL DEFAULT NULL.
 #  Possibly data modifications needed!
-#
-") or die("<br>Could not update" . mysql_error());
+#";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-ALTER TABLE `dept_perms`
+$query = "ALTER TABLE `dept_perms`
     ADD INDEX rights (rights),
     ADD INDEX `dept_id` (`dept_id`),
-    ADD INDEX fid (fid)
-") or die("<br>Could not update dept_perms" . mysql_error());
+    ADD INDEX fid (fid)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-ALTER TABLE log
+$query = "ALTER TABLE log
     ADD revision varchar(255) NULL DEFAULT NULL AFTER note,
     ADD INDEX id (id),
-    ADD INDEX `modified_on` (`modified_on`)
-") or die("<br>Could not update log" . mysql_error());
+    ADD INDEX `modified_on` (`modified_on`)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-$result = mysql_query("
-ALTER TABLE `user_perms`
+$query = "ALTER TABLE `user_perms`
     ADD INDEX fid (fid),
     ADD INDEX uid (uid),
-    ADD INDEX rights (rights)
-") or die("<br>Could not update user_perms" . mysql_error());
+    ADD INDEX rights (rights)";
+$stmt = $pdo->prepare($query);
+$stmt->execute();

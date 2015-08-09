@@ -24,8 +24,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -34,16 +33,15 @@ require_once("File_class.php");
 require_once('Email_class.php');
 require_once('Reviewer_class.php');
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
-if(!$user_obj->canCheckIn()){
+if (!$user_obj->canCheckIn()) {
     redirect_visitor('out.php');
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     $last_message='Failed';
     header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
     exit;
@@ -52,56 +50,64 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 // includes
 
 // open connection
-if (!isset($_POST['submit']))
-{
+if (!isset($_POST['submit'])) {
+    $id = (int) $_REQUEST['id'];
+
     // form not yet submitted, display initial form
 
     // pre-fill the form with some information so that user knows which file is being updated
-    $query = "SELECT description, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = '$_REQUEST[id]' AND status = '$_SESSION[uid]'";
-    $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+    $query = "SELECT description, realname FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = :id AND status = :uid";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':id' => $id,
+        ':uid' => $_SESSION['uid']
+    ));
+    $result = $stmt->fetch();
 
     // in case script is directly accessed, query above will return 0 rows
-    if (mysql_num_rows($result) <= 0)
-    {
+    if ($stmt->rowCount() <= 0) {
         $last_message='Failed';
         header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
         exit;
-    }
-    else
-    {
-        // get result data
-        list($description, $realname) = mysql_fetch_row($result);
-        draw_header(msg('button_check_in'),$last_message);
-        // correction
-        if($description == '')
-        {
+    } else {
+        draw_header(msg('button_check_in'), $last_message);
+        $description = $result['description'];
+        $real_name = $result['realname'];
+
+        if ($description == '') {
             $description = msg('message_no_description_available');
         }
 
-        // clean up
-        mysql_free_result($result);
         // start displaying form
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+    <form action="<?php echo $_SERVER['PHP_SELF'];
+        ?>" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $_GET['id'];
+        ?>">
         <tr>
-            <td><b><?php echo msg('label_filename');?></b></td>
-            <td><b><?php echo $realname; ?></b></td>
+            <td><b><?php echo msg('label_filename');
+        ?></b></td>
+            <td><b><?php echo $real_name;
+        ?></b></td>
         </tr>
 
         <tr>
-            <td><b><?php echo msg('label_description');?></b></td>
-            <td><?php echo $description; ?></td>
+            <td><b><?php echo msg('label_description');
+        ?></b></td>
+            <td><?php echo $description;
+        ?></td>
         </tr>
 
         <tr>
-            <td><b><?php echo msg('label_file_location');?></b></td>
+            <td><b><?php echo msg('label_file_location');
+        ?></b></td>
             <td><input name="file" type="file"></td>
         </tr>
 
         <tr>
-            <td><?php echo msg('label_note_for_revision_log');?></td>
+            <td><?php echo msg('label_note_for_revision_log');
+        ?></td>
             <td><textarea name="note"></textarea></td>
         </tr>
 
@@ -128,17 +134,14 @@ if (!isset($_POST['submit']))
     }
 </script>
         <?php
+
     }//end else
 }//end if (!$submit)
-else
-{
-    if ($GLOBALS['CONFIG']['authorization'] == 'True')
-    {
-        $lpublishable = '0';
-    }
-    else
-    {
-        $lpublishable= '1';
+else {
+    if ($GLOBALS['CONFIG']['authorization'] == 'True') {
+        $publishable = '0';
+    } else {
+        $publishable= '1';
     }
     // form has been submitted, process data
     $id = (int) $_POST['id'];
@@ -146,8 +149,7 @@ else
     $filename = $_FILES['file']['name'];
 
     // no file!
-    if ($_FILES['file']['size'] <= 0)
-    {
+    if ($_FILES['file']['size'] <= 0) {
         $last_message='Failed';
         header('Location:error.php?ec=11&last_message=' . urlencode($last_message));
         exit;
@@ -164,9 +166,8 @@ else
     $file_mime = File::mime($_FILES['file']['tmp_name'], $_FILES['file']['name']);
     
     // check file type
-    foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype) {
-
-        if ($file_mime == $thistype) {
+    foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $this_type) {
+        if ($file_mime == $this_type) {
             $allowedFile = 1;
             break;
         } else {
@@ -175,106 +176,124 @@ else
     }
     
     // illegal file type!
-    if ($allowedFile != 1)
-    {
+    if ($allowedFile != 1) {
         $last_message='MIMETYPE: ' . $file_mime . ' Failed';
         header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
         exit;
     }
 
     // query to ensure that user has modify rights
-    $fileobj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+    $file_data_obj = new FileData($id, $pdo);
 
-    if($fileobj->getError() == '' && $fileobj->getStatus() == $_SESSION['uid'])
-    {     
+    if ($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid']) {
         //look to see how many revision are there
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = '$id'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        $lrevision_num = mysql_num_rows($result);
+        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id
+        ));
+        $result = $stmt->fetchAll();
+
+        $revision_number = $stmt->rowCount();
+
         // if dir not available, create it
-        if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
-        {
-            if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775))
-            {
+        if (!is_dir($GLOBALS['CONFIG']['revisionDir'])) {
+            if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775)) {
                 $last_message=msg('message_directory_creation_failed'). ': ' . $GLOBALS['CONFIG']['revisionDir'] ;
                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                 exit;
             }
         }
-        if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $id) )
-        {
-            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $id, 0775))
-            {
+        if (!is_dir($GLOBALS['CONFIG']['revisionDir'] . $id)) {
+            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $id, 0775)) {
                 $last_message=msg('message_directory_creation_failed') . ': ' . $GLOBALS['CONFIG']['revisionDir'] .  $id;
                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                 exit;
             }
-
         }
-        $lfilename = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
+        $file_name = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
         //read and close
-        $lfhandler = fopen ($lfilename, "r");
-        $lfcontent = fread($lfhandler, filesize ($lfilename));
-        fclose ($lfhandler);
+        $file_handler = fopen($file_name, "r");
+        $file_content = fread($file_handler, filesize($file_name));
+        fclose($file_handler);
         //write and close
-        $lfhandler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($lrevision_num - 1) . '.dat', "w");
-        fwrite($lfhandler, $lfcontent);
-        fclose ($lfhandler);
+        $file_handler = fopen($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($revision_number - 1) . '.dat', "w");
+        fwrite($file_handler, $file_content);
+        fclose($file_handler);
         // all OK, proceed!
-        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id='{$_SESSION['uid']}'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        list($username) = mysql_fetch_row($result);
+
+        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':uid' => $_SESSION['uid']));
+        $result = $stmt->fetch();
+
+        $username = $result['username'];
+
         // update revision log
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($lrevision_num) - 1)) . "' WHERE id = '{$id}' and revision = 'current'";
-        mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES('$id', NOW(), '" . addslashes($username) . "', '". addslashes($_POST['note']) ."', 'current')";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($revision_number) - 1)) . "' WHERE id = :id and revision = 'current'";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id
+        ));
+
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id,
+            ':username' => $username,
+            ':note' => $_POST['note']
+        ));
 
         // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable='$lpublishable', realname='$filename' WHERE id='$id'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable, realname = :filename WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':publishable' => $publishable,
+            ':filename' => $filename,
+            ':id' => $id
+        ));
 
         // rename and save file
         $newFileName = $id . '.dat';
         copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
     
-        AccessLog::addLogEntry($id,'I');
+        AccessLog::addLogEntry($id, 'I', $pdo);
     
         /**
          * Send out email notifications to reviewers
          */
-        $file_obj = new FileData($id, $GLOBALS['connection'], DB_NAME);
+        $file_obj = new FileData($id, $pdo);
         $get_full_name = $user_obj->getFullName();
         $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
         
         $department = $file_obj->getDepartment();
         
-        $reviewer_obj = new Reviewer($id, $GLOBALS['connection'], DB_NAME);
+        $reviewer_obj = new Reviewer($id, $pdo);
         $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
 
         $date = date('Y-m-d H:i:s T');
         
         // Build email for general notices
         $mail_subject = msg('checkinpage_file_was_checked_in');
-        $mail_body2 = msg('checkinpage_file_was_checked_in') . "\n\n";
-        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
-        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . "\n\n";
-        $mail_body2.=msg('date') . ': ' . $date . "\n\n";
-        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . "\n\n";
-        $mail_body2.=msg('email_thank_you') . ',' . "\n\n";
-        $mail_body2.=msg('email_automated_document_messenger') . "\n\n";
-        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+        $mail_body2 = msg('checkinpage_file_was_checked_in') . PHP_EOL;
+        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL;
+        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . PHP_EOL;
+        $mail_body2.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
+        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
         
         $email_obj = new Email();
         $email_obj->setFullName($full_name);
         $email_obj->setSubject($mail_subject);
         $email_obj->setFrom($full_name . ' <' . $user_obj->getEmailAddress() . '>');
         $email_obj->setRecipients($reviewer_list);
-        $email_obj->setBody($mail_body2);        
+        $email_obj->setBody($mail_body2);
         $email_obj->sendEmail();
         
         // clean up and back to main page
-        $last_message = msg('message_document_checked_in');        
+        $last_message = msg('message_document_checked_in');
         header('Location: out.php?last_message=' . urlencode($last_message));
     }
 }
