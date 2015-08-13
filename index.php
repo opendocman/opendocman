@@ -149,7 +149,7 @@ if (isset($_POST['login'])) {
 } elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] == 'mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
 
-    $GLOBALS['smarty']->assign('redirection', $redirection);
+    $GLOBALS['smarty']->assign('redirection', htmlentities($redirection, ENT_QUOTES));
     display_smarty_template('login.tpl');
 } else {
     echo 'Check your config';

@@ -837,7 +837,10 @@ function xss_clean($str)
     $str = preg_replace('#</*\w+:\w[^>]*+>#i', '', $str);
 
     // Remove any attempts to pass-in a script tag obfuscated by spaces
-    $str = preg_replace('/<\s+s\s+c\s+r\s+i\s+p\s+t/', '', $str);
+    $str = preg_replace('#<\s?/?\s*[Ss]\s*[cC]\s*[rR]\s*[iI]\s*[pP]\s*[tT]#', '', $str);
+
+    // Removed ;base64 data usage
+    $str = preg_replace('#data:*[^;]+;base64,#', 'nodatabase64', $str);
 
     do {
         // Remove really unwanted tags
@@ -860,7 +863,7 @@ function redirect_visitor($url = '')
     } else {
         // Lets make sure its not an outside URL
         if (!preg_match('#^(http|https|ftp)://#', $url)) {
-            header('Location:' . $url);
+            header('Location:' . htmlentities($url, ENT_QUOTES));
             exit;
         } else {
             header('Location:index.php');
