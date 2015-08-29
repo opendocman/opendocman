@@ -23,8 +23,7 @@ session_start();
 // includes
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
     
@@ -35,23 +34,18 @@ $settings = new Settings($pdo);
 
 //If the user is not an admin and he/she is trying to access other account that
 // is not his, error out.
-if(!$user_obj->isRoot() == true)
-{
+if (!$user_obj->isRoot() == true) {
     header('Location: error.php?ec=24');
     exit;
 }
 
-if(isset($_REQUEST['submit']) && $_REQUEST['submit']=='update')
-{
-
+if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     draw_header(msg('label_settings'), $last_message);
 
     $settings->edit();
 
     draw_footer();
-}
-elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
-{
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
     draw_header(msg('label_settings'), $last_message);
 
     // Clean up the datadir a bit to make sure it ends with slash
@@ -62,29 +56,19 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     }
 
     // Perform Input Validation
-    if(!is_dir($_POST['dataDir']))
-    {
+    if (!is_dir($_POST['dataDir'])) {
         $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_exists'];
-    }
-    elseif(!is_writable($_POST['dataDir']))
-    {
+    } elseif (!is_writable($_POST['dataDir'])) {
         $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_writable'];
-    }
-    elseif((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration']) || (!is_numeric($_POST['max_query'])) ) )
-    {
+    } elseif ((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration']) || (!is_numeric($_POST['max_query'])))) {
         $_POST['last_message'] = $GLOBALS['lang']['message_config_value_problem'];
-    }
-    elseif($settings->save($_POST))
-    {
+    } elseif ($settings->save($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
-    }
-    else
-    {
+    } else {
         $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
 
-    if (!isset($_POST['last_message']))
-    {
+    if (!isset($_POST['last_message'])) {
         $_POST['last_message']='';
     }
     
@@ -94,13 +78,8 @@ elseif(isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save')
     
     // Clear the tpl templates_c files after update in case they updated theme
     $GLOBALS['smarty']->clear_compiled_tpl();
-}
-elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel')
-{
+} elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
     header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
-}
-else
-{
+} else {
     header('Location: admin.php?last_message=' . urlencode(msg('message_nothing_to_do')));
 }
-

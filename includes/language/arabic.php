@@ -24,7 +24,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'انقر هنالعرض الملفات العامة';
 $lang['forgotpassword'] = 'تغيير كلمة المرور';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'إنشاء حساب جديد';
 $lang['welcome'] = 'نظام التوثيق الآلي';
 $lang['welcome2'] = 'الدخول للنظام';
@@ -239,9 +238,9 @@ $lang['label_fileid'] = 'معرف الملف';
 $lang['label_username'] = 'إسم المستخدم';
 $lang['label_action'] = 'اجراء';
 $lang['label_date'] = 'تاريخ';
-$lang['label_type_pr_sec'] = 'النوع'; //CHM
-$lang['label_primary_type'] = 'أولي'; //CHM
-$lang['label_sub_select_list'] = 'قائمة جزئية'; //CHM
+$lang['label_type_pr_sec'] = 'النوع';
+$lang['label_primary_type'] = 'أولي';
+$lang['label_sub_select_list'] = 'قائمة جزئية';
 
 // Messages
 $lang['message_account_created_add_user'] = 'حسابك تم انشائة.';
@@ -282,23 +281,23 @@ $lang['message_folder_error_check'] = 'خطأ المجلد. تحقق من اخر
 $lang['message_folder_perms_error'] = 'أذونات المجلد خطأ:';
 $lang['message_for_further_assistance'] = 'لمزيد من المساعدة';
 $lang['message_found_documents'] = 'الوثائق موجود(ة).';
-$lang['message_if_you_are_unable_to_view1'] = 'إذا لم تكن قادرا على القيام بذلك لسبب ما، انقر '; //Abduh says :this value must be changed
+$lang['message_if_you_are_unable_to_view1'] = 'إذا لم تكن قادرا على القيام بذلك لسبب ما، انقر ';
 $lang['message_if_you_are_unable_to_view2'] = 'تتزيل الملف';
-$lang['message_if_you_are_unable_to_view3'] = '<br> لبدء تحميله إلى محطة العمل المحلية للحصول على عرض محلي.';//Abduh says :this value must be changed
+$lang['message_if_you_are_unable_to_view3'] = '<br> لبدء تحميله إلى محطة العمل المحلية للحصول على عرض محلي.';
 $lang['message_initial_import'] = 'استيراد اولي';
 $lang['message_last_message'] = 'اخر رسالة';
 $lang['message_latest_version'] = 'احدث اصدار';
 $lang['message_max_number_of_results'] = 'There are more results than allowed, please use the <a href="search.php">Search</a> page to narrow your results.';
-$lang['message_need_one_department'] = 'انت تحتاج على الاقل على ادارة واحدة'; //Abduh says :this value must be changed
+$lang['message_need_one_department'] = 'انت تحتاج على الاقل على ادارة واحدة';
 $lang['message_no_author_comments_available'] = 'لايوجد تعليقات متاحة';
 $lang['message_no_description_available'] = 'لايوجد وصف متاح';
 $lang['message_no_documents_checked_out'] = 'لايوجد اي وثيقة للتفحص حاليا';
 $lang['message_no_files_found'] = 'لا توجد ملفات';
-$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة '; 
-$lang['message_non_unique_account'] = 'حساب غير وحيد'; //Abduh says :this value must be changed
-$lang['message_non_unique_key'] = 'مفتاح غير وحيد في قاعدة البيانات'; //Abduh says :this value must be changed
-$lang['message_nothing_to_do'] = 'لا توجد علاقة'; //Abduh says :this value must be changed
-$lang['message_not_writeable'] = 'غير قابل للكتابة!'; //Abduh says :this value must be changed
+$lang['message_no_information_available'] = 'لاتوجد معلومات متاحة ';
+$lang['message_non_unique_account'] = 'حساب غير وحيد';
+$lang['message_non_unique_key'] = 'مفتاح غير وحيد في قاعدة البيانات';
+$lang['message_nothing_to_do'] = 'لا توجد علاقة';
+$lang['message_not_writable'] = 'غير قابل للكتابة!';
 $lang['message_once_the_document_has_completed'] = 'بمجرد الانتهاء من تحميل الوثيقة، ربما';
 $lang['message_original_version'] = 'نسخة اصلية لوزارة الصناعة والتجارة';
 $lang['message_please_email'] = 'من فضلك البريد الالكتروني';
@@ -373,6 +372,10 @@ $lang['editpage_view'] = 'عرض';
 $lang['editpage_read'] = 'قراءة';
 $lang['editpage_write'] = 'كتابة';
 $lang['editpage_admin'] = 'مسئول';
+
+// File Permissions Page
+$lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
+$lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'تم حذف الملف بشكل نهائي';
@@ -458,6 +461,9 @@ $lang['userpage_username'] = 'إسم المستخدم';
 $lang['userpage_yes'] = 'نعم';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'تحرير نوعية الملف';
 $lang['adminpage_edit_settings'] = 'تحرير الاعدادات';
 $lang['adminpage_reports'] = 'تقارير';
@@ -486,3 +492,7 @@ $lang['categoryviewpage_list_of_files_title'] = 'الملفات المخصصة �
 //Search Page
 $lang['searchpage_all_meta'] = 'بحث في الحقول الرئيسية';
 
+// Footer
+$lang['footer_support'] = 'Support';
+$lang['footer_feedback'] = 'Feedback';
+$lang['footer_bugs'] = 'Bugs';

@@ -41,7 +41,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Anonim dosyalar&#305; g&#246;rmek i&#231;in buraya t&#305;klay&#305;n&#305;z.';
 $lang['forgotpassword'] = 'Forgot your password?';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'Sign-up for an account';
 $lang['welcome'] = "OpenDocMan'a ho&#351;geldiniz";
 $lang['welcome2'] = "G&#252;&#231;l&#252; depolama, yay&#305;nlama ve uyarlama kontrol &#246;zellikli sistemi kullanmak i&#231;in oturum a&#231;&#305;n&#305;z.";
@@ -131,9 +130,9 @@ $lang['message_category_successfully_updated'] = 'Category successfully updated'
 $lang['message_click_to_checkout_document'] = 'Click to check out the selected document and begin downloading it to your local workstation';
 $lang['message_config_value_problem'] = 'There is a problem with one of your configuration values. Please check.';
 $lang['message_current'] = "Ge&#231;erli";
-$lang['message_datadir_problem'] = 'There is a problem with your dataDir. Check to make sure it exists and is writeable';
+$lang['message_datadir_problem'] = 'There is a problem with your dataDir. Check to make sure it exists and is writable';
 $lang['message_datadir_problem_exists'] = 'There is a problem with your dataDir setting. It does not appear to exist.';
-$lang['message_datadir_problem_writable'] = 'There is a problem with your dataDir setting. It does not appear to be writeable to the web server.';
+$lang['message_datadir_problem_writable'] = 'There is a problem with your dataDir setting. It does not appear to be writable to the web server.';
 $lang['message_department_successfully_added'] = 'Department successfully added';
 $lang['message_department_successfully_updated'] = 'Department successfully updated';
 $lang['message_directory_creation_failed'] = 'Directory Creation Failed';
@@ -169,7 +168,7 @@ $lang['message_no_files_found'] = "Dosya(lar) bulunamad&#305;";
 $lang['message_no_information_available'] = 'No information available';
 $lang['message_non_unique_account'] = 'Non-Unique account';
 $lang['message_non_unique_key'] = 'Non-Unique key in database.';
-$lang['message_not_writeable'] = "Yaz&#305;lamaz!";
+$lang['message_not_writable'] = "Yaz&#305;lamaz!";
 $lang['message_nothing_to_do'] = 'Nothing to do';
 $lang['message_once_the_document_has_completed'] = 'Once the document has completed downloading, you may';
 $lang['message_original_version'] = 'Original version';
@@ -483,6 +482,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';

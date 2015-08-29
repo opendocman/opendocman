@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Freie Vorschau der öffentlichen Dokumente';
 $lang['forgotpassword'] = 'Kennwort vergessen?';
-$lang['install_folder']  = 'Sicherheitswarnung: Nach dem Abschluß der Installation / Aktualisierung bitte vor der weiteren Benutzung den Ordner \'install\' entfernen.';
 $lang['signup'] = 'Konto registrieren';
 $lang['welcome'] = 'Willkommen bei OpenDocMan';
 $lang['welcome2'] = '';
@@ -297,7 +296,7 @@ $lang['message_no_information_available'] = 'Keine Information verfügbar';
 $lang['message_non_unique_account'] = 'Dieser Kontoname besteht bereits';
 $lang['message_non_unique_key'] = 'Datenbankschlüssel nicht eindeutig.';
 $lang['message_nothing_to_do'] = 'Keine Aufgaben';
-$lang['message_not_writeable'] = 'Nicht schreibbar!';
+$lang['message_not_writable'] = 'Nicht schreibbar!';
 $lang['message_once_the_document_has_completed'] = 'Gleich nach dem Downloadabschluss geht es weiter';
 $lang['message_original_version'] = 'Ursprüngliche Version (Original)';
 $lang['message_please_email'] = 'Senden sie E-Mail an';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Benutzername';
 $lang['userpage_yes'] = 'Ja';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Einstellungen der Dateitypen anpassen';
 $lang['adminpage_edit_settings'] = 'Einstellungen anpassen';
 $lang['adminpage_reports'] = 'Auswertungen';

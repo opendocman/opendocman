@@ -25,15 +25,16 @@
  * @author Stephen Lawrence Jr.
  * @param string $accesslog
  */
-class AccessLog extends Plugin {
-    
-    var $accesslog='';
+class AccessLog extends Plugin
+{
+    public $accesslog='';
     
     /**
      * AccessLog constructor for the AccessLog plugin
      * @param string $_accesslog Message to display
      */
-    function AccessLog($_accesslog='') {
+    public function AccessLog($_accesslog='')
+    {
         $this->name = 'AccessLog';
         $this->author = 'Stephen Lawrence Jr';
         $this->version = '1.0';
@@ -46,14 +47,16 @@ class AccessLog extends Plugin {
     /**
      * @param string $_var The string to display
      */
-    function setAccessLog($_var) {
+    public function setAccessLog($_var)
+    {
         $this->accesslog = $_var;
     }
 
     /**
      * @returns string $var Get the value of accesslog var
      */
-    function getAccessLog() {
+    public function getAccessLog()
+    {
         $var = $this->accesslog;
         return $var;
     }
@@ -62,7 +65,7 @@ class AccessLog extends Plugin {
      * Draw the admin menu
      * Required if you want an admin menu to show for your plugin
      */
-    function onAdminMenu()
+    public function onAdminMenu()
     {
         $curdir = dirname(__FILE__);
         $GLOBALS['smarty']->display('file:' . $curdir . '/templates/accesslog.tpl');
@@ -74,10 +77,9 @@ class AccessLog extends Plugin {
      * @param string $type The type of entry to describe what happened
      * @param PDO $pdo
      */
-    static function addLogEntry($fileId, $type, PDO $pdo)
+    public static function addLogEntry($fileId, $type, PDO $pdo)
     {
-        if ($fileId == 0)
-        {
+        if ($fileId == 0) {
             global $id;
             $fileId = $id;
         }
@@ -91,7 +93,5 @@ class AccessLog extends Plugin {
                 ':type' => $type
             )
         );
-
     }
-
 }

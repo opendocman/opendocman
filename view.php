@@ -26,15 +26,13 @@ session_start();
 
 include_once('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if (!isset($id) || $id == '')
-{
+if (!isset($id) || $id == '') {
     header('Location:error.php?ec=2');
     exit;
 }
@@ -46,58 +44,47 @@ if (!isset($id) || $id == '')
 $filedata = new FileData($id, $pdo);
 $filedata->setId($id);
 
-if ($filedata->getError() != '')
-{
+if ($filedata->getError() != '') {
     header('Location:error.php?ec=2');
-    ob_end_flush();		// Flush buffer onto screens
-    ob_end_clean();		// Clean up buffer
+    ob_end_flush();        // Flush buffer onto screens
+    ob_end_clean();        // Clean up buffer
     exit;
-}
-else
-{
+} else {
     // all checks completed
 
     /* to avoid problems with some browsers,
-	   download script should not include parameters on the URL
-	   so let's use a form and pass the parameters via POST
+       download script should not include parameters on the URL
+       so let's use a form and pass the parameters via POST
     */
 
     // form not yet submitted
     // display information on how to initiate download
-    if (!isset($submit))
-    {
+    if (!isset($submit)) {
         draw_header('View File', $last_message);
 
         $GLOBALS['smarty']->assign('file_id', $filedata->getId());
         display_smarty_template('view.tpl');
         
-		draw_footer();
-
+        draw_footer();
     }
     // form submitted - begin download
-    else
-    {
+    else {
         $id = $filedata->getId();
         $realname = $filedata->getName();
 
         // get the filename
         $filename = $GLOBALS['CONFIG']['dataDir'] . $_POST['id'] . '.dat';
 
-        if ( file_exists($filename) )
-        {
+        if (file_exists($filename)) {
             // send headers to browser to initiate file download
-            header ('Content-Type: application/octet-stream'); 
-            header ('Content-Disposition: attachment; filename='.rawurlencode($realname));
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename='.rawurlencode($realname));
             readfile($filename);
             
             // Call the plugin API
             callPluginMethod('onViewFile');
-            
-        }
-        else
-        {
+        } else {
             echo 'File not readable...';
         }
-        
     }
 }

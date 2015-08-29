@@ -27,10 +27,8 @@ $last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['
 
 draw_header(msg('error'), $last_message);
 
-if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
-{
-    switch ($_REQUEST['ec'])
-    {
+if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0) {
+    switch ($_REQUEST['ec']) {
         // login failure
         case 0:
             $message = msg('message_there_was_an_error_loggin_you_in');
@@ -79,14 +77,8 @@ if (isset($_REQUEST['ec']) && intval($_REQUEST['ec']) >= 0)
 
         // illegal file type
         case 13:
-            $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '' );
-            $message =  msg('message_that_filetype_not_supported') . ' Admin->Settings->allowedFileTypes:<br><br />Current allowed filetypes:<ul align=left>';
-            //echo "_File array is " . array_values($_FILES['file']);
-            foreach($GLOBALS['CONFIG']['allowedFileTypes'] as $thistype)
-            {
-                $message .= '<li>'.$thistype;
-            }
-            $message .= '</ul>';
+            $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+            $message =  msg('message_that_filetype_not_supported');
             break;
         //non-unique account
         case 14:

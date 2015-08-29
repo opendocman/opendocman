@@ -22,8 +22,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -32,8 +31,7 @@ include('udf_functions.php');
 // open a connection to the database
 $user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
-if(!$user_obj->isAdmin())
-{
+if (!$user_obj->isAdmin()) {
     header('Location:error.php?ec=4');
     exit;
 }
@@ -61,18 +59,18 @@ $actions_array = array(
     "A" => msg('accesslogpage_file_added'),
     "B" => msg('accesslogpage_reserved'),
     "C" => msg('accesslogpage_reserved'),
-    "V" => msg('accesslogpage_file_viewed'), 
-    "D" => msg('accesslogpage_file_downloaded'), 
-    "M" => msg('accesslogpage_file_modified'), 
-    "I" => msg('accesslogpage_file_checked_in'), 
-    "O" => msg('accesslogpage_file_checked_out'), 
-    "X" => msg('accesslogpage_file_deleted'), 
-    "Y" => msg('accesslogpage_file_authorized'), 
+    "V" => msg('accesslogpage_file_viewed'),
+    "D" => msg('accesslogpage_file_downloaded'),
+    "M" => msg('accesslogpage_file_modified'),
+    "I" => msg('accesslogpage_file_checked_in'),
+    "O" => msg('accesslogpage_file_checked_out'),
+    "X" => msg('accesslogpage_file_deleted'),
+    "Y" => msg('accesslogpage_file_authorized'),
     "R" => msg('accesslogpage_file_rejected')
     );
 $accesslog_array = array();
 
-foreach($result as $row) {
+foreach ($result as $row) {
     $details_link = 'details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1);
 
     $accesslog_array[] = array(

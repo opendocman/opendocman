@@ -28,9 +28,8 @@ class Email
     /*
      * Constructor
      */
-    function Email ()
+    public function Email()
     {
-        
     }
 
     /**
@@ -38,7 +37,7 @@ class Email
      */
     public function getFullName()
     {
-        if(!isset($this->full_name)){
+        if (!isset($this->full_name)) {
             return false;
         }
         return $this->full_name;
@@ -64,7 +63,7 @@ class Email
      * @param string $from
      */
     public function setFrom($from)
-    {       
+    {
         $this->from = $from;
     }
 
@@ -114,8 +113,8 @@ class Email
     private function setHeaders()
     {
         if(isset($this->from)) {
-            $mail_headers = "From: {$this->getFrom()}" . "\r\n";
-            $mail_headers .="Content-Type: text/plain; charset=UTF-8" . "\r\n";
+            $mail_headers = "From: {$this->getFrom()}" . PHP_EOL;
+            $mail_headers .="Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
             $this->headers = $mail_headers;
         }
     }
@@ -133,8 +132,8 @@ class Email
      * @return bool
      */
     public function setRecipients($recipients)
-    {      
-        if(!is_array($recipients)) {
+    {
+        if (!is_array($recipients)) {
             return false;
         }
         $this->recipients = $recipients;
@@ -151,5 +150,4 @@ class Email
         }
         return true;
     }
-
 }

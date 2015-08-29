@@ -25,7 +25,7 @@ $query = "SELECT id, revision from {$GLOBALS['CONFIG']['db_prefix']}log WHERE re
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $result = $stmt->fetchAll();
-foreach($result as $row) {
+foreach ($result as $row) {
     $rev_array = explode("-", $row['revision']);
     $rev_left = ltrim($rev_array[0], "(");
     $rev_right = rtrim($rev_array[1], ")");
@@ -49,7 +49,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 $result = $stmt->fetchAll();
 
-foreach($result as $row) {
+foreach ($result as $row) {
     $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data CHANGE {$row['table_name']} {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']} int(11)";
     $stmt = $pdo->prepare($query);
     $stmt->execute();

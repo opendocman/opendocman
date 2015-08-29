@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klik her for at se offentlige filer anonymt';
 $lang['forgotpassword'] = 'Glemt dit password?';
-$lang['install_folder']  = 'Sikkerhedsbesked: Hvis du allerede har installeret/opdateret, så bør du slette folderen \'install\' før du fortsætter';
 $lang['signup'] = 'Log ind til en konto';
 $lang['welcome'] = 'Velkommen til OpenDocMan';
 $lang['welcome2'] = 'Log ind for at begynde med at bruge systemet\'s kraftige lagrings-, publiserings- og revisionskontrolegenskaber.';
@@ -298,7 +297,7 @@ $lang['message_no_information_available'] = 'Ingen information tilgængelig';
 $lang['message_non_unique_account'] = 'Ikke-unik konto';
 $lang['message_non_unique_key'] = 'Ikke-unik nøgle i database.';
 $lang['message_nothing_to_do'] = 'Ikke noget at gøre';
-$lang['message_not_writeable'] = 'Ikke skrivbar!';
+$lang['message_not_writable'] = 'Ikke skrivbar!';
 $lang['message_once_the_document_has_completed'] = 'Når dokumentet er downloadet kan du';
 $lang['message_original_version'] = 'Original version';
 $lang['message_please_email'] = 'Email venligst';
@@ -461,6 +460,9 @@ $lang['userpage_username'] = 'Brugernavn';
 $lang['userpage_yes'] = 'Ja';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Editer filtyper';
 $lang['adminpage_edit_settings'] = 'Editer indstillinger';
 $lang['adminpage_reports'] = 'Rapporter';

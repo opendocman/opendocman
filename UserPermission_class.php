@@ -18,29 +18,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('UserPermission_class') )
-{
+if (!defined('UserPermission_class')) {
     define('UserPermission_class', 'true', false);
 
     class UserPermission extends databaseData
     {
-        var $connection;
-        var $uid;
-        var $user_obj;
-        var $user_perms_obj;
-        var $dept_perms_obj;
-        var $FORBIDDEN_RIGHT;
-        var $NONE_RIGHT;
-        var $VIEW_RIGHT;
-        var $READ_RIGHT;
-        var $WRITE_RIGHT;
-        var $ADMIN_RIGHT;
+        public $connection;
+        public $uid;
+        public $user_obj;
+        public $user_perms_obj;
+        public $dept_perms_obj;
+        public $FORBIDDEN_RIGHT;
+        public $NONE_RIGHT;
+        public $VIEW_RIGHT;
+        public $READ_RIGHT;
+        public $WRITE_RIGHT;
+        public $ADMIN_RIGHT;
 
         /**
          * @param int $uid
          * @param PDO $connection
          */
-        function UserPermission($uid, PDO $connection)
+        public function UserPermission($uid, PDO $connection)
         {
             $this->uid = $uid;
             $this->connection = $connection;
@@ -60,13 +59,13 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getAllowedFileIds($limit)
+        public function getAllowedFileIds($limit)
         {
             $viewable_array = $this->getViewableFileIds($limit);
             $readable_array = $this->getReadableFileIds($limit);
-            $writeable_array = $this->getWriteableFileIds($limit);
+            $writable_array = $this->getWritableFileIds($limit);
             $adminable_array = $this->getAdminableFileIds($limit);
-            $result_array = array_values( array_unique( array_merge($viewable_array, $readable_array, $writeable_array, $adminable_array) ) );
+            $result_array = array_values(array_unique(array_merge($viewable_array, $readable_array, $writable_array, $adminable_array)));
             return $result_array;
         }
 
@@ -75,16 +74,16 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getAllowedFileOBJs($limit = true)
+        public function getAllowedFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ( $this->getAllowedFileIds($limit) );
+            return $this->convertToFileDataOBJ($this->getAllowedFileIds($limit));
         }
 
         /**
          * @param bool $limit
          * @return array
          */
-        function getViewableFileIds($limit = true)
+        public function getViewableFileIds($limit = true)
         {
             //These 2 below takes half of the execution time for this function
             $user_perms_file_array = ($this->user_perms_obj->getCurrentViewOnly($limit));
@@ -109,11 +108,11 @@ if( !defined('UserPermission_class') )
                 ':uid' => $this->uid,
                 ':view_right' => $this->VIEW_RIGHT
             ));
-            $array = $stmt->fetchAll();
+            $array = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
             $dept_perms_file_array = array_diff($dept_perms_file_array, $array);
             $dept_perms_file_array = array_diff($dept_perms_file_array, $user_perms_file_array);
-            $total_listing = array_merge($user_perms_file_array , $dept_perms_file_array);
+            $total_listing = array_merge($user_perms_file_array, $dept_perms_file_array);
             //$total_listing = array_unique( $total_listing);
             //$result_array = array_values($total_listing);
             return $total_listing;
@@ -124,7 +123,7 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getViewableFileOBJs($limit = true)
+        public function getViewableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getViewableFileIds($limit));
         }
@@ -134,12 +133,12 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getReadableFileIds($limit = true)
+        public function getReadableFileIds($limit = true)
         {
             $user_perms_file_array = $this->user_perms_obj->getCurrentReadRight($limit);
             $dept_perms_file_array = $this->dept_perms_obj->getCurrentReadRight($limit);
             $published_file_array = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
+            $result_array = array_values(array_unique(array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array)));
             return $result_array;
         }
 
@@ -148,7 +147,7 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getReadableFileOBJs($limit = true)
+        public function getReadableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getReadableFileIds($limit));
         }
@@ -158,12 +157,12 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getWriteableFileIds($limit = true)
+        public function getWritableFileIds($limit = true)
         {
             $user_perms_file_array = $this->user_perms_obj->getCurrentWriteRight($limit);
             $dept_perms_file_array = $this->dept_perms_obj->getCurrentWriteRight($limit);
             $published_file_array = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
+            $result_array = array_values(array_unique(array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array)));
             return $result_array;
         }
 
@@ -172,9 +171,9 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getWriteableFileOBJs($limit = true)
+        public function getWritableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getWriteableFileIds($limit));
+            return $this->convertToFileDataOBJ($this->getWritableFileIds($limit));
         }
 
         /**
@@ -182,12 +181,12 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getAdminableFileIds($limit = true)
+        public function getAdminableFileIds($limit = true)
         {
             $user_perms_file_array = $this->user_perms_obj->getCurrentAdminRight($limit);
             $dept_perms_file_array = $this->dept_perms_obj->getCurrentAdminRight($limit);
             $published_file_array = $this->user_obj->getPublishedData(1);
-            $result_array = array_values( array_unique( array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array) ) );
+            $result_array = array_values(array_unique(array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array)));
             return $result_array;
         }
 
@@ -196,7 +195,7 @@ if( !defined('UserPermission_class') )
          * @param bool $limit
          * @return array
          */
-        function getAdminableFileOBJs($limit = true)
+        public function getAdminableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getAdminableFileIds($limit));
         }
@@ -207,7 +206,7 @@ if( !defined('UserPermission_class') )
          * @param array $low_priority_array
          * @return array
          */
-        function combineArrays($high_priority_array, $low_priority_array)
+        public function combineArrays($high_priority_array, $low_priority_array)
         {
             return databaseData::combineArrays($high_priority_array, $low_priority_array);
         }
@@ -219,7 +218,7 @@ if( !defined('UserPermission_class') )
          * @param int $data_id
          * @return int
          */
-        function getAuthority($data_id)
+        public function getAuthority($data_id)
         {
             $data_id = (int) $data_id;
             $fileData = new FileData($data_id, $this->connection);
@@ -241,7 +240,5 @@ if( !defined('UserPermission_class') )
                 return $department_permissions;
             }
         }
-
     }
-
 }

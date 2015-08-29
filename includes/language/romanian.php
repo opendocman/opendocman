@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Apasati aici pentru a vizualiza fisierele publice in mod anonim';
 $lang['forgotpassword'] = 'Ati uitat parola?';
-$lang['install_folder'] = 'Atentionare de securitate: Daca ati instalat/actualizat deja atunci trebuie sa eliminati folderul \'install\' innainte de a continua';
 $lang['signup'] = 'Creati un cont';
 $lang['welcome'] = 'Bun venit la Sistemul de Management al Documentelor OpenDocMan';
 $lang['welcome2'] = 'Conectati-va pentru a incepe utilizarea sistemului.';
@@ -297,7 +296,7 @@ $lang['message_no_information_available'] = 'Nu exista informatii disponibile';
 $lang['message_non_unique_account'] = 'Contul nu este unic';
 $lang['message_non_unique_key'] = 'Lipsa cheie unica in baza de date.';
 $lang['message_nothing_to_do'] = 'Nimic de facut';
-$lang['message_not_writeable'] = 'Nu poate fi scris!';
+$lang['message_not_writable'] = 'Nu poate fi scris!';
 $lang['message_once_the_document_has_completed'] = 'Dupa descarcarea completa a documentului, poti';
 $lang['message_original_version'] = 'Versiunea originala';
 $lang['message_please_email'] = 'Va rugam transmiteti email';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Nume utilizator';
 $lang['userpage_yes'] = 'Da';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Modificare tipuri fisiere';
 $lang['adminpage_edit_settings'] = 'Modificare setari sistem';
 $lang['adminpage_reports'] = 'Rapoarte';

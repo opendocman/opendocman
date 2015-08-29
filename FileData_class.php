@@ -18,48 +18,47 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-if( !defined('FileData_class') )
-{	
+if (!defined('FileData_class')) {
     define('FileData_class', 'true', false);
 
     /*
-  		  mysql> describe data;
-		  +-------------------+----------------------+------+-----+---------------------+----------------+
-		  | id                | smallint(5) unsigned |      | PRI | NULL                | auto_increment |
-		  | category          | tinyint(4) unsigned  |      |     | 0                   |                |
-		  | owner             | tinyint(4) unsigned  |      |     | 0                   |                |
-		  | realname          | varchar(255)         |      |     |                     |                |
-		  | created           | datetime             |      |     | 0000-00-00 00:00:00 |                |
-		  | description       | varchar(255)         | YES  |     | NULL                |                |
-		  | comment           | varchar(255)         |      |     |                     |                |
-		  | status            | tinyint(4) unsigned  |      |     | 0                   |                |
-		  | department        | tinyint(4)           |      |     | 0                   |                |
-		  | default_rights    | int(4)               | YES  |     | NULL                |                |
-		  | publishable       | int(4)               | YES  |     | NULL                |                |
-		  | reviewer          | int(4)               | YES  |     | NULL                |                |
-		  | reviewer_comments | varchar(255)         | YES  |     | NULL                |                |
-		  +-------------------+----------------------+------+-----+---------------------+----------------+
+          mysql> describe data;
+          +-------------------+----------------------+------+-----+---------------------+----------------+
+          | id                | smallint(5) unsigned |      | PRI | NULL                | auto_increment |
+          | category          | tinyint(4) unsigned  |      |     | 0                   |                |
+          | owner             | tinyint(4) unsigned  |      |     | 0                   |                |
+          | realname          | varchar(255)         |      |     |                     |                |
+          | created           | datetime             |      |     | 0000-00-00 00:00:00 |                |
+          | description       | varchar(255)         | YES  |     | NULL                |                |
+          | comment           | varchar(255)         |      |     |                     |                |
+          | status            | tinyint(4) unsigned  |      |     | 0                   |                |
+          | department        | tinyint(4)           |      |     | 0                   |                |
+          | default_rights    | int(4)               | YES  |     | NULL                |                |
+          | publishable       | int(4)               | YES  |     | NULL                |                |
+          | reviewer          | int(4)               | YES  |     | NULL                |                |
+          | reviewer_comments | varchar(255)         | YES  |     | NULL                |                |
+          +-------------------+----------------------+------+-----+---------------------+----------------+
     */
 
     class FileData extends databaseData
     {
-        var $category;
-        var $owner;
-        var $created_date;
-        var $description;
-        var $comment;
-        var $status;
-        var $department;
-        var $default_rights;
-        var $view_users;
-        var $read_users;
-        var $write_users;
-        var $admin_users;
-        var $filesize;
-        var $isLocked;
+        public $category;
+        public $owner;
+        public $created_date;
+        public $description;
+        public $comment;
+        public $status;
+        public $department;
+        public $default_rights;
+        public $view_users;
+        public $read_users;
+        public $write_users;
+        public $admin_users;
+        public $filesize;
+        public $isLocked;
         protected $connection;
 
-        function FileData($id, $connection)
+        public function FileData($id, $connection)
         {
             $this->field_name = 'realname';
             $this->field_id = 'id';
@@ -75,7 +74,7 @@ if( !defined('FileData_class') )
          * Return a boolean whether this file exists
          * @return bool|string
          */
-        function exists()
+        public function exists()
         {
             $query = "
               SELECT
@@ -88,8 +87,7 @@ if( !defined('FileData_class') )
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(':id' => $this->id));
 
-            switch($stmt->rowCount())
-            {
+            switch ($stmt->rowCount()) {
                 case 1: return true;
                     break;
                 case 0: return false;
@@ -104,9 +102,8 @@ if( !defined('FileData_class') )
          * This is a more complex version of base class's loadData.
          * This function loads up all the fields in data table
          */
-        function loadData()
+        public function loadData()
         {
-
             $query = "
               SELECT
                 category,
@@ -127,8 +124,8 @@ if( !defined('FileData_class') )
             $stmt->execute(array(':id' => $this->id));
             $result = $stmt->fetchAll();
 
-            if( $stmt->rowCount() == $this->result_limit ) {
-                foreach($result as $row) {
+            if ($stmt->rowCount() == $this->result_limit) {
+                foreach ($result as $row) {
                     $this->category = $row['category'];
                     $this->owner = $row['owner'];
                     $this->created_date = $row['created'];
@@ -147,7 +144,7 @@ if( !defined('FileData_class') )
         /**
          * Update the dynamic values of the file
          */
-        function updateData()
+        public function updateData()
         {
             $query = "
               UPDATE
@@ -181,7 +178,7 @@ if( !defined('FileData_class') )
          * return filesize
          * @return mixed
          */
-        function getFileSize()
+        public function getFileSize()
         {
             return $this->filesize;
         }
@@ -190,7 +187,7 @@ if( !defined('FileData_class') )
          * return this file's category id
          * @return int
          */
-        function getCategory()
+        public function getCategory()
         {
             return $this->category;
         }
@@ -198,7 +195,7 @@ if( !defined('FileData_class') )
         /**
          * @param int $value
          */
-        function setCategory($value)
+        public function setCategory($value)
         {
             $this->category = $value;
         }
@@ -207,9 +204,8 @@ if( !defined('FileData_class') )
          * return this file's category name
          * @return string
          */
-        function getCategoryName()
+        public function getCategoryName()
         {
-
             $query = "
               SELECT
                 name
@@ -232,7 +228,7 @@ if( !defined('FileData_class') )
          * @param int $uid
          * @return bool
          */
-        function isOwner($uid)
+        public function isOwner($uid)
         {
             return ($this->getOwner() == $uid);
         }
@@ -241,7 +237,7 @@ if( !defined('FileData_class') )
          * return the ID of the owner of this file
          * @return int
          */
-        function getOwner()
+        public function getOwner()
         {
             return $this->owner;
         }
@@ -250,7 +246,7 @@ if( !defined('FileData_class') )
          * set the user_id of the file
          * @param int $value
          */
-        function setOwner($value)
+        public function setOwner($value)
         {
             $this->owner = $value;
         }
@@ -259,7 +255,7 @@ if( !defined('FileData_class') )
          * return the username of the owner
          * @return mixed
          */
-        function getOwnerName()
+        public function getOwnerName()
         {
             $user_obj = new User($this->owner, $this->connection);
             return $user_obj->getName();
@@ -270,7 +266,7 @@ if( !defined('FileData_class') )
          * and index=1 corresponds to the first name
          * @return mixed
          */
-        function getOwnerFullName()
+        public function getOwnerFullName()
         {
             $user_obj = new User($this->owner, $this->connection);
             return $user_obj->getFullName();
@@ -282,7 +278,7 @@ if( !defined('FileData_class') )
          * the file's department will not be the same as it's owner's.
          * @return string
          */
-        function getOwnerDeptId()
+        public function getOwnerDeptId()
         {
             $user_obj = new User($this->getOwner(), $this->connection);
             return $user_obj->getDeptId();
@@ -293,7 +289,7 @@ if( !defined('FileData_class') )
          * the department name instead of department id
          * @return string
          */
-        function getOwnerDeptName()
+        public function getOwnerDeptName()
         {
             $user_obj = new User($this->getOwner(), $this->connection);
             return $user_obj->getDeptName();
@@ -303,7 +299,7 @@ if( !defined('FileData_class') )
          * return file description
          * @return string
          */
-        function getDescription()
+        public function getDescription()
         {
             return $this->description;
         }
@@ -311,7 +307,7 @@ if( !defined('FileData_class') )
         /**
          * @param string $value
          */
-        function setDescription($value)
+        public function setDescription($value)
         {
             $this->description = $value;
         }
@@ -319,7 +315,7 @@ if( !defined('FileData_class') )
         /**
          * @return int
          */
-        function getDefaultRights()
+        public function getDefaultRights()
         {
             return $this->default_rights;
         }
@@ -327,7 +323,7 @@ if( !defined('FileData_class') )
         /**
          * @param int $value
          */
-        function setDefaultRights($value)
+        public function setDefaultRights($value)
         {
             $this->default_rights = $value;
         }
@@ -336,7 +332,7 @@ if( !defined('FileData_class') )
          * return file commnents
          * @return mixed
          */
-        function getComment()
+        public function getComment()
         {
             return $this->comment;
         }
@@ -344,7 +340,7 @@ if( !defined('FileData_class') )
         /**
          * @param string $value
          */
-        function setComment($value)
+        public function setComment($value)
         {
             $this->comment = $value;
         }
@@ -353,7 +349,7 @@ if( !defined('FileData_class') )
          * return the status of the file
          * @return int
          */
-        function getStatus()
+        public function getStatus()
         {
             return $this->status;
         }
@@ -361,7 +357,7 @@ if( !defined('FileData_class') )
         /**
          * @param int $status Status of file
          */
-        function setStatus($status)
+        public function setStatus($status)
         {
             $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA set status = :status where id = :id";
             $stmt = $this->connection->prepare($query);
@@ -375,7 +371,7 @@ if( !defined('FileData_class') )
          * return a User OBJ of the person who checked out this file
          * @return User
          */
-        function getCheckerOBJ()
+        public function getCheckerOBJ()
         {
             $user = new User($this->status, $this->connection);
             return $user;
@@ -385,7 +381,7 @@ if( !defined('FileData_class') )
          * return the department ID of the file
          * @return int
          */
-        function getDepartment()
+        public function getDepartment()
         {
             return $this->department;
         }
@@ -393,7 +389,7 @@ if( !defined('FileData_class') )
         /**
          * @param int $value
          */
-        function setDepartment($value)
+        public function setDepartment($value)
         {
             $this->department = $value;
         }
@@ -402,15 +398,14 @@ if( !defined('FileData_class') )
          * return the name of the department of the file
          * @return string
          */
-        function getDeptName()
+        public function getDeptName()
         {
             $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPARTMENT WHERE id = :department_id";
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(':department_id' => $this->getDepartment()));
             $result = $stmt->fetchColumn();
 
-            if ($stmt->rowCount() == 0)
-            {
+            if ($stmt->rowCount() == 0) {
                 echo('ERROR: No database entry exists in department table for ID = '.$this->getDepartment().'.');
                 return "ERROR";
                 //exit;
@@ -423,7 +418,7 @@ if( !defined('FileData_class') )
          * return the date that the file was created
          * @return string
          */
-        function getCreatedDate()
+        public function getCreatedDate()
         {
             return $this->created_date;
         }
@@ -432,9 +427,8 @@ if( !defined('FileData_class') )
          * return the latest modifying date on the file
          * @return string
          */
-        function getModifiedDate()
+        public function getModifiedDate()
         {
-
             $query = "SELECT modified_on FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_LOG WHERE id = :id ORDER BY modified_on DESC limit 1";
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(':id' => $this->id));
@@ -448,7 +442,7 @@ if( !defined('FileData_class') )
          * return the realname of the file
          * @return string
          */
-        function getRealName()
+        public function getRealName()
         {
             return databaseData::getName();
         }
@@ -458,7 +452,7 @@ if( !defined('FileData_class') )
          * @param int $dept_id
          * @return int
          */
-        function getDeptRights($dept_id)
+        public function getDeptRights($dept_id)
         {
             $query = "
               SELECT
@@ -485,11 +479,10 @@ if( !defined('FileData_class') )
          * @param array $uid_array
          * @return array
          */
-        function toUserOBJs($uid_array)
+        public function toUserOBJs($uid_array)
         {
             $UserOBJ_array = array();
-            for($i = 0; $i<sizeof($uid_array); $i++)
-            {
+            for ($i = 0; $i<sizeof($uid_array); $i++) {
                 $UserOBJ_array[$i] = new User($uid_array[$i], $this->connection);
             }
             return $UserOBJ_array;
@@ -499,7 +492,7 @@ if( !defined('FileData_class') )
          * Return a boolean on whether or not this file is publishable
          * @return string
          */
-        function isPublishable()
+        public function isPublishable()
         {
             $query = "
               SELECT
@@ -513,8 +506,7 @@ if( !defined('FileData_class') )
             $stmt->execute(array(':id' => $this->id));
             $result = $stmt->fetchColumn();
 
-            if($stmt->rowCount() != 1)
-            {
+            if ($stmt->rowCount() != 1) {
                 echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
                 exit;
             }
@@ -525,7 +517,7 @@ if( !defined('FileData_class') )
         /**
          * @return bool
          */
-        function isArchived()
+        public function isArchived()
         {
             $query = "
               SELECT
@@ -539,8 +531,7 @@ if( !defined('FileData_class') )
             $stmt->execute(array(':id' => $this->id));
             $result = $stmt->fetchColumn();
 
-            if($stmt->rowCount() != 1)
-            {
+            if ($stmt->rowCount() != 1) {
                 echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
                 exit;
             }
@@ -552,7 +543,7 @@ if( !defined('FileData_class') )
          * This function sets the publishable field in the data table to $boolean
          * @param bool $boolean
          */
-        function Publishable($boolean = true)
+        public function Publishable($boolean = true)
         {
             $query = "
               UPDATE
@@ -569,14 +560,13 @@ if( !defined('FileData_class') )
                 ':uid' => $_SESSION['uid'],
                 ':id' => $this->id
             ));
-
         }
 
         /**
          * return the user id of the reviewer
          * @return int
          */
-        function getReviewerID()
+        public function getReviewerID()
         {
             $query = "
               SELECT
@@ -597,11 +587,10 @@ if( !defined('FileData_class') )
          * return the username of the reviewer
          * @return bool
          */
-        function getReviewerName()
+        public function getReviewerName()
         {
             $reviewer_id = $this->getReviewerID();
-            if(isset($reviewer_id))
-            {
+            if (isset($reviewer_id)) {
                 $user_obj = new User($reviewer_id, $this->connection);
                 return $user_obj->getName();
             }
@@ -612,7 +601,7 @@ if( !defined('FileData_class') )
          * Set $comments into the reviewer comment field in the DB
          * @param $comments
          */
-        function setReviewerComments($comments)
+        public function setReviewerComments($comments)
         {
             $query = "
               UPDATE
@@ -627,7 +616,6 @@ if( !defined('FileData_class') )
                 ':comments' => $comments,
                 ':id' => $this->id
             ));
-
         }
 
 
@@ -635,9 +623,8 @@ if( !defined('FileData_class') )
          * Return the reviewers' comment toward this file
          * @return string
          */
-        function getReviewerComments()
+        public function getReviewerComments()
         {
-
             $query = "
               SELECT
                 reviewer_comments
@@ -656,7 +643,7 @@ if( !defined('FileData_class') )
         /**
          *
          */
-        function temp_delete()
+        public function temp_delete()
         {
             $query = "
               UPDATE
@@ -673,7 +660,7 @@ if( !defined('FileData_class') )
         /**
          *
          */
-        function undelete()
+        public function undelete()
         {
             $query = "
               UPDATE
@@ -690,7 +677,7 @@ if( !defined('FileData_class') )
         /**
          * @return bool
          */
-        function isLocked()
+        public function isLocked()
         {
             return $this->isLocked;
         }

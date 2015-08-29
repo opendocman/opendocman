@@ -2,7 +2,7 @@
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence Jr., Jonathan Miner
-Copyright (C) 2008-2013 Stephen Lawrence Jr.
+Copyright (C) 2008-2015 Stephen Lawrence Jr.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,11 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // User Defined Fields START
 
-if ( !defined('udf_functions') )
-{
+if (!defined('udf_functions')) {
     define('udf_functions', 'true', false);
 
-     function udf_add_file_form()
+    function udf_add_file_form()
     {
         global $pdo;
 
@@ -44,22 +43,18 @@ if ( !defined('udf_functions') )
         $stmt->execute(array());
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             echo '<tr><td>';
-            if (file_exists("udf_help.html"))
-            {
+            if (file_exists("udf_help.html")) {
                 echo '<a class="body" href="udf_help.html#Add_File_'.$row[2].'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'.$row[2].'</a>';
-            }
-            else
-            {
+            } else {
                 echo $row[2];
             }
 
             echo '</td><td>';
 
             //Type is Select List
-            if ( $row[1] == 1 )
-            {
+            if ($row[1] == 1) {
                 echo '<select name="'.$row[0].'">';
                 $query = "
                   SELECT
@@ -72,15 +67,14 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                foreach($sub_result as $sub_row) {
+                foreach ($sub_result as $sub_row) {
                     echo '<option value="'.$sub_row[0].'">'.$sub_row[1].'</option>';
                 }
                 echo '</select>';
             }
 
             // Type is Radio
-            if ( $row[1] == 2 )
-            {
+            if ($row[1] == 2) {
                 $query = "
                   SELECT
                     id,
@@ -92,41 +86,38 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                foreach($sub_result as $sub_row) {
+                foreach ($sub_result as $sub_row) {
                     echo '<input type=radio name="'.$row[0].'" value="'.$sub_row[0].'">'.$sub_row[1];
                 }
             }
 
             // Type is Text
-            if ( $row[1] == 3 )
-            {
+            if ($row[1] == 3) {
                 echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="16">';
             }
-			
-			//CHM
+            
+            //CHM
             // Type is Sub-Select
-            if ( $row[1] == 4 )
-            {
-				$explode_row = explode('_',$row[0]);
-				$field_name = $explode_row[2];
-				
+            if ($row[1] == 4) {
+                $explode_row = explode('_', $row[0]);
+                $field_name = $explode_row[2];
+                
                 $query = "SELECT * FROM {$row[0]}";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-				echo '<select name="'.$row[0].'" onchange="showdropdowns(this.value, \'add\',\'' . $field_name . '\')">';
-					echo '<option value="">Please select</option>';
-                foreach($sub_result as $sub_row) {
-					echo '<option value="'.$sub_row[0].'">'.$sub_row[1].'</option>';
+                echo '<select name="'.$row[0].'" onchange="showdropdowns(this.value, \'add\',\'' . $field_name . '\')">';
+                echo '<option value="">Please select</option>';
+                foreach ($sub_result as $sub_row) {
+                    echo '<option value="'.$sub_row[0].'">'.$sub_row[1].'</option>';
                 }
-				echo '</select>';
-				
-				echo '<div id="txtHint'.$field_name.'">Secondary items will show up here.</div>';
-
+                echo '</select>';
+                
+                echo '<div id="txtHint'.$field_name.'">Secondary items will show up here.</div>';
             }
-			//CHM
-			
+            //CHM
+
             echo '</td></tr>';
         }
     }
@@ -149,7 +140,7 @@ if ( !defined('udf_functions') )
         $result = $stmt->fetchAll();
 
         $i = 0; //CHM
-        foreach($result as $row) {
+        foreach ($result as $row) {
             if ($row[1] == 1 || $row[1] == 2 || $row[1] == 3 || $row[1] == 4) { //CHM
                 if (isset($_REQUEST[$row[0]]) && $_REQUEST[$row[0]] != "") {
                     $explode_row = explode('_', $row[0]);
@@ -211,12 +202,10 @@ if ( !defined('udf_functions') )
         $stmt->execute(array());
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-            if ( $row[1] == 1 || $row[1] == 2)
-            {
+        foreach ($result as $row) {
+            if ($row[1] == 1 || $row[1] == 2) {
                 echo '<tr><td>' . $row[0] . '</td><td>';
-                if ( $row[1] == 1 )
-                {
+                if ($row[1] == 1) {
                     echo '<select name="'.$row[2].'">';
                 }
 
@@ -244,30 +233,26 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                foreach($sub_result as $sub_row) {
-                    if ( $row[1] == 1 )
-                    {
+                foreach ($sub_result as $sub_row) {
+                    if ($row[1] == 1) {
                         echo '<option value="' . $sub_row[0] . '"';
-                        if ( $sel == $sub_row[0] )
-                        {
+                        if ($sel == $sub_row[0]) {
                             echo ' selected';
                         }
                         echo '>' . $sub_row[1] . '</option>';
-                    }
-                     elseif ($row[1] == 2)
-                    {
+                    } elseif ($row[1] == 2) {
                         echo '<input type=radio name="' . $row[2] . '" value="' . $sub_row[0] . '"';
-                        if ($sel == $sub_row[0])
+                        if ($sel == $sub_row[0]) {
                             echo ' checked';
+                        }
                         echo '>' . $sub_row[1];
                     }
                 }
-                if ($row[1] == 1)
+                if ($row[1] == 1) {
                     echo '</select>';
+                }
                 echo '</td></tr>';
-            }
-            elseif ($row[1] == 3)
-            {
+            } elseif ($row[1] == 3) {
                 echo '<tr><td>' . $row[0] . '</td><td>';
                 $query = "
                   SELECT
@@ -283,15 +268,14 @@ if ( !defined('udf_functions') )
 
                 echo '<input type="text" name="' . $row[2] . '" size="50" value="' . $sub_row[0] . '">';
             }
-			//CHM
-            elseif( $row[1] == 4)
-            {
-				$explode_row = explode('_',$row[2]);
-				$field_name = $explode_row[2];
-				
+            //CHM
+            elseif ($row[1] == 4) {
+                $explode_row = explode('_', $row[2]);
+                $field_name = $explode_row[2];
+                
                 echo '<tr><td>' . $row[0] . '</td><td>';
-				echo '<select name="'.$row[2].'"  onchange="showdropdowns(this.value, \'edit\',\'' . $field_name . '\')">';
-					echo '<option value="">Please select one</option>';
+                echo '<select name="'.$row[2].'"  onchange="showdropdowns(this.value, \'edit\',\'' . $field_name . '\')">';
+                echo '<option value="">Please select one</option>';
 
                 $query = "
                   SELECT
@@ -312,24 +296,22 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                foreach($sub_result as $sub_row) {
-                    if ( $row[1] == 4 )
-                    {
+                foreach ($sub_result as $sub_row) {
+                    if ($row[1] == 4) {
                         echo '<option value="' . $sub_row[0] . '"';
-                        if ( $sel_pri == $sub_row[0] )
-                        {
+                        if ($sel_pri == $sub_row[0]) {
                             echo ' selected';
                         }
                         echo '>' . $sub_row[1] . '</option>';
                     }
                 }
-				echo '</select>';
-				
+                echo '</select>';
+                
                 echo '</td></tr>';
-				
-				//secondary dropdown
+                
+                //secondary dropdown
                 echo '<tr><td>&nbsp;</td><td><div id="txtHint'.$field_name.'">';
-				
+                
                 $query = "
                   SELECT
                     {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$field_name}_secondary
@@ -343,10 +325,10 @@ if ( !defined('udf_functions') )
                 $sub_row = $stmt->fetch();
 
                 $sel = $sub_row[0];
-				
-				if($sel ==''){
-					echo 'Secondary items will show up here.';	
-				}else{
+                
+                if ($sel =='') {
+                    echo 'Secondary items will show up here.';
+                } else {
                     $query = "
                       SELECT
                         id,
@@ -360,23 +342,21 @@ if ( !defined('udf_functions') )
                     $stmt->execute(array(':sel_pri' => $sel_pri));
                     $sub_result = $stmt->fetchAll();
 
-					echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary">';
-					foreach($sub_result as $sub_row) {
-						if ( $row[1] == 4 )
-						{
-							echo '<option value="' . $sub_row[0] . '"';
-							if ( $sel == $sub_row[0] )
-							{
-								echo ' selected';
-							}
-							echo '>' . $sub_row[1] . '</option>';
-						}
-					}
-				}
-				echo '</select>';
-				echo '</div></td></tr>';
+                    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary">';
+                    foreach ($sub_result as $sub_row) {
+                        if ($row[1] == 4) {
+                            echo '<option value="' . $sub_row[0] . '"';
+                            if ($sel == $sub_row[0]) {
+                                echo ' selected';
+                            }
+                            echo '>' . $sub_row[1] . '</option>';
+                        }
+                    }
+                }
+                echo '</select>';
+                echo '</div></td></tr>';
             }
-			//CHM
+            //CHM
         }
     }
 
@@ -399,7 +379,7 @@ if ( !defined('udf_functions') )
         $result = $stmt->fetchAll();
 
         $i = 0; //CHM
-        foreach($result as $row) {
+        foreach ($result as $row) {
             if ($row[1] == 1 || $row[1] == 2 || $row[1] == 3 || $row[1] == 4) { //CHM sub select option 4 added
                 if (isset($_REQUEST[$row[2]]) && $_REQUEST[$row[2]] != "") {
                     $query = "
@@ -458,47 +438,38 @@ if ( !defined('udf_functions') )
         $stmt->execute(array());
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-            if ( $row[1] == 1 || $row[1] == 2)
-            {
+        foreach ($result as $row) {
+            if ($row[1] == 1 || $row[1] == 2) {
                 $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = :file_id AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(':file_id' => $fileId));
                 $sub_row = $stmt->fetch();
 
-                if($stmt->rowCount() > 0)
-                {
+                if ($stmt->rowCount() > 0) {
                     $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
                 }
-            } 
-            elseif ($row[1] == 3)
-            {
+            } elseif ($row[1] == 3) {
                 $query = "SELECT {$row[2]} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = :file_id ";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(':file_id' => $fileId));
                 $sub_row = $stmt->fetch();
 
-                if($stmt->rowCount() > 0)
-                {
+                if ($stmt->rowCount() > 0) {
                     $return_string .=  '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
                 }
-
             }
-			//CHM
-            elseif ($row[1] == 4)
-            {
+            //CHM
+            elseif ($row[1] == 4) {
                 $query = "SELECT value FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$row['2']} WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = :file_id AND {$GLOBALS['CONFIG']['db_prefix']}data.{$row['2']}={$row['2']}.id";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(':file_id' => $fileId));
                 $sub_row = $stmt->fetch();
 
-                if($stmt->rowCount() > 0)
-                {
+                if ($stmt->rowCount() > 0) {
                     $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
                 }
-
             }
-			//CHM
+            //CHM
         }
         return $return_string;
     }
@@ -521,7 +492,7 @@ if ( !defined('udf_functions') )
         $stmt->execute();
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             echo '<tr><td><b><a href="udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1).'">'.$row[2].'</a></b></td></tr>';
         }
         echo '</table></td>';
@@ -539,9 +510,9 @@ if ( !defined('udf_functions') )
         foreach($result as $row) {
             if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3 )
             {
-                echo "case '".$row[2]."':\n";
-                echo "      info_Array = ".$row[0]."_array;\n";
-                echo "      break;\n";
+                echo "case '".$row[2]."':".PHP_EOL;
+                echo "      info_Array = ".$row[0]."_array;".PHP_EOL;
+                echo "      break;".PHP_EOL;
             }
         }
     }
@@ -555,18 +526,17 @@ if ( !defined('udf_functions') )
         $stmt->execute();
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-            if ($row[1] == 1 || $row[1] == 2)
-            {
+        foreach ($result as $row) {
+            if ($row[1] == 1 || $row[1] == 2) {
                 $query = "SELECT id,value FROM {$row[0]}";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array());
                 $sub_result = $stmt->fetchAll();
 
-                echo $row[0] . "_array = new Array();\n";              
+                echo $row[0] . "_array = new Array();".PHP_EOL;              
                 $index = 0;
                 foreach($sub_result as $sub_row) {
-                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $sub_row[1] . "\", " . $sub_row[0] . ");\n";
+                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $sub_row[1] . "\", " . $sub_row[0] . ");".PHP_EOL;
                     $index++;
                 }
             }
@@ -582,9 +552,8 @@ if ( !defined('udf_functions') )
         $stmt->execute(array());
         $result = $stmt->fetchAll();
 
-        foreach($result as $row) {
-            if ( $row[1] == 1 || $row[1] == 2)
-            {
+        foreach ($result as $row) {
+            if ($row[1] == 1 || $row[1] == 2) {
                 echo '<option id="'.$id.'" value="'.$row[2].'">'.$row[2].'</option>';
                 $id++;
             }
@@ -595,21 +564,19 @@ if ( !defined('udf_functions') )
     {
         global $pdo;
 
-        if(empty($_REQUEST['table_name']))
-        {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank') );
+        if (empty($_REQUEST['table_name'])) {
+            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
             exit;
         }
 
-        if(empty($_REQUEST['display_name']))
-        {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank') );
+        if (empty($_REQUEST['display_name'])) {
+            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
             exit;
         }
         
         $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
 
-        if(!preg_match('/^\w+$/', $table_name))
+        if(!is_valid_udf_name($table_name))
         {
             header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
             exit;
@@ -620,10 +587,8 @@ if ( !defined('udf_functions') )
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(':table_name' => $table_name));
 
-        if ($stmt->rowCount() == 0)
-        {
-            if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2)
-            {               
+        if ($stmt->rowCount() == 0) {
+            if ($_REQUEST['field_type'] == 1 || $_REQUEST['field_type'] == 2) {
                 // They have chosen Select list of Radio list
                 // 
                 // First we add a new column in the data table
@@ -631,8 +596,7 @@ if ( !defined('udf_functions') )
                 $stmt = $pdo->prepare($query);
                 $stmt->execute(array(':table_name' => $table_name));
 
-                if (!$stmt)
-                {
+                if (!$stmt) {
                     header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
                     exit;
                 }
@@ -642,8 +606,7 @@ if ( !defined('udf_functions') )
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
 
-                if (!$stmt)
-                {
+                if (!$stmt) {
                     // If the CREATE fails, rollback the ALTER
                     $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN $table_name";
                     $stmt = $pdo->prepare($query);
@@ -780,13 +743,12 @@ if ( !defined('udf_functions') )
                     header('Location: admin.php?last_message=Error+:+Duplicate+UDF+Name');
                     exit;
                 }
-			} elseif ($_REQUEST['field_type'] == 3) {
+            } elseif ($_REQUEST['field_type'] == 3) {
                 // The have chosen a text field
                 $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data ADD COLUMN {$table_name} varchar(255) AFTER category";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute();
-                if (!$stmt)
-                {
+                if (!$stmt) {
                     header('Location: admin.php?last_message=Error+:+Problem+With+Alter');
                     exit;
                 }
@@ -808,8 +770,7 @@ if ( !defined('udf_functions') )
                     ':display_name' => $_REQUEST['display_name'],
                     ':field_type' => $_REQUEST['field_type']
                 ));
-                if (!$stmt)
-                {                    
+                if (!$stmt) {
                     // If the INSERT fails, rollback the ALTER
                     $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$table_name}";
                     $stmt = $pdo->prepare($query);
@@ -819,9 +780,7 @@ if ( !defined('udf_functions') )
                     exit;
                 }
             }
-        } 
-        else
-        {
+        } else {
             header('Location: admin.php?last_message=Error+:+Duplicate+Table+Name');
             exit;
         }
@@ -831,10 +790,17 @@ if ( !defined('udf_functions') )
     {
         global $pdo;
 
+        if(!is_valid_udf_name($_REQUEST['id'])) {
+            header('Location: admin.php?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
+            exit;
+        }
+        
+        $request = $_REQUEST['id'];
+        
         // If we are deleting a sub-select, we have two entries to delete
         // , a _primary, and a _secondary
         if(isset($_REQUEST['type']) && $_REQUEST['type'] == 4) {
-            $explode_row = explode('_', $_REQUEST['id']);
+            $explode_row = explode('_', $request);
            
             $subselect_table_name = $explode_row[2];
             foreach (array('primary', 'secondary') as $loop) {
@@ -853,17 +819,18 @@ if ( !defined('udf_functions') )
                 $stmt->execute();
             }
         } else {
+
             $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}udf WHERE table_name = :id ";
             $stmt = $pdo->prepare($query);
             $stmt->execute(array(
-                ':id' => $_REQUEST['id']
+                ':id' => $request
             ));
 
-            $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN {$_REQUEST['id']}";
+            $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data DROP COLUMN $request";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
 
-            $query = "DROP TABLE IF EXISTS {$_REQUEST['id']}";
+            $query = "DROP TABLE IF EXISTS $request";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
         }
@@ -878,8 +845,7 @@ if ( !defined('udf_functions') )
         $stmt->execute();
         $result = $stmt->fetchAll();
 
-        foreach($result as $row)
-        {
+        foreach ($result as $row) {
             echo '<option value="'.$row[2].'">'.$row[2].'</option>';
         }
     }
@@ -889,7 +855,7 @@ if ( !defined('udf_functions') )
      * @param string $where
      * @param string $query_pre
      * @param string $query
-     * @param stting $equate
+     * @param string $equate
      * @param string $keyword
      * @return array
      */
@@ -904,17 +870,23 @@ if ( !defined('udf_functions') )
         ));
         $row = $stmt->fetch();
 
-        if ($row[1] == 1 || $row[1] == 2 || $row[1] == 4)
-        {
+        if ($row[1] == 1 || $row[1] == 2 || $row[1] == 4) {
             $query_pre .= ', ' . $row[0];
             $query .= $row[0] . '.value' . $equate . '\'' . $keyword . '\'';
             $query .= ' AND d.' . $row[0] . ' = ' . $row[0] . '.id';
-        }
-        elseif ($row[1] == 3)
-        {           
+        } elseif ($row[1] == 3) {
             $query .= $row[0] . $equate . '\'' . $keyword . '\'';
         }
 
         return array($query_pre,$query);
+    }
+
+    /**
+     * @param string $name
+     * @return int
+     */
+    function is_valid_udf_name($name) 
+    {
+        return preg_match('/^\w+$/', $name);
     }
 }

@@ -175,10 +175,10 @@ if ($rows == 1 && !(isset($revision_id))) {
     $revision = "$rows";
 }
 
-$file_under_review = ( ($file_data_obj->isPublishable() == -1) ? true : false);
+$file_under_review = (($file_data_obj->isPublishable() == -1) ? true : false);
 
 $to_value = (isset($reviewer_comments_fields[0]) ? (substr($reviewer_comments_fields[0], 3)) : '');
-$subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1],8)) : '');
+$subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1], 8)) : '');
 $comments_value = (isset($reviewer_comments_fields[2]) ? (substr($reviewer_comments_fields[2], 9)) : '');
 
 $file_detail = array(
@@ -219,7 +219,7 @@ if ($user_permission_obj->getAuthority($_REQUEST['id'], $file_data_obj) >= $user
 }
 
 // Lets figure out which buttons to show
-if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']) )) {
+if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))) {
     // check if user has modify rights
 
     $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['pdo']);

@@ -23,8 +23,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -44,42 +43,55 @@ $start_time = time();
 draw_header(msg('search'), $last_message);
 
 echo '<body bgcolor="white">';
-if(!isset($_GET['submit']))
-{
+if (!isset($_GET['submit'])) {
     ?>
     <p>
 
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action=<?php echo $_SERVER['PHP_SELF']; ?> method="get">
+        <form action=<?php echo $_SERVER['PHP_SELF'];
+    ?> method="get">
 
             <tr>
-                <td valign="top"><b><?php echo msg('label_search_term');?></b></td>
+                <td valign="top"><b><?php echo msg('label_search_term');
+    ?></b></td>
                 <td><input type="Text" name="keyword" size="50"></td>
             </tr>
             <tr>
-                <td valign="top"><b><?php echo msg('search');?></b></td>
+                <td valign="top"><b><?php echo msg('search');
+    ?></b></td>
                 <td><select name="where">
-                        <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";?></option>
-                        <option value="department"><?php echo msg('department');?></option>
-                        <option value="category"><?php echo msg('category');?></option>
-                        <option value="descriptions"><?php echo msg('label_description');?></option>
-                        <option value="filenames"><?php echo msg('label_filename');?></option>
-                        <option value="comments"><?php echo msg('label_comment');?></option>
-                        <option value="file_id"><?php echo msg('file');?> #</option>
+                        <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";
+    ?></option>
+                        <option value="department"><?php echo msg('department');
+    ?></option>
+                        <option value="category"><?php echo msg('category');
+    ?></option>
+                        <option value="descriptions"><?php echo msg('label_description');
+    ?></option>
+                        <option value="filenames"><?php echo msg('label_filename');
+    ?></option>
+                        <option value="comments"><?php echo msg('label_comment');
+    ?></option>
+                        <option value="file_id"><?php echo msg('file');
+    ?> #</option>
                             <?php
                             udf_functions_search_options();
-                            ?>
-                        <option value="all" selected><?php echo msg('searchpage_all_meta');?></option>
+    ?>
+                        <option value="all" selected><?php echo msg('searchpage_all_meta');
+    ?></option>
                     </select></td>
             </tr>
 
             <tr>
-                <td><?php echo msg('label_exact_phrase');?>: <input type="checkbox" name="exact_phrase"></td>
-                <td><?php echo msg('label_case_sensitive'); ?><input type="checkbox" name="case_sensitivity"></td>
+                <td><?php echo msg('label_exact_phrase');
+    ?>: <input type="checkbox" name="exact_phrase"></td>
+                <td><?php echo msg('label_case_sensitive');
+    ?><input type="checkbox" name="case_sensitivity"></td>
             </tr>
             <tr>
                 <td>
-                    <div class="buttons"><button class="positive" type="Submit" name="submit" value="Search"><?php echo msg('search');?></button></div>
+                    <div class="buttons"><button class="positive" type="Submit" name="submit" value="Search"><?php echo msg('search');
+    ?></button></div>
                 </td>
             </tr>
         </form>
@@ -88,25 +100,18 @@ if(!isset($_GET['submit']))
     <?php
     //echo '<br><b>Load Time: ' . time() - $start_time;
     draw_footer();
-
-}
-else
-{
+} else {
     function search($where, $keyword, $exact_phrase, $case_sensitivity, $search_array)
     {
         global $pdo;
 
         $remain ='';
-        if( $exact_phrase != 'on' )
-        {
+        if ($exact_phrase != 'on') {
             $keyword = '%' . $keyword . '%';
         }
-        if($case_sensitivity != 'on')
-        {
+        if ($case_sensitivity != 'on') {
             $equate = ' LIKE ';
-        }
-        else
-        {
+        } else {
             $equate = ' LIKE BINARY ';
         }
 
@@ -131,8 +136,7 @@ else
         $author_first_name = '';
         $author_last_name = '';
         $use_uid = false;
-        switch($where)
-        {
+        switch ($where) {
             // Put all the category for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the category array are synchronized.
             case 'author_locked_files':
@@ -148,8 +152,8 @@ else
             // Put all the author name for each of the OBJ in the OBJ array into an array
             // Notice, the index of the OBJ_array and the author name array are synchronized.
             case 'author':
-                if( $exact_phrase=='on' )  {
-                    $author_first_name = substr($keyword, strpos($keyword, ' ') +1 );
+                if ($exact_phrase=='on') {
+                    $author_first_name = substr($keyword, strpos($keyword, ' ') +1);
                     $author_last_name = substr($keyword, 0, strpos($keyword, ' '));
                     $query .= " u.first_name $equate :author_first_name AND u.last_name  $equate :author_last_name ";
                 } else {
@@ -200,7 +204,7 @@ else
 
         $stmt = $pdo->prepare($final_query);
         
-        if(!empty($use_uid)) {
+        if (!empty($use_uid)) {
             $stmt->bindParam(':uid', $_SESSION['uid']);
             $stmt->bindParam(':keyword', $keyword);
         } elseif (!empty($author_last_name) && $exact_phrase == 'on') {
@@ -216,26 +220,22 @@ else
         $index = 0;
         $id_array = array();
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $id_array[$index++] = $row['id'];
             $index++;
         }
-        if(@$remain != '' && $exact_phrase != "on")
-        {
-            return array_values( array_unique( array_merge($id_array, search($where, substr($remain, 1), $exact_phrase, $case_sensitivity, $search_array) ) ) );
+        if (@$remain != '' && $exact_phrase != "on") {
+            return array_values(array_unique(array_merge($id_array, search($where, substr($remain, 1), $exact_phrase, $case_sensitivity, $search_array))));
         }
-        return array_values( array_intersect($id_array, $search_array) );
+        return array_values(array_intersect($id_array, $search_array));
     }
     $current_user = new User($_SESSION['uid'], $pdo);
     $user_perms = new User_Perms($_SESSION['uid'], $pdo);
     $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
     //$s_getFTime = getmicrotime();
-    if($_GET['where'] == 'author_locked_files')
-    {
+    if ($_GET['where'] == 'author_locked_files') {
         $view_able_files_id = $current_user->getExpiredFileIds();
-    }
-    else
-    {
+    } else {
         $view_able_files_id = $current_user_permission->getViewableFileIds(false);
     }
     //$e_getFTime = getmicrotime();
@@ -246,7 +246,7 @@ else
     // Call the plugin API
     callPluginMethod('onSearch');
 
-    list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false,false);
+    list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false, false);
     echo '<br />';
     draw_footer();
     //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';

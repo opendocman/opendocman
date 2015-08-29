@@ -23,12 +23,11 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Click here to view public files anonymously';
 $lang['forgotpassword'] = 'Forgot your password?';
-$lang['install_folder']  = 'Security Notice: If you already installed/updated then you should remove the \'install\' folder before proceeding';
 $lang['signup'] = 'Sign-up for an account';
-$lang['welcome'] = 'Welcome to OpenDocMan';
-$lang['welcome2'] = 'Log in to begin using the system\'s powerful storage, publishing and revision control features.';
-$lang['welcome_anonymous_title'] = 'OpenDocMan Anonymous Page: List All';
-$lang['welcome_anonymous_h1'] = 'OpenDocMan Anonymous Page';
+$lang['welcome'] = 'Welcome.';
+$lang['welcome2'] = 'Log in to begin.';
+$lang['welcome_anonymous_title'] = 'Anonymous Page: List All';
+$lang['welcome_anonymous_h1'] = 'Anonymous Page';
 
 //GLOBAL TERMS
 $lang['action'] = 'Action';
@@ -258,9 +257,9 @@ $lang['message_category_successfully_updated'] = 'Category successfully updated'
 $lang['message_click_to_checkout_document'] = 'Click to check out the selected document and begin downloading it to your local workstation';
 $lang['message_config_value_problem'] = 'There is a problem with one of your configuration values. Please check.';
 $lang['message_current'] = 'Current';
-$lang['message_datadir_problem'] = 'There is a problem with your dataDir. Check to make sure it exists and is writeable';
+$lang['message_datadir_problem'] = 'There is a problem with your dataDir. Check to make sure it exists and is writable';
 $lang['message_datadir_problem_exists'] = 'There is a problem with your dataDir setting. It does not appear to exist.';
-$lang['message_datadir_problem_writable'] = 'There is a problem with your dataDir setting. It does not appear to be writeable to the web server.';
+$lang['message_datadir_problem_writable'] = 'There is a problem with your dataDir setting. It does not appear to be writable to the web server.';
 $lang['message_department_successfully_added'] = 'Department successfully added';
 $lang['message_department_successfully_updated'] = 'Department successfully updated';
 $lang['message_directory_creation_failed'] = 'Directory Creation Failed';
@@ -297,7 +296,7 @@ $lang['message_no_information_available'] = 'No information available';
 $lang['message_non_unique_account'] = 'Non-Unique account';
 $lang['message_non_unique_key'] = 'Non-Unique key in database.';
 $lang['message_nothing_to_do'] = 'Nothing to do';
-$lang['message_not_writeable'] = 'Not Writeable!';
+$lang['message_not_writable'] = 'Not Writable!';
 $lang['message_once_the_document_has_completed'] = 'Once the document has completed downloading, you may';
 $lang['message_original_version'] = 'Original version';
 $lang['message_please_email'] = 'Please email';
@@ -310,7 +309,7 @@ $lang['message_session_error'] = 'Session error. Please login again.';
 $lang['message_set_your_new_password'] = 'Set your new password using the form below.';
 $lang['message_sorry_demo_mode'] = 'Sorry, demo mode only, you can not do that!';
 $lang['message_sorry_not_allowed'] = 'Sorry, you are not allowed do to that!';
-$lang['message_that_filetype_not_supported'] = 'That file type is not currently supported.<p>Please upload a document conforming to any of the following file types or add the missing MIMETYPE to ';
+$lang['message_that_filetype_not_supported'] = 'That file type is not currently supported. Please upload a document conforming to an allowed file type or have the administrator add the missing mime-type.';
 $lang['message_the_code_you_are_using'] = 'The code you are trying to use to reset your password is no longer valid.  Please use this form to reset your password.';
 $lang['message_the_file_is_too_large'] = 'The file is too large. Check your OpenDocMan settings. Maximum size is';
 $lang['message_the_file_is_too_large_php_ini'] = 'The file is too large for your php server. Check your php.ini configuration for max upload/post/memory. Maximum size is currently: ';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'Username';
 $lang['userpage_yes'] = 'Yes';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Edit file types';
 $lang['adminpage_edit_settings'] = 'Edit settings';
 $lang['adminpage_reports'] = 'Reports';

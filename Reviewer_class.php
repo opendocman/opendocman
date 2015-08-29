@@ -20,12 +20,12 @@ class Reviewer extends databaseData
 {
     protected $connection;
 
-    function Reviewer ($id, PDO $pdo)
+    public function Reviewer($id, PDO $pdo)
     {
         $this->id = $id;
         $this->connection = $pdo;
     }
-    function getReviewersForDepartment($dept_id)
+    public function getReviewersForDepartment($dept_id)
     {
         $reviewers = array();
         $query = "
@@ -49,12 +49,11 @@ class Reviewer extends databaseData
         }
         
         $count = 0;
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $reviewers[$count] = $row['user_id'];
             $count++;
         }
 
         return $reviewers;
     }
-
 }

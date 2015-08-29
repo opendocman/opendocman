@@ -24,8 +24,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -36,14 +35,13 @@ require_once('Reviewer_class.php');
 
 $user_obj = new User($_SESSION['uid'], $pdo);
 
-if(!$user_obj->canCheckIn()){
+if (!$user_obj->canCheckIn()) {
     redirect_visitor('out.php');
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     $last_message='Failed';
     header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
     exit;
@@ -52,8 +50,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 // includes
 
 // open connection
-if (!isset($_POST['submit']))
-{
+if (!isset($_POST['submit'])) {
     $id = (int) $_REQUEST['id'];
 
     // form not yet submitted, display initial form
@@ -68,45 +65,49 @@ if (!isset($_POST['submit']))
     $result = $stmt->fetch();
 
     // in case script is directly accessed, query above will return 0 rows
-    if ($stmt->rowCount() <= 0)
-    {
+    if ($stmt->rowCount() <= 0) {
         $last_message='Failed';
         header('Location:error.php?ec=2&last_message=' . urlencode($last_message));
         exit;
-    }
-    else
-    {
-        draw_header(msg('button_check_in'),$last_message);
+    } else {
+        draw_header(msg('button_check_in'), $last_message);
         $description = $result['description'];
         $real_name = $result['realname'];
 
-        if($description == '')
-        {
+        if ($description == '') {
             $description = msg('message_no_description_available');
         }
 
         // start displaying form
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+    <form action="<?php echo $_SERVER['PHP_SELF'];
+        ?>" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $_GET['id'];
+        ?>">
         <tr>
-            <td><b><?php echo msg('label_filename');?></b></td>
-            <td><b><?php echo $real_name; ?></b></td>
+            <td><b><?php echo msg('label_filename');
+        ?></b></td>
+            <td><b><?php echo $real_name;
+        ?></b></td>
         </tr>
 
         <tr>
-            <td><b><?php echo msg('label_description');?></b></td>
-            <td><?php echo $description; ?></td>
+            <td><b><?php echo msg('label_description');
+        ?></b></td>
+            <td><?php echo $description;
+        ?></td>
         </tr>
 
         <tr>
-            <td><b><?php echo msg('label_file_location');?></b></td>
+            <td><b><?php echo msg('label_file_location');
+        ?></b></td>
             <td><input name="file" type="file"></td>
         </tr>
 
         <tr>
-            <td><?php echo msg('label_note_for_revision_log');?></td>
+            <td><?php echo msg('label_note_for_revision_log');
+        ?></td>
             <td><textarea name="note"></textarea></td>
         </tr>
 
@@ -133,16 +134,13 @@ if (!isset($_POST['submit']))
     }
 </script>
         <?php
+
     }//end else
 }//end if (!$submit)
-else
-{
-    if ($GLOBALS['CONFIG']['authorization'] == 'True')
-    {
+else {
+    if ($GLOBALS['CONFIG']['authorization'] == 'True') {
         $publishable = '0';
-    }
-    else
-    {
+    } else {
         $publishable= '1';
     }
     // form has been submitted, process data
@@ -151,8 +149,7 @@ else
     $filename = $_FILES['file']['name'];
 
     // no file!
-    if ($_FILES['file']['size'] <= 0)
-    {
+    if ($_FILES['file']['size'] <= 0) {
         $last_message='Failed';
         header('Location:error.php?ec=11&last_message=' . urlencode($last_message));
         exit;
@@ -170,7 +167,6 @@ else
     
     // check file type
     foreach ($GLOBALS['CONFIG']['allowedFileTypes'] as $this_type) {
-
         if ($file_mime == $this_type) {
             $allowedFile = 1;
             break;
@@ -180,8 +176,7 @@ else
     }
     
     // illegal file type!
-    if ($allowedFile != 1)
-    {
+    if ($allowedFile != 1) {
         $last_message='MIMETYPE: ' . $file_mime . ' Failed';
         header('Location:error.php?ec=13&last_message=' . urlencode($last_message));
         exit;
@@ -190,8 +185,7 @@ else
     // query to ensure that user has modify rights
     $file_data_obj = new FileData($id, $pdo);
 
-    if($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid'])
-    {     
+    if ($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid']) {
         //look to see how many revision are there
         $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
         $stmt = $pdo->prepare($query);
@@ -203,34 +197,29 @@ else
         $revision_number = $stmt->rowCount();
 
         // if dir not available, create it
-        if( !is_dir($GLOBALS['CONFIG']['revisionDir']) )
-        {
-            if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775))
-            {
+        if (!is_dir($GLOBALS['CONFIG']['revisionDir'])) {
+            if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775)) {
                 $last_message=msg('message_directory_creation_failed'). ': ' . $GLOBALS['CONFIG']['revisionDir'] ;
                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                 exit;
             }
         }
-        if( !is_dir($GLOBALS['CONFIG']['revisionDir'] . $id) )
-        {
-            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $id, 0775))
-            {
+        if (!is_dir($GLOBALS['CONFIG']['revisionDir'] . $id)) {
+            if (!mkdir($GLOBALS['CONFIG']['revisionDir'] . $id, 0775)) {
                 $last_message=msg('message_directory_creation_failed') . ': ' . $GLOBALS['CONFIG']['revisionDir'] .  $id;
                 header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
                 exit;
             }
-
         }
         $file_name = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
         //read and close
-        $file_handler = fopen ($file_name, "r");
-        $file_content = fread($file_handler, filesize ($file_name));
-        fclose ($file_handler);
+        $file_handler = fopen($file_name, "r");
+        $file_content = fread($file_handler, filesize($file_name));
+        fclose($file_handler);
         //write and close
-        $file_handler = fopen ($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($revision_number - 1) . '.dat', "w");
+        $file_handler = fopen($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($revision_number - 1) . '.dat', "w");
         fwrite($file_handler, $file_content);
-        fclose ($file_handler);
+        fclose($file_handler);
         // all OK, proceed!
 
         $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
@@ -286,25 +275,25 @@ else
         
         // Build email for general notices
         $mail_subject = msg('checkinpage_file_was_checked_in');
-        $mail_body2 = msg('checkinpage_file_was_checked_in') . "\n\n";
-        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . "\n\n";
-        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . "\n\n";
-        $mail_body2.=msg('date') . ': ' . $date . "\n\n";
-        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . "\n\n";
-        $mail_body2.=msg('email_thank_you') . ',' . "\n\n";
-        $mail_body2.=msg('email_automated_document_messenger') . "\n\n";
-        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . "\n\n";
+        $mail_body2 = msg('checkinpage_file_was_checked_in') . PHP_EOL;
+        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL;
+        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . PHP_EOL;
+        $mail_body2.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
+        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
         
         $email_obj = new Email();
         $email_obj->setFullName($full_name);
         $email_obj->setSubject($mail_subject);
         $email_obj->setFrom($full_name . ' <' . $user_obj->getEmailAddress() . '>');
         $email_obj->setRecipients($reviewer_list);
-        $email_obj->setBody($mail_body2);        
+        $email_obj->setBody($mail_body2);
         $email_obj->sendEmail();
         
         // clean up and back to main page
-        $last_message = msg('message_document_checked_in');        
+        $last_message = msg('message_document_checked_in');
         header('Location: out.php?last_message=' . urlencode($last_message));
     }
 }

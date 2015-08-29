@@ -19,7 +19,7 @@
         <tr>
             <td><b>{$g_lang_userpage_password}</b></td>
             <td>
-                <input name="password" type="text" value="{$rand_password}" class="required" minlength="5" maxlength="10">
+                <input name="password" type="text" value="{$rand_password}" class="required" minlength="5" maxlength="32">
             </td>
         </tr>
         {/if}

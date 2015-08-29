@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'অজ্ঞাতপরিচয় হিসাবে সার্বজনীন ফাইল দেখতে এখানে ক্লিক করুন';
 $lang['forgotpassword'] = 'কূটশব্দ ভুলেছেন?';
-$lang['install_folder']  = 'নিরাপত্তা বিজ্ঞপ্তিঃ  ইতিমধ্যেই যদা সংস্থাপন/কিংবা পরিবর্ধন করে থাকেন তাহলে অগ্রসর হওয়ার পূ্র্বেই অবশ্যই  \'install\' ফোল্ডারটি মুছে ফেলুন ';
 $lang['signup'] = 'একাউন্টের জন্য যোগ দিন';
 $lang['welcome'] = 'OpenDocMan এ সুস্বাগতম';
 $lang['welcome2'] = 'সিস্টেমের শক্তিশালী সংরক্ষণাগার, প্রকাশনা এবং রিভিসন নিয়ন্ত্রণ বৈশিষ্ট্য ব্যবহার করার জন্য প্রবেশ করুন।';
@@ -297,7 +296,7 @@ $lang['message_no_information_available'] = 'কোন তথ্য উপলভ
 $lang['message_non_unique_account'] = 'অনন্য নয় একাউন্ট';
 $lang['message_non_unique_key'] = 'ডাটাবেজে অনন্য নয়  কী।';
 $lang['message_nothing_to_do'] = 'কিছুই করার নেই ';
-$lang['message_not_writeable'] = 'লিখনোপযোগী নয়!';
+$lang['message_not_writable'] = 'লিখনোপযোগী নয়!';
 $lang['message_once_the_document_has_completed'] = 'নথি ডাউনলোড সুসম্পন্ন হলে, আপনি যা যা করতে পারেন ';
 $lang['message_original_version'] = 'আদি ভার্সন';
 $lang['message_please_email'] = 'দয়া করে ই-মেইল করুন';
@@ -460,6 +459,9 @@ $lang['userpage_username'] = 'ব্যবহারকারি নাম';
 $lang['userpage_yes'] = 'হ্যাঁ';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'ফাইলের ধরণ সম্পাদনা';
 $lang['adminpage_edit_settings'] = 'নিয়ামক সম্পাদনা';
 $lang['adminpage_reports'] = 'প্রতিবেদনসমূহ';

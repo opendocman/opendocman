@@ -136,7 +136,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         ));
 
         // INSERT into admin
-        $user_id = $pdo->lastInsertId();;
+        $user_id = $pdo->lastInsertId();
+        ;
         if (!isset($_POST['admin'])) {
             $_POST['admin'] = '0';
         }
@@ -168,20 +169,22 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         $get_full_name = $new_user_obj->getFullName();
         $new_user_full_name = $get_full_name[0] . ' ' . $get_full_name[1];
         $mail_from = $full_name . ' <' . $user_obj->getEmailAddress() . '>';
-        $mail_headers = "From: $mail_from" . "\r\n";
-        $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . "\r\n";
+        $mail_headers = "From: $mail_from" . PHP_EOL;
+        $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
         $mail_subject = msg('message_account_created_add_user');
-        $mail_greeting = $new_user_full_name . ":\n\r\t" . msg('email_i_would_like_to_inform');
-        $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . "\n\r";
-        $mail_body .= $GLOBALS['CONFIG']['base_url'] . "\n\n";
-        $mail_body .= msg('username') . ': ' . $new_user_obj->getName() . "\n\n";
+        $mail_greeting = $new_user_full_name . ":" . PHP_EOL . msg('email_i_would_like_to_inform');
+        $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . PHP_EOL . PHP_EOL;
+        $mail_body .= $GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
+        $mail_body .= msg('username') . ': ' . $new_user_obj->getName() . PHP_EOL . PHP_EOL;
         if ($GLOBALS['CONFIG']['authen'] == 'mysql') {
-            $mail_body .= msg('password') . ': ' . $_POST['password'] . "\n\n";
+            $mail_body .= msg('password') . ': ' . $_POST['password'] . PHP_EOL . PHP_EOL;
         }
-        $mail_salute = "\n\r" . msg('email_salute') . ",\n\r$full_name";
+        $mail_salute =  msg('email_salute') . ",". PHP_EOL . $full_name;
         $mail_to = $new_user_obj->getEmailAddress();
+        $mail_flags = "-f".$user_obj->getEmailAddress();
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
-            mail($mail_to, $mail_subject, ($mail_greeting . ' ' . $mail_body . $mail_salute), $mail_headers);
+            mail($mail_to, $mail_subject, ($mail_greeting . ' ' . $mail_body . $mail_salute), $mail_headers,
+                $mail_flags);
         }
         $last_message = urlencode(msg('message_user_successfully_added'));
 
@@ -252,7 +255,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     display_smarty_template('user_delete_pick.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
-
     $user_obj = new User($_POST['item'], $pdo);
     draw_header(msg('userpage_show_user') . $user_obj->getName(), $last_message);
 
@@ -366,7 +368,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     }
 
     draw_footer();
-
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
 
     // Check to make sue they are either the user being modified or an admin
@@ -478,9 +479,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
     header('Location: out.php?last_message=' . $last_message);
-
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
-
     draw_header(msg('userpage_modify_user'), $last_message);
 
     // Check to see if user is admin
@@ -505,7 +504,6 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     display_smarty_template('user/edit_pick.tpl');
 
     draw_footer();
-
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
     header('Location: admin.php?last_message=' . $last_message);

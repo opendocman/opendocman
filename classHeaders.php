@@ -19,8 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('classHeader') )
-{
+if (!defined('classHeader')) {
     define('classHeader', 'true', false);
     include_once('databaseData_class.php');
     include_once('User_class.php');
@@ -42,36 +41,28 @@ if( !defined('classHeader') )
         //merge higher priority onto lower priority one.
         $user_rights = array();
         $k = 0;
-        $foundFlag = false;   
+        $foundFlag = false;
         //create a multidimension array: element of view and right of view
-        for($i = 0; $i<sizeof($low_priority_array); $i++)
-        {
-            $user_rights[$i] = array($low_priority_array[$i], $low_postfix);         
+        for ($i = 0; $i<sizeof($low_priority_array); $i++) {
+            $user_rights[$i] = array($low_priority_array[$i], $low_postfix);
         }
 
         $k = sizeof($user_rights);
-        for($m = 0; $m<sizeof($hi_priority_array); $m++)
-        {
-            for($u = 0; $u<sizeof($user_rights); $u++)
-            {
-                if($user_rights[$u][0] == $hi_priority_array[$m] and $hi_postfix!='NULL' )
-                {
+        for ($m = 0; $m<sizeof($hi_priority_array); $m++) {
+            for ($u = 0; $u<sizeof($user_rights); $u++) {
+                if ($user_rights[$u][0] == $hi_priority_array[$m] and $hi_postfix!='NULL') {
                     $user_rights[$u][1] = $hi_postfix;
                     $foundFlag = true;
                 }
-                if($user_rights[$u][0] == $hi_priority_array[$m][0] and $hi_postfix =='NULL')
-                {
+                if ($user_rights[$u][0] == $hi_priority_array[$m][0] and $hi_postfix =='NULL') {
                     $user_rights[$u][1] = $hi_priority_array[$m][1];
                     $foundFlag = true;
                 }
-
             }
-            if($foundFlag==false & $hi_postfix != 'NULL')
-            {
+            if ($foundFlag==false & $hi_postfix != 'NULL') {
                 $user_rights[$k++]= array($hi_priority_array[$m], $hi_postfix);
             }
-            if($foundFlag==false & $hi_postfix == 'NULL')
-            {
+            if ($foundFlag==false & $hi_postfix == 'NULL') {
                 $user_rights[$k++]= $hi_priority_array[$m];
             }
             $foundFlag = false;
@@ -84,18 +75,14 @@ if( !defined('classHeader') )
         $result_array = array();
         $result_array = $high_priority_array;
         $result_array_index = sizeof($high_priority_array);
-        for($l = 0 ; $l<sizeof($low_priority_array); $l++)
-        {
-            for($r = 0; $r<sizeof($result_array); $r++)
-            {
-                if($result_array[$r] == $low_priority_array[$l] && $high_priority_array[$r] == true)
-                {
+        for ($l = 0 ; $l<sizeof($low_priority_array); $l++) {
+            for ($r = 0; $r<sizeof($result_array); $r++) {
+                if ($result_array[$r] == $low_priority_array[$l] && $high_priority_array[$r] == true) {
                     $r = sizeof($result_array);
                     $found = true;
                 }
             }
-            if(!$found)
-            {
+            if (!$found) {
                 $result_array[$result_array_index++] = $low_priority_array[$l];
             }
             $found = false;
