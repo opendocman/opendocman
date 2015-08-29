@@ -41,7 +41,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     }
     // all ok, proceed!
     if (!is_dir($GLOBALS['CONFIG']['archiveDir'])) {
-        // Make sure directory is writeable
+        // Make sure directory is writable
         if (!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775)) {
             $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
             header('Location:error.php?ec=23&last_message=' .$last_message);

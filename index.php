@@ -67,7 +67,7 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_POST['login'])) {
-    if (!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writeable($GLOBALS['CONFIG']['dataDir'])) {
+    if (!is_dir($GLOBALS['CONFIG']['dataDir']) || !is_writable($GLOBALS['CONFIG']['dataDir'])) {
         echo "<font color=red>" . msg('message_datadir_problem') . "</font>";
     }
 

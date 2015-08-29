@@ -224,14 +224,14 @@ if (!isset($_POST['submit'])) {
             exit;
         }
 
-        // Check to make sure the dir is available and writeable
+        // Check to make sure the dir is available and writable
         if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {
             $last_message=$GLOBALS['CONFIG']['dataDir'] . ' missing!';
             header('Location:error.php?ec=23&last_message=' .$last_message);
             exit;
         } else {
-            if (!is_writeable($GLOBALS['CONFIG']['dataDir'])) {
-                $last_message=msg('message_folder_perms_error'). ': ' . $GLOBALS['CONFIG']['dataDir'] . ' ' . msg('message_not_writeable');
+            if (!is_writable($GLOBALS['CONFIG']['dataDir'])) {
+                $last_message=msg('message_folder_perms_error'). ': ' . $GLOBALS['CONFIG']['dataDir'] . ' ' . msg('message_not_writable');
                 header('Location:error.php?ec=23&last_message=' .$last_message);
                 exit;
             }

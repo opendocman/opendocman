@@ -308,9 +308,9 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         global $pdo;
 
         define('ODM_INSTALLING', 'true');
-        echo 'Checking that templates_c folder is writeable...<br />';
-        if (!is_writeable('../templates_c')) {
-            echo 'templates_c folder is <strong>Not writeable</strong> - Fix and go <a href="javascript: history.back()" class="button">Back</a><br />';
+        echo 'Checking that templates_c folder is writable...<br />';
+        if (!is_writable('../templates_c')) {
+            echo 'templates_c folder is <strong>Not writable</strong> - Fix and go <a href="javascript: history.back()" class="button">Back</a><br />';
             exit;
         } else {
             echo 'OK<br />';

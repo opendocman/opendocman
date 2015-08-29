@@ -248,9 +248,9 @@ deny from all
             echo 'The data directory exists, but your web server cannot write to it. Please verify the folder permissions are correct on ' . $datadir;
         }
 
-        // Verify the templates_c is writeable
+        // Verify the templates_c is writable
         if (!is_writable(ABSPATH . '/templates_c')) {
-            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writeable by the web server';
+            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writable by the web server';
         }
 
         // We also need to guess at their base_url value

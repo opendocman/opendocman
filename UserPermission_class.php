@@ -63,9 +63,9 @@ if (!defined('UserPermission_class')) {
         {
             $viewable_array = $this->getViewableFileIds($limit);
             $readable_array = $this->getReadableFileIds($limit);
-            $writeable_array = $this->getWriteableFileIds($limit);
+            $writable_array = $this->getWritableFileIds($limit);
             $adminable_array = $this->getAdminableFileIds($limit);
-            $result_array = array_values(array_unique(array_merge($viewable_array, $readable_array, $writeable_array, $adminable_array)));
+            $result_array = array_values(array_unique(array_merge($viewable_array, $readable_array, $writable_array, $adminable_array)));
             return $result_array;
         }
 
@@ -157,7 +157,7 @@ if (!defined('UserPermission_class')) {
          * @param bool $limit
          * @return array
          */
-        public function getWriteableFileIds($limit = true)
+        public function getWritableFileIds($limit = true)
         {
             $user_perms_file_array = $this->user_perms_obj->getCurrentWriteRight($limit);
             $dept_perms_file_array = $this->dept_perms_obj->getCurrentWriteRight($limit);
@@ -171,9 +171,9 @@ if (!defined('UserPermission_class')) {
          * @param bool $limit
          * @return array
          */
-        public function getWriteableFileOBJs($limit = true)
+        public function getWritableFileOBJs($limit = true)
         {
-            return $this->convertToFileDataOBJ($this->getWriteableFileIds($limit));
+            return $this->convertToFileDataOBJ($this->getWritableFileIds($limit));
         }
 
         /**
