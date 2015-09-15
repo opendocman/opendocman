@@ -7,6 +7,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <script type="text/javascript" src="{$g_base_url}/templates/tweeter/js/bootstrap.min.js"></script>
+
     <!-- Le styles -->
 
     <link href="{$g_base_url}/templates/tweeter/css/bootstrap.css" rel="stylesheet">
