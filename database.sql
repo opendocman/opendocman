@@ -7,9 +7,9 @@
 #
 
 CREATE TABLE `odm_access_log` (
-  `file_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `file_id` INT(11) NOT NULL,
+  `user_id` INT(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
 ) ENGINE = MYISAM;
 
@@ -17,60 +17,59 @@ CREATE TABLE `odm_access_log` (
 # Table structure for table 'odm_admin'
 #
 
-CREATE TABLE odm_admin (
-  id int(11) unsigned default NULL,
-  admin tinyint(4) default NULL
+CREATE TABLE `odm_admin` (
+  `id` INT(11) UNSIGNED DEFAULT NULL,
+  `admin` TINYINT(1) DEFAULT NULL,
+  PRIMARY KEY ( `id` )
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_admin'
 #
 
-INSERT INTO odm_admin VALUES (1,1);
+INSERT INTO `odm_admin` VALUES (1,1);
 
 #
 # Table structure for table 'odm_category'
 #
 
-CREATE TABLE odm_category (
-  id int(11) unsigned NOT NULL auto_increment,
-  name varchar(255) NOT NULL default '',
-  PRIMARY KEY  (id)
+CREATE TABLE `odm_category` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL DEFAULT '',
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_category'
 #
 
-INSERT INTO odm_category VALUES (NULL,'SOP');
-INSERT INTO odm_category VALUES (NULL,'Training Manual');
-INSERT INTO odm_category VALUES (NULL,'Letter');
-INSERT INTO odm_category VALUES (NULL,'Presentation');
+INSERT INTO `odm_category` VALUES (NULL,'SOP');
+INSERT INTO `odm_category` VALUES (NULL,'Training Manual');
+INSERT INTO `odm_category` VALUES (NULL,'Letter');
+INSERT INTO `odm_category` VALUES (NULL,'Presentation');
 
 #
 # Table structure for table 'odm_data'
 #
 
-CREATE TABLE odm_data (
-  id int(11) unsigned NOT NULL auto_increment,
-  category int(11) unsigned NOT NULL default '0',
-  owner int(11) unsigned default NULL,
-  realname varchar(255) NOT NULL default '',
-  created datetime NOT NULL default '0000-00-00 00:00:00',
-  description varchar(255) default NULL,
-  comment varchar(255) default '',
-  status smallint(6) default NULL,
-  department smallint(6) unsigned default NULL,
-  default_rights tinyint(4) default NULL,
-  publishable tinyint(4) default NULL,
-  reviewer int(11) unsigned default NULL,
-  reviewer_comments varchar(255) default NULL,
-  PRIMARY KEY  (id),
-  KEY data_idx (id,owner),
-  KEY id (id),
-  KEY id_2 (id),
-  KEY publishable (publishable),
-  KEY description (description)
+CREATE TABLE `odm_data` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `category` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `owner` INT(11) UNSIGNED DEFAULT NULL,
+  `realname` VARCHAR(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `description` VARCHAR(255) DEFAULT NULL,
+  `comment` VARCHAR(255) default '',
+  `status` SMALLINT(6) DEFAULT NULL,
+  `department` SMALLINT(6) UNSIGNED DEFAULT NULL,
+  `default_rights` TINYINT(1) DEFAULT NULL,
+  `publishable` TINYINT(1) DEFAULT NULL,
+  `reviewer` INT(11) UNSIGNED DEFAULT NULL,
+  `reviewer_comments` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY  ( `id` ),
+  KEY data_idx ( `id`, `owner` ),
+  KEY publishable ( `publishable` ),
+  KEY description ( `description` )
 ) ENGINE = MYISAM;
 
 #
@@ -81,29 +80,29 @@ CREATE TABLE odm_data (
 # Table structure for table 'odm_department'
 #
 
-CREATE TABLE odm_department (
-  id int(11) unsigned NOT NULL auto_increment,
-  name varchar(255) NOT NULL default '',
-  PRIMARY KEY  (id)
+CREATE TABLE `odm_department` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL DEFAULT '',
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_department'
 #
 
-INSERT INTO odm_department VALUES (NULL,'Information Systems');
+INSERT INTO `odm_department` VALUES (NULL,'Information Systems');
 
 #
 # Table structure for table 'odm_dept_perms'
 #
 
-CREATE TABLE odm_dept_perms (
-  fid int(11) unsigned default NULL,
-  dept_id int(11) unsigned default NULL,
-  rights tinyint(4) NOT NULL default '0',
-  KEY rights (rights),
-  KEY dept_id (dept_id),
-  KEY fid (fid)
+CREATE TABLE `odm_dept_perms` (
+  `fid` INT(11) UNSIGNED DEFAULT NULL,
+  `dept_id` INT(11) UNSIGNED DEFAULT NULL,
+  `rights` TINYINT(1) NOT NULL DEFAULT '0',
+  KEY fid ( `fid` ),
+  KEY dept_id ( `dept_id` ),
+  KEY rights ( `rights` )
 ) ENGINE = MYISAM;
 
 #
@@ -115,29 +114,30 @@ CREATE TABLE odm_dept_perms (
 # Table structure for table 'odm_dept_reviewer'
 #
 
-CREATE TABLE odm_dept_reviewer (
-  dept_id int(11) unsigned default NULL,
-  user_id int(11) unsigned default NULL
+CREATE TABLE `odm_dept_reviewer` (
+  `dept_id` INT(11) UNSIGNED DEFAULT NULL,
+  `user_id` INT(11) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY ( `dept_id`, `user_id` )
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_dept_reviewer'
 #
 
-INSERT INTO odm_dept_reviewer VALUES (1,1);
+INSERT INTO `odm_dept_reviewer` VALUES (1,1);
 
 #
 # Table structure for table 'odm_log'
 #
 
-CREATE TABLE odm_log (
-  id int(11) unsigned NOT NULL default '0',
-  modified_on datetime NOT NULL default '0000-00-00 00:00:00',
-  modified_by varchar(25) default NULL,
-  note text,
-  revision varchar(255) default NULL,
-  KEY id (id),
-  KEY modified_on (modified_on)
+CREATE TABLE `odm_log` (
+  `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` VARCHAR(25) DEFAULT NULL,
+  `note` TEXT,
+  `revision` VARCHAR(255) DEFAULT NULL,
+  KEY id (`id`),
+  KEY modified_on (`modified_on`)
 ) ENGINE = MYISAM;
 
 #
@@ -149,59 +149,58 @@ CREATE TABLE odm_log (
 # Table structure for table 'odm_rights'
 #
 
-CREATE TABLE odm_rights (
-  RightId tinyint(4) default NULL,
-  Description varchar(255) default NULL
+CREATE TABLE `odm_rights` (
+  `RightId` TINYINT(1) DEFAULT NULL,
+  `Description` VARCHAR(255) DEFAULT NULL
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_rights'
 #
 
-INSERT INTO odm_rights VALUES (0,'none');
-INSERT INTO odm_rights VALUES (1,'view');
-INSERT INTO odm_rights VALUES (-1,'forbidden');
-INSERT INTO odm_rights VALUES (2,'read');
-INSERT INTO odm_rights VALUES (3,'write');
-INSERT INTO odm_rights VALUES (4,'admin');
+INSERT INTO `odm_rights` VALUES (0,'none');
+INSERT INTO `odm_rights` VALUES (1,'view');
+INSERT INTO `odm_rights` VALUES (-1,'forbidden');
+INSERT INTO `odm_rights` VALUES (2,'read');
+INSERT INTO `odm_rights` VALUES (3,'write');
+INSERT INTO `odm_rights` VALUES (4,'admin');
 
 #
 # Table structure for table 'odm_user'
 #
 
-CREATE TABLE odm_user (
-  id int(11) unsigned NOT NULL auto_increment,
-  username varchar(25) NOT NULL default '',
-  password varchar(50) NOT NULL default '',
-  department int(11) unsigned default NULL,
-  phone varchar(20) default NULL,
-  Email varchar(50) default NULL,
-  last_name varchar(255) default NULL,
-  first_name varchar(255) default NULL,
-  pw_reset_code char(32) default NULL,
-  can_add tinyint(1) NULL DEFAULT 1,
-  can_checkin tinyint(1) NULL DEFAULT 1,
-  PRIMARY KEY  (id)
+CREATE TABLE `odm_user` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(25) NOT NULL DEFAULT '',
+  `password` VARCHAR(50) NOT NULL DEFAULT '',
+  `department` INT(11) UNSIGNED DEFAULT NULL,
+  `phone` VARCHAR(20) DEFAULT NULL,
+  `Email` VARCHAR(50) DEFAULT NULL,
+  `last_name` VARCHAR(255) DEFAULT NULL,
+  `first_name` VARCHAR(255) DEFAULT NULL,
+  `pw_reset_code` char(32) DEFAULT NULL,
+  `can_add` TINYINT(1) NULL DEFAULT 1,
+  `can_checkin` TINYINT(1) NULL DEFAULT 1,
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
 #
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
+INSERT INTO `odm_user` VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
 #
 
-CREATE TABLE odm_user_perms (
-  fid int(11) unsigned default NULL,
-  uid int(11) unsigned NOT NULL default '0',
-  rights tinyint(4) NOT NULL default '0',
-  KEY user_perms_idx (fid,uid,rights),
-  KEY fid (fid),
-  KEY uid (uid),
-  KEY rights (rights)
+CREATE TABLE `odm_user_perms` (
+  `fid` INT(11) UNSIGNED DEFAULT NULL,
+  `uid` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  `rights` TINYINT(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY  ( `fid`, `uid`, `rights` ),
+  KEY uid ( `uid` ),
+  KEY rights ( `rights` )
 ) ENGINE = MYISAM;
 
 #
@@ -221,31 +220,31 @@ CREATE TABLE odm_user_perms (
 #
 # display_name is the label shown to the user
 
-CREATE TABLE odm_udf
-(
-    id  int(11) auto_increment unique,
-    table_name  varchar(50),
-    display_name    varchar(16),
-    field_type  int
+CREATE TABLE `odm_udf` (
+  `id` TINYINT(2) NOT NULL AUTO_INCREMENT ,
+  `table_name` VARCHAR(50),
+  `display_name` VARCHAR(16),
+  `field_type` TINYINT(1),
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
-CREATE TABLE IF NOT EXISTS odm_odmsys
-(
-    id  int(11) auto_increment unique,
-    sys_name  varchar(16),
-    sys_value    varchar(255)
+CREATE TABLE IF NOT EXISTS `odm_odmsys` (
+  `id` TINYINT(2) NOT NULL AUTO_INCREMENT ,
+  `sys_name`  VARCHAR(16),
+  `sys_value` VARCHAR(255),
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.3.0');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.3.0');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
-`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-`name` VARCHAR( 255 ) NOT NULL ,
-`value` VARCHAR( 255 ) NOT NULL ,
-`description` VARCHAR( 255 ) NOT NULL ,
-`validation` VARCHAR( 255 ) NOT NULL ,
-PRIMARY KEY ( `id` ) ,
-UNIQUE ( `name` )
+  `id` TINYINT(2) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `name` VARCHAR( 255 ) NOT NULL ,
+  `value` VARCHAR( 255 ) NOT NULL ,
+  `description` VARCHAR( 255 ) NOT NULL ,
+  `validation` VARCHAR( 255 ) NOT NULL ,
+  PRIMARY KEY  ( `id` ) ,
+  UNIQUE KEY  ( `name` )
 ) ENGINE = MYISAM;
 
 INSERT INTO `odm_settings` VALUES(NULL,'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
@@ -269,10 +268,10 @@ INSERT INTO `odm_settings` VALUES(NULL,'max_query', '500', 'Set this to the maxi
 INSERT INTO `odm_settings` VALUES(NULL,'show_footer', 'True', 'Set this to True to display the footer.', 'bool');
 
 CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
-`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
-`type` VARCHAR(255) NOT NULL ,
-`active` TINYINT(4) NOT NULL ,
-PRIMARY KEY (`id`)
+  `id` TINYINT(2) UNSIGNED NOT NULL AUTO_INCREMENT ,
+  `type` VARCHAR(255) NOT NULL ,
+  `active` TINYINT(1) NOT NULL ,
+  PRIMARY KEY  ( `id` )
 ) ENGINE = MYISAM;
 
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/gif', 1);
