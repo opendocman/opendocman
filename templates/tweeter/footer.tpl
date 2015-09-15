@@ -12,7 +12,7 @@
  </script>
 {/if}
       <hr>
-
+{if $g_show_footer eq 'True'}
       <footer>
           <a href="http://www.opendocman.com/">
                 <img src="{$g_base_url}/images/logo.gif" title="{$site_title}" alt="{$site_title}" border="0">
@@ -24,7 +24,7 @@
             <a href="https://github.com/opendocman/opendocman/issues" target="_new">Bugs</a> |
         </p>
       </footer>
-
+{/if}
     </div> <!-- /container -->   
 </body>
 </html>

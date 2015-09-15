@@ -338,7 +338,8 @@ $sql_operations = array(
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'theme', 'tweeter', 'Which theme to use?', '');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'base_url', '{$_SESSION['baseurl']}', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');",
-"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num');"
+"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num');",
+"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'show_footer', 'True', 'Set this to True to display the footer.', 'bool');"
 );
 
 foreach ($sql_operations as $query) {
