@@ -428,7 +428,7 @@ function sort_browser()
                     break;
             }
             <?php
-            echo("\toptions_array[0] = new Option('".msg('outpage_choose')."' + category_option_msg);".PHP_EOL);
+            echo("\toptions_array[0] = new Option('".msg('outpage_choose')." ' + category_option_msg);".PHP_EOL);
             ?>
             options_array[0].id = 0;
             options_array[0].value = 'choose_an_author';
