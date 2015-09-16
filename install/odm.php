@@ -37,7 +37,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
         
 $query = "
-CREATE TABLE `{$dbprefix}access_log` (
+CREATE TABLE IF NOT EXISTS `{$dbprefix}access_log` (
   `file_id` INT(11) NOT NULL,
   `user_id` INT(11) NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
@@ -52,7 +52,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 $query = "
-CREATE TABLE `{$dbprefix}admin` (
+CREATE TABLE IF NOT EXISTS `{$dbprefix}admin` (
   `id` INT(11) UNSIGNED DEFAULT NULL,
   `admin` TINYINT(1) DEFAULT NULL,
   PRIMARY KEY ( `id` )
@@ -71,7 +71,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 $query = "
-CREATE TABLE `{$dbprefix}category` (
+CREATE TABLE IF NOT EXISTS `{$dbprefix}category` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
@@ -100,7 +100,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}data`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}data` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}data` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `category` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `owner` INT(11) UNSIGNED DEFAULT NULL,
@@ -127,7 +127,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}department`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}department` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}department` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
@@ -144,7 +144,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}dept_perms`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}dept_perms` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}dept_perms` (
   `fid` INT(11) UNSIGNED DEFAULT NULL,
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `rights` TINYINT(1) NOT NULL DEFAULT '0',
@@ -160,7 +160,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}dept_reviewer`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}dept_reviewer` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}dept_reviewer` (
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `user_id` INT(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY ( `dept_id`, `user_id` )
@@ -178,7 +178,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}log`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}log` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}log` (
   `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_by` VARCHAR(25) DEFAULT NULL,
@@ -195,7 +195,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}rights`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}rights` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}rights` (
   `RightId` TINYINT(1) DEFAULT NULL,
   `Description` VARCHAR(255) DEFAULT NULL
 ) ENGINE = MYISAM";
@@ -232,7 +232,7 @@ $query = "DROP TABLE IF EXISTS `{$dbprefix}user`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-$query = "CREATE TABLE `{$dbprefix}user` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}user` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(25) NOT NULL DEFAULT '',
   `password` VARCHAR(50) NOT NULL DEFAULT '',
@@ -352,7 +352,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 // Create the filetypes table
-$query = "CREATE  TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
+$query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
   `id` TINYINT(2) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `type` VARCHAR(255) NOT NULL ,
   `active` TINYINT(1) NOT NULL ,

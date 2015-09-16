@@ -6,7 +6,7 @@
 # Table structure for table 'odm_access_log'
 #
 
-CREATE TABLE `odm_access_log` (
+CREATE TABLE IF NOT EXISTS `odm_access_log` (
   `file_id` INT(11) NOT NULL,
   `user_id` INT(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
@@ -17,7 +17,7 @@ CREATE TABLE `odm_access_log` (
 # Table structure for table 'odm_admin'
 #
 
-CREATE TABLE `odm_admin` (
+CREATE TABLE IF NOT EXISTS `odm_admin` (
   `id` INT(11) UNSIGNED DEFAULT NULL,
   `admin` TINYINT(1) DEFAULT NULL,
   PRIMARY KEY ( `id` )
@@ -33,7 +33,7 @@ INSERT INTO `odm_admin` VALUES (1,1);
 # Table structure for table 'odm_category'
 #
 
-CREATE TABLE `odm_category` (
+CREATE TABLE IF NOT EXISTS `odm_category` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
@@ -52,7 +52,7 @@ INSERT INTO `odm_category` VALUES (NULL,'Presentation');
 # Table structure for table 'odm_data'
 #
 
-CREATE TABLE `odm_data` (
+CREATE TABLE IF NOT EXISTS `odm_data` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `category` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `owner` INT(11) UNSIGNED DEFAULT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `odm_data` (
 # Table structure for table 'odm_department'
 #
 
-CREATE TABLE `odm_department` (
+CREATE TABLE IF NOT EXISTS `odm_department` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
@@ -96,7 +96,7 @@ INSERT INTO `odm_department` VALUES (NULL,'Information Systems');
 # Table structure for table 'odm_dept_perms'
 #
 
-CREATE TABLE `odm_dept_perms` (
+CREATE TABLE IF NOT EXISTS `odm_dept_perms` (
   `fid` INT(11) UNSIGNED DEFAULT NULL,
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `rights` TINYINT(1) NOT NULL DEFAULT '0',
@@ -114,7 +114,7 @@ CREATE TABLE `odm_dept_perms` (
 # Table structure for table 'odm_dept_reviewer'
 #
 
-CREATE TABLE `odm_dept_reviewer` (
+CREATE TABLE IF NOT EXISTS `odm_dept_reviewer` (
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `user_id` INT(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY ( `dept_id`, `user_id` )
@@ -130,7 +130,7 @@ INSERT INTO `odm_dept_reviewer` VALUES (1,1);
 # Table structure for table 'odm_log'
 #
 
-CREATE TABLE `odm_log` (
+CREATE TABLE IF NOT EXISTS `odm_log` (
   `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_by` VARCHAR(25) DEFAULT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE `odm_log` (
 # Table structure for table 'odm_rights'
 #
 
-CREATE TABLE `odm_rights` (
+CREATE TABLE IF NOT EXISTS `odm_rights` (
   `RightId` TINYINT(1) DEFAULT NULL,
   `Description` VARCHAR(255) DEFAULT NULL
 ) ENGINE = MYISAM;
@@ -169,7 +169,7 @@ INSERT INTO `odm_rights` VALUES (4,'admin');
 # Table structure for table 'odm_user'
 #
 
-CREATE TABLE `odm_user` (
+CREATE TABLE IF NOT EXISTS `odm_user` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(25) NOT NULL DEFAULT '',
   `password` VARCHAR(50) NOT NULL DEFAULT '',
@@ -194,7 +194,7 @@ INSERT INTO `odm_user` VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@m
 # Table structure for table 'odm_user_perms'
 #
 
-CREATE TABLE `odm_user_perms` (
+CREATE TABLE IF NOT EXISTS `odm_user_perms` (
   `fid` INT(11) UNSIGNED DEFAULT NULL,
   `uid` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `rights` TINYINT(1) NOT NULL DEFAULT '0',
@@ -220,7 +220,7 @@ CREATE TABLE `odm_user_perms` (
 #
 # display_name is the label shown to the user
 
-CREATE TABLE `odm_udf` (
+CREATE TABLE IF NOT EXISTS `odm_udf` (
   `id` TINYINT(2) NOT NULL AUTO_INCREMENT ,
   `table_name` VARCHAR(50),
   `display_name` VARCHAR(16),
@@ -267,7 +267,7 @@ INSERT INTO `odm_settings` VALUES(NULL,'base_url', 'http://localhost/opendocman'
 INSERT INTO `odm_settings` VALUES(NULL,'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing.', 'num');
 INSERT INTO `odm_settings` VALUES(NULL,'show_footer', 'True', 'Set this to True to display the footer.', 'bool');
 
-CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
+CREATE TABLE IF NOT EXISTS `odm_filetypes` (
   `id` TINYINT(2) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `type` VARCHAR(255) NOT NULL ,
   `active` TINYINT(1) NOT NULL ,
