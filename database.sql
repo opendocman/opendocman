@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `odm_odmsys` (
 # Dumping data for table 'odm_odmsys'
 #
 
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.3.4');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.3.5');
 
 #
 # Table structure for table 'odm_rights'

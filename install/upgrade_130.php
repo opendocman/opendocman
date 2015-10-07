@@ -1,6 +1,6 @@
 <?php
 /*
-upgrade_130.php - For users upgrading from DB version 1.3.0 to 1.3.4
+upgrade_130.php - For users upgrading from DB version 1.3.0 to 1.3.5
 Copyright (C) 2015 Ap.Muthu.
 
 This program is free software; you can redistribute it and/or
@@ -131,8 +131,8 @@ foreach ($sql_operations as $query) {
 }
 
 echo 'Updating db version...<br />';
-$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.3.4' WHERE sys_name='version'";
+$query = "UPDATE {$_SESSION['db_prefix']}odmsys SET sys_value='1.3.5' WHERE sys_name='version'";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-echo 'Database update 1.3.4 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
+echo 'Database update 1.3.5 complete. Please edit your admin->settings and verify your dataDir and base_url values...<br />';
