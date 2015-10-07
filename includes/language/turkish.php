@@ -415,9 +415,9 @@ $lang['detailspage_are_sure'] = 'Are you sure?';
 $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
-$lang['outpage_view'] = 'View';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
+$lang['outpage_view'] = 'Görünüm';
+$lang['outpage_ascending'] = 'Yükselen';
+$lang['outpage_descending'] = 'Azalan';
 $lang['outpage_choose_an_order'] = 'Choose an order';
 $lang['outpage_choose'] = 'Choose';
 $lang['category_option_author'] = 'Author';

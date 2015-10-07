@@ -394,14 +394,14 @@ $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Zobrazit';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
+$lang['outpage_ascending'] = 'Stoupající';
+$lang['outpage_descending'] = 'Klesající';
 $lang['outpage_choose_an_order'] = 'Choose an order';
 $lang['outpage_choose'] = 'Choose';
 $lang['category_option_author'] = 'Author';
 $lang['category_option_department'] = 'Department';
-$lang['category_option_category'] = 'File Category';
-$lang['category_option_default'] = 'Empty';
+$lang['category_option_category'] = 'File Kategorie';
+$lang['category_option_default'] = 'Prázdný';
 
 // History Page
 $lang['historypage_category'] = 'Kategorie:';

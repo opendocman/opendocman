@@ -395,7 +395,7 @@ $lang['detailspage_file_checked_out_to'] = 'Odjavljeno';
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
 $lang['outpage_ascending'] = 'Rastuće';
-$lang['outpage_descending'] = 'padajuće';
+$lang['outpage_descending'] = 'Padajuće';
 $lang['outpage_choose_an_order'] = 'Odaberi redoslijed';
 $lang['outpage_choose'] = 'Odaberi';
 $lang['category_option_author'] = 'Autor';

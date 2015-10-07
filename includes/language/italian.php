@@ -393,8 +393,8 @@ $lang['detailspage_file_checked_out_to'] = 'In carico a';
 
 // Out Page
 $lang['outpage_view'] = 'Visualizza';
-$lang['outpage_ascending'] = 'ascendente';
-$lang['outpage_descending'] = 'discendente';
+$lang['outpage_ascending'] = 'Ascendente';
+$lang['outpage_descending'] = 'Discendente';
 $lang['outpage_choose_an_order'] = 'Scegli un ordine';
 $lang['outpage_choose'] = 'Scegli';
 $lang['category_option_author'] = 'Autore';
