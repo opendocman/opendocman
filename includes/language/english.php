@@ -1,6 +1,6 @@
 <?php
-//ENGLISH LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// English LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Stephen Lawrence Jr.
 /*
 This program is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Assign To';
 $lang['label_author'] = 'Author';
 $lang['label_browse_by'] = 'Filter by:';
 $lang['label_case_sensitive'] = 'Case Sensitive';
+$lang['label_category'] = 'Category';
 $lang['label_checked_out_files'] = 'Checked-Out Files';
 $lang['label_check_expiration'] = 'Check Expiration';
 $lang['label_comment'] = 'Comment';
@@ -375,7 +377,7 @@ $lang['editpage_admin'] = 'Admin';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
-// Delete/Undeleta Admin Page
+// Delete/Undelete Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
 $lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';
 

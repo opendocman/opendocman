@@ -293,6 +293,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         $full_name_array = $file_obj->getOwnerFullName();
         $owner_name = $full_name_array[1] . ', ' . $full_name_array[0];
         $dept_name = $file_obj->getDeptName();
+        $cat_name = $file_obj->getCategoryName();
         $realname = $file_obj->getRealname();
 
         //Get the file size in bytes.
@@ -342,6 +343,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
             'modified_date' => $modified_date,
             'owner_name' => $owner_name,
             'dept_name' => $dept_name,
+            'cat_name' => $cat_name,
             'filesize' => $filesize,
             'lock' => $lock,
             'showCheckbox' => $showCheckBox,

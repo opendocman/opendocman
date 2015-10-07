@@ -1,5 +1,5 @@
 <?php
-//Bangla LANGUAGE FILE
+// Bangla LANGUAGE FILE
 // (C) 2014 Stephen Lawrence Jr.
 // Bangla Translated by: Shubhra Prakash Paul <shuvro.paul@gmail.com>
 /*
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'যাকে অ্যাসাইন করা হ�
 $lang['label_author'] = 'লেখক';
 $lang['label_browse_by'] = 'ছাঁকনীর ভিত্তিঃ';
 $lang['label_case_sensitive'] = 'কেস সংবেদী   ';
+$lang['label_category'] = 'ক্যাটেগরি';
 $lang['label_checked_out_files'] = 'চেকড আউট ফাইল';
 $lang['label_check_expiration'] = 'মেয়াদোত্তীর্ণ পরখ করুন';
 $lang['label_comment'] = 'মন্তব্য';

@@ -1,7 +1,7 @@
 <?php
-//ENGLISH LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
-// Translated by: Stephen Lawrence Jr.
+// Tamil LANGUAGE FILE
+// (C) 2010-2014 Ap.Muthu
+// Translated by: Ap.Muthu
 /*
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Assign To';
 $lang['label_author'] = 'ஆசிரியர்';
 $lang['label_browse_by'] = 'Filter by:';
 $lang['label_case_sensitive'] = 'Case Sensitive';
+$lang['label_category'] = 'பகுப்பு';
 $lang['label_checked_out_files'] = 'Checked-Out Files';
 $lang['label_check_expiration'] = 'Check Expiration';
 $lang['label_comment'] = 'Comment';
@@ -171,7 +173,7 @@ $lang['label_delete'] = 'Delete';
 $lang['label_delete_undelete'] = 'Delete/Undelete';
 $lang['label_department_authority'] = 'Specific Department Permissions:';
 $lang['label_department'] = 'துறை';
-$lang['label_departments'] = 'Departments';
+$lang['label_departments'] = 'துறைகள்';
 $lang['label_department_to_modify'] = 'Department to modify';
 $lang['label_description'] = 'Description';
 $lang['label_display'] = 'Display';

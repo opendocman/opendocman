@@ -15,6 +15,7 @@
             <th class="sorting">{$g_lang_label_modified_date}</th>
             <th class="sorting">{$g_lang_label_author}</th>
             <th class="sorting">{$g_lang_label_department}</th>
+            <th class="sorting">{$g_lang_label_category}</th>
             <th class="sorting">{$g_lang_label_size}</th>
             <th class="">{$g_lang_label_status}</th>
         </tr>
@@ -40,6 +41,7 @@
             <td>{$item.modified_date}</td>
             <td>{$item.owner_name}</td>
             <td>{$item.dept_name}</td>
+            <td>{$item.cat_name}</td>
             <td >{$item.filesize}</td>
             <td class="center">
                 {if $item.lock eq false}
@@ -65,6 +67,7 @@
             <th>{$g_lang_label_modified_date}</th>
             <th>{$g_lang_label_author}</th>
             <th>{$g_lang_label_department}</th>
+            <th>{$g_lang_label_category}</th>
             <th>{$g_lang_label_size}</th>
             <th>{$g_lang_label_status}</th>
         </tr>

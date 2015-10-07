@@ -1,22 +1,23 @@
 <?php
-//SPANISH LANGUAGE FILE
-//(C) 2010-2014 Stephen Lawrence Jr.
+// Spanish LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translators:  Obed Alberto Castillo Reyes <obdcastillo@gmail.com>, Ernesto Parra <eparrarincon@gmail.com>
 /*
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Asignado a';
 $lang['label_author'] = 'Autor';
 $lang['label_browse_by'] = 'Buscar por:';
 $lang['label_case_sensitive'] = 'Distinguir May&uacute;sculas/Min&uacute;sculas';
+$lang['label_category'] = 'Categor&iacute;a';
 $lang['label_check_expiration'] = 'Revisar Caducidad';
 $lang['label_checked_out_files'] = 'Archivos Retirados';
 $lang['label_comment'] = 'Comentario';
@@ -240,6 +242,7 @@ $lang['label_date'] = 'Fecha';
 $lang['label_type_pr_sec'] = 'Tipo'; //CHM
 $lang['label_primary_type'] = 'Primario'; //CHM
 $lang['label_sub_select_list'] = 'Lista con Sub-Seleccion'; //CHM
+
 // Mensajes
 $lang['message_account_created'] = 'Su usuario ha sido creado. Por favor revise su e-mail por informaci&oacute;n requerida .';
 $lang['message_account_created_add_user'] = 'Su usuario ha sido creado.';
@@ -374,12 +377,12 @@ $lang['editpage_admin'] = 'Administrar';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
-// Departments Page
-$lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
-
-// Delete/Undeleta Admin Page
+// Delete/Undelete Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'El archivo fue borrado permanentemente';
 $lang['undeletepage_file_undeleted'] = 'El archivo ha sido restaurado';
+
+// Departments Page
+$lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
 
 // Details Page
 $lang['detailspage_view'] = 'Ver';
