@@ -40,7 +40,7 @@ if (false) {
     exit;
 }
 
-define('REQUIRED_VERSION', '1.3.0');
+define('REQUIRED_VERSION', '1.3.4');
 
 session_start();
 
