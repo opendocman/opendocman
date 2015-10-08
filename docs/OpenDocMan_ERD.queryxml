@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<querybuilder version="8.3">
+<source>
+<database charset="utf8" collation="utf8_unicode_ci">opendocman</database>
+</source>
+<canvas>
+<table tablename="odm_access_log" alias="" left="374" top="65" width="124" height="113" />
+<table tablename="odm_admin" alias="" left="814" top="498" width="150" height="68" />
+<table tablename="odm_category" alias="" left="615" top="106" width="129" height="68" />
+<table tablename="odm_data" alias="" left="807" top="65" width="150" height="233" />
+<table tablename="odm_department" alias="" left="1002" top="184" width="130" height="68" />
+<table tablename="odm_dept_perms" alias="" left="1217" top="66" width="136" height="83" />
+<table tablename="odm_dept_reviewer" alias="" left="808" top="310" width="145" height="68" />
+<table tablename="odm_filetypes" alias="" left="1208" top="426" width="150" height="83" />
+<table tablename="odm_log" alias="" left="241" top="317" width="94" height="113" />
+<table tablename="odm_odmsys" alias="" left="1205" top="176" width="150" height="113" />
+<table tablename="odm_rights" alias="" left="1037" top="277" width="95" height="68" />
+<table tablename="odm_settings" alias="" left="1205" top="300" width="150" height="113" />
+<table tablename="odm_udf" alias="" left="1053" top="424" width="93" height="98" />
+<table tablename="odm_user" alias="" left="538" top="332" width="150" height="203" />
+<table tablename="odm_user_perms" alias="" left="811" top="387" width="150" height="83" />
+<join type = "Left Join">
+<from tablename = "odm_data" alias = "">id</from>
+<to tablename = "odm_access_log" alias = "">file_id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_access_log" alias = "">file_id</from>
+<to tablename = "odm_log" alias = "">id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_access_log" alias = "">user_id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_access_log" alias = "">file_id</from>
+<to tablename = "odm_user_perms" alias = "">fid</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_category" alias = "">id</from>
+<to tablename = "odm_data" alias = "">category</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_department" alias = "">id</from>
+<to tablename = "odm_data" alias = "">department</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_data" alias = "">id</from>
+<to tablename = "odm_dept_perms" alias = "">fid</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_department" alias = "">id</from>
+<to tablename = "odm_dept_perms" alias = "">dept_id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_department" alias = "">id</from>
+<to tablename = "odm_dept_reviewer" alias = "">dept_id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_rights" alias = "">RightId</from>
+<to tablename = "odm_dept_perms" alias = "">rights</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_rights" alias = "">RightId</from>
+<to tablename = "odm_user_perms" alias = "">rights</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_admin" alias = "">id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_data" alias = "">owner</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_data" alias = "">reviewer</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_dept_reviewer" alias = "">user_id</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">username</from>
+<to tablename = "odm_log" alias = "">modified_by</to>
+</join>
+<join type = "Left Join">
+<from tablename = "odm_user" alias = "">id</from>
+<to tablename = "odm_user_perms" alias = "">uid</to>
+</join>
+</canvas>
+<grid>
+</grid>
+</querybuilder>
