@@ -40,9 +40,10 @@ $query = "
 CREATE TABLE IF NOT EXISTS `{$dbprefix}access_log` (
   `file_id` INT(11) NOT NULL,
   `user_id` INT(11) NOT NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
-) ENGINE = MYISAM";
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL,
+  PRIMARY KEY ( `file_id`, `user_id`, `timestamp`, `action` )
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -56,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `{$dbprefix}admin` (
   `id` INT(11) UNSIGNED DEFAULT NULL,
   `admin` TINYINT(1) DEFAULT NULL,
   PRIMARY KEY ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -75,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `{$dbprefix}category` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -107,7 +108,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}data` (
   `realname` VARCHAR(255) NOT NULL DEFAULT '',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `description` VARCHAR(255) DEFAULT NULL,
-  `comment` VARCHAR(255) default '',
+  `comment` VARCHAR(255) DEFAULT '',
   `status` SMALLINT(6) DEFAULT NULL,
   `department` SMALLINT(6) UNSIGNED DEFAULT NULL,
   `default_rights` TINYINT(1) DEFAULT NULL,
@@ -118,7 +119,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}data` (
   KEY data_idx ( `id`, `owner` ),
   KEY publishable ( `publishable` ),
   KEY description ( `description` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -131,7 +132,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}department` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL DEFAULT '',
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -148,10 +149,10 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}dept_perms` (
   `fid` INT(11) UNSIGNED DEFAULT NULL,
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `rights` TINYINT(1) NOT NULL DEFAULT '0',
-  KEY fid ( `fid` ),
+  PRIMARY KEY fid ( `fid`, `dept_id` ),
   KEY dept_id ( `dept_id` ),
   KEY rights ( `rights` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -164,7 +165,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}dept_reviewer` (
   `dept_id` INT(11) UNSIGNED DEFAULT NULL,
   `user_id` INT(11) UNSIGNED DEFAULT NULL,
   PRIMARY KEY ( `dept_id`, `user_id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -183,10 +184,10 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}log` (
   `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_by` VARCHAR(25) DEFAULT NULL,
   `note` TEXT,
-  `revision` VARCHAR(255) DEFAULT NULL,
-  KEY id (`id`),
+  `revision` VARCHAR(255) NOT NULL,
+  PRIMARY KEY ( `id`, `revision` ),
   KEY modified_on (`modified_on`)
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -196,9 +197,11 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}rights` (
-  `RightId` TINYINT(1) DEFAULT NULL,
-  `Description` VARCHAR(255) DEFAULT NULL
-) ENGINE = MYISAM";
+  `RightId` tinyint(1) NOT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY ( `RightId` ),
+  UNIQUE KEY `UnqRight` ( `Description` )
+) ENGINE=MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -245,7 +248,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}user` (
   `can_add` TINYINT(1) NULL DEFAULT 1,
   `can_checkin` TINYINT(1) NULL DEFAULT 1,
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -260,13 +263,13 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}user_perms` (
-  `fid` INT(11) UNSIGNED DEFAULT NULL,
-  `uid` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-  `rights` TINYINT(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY  ( `fid`, `uid`, `rights` ),
-  KEY uid ( `uid` ),
-  KEY rights ( `rights` )
-) ENGINE = MYISAM";
+  `fid` int(11) unsigned NOT NULL,
+  `uid` int(11) unsigned NOT NULL,
+  `rights` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY ( `fid`, `uid` ),
+  KEY `uid` ( `uid` ),
+  KEY `rights` ( `rights` )
+) ENGINE=MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -280,7 +283,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}udf` (
   `display_name` VARCHAR(16),
   `field_type` TINYINT(1),
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -293,7 +296,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}odmsys` (
   `sys_name`  VARCHAR(16),
   `sys_value` VARCHAR(255),
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -315,7 +318,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
   `validation` VARCHAR( 255 ) NOT NULL ,
   PRIMARY KEY  ( `id` ) ,
   UNIQUE KEY  ( `name` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -357,7 +360,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}filetypes` (
   `type` VARCHAR(255) NOT NULL ,
   `active` TINYINT(1) NOT NULL ,
   PRIMARY KEY  ( `id` )
-) ENGINE = MYISAM";
+) ENGINE = MyISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
