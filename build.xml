@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OpenDocMan" default="dist">
+	<!-- ============================================  -->
+	<!-- Target: prepare                               -->
+	<!-- ============================================  -->
+	<target name="prepare">
+		<echo msg="Making directory ./build" />
+		<mkdir dir="./build" />
+	</target>
+</project>
