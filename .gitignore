@@ -7,3 +7,5 @@ Thumbs.db
 /nbproject
 config.php
 vendor
+
+tests/_output/*
