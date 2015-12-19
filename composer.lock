@@ -1,0 +1,54 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "420f565c2a85f1e8a883f22d778fa0a4",
+    "content-hash": "696df0763cc697f9f3f07535e05468c2",
+    "packages": [
+        {
+            "name": "owasp/csrf-protector-php",
+            "version": "dev-issue34-config-file-location",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stephenlawrence/CSRF-Protector-PHP.git",
+                "reference": "54d048f19058a33a57b61fccbb2b97e454f7a6ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stephenlawrence/CSRF-Protector-PHP/zipball/54d048f19058a33a57b61fccbb2b97e454f7a6ba",
+                "reference": "54d048f19058a33a57b61fccbb2b97e454f7a6ba",
+                "shasum": ""
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": ">=0.6"
+            },
+            "type": "library",
+            "license": [
+                "APACHE"
+            ],
+            "description": "CSRF protector php, a standalone php library for csrf mitigation in web applications. Easy to integrate in any php web app.",
+            "homepage": "https://github.com/mebjas/CSRF-Protector-PHP",
+            "keywords": [
+                "csrf",
+                "owasp",
+                "security"
+            ],
+            "support": {
+                "source": "https://github.com/stephenlawrence/CSRF-Protector-PHP/tree/issue34-config-file-location"
+            },
+            "time": "2015-12-19 19:32:34"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "owasp/csrf-protector-php": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
