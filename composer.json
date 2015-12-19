@@ -1,0 +1,11 @@
+{
+  "require": {
+    "owasp/csrf-protector-php": "dev-issue34-config-file-location"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/stephenlawrence/CSRF-Protector-PHP"
+    }
+  ]
+}
