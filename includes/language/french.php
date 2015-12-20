@@ -1,5 +1,5 @@
 <?php
-//FRENCH LANGUAGE FILE
+// French LANGUAGE FILE
 // (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: François Vallée, Peter Host
 /*
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Assigner à';
 $lang['label_author'] = 'Auteur';
 $lang['label_browse_by'] = 'Filtrer par:';
 $lang['label_case_sensitive'] = 'Sensible à la Casse';
+$lang['label_category'] = 'Catégorie';
 $lang['label_checked_out_files'] = 'Fichiers Verrouillés';
 $lang['label_check_expiration'] = 'Vérifier l\'Expiration';
 $lang['label_comment'] = 'Commentaire';
@@ -491,7 +493,6 @@ $lang['categoryviewpage_list_of_files_title'] = 'Fichiers assignée à cette cat
 $lang['searchpage_all_meta'] = 'Toutes les Méta-donnés';
 
 // Footer
-$lang['footer_support'] = 'Support';
+$lang['footer_support'] = 'Soutien';
 $lang['footer_feedback'] = 'Rapport';
 $lang['footer_bugs'] = 'Bugs';
-

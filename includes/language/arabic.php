@@ -1,5 +1,5 @@
 <?php
-//ARABIC LANGUAGE FILE
+// Arabic LANGUAGE FILE
 // (C) 2014 Stephen Lawrence Jr.
 // Translated by: Bashar shahir A.Ahmed
 /*
@@ -163,6 +163,7 @@ $lang['label_assign_to'] = '';
 $lang['label_author'] = '';
 $lang['label_browse_by'] = 'ترشيح بواسطة:';
 $lang['label_case_sensitive'] = 'حساسية الحالة';
+$lang['label_category'] = 'التصنيف';
 $lang['label_checked_out_files'] = 'جلب الملف';
 $lang['label_check_expiration'] = 'التحقق من انتهاء الصلاحية';
 $lang['label_comment'] = 'تعليق';
@@ -353,7 +354,6 @@ $lang['addpage_new_file_added'] = 'تم إضافة ملف جديد';
 $lang['addpage_new'] = 'جديد';
 $lang['addpage_uploader'] = 'Uploader';
 $lang['addpage_file_missing'] = 'إختر ملف';
-
 $lang['addpage_permissions'] = 'صلاحيات';
 
 // Edit File Page

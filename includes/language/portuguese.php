@@ -1,6 +1,6 @@
 <?php
-//PORTUGUESE LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// Portuguese LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Mahdy Mussa, Flávio Veras
 /*
 This program is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Atribuir a';
 $lang['label_author'] = 'Autor';
 $lang['label_browse_by'] = 'Filtrar por:';
 $lang['label_case_sensitive'] = 'Sensivel a Caracteres';
+$lang['label_category'] = 'Categoria';
 $lang['label_checked_out_files'] = 'Checked-Out de arquivos';
 $lang['label_check_expiration'] = 'Verifique Vencimento';
 $lang['label_comment'] = 'Comentário';
@@ -487,9 +489,10 @@ $lang['checkinpage_file_was_checked_in'] = 'Um arquivo foi checked in.';
 //Category View Page
 $lang['categoryviewpage_list_of_files_title'] = 'Arquivos atribuídos a esta categoria:';
 
+//Search Page
 $lang['searchpage_all_meta'] = 'Todos os metadados não udf';
 
 // Footer
 $lang['footer_support'] = 'Suporte';
-$lang['footer_feedback'] = 'Feedback';
+$lang['footer_feedback'] = 'Realimentação';
 $lang['footer_bugs'] = 'Bugs';

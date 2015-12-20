@@ -1,6 +1,6 @@
 <?php
-//ROMANIAN LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// Romanian LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Radu Toma
 /*
 This program is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Atribuie la';
 $lang['label_author'] = 'Autor';
 $lang['label_browse_by'] = 'Sorteaza dupa:';
 $lang['label_case_sensitive'] = 'Atentie la majuscule';
+$lang['label_category'] = 'Categorie';
 $lang['label_checked_out_files'] = 'Fisiere de Deblocat';
 $lang['label_check_expiration'] = 'Verifica valabilitatea';
 $lang['label_comment'] = 'Comentariu';

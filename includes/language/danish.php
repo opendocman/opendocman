@@ -1,5 +1,5 @@
 <?php
-//DANISH LANGUAGE FILE
+// Danish LANGUAGE FILE
 // (C) 2013-14 Stephen Lawrence Jr.
 // Translated by: Lars J. Helbo
 /*
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Tilordne til';
 $lang['label_author'] = 'Forfatter';
 $lang['label_browse_by'] = 'Filtrer efter:';
 $lang['label_case_sensitive'] = 'Store/små bogstaver';
+$lang['label_category'] = 'Kategori';
 $lang['label_checked_out_files'] = 'Filer tjekket ud';
 $lang['label_check_expiration'] = 'Kontroller udløbsdato';
 $lang['label_comment'] = 'Kommentar';
@@ -240,7 +242,6 @@ $lang['label_date'] = 'Dato';
 $lang['label_type_pr_sec'] = 'Type'; //CHM
 $lang['label_primary_type'] = 'Primary'; //CHM
 $lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
-
 
 // Messages
 $lang['message_account_created_add_user'] = 'Din konto er blevet oprettet.';
@@ -394,8 +395,8 @@ $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Vis';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
+$lang['outpage_ascending'] = 'Stigende';
+$lang['outpage_descending'] = 'Faldende';
 $lang['outpage_choose_an_order'] = 'Choose an order';
 $lang['outpage_choose'] = 'Choose';
 $lang['category_option_author'] = 'Author';

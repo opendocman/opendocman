@@ -1,5 +1,5 @@
 <?php
-//SWEDISH LANGUAGE FILE
+// Swedish LANGUAGE FILE
 // (C) 2015 Stephen Lawrence Jr.
 // Translated by: Karl Eriksson & Gunnar Sjöberg
 /*
@@ -8,7 +8,7 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
 //Login
 $lang['anonymous_link'] = 'Tryck här för att se publika filer anonymt';
 $lang['forgotpassword'] = '<br>Glömt ditt lösenord?';
-$lang['install_folder']  = 'Säkerhetsnotis: Om du redan har installerat/uppdaterat ska du ta bort \'install\'-katalogen innan du fortsätter';
 $lang['signup'] = 'Registrera dig för ett användarkonto';
 $lang['welcome'] = 'Välkommen till OpenDocMan vårt dokumenhanteringssystem';
 $lang['welcome2'] = 'Logga in för att börja använda systemets kraftfulla möjligheter för lagring, publicering och revionshantering.';
@@ -163,6 +163,7 @@ $lang['label_assign_to'] = 'Anvisa Till';
 $lang['label_author'] = 'Författare';
 $lang['label_browse_by'] = 'Sortera på:';
 $lang['label_case_sensitive'] = 'Skiftlägeskänslig';
+$lang['label_category'] = 'Kategori';
 $lang['label_checked_out_files'] = 'Utcheckade Filer';
 $lang['label_check_expiration'] = 'Kontrollera Utgångna filer';
 $lang['label_comment'] = 'Kommentar';
@@ -225,8 +226,8 @@ $lang['label_select_one'] = 'Välj en';
 $lang['label_settings'] = 'Inställningar';
 $lang['label_size'] = 'Storlek';
 $lang['label_specific_permissions'] = 'Specifika Användarrättigheter (använd ctrl-klick eller cmd-klick)';
-$lang['label_text'] = 'Text';
 $lang['label_status'] = 'Status';
+$lang['label_text'] = 'Text';
 $lang['label_update'] = 'Uppdatera';
 $lang['label_user_defined_fields'] = 'Användardefinierade Fält';
 $lang['label_user_defined_field'] = 'Användardefinierat Fält';
@@ -460,6 +461,9 @@ $lang['userpage_username'] = 'Användarnamn';
 $lang['userpage_yes'] = 'Ja';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Ändra filtyper';
 $lang['adminpage_edit_settings'] = 'Ändra inställningar';
 $lang['adminpage_reports'] = 'Rapporter';

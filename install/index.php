@@ -1,7 +1,7 @@
 <?php
 /*
 install/index.php - Automated setup/upgrade script. Remove after installation
-Copyright (C) 2002-2014  Stephen Lawrence
+Copyright (C) 2002-2015  Stephen Lawrence
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ if (false) {
     exit;
 }
 
-define('REQUIRED_VERSION', '1.3.0');
+define('REQUIRED_VERSION', '1.3.5');
 
 session_start();
 
@@ -97,205 +97,59 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             break;
 
         case "commitinstall":
-
             break;
+
         // User has version 1.0 and is upgrading
         case "update_10":
             do_update_10();
-            do_update_11rc1();
-            do_update_11rc2();
-            do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
         // User has version 11rc1 and is upgrading
         case "update_11rc1":
             do_update_11rc1();
-            do_update_11rc2();
-            do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 11rc2 and is upgrading
         case "update_11rc2":
             do_update_11rc2();
-            do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 11 and is upgrading
         case "update_11":
             do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 12rc1 and is upgrading
         case "update_12rc1":
             do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 12p1 and is upgrading
         case "update_12p1":
             do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 12p3 and is upgrading
         case "update_12p3":
             do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 124 and is upgrading
         case "update_124":
             do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1252 and is upgrading
         case "update_1252":
             do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1256 and is upgrading
         case "update_1256":
             do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1257 or 126beta and is upgrading
         case "update_1257":
             do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1261 and is upgrading
         case "update_1261":
             do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1262 and is upgrading
         case "update_1262":
             do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has version 1262 and is upgrading
         case "update_1263":
             do_update_1263();
-            do_update_128();
-            do_update_129();
-            break;
-
         // User has DB version 128 and is upgrading
         case "update_128":
             do_update_128();
-            do_update_129();
-            break;
-
         // User has DB version 129 and is upgrading
         case "update_129":
             do_update_129();
+        // User has DB version 130 and is upgrading
+        case "update_130":
+            do_update_130();
             break;
 
         default:
@@ -460,6 +314,14 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
 
+    function do_update_130()
+    {
+        echo 'Updating from DB versions 1.3.0...<br />';
+        include("../config.php");
+        include("upgrade_130.php");
+        echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
+    }
+
     function get_db_version($db_prefix)
     {
         return Settings::get_db_version();
@@ -535,6 +397,9 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </tr>
         <tr>
             <td>Upgrade your current database from a previous version<br/><br/></td>
+        </tr>
+        <tr>
+            <td><a href="index.php?op=update_129">Upgrade from DB schema version 1.3.0</a><br><br></td>
         </tr>
         <tr>
             <td><a href="index.php?op=update_129">Upgrade from DB schema version 1.2.9</a><br><br></td>

@@ -1,6 +1,6 @@
 <?php
-//CROATIAN LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// Croatian LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Mihovil Stanić
 /*
 This program is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Dodjeli korisniku';
 $lang['label_author'] = 'Autor';
 $lang['label_browse_by'] = 'Filtriraj po:';
 $lang['label_case_sensitive'] = 'Osjetljivo na velika/mala slova';
+$lang['label_category'] = 'Kategorija';
 $lang['label_checked_out_files'] = 'Datoteke koje su izdane';
 $lang['label_check_expiration'] = 'Provjeri istek roka trajanja';
 $lang['label_comment'] = 'Komentar';
@@ -352,7 +354,6 @@ $lang['addpage_new_file_added'] = 'Dodana je nova datoteka';
 $lang['addpage_new'] = 'Nova';
 $lang['addpage_uploader'] = 'Prenositelj';
 $lang['addpage_file_missing'] = 'Odaberite datoteku za prijenos';
-
 $lang['addpage_permissions'] = 'Dozvole';
 
 // Edit File Page
@@ -395,7 +396,7 @@ $lang['detailspage_file_checked_out_to'] = 'Odjavljeno';
 // Out Page
 $lang['outpage_view'] = 'Prikaži';
 $lang['outpage_ascending'] = 'Rastuće';
-$lang['outpage_descending'] = 'padajuće';
+$lang['outpage_descending'] = 'Padajuće';
 $lang['outpage_choose_an_order'] = 'Odaberi redoslijed';
 $lang['outpage_choose'] = 'Odaberi';
 $lang['category_option_author'] = 'Autor';

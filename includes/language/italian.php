@@ -1,6 +1,6 @@
 <?php
-// ITALIAN LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// Italian LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Mainieri Paolo; updated by Andrea Garelli (2013)
 /*
 This program is free software; you can redistribute it and/or
@@ -17,10 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
-// Login
+//Login
 $lang['anonymous_link'] = 'Clicca qui per visualizzare i file pubblici in modo anonimo';
 $lang['forgotpassword'] = 'Password dimenticata?';
 $lang['signup'] = 'Registrati per un nuovo account';
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Assegna a';
 $lang['label_author'] = 'Autore';
 $lang['label_browse_by'] = 'Filtra per:';
 $lang['label_case_sensitive'] = 'Maiusc./minusc. ';
+$lang['label_category'] = 'Categoria';
 $lang['label_checked_out_files'] = 'File scaricati';
 $lang['label_check_expiration'] = 'Controlla scadenza';
 $lang['label_comment'] = 'Commento';
@@ -393,8 +395,8 @@ $lang['detailspage_file_checked_out_to'] = 'In carico a';
 
 // Out Page
 $lang['outpage_view'] = 'Visualizza';
-$lang['outpage_ascending'] = 'ascendente';
-$lang['outpage_descending'] = 'discendente';
+$lang['outpage_ascending'] = 'Ascendente';
+$lang['outpage_descending'] = 'Discendente';
 $lang['outpage_choose_an_order'] = 'Scegli un ordine';
 $lang['outpage_choose'] = 'Scegli';
 $lang['category_option_author'] = 'Autore';

@@ -10,14 +10,16 @@ All code copyright Stephen Lawrence Jr. 2002-2011
 * Khoa Nguyen [core programming]
 * Jon Miner [udf functions]
 * Willem van der Mark [ bug fixes and i8n ]
+* Ap.Muthu [bug fixes in UI, and Installer improvements, SQL cleanup]
 
 == Translations
 
 * Jan Sepp [Dutch]
 * Martin Waiss [German]
 * Pablo Luis Zorzoli <pablozorzoli@yahoo.com.ar> [Spanish]
-* "A. Murat Ergin" <murat.ergin@ege.edu.tr> [Turkish]
-* Mihovil Stanić <Croatian>
+* A. Murat Ergin <murat.ergin@ege.edu.tr> [Turkish]
+* Mihovil Stanić [Croatian]
+* Ap.Muthu <apmuthu@usa.net> [Tamil]
 
 == Third-party code used
 Various lines of the installer logic - Wordpress

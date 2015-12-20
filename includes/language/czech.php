@@ -1,5 +1,5 @@
 <?php
-//CZECH LANGUAGE FILE
+// Czech LANGUAGE FILE
 // (C) 2013-14 Stephen Lawrence Jr.
 // Translated by: The Opice
 /*
@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Přiřadit:';
 $lang['label_author'] = 'Autor';
 $lang['label_browse_by'] = 'Třídit podle:';
 $lang['label_case_sensitive'] = 'Rozlišovat VELKÁ a malá písmena';
+$lang['label_category'] = 'Kategorie';
 $lang['label_checked_out_files'] = 'Checked-Out Files';
 $lang['label_check_expiration'] = 'Zkontrolujte dobu platnosti';
 $lang['label_comment'] = 'Poznámka';
@@ -352,7 +354,6 @@ $lang['addpage_new_file_added'] = 'A new file has been added';
 $lang['addpage_new'] = 'New';
 $lang['addpage_uploader'] = 'Uploader';
 $lang['addpage_file_missing'] = 'Please select a file to upload';
-
 $lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
@@ -394,14 +395,14 @@ $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 
 // Out Page
 $lang['outpage_view'] = 'Zobrazit';
-$lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
+$lang['outpage_ascending'] = 'Stoupající';
+$lang['outpage_descending'] = 'Klesající';
 $lang['outpage_choose_an_order'] = 'Choose an order';
 $lang['outpage_choose'] = 'Choose';
 $lang['category_option_author'] = 'Author';
 $lang['category_option_department'] = 'Department';
-$lang['category_option_category'] = 'File Category';
-$lang['category_option_default'] = 'Empty';
+$lang['category_option_category'] = 'File Kategorie';
+$lang['category_option_default'] = 'Prázdný';
 
 // History Page
 $lang['historypage_category'] = 'Kategorie:';

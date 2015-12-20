@@ -1,6 +1,6 @@
 <?php
-//ENGLISH LANGUAGE FILE
-// (C) 20010-2014 Stephen Lawrence Jr.
+// Chinese LANGUAGE FILE
+// (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: fanquanfang
 /*
 This program is free software; you can redistribute it and/or
@@ -162,6 +162,7 @@ $lang['label_assign_to'] = '分发给';
 $lang['label_author'] = '作者';
 $lang['label_browse_by'] = '过滤：';
 $lang['label_case_sensitive'] = '大小写敏感';
+$lang['label_category'] = '分类';
 $lang['label_checked_out_files'] = '签出文档';
 $lang['label_check_expiration'] = '检查作废';
 $lang['label_comment'] = '评语';

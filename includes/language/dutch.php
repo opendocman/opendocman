@@ -1,22 +1,23 @@
  <?php
-//DUTCH LANGUAGE FILE
+// Dutch LANGUAGE FILE
 // (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Jan Sepp
 /*
-        This program is free software; you can redistribute it and/or
-        modify it under the terms of the GNU General Public License
-        as published by the Free Software Foundation; either version 2
-        of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with this program; if not, write to the Free Software
-        Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 $lang = array();
 global $lang;
 
@@ -162,6 +163,7 @@ $lang['label_assign_to'] = 'Toegewezen aan';
 $lang['label_author'] = 'Auteur';
 $lang['label_browse_by'] = 'Filter op:';
 $lang['label_case_sensitive'] = 'Hoofdlettergevoelig';
+$lang['label_category'] = 'Categorie';
 $lang['label_checked_out_files'] = 'Files die zijn uitgecheckt';
 $lang['label_check_expiration'] = 'Controleer verloopdatum';
 $lang['label_comment'] = 'Commentaar';
@@ -394,7 +396,7 @@ $lang['detailspage_file_checked_out_to'] = 'Checked out to';
 // Out Page
 $lang['outpage_view'] = 'View';
 $lang['outpage_ascending'] = 'Ascending';
-$lang['outpage_descending'] = 'descending';
+$lang['outpage_descending'] = 'Descending';
 $lang['outpage_choose_an_order'] = 'Choose an order';
 $lang['outpage_choose'] = 'Choose';
 $lang['category_option_author'] = 'Author';

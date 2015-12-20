@@ -129,6 +129,12 @@ deny from all
 
     case 1:
         display_header();
+
+		$pieces = split('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
+		array_pop($pieces);
+		$installpath = implode('/',$pieces);
+		unset($pieces);
+
     ?>
 <form method="post" id="configform" action="setup-config.php?step=2">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
@@ -177,7 +183,7 @@ deny from all
 		</tr>
                 <tr>
 			<th scope="row"><label for="prefix">Base URL</label></th>
-			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $_SERVER['HTTP_HOST'];?>/opendocman"/>
+			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $installpath;?>"/>
                             <br/>Enter in the root URL where OpenDocMan will be running from. Example: http://www.myhost.com/opendocman<br/>
                         </td>
 		</tr>
