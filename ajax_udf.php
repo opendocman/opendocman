@@ -1,4 +1,5 @@
 <?php
+use Aura\Html\Escaper as e;
 /* 
 Copyright (C) 2014 Stephen Lawrence Jr.
 
@@ -71,10 +72,10 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
 
             if ($result && $q != 'primary') {
                 echo '<table>';
-                echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . $add_value . '\')">';
+                echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . e::h($add_value) . '\')">';
                 echo '<option value="0">Please select one</option>';
                 foreach ($result as $row) {
-                    echo '<option value=' . $row[0] . ' ' . ($row[0] == $q ? "selected" : "") . '>' . $row[1] . '</option>'; //CHM
+                    echo '<option value=' . e::h($row[0]) . ' ' . ($row[0] == $q ? "selected" : "") . '>' . e::h($row[1]) . '</option>'; //CHM
                 }
                 echo '</select></td></tr>';
                 echo '</table>';
@@ -85,7 +86,7 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
             } elseif ($q == 'primary') {
                 $table_name = '_primary';
             } else {
-                $table_name = '_secondary WHERE pr_id = "' . $q . '"';
+                $table_name = '_secondary WHERE pr_id = "' . e::h($q) . '"';
             }
 
             echo '<table>';
@@ -115,8 +116,8 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
                             $bg = "FCFCFC";
                         }
                         echo '<tr bgcolor="' . $bg . '">
-                                    <td align=center><input type=checkbox name=x' . $row[0] . '></td>
-                                        <td>' . $row[1] . '</td>
+                                    <td align=center><input type=checkbox name=x' . e::h($row[0]) . '></td>
+                                        <td>' . e::h($row[1]) . '</td>
                                   </tr>';
                     }
                 }
@@ -156,9 +157,9 @@ if ($add_value == "add") {
         $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary">';
+        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary">';
         foreach ($result as $subrow) {
-            echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+            echo '<option value="' . e::h($subrow[0]) . '">' . e::h($subrow[1]) . '</option>';
         }
         echo '</select>';
     }
@@ -177,9 +178,9 @@ if ($add_value == "edit") {
         $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $table_name . '_secondary">';
+        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary">';
         foreach ($result as $subrow) {
-            echo '<option value="' . $subrow[0] . '">' . $subrow[1] . '</option>';
+            echo '<option value="' . e::h($subrow[0]) . '">' . e::h($subrow[1]) . '</option>';
         }
         echo '</select>';
     }

@@ -59,11 +59,13 @@ $user_perms_obj = new User_Perms($_SESSION['uid'], $pdo);
 $user_permission_obj = new UserPermission($_SESSION['uid'], $pdo);
 $user_obj = new User($file_data_obj->getOwner(), $pdo);
 
+$owner_full_name = $file_data_obj->getOwnerFullName();
+
 // display details
 $owner_id = $file_data_obj->getOwner();
 $category = $file_data_obj->getCategoryName();
-$owner_full_name = $file_data_obj->getOwnerFullName();
-$owner = $owner_full_name[1] . ', ' . $owner_full_name[0];
+$owner_last_first = $owner_full_name[1] . ', ' . $owner_full_name[0];
+$owner_first_last = $owner_full_name[0] . ' ' . $owner_full_name[1];
 $real_name = $file_data_obj->getName();
 $created = $file_data_obj->getCreatedDate();
 $description = $file_data_obj->getDescription();
@@ -181,9 +183,9 @@ $to_value = (isset($reviewer_comments_fields[0]) ? (substr($reviewer_comments_fi
 $subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1], 8)) : '');
 $comments_value = (isset($reviewer_comments_fields[2]) ? (substr($reviewer_comments_fields[2], 9)) : '');
 
-$file_detail = array(
+$file_detail_array = array(
     'file_unlocked' => $file_unlocked,
-    'to_value' => $subject_value,
+    'to_value' => $to_value,
     'subject_value' => $subject_value,
     'comments_value' => $comments_value,
     'realname' => $real_name,
@@ -191,8 +193,8 @@ $file_detail = array(
     'filesize' => $file_size,
     'created' => fix_date($created),
     'owner_email' => $user_obj->getEmailAddress(),
-    'owner' => $owner,
-    'owner_fullname' => $owner_full_name,
+    'owner' => $owner_last_first,
+    'owner_fullname' => $owner_first_last,
     'description' => wordwrap($description, 50, '<br />'),
     'comment' => wordwrap($comment, 50, '<br />'),
     'udf_details_display' => udf_details_display($request_id),
@@ -252,7 +254,7 @@ $GLOBALS['smarty']->assign('my_delete_link', $my_delete_link);
 // Call the plugin API
 callPluginMethod('onDuringDetails', $file_data_obj->id);
 
-$GLOBALS['smarty']->assign('file_detail', $file_detail);
+$GLOBALS['smarty']->assign('file_detail', $file_detail_array);
 display_smarty_template('details.tpl');
 
 // Call the plugin API

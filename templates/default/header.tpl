@@ -2,7 +2,7 @@
 <html>
     <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <title>{$g_title} - {$page_title}</title>
+        <title>{$g_title|escape:'html'} - {$page_title|escape:'html'}</title>
 {literal}
         <script type="text/javascript">
         <!--
@@ -24,7 +24,7 @@
 {* Must Include This Section *}
 {include file='../../templates/common/head_include.tpl'}
 
-<link type="text/css" rel="stylesheet" href="{$g_base_url}/templates/default/css/default.css">
+<link type="text/css" rel="stylesheet" href="{$g_base_url|escape:'html'}/templates/default/css/default.css">
     </head>
     <body >
         <!-- ----------------begin_draw_menu----------------- -->
@@ -32,24 +32,24 @@
 <table width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td align="left">
-            <a href="{$g_base_url}/out.php">
-                <img src="{$g_base_url}/images/logo.gif" title="{$site_title}" alt="{$site_title}" border="0">
+            <a href="{$g_base_url|escape:'html'}/out.php">
+                <img src="{$g_base_url|escape:'html'}/images/logo.gif" title="{$site_title|escape:'html'}" alt="{$site_title|escape:'html'}" border="0">
             </a>
         </td>
         <td align="right" >
             <p>
                 <div class="buttons">
                     {if $can_checkin || $isadmin eq 'yes'}
-                <a href="{$g_base_url}/in.php" class="regular"><img src="{$g_base_url}/images/import-2.png" alt="check in"/>{$g_lang_button_check_in}</a>
+                <a href="{$g_base_url|escape:'html'}/in.php" class="regular"><img src="{$g_base_url|escape:'html'}/images/import-2.png" alt="check in"/>{$g_lang_button_check_in}</a>
                 {/if}
-                <a href="{$g_base_url}/search.php" class="regular"><img src="{$g_base_url}/images/find-new-users.png" alt="search"/>{$g_lang_search}</a>
+                <a href="{$g_base_url|escape:'html'}/search.php" class="regular"><img src="{$g_base_url|escape:'html'}/images/find-new-users.png" alt="search"/>{$g_lang_search}</a>
                 {if $can_add || $isadmin eq 'yes'}
-                    <a href="{$g_base_url}/add.php" class="regular"><img src="{$g_base_url}/images/plus.png" alt="add file"/>{$g_lang_button_add_document}</a>
+                    <a href="{$g_base_url|escape:'html'}/add.php" class="regular"><img src="{$g_base_url|escape:'html'}/images/plus.png" alt="add file"/>{$g_lang_button_add_document}</a>
                 {/if}
             {if $isadmin eq 'yes'}
-                <a href="{$g_base_url}/admin.php" class="positive"><img src="{$g_base_url}/images/control.png" alt="admin"/>{$g_lang_label_admin}</a>
+                <a href="{$g_base_url|escape:'html'}/admin.php" class="positive"><img src="{$g_base_url|escape:'html'}/images/control.png" alt="admin"/>{$g_lang_label_admin}</a>
             {/if}
-                <a href="{$g_base_url}/logout.php" class="negative">{$g_lang_logout}</a>
+                <a href="{$g_base_url|escape:'html'}/logout.php" class="negative">{$g_lang_logout}</a>
             </div>
             </p>
         </td>
@@ -64,7 +64,7 @@
 <tr>
 {if $userName}
 <td bgcolor="#0000A0" align="left" valign="middle" width="10">
-<span class="statusbar">{$userName}</span></td>
+<span class="statusbar">{$userName|escape:'html'}</span></td>
 {/if}
 
 <td bgcolor="#0000A0" align="left" valign="middle" width="10">
@@ -76,11 +76,11 @@
 <td bgcolor="#0000A0" align="middle" valign="middle" width="0"><font size="3" face="Arial" color="White">|</font></td>
 <td bgcolor="#0000A0" align="left" valign="middle">{$breadCrumb}</td>
 <td bgcolor="#0000A0" align="right" valign="middle">
-    <b><font size="-2" face="Arial" color="White">{$g_lang_message_last_message}: {$lastmessage}</font></b>
+    <b><font size="-2" face="Arial" color="White">{$g_lang_message_last_message}: {$lastmessage|escape:'html'}</font></b>
 </td>
 </tr>
 </table>
 <div id="content">
 {if $lastmessage ne ''}
-    <div id="last_message">{$lastmessage}</div>
+    <div id="last_message">{$lastmessage|escape:'html'}</div>
 {/if}

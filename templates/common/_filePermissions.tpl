@@ -51,7 +51,7 @@
                         {assign var="noneselected" value="checked='checked'"}
                     {/if}
                 <tr>
-                    <td>{$dept.name}</td>
+                    <td>{$dept.name|escape:'html'}</td>
                     <td><input type="radio" name="department_permission[{$dept.id}]" value="-1" {if $dept.rights eq '-1'}checked="checked"{/if} /></td>
                     <td><input type="radio" name="department_permission[{$dept.id}]" value="0" {if $dept.rights eq '0'}checked="checked"{/if} {$noneselected}/></td>
                     <td><input type="radio" name="department_permission[{$dept.id}]" value="1" {if $dept.rights eq 1}checked="checked"{/if} {$selected} /></td>
@@ -85,7 +85,7 @@
                 {/if} 
 
                 <tr>
-                    <td>{$user.last_name}, {$user.first_name}</td>
+                    <td>{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</td>
                     <td><input type="radio" name="user_permission[{$user.id}]" value="-1" {if $user.rights eq '-1'}checked="checked"{/if} /></td>
                     <td><input type="radio" name="user_permission[{$user.id}]" value="1" {if $user.rights eq 1}checked="checked"{/if} /></td>
                     <td><input type="radio" name="user_permission[{$user.id}]" value="2" {if $user.rights eq 2}checked="checked"{/if} /></td>

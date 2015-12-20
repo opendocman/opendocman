@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 add.php - adds files to the repository
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Jon Miner
@@ -86,7 +88,7 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
             if($GLOBALS['CONFIG']['authen'] == 'mysql')
             {
-                echo msg('message_account_created_password') . ': '.$_REQUEST['password'].PHP_EOL . PHP_EOL;
+                echo msg('message_account_created_password') . ': '. e::h($_REQUEST['password']) . PHP_EOL . PHP_EOL;
                 echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">' . msg('login'). '</a>';
                 exit;
             }
@@ -159,7 +161,7 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value=' . $row['id'] . '>' . $row['name'] . '</option>';
+        echo '<option value=' . e::h($row['id']) . '>' . e::h($row['name']) . '</option>';
     }
 
     ?>

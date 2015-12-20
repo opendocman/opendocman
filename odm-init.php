@@ -29,8 +29,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 require __DIR__ . '/vendor/autoload.php';
 
 include_once __DIR__ .'/vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
-
 csrfProtector::init();
+
+/**
+ * Set up the various view objects needed
+ * and add the templates/layouts
+ */
+$factory = new \Aura\Html\HelperLocatorFactory;
+$helpers = $factory->newInstance();
+$view_factory = new \Aura\View\ViewFactory;
+$view = $view_factory->newInstance($helpers);
+$view_registry = $view->getViewRegistry();
+$view_registry->set('access_log',  __DIR__ . '/templates/views/access_log.php');
+
+$layout_registry = $view->getLayoutRegistry();
+$layout_registry->set('default', __DIR__ . '/templates/layouts/default.php');
 
 /*
  * Connect to Database

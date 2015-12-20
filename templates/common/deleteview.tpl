@@ -9,7 +9,7 @@
                 <button class="positive" type="submit" name="submit" value="Undelete">{$g_lang_button_undelete}</button>
 		<button class="negative" type="submit" name="submit" value="Delete file(s)">{$g_lang_button_delete_files}</button>
                         </div>
-                    <input type="hidden" name="mode" value="{$lmode}" />
+                    <input type="hidden" name="mode" value="{$lmode|escape:'html'}" />
 		<input type="hidden" name="Docflag" value="-1" />
      </table>
 </form>

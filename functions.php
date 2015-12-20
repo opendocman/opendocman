@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 functions.php - various utility functions
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
@@ -130,14 +132,14 @@ function draw_header($pageTitle, $lastmessage = '')
 
     // Set up the breadcrumbs
     $crumb = new crumb();
-    $crumb->addCrumb($_REQUEST['state'], $pageTitle, $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
-    $breadCrumb = $crumb->printTrail($_REQUEST['state']);
+    $crumb->addCrumb(e::h($_REQUEST['state']), e::h($pageTitle), $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+    $breadCrumb = $crumb->printTrail(e::h($_REQUEST['state']));
 
     $GLOBALS['smarty']->assign('breadCrumb', $breadCrumb);
     $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
     $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
-    $GLOBALS['smarty']->assign('lastmessage', htmlspecialchars($lastmessage));
+    $GLOBALS['smarty']->assign('lastmessage', $lastmessage);
     display_smarty_template('header.tpl');
 
 }
@@ -301,12 +303,12 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         if ($userAccessLevel >= $userperms_obj->READ_RIGHT) {
             $suffix = strtolower((substr($realname, ((strrpos($realname, ".") + 1)))));
             $mimetype = File::mime_by_ext($suffix);
-            $view_link = 'view_file.php?submit=view&id=' . urlencode($fileid) . '&mimetype=' . urlencode("$mimetype");
+            $view_link = 'view_file.php?submit=view&id=' . urlencode(e::h($fileid)) . '&mimetype=' . urlencode("$mimetype");
         } else {
             $view_link = 'none';
         }
 
-        $details_link = 'details.php?id=' . $fileid . '&state=' . ($_REQUEST['state'] + 1);
+        $details_link = 'details.php?id=' . e::h($fileid) . '&state=' . (e::h($_REQUEST['state'] + 1));
 
         $read = array($userperms_obj->READ_RIGHT, 'r');
         $write = array($userperms_obj->WRITE_RIGHT, 'w');
@@ -324,9 +326,7 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         }
 
         //Found the user right, now bold every below it.  For those that matches, make them different.
-        for ($i = $index_found; $i >= 0; $i--) {
-            $rights[$i][1] = '<b>' . $rights[$i][1] . '</b>';
-        }
+        
         //For everything above it, blank out
         for ($i = $index_found + 1; $i < sizeof($rights); $i++) {
             $rights[$i][1] = '-';
@@ -483,9 +483,9 @@ function sort_browser()
         $index = 0;
         echo("author_array = new Array();".PHP_EOL);
         foreach($result as $row) {
-            $last_name = $row['last_name'];
-            $first_name = $row['first_name'];
-            $id = $row['id'];
+            $last_name = e::h($row['last_name']);
+            $first_name = e::h($row['first_name']);
+            $id = e::h($row['id']);
             echo("\tauthor_array[$index] = new Array(\"$last_name $first_name\", $id);".PHP_EOL);
             $index++;
         }
@@ -507,8 +507,8 @@ function sort_browser()
         $index = 0;
         echo("department_array = new Array();".PHP_EOL);
         foreach($result as $row) {
-            $dept = $row['name'];
-            $id = $row['id'];
+            $dept = e::h($row['name']);
+            $id = e::h($row['id']);
             echo("\tdepartment_array[$index] = new Array(\"$dept\", $id);".PHP_EOL);
             $index++;
         }
@@ -530,8 +530,8 @@ function sort_browser()
         $index = 0;
         echo("category_array = new Array();".PHP_EOL);
         foreach($result as $row) {
-            $category = $row['name'];
-            $id = $row['id'];
+            $category = e::h($row['name']);
+            $id = e::h($row['id']);
             echo("\tcategory_array[$index] = new Array(\"$category\", $id);".PHP_EOL);
             $index++;
         }
@@ -723,7 +723,7 @@ function sanitizeme($input)
 function msg($s)
 {
     if (isset($GLOBALS['lang'][$s])) {
-        return $GLOBALS['lang'][$s];
+        return e::h($GLOBALS['lang'][$s]);
     } else {
         return $s;
     }
@@ -756,7 +756,7 @@ function callPluginMethod($method, $args = '')
 {
     foreach ($GLOBALS['plugin']->pluginslist as $value) {
         if (!valid_username($value)) {
-            echo 'Sorry, your plugin ' . $value . ' is not setup properly';
+            echo 'Sorry, your plugin ' . e::h($value) . ' is not setup properly';
         }
         $plugin_obj = new $value;
         $plugin_obj->$method($args);

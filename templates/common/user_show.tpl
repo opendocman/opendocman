@@ -1,12 +1,12 @@
 <table border=0>
     <th>{$g_lang_userpage_user_info}</th>
-        <tr><td>{$g_lang_userpage_id}</td><td>{$user->id}</td></tr>
-        <tr><td>{$g_lang_userpage_last_name}</td><td>{$last_name}</td></tr>
-        <tr><td>{$g_lang_userpage_first_name}</td><td>{$first_name}</td></tr>
-        <tr><td>{$g_lang_userpage_username}</td><td>{$user->username}</td></tr>
-        <tr><td>{$g_lang_userpage_department}</td><td>{$user->department}</td></tr>
-        <tr><td>{$g_lang_userpage_email}</td><td>{$user->email}</td></tr>
-        <tr><td>{$g_lang_userpage_phone_number}</td><td>{$user->phone}</td></tr>
+        <tr><td>{$g_lang_userpage_id}</td><td>{$user->id|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_last_name}</td><td>{$last_name|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_first_name}</td><td>{$first_name|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_username}</td><td>{$user->username|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_department}</td><td>{$user->department|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_email}</td><td>{$user->email|escape:'html'}</td></tr>
+        <tr><td>{$g_lang_userpage_phone_number}</td><td>{$user->phone|escape:'html'}</td></tr>
         <tr>
             <td>{$g_lang_userpage_admin}</td>
             <td>

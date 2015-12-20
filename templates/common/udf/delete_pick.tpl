@@ -7,7 +7,7 @@
             <td colspan=3>
                 <select name="item">
                     {foreach from=$udfs item=item}
-                        <option value="{$item.table_name}">{$item.display_name}</option>
+                        <option value="{$item.table_name|escape:'html'}">{$item.display_name|escape:'html'}</option>
                     {/foreach}
                 </select>
             </td>
