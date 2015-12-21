@@ -4,27 +4,258 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "420f565c2a85f1e8a883f22d778fa0a4",
-    "content-hash": "696df0763cc697f9f3f07535e05468c2",
+    "hash": "ab62f75514071dafce4c21d3f3c7bc53",
+    "content-hash": "8732ee2436d90735e7a2fcd25a8396b5",
     "packages": [
         {
-            "name": "owasp/csrf-protector-php",
-            "version": "dev-issue34-config-file-location",
+            "name": "aura/di",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/stephenlawrence/CSRF-Protector-PHP.git",
-                "reference": "54d048f19058a33a57b61fccbb2b97e454f7a6ba"
+                "url": "https://github.com/auraphp/Aura.Di.git",
+                "reference": "c0d51c15e105c4b6df90d4c29d9e4dac6bee4d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stephenlawrence/CSRF-Protector-PHP/zipball/54d048f19058a33a57b61fccbb2b97e454f7a6ba",
-                "reference": "54d048f19058a33a57b61fccbb2b97e454f7a6ba",
+                "url": "https://api.github.com/repos/auraphp/Aura.Di/zipball/c0d51c15e105c4b6df90d4c29d9e4dac6bee4d5b",
+                "reference": "c0d51c15e105c4b6df90d4c29d9e4dac6bee4d5b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Di\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Di Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Di/contributors"
+                }
+            ],
+            "description": "Provides a dependency injection container system with native support for constructor- and setter-based injection, lazy-loading of services, and inheritable configuration of setters and constructor params.",
+            "homepage": "https://github.com/auraphp/Aura.Di",
+            "keywords": [
+                "container",
+                "dependency injection",
+                "dependency injection container",
+                "di",
+                "di container"
+            ],
+            "time": "2015-05-31 20:45:07"
+        },
+        {
+            "name": "aura/html",
+            "version": "2.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.Html.git",
+                "reference": "7f575f35765af41091b85b23a92b168ae0c5765f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.Html/zipball/7f575f35765af41091b85b23a92b168ae0c5765f",
+                "reference": "7f575f35765af41091b85b23a92b168ae0c5765f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\Html\\_Config\\Common"
+                    }
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\Html\\": "src/",
+                    "Aura\\Html\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.Html Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.Html/contributors"
+                }
+            ],
+            "description": "Provides HTML escapers and helpers, including form input helpers.",
+            "homepage": "https://github.com/auraphp/Aura.Html",
+            "keywords": [
+                "Escape",
+                "escaper",
+                "escapers",
+                "escaping",
+                "form",
+                "helper",
+                "helpers",
+                "html",
+                "input"
+            ],
+            "time": "2015-03-27 17:31:31"
+        },
+        {
+            "name": "aura/view",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/auraphp/Aura.View.git",
+                "reference": "defd8821dd1fe871ab23bf70bab6efc5323a701e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/auraphp/Aura.View/zipball/defd8821dd1fe871ab23bf70bab6efc5323a701e",
+                "reference": "defd8821dd1fe871ab23bf70bab6efc5323a701e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "aura/di": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "library",
+                    "config": {
+                        "common": "Aura\\View\\_Config\\Common"
+                    }
+                },
+                "branch-alias": {
+                    "dev-develop-2": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aura\\View\\": "src/",
+                    "Aura\\View\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aura.View Contributors",
+                    "homepage": "https://github.com/auraphp/Aura.View/contributors"
+                }
+            ],
+            "description": "Provides an implementation of the TemplateView and TwoStepView patterns, with support for helpers and for closures as templates, using PHP itself as the templating language.",
+            "homepage": "https://github.com/auraphp/Aura.View",
+            "keywords": [
+                "Escape",
+                "escaper",
+                "escaping",
+                "template",
+                "template view",
+                "two step view",
+                "two-step view",
+                "twostep view",
+                "view"
+            ],
+            "time": "2015-03-27 18:49:40"
+        },
+        {
+            "name": "foa/html-view-bundle",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/friendsofaura/FOA.Html_View_Bundle.git",
+                "reference": "d6943933c1a1983594cd5d72b0f2131795479216"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/friendsofaura/FOA.Html_View_Bundle/zipball/d6943933c1a1983594cd5d72b0f2131795479216",
+                "reference": "d6943933c1a1983594cd5d72b0f2131795479216",
+                "shasum": ""
+            },
+            "require": {
+                "aura/di": "~2.0",
+                "aura/html": "~2.1",
+                "aura/view": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "aura": {
+                    "type": "kernel",
+                    "config": {
+                        "common": "FOA\\Html_View_Bundle\\_Config\\Common"
+                    }
+                },
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FOA\\Html_View_Bundle\\_Config\\": "config/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Hari KT",
+                    "email": "kthari85@gmail.com"
+                }
+            ],
+            "description": "Integration of Aura.Html and Aura.View with Aura.Di",
+            "keywords": [
+                "di",
+                "helper",
+                "html",
+                "view"
+            ],
+            "time": "2014-10-05 16:43:07"
+        },
+        {
+            "name": "owasp/csrf-protector-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mebjas/CSRF-Protector-PHP.git",
+                "reference": "1124a303979501d05289d4e804a88946e6c39d03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mebjas/CSRF-Protector-PHP/zipball/1124a303979501d05289d4e804a88946e6c39d03",
+                "reference": "1124a303979501d05289d4e804a88946e6c39d03",
                 "shasum": ""
             },
             "require-dev": {
                 "satooshi/php-coveralls": ">=0.6"
             },
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "APACHE"
             ],
@@ -35,10 +266,7 @@
                 "owasp",
                 "security"
             ],
-            "support": {
-                "source": "https://github.com/stephenlawrence/CSRF-Protector-PHP/tree/issue34-config-file-location"
-            },
-            "time": "2015-12-19 19:32:34"
+            "time": "2015-12-20 22:24:25"
         }
     ],
     "packages-dev": [],

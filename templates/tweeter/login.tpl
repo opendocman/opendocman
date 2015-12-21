@@ -25,18 +25,18 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="{$g_base_url}/templates/tweeter/images/favicon.ico">
+    <link rel="shortcut icon" href="{$g_base_url|escape:'html'}/templates/tweeter/images/favicon.ico">
 
-    <link rel="apple-touch-icon" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon-114x114.png">
     
     
     {* Must Include This Section *}
     {include file='../../templates/common/head_include.tpl'}
     
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <title>{$g_title}</title>
+        <title>{$g_title|escape:'html'}</title>
         </head>
         <body bgcolor="White">
 
@@ -52,7 +52,7 @@
         <table border="0" cellspacing="5" cellpadding="5">
         <form action="index.php" method="post">
             {if $redirection}
-                <input type="hidden" name="redirection" value="{$redirection}">
+                <input type="hidden" name="redirection" value="{$redirection|escape:'html'}">
             {/if}
             
          <tr>
@@ -63,7 +63,7 @@
         <td>{$g_lang_password}</td>
         <td><input type="password" name="frmpass" size="15">
             {if $g_allow_password_reset eq 'True'}
-                <a href="{$g_base_url}/forgot_password.php">{$g_lang_forgotpassword}</a>
+                <a href="{$g_base_url|escape:'html'}/forgot_password.php">{$g_lang_forgotpassword}</a>
              {/if}
                      </td>
         </tr>
@@ -77,7 +77,7 @@
         {/if}
         {if $g_allow_signup eq 'True'}
                 <tr>
-            <td colspan="2"><a href="{$g_base_url}/signup.php">{$g_lang_signup}</a>
+            <td colspan="2"><a href="{$g_base_url|escape:'html'}/signup.php">{$g_lang_signup}</a>
         </tr>
         {/if}
         

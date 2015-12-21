@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+use Aura\Html\Escaper\AttrEscaper as a;
 /*
 category.php - Administer Categories
 Copyright (C) 2002-2011 Stephen Lawrence Jr.
@@ -18,7 +20,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-// check for valid session 
+// check for valid session
 session_start();
 
 // includes
@@ -40,7 +42,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
     ?>
-    <form id="categoryAddForm" action="category.php?last_message=<?php echo $last_message;
+    <form id="categoryAddForm" action="category.php?last_message=<?php echo e::h($last_message);
     ?>" method="GET" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
@@ -100,11 +102,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $stmt->execute(array(':item' => $_REQUEST['item']));
     $result = $stmt->fetch();
 
-    echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . $result['id'] . '</td></tr>';
-    echo '<tr><td>'.msg('label_name').' :</td><td>' . $result['name'] . '</td></tr>';
+    echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . e::h($result['id']) . '</td></tr>';
+    echo '<tr><td>'.msg('label_name').' :</td><td>' . e::h($result['name']) . '</td></tr>';
     ?>
     <form action="category.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $item;
+        <input type="hidden" name="id" value="<?php echo e::h($item);
     ?>">
         <tr>
             <td>
@@ -120,7 +122,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+        echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
                     </select>
@@ -143,8 +145,8 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_footer();
 } elseif (isset($_REQUEST['deletecategory'])) {
     // Delete category
-    // 
-    // 
+    //
+    //
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location:error.php?ec=4');
@@ -173,7 +175,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF'];
     ?>" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+            <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -185,8 +187,8 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        $str = '<option value="' . $row['id'] . '"';
-        $str .= '>' . $row['name'] . '</option>';
+        $str = '<option value="' . e::h($row['id']) . '"';
+        $str .= '>' . e::h($row['name']) . '</option>';
         echo $str;
     }
     $deletepick='';
@@ -209,7 +211,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     // query to show item
     draw_header(msg('area_view_category'), $last_message);
     $category_id = (int) $_REQUEST['item'];
-        
+
     // Select name
     $query = "SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id = :category_id";
     $stmt = $pdo->prepare($query);
@@ -222,12 +224,12 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     foreach ($result as $row) {
         echo '<th>' . msg('label_name') . '</th><th>' . msg('label_id') . '</th>';
         echo '<tr>';
-        echo '<td>' . $row['name'] . '</td>';
-        echo '<td>' . $category_id . '</td>';
+        echo '<td>' . e::h($row['name']) . '</td>';
+        echo '<td>' . e::h($category_id) . '</td>';
         echo '</tr>';
     }
     ?>
-<form action="admin.php?last_message=<?php echo $last_message;
+<form action="admin.php?last_message=<?php echo e::h($last_message);
     ?>" method="POST" enctype="multipart/form-data">
     <tr>
         <td colspan="4" align="center"><div class="buttons"><button class="regular" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div></td>
@@ -245,18 +247,18 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<a href="edit.php?id=' . $row['id'] . '&state=3">ID: ' . $row['id'] . ',' . $row['realname'] . '</a><br />';
+        echo '<a href="edit.php?id=' . e::h($row['id']) . '&state=3">ID: ' . e::h($row['id']) . ',' . e::h($row['realname']) . '</a><br />';
     }
-    
+
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick') {
     draw_header(msg('area_view_category') . ' : ' . msg('choose'), $last_message);
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>?last_message=<?php echo $last_message;
+    ?>?last_message=<?php echo e::h($last_message);
     ?>" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+            <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -268,7 +270,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+        echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
                     </select></td>
@@ -290,7 +292,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header(msg('area_update_category'), $last_message);
     ?>
-<form id="updateCategoryForm" action="category.php?last_message=<?php echo $last_message;
+<form id="updateCategoryForm" action="category.php?last_message=<?php echo e::a($last_message);
     ?>" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
@@ -306,8 +308,8 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     foreach ($result as $row) {
         echo '<tr>';
-        echo '<td colspan="2">' . msg('category') . ': <input type="textbox" name="name" value="' . $row['name'] . '" class="required" maxlength="40"></td>';
-        echo '<input type="hidden" name="id" value="' . $row['id'] . '">';
+        echo '<td colspan="2">' . msg('category') . ': <input type="textbox" name="name" value="' . e::h($row['name']) . '" class="required" maxlength="40"></td>';
+        echo '<input type="hidden" name="id" value="' . e::h($row['id']) . '">';
     }
     ?>
 
@@ -338,7 +340,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ?>
     <form action="<?php echo $_SERVER['PHP_SELF'];
     ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+        <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
         <table border="0">
             <tr>
@@ -352,7 +354,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+        echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
                 </td>

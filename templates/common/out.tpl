@@ -24,23 +24,23 @@
         <tr {if $item.lock eq true}class="gradeX"{/if} >
             {if $item.showCheckbox eq '1'}
                 {assign var=form value=1}
-                <td><input type="checkbox" class="checkbox" value="{$item.id}" name="checkbox[]"/></td>
+                <td><input type="checkbox" class="checkbox" value="{$item.id|escape:'html'}" name="checkbox[]"/></td>
             {/if}
-            <td class="center">{$item.id}</td>
+            <td class="center">{$item.id|escape}</td>
             <td class="center" style="width: 50px;">
                 {if $item.view_link eq 'none'}
                     &nbsp;
                 {else}
-                    <a href="{$item.view_link}">{$g_lang_outpage_view}</a></td>
+                    <a href="{$item.view_link|escape:'html'}">{$g_lang_outpage_view}</a></td>
                 {/if}
-            <td><a href="{$item.details_link}">{$item.filename}</a></td>
-            <td >{$item.description}</td>
-            <td class="center">{$item.rights[0][1]} | {$item.rights[1][1]} | {$item.rights[2][1]}</td>
-            <td>{$item.created_date}</td>
-            <td>{$item.modified_date}</td>
-            <td>{$item.owner_name}</td>
-            <td>{$item.dept_name}</td>
-            <td >{$item.filesize}</td>
+            <td><a href="{$item.details_link|escape}">{$item.filename|escape:'html'}</a></td>
+            <td >{$item.description|escape:'html'}</td>
+            <td class="center">{$item.rights[0][1]|escape:'html'} | {$item.rights[1][1]|escape:'html'} | {$item.rights[2][1]|escape:'html'}</td>
+            <td>{$item.created_date|escape:'html'}</td>
+            <td>{$item.modified_date|escape:'html'}</td>
+            <td>{$item.owner_name|escape:'html'}</td>
+            <td>{$item.dept_name|escape:'html'}</td>
+            <td >{$item.filesize|escape:'html'}</td>
             <td class="center">
                 {if $item.lock eq false}
                     <img src="{$g_base_url}/images/file_unlocked.png" alt="unlocked" />

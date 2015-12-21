@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 toBePublished.php -  Display list of publishable files to reviewer
 Copyright (C) 2002, 2003, 2004  Stephen Lawrence, Khoa Nguyen
@@ -95,23 +97,23 @@ if (!isset($_REQUEST['submit'])) {
     $GLOBALS['smarty']->assign('checkbox', $checkbox);
     display_smarty_template('commentform.tpl');
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject') {
-    $to = isset($_POST['to']) ? $_POST['to'] : '';
-    $subject = isset($_POST['subject']) ? $_POST['subject'] : '';
-    $checkbox = isset($_POST['checkbox']) ? $_POST['checkbox'] : '';
+    $to = isset($_POST['to']) ? e::h($_POST['to']) : '';
+    $subject = isset($_POST['subject']) ? e::h($_POST['subject']) : '';
+    $checkbox = isset($_POST['checkbox']) ? e::h($_POST['checkbox']) : '';
 
     $mail_break = '--------------------------------------------------'.PHP_EOL;
     $reviewer_comments = "To=$to;Subject=$subject;Comments=$comments;";
     $user_obj = new user($_SESSION['uid'], $pdo);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
-    $full_name = $get_full_name[0].' '.$get_full_name[1];
+    $full_name = e::h($get_full_name[0]) .' '. e::h($get_full_name[1]);
     $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-    $mail_headers = "From: $mail_from".PHP_EOL;
+    $mail_headers = "From: " . e::h($mail_from) . PHP_EOL;
     $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL;
-    $mail_subject= (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
+    $mail_subject= (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : msg('email_subject_review_status'));
     $mail_greeting=msg('email_greeting'). ":" . PHP_EOL . "\t" . msg('email_i_would_like_to_inform');
     $mail_body = $comments . PHP_EOL . PHP_EOL;
-    $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'. PHP_EOL . PHP_EOL .$mail_break.$_REQUEST['comments']. PHP_EOL .$mail_break;
+    $mail_body .= msg('email_was_declined_for_publishing_at') . ' ' .$date. ' ' . msg('email_for_the_following_reasons') . ':'. PHP_EOL . PHP_EOL . $mail_break . e::h($_REQUEST['comments']) . PHP_EOL . $mail_break;
     $mail_salute=PHP_EOL . PHP_EOL . msg('email_salute') . ",". PHP_EOL . $full_name;
 
     if ($user_obj->isAdmin()) {
@@ -133,12 +135,12 @@ if (!isset($_REQUEST['submit'])) {
             if (isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users'])) {
                 // Lets unset this now so the new array will just be user_id's
                 $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
-                $mail_body1 = $comments . PHP_EOL . PHP_EOL;
+                $mail_body1 = e::h($comments) . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_was_rejected_from_repository') . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
-                $mail_body1.=msg('label_reviewer') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+                $mail_body1.=msg('label_reviewer') . ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
@@ -152,13 +154,13 @@ if (!isset($_REQUEST['submit'])) {
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid, 'R', $pdo);
             // Set up rejected email message to sent out
-            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_a_new_file_has_been_rejected'));
-            $mail_body = $comments . PHP_EOL . PHP_EOL;
+            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : msg('email_a_new_file_has_been_rejected'));
+            $mail_body = e::h($comments) . PHP_EOL . PHP_EOL;
             $mail_body.=msg('email_a_new_file_has_been_rejected').PHP_EOL . PHP_EOL;
             $mail_body.=msg('label_filename'). ':  ' .$file_obj->getName() . PHP_EOL . PHP_EOL;
             $mail_body.=msg('label_status').': ' .msg('message_rejected'). PHP_EOL . PHP_EOL;
             $mail_body.=msg('date'). ': ' .$date. PHP_EOL . PHP_EOL;
-            $mail_body.=msg('label_reviewer'). ': ' .$full_name. PHP_EOL . PHP_EOL;
+            $mail_body.=msg('label_reviewer'). ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
             $mail_body.=msg('email_thank_you'). ','. PHP_EOL . PHP_EOL;
             $mail_body.=msg('email_automated_document_messenger'). PHP_EOL . PHP_EOL;
             $mail_body.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
@@ -181,15 +183,15 @@ if (!isset($_REQUEST['submit'])) {
     }
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize') {
-    $checkbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
-    $reviewer_comments = "To=$_POST[to];Subject=$_POST[subject];Comments=$_POST[comments];";
+    $checkbox = isset($_REQUEST['checkbox']) ? e::h($_REQUEST['checkbox']) : '';
+    $reviewer_comments = "To= " . e::h($_POST['to']) . ";Subject=" . e::h($_POST['subject']) . ";Comments=" . e::h($_POST['comments']) . ";";
     $user_obj = new User($_SESSION['uid'], $pdo);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : msg('email_subject_review_status'));
-    $mail_from= $full_name.' <'.$user_obj->getEmailAddress().'>';
-    $mail_headers = "From: ".$mail_from.PHP_EOL.PHP_EOL;
+    $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : msg('email_subject_review_status'));
+    $mail_from= e::h($full_name) . ' <'.$user_obj->getEmailAddress().'>';
+    $mail_headers = "From: ". e::h($mail_from) .PHP_EOL.PHP_EOL;
     $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL . PHP_EOL;
 
     if ($user_obj->isAdmin()) {
@@ -214,12 +216,12 @@ if (!isset($_REQUEST['submit'])) {
                 // Lets unset this now so the new array will just be user_id's
                 $_POST['send_to_users'] = array_slice($_POST['send_to_users'], 1);
 
-                $mail_body1 = $comments . PHP_EOL . PHP_EOL;
+                $mail_body1 = e::h($comments) . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_your_file_has_been_authorized') . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('label_status') . ': ' . msg('message_authorized') . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
-                $mail_body1.=msg('label_reviewer') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+                $mail_body1.=msg('label_reviewer') . ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
                 $mail_body1.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
@@ -234,13 +236,13 @@ if (!isset($_REQUEST['submit'])) {
             AccessLog::addLogEntry($fileid, 'Y', $pdo);
             
             // Build email for general notices
-            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes($_REQUEST['subject']) : $file_obj->getName().' ' .msg('email_added_to_repository'));
+            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : $file_obj->getName().' ' .msg('email_added_to_repository'));
             $mail_body2=$comments . PHP_EOL . PHP_EOL;
             $mail_body2.=msg('email_a_new_file_has_been_added'). PHP_EOL . PHP_EOL;
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
             $mail_body2.=msg('label_status'). ': New'. PHP_EOL . PHP_EOL;
             $mail_body2.=msg('date'). ': ' . $date . PHP_EOL . PHP_EOL;
-            $mail_body2.=msg('label_reviewer'). ': ' . $full_name . PHP_EOL . PHP_EOL;
+            $mail_body2.=msg('label_reviewer'). ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
             $mail_body2.=msg('email_thank_you'). ','. PHP_EOL . PHP_EOL;
             $mail_body2.=msg('email_automated_document_messenger'). PHP_EOL . PHP_EOL;
             $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;

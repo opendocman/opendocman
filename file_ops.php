@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 file_ops.php - admin file operations
 Copyright (C) 2002-2004 Stephen Lawrence Jr, Khoa Nguyen

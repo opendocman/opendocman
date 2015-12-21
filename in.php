@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 in.php - display files checked out to user, offer link to check back in
 Copyright (C) 2002-2013 Stephen Lawrence Jr.
@@ -69,7 +71,7 @@ if ($count == 0) {
     echo '<img src="images/exclamation.gif"> ' . msg('message_no_documents_checked_out');
 } else {
     echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1">';
-    echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . $count . '</caption>';
+    echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . e::h($count) . '</caption>';
     echo '<tr bgcolor="#83a9f7">';
     echo '<td class="listtable"><b>' .msg('button_check_in'). '</b></td>';
     echo '<td class="listtable"><b>' .msg('label_file_name'). '</b></td>';
@@ -99,13 +101,13 @@ if ($count == 0) {
         $highlighted_color = '#bdf9b6';
 
         echo '<tr valign="middle" bgcolor="' . $row_color . '" onmouseover="this.style.backgroundColor=\'' . $highlighted_color . '\';" onmouseout="this.style.backgroundColor=\'' . $row_color . '\';">';
-        echo '<td class="listtable"><div class="buttons"><a href="check-in.php?id=' . $id . '&amp;state=' .($_REQUEST['state']+1) . '" class="regular"><img src="images/import-2.png" alt="checkin"/>' .msg('button_check_in'). '</a></div>';
+        echo '<td class="listtable"><div class="buttons"><a href="check-in.php?id=' . e::h($id) . '&amp;state=' . e::h(($_REQUEST['state']+1)) . '" class="regular"><img src="images/import-2.png" alt="checkin"/>' .msg('button_check_in'). '</a></div>';
         echo '</td>';
-        echo '<td class="listtable">' . $realname . '</td>';
-        echo '<td class="listtable">' . $description . '</td>';
-        echo '<td class="listtable">' . fix_date($created) . '</td> ';
-        echo '<td class="listtable">' . $last_name . ', ' . $first_name . '</td> ';
-        echo '<td class="listtable">' . display_filesize($filename) . '</td> ';
+        echo '<td class="listtable">' . e::h($realname) . '</td>';
+        echo '<td class="listtable">' . e::h($description) . '</td>';
+        echo '<td class="listtable">' . fix_date(e::h($created)) . '</td> ';
+        echo '<td class="listtable">' . e::h($last_name) . ', ' . e::h($first_name) . '</td> ';
+        echo '<td class="listtable">' . display_filesize(e::h($filename)) . '</td> ';
         echo '</tr>';
 
         if ($row_color == "#FCFCFC") {

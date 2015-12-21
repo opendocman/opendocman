@@ -1,4 +1,4 @@
-		{$mode}
+		{$mode|escape:'html'}
                 {$g_lang_email_note_to_authors}
 		<form name="author_note_form"
 			{if $mode eq 'root'}
@@ -10,17 +10,17 @@
 		<tr>
 		<td>{$g_lang_email_to}</td>
 		<td>
-                    <input type="text" name="to" value="Author(s)" size='15' {$access_mode}>
+                    <input type="text" name="to" value="Author(s)" size='15' {$access_mode|escape:'html'}>
                 </td>
 		</tr>
                 <tr>
                     <td>{$g_lang_email_subject}</td>
                     <td>
-                        <input type="text" name="subject" size=50 value="" size='30' {$access_mode}></td>
+                        <input type="text" name="subject" size=50 value="" size='30' {$access_mode|escape:'html'}></td>
                 </tr>
                 <tr>
                     <td>{$g_lang_email_custom_comment}</td>
-                    <td><textarea name="comments" cols=45 rows=7 size='220' {$access_mode}></textarea></td>
+                    <td><textarea name="comments" cols=45 rows=7 size='220' {$access_mode|escape:'html'}></textarea></td>
                 </tr>
 		</table>
 		<br />&nbsp&nbsp
@@ -45,14 +45,14 @@
                                     <option value="0">no one</option>
                                     <option value="owner" selected="selected">file owners</option>
                                     {foreach from=$user_info item=user}
-                                    <option value="{$user.id}">{$user.last_name}, {$user.first_name}</option>
+                                    <option value="{$user.id}">{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</option>
                                     {/foreach}
 
                                     
 			</select></td></tr></table>
 			<br />
                          <div class="buttons">
-                            <button class="positive" type="submit" name="submit" value="{$submit_value}">{$submit_value}</button>
+                            <button class="positive" type="submit" name="submit" value="{$submit_value|escape:'html'}">{$submit_value|escape:'html'}</button>
                             <button class="negative" type="submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button>
                          </div><br /><br />
 

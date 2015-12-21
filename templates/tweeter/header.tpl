@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{$g_title} - {$page_title}</title>
+    <title>{$g_title} - {$page_title|escape:'html'}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -50,29 +50,29 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{$g_base_url}/out.php">{$g_title}</a>
+          <a class="brand" href="{$g_base_url|escape:'html'}/out.php">{$g_title|escape:'html'}</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
 
-              <li class="active"><a href="{$g_base_url}/out.php">{$g_lang_home}</a></li>
+              <li class="active"><a href="{$g_base_url|escape:'html'}/out.php">{$g_lang_home}</a></li>
               {if $can_checkin || $isadmin eq 'yes'}
                 <li><a href="{$g_base_url}/in.php">{$g_lang_button_check_in}</a></li>
               {/if}
-              <li><a href="{$g_base_url}/search.php">{$g_lang_search}</a></li>
+              <li><a href="{$g_base_url|escape:'html'}/search.php">{$g_lang_search}</a></li>
               {if $can_add || $isadmin eq 'yes'} 
-                <li><a href="{$g_base_url}/add.php">{$g_lang_button_add_document}</a></li>
+                <li><a href="{$g_base_url|escape:'html'}/add.php">{$g_lang_button_add_document}</a></li>
               {/if}
               {if $isadmin eq 'yes'}
               <li>
                  
-                    <a href="{$g_base_url}/admin.php">{$g_lang_label_admin}</a>
+                    <a href="{$g_base_url|escape:'html'}/admin.php">{$g_lang_label_admin}</a>
               </li>
               {/if}
-              <li><a href="{$g_base_url}/logout.php">{$g_lang_logout}</a></li>
+              <li><a href="{$g_base_url|escape:'html'}/logout.php">{$g_lang_logout}</a></li>
             </ul>          
               <p class="navbar-text pull-right">
 {$g_lang_label_logged_in_as}
-<a href="{$base_url}/profile.php">{$userName}</a>
+<a href="{$base_url|escape:'html'}/profile.php">{$userName}</a>
 </p>
           </div><!--/.nav-collapse -->
         </div>
@@ -90,5 +90,5 @@
         </div>
         <p></p>
         {if $lastmessage ne ''}
-            <div id="last_message">{$lastmessage}</div>
+            <div id="last_message">{$lastmessage|escape:'html'}</div>
         {/if}

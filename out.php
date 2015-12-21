@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 out.php - display a list/ of all available documents that user has permission to view (with file status)
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
@@ -48,7 +50,7 @@ if ($user_obj->isAdmin()) {
 }
     
 if ($reviewIdCount > 0) {
-    echo '<img src="images/exclamation.gif" /> <a href="toBePublished.php?state=1">'.msg('message_documents_waiting'). '</a>: ' . $reviewIdCount  . '</a><br />';
+    echo '<img src="images/exclamation.gif" /> <a href="toBePublished.php?state=1">'.msg('message_documents_waiting'). '</a>: ' . e::h($reviewIdCount)  . '</a><br />';
 }
 
 $rejected_files_obj = $user_obj->getRejectedFileIds();
@@ -59,7 +61,7 @@ if (isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null) {
 
 $llen = $user_obj->getNumExpiredFiles();
 if ($llen > 0) {
-    echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'">' .msg('message_documents_expired'). ': ' . $llen . '</a><br />';
+    echo '<img src="images/exclamation_red.gif"><a href="javascript:window.location=\'search.php?submit=submit&sort_by=id&where=author_locked_files&sort_order=asc&keyword=-1&exact_phrase=on\'">' .msg('message_documents_expired'). ': ' . e::h($llen) . '</a><br />';
 }
 // get a list of documents the user has "view" permission for
 // get current user's information-->department

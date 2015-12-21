@@ -4,15 +4,15 @@
 
 <!-- file upload formu using ENCTYPE -->
 <form id="addeditform" name="main" action="{$smarty.server.PHP_SELF}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
-    <input type="hidden" id="db_prefix" value="{$db_prefix}" />
+    <input type="hidden" id="db_prefix" value="{$db_prefix|escape:'html'}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    
 {foreach from=$t_name item=name name='loop1'}
-    <input type="hidden" id="secondary{$i}" name="secondary{$i}" value="" /> <!-- CHM hidden and onsubmit added-->
-    <input type="hidden" id="tablename{$i}" name="tablename{$i}" value="{$name}" /> <!-- CHM hidden and onsubmit added-->
+    <input type="hidden" id="secondary{$i|escape:'html'}" name="secondary{$i|escape:'html'}" value="" /> <!-- CHM hidden and onsubmit added-->
+    <input type="hidden" id="tablename{$i|escape:'html'}" name="tablename{$i|escape:'html'}" value="{$name|escape:'html'}" /> <!-- CHM hidden and onsubmit added-->
     {assign var='i' value=$i+1}
 {/foreach}
-    <input id="i_value" type="hidden" name="i_value" value="{$i}" /> <!-- CHM hidden and onsubmit added-->
+    <input id="i_value" type="hidden" name="i_value" value="{$i|escape:'html'}" /> <!-- CHM hidden and onsubmit added-->
     <tr>
         <td>
             <a class="body" tabindex=1 href="help.html#Add_File_-_File_Location" onClick="return popup(this, 'Help')" style="text-decoration:none">{$g_lang_label_file_location}</a>
@@ -31,7 +31,7 @@
         <td>
             <select name="file_owner">
             {foreach from=$avail_users item=user}
-                <option value="{$user.id}" {$user.selected}>{$user.last_name}, {$user.first_name}</option>
+                <option value="{$user.id}" {$user.selected}>{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</option>
             {/foreach}
             </select>
         </td>
@@ -44,7 +44,7 @@
                
             <select name="file_department">
             {foreach from=$avail_depts item=dept}
-                <option value="{$dept.id}" {$dept.selected}>{$dept.name}</option>
+                <option value="{$dept.id}" {$dept.selected}>{$dept.name|escape:'html'}</option>
             {/foreach}
             </select>
         </td>
@@ -57,7 +57,7 @@
         <td colspan=3>
             <select tabindex=2 name="category" >
             {foreach from=$cats_array item=cat}
-                <option value="{$cat.id}">{$cat.name}</option>
+                <option value="{$cat.id}">{$cat.name|escape:'html'}</option>
             {/foreach}
             </select>
         </td>
