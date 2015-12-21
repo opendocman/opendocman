@@ -89,6 +89,8 @@ $sql_operations=array(
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'text/richtxt', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/mspowerpoint', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/octet-stream', 1);",
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/zip', 1);",
+"INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/x-zip', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NULL, 'image/tiff', 1);",
 "INSERT INTO `{$_SESSION['db_prefix']}filetypes` VALUES(NUll, 'image/tif', 1);",
