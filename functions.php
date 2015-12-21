@@ -37,6 +37,9 @@ foreach ($GLOBALS['CONFIG'] as $key => $value) {
     $GLOBALS['smarty']->assign('g_' . $key, $value);
 }
 
+include_once __DIR__ .'/vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
+csrfProtector::init();
+
 include_once('classHeaders.php');
 include_once('mimetypes.php');
 require_once('crumb.php');
