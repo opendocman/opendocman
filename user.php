@@ -243,8 +243,11 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick') {
-    $deletepick = '';
     draw_header(msg('userpage_user_delete'), $last_message);
+
+    $deletepick = '';
+
+    $state = $_REQUEST['state'] + 1;
 
     $query = "SELECT id,username, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
     $stmt = $pdo->prepare($query);
@@ -252,7 +255,9 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $user_list = $stmt->fetchAll();
 
     $GLOBALS['smarty']->assign('user_list', $user_list);
+    $GLOBALS['smarty']->assign('state', $state);
     display_smarty_template('user_delete_pick.tpl');
+
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
     $user_obj = new User($_POST['item'], $pdo);

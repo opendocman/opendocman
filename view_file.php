@@ -121,5 +121,4 @@ if (!isset($_GET['submit'])) {
     }
 } else {
     echo msg('message_nothing_to_do');
-    echo 'submit is ' . $_GET['submit'];
 }

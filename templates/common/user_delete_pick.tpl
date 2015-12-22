@@ -1,6 +1,6 @@
 <table border="0" cellspacing="5" cellpadding="5">
     <form action="user.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="state" value="<?php echo($_REQUEST['state'] + 1); ?>">
+        <input type="hidden" name="state" value="{$state}">
         <tr>
             <td><b>{$g_lang_userpage_user}</b></td>
             <td colspan=3>
