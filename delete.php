@@ -72,7 +72,6 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     
     header('Location: out.php?last_message=' . $last_message);
 } elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive') {
-    isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
     
     //publishable=2 for archive deletion
     $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";

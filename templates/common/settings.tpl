@@ -50,7 +50,7 @@
             {/foreach}
                 <td align="center">
                     <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</buttons>
+                        <button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
                     </div>
                 </td>
                 <td align="center">

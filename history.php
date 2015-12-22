@@ -36,12 +36,14 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     exit;
 }
 
+$id = $_REQUEST['id'];
+
 draw_header(msg('area_view_history'), $last_message);
 //revision parsing
-if (strchr($_REQUEST['id'], '_')) {
-    list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
+if (strchr($id, '_')) {
+    list($id, $revision_id) = explode('_', $id);
 }
-$datafile = new FileData($_REQUEST['id'], $pdo);
+$datafile = new FileData($id, $pdo);
 // verify
 if ($datafile->getError() != null) {
     header('Location:error.php?ec=2');
@@ -49,7 +51,7 @@ if ($datafile->getError() != null) {
 } else {
     // obtain data from resultset
 
-$owner_full_name = $datafile->getOwnerFullName();
+    $owner_full_name = $datafile->getOwnerFullName();
     $owner = $owner_full_name[1].', '.$owner_full_name[0];
     $real_name = $datafile->getRealName();
     $category = $datafile->getCategoryName();
@@ -66,9 +68,9 @@ if ($description == '') {
         $comments = msg('message_no_author_comments_available');
     }
     if ($datafile->isArchived()) {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat';
     } else {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+        $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
     }
     ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
@@ -189,7 +191,7 @@ if (isset($revision_id)) {
         ";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
-            ':id' => $_REQUEST['id'],
+            ':id' => $id,
             ':revision_id'=> $revision_id
         ));
         $result = $stmt->fetchAll();
@@ -213,7 +215,7 @@ if (isset($revision_id)) {
         ";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
-            ':id' => $_REQUEST['id']
+            ':id' => $id
         ));
         $result = $stmt->fetchAll();
     }
@@ -237,8 +239,8 @@ if (isset($revision_id)) {
         echo '<tr bgcolor=' . $bgcolor . '>';
 
         $extra_message = '';
-        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision.dat")) {
-            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
+        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . "_$revision.dat")) {
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $id . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
         } else {
             echo '<td><font size="-1">' . $revision . $extra_message;
         }

@@ -107,8 +107,8 @@
 	var mesg_window_frm;
 	function my_delete()
 	{
-		if(window.confirm("{/literal}{$g_lang_detailspage_are_sure}{literal}")) {	
-		window.location = "{/literal}{$my_delete_link}{literal}";	
+		if(window.confirm("{/literal}{$g_lang_detailspage_are_sure}{literal}")) {
+		window.location = "{/literal}{$my_delete_link}{literal}";
 		}
 	}
 	function sendFields()

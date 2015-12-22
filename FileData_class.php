@@ -507,7 +507,7 @@ if (!defined('FileData_class')) {
             $result = $stmt->fetchColumn();
 
             if ($stmt->rowCount() != 1) {
-                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . ' for help');
                 exit;
             }
 
@@ -532,7 +532,7 @@ if (!defined('FileData_class')) {
             $result = $stmt->fetchColumn();
 
             if ($stmt->rowCount() != 1) {
-                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . ' for help');
                 exit;
             }
 
