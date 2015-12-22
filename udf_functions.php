@@ -483,9 +483,11 @@ if (!defined('udf_functions')) {
     {
         global $pdo;
 
+        $state = $_REQUEST['state']+1;
+
         echo '<td valign=top><table border=0>';
-        echo '<tr><td><b><a href="udf.php?submit=add&state=' . ($_REQUEST['state']+1).'">' .msg('label_add'). '</a></b></td></tr>';
-        echo '<tr><td><b><a href="udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1).'">' .msg('label_delete'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=add&state=$state">' .msg('label_add'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=deletepick&state=$state">' .msg('label_delete'). '</a></b></td></tr>';
         echo '<tr><td><hr></td></tr>';
         $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $stmt = $pdo->prepare($query);
@@ -493,7 +495,7 @@ if (!defined('udf_functions')) {
         $result = $stmt->fetchAll();
 
         foreach ($result as $row) {
-            echo '<tr><td><b><a href="udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1).'">'.$row[2].'</a></b></td></tr>';
+            echo '<tr><td><b><a href="udf.php?submit=edit&udf='.$row[0].'&state=$state">'.$row[2].'</a></b></td></tr>';
         }
         echo '</table></td>';
     }
