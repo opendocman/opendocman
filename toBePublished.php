@@ -272,6 +272,6 @@ if (!isset($_REQUEST['submit'])) {
     echo $file_obj->getReviewerComments();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel') {
     $last_message=urlencode(msg('message_action_cancelled'));
-    header('Location: toBePublished.php?last_message=' . $last_message);
+    header('Location: toBePublished.php?last_message=' . urlencode($last_message));
 }
     draw_footer();

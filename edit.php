@@ -265,13 +265,13 @@ if (!isset($_REQUEST['submit'])) {
         $update_dept_perms_stmt->execute();
     }
 
-    $message = urlencode('Document successfully updated');
+    $message = 'Document successfully updated';
 
     AccessLog::addLogEntry($fileId, 'M', $pdo);
 
     // Call the plugin API
     callPluginMethod('onAfterEditFile', $fileId);
 
-    header('Location: details.php?id=' . $fileId . '&last_message=' . $message);
+    header('Location: details.php?id=' . $fileId . '&last_message=' . urlencode($message));
 }
 draw_footer();

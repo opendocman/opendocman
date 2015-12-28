@@ -149,7 +149,7 @@ function draw_header($pageTitle, $lastmessage = '')
 
 function draw_error($message)
 {
-    echo '<div id="last_message">' . htmlspecialchars($message) . '</div>';
+    echo '<div id="last_message">' . e::h($message) . '</div>';
 }
 
 function draw_footer()

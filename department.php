@@ -96,7 +96,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     if ($department == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
         exit;
     }
     //Check to see if this department is already in DB
@@ -106,7 +106,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     if ($stmt->rowCount() != 0) {
-        header('Location: error.php?ec=3&message=' . htmlentities($department) . ' already exist in the database');
+        header('Location: error.php?ec=3&message=' . urlencode($department) . ' already exist in the database');
         exit;
     }
 
@@ -140,7 +140,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 
     $num_rows = $stmt->rowCount();
     if ($num_rows != 1) {
-        header('Location: error.php?ec=14&message=unable to identify ' . $department);
+        header('Location: error.php?ec=14&message=' . urlencode('unable to identify ' . $department));
         exit;
     }
 
@@ -171,7 +171,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     // Call the plugin API
     callPluginMethod('onDepartmentAddSave', $result['id']);
   
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Show Department') {
     // query to show item
     draw_header(msg('area_department_information'), $last_message);
@@ -213,8 +213,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
         echo '<tr><td colspan="2">' . e::h($row['first_name']) . ' ' . e::h($row['last_name']) . '</td></tr>';
     }
     ?>
-                        <form action="admin.php?last_message=<?php echo e::h($last_message);
-    ?>" method="POST" enctype="multipart/form-data">
+                        <form action="admin.php" method="POST" enctype="multipart/form-data">
                             <tr>
                                 <td colspan="4" align="center"><div class="buttons"><button class="regular" type="Submit" name="" value="Back"><?php echo msg('button_back')?></button></div></td>
                             </tr>
@@ -228,7 +227,6 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ?>
                             <table border="0" cellspacing="5" cellpadding="5">
                                 <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>?last_message=<?php echo e::h($last_message);
     ?>" method="POST" enctype="multipart/form-data">
                                     <tr>
                                     <input type="hidden" name="state" value="<?php echo(e::h($_GET['state']+1));
@@ -418,8 +416,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $stmt->execute(array(':id' => $_REQUEST['id']));
 
     // back to main page
-    $last_message = urlencode(msg('message_all_actions_successfull') . ' id:' . (int) $_REQUEST['id']);
-    header('Location: admin.php?last_message=' . $last_message);
+    $last_message = msg('message_all_actions_successfull') . ' id:' . (int) $_REQUEST['id'];
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify') {
     $dept_obj = new Department($_REQUEST['item'], $pdo);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(), $last_message);
@@ -527,7 +525,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     if ($name == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
         exit;
     }
     
@@ -541,7 +539,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     if ($stmt->rowCount() != 0) {
-        header('Location: error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database');
+        header('Location: error.php?ec=3&last_message=' . urlencode($_POST['name'] . ' already exist in the database'));
         exit;
     }
 
@@ -559,7 +557,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     // Call the plugin API
     callPluginMethod('onDepartmentModifySave', $_REQUEST);
     
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
     header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
 } else {

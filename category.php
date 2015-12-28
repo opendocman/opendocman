@@ -42,8 +42,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
     ?>
-    <form id="categoryAddForm" action="category.php?last_message=<?php echo e::h($last_message);
-    ?>" method="GET" enctype="multipart/form-data">
+    <form id="categoryAddForm" action="category.php" method="GET" enctype="multipart/form-data">
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -81,7 +80,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_added'));
-    header('Location:admin.php?last_message=' . $last_message);
+    header('Location:admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete') {
     // If demo mode, don't allow them to update the demo account
     if ($GLOBALS['CONFIG']['demo'] == 'True') {
@@ -166,8 +165,8 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ));
 
     // back to main page
-    $last_message = urlencode(msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id']);
-    header('Location: admin.php?last_message=' . $last_message);
+    $last_message = msg('message_category_successfully_deleted') . ' id:' . $_REQUEST['id'];
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     $deletepick='';
     draw_header(msg('area_delete_category'). ' : ' .msg('choose'), $last_message);
@@ -229,8 +228,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo '</tr>';
     }
     ?>
-<form action="admin.php?last_message=<?php echo e::h($last_message);
-    ?>" method="POST" enctype="multipart/form-data">
+<form action="admin.php" method="POST" enctype="multipart/form-data">
     <tr>
         <td colspan="4" align="center"><div class="buttons"><button class="regular" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div></td>
     </tr>
@@ -256,7 +254,6 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>?last_message=<?php echo e::h($last_message);
     ?>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
@@ -292,8 +289,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header(msg('area_update_category'), $last_message);
     ?>
-<form id="updateCategoryForm" action="category.php?last_message=<?php echo e::a($last_message);
-    ?>" method="POST" enctype="multipart/form-data">
+<form id="updateCategoryForm" action="category.php" method="POST" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
 <?php
@@ -391,9 +387,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ));
 
     // back to main page
-    $last_message = urlencode(msg('message_category_successfully_updated') .' : ' . $_REQUEST['name']);
-    header('Location: admin.php?last_message=' . $last_message);
+    $last_message = msg('message_category_successfully_updated') .' : ' . $_REQUEST['name'];
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
-    $last_message=urlencode(msg('message_action_cancelled'));
-    header('Location: admin.php?last_message=' . $last_message);
+    $last_message = msg('message_action_cancelled');
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 }

@@ -95,7 +95,7 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
             $file_obj->Publishable(0);
         }
     }
-    header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'] . '&last_message='. msg('message_file_authorized'));
+    header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . urlencode(@$_REQUEST['mode']) . '&last_message='. urlencode(msg('message_file_authorized')));
 } elseif ($_POST['submit'] == 'delete') {
     if (!isset($_REQUEST['checkbox'])) {
         header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
@@ -114,7 +114,7 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
         }
         $url = substr($url, 0, strlen($url)-1);
     }
-    header('Location:'.$url.'&num_checkboxes=' . $loop);
+    header('Location:'. urlencode($url) .'&num_checkboxes=' . urlencode($loop));
 }
 
 ?>

@@ -193,7 +193,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         // Call the plugin API call for this section
         callPluginMethod('onAfterAddUser');
 
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
     }
 } elseif (isset($_POST['submit']) && 'Delete User' == $_POST['submit']) {
     // Make sure they are an admin
@@ -224,7 +224,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     // back to main page
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
     // If demo mode, don't allow them to update the demo account
     if (@$GLOBALS['CONFIG']['demo'] == 'True') {
@@ -481,7 +481,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     // back to main page
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
-    header('Location: out.php?last_message=' . $last_message);
+    header('Location: out.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('userpage_modify_user'), $last_message);
 
@@ -509,7 +509,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } else {
     header('Location: admin.php?last_message=' . urlencode('Unrecognizalbe action'));
 }

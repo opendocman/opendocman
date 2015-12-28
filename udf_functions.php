@@ -567,12 +567,12 @@ if (!defined('udf_functions')) {
         global $pdo;
 
         if (empty($_REQUEST['table_name'])) {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
+            header('Location: admin.php?last_message=' . urlencode(msg('message_udf_cannot_be_blank')));
             exit;
         }
 
         if (empty($_REQUEST['display_name'])) {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
+            header('Location: admin.php?last_message=' . urlencode(msg('message_udf_cannot_be_blank')));
             exit;
         }
         
