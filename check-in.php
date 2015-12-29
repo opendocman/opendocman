@@ -83,7 +83,7 @@ if (!isset($_POST['submit'])) {
         // start displaying form
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
-    <form action="<?php echo $_SERVER['PHP_SELF'];
+    <form action="<?php echo e::h($_SERVER['PHP_SELF']);
         ?>" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
         ?>">

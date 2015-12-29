@@ -135,21 +135,21 @@ function draw_header($pageTitle, $lastmessage = '')
 
     // Set up the breadcrumbs
     $crumb = new crumb();
-    $crumb->addCrumb(e::h($_REQUEST['state']), e::h($pageTitle), $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']);
+    $crumb->addCrumb(e::h($_REQUEST['state']), e::h($pageTitle), e::h($_SERVER['PHP_SELF']) . '?' . e::h($_SERVER['QUERY_STRING']));
     $breadCrumb = $crumb->printTrail(e::h($_REQUEST['state']));
 
     $GLOBALS['smarty']->assign('breadCrumb', $breadCrumb);
     $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
     $GLOBALS['smarty']->assign('base_url', $GLOBALS['CONFIG']['base_url']);
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
-    $GLOBALS['smarty']->assign('lastmessage', $lastmessage);
+    $GLOBALS['smarty']->assign('lastmessage', urldecode($lastmessage));
     display_smarty_template('header.tpl');
 
 }
 
 function draw_error($message)
 {
-    echo '<div id="last_message">' . e::h($message) . '</div>';
+    echo '<div id="last_message">' . e::h(urldecode($message)) . '</div>';
 }
 
 function draw_footer()
@@ -861,7 +861,7 @@ function xss_clean($str)
 function redirect_visitor($url = '')
 {
     if ($url == '') {
-        header('Location:index.php?redirection=' . urlencode($_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING']));
+        header('Location:index.php?redirection=' . urlencode(e::h($_SERVER['PHP_SELF']) . '?' . e::h($_SERVER['QUERY_STRING'])));
         exit;
     } else {
         // Lets make sure its not an outside URL

@@ -61,7 +61,7 @@ if (!isset($_GET['submit'])) {
 
 <p>
 
-<form action="<?php echo $_SERVER['PHP_SELF'];
+<form action="<?php echo e::h($_SERVER['PHP_SELF']);
     ?>" method="get">
     <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
     ?>">

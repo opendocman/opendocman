@@ -1,6 +1,6 @@
 <?php use Aura\Html\Escaper as e; ?>
 <div id="filetable_wrapper">
-<form name="table" method="post" action="<?= e::a(($_SERVER['PHP_SELF'])) ?>">
+<form name="table" method="post" action="<?= e::h($_SERVER['PHP_SELF']) ?>">
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>
         <tr>
@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <?php foreach ($this->accesslog_array as $item): ?>
-        <tr <?php if ($item['lock'] == true): ?> class="gradeX" <?php endif; ?>>
+        <tr>
             <td class="center"><a href="<?= e::a($item['details_link']) ?>"><?= e::h($item['realname']) ?></a></td>
             <td class="center" style="width: 50px;"><?= e::h($item['file_id']) ?></td>
             <td class="center"><?= e::h($item['user_name']) ?></td>

@@ -35,7 +35,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_rejected'), $last_message);
-    $page_url = $_SERVER['PHP_SELF'] . '?mode=' . @$_REQUEST['mode'];
+    $page_url = e::h($_SERVER['PHP_SELF']) . '?mode=' . @$_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $pdo);
     $user_perms_obj = new UserPermission($_SESSION['uid'], $pdo);
@@ -46,9 +46,9 @@ if (!isset($_POST['submit'])) {
     }
 
     if (@$_REQUEST['mode']=='root') {
-        echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '?mode=root"' . ' method="post">';
+        echo '<form name="author_note_form" action="' . e::h($_SERVER['PHP_SELF']) . '?mode=root"' . ' method="post">';
     } else {
-        echo '<form name="author_note_form" action="' . $_SERVER['PHP_SELF'] . '" method="post">';
+        echo '<form name="author_note_form" action="' . e::h($_SERVER['PHP_SELF']) . '" method="post">';
     }
     ?>
 <table border="0">
@@ -84,7 +84,7 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
            draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'resubmit') {
     if (!isset($_REQUEST['checkbox'])) {
-        header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+        header('Location: ' . e::h($_SERVER['PHP_SELF']) . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;
     }
     
@@ -95,10 +95,10 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
             $file_obj->Publishable(0);
         }
     }
-    header('Location:' . $_SERVER['PHP_SELF'] . '?mode=' . urlencode(@$_REQUEST['mode']) . '&last_message='. urlencode(msg('message_file_authorized')));
+    header('Location:' . e::h($_SERVER['PHP_SELF']) . '?mode=' . urlencode(@$_REQUEST['mode']) . '&last_message='. urlencode(msg('message_file_authorized')));
 } elseif ($_POST['submit'] == 'delete') {
     if (!isset($_REQUEST['checkbox'])) {
-        header('Location: ' .$_SERVER['PHP_SELF'] . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+        header('Location: ' . e::h($_SERVER['PHP_SELF']) . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;
     }
     

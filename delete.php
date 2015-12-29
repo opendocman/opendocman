@@ -89,7 +89,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     $luserperm_obj = new UserPermission($_SESSION['uid'], $pdo);
     
     draw_header(msg('area_deleted_files'), $last_message);
-    $page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
+    $page_url = e::h($_SERVER['PHP_SELF']) . '?mode=' . $_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $pdo);
     $userperms = new UserPermission($_SESSION['uid'], $pdo);

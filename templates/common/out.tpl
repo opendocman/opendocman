@@ -1,5 +1,5 @@
 <div id="filetable_wrapper">
-<form name="table" method="post" action="{$smarty.server.PHP_SELF}">
+<form name="table" method="post" action="{$smarty.server.PHP_SELF|escape:'html'}">
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>
         <tr>

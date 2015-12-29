@@ -37,13 +37,13 @@ if (!$user_obj->isRoot()) {
 }
 $flag = 0;
 if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
-    echo PHP_EOL . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
+    echo PHP_EOL . '<form name="table" action="' . e::h($_SERVER['PHP_SELF']) . '" method="POST">';
     echo PHP_EOL . '<input name="submit" type="hidden" value="Clear Status">';
     draw_header(msg('label_checked_out_files'), $last_message);
 
     $file_id_array = $user_obj->getCheckedOutFiles();
 
-    $page_url = $_SERVER['PHP_SELF'] . '?';
+    $page_url = e::h($_SERVER['PHP_SELF']) . '?';
     $user_perm_obj = new UserPermission($_SESSION['uid'], $pdo);
     $list_status = list_files($file_id_array, $user_perm_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
     if ($list_status != -1) {
@@ -59,7 +59,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
             $file_obj->setStatus(0);
         }
     }
-    header('Location:' . $_SERVER['PHP_SELF'] . '?state=2&submit=view_checkedout');
+    header('Location:' . e::h($_SERVER['PHP_SELF']) . '?state=2&submit=view_checkedout');
 } else {
     echo 'Nothing to do';
 }

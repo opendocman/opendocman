@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 search.php - main search logic
 Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
@@ -48,7 +50,7 @@ if (!isset($_GET['submit'])) {
     <p>
 
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action=<?php echo $_SERVER['PHP_SELF'];
+        <form action=<?php echo e::h($_SERVER['PHP_SELF']);
     ?> method="get">
 
             <tr>
