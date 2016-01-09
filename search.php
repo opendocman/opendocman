@@ -50,8 +50,7 @@ if (!isset($_GET['submit'])) {
     <p>
 
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action=<?php echo e::h($_SERVER['PHP_SELF']);
-    ?> method="get">
+        <form action="search.php" method="get">
 
             <tr>
                 <td valign="top"><b><?php echo msg('label_search_term');

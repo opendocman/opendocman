@@ -61,8 +61,7 @@ if (!isset($_GET['submit'])) {
 
 <p>
 
-<form action="<?php echo e::h($_SERVER['PHP_SELF']);
-    ?>" method="get">
+<form action="check-out.php" method="get">
     <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
     ?>">
     <input type="hidden" name="access_right" value="<?php echo e::h($_GET['access_right']);

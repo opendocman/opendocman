@@ -3,7 +3,7 @@
 <script type="text/javascript" src="functions.js"></script>
 
 <!-- file upload formu using ENCTYPE -->
-<form id="addeditform" name="main" action="{$smarty.server.PHP_SELF|escape:'html'}" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
+<form id="addeditform" name="main" action="add.php" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">
     <input type="hidden" id="db_prefix" value="{$db_prefix|escape:'html'}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    

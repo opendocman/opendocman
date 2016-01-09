@@ -226,8 +226,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $showpick='';
     ?>
                             <table border="0" cellspacing="5" cellpadding="5">
-                                <form action="<?php echo e::h($_SERVER['PHP_SELF']);
-    ?>" method="POST" enctype="multipart/form-data">
+                                <form action="department.php" method="POST" enctype="multipart/form-data">
                                     <tr>
                                     <input type="hidden" name="state" value="<?php echo(e::h($_GET['state']+1));
     ?>">
@@ -331,8 +330,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action="<?php echo e::h($_SERVER['PHP_SELF']);
-    ?>" method="POST" enctype="multipart/form-data">
+        <form action="department.php" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
@@ -476,8 +474,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('area_choose_department'), $last_message);
     ?>
-                            <form action="<?php echo e::h($_SERVER['PHP_SELF']);
-    ?>" method="GET" enctype="multipart/form-data">
+                            <form action="department.php" method="GET" enctype="multipart/form-data">
                                 <INPUT type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
                                 <table border="0" cellspacing="5" cellpadding="5">

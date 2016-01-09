@@ -2,9 +2,9 @@
                 {$g_lang_email_note_to_authors}
 		<form name="author_note_form"
 			{if $mode eq 'root'}
-			 action="{$smarty.server.PHP_SELF|escape:'html'}?mode=root" method="POST">
+			 action="toBePublished.php?mode=root" method="POST">
 			{else}
-			 action="{$smarty.server.PHP_SELF|escape:'html'}" method="POST">
+			 action="toBePublished.php" method="POST">
                         {/if}
 		<table name="author_note_table">
 		<tr>

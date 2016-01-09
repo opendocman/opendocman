@@ -1,6 +1,6 @@
 <?php use Aura\Html\Escaper as e; ?>
 <div id="filetable_wrapper">
-<form name="table" method="post" action="<?= e::h($_SERVER['PHP_SELF']) ?>">
+<form name="table" method="post" action="access_log.php">
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>
         <tr>

@@ -56,7 +56,7 @@ if (!isset($_REQUEST['submit'])) {
     }
 } elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' || $_REQUEST['submit'] == 'commentReject')) {
     if (!isset($_REQUEST['checkbox'])) {
-        header('Location: ' . e::h($_SERVER['PHP_SELF']) . '?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
+        header('Location: toBePublished.php?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
     }
 
     draw_header(msg('label_comment'), $last_message);
@@ -178,7 +178,7 @@ if (!isset($_REQUEST['submit'])) {
             }
         } else {
             // If their user cannot reject this file_id, display error
-            header("Location:" . e::h($_SERVER[PHP_SELF]) . "?last_message=" .urlencode(msg('message_error_performing_action')));
+            header("Location:toBePublished.php?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
     header("Location: out.php?last_message=" .urlencode(msg('message_file_rejected')));
@@ -259,7 +259,7 @@ if (!isset($_REQUEST['submit'])) {
             }
         } else {
             // If their user cannot authorize this file_id, display error
-            header("Location:" . e::h($_SERVER[PHP_SELF]) . "?last_message=" .urlencode(msg('message_error_performing_action')));
+            header("Location:toBePublished.php?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
     header('Location: out.php?last_message=' .urlencode(msg('message_file_authorized')));
