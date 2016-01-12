@@ -1,4 +1,7 @@
 {
+  "config": {
+    "preferred-install": "dist"
+  },
   "require": {
     "aura/html": "^2.4",
     "foa/html-view-bundle": "2.*",

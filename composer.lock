@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc1fb0f2971bd18d694127ccecb0a887",
+    "hash": "7e7cf09af58802623943dbc766d64057",
     "content-hash": "f1709faf09f81e04ccf71d856b0899c9",
     "packages": [
         {
@@ -243,12 +243,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mebjas/CSRF-Protector-PHP.git",
-                "reference": "1124a303979501d05289d4e804a88946e6c39d03"
+                "reference": "e1643765b214c256d43fb531de0a2e09abf120ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mebjas/CSRF-Protector-PHP/zipball/1124a303979501d05289d4e804a88946e6c39d03",
-                "reference": "1124a303979501d05289d4e804a88946e6c39d03",
+                "url": "https://api.github.com/repos/mebjas/CSRF-Protector-PHP/zipball/e1643765b214c256d43fb531de0a2e09abf120ac",
+                "reference": "e1643765b214c256d43fb531de0a2e09abf120ac",
                 "shasum": ""
             },
             "require-dev": {
@@ -266,7 +266,7 @@
                 "owasp",
                 "security"
             ],
-            "time": "2015-12-20 22:24:25"
+            "time": "2016-01-12 06:20:09"
         }
     ],
     "packages-dev": [
