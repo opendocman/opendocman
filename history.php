@@ -129,7 +129,7 @@ if ($status == 0) {
 <th valign=top align=right><?php echo msg('historypage_revision');
     ?></th><td>
     <div id="revision_current">
-<?php 
+<?php
 if (isset($revision_id)) {
     if ($revision_id == 0) {
         echo msg('historypage_original_revision');
@@ -241,7 +241,7 @@ if (isset($revision_id)) {
 
         $extra_message = '';
         if (is_file($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . "_$revision.dat")) {
-            echo '<td align=center><font size="-1"> <a href="details.php?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'] - 1)) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
         } else {
             echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
         }
