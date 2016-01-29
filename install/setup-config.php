@@ -150,7 +150,7 @@ deny from all
 		</tr>
 		<tr>
 			<th scope="row"><label for="pwd">Password</label></th>
-			<td><input name="pwd" id="pwd" type="text" size="25" value="password" /></td>
+			<td><input name="pwd" id="pwd" type="password" size="25" value="password" /></td>
 			<td>...and MySQL password.</td>
 		</tr>
 		<tr>
@@ -167,7 +167,7 @@ deny from all
 		</tr>
                 <tr>
 			<th scope="row"><label for="adminpass">Administrator Password</label></th>
-			<td><input name="adminpass" id="adminpass" type="text" value="" size="8" class="required" minlength="5"/></td>
+			<td><input name="adminpass" id="adminpass" type="password" value="" size="8" class="required" minlength="5"/></td>
 			<td>Enter an administrator password here. Write it down! (only used for new installs)</td>
 		</tr>
 		<tr>
