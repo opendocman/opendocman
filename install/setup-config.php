@@ -129,6 +129,11 @@ deny from all
 
     case 1:
         display_header();
+
+        $pieces = split('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
+        array_pop($pieces);
+        $computed_base_url = implode('/',$pieces);
+        unset($pieces);
     ?>
 <form method="post" id="configform" action="setup-config.php?step=2">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
@@ -151,8 +156,8 @@ deny from all
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
 			<td><input name="dbhost" id="dbhost" type="text" size="25" value="localhost" class="required" minlength="2"/></td>
-			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work. 
-                            It can also include a port number. e.g. "hostname:port" or a path to a local socket e.g. ":/path/to/socket" for the localhost. 
+			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.
+                            It can also include a port number. e.g. "hostname;port=3306" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
                         </td>
 		</tr>
 		<tr>
@@ -177,7 +182,7 @@ deny from all
 		</tr>
                 <tr>
 			<th scope="row"><label for="prefix">Base URL</label></th>
-			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $_SERVER['HTTP_HOST'];?>/opendocman"/>
+			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $computed_base_url; ?>"/>
                             <br/>Enter in the root URL where OpenDocMan will be running from. Example: http://www.myhost.com/opendocman<br/>
                         </td>
 		</tr>
@@ -218,7 +223,7 @@ deny from all
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
-        
+
         // Clean up the datadir a bit to make sure it ends with slash
         if (substr($datadir, -1) != '/') {
             $datadir .= '/';
@@ -238,7 +243,7 @@ deny from all
          $_SESSION['datadir'] = $datadir;
          $_SESSION['baseurl'] = $baseurl;
          $_SESSION['adminpass'] = $adminpass;
-         
+
         // Here we check their datadir value and try to create the folder. If we cannot, we will warn them.
         if (!is_dir($datadir)) {
             if (!mkdir($datadir)) {
