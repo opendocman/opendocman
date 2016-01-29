@@ -35,7 +35,7 @@ global $pdo;
 $query = "DROP TABLE IF EXISTS {$dbprefix}access_log";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-        
+
 $query = "
 CREATE TABLE IF NOT EXISTS `{$dbprefix}access_log` (
   `file_id` INT(11) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `{$dbprefix}access_log` (
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-// Admin table    
+// Admin table
 $query = "DROP TABLE IF EXISTS `{$dbprefix}admin`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
