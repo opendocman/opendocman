@@ -321,3 +321,4 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dwg', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dfx', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'drawing/x-dwf', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/svg', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'video/3gpp', 1);
