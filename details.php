@@ -51,7 +51,7 @@ if (strchr($_GET['id'], '_')) {
 draw_header(msg('area_file_details'), $last_message);
 
 $request_id = (int) $_GET['id']; //save an original copy of id
-$state = (int) $_GET['state'];
+$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
 
 $file_data_obj = new FileData($request_id, $pdo);
 checkUserPermission($request_id, $file_data_obj->VIEW_RIGHT, $file_data_obj);
