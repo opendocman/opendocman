@@ -33,17 +33,16 @@ Check the docs folder for further documentation
 
   ex.  $>mkdir /usr/local/opendocman/data
 
- 4. Run composer: "./composer.phar install"
- 5. Load the opendocman page in your web browser
+ . Load the opendocman page in your web browser
 (ex. http://www.example.com/opendocman/ ) and follow the prompts.
 
- 6. Login as "admin" (with the password you set during the installation). 
+ 5. Login as "admin" (with the password you set during the installation). 
 
- 7. Edit your site settings at Admin->Site Settings
+ 6. Edit your site settings at Admin->Site Settings
 
- 8. Add departments, categories, users, etc.
+ 7. Add departments, categories, users, etc.
 
- 9. Enjoy!
+ 8. Enjoy!
 
 1.3 New Installation (Manual)
 
@@ -69,6 +68,4 @@ Check the docs folder for further documentation
     Change those to reflect the correct locations.
  7. Import your database.sql file into your database
 
- 8. Run composer: "./composer.phar install"
-
- 9. Visit the URL for your installation and login as admin (no password)
+ 8. Visit the URL for your installation and login as admin (no password)
