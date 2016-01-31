@@ -50,7 +50,8 @@ if (strchr($_REQUEST['id'], '_')) {
 
 draw_header(msg('area_file_details'), $last_message);
 
-$request_id = $_REQUEST['id']; //save an original copy of id
+$request_id = (int) $_GET['id']; //save an original copy of id
+$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
 
 $file_data_obj = new FileData($_REQUEST['id'], $pdo);
 checkUserPermission($_REQUEST['id'], $file_data_obj->VIEW_RIGHT, $file_data_obj);
@@ -216,7 +217,7 @@ if ($status > 0) {
 
 // Can they Read?
 if ($user_permission_obj->getAuthority($_REQUEST['id'], $file_data_obj) >= $user_permission_obj->READ_RIGHT) {
-    $view_link = "view_file.php?id=$full_requestId" . '&state=' . ($_REQUEST['state'] + 1);
+    $view_link = "view_file.php?id=$full_requestId" . '&state=' . ($state + 1);
     $GLOBALS['smarty']->assign('view_link', $view_link);
 }
 
@@ -227,7 +228,7 @@ if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))
     $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['pdo']);
     if ($user_perms->getAuthority($_REQUEST['id'], $file_data_obj) >= $user_perms->WRITE_RIGHT && !isset($revision_id) && !$file_data_obj->isArchived()) {
         // if so, display link for checkout
-        $check_out_link = "check-out.php?id=$request_id" . '&state=' . ($_REQUEST['state'] + 1) . '&access_right=modify';
+        $check_out_link = "check-out.php?id=$request_id" . '&state=' . ($state + 1) . '&access_right=modify';
         $GLOBALS['smarty']->assign('check_out_link', $check_out_link);
     }
 
@@ -235,7 +236,7 @@ if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))
     if ($user_permission_obj->getAuthority($_REQUEST['id'], $file_data_obj) >= $user_permission_obj->ADMIN_RIGHT && !@isset($revision_id) && !$file_data_obj->isArchived()) {
         // if user is also the owner of the file AND file is not checked out
         // additional actions are available 
-        $edit_link = "edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state'] + 1);
+        $edit_link = "edit.php?id=$_REQUEST[id]&state=" . ($state + 1);
         $GLOBALS['smarty']->assign('edit_link', $edit_link);
     }
 }
@@ -243,7 +244,7 @@ if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))
 ////end if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
-$history_link = "history.php?id=$request_id&state=" . ($_REQUEST['state'] + 1);
+$history_link = "history.php?id=$request_id&state=" . ($state + 1);
 $comments_link = 'toBePublished.php?submit=comments&id=' . $_REQUEST['id'];
 $my_delete_link = 'delete.php?mode=tmpdel&id0=' . $_REQUEST['id'];
 
