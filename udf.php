@@ -51,7 +51,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     udf_functions_add_udf();
 
     $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item']))) {
 
     draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
@@ -85,7 +85,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     // back to main page
     $last_message = urlencode(msg('message_udf_successfully_deleted') . ': id=' . $_REQUEST['id']);
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     draw_header(msg('select') . ' ' . msg('label_user_defined_fields'), $last_message);
 
@@ -109,7 +109,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
     $last_message = urlencode('Action canceled');
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit') {
 
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);

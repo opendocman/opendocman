@@ -34,7 +34,7 @@ draw_header(msg('area_personal_profile'), $last_message);
 
 <html>
     <br><br>
-    <INPUT type="hidden" name="callee" value="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <INPUT type="hidden" name="callee" value="profile.php">
     <table name="list" align="center" border="0">
            <tr><td><a href="user.php?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>"><?php echo msg('profilepage_update_profile')?></a></td></tr>
                         </table>

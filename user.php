@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 user.php - user administration
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
@@ -168,18 +170,18 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
         $get_full_name = $new_user_obj->getFullName();
         $new_user_full_name = $get_full_name[0] . ' ' . $get_full_name[1];
-        $mail_from = $full_name . ' <' . $user_obj->getEmailAddress() . '>';
-        $mail_headers = "From: $mail_from" . PHP_EOL;
+        $mail_from = e::h($full_name) . ' <' . $user_obj->getEmailAddress() . '>';
+        $mail_headers = "From: " . e::h($mail_from)  . PHP_EOL;
         $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
         $mail_subject = msg('message_account_created_add_user');
-        $mail_greeting = $new_user_full_name . ":" . PHP_EOL . msg('email_i_would_like_to_inform');
+        $mail_greeting = e::h($new_user_full_name) . ":" . PHP_EOL . msg('email_i_would_like_to_inform');
         $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . PHP_EOL . PHP_EOL;
         $mail_body .= $GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
         $mail_body .= msg('username') . ': ' . $new_user_obj->getName() . PHP_EOL . PHP_EOL;
         if ($GLOBALS['CONFIG']['authen'] == 'mysql') {
-            $mail_body .= msg('password') . ': ' . $_POST['password'] . PHP_EOL . PHP_EOL;
+            $mail_body .= msg('password') . ': ' . e::h($_POST['password']) . PHP_EOL . PHP_EOL;
         }
-        $mail_salute =  msg('email_salute') . ",". PHP_EOL . $full_name;
+        $mail_salute =  msg('email_salute') . ",". PHP_EOL . e::h($full_name);
         $mail_to = $new_user_obj->getEmailAddress();
         $mail_flags = "-f".$user_obj->getEmailAddress();
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
@@ -191,7 +193,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         // Call the plugin API call for this section
         callPluginMethod('onAfterAddUser');
 
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
     }
 } elseif (isset($_POST['submit']) && 'Delete User' == $_POST['submit']) {
     // Make sure they are an admin
@@ -222,7 +224,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     // back to main page
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
     // If demo mode, don't allow them to update the demo account
     if (@$GLOBALS['CONFIG']['demo'] == 'True') {
@@ -252,6 +254,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $user_list = $stmt->fetchAll();
 
     $GLOBALS['smarty']->assign('user_list', $user_list);
+    $GLOBALS['smarty']->assign('state', $_REQUEST['state']);
     display_smarty_template('user_delete_pick.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
@@ -334,14 +337,14 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
             if (isset($department_reviewer)) {
                 for ($r = 0; $r < sizeof($department_reviewer); $r++) {
                     if ($all_departments[$d][0] == $department_reviewer[$r][0]) {
-                        $department_select_options[] = '<option value="' . $all_departments[$d][0] . '" selected>' . $all_departments[$d][1] . '</option>';
+                        $department_select_options[] = '<option value="' . e::h($all_departments[$d][0]) . '" selected>' . e::h($all_departments[$d][1]) . '</option>';
                         $found = true;
                         $r = sizeof($department_reviewer);
                     }
                 }
             }
             if (!$found) {
-                $department_select_options[] = '<option value="' . $all_departments[$d][0] . '">' . $all_departments[$d][1] . '</option>';
+                $department_select_options[] = '<option value="' . e::h($all_departments[$d][0]) . '">' . e::h($all_departments[$d][1]) . '</option>';
             }
         }
 
@@ -478,7 +481,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     // back to main page
 
     $last_message = urlencode(msg('message_user_successfully_updated'));
-    header('Location: out.php?last_message=' . $last_message);
+    header('Location: out.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('userpage_modify_user'), $last_message);
 
@@ -506,7 +509,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } else {
     header('Location: admin.php?last_message=' . urlencode('Unrecognizalbe action'));
 }

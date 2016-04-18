@@ -5,23 +5,23 @@
             </tr>
             {foreach from=$settings_array item=i}
             <tr>
-                <td>{$i.name}</td>
+                <td>{$i.name|escape:'html'}</td>
                 <td>
                 {if $i.validation eq 'bool'}
-                    <select name="{$i.name}">
+                    <select name="{$i.name|escape:'html'}">
                         <option value="True" {if $i.value eq 'True'} selected="selected"{/if}>True</option>
                         <option value="False" {if $i.value eq 'False'} selected="selected"{/if}>False</option>
                     </select>
                 {elseif $i.name eq 'theme'}
                     <select name="theme">
                         {foreach from=$themes item=theme}
-                            <option value="{$theme}" {if $i.value eq $theme}selected="selected"{/if}>{$theme}</option>
+                            <option value="{$theme|escape}" {if $i.value eq $theme}selected="selected"{/if}>{$theme|escape:'html'}</option>
                         {/foreach}
                     </select>
                 {elseif $i.name eq 'language'}
                     <select name="language">
                         {foreach from=$languages item=language}
-                            <option value="{$language}" {if $i.value eq $language} selected="selected"{/if}>{$language}</option>
+                            <option value="{$language|escape}" {if $i.value eq $language} selected="selected"{/if}>{$language|escape:'html'}</option>
                         {/foreach}
                     </select>
                  {elseif $i.name eq 'file_expired_action'}
@@ -38,19 +38,19 @@
                 {elseif $i.name eq 'root_id'}
                     <select name="root_id">
                         {foreach from=$useridnums item=useridnum}
-                            <option value="{$useridnum[0]}" {if $i.value eq $useridnum[0]} selected="selected"{/if}>{$useridnum[1]}</option>
+                            <option value="{$useridnum[0]|escape}" {if $i.value eq $useridnum[0]} selected="selected"{/if}>{$useridnum[1]|escape:'html'}</option>
                         {/foreach}
                     </select>
                 {else}
-                    <input size="40" name="{$i.name}" type="text" value="{$i.value}">
+                    <input size="40" name="{$i.name|escape}" type="text" value="{$i.value|escape:'html'}">
                 {/if}
                 </td>
-                <td><em>{$i.description}</em></td>
+                <td><em>{$i.description|escape:'html'}</em></td>
             </tr>
             {/foreach}
                 <td align="center">
                     <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</buttons>
+                        <button class="positive" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
                     </div>
                 </td>
                 <td align="center">

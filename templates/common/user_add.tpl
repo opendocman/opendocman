@@ -37,7 +37,7 @@
             <td>
                 <select name="department">
                     {foreach from=$department_list item=item name=department_list}
-                    <option value={$item.id}>{$item.name}</option>
+                    <option value={$item.id|escape}>{$item.name|escape:'html'}</option>
                     {/foreach}
                 </select>
             </td>
@@ -52,7 +52,7 @@
             <td id="userReviewDepartmentListTd">
                 <select class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" />
                 {foreach from=$department_list item=item name=department_list}
-                    <option value={$item.id}>{$item.name}</option>
+                    <option value={$item.id|escape}>{$item.name|escape:'html'}</option>
                 {/foreach}
                 </select>
             </td>

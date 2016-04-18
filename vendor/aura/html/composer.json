@@ -1,0 +1,53 @@
+{
+    "name": "aura/html",
+    "type": "library",
+    "description": "Provides HTML escapers and helpers, including form input helpers.",
+    "keywords": [
+        "html",
+        "form",
+        "input",
+        "helper",
+        "helpers",
+        "escape",
+        "escaper",
+        "escapers",
+        "escaping"
+    ],
+    "homepage": "https://github.com/auraphp/Aura.Html",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Aura.Html Contributors",
+            "homepage": "https://github.com/auraphp/Aura.Html/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aura\\Html\\": "src/",
+            "Aura\\Html\\_Config\\": "config/"
+        }
+    },
+    "extra": {
+        "aura": {
+            "type": "library",
+            "config": {
+                "common": "Aura\\Html\\_Config\\Common"
+            }
+        },
+        "branch-alias": {
+            "dev-develop-2": "2.1.x-dev"
+        }
+    },
+    "require-dev": {
+        "aura/di": "~2.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Html\\": "tests/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
+        }
+    }
+}

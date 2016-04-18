@@ -1,8 +1,10 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 delete.php - delete a file from the respository and the db
 Copyright (C) 2002-2004  Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011  Stephen Lawrence Jr.
+Copyright (C) 2005-2016  Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -44,7 +46,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
         // Make sure directory is writable
         if (!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775)) {
             $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
-            header('Location:error.php?ec=23&last_message=' .$last_message);
+            header('Location:error.php?ec=23&last_message=' . urlencode($last_message));
             exit;
         }
     }
@@ -65,14 +67,13 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     }
     // delete from directory
     // clean up and back to main page
-    $last_message = urlencode(msg('message_document_has_been_archived'));
+    $last_message = msg('message_document_has_been_archived');
         
     // Call the plugin API call for this section
     callPluginMethod('onAfterArchiveFile');
     
-    header('Location: out.php?last_message=' . $last_message);
+    header('Location: out.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive') {
-    isset($_REQUEST['mode']) ? $_REQUEST['mode'] : '';
     
     //publishable=2 for archive deletion
     $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";
@@ -90,7 +91,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     $luserperm_obj = new UserPermission($_SESSION['uid'], $pdo);
     
     draw_header(msg('area_deleted_files'), $last_message);
-    $page_url = $_SERVER['PHP_SELF'] . '?mode=' . $_REQUEST['mode'];
+    $page_url = e::h($_SERVER['PHP_SELF']) . '?mode=' . $_REQUEST['mode'];
 
     $user_obj = new User($_SESSION['uid'], $pdo);
     $userperms = new UserPermission($_SESSION['uid'], $pdo);
@@ -110,7 +111,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             exit;
         }
     }
-    header('Location:' . $redirect . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
+    header('Location:' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete') {
     if (isset($_REQUEST['checkbox'])) {
         foreach ($_REQUEST['checkbox'] as $fileId) {
@@ -119,7 +120,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
         }
     }
-    header('Location:' . $redirect . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
+    header('Location:' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
 }
 
 draw_footer();

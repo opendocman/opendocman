@@ -1,0 +1,39 @@
+{
+    "name": "foa/html-view-bundle",
+    "description": "Integration of Aura.Html and Aura.View with Aura.Di",
+    "keywords": [
+        "view",
+        "html",
+        "helper",
+        "di"
+    ],
+    "type": "library",
+    "require": {
+        "aura/view": "~2.0",
+        "aura/html": "~2.1",
+        "aura/di": "~2.0"
+    },
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FOA\\Html_View_Bundle\\_Config\\": "config/"
+        }
+    },
+    "extra": {
+        "aura": {
+            "type": "kernel",
+            "config": {
+                "common": "FOA\\Html_View_Bundle\\_Config\\Common"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}

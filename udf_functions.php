@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 udf_functions.php - adds user definced functions
 Copyright (C) 2007  Stephen Lawrence Jr., Jonathan Miner
@@ -46,16 +48,16 @@ if (!defined('udf_functions')) {
         foreach ($result as $row) {
             echo '<tr><td>';
             if (file_exists("udf_help.html")) {
-                echo '<a class="body" href="udf_help.html#Add_File_'.$row[2].'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'.$row[2].'</a>';
+                echo '<a class="body" href="udf_help.html#Add_File_'. e::h($row[2]) .'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'. e::h($row[2]) .'</a>';
             } else {
-                echo $row[2];
+                echo e::h($row[2]);
             }
 
             echo '</td><td>';
 
             //Type is Select List
             if ($row[1] == 1) {
-                echo '<select name="'.$row[0].'">';
+                echo '<select name="'. e::h($row[0]) .'">';
                 $query = "
                   SELECT
                     id,
@@ -68,7 +70,7 @@ if (!defined('udf_functions')) {
                 $sub_result = $stmt->fetchAll();
 
                 foreach ($sub_result as $sub_row) {
-                    echo '<option value="'.$sub_row[0].'">'.$sub_row[1].'</option>';
+                    echo '<option value="'. e::h($sub_row[0]) .'">'. e::h($sub_row[1]) .'</option>';
                 }
                 echo '</select>';
             }
@@ -87,13 +89,13 @@ if (!defined('udf_functions')) {
                 $sub_result = $stmt->fetchAll();
 
                 foreach ($sub_result as $sub_row) {
-                    echo '<input type=radio name="'.$row[0].'" value="'.$sub_row[0].'">'.$sub_row[1];
+                    echo '<input type=radio name="'. e::h($row[0]) .'" value="'. e::h($sub_row[0]) .'">'. e::h($sub_row[1]);
                 }
             }
 
             // Type is Text
             if ($row[1] == 3) {
-                echo '<input tabindex="5" type="Text" name="'.$row[0].'" size="16">';
+                echo '<input tabindex="5" type="Text" name="'. e::h($row[0]) .'" size="16">';
             }
             
             //CHM
@@ -107,14 +109,14 @@ if (!defined('udf_functions')) {
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                echo '<select name="'.$row[0].'" onchange="showdropdowns(this.value, \'add\',\'' . $field_name . '\')">';
+                echo '<select name="'. e::h($row[0]) .'" onchange="showdropdowns(this.value, \'add\',\'' . e::h($field_name) . '\')">';
                 echo '<option value="">Please select</option>';
                 foreach ($sub_result as $sub_row) {
-                    echo '<option value="'.$sub_row[0].'">'.$sub_row[1].'</option>';
+                    echo '<option value="'. e::h($sub_row[0]) .'">'. e::h($sub_row[1]) .'</option>';
                 }
                 echo '</select>';
                 
-                echo '<div id="txtHint'.$field_name.'">Secondary items will show up here.</div>';
+                echo '<div id="txtHint'. e::h($field_name) .'">Secondary items will show up here.</div>';
             }
             //CHM
 
@@ -235,17 +237,17 @@ if (!defined('udf_functions')) {
 
                 foreach ($sub_result as $sub_row) {
                     if ($row[1] == 1) {
-                        echo '<option value="' . $sub_row[0] . '"';
+                        echo '<option value="' . e::h($sub_row[0]) . '"';
                         if ($sel == $sub_row[0]) {
                             echo ' selected';
                         }
-                        echo '>' . $sub_row[1] . '</option>';
+                        echo '>' . e::h($sub_row[1]) . '</option>';
                     } elseif ($row[1] == 2) {
-                        echo '<input type=radio name="' . $row[2] . '" value="' . $sub_row[0] . '"';
+                        echo '<input type=radio name="' . e::h($row[2]) . '" value="' . e::h($sub_row[0]) . '"';
                         if ($sel == $sub_row[0]) {
                             echo ' checked';
                         }
-                        echo '>' . $sub_row[1];
+                        echo '>' . e::h($sub_row[1]);
                     }
                 }
                 if ($row[1] == 1) {
@@ -253,7 +255,7 @@ if (!defined('udf_functions')) {
                 }
                 echo '</td></tr>';
             } elseif ($row[1] == 3) {
-                echo '<tr><td>' . $row[0] . '</td><td>';
+                echo '<tr><td>' . e::h($row[0]) . '</td><td>';
                 $query = "
                   SELECT
                     {$row['2']}
@@ -266,15 +268,15 @@ if (!defined('udf_functions')) {
                 $stmt->execute(array(':id' => $_REQUEST['id']));
                 $sub_row = $stmt->fetch();
 
-                echo '<input type="text" name="' . $row[2] . '" size="50" value="' . $sub_row[0] . '">';
+                echo '<input type="text" name="' . e::h($row[2]) . '" size="50" value="' . e::h($sub_row[0]) . '">';
             }
             //CHM
             elseif ($row[1] == 4) {
                 $explode_row = explode('_', $row[2]);
                 $field_name = $explode_row[2];
                 
-                echo '<tr><td>' . $row[0] . '</td><td>';
-                echo '<select name="'.$row[2].'"  onchange="showdropdowns(this.value, \'edit\',\'' . $field_name . '\')">';
+                echo '<tr><td>' . e::h($row[0]) . '</td><td>';
+                echo '<select name="'. e::h($row[2]) .'"  onchange="showdropdowns(this.value, \'edit\',\'' . e::h($field_name) . '\')">';
                 echo '<option value="">Please select one</option>';
 
                 $query = "
@@ -298,11 +300,11 @@ if (!defined('udf_functions')) {
 
                 foreach ($sub_result as $sub_row) {
                     if ($row[1] == 4) {
-                        echo '<option value="' . $sub_row[0] . '"';
+                        echo '<option value="' . e::h($sub_row[0]) . '"';
                         if ($sel_pri == $sub_row[0]) {
                             echo ' selected';
                         }
-                        echo '>' . $sub_row[1] . '</option>';
+                        echo '>' . e::h($sub_row[1]) . '</option>';
                     }
                 }
                 echo '</select>';
@@ -310,7 +312,7 @@ if (!defined('udf_functions')) {
                 echo '</td></tr>';
                 
                 //secondary dropdown
-                echo '<tr><td>&nbsp;</td><td><div id="txtHint'.$field_name.'">';
+                echo '<tr><td>&nbsp;</td><td><div id="txtHint'. e::h($field_name) .'">';
                 
                 $query = "
                   SELECT
@@ -342,14 +344,14 @@ if (!defined('udf_functions')) {
                     $stmt->execute(array(':sel_pri' => $sel_pri));
                     $sub_result = $stmt->fetchAll();
 
-                    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'.$field_name.'_secondary">';
+                    echo '<select id="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'. e::h($field_name) .'_secondary" name="' . $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_'. e::h($field_name) .'_secondary">';
                     foreach ($sub_result as $sub_row) {
                         if ($row[1] == 4) {
-                            echo '<option value="' . $sub_row[0] . '"';
+                            echo '<option value="' . e::h($sub_row[0]) . '"';
                             if ($sel == $sub_row[0]) {
                                 echo ' selected';
                             }
-                            echo '>' . $sub_row[1] . '</option>';
+                            echo '>' . e::h($sub_row[1]) . '</option>';
                         }
                     }
                 }
@@ -446,7 +448,7 @@ if (!defined('udf_functions')) {
                 $sub_row = $stmt->fetch();
 
                 if ($stmt->rowCount() > 0) {
-                    $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
+                    $return_string .= '<th valign=top align=right>' . e::h($row[0]) . ':</th><td>' . e::h($sub_row[0]) . '</td></tr>';
                 }
             } elseif ($row[1] == 3) {
                 $query = "SELECT {$row[2]} FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE {$GLOBALS['CONFIG']['db_prefix']}data.id = :file_id ";
@@ -455,7 +457,7 @@ if (!defined('udf_functions')) {
                 $sub_row = $stmt->fetch();
 
                 if ($stmt->rowCount() > 0) {
-                    $return_string .=  '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
+                    $return_string .=  '<th valign=top align=right>' . e::h($row[0]) . ':</th><td>' . e::h($sub_row[0]) . '</td></tr>';
                 }
             }
             //CHM
@@ -466,7 +468,7 @@ if (!defined('udf_functions')) {
                 $sub_row = $stmt->fetch();
 
                 if ($stmt->rowCount() > 0) {
-                    $return_string .= '<th valign=top align=right>' . $row[0] . ':</th><td>' . $sub_row[0] . '</td></tr>';
+                    $return_string .= '<th valign=top align=right>' . e::h($row[0]) . ':</th><td>' . e::h($sub_row[0]) . '</td></tr>';
                 }
             }
             //CHM
@@ -484,8 +486,8 @@ if (!defined('udf_functions')) {
         global $pdo;
 
         echo '<td valign=top><table border=0>';
-        echo '<tr><td><b><a href="udf.php?submit=add&state=' . ($_REQUEST['state']+1).'">' .msg('label_add'). '</a></b></td></tr>';
-        echo '<tr><td><b><a href="udf.php?submit=deletepick&state=' . ($_REQUEST['state']+1).'">' .msg('label_delete'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=add&state=' . (e::h($_REQUEST['state'] + 1)).'">' .msg('label_add'). '</a></b></td></tr>';
+        echo '<tr><td><b><a href="udf.php?submit=deletepick&state=' . (e::h($_REQUEST['state'] + 1)).'">' .msg('label_delete'). '</a></b></td></tr>';
         echo '<tr><td><hr></td></tr>';
         $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
         $stmt = $pdo->prepare($query);
@@ -493,7 +495,7 @@ if (!defined('udf_functions')) {
         $result = $stmt->fetchAll();
 
         foreach ($result as $row) {
-            echo '<tr><td><b><a href="udf.php?submit=edit&udf='.$row[0].'&state=' . ($_REQUEST['state']+1).'">'.$row[2].'</a></b></td></tr>';
+            echo '<tr><td><b><a href="udf.php?submit=edit&udf='. e::h($row[0]) .'&state=' . (e::h($_REQUEST['state'] + 1)).'">'. e::h($row[2]) .'</a></b></td></tr>';
         }
         echo '</table></td>';
     }
@@ -510,8 +512,8 @@ if (!defined('udf_functions')) {
         foreach($result as $row) {
             if ( $row[1] == 1 || $row[1] == 2 || $row[1] == 3 )
             {
-                echo "case '".$row[2]."':".PHP_EOL;
-                echo "      info_Array = ".$row[0]."_array;".PHP_EOL;
+                echo "case '". e::h($row[2]) ."':".PHP_EOL;
+                echo "      info_Array = ". e::h($row[0]) ."_array;".PHP_EOL;
                 echo "      break;".PHP_EOL;
             }
         }
@@ -536,7 +538,7 @@ if (!defined('udf_functions')) {
                 echo $row[0] . "_array = new Array();".PHP_EOL;              
                 $index = 0;
                 foreach($sub_result as $sub_row) {
-                    echo "\t" . $row[0] . "_array[" . $index . "] = new Array(\"" . $sub_row[1] . "\", " . $sub_row[0] . ");".PHP_EOL;
+                    echo "\t" . e::h($row[0]) . "_array[" . e::h($index) . "] = new Array(\"" . e::h($sub_row[1]) . "\", " . e::h($sub_row[0]) . ");".PHP_EOL;
                     $index++;
                 }
             }
@@ -554,7 +556,7 @@ if (!defined('udf_functions')) {
 
         foreach ($result as $row) {
             if ($row[1] == 1 || $row[1] == 2) {
-                echo '<option id="'.$id.'" value="'.$row[2].'">'.$row[2].'</option>';
+                echo '<option id="'. e::h($id) .'" value="'. e::h($row[2]) .'">'. e::h($row[2]) .'</option>';
                 $id++;
             }
         }
@@ -565,12 +567,12 @@ if (!defined('udf_functions')) {
         global $pdo;
 
         if (empty($_REQUEST['table_name'])) {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
+            header('Location: admin.php?last_message=' . urlencode(msg('message_udf_cannot_be_blank')));
             exit;
         }
 
         if (empty($_REQUEST['display_name'])) {
-            header('Location: admin.php?last_message=' . msg('message_udf_cannot_be_blank'));
+            header('Location: admin.php?last_message=' . urlencode(msg('message_udf_cannot_be_blank')));
             exit;
         }
         
@@ -846,7 +848,7 @@ if (!defined('udf_functions')) {
         $result = $stmt->fetchAll();
 
         foreach ($result as $row) {
-            echo '<option value="'.$row[2].'">'.$row[2].'</option>';
+            echo '<option value="'. e::h($row[2]) .'">'. e::h($row[2]) .'</option>';
         }
     }
 

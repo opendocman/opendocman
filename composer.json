@@ -1,0 +1,13 @@
+{
+  "config": {
+    "preferred-install": "dist"
+  },
+  "require": {
+    "aura/html": "^2.4",
+    "foa/html-view-bundle": "2.*",
+    "owasp/csrf-protector-php": "dev-master"
+  },
+  "require-dev": {
+    "phplint/phplint": "^0.0.1"
+  }
+}

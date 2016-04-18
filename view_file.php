@@ -53,7 +53,13 @@ if (!isset($_GET['submit'])) {
         $prefix = (substr($realname, 0, (strrpos($realname, "."))));
         $suffix = strtolower((substr($realname, ((strrpos($realname, ".")+1)))));
     }
-    
+
+    // If we have a revision ID lets use the original
+    // request id that included the file id and revision number (ex. 1_0)
+    if (isset($revision_id)) {
+        $file_id = $request_id;
+    }
+
     $mimetype = File::mime_by_ext($suffix);
 
     $GLOBALS['smarty']->assign('mimetype', $mimetype);
@@ -93,12 +99,12 @@ if (!isset($_GET['submit'])) {
     }
 } elseif ($_GET['submit'] == 'Download') {
     $file_obj = new FileData($_REQUEST['id'], $pdo);
-    
+
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
-    
+
     $realname = $file_obj->getName();
-    
+
     if (isset($revision_id)) {
         $filename = $revision_dir . $request_id . ".dat";
     } elseif ($file_obj->isArchived()) {
@@ -121,5 +127,4 @@ if (!isset($_GET['submit'])) {
     }
 } else {
     echo msg('message_nothing_to_do');
-    echo 'submit is ' . $_GET['submit'];
 }

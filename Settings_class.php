@@ -144,7 +144,7 @@ if (!defined('Settings_class')) {
             if ($handle = opendir($path)) {
                 while (false !== ($file = readdir($handle))) {
                     // Filter out any other types of folders that might be in here
-                    if ($file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh' && $file != 'common' && $file != 'DataTables') {
+                    if ($file != 'layouts' && $file != 'views' && $file != "." && $file != ".." && $file != ".svn" && $file != 'README' && $file != 'sync.sh' && $file != 'common' && $file != 'DataTables') {
                         array_push($file_list, $file);
                     }
                 }

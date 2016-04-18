@@ -61,6 +61,8 @@ if (file_exists('../config.php')) {
     Header('Location: ../index.php');
 }
 
+use Aura\Html\Escaper as e;
+
 // Lets get a connection going
 
 $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
@@ -527,7 +529,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 } elseif ($is_upgrade) {
     ?>
         <tr>
-            <td>Your current Database schema version: <strong><?php echo $db_version;
+            <td>Your current Database schema version: <strong><?php echo e::h($db_version);
     ?></strong><br/><br/>
                 Required Database schema version: <?php echo REQUIRED_VERSION;
     ?><br/><br />

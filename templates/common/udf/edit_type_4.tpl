@@ -1,6 +1,6 @@
 <form id="editUdfForm" method="post">
     <input type="hidden" name="submit" value="edit">
-    <input type="hidden" name="udf" value="{$udf}">
+    <input type="hidden" name="udf" value="{$udf|escape:'html'}">
 
     <table>
         <tr>
@@ -10,13 +10,13 @@
         <tr>
             <th align="right">{$g_lang_label_display} {$g_lang_label_name}:</th>
             <td>
-                <input maxlength="16" name="display_name" value="{$display_name}" class="required">
+                <input maxlength="16" name="display_name" value="{$display_name|escape:'html'}" class="required">
             </td>
         </tr>
         <tr>
             <th align="right">{$g_lang_label_type_pr_sec}:</th>
             <td>
-                <select name="type_pr_sec" class="required" onchange="showdivs(this.value,'{$udf}')">
+                <select name="type_pr_sec" class="required" onchange="showdivs(this.value,'{$udf|escape:'html'}')">
                     <option value="primary">Primary Items</option>
                     <option value="secondary">Secondary Items</option>
                 </select>
@@ -33,9 +33,9 @@
             {cycle values='FCFCFC, E3E7F9' assign=CellCSS}
             <tr bgcolor="{$CellCSS}">
                 <td align="center">
-                    <input type="checkbox" name="x{$item[0]}">
+                    <input type="checkbox" name="x{$item[0]|escape:'html'}">
                 </td>
-                <td>{$item[1]}</td>
+                <td>{$item[1]|escape:'html'}</td>
             </tr>
         {/foreach}
         <tr>

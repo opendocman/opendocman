@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
    department.php - Administer Departments
    Copyright (C) 2002-2011 Stephen Lawrence Jr.
@@ -94,7 +96,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     if ($department == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
         exit;
     }
     //Check to see if this department is already in DB
@@ -104,7 +106,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     if ($stmt->rowCount() != 0) {
-        header('Location: error.php?ec=3&message=' . htmlentities($department) . ' already exist in the database');
+        header('Location: error.php?ec=3&message=' . urlencode($department) . ' already exist in the database');
         exit;
     }
 
@@ -138,7 +140,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 
     $num_rows = $stmt->rowCount();
     if ($num_rows != 1) {
-        header('Location: error.php?ec=14&message=unable to identify ' . $department);
+        header('Location: error.php?ec=14&message=' . urlencode('unable to identify ' . $department));
         exit;
     }
 
@@ -169,7 +171,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     // Call the plugin API
     callPluginMethod('onDepartmentAddSave', $result['id']);
   
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Show Department') {
     // query to show item
     draw_header(msg('area_department_information'), $last_message);
@@ -182,8 +184,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 
     echo '<table name="main" cellspacing="15" border="0">';
     echo '<th>ID</th><th>' . msg('department') . '</th>';
-    echo '<tr><td>' . $result['id'] . '</td>';
-    echo '<td>' . $result['name'] . '</td></tr>';
+    echo '<tr><td>' . e::h($result['id']) . '</td>';
+    echo '<td>' . e::h($result['name']) . '</td></tr>';
     ?>
                         <tr>
                             <td align="center" colspan="2"><b><?php echo msg('label_users_in_department')?></b></td>
@@ -208,11 +210,10 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<tr><td colspan="2">' . $row['first_name'] . ' ' . $row['last_name'] . '</td></tr>';
+        echo '<tr><td colspan="2">' . e::h($row['first_name']) . ' ' . e::h($row['last_name']) . '</td></tr>';
     }
     ?>
-                        <form action="admin.php?last_message=<?php echo $last_message;
-    ?>" method="POST" enctype="multipart/form-data">
+                        <form action="admin.php" method="POST" enctype="multipart/form-data">
                             <tr>
                                 <td colspan="4" align="center"><div class="buttons"><button class="regular" type="Submit" name="" value="Back"><?php echo msg('button_back')?></button></div></td>
                             </tr>
@@ -225,11 +226,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $showpick='';
     ?>
                             <table border="0" cellspacing="5" cellpadding="5">
-                                <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>?last_message=<?php echo htmlspecialchars($last_message);
-    ?>" method="POST" enctype="multipart/form-data">
+                                <form action="department.php" method="POST" enctype="multipart/form-data">
                                     <tr>
-                                    <input type="hidden" name="state" value="<?php echo($_GET['state']+1);
+                                    <input type="hidden" name="state" value="<?php echo(e::h($_GET['state']+1));
     ?>">
                                     <td><b><?php echo msg('department')?></b></td>
                                     <td colspan=3><select name="item">
@@ -240,7 +239,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+        echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
                                         </select></td>
@@ -288,8 +287,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . $row['id'] . '</td></tr>';
-        echo '<tr><td>'.msg('label_name').' :</td><td>' . $row['name'] . '</td></tr>';
+        echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . e::h($row['id']) . '</td></tr>';
+        echo '<tr><td>'.msg('label_name').' :</td><td>' . e::h($row['name']) . '</td></tr>';
 
 
         ?>
@@ -304,7 +303,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                   <select name="assigned_id">
                       <?php
                             foreach ($reassign_list_query_result as $row) {
-                                echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+                                echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
                             }
         ?>
                     </select>
@@ -331,9 +330,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
-        <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+        <form action="department.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
                 <td><b><?php echo msg('department')?></b></td>
@@ -345,8 +343,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        $str = '<option value="' . $row['id'] . '"';
-        $str .= '>' . $row['name'] . '</option>';
+        $str = '<option value="' . e::h($row['id']) . '"';
+        $str .= '>' . e::h($row['name']) . '</option>';
         echo $str;
     }
     $deletepick='';
@@ -416,8 +414,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $stmt->execute(array(':id' => $_REQUEST['id']));
 
     // back to main page
-    $last_message = urlencode(msg('message_all_actions_successfull') . ' id:' . (int) $_REQUEST['id']);
-    header('Location: admin.php?last_message=' . $last_message);
+    $last_message = msg('message_all_actions_successfull') . ' id:' . (int) $_REQUEST['id'];
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify') {
     $dept_obj = new Department($_REQUEST['item'], $pdo);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(), $last_message);
@@ -438,9 +436,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                                             <b><?php echo msg('department')?></b>
                                         </td>
                                         <td colspan="3">
-                                            <input type="textbox" name="name" value="<?php echo $row['name'];
+                                            <input type="textbox" name="name" value="<?php echo e::h($row['name']);
         ?>" class="required" maxlength="40">
-                                            <input type="hidden" name="id" value="<?php echo $row['id'];
+                                            <input type="hidden" name="id" value="<?php echo e::h($row['id']);
         ?>">
                                             <?php
                                             // Call the plugin API
@@ -476,9 +474,8 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('area_choose_department'), $last_message);
     ?>
-                            <form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>" method="GET" enctype="multipart/form-data">
-                                <INPUT type="hidden" name="state" value="<?php echo($_REQUEST['state']+1);
+                            <form action="department.php" method="GET" enctype="multipart/form-data">
+                                <INPUT type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
                                 <table border="0" cellspacing="5" cellpadding="5">
                                     <tr>
@@ -492,7 +489,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+        echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
                                         </td>
@@ -525,7 +522,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     if ($name == '') {
         $last_message=msg('departmentpage_department_name_required');
         
-        header('Location: admin.php?last_message=' . $last_message);
+        header('Location: admin.php?last_message=' . urlencode($last_message));
         exit;
     }
     
@@ -539,7 +536,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $result = $stmt->fetchAll();
 
     if ($stmt->rowCount() != 0) {
-        header('Location: error.php?ec=3&last_message=' . $_POST['name'] . ' already exist in the database');
+        header('Location: error.php?ec=3&last_message=' . urlencode($_POST['name'] . ' already exist in the database'));
         exit;
     }
 
@@ -557,7 +554,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     // Call the plugin API
     callPluginMethod('onDepartmentModifySave', $_REQUEST);
     
-    header('Location: admin.php?last_message=' . $last_message);
+    header('Location: admin.php?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
     header('Location: admin.php?last_message=' . urlencode(msg('message_action_cancelled')));
 } else {

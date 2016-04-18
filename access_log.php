@@ -84,7 +84,14 @@ foreach ($result as $row) {
     );
 }
 
-$GLOBALS['smarty']->assign('accesslog_array', $accesslog_array);
-display_smarty_template('access_log.tpl');
+$view->setData([
+    'accesslog_array' => $accesslog_array,
+    'showCheckBox' => false,
+    'form' => 0
+]);
+
+$view->setView('access_log');
+$view->setLayout('default');
+echo $view->__invoke();
 
 draw_footer();

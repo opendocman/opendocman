@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 check-in.php - uploads a new version of a file
 Copyright (C) 2002-2011 Stephen Lawrence Jr.
@@ -81,21 +83,20 @@ if (!isset($_POST['submit'])) {
         // start displaying form
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
-    <form action="<?php echo $_SERVER['PHP_SELF'];
-        ?>" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $_GET['id'];
+    <form action="check-in.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
         ?>">
         <tr>
             <td><b><?php echo msg('label_filename');
         ?></b></td>
-            <td><b><?php echo $real_name;
+            <td><b><?php echo e::h($real_name);
         ?></b></td>
         </tr>
 
         <tr>
             <td><b><?php echo msg('label_description');
         ?></b></td>
-            <td><?php echo $description;
+            <td><?php echo e::h($description);
         ?></td>
         </tr>
 
@@ -279,7 +280,7 @@ else {
         $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL;
         $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . PHP_EOL;
         $mail_body2.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
-        $mail_body2.=msg('addpage_uploader') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+        $mail_body2.=msg('addpage_uploader') . ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
         $mail_body2.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
         $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
         $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;

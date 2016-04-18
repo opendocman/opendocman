@@ -12,7 +12,7 @@
                     <form action="filetypes.php" method="POST" enctype="multipart/form-data">
                         <select class="multiView" id="types" multiple="multiple" name="types[]">
                         {foreach from=$filetypes_array item=i}
-                            <option value="{$i.id}">{$i.type}</option>
+                            <option value="{$i.id|escape}">{$i.type|escape:'html'}</option>
                         {/foreach}
                         </select>
                     </td>

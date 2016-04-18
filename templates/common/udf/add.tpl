@@ -1,4 +1,4 @@
-<form id="udfAddForm" action="udf.php?last_message={$last_message}" method="GET" enctype="multipart/form-data">
+<form id="udfAddForm" action="udf.php?last_message={$last_message|escape:'html'}" method="GET" enctype="multipart/form-data">
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
             <td><b>{$g_lang_label_name}(limit 5)</b></td>

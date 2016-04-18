@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 history.php - display revision history
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
@@ -49,7 +51,7 @@ if ($datafile->getError() != null) {
 } else {
     // obtain data from resultset
 
-$owner_full_name = $datafile->getOwnerFullName();
+    $owner_full_name = $datafile->getOwnerFullName();
     $owner = $owner_full_name[1].', '.$owner_full_name[0];
     $real_name = $datafile->getRealName();
     $category = $datafile->getCategoryName();
@@ -57,6 +59,7 @@ $owner_full_name = $datafile->getOwnerFullName();
     $description = $datafile->getDescription();
     $comments = $datafile->getComment();
     $status = $datafile->getStatus();
+    $id = $_REQUEST['id'];
 
 // corrections
 if ($description == '') {
@@ -66,9 +69,9 @@ if ($description == '') {
         $comments = msg('message_no_author_comments_available');
     }
     if ($datafile->isArchived()) {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . e::h($id) . '.dat';
     } else {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+        $filename = $GLOBALS['CONFIG']['dataDir'] . e::h($id) . '.dat';
     }
     ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
@@ -83,13 +86,13 @@ if ($status == 0) {
     echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
 }
     echo '</td>';
-    echo '<td align="left"><font size="+1">'.$real_name.'</font></td>';
+    echo '<td align="left"><font size="+1">'. e::h($real_name) .'</font></td>';
     ?>
 </tr>
 
 <tr>
 <th valign=top align=right><?php echo msg('historypage_category');
-    ?></th><td><?php echo $category;
+    ?></th><td><?php echo e::h($category);
     ?></td>
 </tr>
 
@@ -107,26 +110,26 @@ if ($status == 0) {
 
 <tr>
 <th valign=top align=right><?php echo msg('historypage_owner');
-    ?></th><td> <?php echo $owner;
+    ?></th><td> <?php echo e::h($owner);
     ?></td>
 </tr>
 
 <tr>
 <th valign=top align=right><?php echo msg('historypage_description');
-    ?></th><td> <?php echo $description;
+    ?></th><td> <?php echo e::h($description);
     ?></td>
 </tr>
 
 <tr>
 <th valign=top align=right><?php echo msg('historypage_comment');
-    ?></th><td> <?php echo $comments;
+    ?></th><td> <?php echo e::h($comments);
     ?></td>
 </tr>
 <tr>
 <th valign=top align=right><?php echo msg('historypage_revision');
     ?></th><td>
     <div id="revision_current">
-<?php 
+<?php
 if (isset($revision_id)) {
     if ($revision_id == 0) {
         echo msg('historypage_original_revision');
@@ -189,7 +192,7 @@ if (isset($revision_id)) {
         ";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
-            ':id' => $_REQUEST['id'],
+            ':id' => $id,
             ':revision_id'=> $revision_id
         ));
         $result = $stmt->fetchAll();
@@ -213,7 +216,7 @@ if (isset($revision_id)) {
         ";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
-            ':id' => $_REQUEST['id']
+            ':id' => $id
         ));
         $result = $stmt->fetchAll();
     }
@@ -237,18 +240,18 @@ if (isset($revision_id)) {
         echo '<tr bgcolor=' . $bgcolor . '>';
 
         $extra_message = '';
-        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision.dat")) {
-            echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision + 1) . '</div></a>' . $extra_message;
+        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . "_$revision.dat")) {
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
         } else {
-            echo '<td><font size="-1">' . $revision . $extra_message;
+            echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
         }
         ?>
                     </font></td>
                     <td><font size="-1"><?php echo fix_date($modified_on);
         ?></font></td>
-                    <td><font size="-1"><?php echo $last_name . ', ' . $first_name;
+                    <td><font size="-1"><?php echo e::h($last_name) . ', ' . e::h($first_name);
         ?></font></td>
-                    <td><font size="-1"><?php echo $note;
+                    <td><font size="-1"><?php echo e::h($note);
         ?></font></td>
             </tr>
 <?php

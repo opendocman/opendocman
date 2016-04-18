@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /**
 FileData_class.php - Builds file data objects
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
@@ -406,7 +408,7 @@ if (!defined('FileData_class')) {
             $result = $stmt->fetchColumn();
 
             if ($stmt->rowCount() == 0) {
-                echo('ERROR: No database entry exists in department table for ID = '.$this->getDepartment().'.');
+                echo('ERROR: No database entry exists in department table for ID = '. e::h($this->getDepartment()) .'.');
                 return "ERROR";
                 //exit;
             }
@@ -507,7 +509,7 @@ if (!defined('FileData_class')) {
             $result = $stmt->fetchColumn();
 
             if ($stmt->rowCount() != 1) {
-                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+                echo('DB error.  Unable to locate file id ' . e::h($this->id) . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . ' for help');
                 exit;
             }
 
@@ -532,7 +534,7 @@ if (!defined('FileData_class')) {
             $result = $stmt->fetchColumn();
 
             if ($stmt->rowCount() != 1) {
-                echo('DB error.  Unable to locate file id ' . $this->id . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . 'for help');
+                echo('DB error.  Unable to locate file id ' . e::h($this->id) . ' in table '.$GLOBALS['CONFIG']['db_prefix'].'data.  Please contact ' . $GLOBALS['CONFIG']['site_mail'] . ' for help');
                 exit;
             }
 

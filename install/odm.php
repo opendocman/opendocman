@@ -35,7 +35,7 @@ global $pdo;
 $query = "DROP TABLE IF EXISTS {$dbprefix}access_log";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-        
+
 $query = "
 CREATE TABLE `{$dbprefix}access_log` (
   `file_id` int(11) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `{$dbprefix}access_log` (
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
-// Admin table    
+// Admin table
 $query = "DROP TABLE IF EXISTS {$dbprefix}admin";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
@@ -104,7 +104,7 @@ $query = "CREATE TABLE {$dbprefix}data (
   category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
-  created datetime NOT NULL default '0000-00-00 00:00:00',
+  created datetime NOT NULL,
   description varchar(255) default NULL,
   comment varchar(255) default '',
   status smallint(6) default NULL,
@@ -180,7 +180,7 @@ $stmt->execute();
 
 $query = "CREATE TABLE {$dbprefix}log (
   id int(11) unsigned NOT NULL default '0',
-  modified_on datetime NOT NULL default '0000-00-00 00:00:00',
+  modified_on datetime NOT NULL,
   modified_by varchar(25) default NULL,
   note text,
   revision varchar(255) default NULL,
@@ -377,6 +377,7 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/mspowerpoint', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/octet-stream', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);",
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/x-zip', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/zip', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/tiff', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NUll, 'image/tif', 1);",
@@ -406,7 +407,8 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/x-dwg', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/x-dfx', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);",
-"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/svg', 1);"
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/svg', 1);",
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'video/3gpp', 1);"
         );
 foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);

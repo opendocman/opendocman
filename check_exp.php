@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 check_exp.php - check to see if files need to be re-authorized
 Copyright (C) 2004 Stephen Lawrence, Khoa Nguyen
@@ -101,11 +103,11 @@ $stmt->execute(array(
 ));
 $data_result = $stmt->fetchAll();
 
-echo msg('message_rejecting_files'). ' ' . $expired_revision . '<br>';
+echo msg('message_rejecting_files'). ' ' . e::h($expired_revision) . '<br>';
 echo msg('message_rejected') . ' ' . $stmt->rowCount() . ' file(s)<br>';
 $count = 0;
 foreach ($data_result as $row) {
-    echo '&nbsp;&nbsp;' . $count . ' File ID: ' . $row['id'] . '<br>';
+    echo '&nbsp;&nbsp;' . $count . ' File ID: ' . e::h($row['id']) . '<br>';
     $count++;
 }
 // Notify owner
@@ -121,7 +123,7 @@ if ($GLOBALS['CONFIG']['file_expired_action'] != 4) {
     $mail_subject=msg('email_subject_review_status');
     $mail_greeting=msg('email_greeting') . ":". PHP_EOL . "\t" . msg('email_i_would_like_to_inform');
     $mail_body = msg('email_was_declined_for_publishing_at') . ' ' .$time.' on '.$date.' ' . msg('email_because_you_did_not_revise') . ' ' . $GLOBALS['CONFIG']['revision_expiration'] . ' '. msg('days');
-    $mail_salute=PHP_EOL . PHP_EOL . msg('email_salute') . ",". PHP_EOL . $full_name;
+    $mail_salute=PHP_EOL . PHP_EOL . msg('email_salute') . ",". PHP_EOL . e::h($full_name);
     foreach($data_result as $row) {
         $file_obj = new FileData($row['id'], $pdo);
         $user_obj = new User($file_obj->getOwner(), $pdo);

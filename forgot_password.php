@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
    forgot_password.php - utility to reset a user password
    Copyright (C) 2005-2006 Glowball Solutions
@@ -128,11 +130,11 @@ if (
 
             <form action="forgot_password.php" method="post">
             <input type="hidden" name="action" value="forgot">
-            <input type="hidden" name="user_id" value="<?php echo $user_id;
+            <input type="hidden" name="user_id" value="<?php echo e::h($user_id);
         ?>">
-            <input type="hidden" name="username" value="<?php echo $username;
+            <input type="hidden" name="username" value="<?php echo e::h($username);
         ?>">
-            <input type="hidden" name="code" value="<?php echo $code;
+            <input type="hidden" name="code" value="<?php echo e::h($code);
         ?>">
             <table>
             <tr>
@@ -216,7 +218,7 @@ if (
         ));
 
         // generate the link
-        $resetLink = $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php?username=' . $username . '&code=' . $reset_code;
+        $resetLink = $GLOBALS['CONFIG']['base_url'] . '/forgot_password.php?username=' . e::h($username) . '&code=' . e::h($reset_code);
         $mail_headers  = "From: " . $GLOBALS['CONFIG']['site_mail'] . PHP_EOL;
         $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
         $mail_body  = msg('email_someone_has_requested_password').PHP_EOL . PHP_EOL;

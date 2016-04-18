@@ -33,7 +33,7 @@ Check the docs folder for further documentation
 
   ex.  $>mkdir /usr/local/opendocman/data
 
- 4. Load the opendocman page in your web browser
+ . Load the opendocman page in your web browser
 (ex. http://www.example.com/opendocman/ ) and follow the prompts.
 
  5. Login as "admin" (with the password you set during the installation). 

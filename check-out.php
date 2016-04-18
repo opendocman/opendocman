@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 check-out.php - performs checkout and updates database
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
@@ -59,11 +61,10 @@ if (!isset($_GET['submit'])) {
 
 <p>
 
-<form action="<?php echo $_SERVER['PHP_SELF'];
-    ?>" method="get">
-    <input type="hidden" name="id" value="<?php echo $_GET['id'];
+<form action="check-out.php" method="get">
+    <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
     ?>">
-    <input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];
+    <input type="hidden" name="access_right" value="<?php echo e::h($_GET['access_right']);
     ?>">
     <div class="buttons"><button class="regular" type="submit" name="submit" value="Click here"><?php echo msg('area_check_out_file')?></button>&nbsp;<?php echo msg('message_click_to_checkout_document')?></div>
 </form>
@@ -93,7 +94,7 @@ else {
     if (file_exists($filename)) {
         // send headers to browser to initiate file download
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="' . $real_name . '"');
+        header('Content-Disposition: attachment; filename="' . e::h($real_name) . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);

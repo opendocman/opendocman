@@ -1,4 +1,5 @@
 <?php
+use Aura\Html\Escaper as e;
 /*
 error.php - displays error messages based on error code $ec
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
@@ -21,9 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // includes
 include('odm-load.php');
-session_start();
 
-$last_message = (isset($_REQUEST['last_message']) ? htmlspecialchars($_REQUEST['last_message']) : '');
+$last_message = (isset($_REQUEST['last_message']) ? e::h($_REQUEST['last_message']) : '');
 
 draw_header(msg('error'), $last_message);
 
