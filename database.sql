@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `odm_data` (
   `category` INT(11) UNSIGNED NOT NULL DEFAULT '0',
   `owner` INT(11) UNSIGNED DEFAULT NULL,
   `realname` VARCHAR(255) NOT NULL DEFAULT '',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   `description` VARCHAR(255) DEFAULT NULL,
   `comment` VARCHAR(255) DEFAULT '',
   `status` SMALLINT(6) DEFAULT NULL,
@@ -184,7 +184,7 @@ INSERT INTO `odm_filetypes` VALUES (NULL, 'video/3gpp', 1);
 
 CREATE TABLE IF NOT EXISTS `odm_log` (
   `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-  `modified_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_on` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   `modified_by` VARCHAR(25) DEFAULT NULL,
   `note` TEXT,
   `revision` VARCHAR(255) NOT NULL,
