@@ -56,7 +56,7 @@ CREATE TABLE odm_data (
   category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
-  created datetime NOT NULL default '0000-00-00 00:00:00',
+  created datetime NOT NULL default '1000-01-01 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) default '',
   status smallint(6) default NULL,
@@ -132,7 +132,7 @@ INSERT INTO odm_dept_reviewer VALUES (1,1);
 
 CREATE TABLE odm_log (
   id int(11) unsigned NOT NULL default '0',
-  modified_on datetime NOT NULL default '0000-00-00 00:00:00',
+  modified_on datetime NOT NULL default '1000-01-01 00:00:00',
   modified_by varchar(25) default NULL,
   note text,
   revision varchar(255) default NULL,
