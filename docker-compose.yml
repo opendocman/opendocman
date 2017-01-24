@@ -1,0 +1,31 @@
+version: '2'
+services:
+  db:
+    image: mysql
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=opendocman
+      - MYSQL_USER=opendocman
+      - MYSQL_PASSWORD=opendocman
+      - MYSQL_ROOT_PASSWORD=rootpass
+    ports:
+      - 3306:3306
+
+
+  app:
+    build: .
+    ports:
+      - 80:80
+      - 9000:9000
+    volumes:
+      - odm-data:/var/www/odm_data
+      - odm-code:/var/www/html
+
+volumes:
+  odm-code:
+    driver: local
+  odm-data:
+    driver: local
+  db-data:
+    driver: local
