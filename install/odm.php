@@ -298,7 +298,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 // Create version number in db
-$query = "INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.3.0')";
+$query = "INSERT INTO {$dbprefix}odmsys VALUES (NULL,'version','1.3.6')";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -337,7 +337,6 @@ $sql_operations = array(
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'theme', 'tweeter', 'Which theme to use?', '');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');",
-"INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'base_url', '{$_SESSION['baseurl']}', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');",
 "INSERT INTO `{$dbprefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num');"
 );
 
