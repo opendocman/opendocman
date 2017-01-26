@@ -40,15 +40,13 @@ if (false) {
     exit;
 }
 
-define('REQUIRED_VERSION', '1.3.6');
-
 session_start();
 
 if (file_exists('../config.php') && (!isset($_SESSION['datadir']))) {
     include('../odm-load.php');
     include_once('../version.php');
     $db_version = Settings::get_db_version($GLOBALS['CONFIG']['db_prefix']);
-    if ($db_version == REQUIRED_VERSION) {
+    if ($db_version == REQUIRED_DB_VERSION) {
         echo "<p>Looks like you don't need to update anything. If you need to re-install, please delete your config.php file first. You may then <a href='./'>try again</a>.</p>";
         exit;
     }
@@ -519,7 +517,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 
         $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
         $db_version = Settings::get_db_version($prefix);
-        $is_upgrade = ($db_version != REQUIRED_VERSION);
+        $is_upgrade = ($db_version != REQUIRED_DB_VERSION);
 
         ?>
     <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
@@ -560,7 +558,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         <tr>
             <td>Your current Database schema version: <strong><?php echo e::h($db_version);
     ?></strong><br/><br/>
-                Required Database schema version: <?php echo REQUIRED_VERSION;
+                Required Database schema version: <?php echo REQUIRED_DB_VERSION;
     ?><br/><br />
             </td>
         </tr>
