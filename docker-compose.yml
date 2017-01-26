@@ -3,7 +3,7 @@ services:
   db:
     image: mysql
     volumes:
-      - db-data:/var/lib/mysql
+      - odm-db-data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=opendocman
       - MYSQL_USER=opendocman
@@ -15,17 +15,29 @@ services:
 
   app:
     build: .
+    depends_on:
+      - db
     ports:
       - 80:80
+      - 443:443
       - 9000:9000
+    hostname: odm.local
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=opendocman
+      - DB_USER=opendocman
+      - DB_PASS=opendocman
+      - DB_ROOT_PASS=rootpass
+      - ADMIN_PASSWORD=321admin
     volumes:
-      - odm-data:/var/www/odm_data
-      - odm-code:/var/www/html
+      - odm-files-data:/var/www/document_repository
+      #- odm-code-data:/var/www/html
 
 volumes:
-  odm-code:
+  odm-code-data:
     driver: local
-  odm-data:
+  odm-files-data:
     driver: local
-  db-data:
+  odm-db-data:
     driver: local

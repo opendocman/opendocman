@@ -180,12 +180,6 @@ deny from all
                             </ul>
                         </td>
 		</tr>
-                <tr>
-			<th scope="row"><label for="prefix">Base URL</label></th>
-			<td colspan="2"><input name="baseurl" id="baseurl" type="text" size="45" class="required url2" minlength="2" value="http://<?php echo $computed_base_url; ?>"/>
-                            <br/>Enter in the root URL where OpenDocMan will be running from. Example: http://www.myhost.com/opendocman<br/>
-                        </td>
-		</tr>
 	</table>
 	<p class="step"><input name="submit" type="submit" value="Submit" class="button" /></p>
 </form>
