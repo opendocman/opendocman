@@ -1,4 +1,4 @@
- <?php
+<?php
 // Dutch LANGUAGE FILE
 // (C) 2010-2014 Stephen Lawrence Jr.
 // Translated by: Jan Sepp
