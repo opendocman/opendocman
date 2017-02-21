@@ -3,8 +3,9 @@ MAINTAINER Logical Arts, LLC <info@logicalarts.net>
 
 # Install packages
 RUN apt-get update \
-  && apt-get install -y apt-utils vim mysql-client php5-mysql git openssl ssl-cert sendmail \
-  && docker-php-ext-install pdo_mysql pdo
+  && apt-get install --no-install-recommends -y apt-utils vim mysql-client php5-mysql git openssl ssl-cert sendmail \
+  && docker-php-ext-install pdo_mysql pdo \
+  && rm -rf /var/lib/apt/lists/*
 
 # Copy php configs
 #COPY src/main/resources/docker-php-pecl-install /usr/local/bin/
