@@ -32,6 +32,8 @@ $GLOBALS['smarty'] = new Smarty();
 $GLOBALS['smarty']->template_dir = dirname(__FILE__) . '/templates/' . $GLOBALS['CONFIG']['theme'] . '/';
 $GLOBALS['smarty']->compile_dir = dirname(__FILE__) . '/templates_c/';
 
+$GLOBALS['CONFIG']['base_url'] = base_url();
+
 /**** SET g_ vars from Global Config arr ***/
 foreach ($GLOBALS['CONFIG'] as $key => $value) {
     $GLOBALS['smarty']->assign('g_' . $key, $value);
@@ -873,4 +875,12 @@ function redirect_visitor($url = '')
             exit;
         }
     }
+}
+
+function base_url(){
+    return sprintf(
+        "%s://%s",
+        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+        $_SERVER['SERVER_NAME']
+    );
 }
