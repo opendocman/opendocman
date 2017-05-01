@@ -35,9 +35,9 @@ if (!$user_obj->isRoot()) {
 }
 $flag = 0;
 if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
+    draw_header(msg('label_checked_out_files'), $last_message);
     echo PHP_EOL . '<form name="table" action="' . $_SERVER['PHP_SELF'] . '" method="POST">';
     echo PHP_EOL . '<input name="submit" type="hidden" value="Clear Status">';
-    draw_header(msg('label_checked_out_files'), $last_message);
 
     $file_id_array = $user_obj->getCheckedOutFiles();
 
