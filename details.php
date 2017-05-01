@@ -1,9 +1,9 @@
 <?php
-
+use Aura\Html\Escaper as e;
 /*
   details.php - display file information  check for session
   Copyright (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
-  Copyright (C) 2008-2013 Stephen Lawrence Jr.
+  Copyright (C) 2008-2015 Stephen Lawrence Jr.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -30,47 +30,49 @@ if (!isset($_SESSION['uid'])) {
 
 include('udf_functions.php');
 
-$last_message = isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '';
+$last_message = isset($_GET['last_message']) ? $_GET['last_message'] : '';
 
-$full_requestId = $_REQUEST['id'];
-
-// in case this file is accessed directly - check for $_REQUEST['id']
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == "") {
+// in case this file is accessed directly - check for $_GET['id']
+if (!isset($_GET['id']) || $_GET['id'] == "") {
     header('Location:error.php?ec=2');
     exit;
 }
 
-if (strchr($_REQUEST['id'], '_')) {
-    list($_REQUEST['id'], $lrevision_id) = explode('_', $_REQUEST['id']);
-    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . $lrevision_id;
-    $filesize = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . '_' . $lrevision_id . '.dat');
+$full_requestId = $_GET['id'];
+
+if (strchr($_GET['id'], '_')) {
+    list($_GET['id'], $revision_id) = explode('_', $_GET['id']);
+    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . $revision_id;
+    $file_size = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_GET['id'] . '/' . $_GET['id'] . '_' . $revision_id . '.dat');
 } else {
     $pageTitle = msg('area_file_details');
 }
 
 draw_header(msg('area_file_details'), $last_message);
 
-$lrequest_id = $_REQUEST['id']; //save an original copy of id
+$request_id = (int) $_GET['id']; //save an original copy of id
+$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
 
-$filedata = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
-checkUserPermission($_REQUEST['id'], $filedata->VIEW_RIGHT, $filedata);
-$user = new User_Perms($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$file_data_obj = new FileData($request_id, $pdo);
+checkUserPermission($request_id, $file_data_obj->VIEW_RIGHT, $file_data_obj);
+$user_perms_obj = new User_Perms($_SESSION['uid'], $pdo);
 
-$userPermObj = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-$user_obj = new user($filedata->getOwner(), $GLOBALS['connection'], DB_NAME);
-$secureurl = new phpsecureurl;
+$user_permission_obj = new UserPermission($_SESSION['uid'], $pdo);
+$user_obj = new User($file_data_obj->getOwner(), $pdo);
+
+$owner_full_name = $file_data_obj->getOwnerFullName();
 
 // display details
-$owner_id = $filedata->getOwner();
-$category = $filedata->getCategoryName();
-$owner_fullname = $filedata->getOwnerFullName();
-$owner = $owner_fullname[1] . ', ' . $owner_fullname[0];
-$realname = $filedata->getName();
-$created = $filedata->getCreatedDate();
-$description = $filedata->getDescription();
-$comment = $filedata->getComment();
-$status = $filedata->getStatus();
-$reviewer = $filedata->getReviewerName();
+$owner_id = $file_data_obj->getOwner();
+$category = $file_data_obj->getCategoryName();
+$owner_last_first = $owner_full_name[1] . ', ' . $owner_full_name[0];
+$owner_first_last = $owner_full_name[0] . ' ' . $owner_full_name[1];
+$real_name = $file_data_obj->getName();
+$created = $file_data_obj->getCreatedDate();
+$description = $file_data_obj->getDescription();
+$comment = $file_data_obj->getComment();
+$status = $file_data_obj->getStatus();
+$reviewer = $file_data_obj->getReviewerName();
 // corrections
 if ($description == '') {
     $description = msg('message_no_description_available');
@@ -80,7 +82,7 @@ if ($comment == '') {
     $comment = msg('message_no_author_comments_available');
 }
 
-$reviewer_comments_str = $filedata->getReviewerComments();
+$reviewer_comments_str = $file_data_obj->getReviewerComments();
 $reviewer_comments_fields = explode(';', $reviewer_comments_str);
 
 for ($i = 0; $i < sizeof($reviewer_comments_fields); $i++) {
@@ -98,80 +100,105 @@ if (isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) 
     $reviewer_comments_fields[0] = 'To=Author(s)';
 }
 
-if ($filedata->isArchived()) {
-    $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
-    $filesize = display_filesize($filename);
+if ($file_data_obj->isArchived()) {
+    $filename = $GLOBALS['CONFIG']['archiveDir'] . $request_id . '.dat';
+    $file_size = display_filesize($filename);
 } else {
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $request_id . '.dat';
 
-    if (!isset($filesize)) {
-        $filesize = display_filesize($filename);
+    if (!isset($file_size)) {
+        $file_size = display_filesize($filename);
     }
 }
 
 // display red or green icon depending on file status
-if ($status == 0 && $user->canView($_REQUEST['id'])) {
+if ($status == 0 && $user_perms_obj->canView($request_id)) {
     $file_unlocked = true;
 } else {
     $file_unlocked = false;
 }
 //chm sahar
-if (isset($lrevision_id)) {
-    $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-        {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.note, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.revision 
-        FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-        WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-        AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-        AND {$GLOBALS['CONFIG']['db_prefix']}log.revision = $lrevision_id 
-        ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+if (!empty($revision_id)) {
+    $query = "
+        SELECT
+          u.last_name,
+          u.first_name,
+          l.modified_on,
+          l.note,
+          l.revision
+        FROM
+          {$GLOBALS['CONFIG']['db_prefix']}log l,
+          {$GLOBALS['CONFIG']['db_prefix']}user u
+        WHERE
+          l.id = :log_id
+        AND
+          u.username = l.modified_by
+        AND
+          l.revision = :revision_id
+        ORDER BY
+          l.modified_on DESC";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':log_id' => $request_id,
+        ':revision_id' => $revision_id
+    ));
+    $revisionData = $stmt->fetchAll();
 } else {
-    $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-        {$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.note, 
-        {$GLOBALS['CONFIG']['db_prefix']}log.revision 
-        FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-        WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-        AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-        ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
+    $query = "
+      SELECT
+        u.last_name,
+        u.first_name,
+        l.modified_on,
+        l.note,
+        l.revision
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}log l,
+        {$GLOBALS['CONFIG']['db_prefix']}user u
+        WHERE
+          l.id = :log_id
+        AND
+          u.username = l.modified_by
+        ORDER BY
+          l.modified_on DESC
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(
+        ':log_id' => $request_id
+    ));
+    $revisionData = $stmt->fetchAll();
 }
 
-$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
-$rows = mysql_num_rows($result);
-$revisionData = mysql_fetch_assoc($result);
+$rows = $stmt->rowCount();
 
-if ($rows == 1 && !(isset($lrevision_id))) {
+if ($rows == 1 && !(isset($revision_id))) {
     $revision = "1";
-} elseif (isset($lrevision_id)) {
-    $revision = $lrevision_id + 1;
+} elseif (isset($revision_id)) {
+    $revision = $revision_id + 1;
 } else {
     $revision = "$rows";
 }
 
-$file_under_review = ( ($filedata->isPublishable() == -1) ? true : false);
+$file_under_review = (($file_data_obj->isPublishable() == -1) ? true : false);
 
 $to_value = (isset($reviewer_comments_fields[0]) ? (substr($reviewer_comments_fields[0], 3)) : '');
-$subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1],8)) : '');
+$subject_value = (isset($reviewer_comments_fields[1]) ? (substr($reviewer_comments_fields[1], 8)) : '');
 $comments_value = (isset($reviewer_comments_fields[2]) ? (substr($reviewer_comments_fields[2], 9)) : '');
 
-$file_detail = array(
+$file_detail_array = array(
     'file_unlocked' => $file_unlocked,
-    'to_value' => $subject_value,
+    'to_value' => $to_value,
     'subject_value' => $subject_value,
     'comments_value' => $comments_value,
-    'realname' => $realname,
+    'realname' => $real_name,
     'category' => $category,
-    'filesize' => $filesize,
+    'filesize' => $file_size,
     'created' => fix_date($created),
     'owner_email' => $user_obj->getEmailAddress(),
-    'owner' => $owner,
-    'owner_fullname' => $owner_fullname,
+    'owner' => $owner_last_first,
+    'owner_fullname' => $owner_first_last,
     'description' => wordwrap($description, 50, '<br />'),
     'comment' => wordwrap($comment, 50, '<br />'),
-    'udf_details_display' => udf_details_display($lrequest_id),
+    'udf_details_display' => udf_details_display($request_id),
     'revision' => $revision,
     'file_under_review' => $file_under_review,
     'reviewer' => $reviewer,
@@ -181,38 +208,35 @@ $file_detail = array(
 if ($status > 0) {
     // status != 0 -> file checked out to another user. status = uid of the check-out person
     // query to find out who...
-    $checkout_person_obj = $filedata->getCheckerOBJ();
-    $fullname = $checkout_person_obj->getFullName();
+    $checkout_person_obj = $file_data_obj->getCheckerOBJ();
+    $full_name = $checkout_person_obj->getFullName();
 
-    $GLOBALS['smarty']->assign('checkout_person_full_name', $fullname);
+    $GLOBALS['smarty']->assign('checkout_person_full_name', $full_name);
     $GLOBALS['smarty']->assign('checkout_person_email', $checkout_person_obj->getEmailAddress());
 }
 
 // Can they Read?
-if ($userPermObj->getAuthority($_REQUEST['id'], $filedata) >= $userPermObj->READ_RIGHT) {
-    $view_link = $secureurl->encode("view_file.php?id=$full_requestId" . '&state=' . ($_REQUEST['state'] + 1));
+if ($user_permission_obj->getAuthority($request_id, $file_data_obj) >= $user_permission_obj->READ_RIGHT) {
+    $view_link = 'view_file.php?id=' . e::h($full_requestId) . '&state=' . ($state + 1);
     $GLOBALS['smarty']->assign('view_link', $view_link);
 }
 
 // Lets figure out which buttons to show
-if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) )) {
-    // status = 0 -> file available for checkout
+if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))) {
     // check if user has modify rights
-    $query2 = "SELECT status FROM {$GLOBALS['CONFIG']['db_prefix']}data, {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid = '$_REQUEST[id]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.uid = '$_SESSION[uid]' AND {$GLOBALS['CONFIG']['db_prefix']}user_perms.rights = '2' AND {$GLOBALS['CONFIG']['db_prefix']}data.status = '0' AND {$GLOBALS['CONFIG']['db_prefix']}data.id = {$GLOBALS['CONFIG']['db_prefix']}user_perms.fid";
-    $result2 = mysql_query($query2, $GLOBALS['connection']) or die("Error in query: $query2. " . mysql_error());
-    $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
-    if ($user_perms->getAuthority($_REQUEST['id'], $filedata) >= $user_perms->WRITE_RIGHT && !isset($lrevision_id) && !$filedata->isArchived()) {
+
+    $user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['pdo']);
+    if ($user_perms->getAuthority($request_id, $file_data_obj) >= $user_perms->WRITE_RIGHT && !isset($revision_id) && !$file_data_obj->isArchived()) {
         // if so, display link for checkout
-        $check_out_link = $secureurl->encode("check-out.php?id=$lrequest_id" . '&state=' . ($_REQUEST['state'] + 1) . '&access_right=modify');
+        $check_out_link = "check-out.php?id=$request_id" . '&state=' . ($state + 1) . '&access_right=modify';
         $GLOBALS['smarty']->assign('check_out_link', $check_out_link);
     }
 
-    mysql_free_result($result2);
 
-    if ($userPermObj->getAuthority($_REQUEST['id'], $filedata) >= $userPermObj->ADMIN_RIGHT && !@isset($lrevision_id) && !$filedata->isArchived()) {
+    if ($user_permission_obj->getAuthority($request_id, $file_data_obj) >= $user_permission_obj->ADMIN_RIGHT && !@isset($revision_id) && !$file_data_obj->isArchived()) {
         // if user is also the owner of the file AND file is not checked out
         // additional actions are available 
-        $edit_link = $secureurl->encode("edit.php?id=$_REQUEST[id]&state=" . ($_REQUEST['state'] + 1));
+        $edit_link = "edit.php?id=$request_id&state=" . ($state + 1);
         $GLOBALS['smarty']->assign('edit_link', $edit_link);
     }
 }
@@ -220,21 +244,21 @@ if ($status == 0 || ($status == -1 && $filedata->isOwner($_SESSION['uid']) )) {
 ////end if ($status == 0)
 // ability to view revision history is always available 
 // put it outside the block
-$history_link = $secureurl->encode("history.php?id=$lrequest_id&state=" . ($_REQUEST['state'] + 1));
-$comments_link = $secureurl->encode('toBePublished.php?submit=comments&id=' . $_REQUEST['id']);
-$my_delete_link = $secureurl->encode('delete.php?mode=tmpdel&id0=' . $_REQUEST['id']);
+$history_link = "history.php?id=$request_id&state=" . ($state + 1);
+$comments_link = 'toBePublished.php?submit=comments&id=' . $request_id;
+$my_delete_link = 'delete.php?mode=tmpdel&id0=' . $request_id;
 
 $GLOBALS['smarty']->assign('history_link', $history_link);
 $GLOBALS['smarty']->assign('comments_link', $comments_link);
 $GLOBALS['smarty']->assign('my_delete_link', $my_delete_link);
 
 // Call the plugin API
-callPluginMethod('onDuringDetails', $filedata->id);
+callPluginMethod('onDuringDetails', $file_data_obj->id);
 
-$GLOBALS['smarty']->assign('file_detail', $file_detail);
+$GLOBALS['smarty']->assign('file_detail', $file_detail_array);
 display_smarty_template('details.tpl');
 
 // Call the plugin API
-callPluginMethod('onAfterDetails', $filedata->id);
+callPluginMethod('onAfterDetails', $file_data_obj->id);
 
 draw_footer();

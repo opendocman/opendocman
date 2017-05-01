@@ -56,7 +56,7 @@ CREATE TABLE odm_data (
   category int(11) unsigned NOT NULL default '0',
   owner int(11) unsigned default NULL,
   realname varchar(255) NOT NULL default '',
-  created datetime NOT NULL default '0000-00-00 00:00:00',
+  created datetime NOT NULL default '1000-01-01 00:00:00',
   description varchar(255) default NULL,
   comment varchar(255) default '',
   status smallint(6) default NULL,
@@ -132,7 +132,7 @@ INSERT INTO odm_dept_reviewer VALUES (1,1);
 
 CREATE TABLE odm_log (
   id int(11) unsigned NOT NULL default '0',
-  modified_on datetime NOT NULL default '0000-00-00 00:00:00',
+  modified_on datetime NOT NULL default '1000-01-01 00:00:00',
   modified_by varchar(25) default NULL,
   note text,
   revision varchar(255) default NULL,
@@ -188,7 +188,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin','',1,'5555551212','admin@example.com','User','Admin','', 1, 1);
+INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.2.9');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.3.6');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -259,13 +259,11 @@ INSERT INTO `odm_settings` VALUES(NULL,'max_filesize', '5000000', 'Set the maxim
 INSERT INTO `odm_settings` VALUES(NULL,'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255');
 INSERT INTO `odm_settings` VALUES(NULL,'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num');
 INSERT INTO `odm_settings` VALUES(NULL,'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool');
-INSERT INTO `odm_settings` VALUES(NULL,'secureurl', 'True', 'Secure URL control: On or Off (case sensitive). When set to \"On\", all urls will be secured. When set to \"Off\", all urls are normal and readable', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL,'theme', 'tweeter', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
-INSERT INTO `odm_settings` VALUES(NULL,'base_url', 'http://localhost/opendocman', 'Set this to the url of the site. No need for trailing \"/\" here', 'url');
 INSERT INTO `odm_settings` VALUES(NULL,'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing.', 'num');
 
 CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
@@ -291,6 +289,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'text/richtxt', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/mspowerpoint', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/octet-stream', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip-compressed', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'application/x-zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/zip', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/tiff', 1);
 INSERT INTO `odm_filetypes` VALUES(NUll, 'image/tif', 1);
@@ -321,3 +320,4 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dwg', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/x-dfx', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'drawing/x-dwf', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/svg', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'video/3gpp', 1);

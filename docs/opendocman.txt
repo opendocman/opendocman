@@ -36,7 +36,7 @@ system designed to conform to ISO 17025/IEC. It features
 automatic installation, file expiration, multiple version
 handling, file check-in/out, departmental access control,
 file moderation, fine grained user access control, email
-notificaiton and a great search function. Written in PHP,
+notification and a great search function. Written in PHP,
 and utilizing MySQL for the backend, this project is useful
 for any company looking to keep their documentation in a
 centralized repository.
@@ -82,27 +82,27 @@ centralized repository.
   state and can be left there, un-archived, or permanently
   deleted.
 
-12. Bookmarkable URL's - You can bookmark a page in OpenDocMan
+12. Bookmark-able URLs - You can bookmark a page in OpenDocMan
   and email it to a co-worker, etc..
 
-13. Breakcrumb Navigation - As you navigate through the site,
+13. Breadcrumb Navigation - As you navigate through the site,
   breadcrumb links are generated to aid in backward navigation.
 
 14. File Expiration - Files can be set to automatically expire
   after a definable period. The expiration action can be
   one of either Remove from file list until renewed, Show
-  in file list but non-checkoutable, Send email to reviewer
+  in file list but locked, Send email to reviewer
   only, or Do Nothing.
 
 15. 
 
 1.2 Requirements
 
-* Apache Webserver 2.x (or any other webserver, that supports PHP) (http://www.apache.org/)
+* Apache web server 2.x (or any other web server, that supports PHP) (http://www.apache.org/)
 
 * MySQL Server 5.0+ (http://www.mysql.com/)
 
-* PHP 5+ compiled with MySQL-Support (http://www.php.net/)
+* PHP 5.4+ compiled with PDO-MySQL Support (http://www.php.net/)
 
 1.2.1 Partially Tested
 
@@ -128,7 +128,7 @@ centralized repository.
 
 2.2 New Installation (Automatic)
 
- 1. Untar/Unzip files into any dir in your webserver documents dir
+ 1. Un-tar/Unzip files into any dir in your web server documents dir
 
  2. Create a MySQL database/username/password.
 
@@ -152,7 +152,7 @@ centralized repository.
 
 2.3 New Installation (Manual)
 
- 1. Untar/Unzip files into any dir in your webserver documents dir
+ 1. Un-tar/Unzip files into any dir in your web server documents dir
 
  2. Create a MySQL database/username/password.
 
@@ -167,14 +167,16 @@ centralized repository.
  
  5. Edit the config.php to include your database parameters
 
- 6. Edit the database.sql file. You need to change the values set in the odm_settings table, specifically for these two entries:
-    dataDir
-    base_url
-    
+ 6. Edit the database.sql file. You need to change the values set in the odm_settings table, specifically for these entries:
+    * dataDir
+    * base_url
     Change those to reflect the correct locations.
+
+    You will also want to update the admin password being used where the admin user is added.
+
  7. Import your database.sql file into your database
 
- 8. Visit the URL for your installation and login as admin (no password)
+ 8. Visit the URL for your installation and login as admin with the password you added in the database.sql file
 
 3 Configuration
 
@@ -189,7 +191,7 @@ Below are some of the configurable options:
   permissions to read/write files in this folder!
   
 * demo - This setting is for a demo installation, where random
-  people will be all loggging in as the same username/password
+  people will be all logging in as the same username/password
   like 'demo/demo'.
 
 * authen - Future setting to control other authentication
@@ -199,7 +201,7 @@ Below are some of the configurable options:
 * base_url - Set this to the url of the site (no ending slash)
 
 * title - This is the browser window title and be anything
-  you want (ex. Mycomany Document Managment System)
+  you want (ex. My Company Document Management System)
 
 * site_mail - The email address of the administrator of this
   site. Users will be told to contact this person if they
@@ -218,7 +220,6 @@ Below are some of the configurable options:
 
 * authorization [On, Off] - Turn file moderation on or off.
 
-* secureurl [On,Off] - Hide the URL contents from prying
 
 * theme [default="default"] - which theme to use? Smarty-based
   themes are located in templates/ folder. Look at default for example.
@@ -262,8 +263,8 @@ and File Management under this menu item.
 
 6. Add any comments necessary for users of the file.
 
-7. Set specific user premissions, if any. You may shift-click,
-  ctrl-click, or click on any of the usernames in any of
+7. Set specific user permissions, if any. You may shift-click,
+  ctrl-click, or click on any of the user names in any of
   the columns to specify certain rights to certain users
   of the file. 
 
@@ -348,148 +349,6 @@ new files need to be created and a current files modified.
 
 These files MUST be kept in sync for each release!
 
-7 Old Changes
+7 Changelog
+Located at http://www.opendocman.com/category/changelog/
 
-7.1 1.2rc1 - July 9th, 2003
-
-* Better permission: new design for this page will be both
-  more straight forward for the user and the programmers.
-  The permission select boxes are now used to directly specify
-  which user has which right to the file. Admin needs not
-  to set inheriting rights. When the admin sets rights to
-  the department, he indirectly set inheriting rights for
-  all users. Require more testing.
-
-* Multiple version of document: Instead of overwriting a
-  document when a new version is added, keep the old versions,
-  so there is a traceable change path. Revision configuration
-  is in config.php Revision dir will be created if not.
-  Inside revision folder, for each file, a folder will be
-  created with their name (e.g 80/ for 80.dat). Inside 80
-  folder for example, there will files with the naming of
-  format of 80_x.dat were x is the revision number. User
-  can view these older revision through details.php
-
-* Add archiving function for deleted files: When file is
-  deleted by user, they are moved into an archiving folder.
-  This folder is configurable in config.php. Root user can
-  permenently delete the files in admin.php under Del/Undel
-  link
-
-* Add ability to change owner of file: Admin can change owner
-  in edit.php. New or old owner can have their rights revolked
-
-* File Expiration: file expiration script's name is check_exp.php.
-  This script will run under root authority. Anyone can
-  invoke it if they know its url. A link to this page is
-  in Admin.php. Configuration to this script is available
-  in config.php under "revision_expiration"
-
-* Enable/Disable Reviewing/Authorization: User can disable
-  the Review and Authorization proccess in config.php setting
-  under "authorization". After disabled, when files are
-  added or check-ined, they by pass the whole Review and
-  Authorization proccess
-
-* Drop the Comment column in out.php: Comments columns are
-  droped out of any table listing
-
-* bookmarkable URL: Url are now bookmarkable
-
-* Wildcard search: Wild card search are now integrated into
-  search.php. To search for the key word "Administration",
-  user can type in Admin.
-
-* add bread crumb: Bread Crums are added to the project for
-  betting browsing
-
-* Should allow telephone numbers in international format:
-  telephone numbers enforcement are removed
-
-* Add a timeout function to checked-out document: In admin.php,
-  root user can see all the checked out files and clear
-  their check-out status
-
-* 3-4 seconds for 5000 files with DB of 3.4 mb in size: ODM1.2-rc1
-  is optimized to handle a heavy amount of data in a few
-  seconds
-
-7.2 1.1-Final - May 6th, 2003
-
-* Added icons to the review notices
-
-* changed from using copy() to move_uploaded_file() instead 
-
-* New users guide added to docs/ 
-
-* Small database schema changes
-
-7.3 1.1rc2 - March 23, 2003
-
-* This release fixes a number of bugs with user sessions,
-  url encoding, file viewing, and others. See changelog
-  for details.\ Also added a demo mode setting which will
-  make it a "read only" installation for demo purposes,
-  where the users will not be able to modify their info
-  (password, phone, etc). Added new icons for notices.
-
-* setup.php, commitchange.php: fixed username issues from
-  bug #702453
-
-* config.php: added a demo mode setting
-
-* functions.php: fix urlencode for sort_browser. Resolving
-  bug-702377
-
-* view_file.php: added backslash thanks Huy
-
-* out.php, images/exclamation.gif, images/exclamation_red.gif:
-  added yellow ! for new notice added red ! for rejected
-  notice
-
-* view_file.php: fix https viewing and downloading problem
-
-* FormCheck.js: phonenumber validation has been removed
-
-7.4 1.1rc1 - March 10, 2003
-
-* New: web based installer/updater 
-
-* New: Ability to run with register_globals=off 
-
-* New: New mysql connection method 
-
-* New: error_reporting can be set to any level 
-
-* New: short_open_tags can be off.
-
-* edit.php: fixed error: unable to set modify permission
-  to users
-
-* toBePublished.php: fixed PHP_SELF
-
-* databaseData_class.php: a new level of abstraction has
-  been added to this foundation class. Unlike before, this
-  class's DB information such as database name, and table
-  names can now be configured. All derived classes inherit
-  this feature. One big drawback is the readability every
-  query has been dramatically reduced.
-
-* FileData_class.php: fixed error in sql statement
-
-* search.php: fixed some locals that were set to _GET
-
-* add.php: turned off error rep for status_bar
-
-* search.php: fixed undefined var $cases in 119
-
-* view_file.php: fixed bug in split code. Missing backslashe
-  for period
-
-* install/: odm1.1rc1.php, upgrade.php, upgrade_10.php: initial
-  import of installation scripts
-
-* database.sql: fixed column types (tinyint to smallint,
-  etc.)
-
-7.5 1.0 - Initial Release - December 19, 2003

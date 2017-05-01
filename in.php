@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 in.php - display files checked out to user, offer link to check back in
 Copyright (C) 2002-2013 Stephen Lawrence Jr.
@@ -25,14 +27,13 @@ session_start();
 // includes
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 
-if(!$user_obj->canCheckIn()){
+if (!$user_obj->canCheckIn()) {
     redirect_visitor('out.php');
 }
 
@@ -41,30 +42,36 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 draw_header(msg('button_check_in'), $last_message);
 
 // query to get list of documents checked out to this user
-$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}data.id, 
-        {$GLOBALS['CONFIG']['db_prefix']}user.last_name,
-        {$GLOBALS['CONFIG']['db_prefix']}user.first_name,
-				realname, 
-				created, 
-				description, 
-				status 
-				FROM {$GLOBALS['CONFIG']['db_prefix']}data, 
-        {$GLOBALS['CONFIG']['db_prefix']}user
-				WHERE status = '{$_SESSION['uid']}' 
-				AND {$GLOBALS['CONFIG']['db_prefix']}data.owner = {$GLOBALS['CONFIG']['db_prefix']}user.id";
-
-$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+$query = "
+  SELECT
+    d.id,
+    u.last_name,
+    u.first_name,
+	d.realname,
+    d.created,
+    d.description,
+    d.status
+  FROM
+    {$GLOBALS['CONFIG']['db_prefix']}data as d,
+    {$GLOBALS['CONFIG']['db_prefix']}user as u
+  WHERE
+    d.status = :uid
+  AND
+    d.owner = u.id
+";
+$stmt = $pdo->prepare($query);
+$stmt->execute(array(
+    ':uid' => $_SESSION['uid']
+));
+$result = $stmt->fetchAll();
 
 // how many records?
-$count = mysql_num_rows($result);
-if ($count == 0)
-{
+$count = $stmt->rowCount();
+if ($count == 0) {
     echo '<img src="images/exclamation.gif"> ' . msg('message_no_documents_checked_out');
-}
-else
-{
+} else {
     echo '<table border="0" hspace="0" hgap="0" cellpadding="1" cellspacing="1">';
-    echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . $count . '</caption>';
+    echo '<caption><b>' . msg('message_document_checked_out_to_you'). ' : ' . e::h($count) . '</caption>';
     echo '<tr bgcolor="#83a9f7">';
     echo '<td class="listtable"><b>' .msg('button_check_in'). '</b></td>';
     echo '<td class="listtable"><b>' .msg('label_file_name'). '</b></td>';
@@ -76,11 +83,17 @@ else
 
     $row_color = "#FCFCFC";
     // iterate through resultset
-    while(list($id, $last_name, $first_name, $realname, $created, $description, $status) = mysql_fetch_row($result))
-    {
+    foreach ($result as $row) {
+        $id = $row['id'];
+        $last_name = $row['last_name'];
+        $first_name = $row['first_name'];
+        $realname = $row['realname'];
+        $created = $row['created'];
+        $description = $row['description'];
+        $status = $row['status'];
+
         // correction
-        if ($description == '')
-        {
+        if ($description == '') {
             $description = msg('message_no_information_available');
         }
         $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
@@ -88,27 +101,23 @@ else
         $highlighted_color = '#bdf9b6';
 
         echo '<tr valign="middle" bgcolor="' . $row_color . '" onmouseover="this.style.backgroundColor=\'' . $highlighted_color . '\';" onmouseout="this.style.backgroundColor=\'' . $row_color . '\';">';
-        echo '<td class="listtable"><div class="buttons"><a href="check-in.php?id=' . $id . '&amp;state=' .($_REQUEST['state']+1) . '" class="regular"><img src="images/import-2.png" alt="checkin"/>' .msg('button_check_in'). '</a></div>';
+        echo '<td class="listtable"><div class="buttons"><a href="check-in.php?id=' . e::h($id) . '&amp;state=' . e::h(($_REQUEST['state']+1)) . '" class="regular"><img src="images/import-2.png" alt="checkin"/>' .msg('button_check_in'). '</a></div>';
         echo '</td>';
-        echo '<td class="listtable">' . $realname . '</td>';
-        echo '<td class="listtable">' . $description . '</td>';
-        echo '<td class="listtable">' . fix_date($created) . '</td> ';
-        echo '<td class="listtable">' . $last_name . ', ' . $first_name . '</td> ';
-        echo '<td class="listtable">' . display_filesize($filename) . '</td> ';
+        echo '<td class="listtable">' . e::h($realname) . '</td>';
+        echo '<td class="listtable">' . e::h($description) . '</td>';
+        echo '<td class="listtable">' . fix_date(e::h($created)) . '</td> ';
+        echo '<td class="listtable">' . e::h($last_name) . ', ' . e::h($first_name) . '</td> ';
+        echo '<td class="listtable">' . display_filesize(e::h($filename)) . '</td> ';
         echo '</tr>';
 
-        if ( $row_color == "#FCFCFC" )
-        {
+        if ($row_color == "#FCFCFC") {
             $row_color = "#E3E7F9";
-        }
-        else
-        {
+        } else {
             $row_color = "#FCFCFC";
         }
     }
 
     // clean up
-    mysql_free_result ($result);
 
     echo '</table>';
 }

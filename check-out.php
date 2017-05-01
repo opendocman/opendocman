@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 check-out.php - performs checkout and updates database
 Copyright (C) 2002-2004  Stephen Lawrence, Khoa Nguyen
@@ -24,8 +26,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -33,12 +34,10 @@ require_once("AccessLog_class.php");
  
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if(strchr($_REQUEST['id'], '_') )
-{
+if (strchr($_REQUEST['id'], '_')) {
     header('Location:error.php?ec=20');
 }
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     header('Location:error.php?ec=2');
     exit;
 }
@@ -46,27 +45,27 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
 will be the same as the person with admin or modify right except that the DB will not have any recored of him checking out this file.  Therefore, he will not be able to check-in the file on
 the server
 */
-$fileobj = new FileData($_GET['id'], $GLOBALS['connection'], DB_NAME);
-$fileobj->setId($_GET['id']);
-if ($fileobj->getError() != NULL || $fileobj->getStatus() > 0  || $fileobj->isArchived())
-{
+$file_data_obj = new FileData($_GET['id'], $pdo);
+$file_data_obj->setId($_GET['id']);
+if ($file_data_obj->getError() != null || $file_data_obj->getStatus() > 0  || $file_data_obj->isArchived()) {
     header('Location:error.php?ec=2');
     exit;
 }
-if (!isset($_GET['submit']))
-{
+if (!isset($_GET['submit'])) {
     draw_header(msg('area_check_out_file'), $last_message);
     // form not yet submitted
     // display information on how to initiate download
-    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
+    checkUserPermission($_REQUEST['id'], $file_data_obj->WRITE_RIGHT, $file_data_obj);
     ?>
 
 
 <p>
 
-<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="get">
-    <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-    <input type="hidden" name="access_right" value="<?php echo $_GET['access_right'];?>">
+<form action="check-out.php" method="get">
+    <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
+    ?>">
+    <input type="hidden" name="access_right" value="<?php echo e::h($_GET['access_right']);
+    ?>">
     <div class="buttons"><button class="regular" type="submit" name="submit" value="Click here"><?php echo msg('area_check_out_file')?></button>&nbsp;<?php echo msg('message_click_to_checkout_document')?></div>
 </form>
     <?php echo msg('message_once_the_document_has_completed')?>&nbsp;<a href="out.php"><?php echo msg('button_continue')?></a>.
@@ -74,34 +73,35 @@ if (!isset($_GET['submit']))
     draw_footer();
 }
 // form submitted - download
-else
-{
-    checkUserPermission($_REQUEST['id'], $fileobj->WRITE_RIGHT, $fileobj);
-    $realname = $fileobj->getName();
-    if($_GET['access_right'] == 'modify')
-    {
+else {
+    $id = (int) $_REQUEST['id'];
+
+    checkUserPermission($id, $file_data_obj->WRITE_RIGHT, $file_data_obj);
+    $real_name = $file_data_obj->getName();
+    if ($_GET['access_right'] == 'modify') {
         // since this user has checked it out and will modify it
         // update db to reflect new status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '$_SESSION[uid]' WHERE id = '$_GET[id]'";
-        $result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = :uid WHERE id = :id";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':uid' => $_SESSION['uid'],
+            ':id' => $id
+        ));
     }
     // calculate filename
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $_GET['id'] . '.dat';
+    $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
 
-    if (file_exists($filename))
-    {
+    if (file_exists($filename)) {
         // send headers to browser to initiate file download
-        header ('Content-Type: application/octet-stream');
-        header ('Content-Disposition: attachment; filename="' . $realname . '"');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . e::h($real_name) . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);
         
-        AccessLog::addLogEntry($_REQUEST['id'],'O');
-        AccessLog::addLogEntry($_REQUEST['id'],'D');
-    }
-    else
-    {
+        AccessLog::addLogEntry($id, 'O', $pdo);
+        AccessLog::addLogEntry($id, 'D', $pdo);
+    } else {
         echo 'File does not exist...';
     }
 }

@@ -11,7 +11,7 @@
                     <td>
                         <select class="multiView" multiple="multiple" id="types" name="types[]">
                             {foreach from=$filetypes_array item=i}
-                                <option value="{$i.id}" {if $i.active eq '1'}selected="selected"{/if}>{$i.type}</option>
+                                <option value="{$i.id|escape}" {if $i.active eq '1'}selected="selected"{/if}>{$i.type|escape:'html'}</option>
                             {/foreach}
                         </select>
                     </td>

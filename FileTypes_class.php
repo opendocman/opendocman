@@ -1,7 +1,7 @@
 <?php
 /*
 FileTypes_class.php - Container for allowed file types info
-Copyright (C) 2010-2011 Stephen Lawrence Jr.
+Copyright (C) 2010-2014 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,115 +18,167 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('FileTypes_class') )
-{
+if (!defined('FileTypes_class')) {
     define('FileTypes_class', 'true', false);
+
+    /**
+     * Class that handles the opendocman allowedFileTypes values
+     */
     class FileTypes_class
     {
-       /*
-        * Class that handles the opendocman allowedFileTypes values
-        */
+        protected $connection;
+
+        public function FileTypes_class(PDO $pdo)
+        {
+            $this->connection = $pdo;
+        }
 
        /*
         * Get value for a specific file type based on the key
         * @param string $data
         */
-        function get($data)
+        public function get($data)
         {
-
         }
 
-        /*
+        /**
          * Add a new file type
          * @param string $data
-        */
-        function add($data)
+         * @return bool
+         */
+        public function add($data)
         {
-            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}filetypes (type,active) VALUES ('{$data['filetype']}','1')";
-            $result = mysql_query($query) or die ('Failed to save filetypes: ' . mysql_error());
-            return TRUE;
+            $query = "
+              INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}filetypes
+                (type, active)
+              VALUES
+                (:data, '1')
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute(array(':data' => $data['filetype']));
+
+            return true;
         }
 
-        /*
-        * Save all the file type info
-        * @param array $data Array of values to be saved ($key,$value)
-        */
-        function save($data)
+        /**
+         * Save all the file type info
+         * @param array $data Array of values to be saved ($key,$value)
+         * @return bool
+         */
+        public function save($data)
         {
-
             // First, uncheck all status values
-            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}filetypes SET active='0'";
-            $result = mysql_query($query) or die('Failed to un-set filetypes active values: ' . mysql_error());
+            $query = "
+              UPDATE
+                {$GLOBALS['CONFIG']['db_prefix']}filetypes
+              SET
+                active='0'
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+
             if (isset($data['types'])) {
                 foreach ($data['types'] as $key => $value) {
-                    //print_r($data['types']);exit;
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}filetypes SET active='1' WHERE id='$value'";
-                    //echo $query;exit;
-                    $result = mysql_query($query) or die('Failed to save filetypes: ' . mysql_error());
+                    $query2 = "
+                      UPDATE
+                        {$GLOBALS['CONFIG']['db_prefix']}filetypes
+                      SET
+                        active='1'
+                      WHERE
+                        id = :value
+                    ";
+                    $stmt = $this->connection->prepare($query2);
+                    $stmt->execute(array(':value' => $value));
                 }
-                return TRUE;
+                return true;
             }
             return false;
         }
 
-        /*
-        * Load active file types to an array
-        * return array
-        */
-        function load()
+        /**
+         * Load active file types into a global array
+         */
+        public function load()
         {
             $GLOBALS['CONFIG']['allowedFileTypes'] = array();
-            $sql = "SELECT type FROM {$GLOBALS['CONFIG']['db_prefix']}filetypes WHERE active='1'";
-            $result = mysql_query($sql) or die ('Getting filetypes failed: ' . mysql_error());
-            while(list($value) = mysql_fetch_row($result))
-            {
-                array_push($GLOBALS['CONFIG']['allowedFileTypes'], $value);
-            }
+            $query = "
+              SELECT
+                type
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}filetypes
+              WHERE
+                active='1'
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
+            foreach ($result as $row) {
+                array_push($GLOBALS['CONFIG']['allowedFileTypes'], $row['type']);
+            }
         }
 
         /*
          * Show the file types edit form
         */
-        function edit()
+        public function edit()
         {
             $filetypes_arr = array();
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}filetypes";
-            $result = mysql_query($query) or die('Failed to edit filetypes: ' . mysql_error());
-            while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-            {
+            $query = "
+              SELECT
+                *
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}filetypes
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            foreach ($result as $row) {
                 $filetypes_arr[] = $row;
             }
 
-            $GLOBALS['smarty']->assign('filetypes_array',$filetypes_arr);
+            $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
             display_smarty_template('filetypes.tpl');
         }
 
         /*
          * Show the form in order to Delete a filetype
         */
-        function deleteSelect()
+        public function deleteSelect()
         {
             $filetypes_arr = array();
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}filetypes";
-            $result = mysql_query($query) or die('Failed to select filetypes list: ' . mysql_error());
-            while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-            {
+            $query = "
+              SELECT
+                *
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}filetypes
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+
+            foreach ($result as $row) {
                 $filetypes_arr[] = $row;
             }
 
-            $GLOBALS['smarty']->assign('filetypes_array',$filetypes_arr);
+            $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
             display_smarty_template('filetypes_deleteshow.tpl');
         }
 
-        function delete($data)
+        public function delete($data)
         {
-            foreach($data['types'] as $id)
-            {
-                $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}filetypes WHERE id={$id}";
-                $result = mysql_query($query) or die('Failed to delete filetype: ' . mysql_error());
+            foreach ($data['types'] as $id) {
+                $query = "
+                  DELETE FROM
+                    {$GLOBALS['CONFIG']['db_prefix']}filetypes
+                  WHERE
+                    id = :id
+                ";
+                $stmt = $this->connection->prepare($query);
+                $stmt->execute(array(':id' => $id));
             }
-            return TRUE;
+            return true;
         }
     }
 }

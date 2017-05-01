@@ -1,0 +1,53 @@
+{
+    "name": "aura/view",
+    "type": "library",
+    "description": "Provides an implementation of the TemplateView and TwoStepView patterns, with support for helpers and for closures as templates, using PHP itself as the templating language.",
+    "keywords": [
+        "escape",
+        "escaper",
+        "escaping",
+        "template",
+        "template view",
+        "two step view",
+        "two-step view",
+        "twostep view",
+        "view"
+    ],
+    "homepage": "https://github.com/auraphp/Aura.View",
+    "license": "BSD-2-Clause",
+    "authors": [
+        {
+            "name": "Aura.View Contributors",
+            "homepage": "https://github.com/auraphp/Aura.View/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aura\\View\\": "src/",
+            "Aura\\View\\_Config\\": "config/"
+        }
+    },
+    "extra": {
+        "aura": {
+            "type": "library",
+            "config": {
+                "common": "Aura\\View\\_Config\\Common"
+            }
+        },
+        "branch-alias": {
+            "dev-develop-2": "2.0.x-dev"
+        }
+    },
+    "require-dev": {
+        "aura/di": "~2.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\View\\": "tests/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
+        }
+    }
+}

@@ -18,249 +18,325 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-if( !defined('Dept_Perms_class') )
-{
+if (!defined('Dept_Perms_class')) {
     define('Dept_Perms_class', 'true');
 
     class Dept_Perms extends databaseData
     {
-        var $fid;
-        var $id;
-        var $rights;
-        var $file_obj;
-        var $error;
-        var $chosen_mode;
-        var $connection, $database;
-        var $error_flag = FALSE;
+        public $fid;
+        public $id;
+        public $rights;
+        public $file_obj;
+        public $error;
+        public $chosen_mode;
+        protected $connection;
+        public $error_flag = false;
 
-        var $NONE_RIGHT = 0;
-        var $VIEW_RIGHT = 1;
-        var $READ_RIGHT = 2;
-        var $WRITE_RIGHT = 3;
-        var $ADMIN_RIGHT = 4;
-        var $FORBIDDEN_RIGHT = -1;
-        var $USER_MODE = 0;
-        var $FILE_MODE = 1;
+        public $NONE_RIGHT = 0;
+        public $VIEW_RIGHT = 1;
+        public $READ_RIGHT = 2;
+        public $WRITE_RIGHT = 3;
+        public $ADMIN_RIGHT = 4;
+        public $FORBIDDEN_RIGHT = -1;
+        public $USER_MODE = 0;
+        public $FILE_MODE = 1;
 
-        function Dept_Perms($id, $connection, $database)
+        /**
+         * @param int $id
+         * @param PDO $connection
+         */
+        public function Dept_Perms($id, PDO $connection)
         {
-            $this->id = $id;  // this can be fid or uid
+            // this can be fid or uid
+            $this->id = $id;
             $this->connection = $connection;
-            $this->database = $database;
         }
-        function getCurrentViewOnly($limit = true)
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
+        public function getCurrentViewOnly($limit = true)
         {
             return $this->loadData_UserPerm($this->VIEW_RIGHT, $limit);
         }
-        function getCurrentNoneRight($limit = true)
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
+        public function getCurrentNoneRight($limit = true)
         {
             return $this->loadData_UserPerm($this->NONE_RIGHT, $limit);
         }
-        function getCurrentReadRight($limit = true)
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
+        public function getCurrentReadRight($limit = true)
         {
             return $this->loadData_UserPerm($this->READ_RIGHT, $limit);
         }
-        function getCurrentWriteRight($limit = true)
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
+        public function getCurrentWriteRight($limit = true)
         {
             return $this->loadData_UserPerm($this->WRITE_RIGHT, $limit);
         }
-        function getCurrentAdminRight($limit = true)
+
+        /**
+         * @param bool $limit
+         * @return array
+         */
+        public function getCurrentAdminRight($limit = true)
         {
             return $this->loadData_UserPerm($this->ADMIN_RIGHT, $limit);
         }
-        function getId()
+
+        /**
+         * @return int
+         */
+        public function getId()
         {
             return $this->id;
         }
-        /* loadData_userPerm($right) return a list of files that
-	the department that this OBJ represents has authority >=
-	than $right */
-        function loadData_UserPerm($right, $limit = true)
+
+        /**
+         * Return a list of files that the department that this OBJ represents has authority >= than $right
+         * @param int $right
+         * @param bool $limit
+         * @return array
+         */
+        public function loadData_UserPerm($right, $limit = true)
         {
             $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
 
-            //$s1 = getmicrotime();
-            $fileid_array = array();
             $query = "SELECT deptperms.fid
                     FROM
                         {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as data,
                         {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS as deptperms
                     WHERE
-                            deptperms.rights >= $right
+                            deptperms.rights >= :right
                     AND
-                            deptperms.dept_id=$this->id
+                            deptperms.dept_id = :id
                     AND
                             data.id=deptperms.fid
                     AND
                             data.publishable=1 "
-                                . $limit_query;
-            $result = mysql_query($query, $this->connection) or die("Error in querying: $query" .mysql_error());
-            //$fileid_array[$index][0] ==> fid
-            //$fileid_array[$index][1] ==> owner
-            //$fileid_array[$index][2] ==> username
-            $llen = mysql_num_rows($result);
-            $index = 0;
-            while($index<$llen)
-            {
-                list($fileid_array[$index++] ) = mysql_fetch_row($result);
-            }
-            return $fileid_array;
+                . $limit_query;
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':right' => $right
+            ));
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            return $result;
         }
-        /* canView($data_id) return a boolean on whether or not this department
-	has view right to the file whose ID is $data_id*/
-        function canView($data_id)
+
+        /**
+         * return a boolean on whether or not this department
+         * has view right to the file whose ID is $data_id*
+         * @param int $data_id
+         * @return bool
+         */
+        public function canView($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
-            /* check  to see if this department doesn't have a forbidden right or
-		if this file is publishable*/
-            if(!$this->isForbidden($data_id) and $filedata->isPublishable() )
-            {
+            $filedata = new FileData($data_id, $this->connection);
+
+            //check  to see if this department doesn't have a forbidden right or
+            //if this file is publishable
+            if (!$this->isForbidden($data_id) and $filedata->isPublishable()) {
                 // return whether or not this deptartment can view the file
-                if($this->canDept($data_id, $this->VIEW_RIGHT))
-                {
+                if ($this->canDept($data_id, $this->VIEW_RIGHT)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
             return false;
         }
-        /* canRead($data_id) return a boolean on whether or not this department
-	has read right to the file whose ID is $data_id*/
-        function canRead($data_id)
+
+        /**
+         * return a boolean on whether or not this department
+         * has read right to the file whose ID is $data_id
+         * @param int $data_id
+         * @return bool
+         */
+        public function canRead($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
-            /* check  to see if this department doesn't have a forbidden right or
-		if this file is publishable*/
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
+            $filedata = new FileData($data_id, $this->connection);
+
+            //check  to see if this department doesn't have a forbidden right or
+            //if this file is publishable
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
                 // return whether or not this deptartment can read the file
-                if($this->canDept($data_id, $this->READ_RIGHT) or !$filedata->isPublishable($data_id) )
-                {
+                if ($this->canDept($data_id, $this->READ_RIGHT) or !$filedata->isPublishable($data_id)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
             return false;
         }
-        /* canWrite($data_id) return a boolean on whether or not this department
-	has modify right to the file whose ID is $data_id*/
-        function canWrite($data_id)
+
+        /**
+         * return a boolean on whether or not this department
+         * has modify right to the file whose ID is $data_id
+         * @param int $data_id
+         * @return bool
+         */
+        public function canWrite($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
-            /* check  to see if this department doesn't have a forbidden right or
-		if this file is publishable*/
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
+            $filedata = new FileData($data_id, $this->connection);
+
+            //check  to see if this department doesn't have a forbidden right or
+            //if this file is publishable
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
                 // return whether or not this deptartment can modify the file
-                if($this->canDept($data_id, $this->WRITE_RIGHT))
-                {
+                if ($this->canDept($data_id, $this->WRITE_RIGHT)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
-
         }
-        /* canAdmin($data_id) return a boolean on whether or not this department
-	has admin right to the file whose ID is $data_id*/
-        function canAdmin($data_id)
+
+        /**
+         * return a boolean on whether or not this department
+         * has admin right to the file whose ID is $data_id
+         * @param int $data_id
+         * @return bool
+         */
+        public function canAdmin($data_id)
         {
-            $filedata = new FileData($data_id, $this->connection, $this->database);
-            /* check  to see if this department doesn't have a forbidden right or
-		if this file is publishable*/
-            if(!$this->isForbidden($data_id) or !$filedata->isPublishable() )
-            {
+            $filedata = new FileData($data_id, $this->connection);
+
+            //check  to see if this department doesn't have a forbidden right or
+            //if this file is publishable
+            if (!$this->isForbidden($data_id) or !$filedata->isPublishable()) {
                 // return whether or not this deptartment can admin the file
-                if($this->canDept($data_id, $this->ADMIN_RIGHT))
-                {
+                if ($this->canDept($data_id, $this->ADMIN_RIGHT)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     false;
                 }
             }
-
         }
-        /* isForbidden($data_id) return a boolean on whether or not this department
-	has forbidden right to the file whose ID is $data_id
-	EX:
-	$dpobj = new Dept_Perm($dept_id, $connection, $database);
-	if( $dpobj.isForbidden($data_id) != $dpobj->error_code 
-		and $dpobj.isForbidden($data_id) = false )
-	{
-		......
-	} 
-        */
-        function isForbidden($data_id)
+
+        /**
+         * Return a boolean on whether or not this department has forbidden right to the file whose ID is $data_id
+         * @param int $data_id
+         * @return bool
+         */
+        public function isForbidden($data_id)
         {
             $this->error_flag = true; // reset flag
-            $right = -1;
-            $query = "SELECT $this->database.{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights FROM $this->database.{$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id";
-            $result = mysql_query($query, $this->connection) or die("Error in query" .mysql_error() );
-            if(mysql_num_rows($result) == 1)
-            {
-                list ($right) = mysql_fetch_row($result);
-                if($right == $this->FORBIDDEN_RIGHT)
-                {
+            $query = "
+                SELECT
+                  rights
+                FROM
+                  {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
+                WHERE
+                  dept_id = :id
+                AND
+                  fid = :data_id
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':data_id' => $data_id,
+                ':id' => $this->id
+            ));
+            $result = $stmt->fetch();
+
+            if ($stmt->rowCount() == 1) {
+                if ($result['rights'] == $this->FORBIDDEN_RIGHT) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
-                $this->error = "Non-unique database entry found in $this->database.$this->TABLE_DEPT_PERMS";
+            } else {
+                $this->error = "Non-unique database entry found in $this->TABLE_DEPT_PERMS";
                 $this->error_flag = false;
                 return 0;
             }
         }
-        // canDept($data_id, $right) return a bool on whether or not this deparment has $right
-        // right on file with data id of $data_id
-        function canDept($data_id, $right)
-        {
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id and {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id AND {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights >= $right";
-            $result = mysql_query($query, $this->connection) or die ("Error in querying: $query" .mysql_error() );
 
-            switch(mysql_num_rows($result) )
-            {
+        /**
+         * return a bool on whether or not this department has $right
+         * right on file with data id of $data_id
+         * @param int $data_id
+         * @param int $right
+         * @return bool
+         */
+        public function canDept($data_id, $right)
+        {
+            $query = "
+              SELECT
+                *
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
+              WHERE
+                dept_id = :id
+              AND
+                fid = :data_id
+              AND
+                rights >= :right
+            ";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':data_id' => $data_id,
+                ':right' => $right,
+                ':id' => $this->id
+            ));
+
+            $num_results = $stmt->rowCount();
+            switch ($num_results) {
                 case 1: return true;
                     break;
                 case 0: return false;
                     break;
-                default : $this->error = 'non-unique uid: $this->id';
+                default : $this->error = 'non-unique uid: ' . $this->id;
                     break;
             }
         }
-        // return the numeric permission setting of this department for the file with
-        // ID nuber ob $data_id
-        function getPermission($data_id)
+
+        /**
+         * Return the numeric permission setting of this department for the file with ID number $data_id
+         * @param int $data_id
+         * @return int|string
+         */
+        public function getPermission($data_id)
         {
-            $query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.rights FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS WHERE {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.dept_id = $this->id and {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS.fid = $data_id";
-            $result = mysql_query($query, $this->connection) or die("Error in query: .$query" . mysql_error() );
-            if(mysql_num_rows($result) == 1)
-            {
-                list($permission) = mysql_fetch_row($result);
+            $query = "
+              SELECT
+                rights
+              FROM
+                {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DEPT_PERMS
+              WHERE
+                dept_id = :id
+              AND
+                fid = :data_id";
+            $stmt =  $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':data_id' => $data_id,
+                ':id' => $this->id
+            ));
+            $results = $stmt->fetch();
+
+            $num_results = $stmt->rowCount();
+            if ($num_results == 1) {
+                $permission = $results['rights'];
                 return $permission;
-            }
-            else if (mysql_num_rows($result) == 0)
-            {
+            } elseif ($num_results == 0) {
                 return 0;
-            }
-            else
-            {
+            } else {
                 return 'Non-unique error';
             }
         }
-    }//end class
-}//end ifdef
+    }
+}

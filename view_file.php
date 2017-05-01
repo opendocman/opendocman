@@ -2,7 +2,7 @@
 /*
 view_file.php - draws screen which allows users to view files inline
 Copyright (C) 2002-2004 Stephen Lawrence Jr., Khoa Nguyen
-Copyright (C) 2005-2011 Stephen Lawrence Jr.
+Copyright (C) 2005-2015 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,8 +24,7 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
@@ -33,19 +32,15 @@ require_once("AccessLog_class.php");
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$secureurl_obj = New phpsecureurl();
-
-$lrequest_id = $_REQUEST['id']; //save an original copy of id
-if(strchr($_REQUEST['id'], '_') )
-{
-    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
-    $lrevision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+$request_id = $_REQUEST['id']; //save an original copy of id
+if (strchr($_REQUEST['id'], '_')) {
+    list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
+    $revision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
 }
 
-if(!isset($_GET['submit']))
-{
-    draw_header(msg('view') . ' ' . msg('file'),$last_message);
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+if (!isset($_GET['submit'])) {
+    draw_header(msg('view') . ' ' . msg('file'), $last_message);
+    $file_obj = new FileData($_REQUEST['id'], $pdo);
     $file_name = $file_obj->getName();
     $file_id = $file_obj->getId();
     $realname = $file_obj->getName();
@@ -53,115 +48,83 @@ if(!isset($_GET['submit']))
     // Get the suffix of the file so we can look it up
     // in the $mimetypes array
     $suffix = '';
-    if(strchr($realname, '.'))
-    {
+    if (strchr($realname, '.')) {
         // Fix by blackwes
-        $prefix = (substr($realname,0,(strrpos($realname,"."))));
-        $suffix = strtolower((substr($realname,((strrpos($realname,".")+1)))));
+        $prefix = (substr($realname, 0, (strrpos($realname, "."))));
+        $suffix = strtolower((substr($realname, ((strrpos($realname, ".")+1)))));
     }
-    
-    $lmimetype = File::mime_by_ext($suffix);
-    
-    //echo "Realname is $realname<br>";
-    //echo "prefix = $prefix<br>";
-    //echo "suffix = $suffix<br>";
-    //echo "mime:$lmimetype";
-    echo '<form action="view_file.php" name="view_file_form" method="get">';
-    echo '<INPUT type="hidden" name="id" value="'.$lrequest_id.'">';
-    echo '<INPUT type="hidden" name="mimetype" value="'.$lmimetype.'">';
-    echo '<BR>';
-    // Present a link to allow for inline viewing
-    echo msg('message_to_view_your_file') . ' <a class="body" style="text-decoration:none" target="_new" href="view_file.php?submit=view&id=' . urlencode($lrequest_id) . '&mimetype=' . urlencode("$lmimetype") . '">' . msg('button_click_here') . '</a><br><br>';
-    echo '<div class="buttons"><button class="regular" type="submit" name="submit" value="Download">';
-    echo msg('message_if_you_are_unable_to_view2');
-    echo '</button></div>';
-    echo msg('message_if_you_are_unable_to_view1');
-    echo msg('message_if_you_are_unable_to_view2');
-    echo msg('message_if_you_are_unable_to_view3');
-    echo '</form>';
 
+    // If we have a revision ID lets use the original
+    // request id that included the file id and revision number (ex. 1_0)
+    if (isset($revision_id)) {
+        $file_id = $request_id;
+    }
+
+    $mimetype = File::mime_by_ext($suffix);
+
+    $GLOBALS['smarty']->assign('mimetype', $mimetype);
+    $GLOBALS['smarty']->assign('file_id', $file_id);
+
+    // drw form
+    display_smarty_template('view_file.tpl');
     draw_footer();
-}
-elseif ($_GET['submit'] == 'view')
-{
-    //echo "mimetype = $mimetype<br>";
-    //exit;
-    //echo "ID is $_REQUEST['id']";
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+} elseif ($_GET['submit'] == 'view') {
+    $file_obj = new FileData($_REQUEST['id'], $pdo);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
     $realname = $file_obj->getName();
-    if( isset($lrevision_id) )
-    {
-        $filename = $lrevision_dir . $lrequest_id . ".dat";
-    }
-    elseif( $file_obj->isArchived() )
-    {
+
+    if (isset($revision_id)) {
+        $filename = $revision_dir . $request_id . ".dat";
+    } elseif ($file_obj->isArchived()) {
         $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
-    }
-    else
-    {
+    } else {
         $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
     }
 
-    if ( file_exists($filename) )
-    {
+    if (file_exists($filename)) {
         // send headers to browser to initiate file download
         header('Content-Length: '.filesize($filename));
         // Pass the mimetype so the browser can open it
-        header ('Cache-control: private');
+        header('Cache-control: private');
         header('Content-Type: ' . $_GET['mimetype']);
-        header('Content-Disposition: inline; filename="' . rawurlencode($realname) . '"');
+        header('Content-Disposition: attachment; filename="' . rawurlencode($realname) . '"');
         // Apache is sending Last Modified header, so we'll do it, too
         $modified=filemtime($filename);
-        header('Last-Modified: '. date('D, j M Y G:i:s T',$modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
+        header('Last-Modified: '. date('D, j M Y G:i:s T', $modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
         readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'],'V');
-    }
-    else
-    {
+        AccessLog::addLogEntry($_REQUEST['id'], 'V', $pdo);
+    } else {
         echo msg('message_file_does_not_exist');
     }
-}
-elseif ($_GET['submit'] == 'Download')
-{
-    $file_obj = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+} elseif ($_GET['submit'] == 'Download') {
+    $file_obj = new FileData($_REQUEST['id'], $pdo);
+
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
+
     $realname = $file_obj->getName();
-    if( isset($lrevision_id) )
-    {
-        $filename = $lrevision_dir . $lrequest_id . ".dat";
-    }
-    elseif( $file_obj->isArchived() )
-    {
+
+    if (isset($revision_id)) {
+        $filename = $revision_dir . $request_id . ".dat";
+    } elseif ($file_obj->isArchived()) {
         $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
-    }
-    else
-    {
+    } else {
         $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
     }
 
-    if (file_exists($filename))
-    {
+    if (file_exists($filename)) {
         // send headers to browser to initiate file download
         header('Cache-control: private');
-        header ('Content-Type: '.$_GET['mimetype']);
-        header ('Content-Disposition: attachment; filename="' . $realname . '"');
+        header('Content-Type: '.$_GET['mimetype']);
+        header('Content-Disposition: attachment; filename="' . $realname . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'],'D');
-    }
-    else
-    {
+        AccessLog::addLogEntry($_REQUEST['id'], 'D', $pdo);
+    } else {
         echo msg('message_file_does_not_exist');
     }
-
-}
-else
-{
+} else {
     echo msg('message_nothing_to_do');
-    echo 'submit is ' . $_GET['submit'];
 }
-?>

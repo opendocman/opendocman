@@ -1,4 +1,6 @@
 <?php
+use Aura\Html\Escaper as e;
+
 /*
 history.php - display revision history
 Copyright (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
@@ -25,125 +27,119 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '')
-{
+if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
     header('Location:error.php?ec=2');
     exit;
 }
 
 draw_header(msg('area_view_history'), $last_message);
 //revision parsing
-if(strchr($_REQUEST['id'], '_') )
-{
-    list($_REQUEST['id'], $lrevision_id) = explode('_' , $_REQUEST['id']);
+if (strchr($_REQUEST['id'], '_')) {
+    list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
 }
-$datafile = new FileData($_REQUEST['id'], $GLOBALS['connection'], DB_NAME);
+$datafile = new FileData($_REQUEST['id'], $pdo);
 // verify
-if ($datafile->getError() != NULL)
-{
+if ($datafile->getError() != null) {
     header('Location:error.php?ec=2');
     exit;
-}
-else
-{
-// obtain data from resultset
+} else {
+    // obtain data from resultset
 
-$owner_fullname = $datafile->getOwnerFullName();
-$owner = $owner_fullname[1].', '.$owner_fullname[0];
-$realname = $datafile->getRealName();
-$category = $datafile->getCategoryName();
-$created = $datafile->getCreatedDate();
-$description = $datafile->getDescription();
-$comments = $datafile->getComment();
-$status = $datafile->getStatus();
+    $owner_full_name = $datafile->getOwnerFullName();
+    $owner = $owner_full_name[1].', '.$owner_full_name[0];
+    $real_name = $datafile->getRealName();
+    $category = $datafile->getCategoryName();
+    $created = $datafile->getCreatedDate();
+    $description = $datafile->getDescription();
+    $comments = $datafile->getComment();
+    $status = $datafile->getStatus();
+    $id = $_REQUEST['id'];
 
 // corrections
-if ($description == '')
-{ 
+if ($description == '') {
     $description = msg('message_no_description_available');
 }
-if ($comments == '')
-{ 
-    $comments = msg('message_no_author_comments_available');
-}
-if($datafile->isArchived())
-{	
-    $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . '.dat';
-}
-else
-{	
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . '.dat';
-}
-?>
+    if ($comments == '') {
+        $comments = msg('message_no_author_comments_available');
+    }
+    if ($datafile->isArchived()) {
+        $filename = $GLOBALS['CONFIG']['archiveDir'] . e::h($id) . '.dat';
+    } else {
+        $filename = $GLOBALS['CONFIG']['dataDir'] . e::h($id) . '.dat';
+    }
+    ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
 
 <tr>
 <td align="right">
 <?php
 // check file status, display appropriate icon
-if ($status == 0)
-{ 
+if ($status == 0) {
     echo '<img src="images/file_unlocked.png" alt="" border=0 align="absmiddle">';
-} 
-else
-{ 
+} else {
     echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
 }
-echo '</td>';
-echo '<td align="left"><font size="+1">'.$realname.'</font></td>';
-?>
+    echo '</td>';
+    echo '<td align="left"><font size="+1">'. e::h($real_name) .'</font></td>';
+    ?>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_category');?></th><td><?php echo $category; ?></td>
+<th valign=top align=right><?php echo msg('historypage_category');
+    ?></th><td><?php echo e::h($category);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_file_size');?></th><td> <?php echo display_filesize($filename); ?></td>
+<th valign=top align=right><?php echo msg('historypage_file_size');
+    ?></th><td> <?php echo display_filesize($filename);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_creation_date');?></th><td> <?php echo fix_date($created); ?></td>
+<th valign=top align=right><?php echo msg('historypage_creation_date');
+    ?></th><td> <?php echo fix_date($created);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_owner');?></th><td> <?php echo $owner; ?></td>
+<th valign=top align=right><?php echo msg('historypage_owner');
+    ?></th><td> <?php echo e::h($owner);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_description');?></th><td> <?php echo $description; ?></td>
+<th valign=top align=right><?php echo msg('historypage_description');
+    ?></th><td> <?php echo e::h($description);
+    ?></td>
 </tr>
 
 <tr>
-<th valign=top align=right><?php echo msg('historypage_comment');?></th><td> <?php echo $comments; ?></td>
+<th valign=top align=right><?php echo msg('historypage_comment');
+    ?></th><td> <?php echo e::h($comments);
+    ?></td>
 </tr>
 <tr>
-<th valign=top align=right><?php echo msg('historypage_revision');?></th><td>
+<th valign=top align=right><?php echo msg('historypage_revision');
+    ?></th><td>
     <div id="revision_current">
-<?php 
-if(isset($lrevision_id))
-{
-    if( $lrevision_id == 0)
-    {
+<?php
+if (isset($revision_id)) {
+    if ($revision_id == 0) {
         echo msg('historypage_original_revision');
+    } else {
+        echo $revision_id;
     }
-    else
-    {
-        echo $lrevision_id;
-    }
-}
-else
-{
+} else {
     echo msg('historypage_latest');
 }
-        ?>
+    ?>
     </div>
 </td>
 </tr>
@@ -153,7 +149,8 @@ else
 <td align="right">
 <img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">
 </td>
-<td><?php echo msg('historypage_history');?></td>
+<td><?php echo msg('historypage_history');
+    ?></td>
 </td>
 </tr>
 
@@ -161,69 +158,106 @@ else
 <td colspan="2" align="center">
 	<table border="0" cellspacing="5" cellpadding="5">
 	<tr bgcolor="#83a9f7">
-	<th><font size=-1><?php echo msg('historypage_version');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_modification');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_by');?></font></th>
-	<th><font size=-1><?php echo msg('historypage_note');?></font></th>
+	<th><font size=-1><?php echo msg('historypage_version');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_modification');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_by');
+    ?></font></th>
+	<th><font size=-1><?php echo msg('historypage_note');
+    ?></font></th>
 	</tr>
 <?php
-	// query to obtain a list of modifications
-	
-	if( isset($lrevision_id) )
-	{
-		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-						{$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.note, 
-						{$GLOBALS['CONFIG']['db_prefix']}log.revision 
-						FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-						WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-						AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-						AND {$GLOBALS['CONFIG']['db_prefix']}log.revision <= $lrevision_id 
-						ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
-	}
-	else
-	{
-		$query = "SELECT {$GLOBALS['CONFIG']['db_prefix']}user.last_name, 
-					{$GLOBALS['CONFIG']['db_prefix']}user.first_name, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.modified_on, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.note, 
-					{$GLOBALS['CONFIG']['db_prefix']}log.revision 
-					FROM {$GLOBALS['CONFIG']['db_prefix']}log, {$GLOBALS['CONFIG']['db_prefix']}user 
-					WHERE {$GLOBALS['CONFIG']['db_prefix']}log.id = '{$_REQUEST['id']}' 
-					AND {$GLOBALS['CONFIG']['db_prefix']}user.username = {$GLOBALS['CONFIG']['db_prefix']}log.modified_by 
-					ORDER BY {$GLOBALS['CONFIG']['db_prefix']}log.modified_on DESC";
-	}
-	$result = mysql_query($query, $GLOBALS['connection']) or die ("Error in query: $query. " . mysql_error());
-	$current_revision = mysql_num_rows($result);
-	// iterate through resultset
-	while(list($last_name, $first_name, $modified_on, $note, $revision_id) = mysql_fetch_row($result))
-	{
+    // query to obtain a list of modifications
 
-            if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
-                $bgcolor = "#E3E7F9";
-            } else {
-                $bgcolor = "#FCFCFC";
-            }
+    if (isset($revision_id)) {
+        $query = "
+          SELECT
+            u.last_name,
+            uuser.first_name,
+			l.modified_on,
+			l.note,
+			l.revision
+		  FROM
+		    {$GLOBALS['CONFIG']['db_prefix']}log l,
+		    {$GLOBALS['CONFIG']['db_prefix']}user u
+		  WHERE
+		    l.id = :id
+          AND
+            u.username = l.modified_by
+		  AND
+		    l.revision <= :revision_id
+		  ORDER BY
+		    l.modified_on DESC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id,
+            ':revision_id'=> $revision_id
+        ));
+        $result = $stmt->fetchAll();
+    } else {
+        $query = "
+          SELECT
+            u.last_name,
+            u.first_name,
+			l.modified_on,
+			l.note,
+			l.revision
+          FROM
+            {$GLOBALS['CONFIG']['db_prefix']}log l,
+			{$GLOBALS['CONFIG']['db_prefix']}user u
+		  WHERE
+			l.id = :id
+          AND
+            u.username = l.modified_by
+          ORDER BY
+            l.modified_on DESC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id
+        ));
+        $result = $stmt->fetchAll();
+    }
 
-            echo '<tr bgcolor=' . $bgcolor . '>';
 
-            $extra_message = '';
-            if (is_file($GLOBALS['CONFIG']['revisionDir'] . $_REQUEST['id'] . '/' . $_REQUEST['id'] . "_$revision_id.dat")) {
-                echo '<td align=center><font size="-1"> <a href="details.php?id=' . $_REQUEST['id'] . "_$revision_id" . '&state=' . ($_REQUEST['state'] - 1) . '"><div class="revision">' . ($revision_id + 1) . '</div></a>' . $extra_message;
-            } else {
-                echo '<td><font size="-1">' . $revision_id . $extra_message;
-            }
-            ?>
+    $current_revision = $stmt->rowCount();
+    // iterate through resultset
+    foreach ($result as $row) {
+        $last_name = $row['last_name'];
+        $first_name = $row['first_name'];
+        $modified_on = $row['modified_on'];
+        $note = $row['note'];
+        $revision = $row['revision'];
+
+        if (isset($bgcolor) && $bgcolor == "#FCFCFC") {
+            $bgcolor = "#E3E7F9";
+        } else {
+            $bgcolor = "#FCFCFC";
+        }
+
+        echo '<tr bgcolor=' . $bgcolor . '>';
+
+        $extra_message = '';
+        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . "_$revision.dat")) {
+            echo '<td align=center><font size="-1"> <a href="details.php?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
+        } else {
+            echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
+        }
+        ?>
                     </font></td>
-                    <td><font size="-1"><?php echo fix_date($modified_on); ?></font></td>
-                    <td><font size="-1"><?php echo $last_name . ', ' . $first_name; ?></font></td>
-                    <td><font size="-1"><?php echo $note; ?></font></td>
+                    <td><font size="-1"><?php echo fix_date($modified_on);
+        ?></font></td>
+                    <td><font size="-1"><?php echo e::h($last_name) . ', ' . e::h($first_name);
+        ?></font></td>
+                    <td><font size="-1"><?php echo e::h($note);
+        ?></font></td>
             </tr>
 <?php
-	}
-	// clean up
-	mysql_free_result($result);
+
+    }
+    // clean up
 ?>
 	</table>
 </td>
@@ -232,7 +266,6 @@ else
 </table>
 <?php
 // Call the plugin API
-callPluginMethod('onAfterHistory',$datafile->getId());
-draw_footer();
+callPluginMethod('onAfterHistory', $datafile->getId());
+    draw_footer();
 }
-

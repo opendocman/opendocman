@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Click para ver Documentos P&uacute;blicos';
 $lang['forgotpassword'] = 'Olvid&oacute; su Contrase&nacute;a?';
-$lang['install_folder']  = 'Advertencia: Si usted ha instalando/actualizando deber&iacute;a eliminar el directorio \'install\' antes de continuar';
 $lang['signup'] = 'Registrarse como usuario';
 $lang['welcome'] = 'Bienvenido a OpenDocMan';
 $lang['welcome2'] = 'Debe autenticarse para comenzar a utilizar esta herramienta de almacenamiento, publicaci&oacute;n y control de versiones';
@@ -295,7 +294,7 @@ $lang['message_no_files_found'] = 'No Se Encontraron Archivos';
 $lang['message_no_information_available'] = 'No Hay informacion Disponible';
 $lang['message_non_unique_account'] = 'Ya existe el usuario';
 $lang['message_non_unique_key'] = 'Ya existe este ID.';
-$lang['message_not_writeable'] = 'No se puede Escribir!';
+$lang['message_not_writable'] = 'No se puede Escribir!';
 $lang['message_nothing_to_do'] = 'Nada por hacer';
 $lang['message_once_the_document_has_completed'] = 'Una vez el Documento ha sido totalmente Descargado en Su Computadora, Usted Puede';
 $lang['message_original_version'] = 'Versi&oacute;n Original';
@@ -351,7 +350,7 @@ $lang['addpage_admin'] = 'Administrar';
 $lang['addpage_new_file_added'] = 'Un nuevo archivo ha sido añadido';
 $lang['addpage_new'] = 'Nuevo';
 $lang['addpage_uploader'] = 'Subi&oacute;';
-$lang['addpage_file_missing'] = 'Please select a file to upload';    
+$lang['addpage_file_missing'] = 'Please select a file to upload';
 $lang['addpage_permissions'] = 'Permissions';
 
 // Edit File Page
@@ -459,6 +458,9 @@ $lang['userpage_username'] = 'Usuario';
 $lang['userpage_yes'] = 'S&iacute;';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Editar Tipo de Documentos';
 $lang['adminpage_edit_settings'] = 'Editar Configuraci&oacute;n';
 $lang['adminpage_reports'] = 'Reportes';

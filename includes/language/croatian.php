@@ -23,7 +23,6 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Kliknite ovdje kako biste anonimno gledali javne datoteke';
 $lang['forgotpassword'] = 'Zaboravili ste lozinku?';
-$lang['install_folder']  = 'Sigurnosno upozorenje: Ako ste već instalirali/nadogradili program, trebali biste izbrisati \'install\' direktorij prije nego nastavite dalje';
 $lang['signup'] = 'Registrirajte račun';
 $lang['welcome'] = 'Dobro došli u OpenDocMan.';
 $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku pohranu podataka, objavljivanje i kontrolu promjena nad datotekama.';
@@ -297,7 +296,7 @@ $lang['message_no_information_available'] = 'Informacija nije dostupna';
 $lang['message_non_unique_account'] = 'Račun nije jedinstven';
 $lang['message_non_unique_key'] = 'Ključ u bazi nije jedinstven.';
 $lang['message_nothing_to_do'] = 'Ništa za raditi';
-$lang['message_not_writeable'] = 'Nije moguće zapisati!';
+$lang['message_not_writable'] = 'Nije moguće zapisati!';
 $lang['message_once_the_document_has_completed'] = 'Kada se završi preuzimanje dokumenta, možete';
 $lang['message_original_version'] = 'Originalna verzija';
 $lang['message_please_email'] = 'Molimo pošaljite e-poštu';
@@ -461,6 +460,9 @@ $lang['userpage_username'] = 'Korisničko ime';
 $lang['userpage_yes'] = 'Da';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_settings'] = 'Uredi postavke';
 $lang['adminpage_edit_filetypes'] = 'Uredi tipove datoteka';
 $lang['adminpage_reports'] = 'Izvještaji';

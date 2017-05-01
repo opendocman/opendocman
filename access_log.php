@@ -22,19 +22,16 @@ session_start();
 
 include('odm-load.php');
 
-if (!isset($_SESSION['uid']))
-{
+if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
 include('udf_functions.php');
-$secureurl = new phpsecureurl;
 
 // open a connection to the database
-$user_obj = new User($_SESSION['uid'], $GLOBALS['connection'], DB_NAME);
+$user_obj = new User($_SESSION['uid'], $pdo);
 // Check to see if user is admin
-if(!$user_obj->isAdmin())
-{
+if (!$user_obj->isAdmin()) {
     header('Location:error.php?ec=4');
     exit;
 }
@@ -44,36 +41,37 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 draw_header(msg('accesslogpage_access_log'), $last_message);
 
 $query = "SELECT 
-            {$GLOBALS['CONFIG']['db_prefix']}access_log.*, 
-            {$GLOBALS['CONFIG']['db_prefix']}data.realname, 
-            {$GLOBALS['CONFIG']['db_prefix']}user.username
+            a.*,
+            d.realname,
+            u.username
           FROM 
-            {$GLOBALS['CONFIG']['db_prefix']}access_log 
+            {$GLOBALS['CONFIG']['db_prefix']}access_log a
           INNER JOIN 
-            {$GLOBALS['CONFIG']['db_prefix']}data ON {$GLOBALS['CONFIG']['db_prefix']}access_log.file_id={$GLOBALS['CONFIG']['db_prefix']}data.id
+            {$GLOBALS['CONFIG']['db_prefix']}data AS d ON a.file_id = d.id
           INNER JOIN 
-            {$GLOBALS['CONFIG']['db_prefix']}user ON {$GLOBALS['CONFIG']['db_prefix']}access_log.user_id = {$GLOBALS['CONFIG']['db_prefix']}user.id
+            {$GLOBALS['CONFIG']['db_prefix']}user AS u ON a.user_id = u.id
         ";
-$result = mysql_query($query, $GLOBALS['connection']) or die("Error in query: $query. " . mysql_error());
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$result = $stmt->fetchAll();
 
 $actions_array = array(
     "A" => msg('accesslogpage_file_added'),
     "B" => msg('accesslogpage_reserved'),
     "C" => msg('accesslogpage_reserved'),
-    "V" => msg('accesslogpage_file_viewed'), 
-    "D" => msg('accesslogpage_file_downloaded'), 
-    "M" => msg('accesslogpage_file_modified'), 
-    "I" => msg('accesslogpage_file_checked_in'), 
-    "O" => msg('accesslogpage_file_checked_out'), 
-    "X" => msg('accesslogpage_file_deleted'), 
-    "Y" => msg('accesslogpage_file_authorized'), 
+    "V" => msg('accesslogpage_file_viewed'),
+    "D" => msg('accesslogpage_file_downloaded'),
+    "M" => msg('accesslogpage_file_modified'),
+    "I" => msg('accesslogpage_file_checked_in'),
+    "O" => msg('accesslogpage_file_checked_out'),
+    "X" => msg('accesslogpage_file_deleted'),
+    "Y" => msg('accesslogpage_file_authorized'),
     "R" => msg('accesslogpage_file_rejected')
     );
 $accesslog_array = array();
 
-while ($row = mysql_fetch_array($result))
-{
-    $details_link = $secureurl->encode('details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1));
+foreach ($result as $row) {
+    $details_link = 'details.php?id=' . $row['file_id'] . '&state=' . ($_REQUEST['state'] + 1);
 
     $accesslog_array[] = array(
         'user_id' => $row['user_id'],
@@ -86,7 +84,14 @@ while ($row = mysql_fetch_array($result))
     );
 }
 
-$GLOBALS['smarty']->assign('accesslog_array', $accesslog_array);
-display_smarty_template('access_log.tpl');
+$view->setData([
+    'accesslog_array' => $accesslog_array,
+    'showCheckBox' => false,
+    'form' => 0
+]);
+
+$view->setView('access_log');
+$view->setLayout('default');
+echo $view->__invoke();
 
 draw_footer();
