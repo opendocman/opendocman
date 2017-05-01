@@ -217,8 +217,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':id' => $_POST['id']));
 
-    // Change data info to nobody
-    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='0' WHERE owner = :id ";
+    // Change owner to root user
+    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET owner='{$GLOBALS['CONFIG']['root_id']}' WHERE owner = :id ";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':id' => $_POST['id']));
 
