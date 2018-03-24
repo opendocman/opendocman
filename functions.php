@@ -655,17 +655,23 @@ function display_filesize($file)
         if ($size < $kb) {
             return $size . " B";
         } elseif ($size < $mb) {
-            return round($size / $kb, 2) . " KB";
+            return true_round($size / $kb, 2) . " KB";
         } elseif ($size < $gb) {
-            return round($size / $mb, 2) . " MB";
+            return true_round($size / $mb, 2) . " MB";
         } elseif ($size < $tb) {
-            return round($size / $gb, 2) . " GB";
+            return true_round($size / $gb, 2) . " GB";
         } else {
-            return round($size / $tb, 2) . " TB";
+            return true_round($size / $tb, 2) . " TB";
         }
     } else {
         return "X";
     }
+}
+
+function true_round($num, $digits) {
+    $b = floor($num);
+    $c = str_pad(floor(($num-$b)*pow(10,$digits)),$digits,'0',STR_PAD_LEFT);
+    return ($b.".".$c);
 }
 
 function valid_username($username)
