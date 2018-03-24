@@ -413,7 +413,8 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/x-dfx', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'drawing/x-dwf', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'image/svg', 1);",
-"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'video/3gpp', 1);"
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'video/3gpp', 1);",
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'audio/midi', 1);"
         );
 foreach ($sql_operations as $query) {
     $stmt = $pdo->prepare($query);
