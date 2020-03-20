@@ -42,6 +42,8 @@ if (false) {
 
 session_start();
 
+define('REQUIRED_DB_VERSION', '1.3.6');
+
 if (file_exists('../config.php') && (!isset($_SESSION['datadir']))) {
     include('../odm-load.php');
     include_once('../version.php');
@@ -556,7 +558,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 } elseif ($is_upgrade) {
     ?>
         <tr>
-            <td>Your current Database schema version: <strong><?php echo e::h($db_version);
+            <td>Your current Database schema version: <strong><?php echo(htmlentities($db_version));
     ?></strong><br/><br/>
                 Required Database schema version: <?php echo REQUIRED_DB_VERSION;
     ?><br/><br />

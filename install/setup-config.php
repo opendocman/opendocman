@@ -130,7 +130,7 @@ deny from all
     case 1:
         display_header();
 
-        $pieces = split('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
+        $pieces = explode('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
         array_pop($pieces);
         $computed_base_url = implode('/',$pieces);
         unset($pieces);
@@ -155,7 +155,7 @@ deny from all
 		</tr>
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
-			<td><input name="dbhost" id="dbhost" type="text" size="25" value="localhost" class="required" minlength="2"/></td>
+			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo ($_ENV['DB_HOST'] ? $_ENV['DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
 			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.
                             It can also include a port number. e.g. "hostname;port=3306" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
                         </td>
@@ -172,7 +172,7 @@ deny from all
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Data Directory</label></th>
-			<td colspan="2"><input name="datadir" id="datadir" type="text" value="<?php echo dirname($_SERVER['DOCUMENT_ROOT']);?>/odm_data/" size="45" class="required" minlength="2"/>
+			<td colspan="2"><input name="datadir" id="datadir" type="text" value="<?php echo ($_ENV['ODM_DATA_DIR'] ? $_ENV['ODM_DATA_DIR'] : dirname($_SERVER['DOCUMENT_ROOT']) . '/odm_data/');?>" size="45" class="required" minlength="2"/>
                             <br/>Enter in a web-writable folder that you have created on your server to store the data files. We have tried to guess for one.<br/>
                             <ul>
                                 <li><em>Windows Example:</em> c:/document_repository/</li>
