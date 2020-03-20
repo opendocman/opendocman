@@ -1,14 +1,14 @@
 version: '3'
 services:
   db:
-    image: mysql:5.5
+    image: mariadb:10.4
     volumes:
       - odm-db-data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=opendocman
       - MYSQL_USER=opendocman
       - MYSQL_PASSWORD=opendocman
-      - MYSQL_ROOT_PASSWORD=${ROOT_PASS}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
     ports:
       - 3306:3306
 
@@ -29,7 +29,8 @@ services:
       - DB_USER=opendocman
       - DB_PASS=opendocman
       - DB_ROOT_PASS=rootpass
-      - ADMIN_PASSWORD=${ADMIN_PASS}
+      - ODM_DATA_DIR=/var/www/document_repository
+    command: ["./wait-for-mysql.sh", "db", "/start.sh"]
     volumes:
       - odm-files-data:/var/www/document_repository
       #- odm-code-data:/var/www/html

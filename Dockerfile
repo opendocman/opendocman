@@ -1,9 +1,9 @@
-FROM php:5.6-apache
+FROM php:7.3-apache
 MAINTAINER Logical Arts, LLC <info@logicalarts.net>
 
 # Install packages
 RUN apt-get update \
-  && apt-get install --no-install-recommends -y apt-utils vim mysql-client php5-mysql git openssl ssl-cert sendmail \
+  && apt-get install --no-install-recommends -y apt-utils vim git openssl ssl-cert sendmail default-mysql-client \
   && docker-php-ext-install pdo_mysql pdo \
   && rm -rf /var/lib/apt/lists/*
 
@@ -25,8 +25,8 @@ COPY . /var/www/html
 RUN usermod -u 1000 www-data
 
 # Copy startup command
-COPY src/main/resources/start.sh /start.sh
-RUN chmod 755 /start.sh
+COPY src/main/resources/*.sh /
+RUN chmod 755 /*.sh
 
 EXPOSE 80 443
 
