@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+      - args:
+        - ./wait-for-mysql.sh
+        - db
+        - /start.sh
+        env:
+        - name: DB_HOST
+          value: db
+        - name: DB_NAME
+          value: opendocman
+        - name: DB_PASS
+          value: opendocman
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_ROOT_PASS
+          value: rootpass
+        - name: DB_USER
+          value: opendocman
+        - name: ODM_DATA_DIR
+          value: /var/www/document_repository
+        image: stephenlawrence/opendocman-www:k8s-support
+        imagePullPolicy: ""
+        name: app
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        - containerPort: 9000
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/document_repository
+          name: odm-files-data
+      hostname: odm-local
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: odm-files-data
+        persistentVolumeClaim:
+          claimName: odm-files-data
+status: {}
