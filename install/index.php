@@ -65,9 +65,9 @@ use Aura\Html\Escaper as e;
 
 // Lets get a connection going
 
-$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+$dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . " - Please make sure you have created a database<br/>";
     die();
@@ -341,7 +341,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         }
         echo '<br />installing...<br>';
         // Create database
-        $query = "CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "`";
+        $query = "CREATE DATABASE IF NOT EXISTS `" . APP_DB_NAME . "`";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         echo 'Database Created<br />';

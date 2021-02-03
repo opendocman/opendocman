@@ -8,7 +8,7 @@ services:
       - MYSQL_DATABASE=opendocman
       - MYSQL_USER=opendocman
       - MYSQL_PASSWORD=opendocman
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_ROOT_PASSWORD=rootpass
     ports:
       - 3306:3306
 
@@ -23,22 +23,18 @@ services:
       - 9000:9000
     hostname: odm.local
     environment:
-      - DB_HOST=db
+      - APP_DB_HOST=db
       - DB_PORT=3306
-      - DB_NAME=opendocman
-      - DB_USER=opendocman
-      - DB_PASS=opendocman
-      - DB_ROOT_PASS=rootpass
+      - APP_DB_NAME=opendocman
+      - APP_DB_USER=opendocman
+      - APP_DB_PASS=opendocman
       - ODM_DATA_DIR=/var/www/document_repository
     command: ["./wait-for-mysql.sh", "db", "/start.sh"]
     volumes:
       - odm-files-data:/var/www/document_repository
-      #- odm-code-data:/var/www/html
+      - odm-code-data:/var/www/html
 
 volumes:
   odm-code-data:
-    driver: local
   odm-files-data:
-    driver: local
   odm-db-data:
-    driver: local

@@ -140,22 +140,22 @@ deny from all
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="dbname">Database Name</label></th>
-			<td><input name="dbname" id="dbname" type="text" size="25" value="opendocman" class="required" minlength="2" /></td>
+			<td><input name="dbname" id="dbname" type="text" size="25" value="<?php echo ($_ENV['APP_DB_NAME'] ? $_ENV['APP_DB_NAME'] : 'opendocman'); ?>" class="required" minlength="2" /></td>
 			<td>The name of the database you want to run OpenDocMan in. </td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="uname">User Name</label></th>
-			<td><input name="uname" id="uname" type="text" size="25" value="username" class="required" minlength="2"/></td>
+			<td><input name="uname" id="uname" type="text" size="25" value="<?php echo ($_ENV['APP_DB_USER'] ? $_ENV['APP_DB_USER'] : 'opendocman'); ?>" class="required" minlength="2"/></td>
 			<td>Your MySQL username</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="pwd">Password</label></th>
-			<td><input name="pwd" id="pwd" type="password" size="25" value="password" /></td>
+			<td><input name="pwd" id="pwd" type="password" size="25" value="<?php echo ($_ENV['APP_DB_PASS'] ? $_ENV['APP_DB_PASS'] : 'opendocman'); ?>" /></td>
 			<td>...and MySQL password.</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
-			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo ($_ENV['DB_HOST'] ? $_ENV['DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
+			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo ($_ENV['APP_DB_HOST'] ? $_ENV['APP_DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
 			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.
                             It can also include a port number. e.g. "hostname;port=3306" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
                         </td>
@@ -194,15 +194,15 @@ deny from all
     /**#@+
      * @ignore
      */
-    define('DB_NAME', trim($_POST['dbname']));
-    define('DB_USER', trim($_POST['uname']));
-    define('DB_PASS', trim($_POST['pwd']));
-    define('DB_HOST', trim($_POST['dbhost']));
+    define('APP_DB_NAME', trim($_POST['dbname']));
+    define('APP_DB_USER', trim($_POST['uname']));
+    define('APP_DB_PASS', trim($_POST['pwd']));
+    define('APP_DB_HOST', trim($_POST['dbhost']));
 
     // We'll fail here if the values are no good.
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+        $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
         try {
-            $pdo = new PDO($dsn, DB_USER, DB_PASS);
+            $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
@@ -257,16 +257,16 @@ deny from all
         // Now replace the default config values with the real ones
     foreach ($configFile as $line_num => $line) {
         switch (substr($line, 0, 16)) {
-            case "define('DB_NAME'":
+            case "define('APP_DB_NAME'":
                 $configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
                 break;
-            case "define('DB_USER'":
+            case "define('APP_DB_USER'":
                 $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
                 break;
-            case "define('DB_PASS'":
+            case "define('APP_DB_PASS'":
                 $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
                 break;
-            case "define('DB_HOST'":
+            case "define('APP_DB_HOST'":
                 $configFile[$line_num] = str_replace("localhost", $dbhost, $line);
                 break;
             case '$GLOBALS[\'CONFIG':

@@ -23,26 +23,26 @@ if (!defined('config')) {
     define('config', 'true', false);
 
     // config.php - useful variables/functions
-    $db_name = isset($_ENV['DB_NAME']) ? $_ENV['DB_NAME'] : 'opendocman';
-    $db_user = isset($_ENV['DB_USER']) ? $_ENV['DB_USER'] : 'opendocman';
-    $db_pass = isset($_ENV['DB_PASS'])? $_ENV['DB_PASS'] : 'opendocman';
-    $db_host = isset($_ENV['DB_HOST']) ? $_ENV['DB_HOST'] : 'localhost;port=3306';
+    $db_name = isset($_ENV['APP_DB_NAME']) ? $_ENV['APP_DB_NAME'] : 'opendocman';
+    $db_user = isset($_ENV['APP_DB_USER']) ? $_ENV['APP_DB_USER'] : 'opendocman';
+    $db_pass = isset($_ENV['APP_DB_PASS'])? $_ENV['APP_DB_PASS'] : 'opendocman';
+    $db_host = isset($_ENV['APP_DB_HOST']) ? $_ENV['APP_DB_HOST'] : 'localhost;port=3306';
     $db_prefix = isset($_ENV['DB_PREFIX']) ? $_ENV['DB_PREFIX'] : 'odm_';
 
     // ** MySQL settings - You can get this info from your web host ** //
     /** The name of the database for [OpenDocMan */
-    define('DB_NAME', $db_name);
+    define('APP_DB_NAME', $db_name);
 
     /** MySQL database username */
-    define('DB_USER', $db_user);
+    define('APP_DB_USER', $db_user);
 
     /** MySQL database password */
-    define('DB_PASS', $db_pass);
+    define('APP_DB_PASS', $db_pass);
 
     /** MySQL hostname */
     /* The MySQL server. It can also include a port number. e.g. "hostname;port=3306" or a path to a
      * local socket e.g. ":/path/to/socket" for the localhost.  */
-    define('DB_HOST', $db_host);
+    define('APP_DB_HOST', $db_host);
 
     /**
      * Prefix to append to each table name in the database (ex. odm_ would make the tables
