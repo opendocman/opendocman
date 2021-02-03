@@ -30,7 +30,7 @@ if (!defined('Department_class')) {
          * @param int $id
          * @param PDO $connection
          */
-        public function Department($id, PDO $connection)
+        public function __construct($id, PDO $connection)
         {
             $this->field_name = 'name';
             $this->field_id = 'id';

@@ -60,7 +60,7 @@ if (!defined('FileData_class')) {
         public $isLocked;
         protected $connection;
 
-        public function FileData($id, $connection)
+        public function __construct($id, $connection)
         {
             $this->field_name = 'realname';
             $this->field_id = 'id';

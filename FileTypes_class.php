@@ -28,7 +28,7 @@ if (!defined('FileTypes_class')) {
     {
         protected $connection;
 
-        public function FileTypes_class(PDO $pdo)
+        public function __construct(PDO $pdo)
         {
             $this->connection = $pdo;
         }
