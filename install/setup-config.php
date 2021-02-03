@@ -248,8 +248,8 @@ deny from all
         }
 
         // Verify the templates_c is writable
-        if (!is_writable(ABSPATH . '/templates_c')) {
-            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writable by the web server';
+        if (!is_writable(ABSPATH . 'templates_c')) {
+            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . 'templates_c is writable by the web server';
         }
 
         // We also need to guess at their base_url value

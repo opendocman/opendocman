@@ -3,6 +3,7 @@
 ._*
 ~$*
 .*.swp
+.idea
 Thumbs.db
 /nbproject
 config.php
