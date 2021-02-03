@@ -1,7 +1,7 @@
 <?php
 /*
-upgrade_129.php - For users upgrading from DB version 1.2.9 to 1.3.0
-Copyright (C) 2015 Stephen Lawrence Jr.
+upgrade_136.php - For users upgrading from DB version 1.3.6 to 1.4.0
+Copyright (C) 2021 Stephen Lawrence Jr.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
