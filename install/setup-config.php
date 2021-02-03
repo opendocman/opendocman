@@ -256,9 +256,9 @@ deny from all
 
         // Now replace the default config values with the real ones
     foreach ($configFile as $line_num => $line) {
-        switch (substr($line, 0, 16)) {
+        switch (substr($line, 4, 16)) {
             case "define('DB_NAME'":
-                $configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
+                $configFile[$line_num] = str_replace("'database_name_here'", "'$dbname'", $line);
                 break;
             case "define('DB_USER'":
                 $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
@@ -267,10 +267,10 @@ deny from all
                 $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
                 break;
             case "define('DB_HOST'":
-                $configFile[$line_num] = str_replace("localhost", $dbhost, $line);
+                $configFile[$line_num] = str_replace("'localhost'", "'$dbhost'", $line);
                 break;
             case '$GLOBALS[\'CONFIG':
-                $configFile[$line_num] = str_replace('odm_', $prefix, $line);
+                $configFile[$line_num] = str_replace("'odm_'", "'$prefix'", $line);
                 break;
         }
     }
