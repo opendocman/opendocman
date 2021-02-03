@@ -596,7 +596,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             <td>Upgrade your current database from a previous version<br/><br/></td>
         </tr>
         <tr>
-            <td><a href="index.php?op=update_130">Upgrade from DB schema version 1.3.6</a><br><br></td>
+            <td><a href="index.php?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>
         </tr>
         <tr>
             <td><a href="index.php?op=update_130">Upgrade from DB schema version 1.3.0</a><br><br></td>

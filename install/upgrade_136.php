@@ -24,7 +24,7 @@ echo 'Altering the data table...<br />';
 $query = "ALTER TABLE `{$_SESSION['db_prefix']}data` DROP key `description`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-$query = "ALTER TABLE `{$_SESSION['db_prefix']}data` ADD KEY `description (description(200))`";
+$query = "ALTER TABLE `{$_SESSION['db_prefix']}data` ADD KEY `description` (`description`(200))";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
@@ -33,7 +33,7 @@ echo 'Altering the settings table...<br />';
 $query = "ALTER TABLE `{$_SESSION['db_prefix']}settings` DROP CONSTRAINT `name`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
-$query = "ALTER TABLE `{$_SESSION['db_prefix']}data` ADD CONSTRAINT name UNIQUE (name(200))";
+$query = "ALTER TABLE `{$_SESSION['db_prefix']}settings` ADD CONSTRAINT `name` UNIQUE (`name`(200))";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 
