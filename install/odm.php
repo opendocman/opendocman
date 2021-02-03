@@ -118,7 +118,7 @@ $query = "CREATE TABLE {$dbprefix}data (
   KEY id (id),
   KEY id_2 (id),
   KEY publishable (publishable),
-  KEY description (description)
+  KEY description (description(200))
 ) ENGINE = MYISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
@@ -314,7 +314,7 @@ $query = "CREATE TABLE IF NOT EXISTS `{$dbprefix}settings` (
 `description` VARCHAR( 255 ) NOT NULL ,
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
-UNIQUE ( `name` )
+UNIQUE ( `name`(200))
 ) ENGINE = MYISAM";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
