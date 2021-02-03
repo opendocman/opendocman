@@ -130,7 +130,7 @@ deny from all
     case 1:
         display_header();
 
-        $pieces = explode('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
+	$pieces = preg_split('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
         array_pop($pieces);
         $computed_base_url = implode('/',$pieces);
         unset($pieces);
