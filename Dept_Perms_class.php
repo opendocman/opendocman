@@ -45,7 +45,7 @@ if (!defined('Dept_Perms_class')) {
          * @param int $id
          * @param PDO $connection
          */
-        public function Dept_Perms($id, PDO $connection)
+        public function __construct($id, PDO $connection)
         {
             // this can be fid or uid
             $this->id = $id;

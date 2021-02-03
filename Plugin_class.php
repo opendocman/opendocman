@@ -30,7 +30,7 @@ class Plugin
     public $description = '';
     public $pluginslist = '';
     
-    public function Plugin()
+    public function __construct()
     {
         $name = $this->name;
         $version = $this->version;

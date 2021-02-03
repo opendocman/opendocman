@@ -30,7 +30,7 @@ if (!defined('Settings_class')) {
     {
         protected $connection;
         
-        public function Settings(PDO $pdo)
+        public function __construct(PDO $pdo)
         {
             $this->connection = $pdo;
         }

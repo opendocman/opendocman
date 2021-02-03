@@ -33,7 +33,7 @@ class AccessLog extends Plugin
      * AccessLog constructor for the AccessLog plugin
      * @param string $_accesslog Message to display
      */
-    public function AccessLog($_accesslog='')
+    public function __construct($_accesslog='')
     {
         $this->name = 'AccessLog';
         $this->author = 'Stephen Lawrence Jr';
