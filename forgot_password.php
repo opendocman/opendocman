@@ -121,9 +121,8 @@ if (
 
 
          */
-        if (strlen($_REQUEST['last_message'])) {
-            draw_error($_REQUEST['last_message']);
-        }
+	$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+        draw_header(msg('forgot_password'), $last_message);
         ?>
 
             <p><?php echo msg('message_set_your_new_password')?></p>
@@ -149,6 +148,7 @@ if (
             </form>
 
             <?php
+	draw_footer();
             // build the footer
             /*
 
@@ -239,9 +239,8 @@ if (
 
 // default form
 else {
-    if (strlen($_REQUEST['last_message'])) {
-        draw_error($_REQUEST['last_message']);
-    }
+	$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+        draw_header(msg('forgot_password'), $last_message);
     ?>
 
         <p><?php echo msg('message_this_site_has_high_security')?></p>
@@ -261,5 +260,6 @@ else {
         </form>
 
         <?php
+	draw_footer();
 
 }
