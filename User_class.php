@@ -40,7 +40,7 @@ if (!defined('User_class')) {
          * @param int $id
          * @param PDO $connection
          */
-        public function User($id, PDO $connection)
+        public function __construct($id, PDO $connection)
         {
             $this->root_id = $GLOBALS['CONFIG']['root_id'];
             $this->field_name = 'username';
@@ -49,7 +49,7 @@ if (!defined('User_class')) {
             $this->result_limit = 1; //there is only 1 user with a certain user_name or user_id
 
             databaseData::setTableName($this->TABLE_USER);
-            databaseData::databaseData($id, $connection);
+            databaseData::__construct($id, $connection);
 
             $query = "
                     SELECT 

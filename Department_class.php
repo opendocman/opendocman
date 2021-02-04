@@ -36,7 +36,7 @@ if (!defined('Department_class')) {
             $this->field_id = 'id';
             $this->result_limit = 1; //there is only 1 department with a certain department_id and department_name
             $this->tablename = $this->TABLE_DEPARTMENT;
-            databaseData::databaseData($id, $connection);
+            databaseData::__construct($id, $connection);
         }
 
         /**
