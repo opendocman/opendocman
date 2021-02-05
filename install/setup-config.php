@@ -40,7 +40,7 @@ if (!file_exists(ABSPATH . 'config-sample.php')) {
 $configFile = file(ABSPATH . 'config-sample.php');
 
 // Check if config.php has been created
-if (file_exists(ABSPATH . 'config.php')) {
+if (file_exists(ABSPATH . 'config.php') || file_exists(ABSPATH . 'docker-configs/config.php')) {
     echo("<p>The file 'config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='./'>installing now</a>.</p>");
     exit;
 }
@@ -194,10 +194,10 @@ deny from all
     /**#@+
      * @ignore
      */
-    define('APP_DB_NAME', trim($_POST['dbname']));
-    define('APP_DB_USER', trim($_POST['uname']));
-    define('APP_DB_PASS', trim($_POST['pwd']));
-    define('APP_DB_HOST', trim($_POST['dbhost']));
+    define('APP_DB_NAME', sanitizeme(trim($_POST['dbname'])));
+    define('APP_DB_USER', sanitizeme(trim($_POST['uname'])));
+    define('APP_DB_PASS', sanitizeme(trim($_POST['pwd'])));
+    define('APP_DB_HOST', sanitizeme(trim($_POST['dbhost'])));
 
     // We'll fail here if the values are no good.
         $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
@@ -209,11 +209,7 @@ deny from all
         }
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $dbname  = sanitizeme(trim($_POST['dbname']));
-    $uname   = sanitizeme(trim($_POST['uname']));
-    $passwrd = sanitizeme(trim($_POST['pwd']));
-    $dbhost  = sanitizeme(trim($_POST['dbhost']));
-    $prefix  = sanitizeme(trim($_POST['prefix']));
+        $prefix  = sanitizeme(trim($_POST['prefix']));
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
@@ -248,33 +244,35 @@ deny from all
         }
 
         // Verify the templates_c is writable
-        if (!is_writable(ABSPATH . '/templates_c')) {
-            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '/templates_c is writable by the web server';
+        if (!is_writable(ABSPATH . 'templates_c')) {
+            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . 'templates_c is writable by the web server';
         }
 
         // We also need to guess at their base_url value
 
         // Now replace the default config values with the real ones
     foreach ($configFile as $line_num => $line) {
-        switch (substr($line, 0, 16)) {
+        switch (substr($line, 4, 20)) {
             case "define('APP_DB_NAME'":
-                $configFile[$line_num] = str_replace("database_name_here", $dbname, $line);
+                $configFile[$line_num] = str_replace("database_name_here", APP_DB_NAME, $line);
                 break;
             case "define('APP_DB_USER'":
-                $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
+                $configFile[$line_num] = str_replace("username_here", APP_DB_USER, $line);
                 break;
             case "define('APP_DB_PASS'":
-                $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
+                $configFile[$line_num] = str_replace("password_here", APP_DB_PASS, $line);
                 break;
             case "define('APP_DB_HOST'":
-                $configFile[$line_num] = str_replace("localhost", $dbhost, $line);
+                $configFile[$line_num] = str_replace("localhost", APP_DB_HOST, $line);
                 break;
             case '$GLOBALS[\'CONFIG':
-                $configFile[$line_num] = str_replace('odm_', $prefix, $line);
+                $configFile[$line_num] = str_replace("'odm_'", "'$prefix'", $line);
                 break;
         }
     }
-    if (! is_writable(ABSPATH)) {
+
+    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? 'docker-configs/' : '');
+    if (! is_writable($config_folder)) {
         display_header();
         ?>
 <p>Sorry, but I can't write the <code>config.php</code> file.</p>
@@ -289,12 +287,13 @@ deny from all
 <?php
 
     } else {
-        $handle = fopen(ABSPATH . 'config.php', 'w');
+
+        $handle = fopen($config_folder . "config.php", 'w');
         foreach ($configFile as $line) {
             fwrite($handle, $line);
         }
         fclose($handle);
-        chmod(ABSPATH . 'config.php', 0666);
+        chmod($config_folder . 'config.php', 0666);
         display_header();
         ?>
 <p>Great! You've made it through this part of the installation. OpenDocMan can now communicate with your database. If you are ready, time now to&hellip;</p>

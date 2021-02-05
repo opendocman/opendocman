@@ -1,13 +1,6 @@
 <?php
 /*
 init.php - bootloader to initialize variables
- * If the config.php file is not found then an error
- * will be displayed asking the visitor to set up the
- * config.php file.
- *
- * Will also search for config.php in the OpenDocMan parent
- * directory to allow the OpendocMan directory to remain
- * untouched.
 
 Copyright (C) 2011 Stephen Lawrence Jr.
 

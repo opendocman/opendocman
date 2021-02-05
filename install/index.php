@@ -44,7 +44,8 @@ session_start();
 
 define('REQUIRED_DB_VERSION', '1.3.6');
 
-if (file_exists('../config.php') && (!isset($_SESSION['datadir']))) {
+// If we have a config.php then we have been through the setup already
+if (((file_exists('../config.php') || file_exists('../docker-configs/config.php')) && (!isset($_SESSION['datadir'])))) {
     include('../odm-load.php');
     include_once('../version.php');
     $db_version = Settings::get_db_version($GLOBALS['CONFIG']['db_prefix']);
@@ -53,10 +54,13 @@ if (file_exists('../config.php') && (!isset($_SESSION['datadir']))) {
         exit;
     }
 }
-// Search for the config file in parent folder
+
+// Search for the config file in parent folder and the docker-compose configs mount directory
 // If not found, redirect to index for install routine
 if (file_exists('../config.php')) {
     include('../config.php');
+} elseif (file_exists('../docker-configs/config.php'))  {
+    include('../docker-configs/config.php');
 } else {
     Header('Location: ../index.php');
 }
@@ -346,7 +350,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         $stmt->execute();
         echo 'Database Created<br />';
 
-        include('../config.php');
         include_once("odm.php");
         echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password (WRITE IT DOWN): ' . $_SESSION['adminpass'] . '</strong></p></br />Click <a href="../settings.php?submit=update">HERE</a> to edit your site settings';
         unset($_SESSION['datadir']);
@@ -359,7 +362,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_10()
     {
         echo 'Updating DB version 1.0...<br>';
-        include("../config.php");
         include("upgrade_10.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -367,7 +369,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_11rc1()
     {
         echo 'Updating DB version 1.1rc1...<br>';
-        include("../config.php");
         include("upgrade_11rc1.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -375,7 +376,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_11rc2()
     {
         echo 'Updating DB version 1.1rc2...<br>';
-        include("../config.php");
         include("upgrade_11rc2.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -383,7 +383,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_11()
     {
         echo 'Updating DB version 1.1...<br>';
-        include("../config.php");
         include("upgrade_11.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -391,7 +390,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_12rc1()
     {
         echo 'Updating DB version 1.2rc1...<br>';
-        include("../config.php");
         include("upgrade_12rc1.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -399,7 +397,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_12p1()
     {
         echo 'Updating from DB version 1.2p1...<br>';
-        include("../config.php");
         include("upgrade_12p1.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -407,7 +404,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_12p3()
     {
         echo 'Updating from DB version 1.2p3...<br>';
-        include("../config.php");
         include("upgrade_12p3.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -415,7 +411,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_124()
     {
         echo 'Updating from DB version 1.2.4...<br>';
-        include("../config.php");
         include("upgrade_124.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -423,7 +418,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1252()
     {
         echo 'Updating from DB version 1.2.5.2...<br>';
-        include("../config.php");
         include("upgrade_1252.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -431,7 +425,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1256()
     {
         echo 'Updating from DB version 1.2.5.6...<br />';
-        include("../config.php");
         include("upgrade_1256.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -439,7 +432,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1257()
     {
         echo 'Updating from DB version 1.2.5.7...<br />';
-        include("../config.php");
         include("upgrade_1257.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -447,7 +439,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1261()
     {
         echo 'Updating from DB version 1.2.6.1...<br />';
-        include("../config.php");
         include("upgrade_1261.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -455,7 +446,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1262()
     {
         echo 'Updating from DB version 1.2.6.2...<br />';
-        include("../config.php");
         include("upgrade_1262.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -463,7 +453,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_1263()
     {
         echo 'Updating from DB version 1.2.6.3...<br />';
-        include("../config.php");
         include("upgrade_1263.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -471,7 +460,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_128()
     {
         echo 'Updating from DB versions 1.2.8...<br />';
-        include("../config.php");
         include("upgrade_128.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
@@ -479,37 +467,14 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     function do_update_129()
     {
         echo 'Updating from DB versions 1.2.9...<br />';
-        include("../config.php");
         include("upgrade_129.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
     function do_update_130()
     {
         echo 'Updating from DB versions 1.3.0...<br />';
-        include("../config.php");
         include("upgrade_130.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-    }
-
-    function get_db_version($db_prefix)
-    {
-        return Settings::get_db_version();
-
-        global $pdo;
-        $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
-        $query1 = "SHOW TABLES LIKE :table";
-        $stmt = $pdo->prepare($query1);
-        $stmt->execute(array(':table' => $prefix . 'odmsys'));
-
-        if ($stmt->rowCount() > 0) {
-            $query2 = "SELECT sys_value from {$prefix}odmsys WHERE sys_name='version'";
-            $stmt = $pdo->prepare($query2);
-            $stmt->execute();
-            $result_array = $stmt->fetch();
-        }
-
-        $db_version = (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
-        return $db_version;
     }
 
     function print_intro()

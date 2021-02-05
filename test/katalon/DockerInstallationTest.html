@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+	<title>DockerInstallationTest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">01_ODM_EnvDocker</td></tr>
+</thead>
+<tbody>
+<tr><td>store</td><td>/var/www/document_repository<datalist><option>/var/www/odm_data/</option><option>/var/www/document_repository</option></datalist></td><td>CurrentEnvironmentDataDir</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDB</td>
+</tr>
+<tr><td>store</td><td>http://local.odm<datalist><option>http://local.odm</option><option>http://localhost</option></datalist></td><td>CurrentEnvironment</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDBUser</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDBPassword</td>
+</tr>
+<tr><td>store</td><td>db<datalist><option>db</option><option>localhost</option></datalist></td><td>CurrentEnvironmentDBHost</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">01_ODM_EnvLocalhost</td></tr>
+</thead>
+<tbody>
+<tr><td>store</td><td>localhost<datalist><option>db</option><option>localhost</option></datalist></td><td>CurrentEnvironmentDBHost</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDB</td>
+</tr>
+<tr><td>store</td><td>http://localhost<datalist><option>http://localhost</option><option>http://local.odm</option></datalist></td><td>CurrentEnvironment</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDBUser</td>
+</tr>
+<tr><td>store</td><td>opendocman<datalist><option>opendocman</option></datalist></td><td>CurrentEnvironmentDBPassword</td>
+</tr>
+<tr><td>store</td><td>/var/www/document_repository<datalist><option>/var/www/document_repository</option></datalist></td><td>CurrentEnvironmentDataDir</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">02_ODM_Installation</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>${CurrentEnvironment}/index.php<datalist><option>${CurrentEnvironment}/index.php</option><option></option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Create a Configuration File<datalist><option>link=Create a Configuration File</option></datalist></td><td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Let’s go!<datalist><option>link=Let’s go!</option></datalist></td>
+	<td></td>
+</tr>
+<tr><td>type</td><td>id=dbhost<datalist><option>id=host</option><option>id=dbhost</option></datalist></td><td>${CurrentEnvironmentDBHost}</td>
+</tr>
+<tr><td>type</td><td>id=dbname<datalist><option>id=dbname</option></datalist></td><td>${CurrentEnvironmentDB}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=uname<datalist><option>id=uname</option></datalist></td>
+	<td>${CurrentEnvironmentDBUser}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=pwd<datalist><option>id=pwd</option></datalist></td>
+	<td>${CurrentEnvironmentDBPassword}</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=adminpass<datalist><option>id=adminpass</option></datalist></td>
+	<td>321admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=datadir<datalist><option>id=datadir</option></datalist></td>
+	<td>${CurrentEnvironmentDataDir}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=submit<datalist><option>name=submit</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Run the install<datalist><option>link=Run the install</option></datalist></td>
+	<td></td>
+</tr>
+<tr><td>chooseOkOnNextConfirmation</td><td><datalist><option></option></datalist></td><td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Click HERE To set up database for*<datalist><option>link=Click HERE To set up database for*</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>All Done with installation!<datalist><option>All Done with installation!</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${CurrentEnvironment}/index.php<datalist><option>${CurrentEnvironment}/index.php</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=frmuser<datalist><option>name=frmuser</option></datalist></td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=frmpass<datalist><option>name=frmpass</option></datalist></td>
+	<td>321admin</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=login<datalist><option>name=login</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Admin<datalist><option>link=Admin</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Update<datalist><option>link=Update</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=item<datalist><option>name=item</option></datalist></td>
+	<td>label=User, Admin - admin</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=submit<datalist><option>name=submit</option></datalist></td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=Email<datalist><option>name=Email</option></datalist></td>
+	<td>support@localhost.local</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=submit<datalist><option>name=submit</option></datalist></td>
+	<td></td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">03_ODM_FilePermissions_Add_Departments</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>${CurrentEnvironment}/out.php<datalist><option>${CurrentEnvironment}/out.php</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Admin<datalist><option>link=Admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>xpath=(//a[contains(text(),'Add')])[3]<datalist><option>xpath=(//a[contains(text(),'Add')])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=department<datalist><option>name=department</option></datalist></td><td>Department A</td>
+</tr>
+<tr><td>clickAndWait</td><td>//button[@name='submit']<datalist><option>//button[@name='submit']</option><option>//form[@id='addDepartmentForm']/table/tbody/tr/td[3]/div/button</option><option>//button</option><option>css=button[name="submit"]</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyTextPresent</td><td>Department successfully added<datalist><option>Department successfully added</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>xpath=(//a[contains(text(),'Add')])[3]<datalist><option>xpath=(//a[contains(text(),'Add')])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=department<datalist><option>name=department</option></datalist></td><td>Department B</td>
+</tr>
+<tr><td>clickAndWait</td><td>//button[@name='submit']<datalist><option>//button[@name='submit']</option><option>//form[@id='addDepartmentForm']/table/tbody/tr/td[3]/div/button</option><option>//button</option><option>css=button[name="submit"]</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyTextPresent</td><td>Department successfully added<datalist><option>Department successfully added</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>xpath=(//a[contains(text(),'Add')])[3]<datalist><option>xpath=(//a[contains(text(),'Add')])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=department<datalist><option>name=department</option></datalist></td><td>Department C</td>
+</tr>
+<tr><td>clickAndWait</td><td>//button[@name='submit']<datalist><option>//button[@name='submit']</option><option>//form[@id='addDepartmentForm']/table/tbody/tr/td[3]/div/button</option><option>//button</option><option>css=button[name="submit"]</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyTextPresent</td><td>Department successfully added<datalist><option>Department successfully added</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>xpath=(//a[contains(text(),'Add')])[3]<datalist><option>xpath=(//a[contains(text(),'Add')])[3]</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=department<datalist><option>name=department</option></datalist></td><td>Department A</td>
+</tr>
+<tr><td>clickAndWait</td><td>//button[@name='submit']<datalist><option>//button[@name='submit']</option><option>//form[@id='addDepartmentForm']/table/tbody/tr/td[3]/div/button</option><option>//button</option><option>css=button[name="submit"]</option></datalist></td><td></td>
+</tr>
+<tr><td>assertText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>Record already exists. Try again with a different value.</td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">04_ODM_Add_ABC_Users</td></tr>
+</thead>
+<tbody>
+<tr><td>open</td><td>${CurrentEnvironment}/admin.php<datalist><option>${CurrentEnvironment}/admin.php</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Admin<datalist><option>link=Admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptA</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>depta</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>depta@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptB</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>deptb</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option><option>//select[@name='department']</option><option>//form[@id='add_user']/table/tbody/tr[9]/td[2]/select</option><option>//select</option><option>css=select[name="department"]</option></datalist></td><td>label=Department B</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>deptb@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptC</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>deptc</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Department C</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>deptc@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptA2</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>depta2</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Department A</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>depta2@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptB2</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>deptb2</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Department B</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>deptb2@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>DeptC2</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>deptc2</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Department C</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>deptc2@local.dev</td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>User</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>Admin2</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>admin2</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Information Systems</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>admin2@local.dev</td>
+</tr>
+<tr><td>click</td><td>id=cb_admin<datalist><option>id=cb_admin</option><option>name=admin</option><option>//input[@id='cb_admin']</option><option>//form[@id='add_user']/table/tbody/tr[10]/td[2]/input</option><option>//tr[10]/td[2]/input</option><option>css=#cb_admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyText</td><td>id=last_message<datalist><option>id=last_message</option></datalist></td><td>User successfully added</td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Update<datalist><option>link=Update</option></datalist></td><td></td>
+</tr>
+<tr><td>select</td><td>name=item<datalist><option>name=item</option></datalist></td><td>label=User, Admin2 - admin2</td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyValue</td><td>id=cb_admin<datalist><option>id=cb_admin</option></datalist></td><td>on</td>
+</tr>
+<tr><td>click</td><td>id=cb_admin<datalist><option>id=cb_admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Admin<datalist><option>link=Admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Update<datalist><option>link=Update</option></datalist></td><td></td>
+</tr>
+<tr><td>select</td><td>name=item<datalist><option>name=item</option></datalist></td><td>label=User, Admin2 - admin2</td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyValue</td><td>id=cb_admin<datalist><option>id=cb_admin</option></datalist></td><td>off</td>
+</tr>
+<tr><td>click</td><td>id=cb_admin<datalist><option>id=cb_admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Admin<datalist><option>link=Admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Update<datalist><option>link=Update</option></datalist></td><td></td>
+</tr>
+<tr><td>select</td><td>name=item<datalist><option>name=item</option></datalist></td><td>label=User, Admin2 - admin2</td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyValue</td><td>id=cb_admin<datalist><option>id=cb_admin</option></datalist></td><td>on</td>
+</tr>
+<tr><td>clickAndWait</td><td>name=submit<datalist><option>name=submit</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Admin<datalist><option>link=Admin</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>link=Add<datalist><option>link=Add</option></datalist></td><td></td>
+</tr>
+<tr><td>type</td><td>name=last_name<datalist><option>name=last_name</option></datalist></td><td>Reviewer</td>
+</tr>
+<tr><td>type</td><td>name=first_name<datalist><option>name=first_name</option></datalist></td><td>Depta</td>
+</tr>
+<tr><td>type</td><td>name=username<datalist><option>name=username</option></datalist></td><td>deptareviewer</td>
+</tr>
+<tr><td>type</td><td>name=password<datalist><option>name=password</option></datalist></td><td>password</td>
+</tr>
+<tr><td>type</td><td>name=Email<datalist><option>name=Email</option></datalist></td><td>deptareviewer@local.dev</td>
+</tr>
+<tr><td>select</td><td>name=department<datalist><option>name=department</option></datalist></td><td>label=Department A</td>
+</tr>
+<tr><td>click</td><td>//button[@type='button']<datalist><option>//button[@type='button']</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=ui-multiselect-userReviewDepartmentsList-option-0<datalist><option>id=ui-multiselect-userReviewDepartmentsList-option-0</option></datalist></td><td></td>
+</tr>
+<tr><td>click</td><td>id=ui-multiselect-userReviewDepartmentsList-option-1<datalist><option>id=ui-multiselect-userReviewDepartmentsList-option-1</option></datalist></td><td></td>
+</tr>
+<tr><td>clickAndWait</td><td>id=submitButton<datalist><option>id=submitButton</option></datalist></td><td></td>
+</tr>
+<tr><td>verifyTextPresent</td><td>User successfully added<datalist><option>User successfully added</option></datalist></td><td></td>
+</tr>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">05_ODM_Add_Edit_File</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">06_Admin_Pages_Mime_Type_Test</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">07_Admin_Pages_Access_Log</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">08_ODM_Auth_File</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">09_ODM_CheckOut_In</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">10_ODM_Auth_File</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">11_DM_View_File</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">12_Admin_Pages_ODM_SubSelect_Test</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">13_ODM_Search_UDF</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">14_ODM_Search_User</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">15_ODM_Search_FID</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">16_ODM_Search_Comment</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">17_ODM_Search_Category</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">18_ODM_Search_Description</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">19_ODM_Search_Department</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">20_ODM_Search</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">21_ODM_Search_Filename_CASE</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">22_ODM_Delete_SubSelect</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">23_ODM_Delete_ABC_Users</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">24_ODM_Delete_Depts</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">25_ODM_Logout</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">26_ODM_XSS_Tests</td></tr>
+</thead>
+<tbody>
+</tbody></table>
+</body>
+</html>

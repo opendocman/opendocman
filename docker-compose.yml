@@ -29,12 +29,13 @@ services:
       - APP_DB_USER=opendocman
       - APP_DB_PASS=opendocman
       - ODM_DATA_DIR=/var/www/document_repository
+      - IS_DOCKER=true
     command: ["./wait-for-mysql.sh", "db", "/start.sh"]
     volumes:
       - odm-files-data:/var/www/document_repository
-      - odm-code-data:/var/www/html
+      - odm-docker-configs:/var/www/html/docker-configs
 
 volumes:
-  odm-code-data:
   odm-files-data:
   odm-db-data:
+  odm-docker-configs:

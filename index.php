@@ -26,7 +26,7 @@ session_start();
  * Test to see if we have the config.php file. If not, must not be installed yet.
 */
 
-if (!file_exists('config.php')) {
+if (!file_exists('config.php') && !file_exists('docker-configs/config.php')) {
     if (
         !extension_loaded('pdo')
         || !extension_loaded('pdo_mysql')
