@@ -42,7 +42,7 @@ if (false) {
 
 session_start();
 
-define('REQUIRED_DB_VERSION', '1.3.6');
+define('REQUIRED_DB_VERSION', '1.4.0');
 
 // If we have a config.php then we have been through the setup already
 if (((file_exists('../config.php') || file_exists('../docker-configs/config.php')) && (!isset($_SESSION['datadir'])))) {
@@ -124,6 +124,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
         // User has version 11rc1 and is upgrading
         case "update_11rc1":
@@ -143,6 +144,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 11rc2 and is upgrading
@@ -162,6 +164,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 11 and is upgrading
@@ -180,6 +183,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 12rc1 and is upgrading
@@ -197,6 +201,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 12p1 and is upgrading
@@ -213,6 +218,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 12p3 and is upgrading
@@ -228,6 +234,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 124 and is upgrading
@@ -242,6 +249,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1252 and is upgrading
@@ -255,6 +263,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1256 and is upgrading
@@ -267,6 +276,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1257 or 126beta and is upgrading
@@ -278,6 +288,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1261 and is upgrading
@@ -288,6 +299,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1262 and is upgrading
@@ -297,6 +309,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has version 1262 and is upgrading
@@ -305,6 +318,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has DB version 128 and is upgrading
@@ -312,19 +326,26 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_128();
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has DB version 129 and is upgrading
         case "update_129":
             do_update_129();
             do_update_130();
+            do_update_136();
             break;
 
         // User has DB version 130 and is upgrading
         case "update_130":
             do_update_130();
+            do_update_136();
             break;
 
+        // User has DB version 136 and is upgrading
+        case "update_136":
+            do_update_136();
+            break;
 
         default:
             print_intro();
@@ -476,6 +497,13 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         include("upgrade_130.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
+    function do_update_136()
+    {
+        echo 'Updating from DB versions 1.3.6...<br />';
+        include("../config.php");
+        include("upgrade_136.php");
+        echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
+    }
 
     function print_intro()
     {
@@ -531,6 +559,9 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </tr>
         <tr>
             <td>Upgrade your current database from a previous version<br/><br/></td>
+        </tr>
+        <tr>
+            <td><a href="index.php?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>
         </tr>
         <tr>
             <td><a href="index.php?op=update_130">Upgrade from DB schema version 1.3.0</a><br><br></td>

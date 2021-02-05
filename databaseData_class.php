@@ -56,7 +56,7 @@ if (!defined("databaseData_class"));
          * @param int $id
          * @param PDO $connection
          */
-        public function databaseData($id, PDO $connection)
+        public function __construct($id, PDO $connection)
         {
             $this->connection = $connection;
             $this->setId($id); //setId not only set the $id data member but also find and set name

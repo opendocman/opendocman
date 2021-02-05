@@ -20,7 +20,7 @@ class Reviewer extends databaseData
 {
     protected $connection;
 
-    public function Reviewer($id, PDO $pdo)
+    public function __construct($id, PDO $pdo)
     {
         $this->id = $id;
         $this->connection = $pdo;

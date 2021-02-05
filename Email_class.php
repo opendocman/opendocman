@@ -28,7 +28,7 @@ class Email
     /*
      * Constructor
      */
-    public function Email()
+    public function __construct()
     {
     }
 
