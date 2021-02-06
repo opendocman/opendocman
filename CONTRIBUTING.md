@@ -19,8 +19,8 @@ have a chance of keeping ontop of things.
 * Create a topic branch from where you want to base your work.
   * This is usually the develop branch (aka future features / fixes).
   * To quickly create a topic branch based on develop; `git checkout -b
-    feature/issuexxx-my_contribution develop`. Please avoid working directly on the
-    `develop` branch.
+    feature/issuexxx-my_contribution master`. Please avoid working directly on the
+    `master` branch.
 * Make commits of logical units.
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Make sure your commit messages are in the proper format.
