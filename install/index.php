@@ -1,22 +1,23 @@
 <?php
 /*
-install/index.php - Automated setup/upgrade script. Remove after installation
-Copyright (C) 2002-2014  Stephen Lawrence
+ * Copyright (C) 2000-2021. Stephen Lawrence
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 3
-of the License, or any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
+// Automated setup/upgrade script
 // Sanity check.
 if (false) {
     ?>
@@ -108,30 +109,8 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         // User has version 1.0 and is upgrading
         case "update_10":
             do_update_10();
-            do_update_11rc1();
             do_update_11rc2();
             do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            do_update_130();
-            do_update_136();
-            break;
-        // User has version 11rc1 and is upgrading
-        case "update_11rc1":
-            do_update_11rc1();
-            do_update_11rc2();
-            do_update_11();
-            do_update_12rc1();
             do_update_12p1();
             do_update_12p3();
             do_update_124();
@@ -151,7 +130,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         case "update_11rc2":
             do_update_11rc2();
             do_update_11();
-            do_update_12rc1();
             do_update_12p1();
             do_update_12p3();
             do_update_124();
@@ -170,25 +148,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         // User has version 11 and is upgrading
         case "update_11":
             do_update_11();
-            do_update_12rc1();
-            do_update_12p1();
-            do_update_12p3();
-            do_update_124();
-            do_update_1252();
-            do_update_1256();
-            do_update_1257();
-            do_update_1261();
-            do_update_1262();
-            do_update_1263();
-            do_update_128();
-            do_update_129();
-            do_update_130();
-            do_update_136();
-            break;
-
-        // User has version 12rc1 and is upgrading
-        case "update_12rc1":
-            do_update_12rc1();
             do_update_12p1();
             do_update_12p3();
             do_update_124();
@@ -387,13 +346,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
 
-    function do_update_11rc1()
-    {
-        echo 'Updating DB version 1.1rc1...<br>';
-        include("upgrade_11rc1.php");
-        echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-    }
-
     function do_update_11rc2()
     {
         echo 'Updating DB version 1.1rc2...<br>';
@@ -405,13 +357,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     {
         echo 'Updating DB version 1.1...<br>';
         include("upgrade_11.php");
-        echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
-    }
-
-    function do_update_12rc1()
-    {
-        echo 'Updating DB version 1.2rc1...<br>';
-        include("upgrade_12rc1.php");
         echo 'All Done with update! Click <a href="../index.php">HERE</a> to login<br>';
     }
 
@@ -600,16 +545,10 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             <td><a href="index.php?op=update_12p1">Upgrade from DB schema version 1.2p1</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index.php?op=update_12rc1">Upgrade from DB schema version 1.2rc(x)</a><br><br></td>
-        </tr>
-        <tr>
             <td><a href="index.php?op=update_11">Upgrade from DB schema version 1.1</a><br><br></td>
         </tr>
         <tr>
             <td><a href="index.php?op=update_11rc2">Upgrade from DB schema version 1.1rc2</a><br><br></td>
-        </tr>
-        <tr>
-            <td><a href="index.php?op=update_11rc1">Upgrade from DB schema version 1.1rc1</a><br><br></td>
         </tr>
         <tr>
             <td><a href="index.php?op=update_10">Upgrade from DB schema version 1.0</a><br><br></td>
