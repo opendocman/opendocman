@@ -46,9 +46,9 @@ $layout_registry->set('default', __DIR__ . '/templates/layouts/default.php');
  * Connect to Database
  */
 
-$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+$dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();

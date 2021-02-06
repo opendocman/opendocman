@@ -36,6 +36,9 @@
 if (file_exists('config.php')) {
     // In the case of root folder calls
     require_once('config.php');
+} elseif (file_exists('docker-configs/config.php')) {
+    // In case we are running from Docker
+    require_once('docker-configs/config.php');
 } elseif (file_exists('../config.php')) {
     // In the case of subfolders
     require_once('../config.php');

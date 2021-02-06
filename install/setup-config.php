@@ -58,7 +58,7 @@ if (!file_exists(ABSPATH . 'config-sample.php')) {
 $configFile = file(ABSPATH . 'config-sample.php');
 
 // Check if config.php has been created
-if (file_exists(ABSPATH . 'config.php')) {
+if (file_exists(ABSPATH . 'config.php') || file_exists(ABSPATH . 'docker-configs/config.php')) {
     echo("<p>The file 'config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href='./'>installing now</a>.</p>");
     exit;
 }
@@ -158,22 +158,22 @@ deny from all
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="dbname">Database Name</label></th>
-			<td><input name="dbname" id="dbname" type="text" size="25" value="opendocman" class="required" minlength="2" /></td>
+			<td><input name="dbname" id="dbname" type="text" size="25" value="<?php echo ($_ENV['APP_DB_NAME'] ? $_ENV['APP_DB_NAME'] : 'opendocman'); ?>" class="required" minlength="2" /></td>
 			<td>The name of the database you want to run OpenDocMan in. </td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="uname">User Name</label></th>
-			<td><input name="uname" id="uname" type="text" size="25" value="username" class="required" minlength="2"/></td>
+			<td><input name="uname" id="uname" type="text" size="25" value="<?php echo ($_ENV['APP_DB_USER'] ? $_ENV['APP_DB_USER'] : 'opendocman'); ?>" class="required" minlength="2"/></td>
 			<td>Your MySQL username</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="pwd">Password</label></th>
-			<td><input name="pwd" id="pwd" type="password" size="25" value="password" /></td>
+			<td><input name="pwd" id="pwd" type="password" size="25" value="<?php echo ($_ENV['APP_DB_PASS'] ? $_ENV['APP_DB_PASS'] : 'opendocman'); ?>" /></td>
 			<td>...and MySQL password.</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
-			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo ($_ENV['DB_HOST'] ? $_ENV['DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
+			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo ($_ENV['APP_DB_HOST'] ? $_ENV['APP_DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
 			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.
                             It can also include a port number. e.g. "hostname;port=3306" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
                         </td>
@@ -212,26 +212,22 @@ deny from all
     /**#@+
      * @ignore
      */
-    define('DB_NAME', trim($_POST['dbname']));
-    define('DB_USER', trim($_POST['uname']));
-    define('DB_PASS', trim($_POST['pwd']));
-    define('DB_HOST', trim($_POST['dbhost']));
+    define('APP_DB_NAME', sanitizeme(trim($_POST['dbname'])));
+    define('APP_DB_USER', sanitizeme(trim($_POST['uname'])));
+    define('APP_DB_PASS', sanitizeme(trim($_POST['pwd'])));
+    define('APP_DB_HOST', sanitizeme(trim($_POST['dbhost'])));
 
     // We'll fail here if the values are no good.
-        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+        $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
         try {
-            $pdo = new PDO($dsn, DB_USER, DB_PASS);
+            $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $dbname  = sanitizeme(trim($_POST['dbname']));
-    $uname   = sanitizeme(trim($_POST['uname']));
-    $passwrd = sanitizeme(trim($_POST['pwd']));
-    $dbhost  = sanitizeme(trim($_POST['dbhost']));
-    $prefix  = sanitizeme(trim($_POST['prefix']));
+        $prefix  = sanitizeme(trim($_POST['prefix']));
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
         $baseurl  = sanitizeme(trim($_POST['baseurl']));
@@ -274,25 +270,27 @@ deny from all
 
         // Now replace the default config values with the real ones
     foreach ($configFile as $line_num => $line) {
-        switch (substr($line, 4, 16)) {
-            case "define('DB_NAME'":
-                $configFile[$line_num] = str_replace("'database_name_here'", "'$dbname'", $line);
+        switch (substr($line, 4, 20)) {
+            case "define('APP_DB_NAME'":
+                $configFile[$line_num] = str_replace("database_name_here", APP_DB_NAME, $line);
                 break;
-            case "define('DB_USER'":
-                $configFile[$line_num] = str_replace("'username_here'", "'$uname'", $line);
+            case "define('APP_DB_USER'":
+                $configFile[$line_num] = str_replace("username_here", APP_DB_USER, $line);
                 break;
-            case "define('DB_PASS'":
-                $configFile[$line_num] = str_replace("'password_here'", "'$passwrd'", $line);
+            case "define('APP_DB_PASS'":
+                $configFile[$line_num] = str_replace("password_here", APP_DB_PASS, $line);
                 break;
-            case "define('DB_HOST'":
-                $configFile[$line_num] = str_replace("'localhost'", "'$dbhost'", $line);
+            case "define('APP_DB_HOST'":
+                $configFile[$line_num] = str_replace("localhost", APP_DB_HOST, $line);
                 break;
             case '$GLOBALS[\'CONFIG':
                 $configFile[$line_num] = str_replace("'odm_'", "'$prefix'", $line);
                 break;
         }
     }
-    if (! is_writable(ABSPATH)) {
+
+    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? 'docker-configs/' : '');
+    if (! is_writable($config_folder)) {
         display_header();
         ?>
 <p>Sorry, but I can't write the <code>config.php</code> file.</p>
@@ -307,12 +305,13 @@ deny from all
 <?php
 
     } else {
-        $handle = fopen(ABSPATH . 'config.php', 'w');
+
+        $handle = fopen($config_folder . "config.php", 'w');
         foreach ($configFile as $line) {
             fwrite($handle, $line);
         }
         fclose($handle);
-        chmod(ABSPATH . 'config.php', 0666);
+        chmod($config_folder . 'config.php', 0666);
         display_header();
         ?>
 <p>Great! You've made it through this part of the installation. OpenDocMan can now communicate with your database. If you are ready, time now to&hellip;</p>

@@ -25,7 +25,7 @@ session_start();
  * Test to see if we have the config.php file. If not, must not be installed yet.
 */
 
-if (!file_exists('config.php')) {
+if (!file_exists('config.php') && !file_exists('docker-configs/config.php')) {
     if (
         !extension_loaded('pdo')
         || !extension_loaded('pdo_mysql')
@@ -39,9 +39,11 @@ if (!file_exists('config.php')) {
     <head>
         <link rel="stylesheet" href="templates/common/css/install.css" type="text/css"/>
     </head>
-    <body>Looks like this is a new installation because we did not find a config.php file or we cannot locate the
-    database. We need to create a config.php file now: <p><a href="install/setup-config.php" class="button">Create a
-            Configuration File</a></p></body>
+        <body>
+            <h2>Looks like this is a new installation because we did not find a config.php file or we cannot locate the
+            database. We need to create a config.php file now:</h2>
+            <p><a href="install/setup-config.php" class="button">Create a Configuration File</a></p>
+        </body>
     </html>
     <?php
     exit;
