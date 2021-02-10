@@ -879,9 +879,16 @@ function redirect_visitor($url = '')
 }
 
 function base_url(){
-    return sprintf(
-        "%s://%s",
-        isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-        $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])
-    );
+    // We don't want to re-write the base_url value when we are being called by a plugin
+    if(!preg_match('/plug-ins*/', $_SERVER['REQUEST_URI'])) {
+        return sprintf(
+            "%s://%s",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])
+        );
+    } else {
+        // Set the base url relative to the plug-ins folder when being called from there
+        return "../../";
+
+    }
 }
