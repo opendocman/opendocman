@@ -33,7 +33,7 @@ services:
     command: ["./wait-for-mysql.sh", "db", "/start.sh"]
     volumes:
       - odm-files-data:/var/www/document_repository
-      - odm-docker-configs:/var/www/html/docker-configs
+      - odm-docker-configs:/var/www/html/application/configs/docker-configs
 
 volumes:
   odm-files-data:

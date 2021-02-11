@@ -7,3 +7,4 @@
 Thumbs.db
 /nbproject
 config.php
+application/templates_c/*.tpl.php

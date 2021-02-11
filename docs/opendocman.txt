@@ -6,21 +6,17 @@ Table of Contents
     1.1 Features
     1.2 Requirements
         1.2.1 Partially Tested
-2 Installation and Updating
-    2.1 Update Procedure
-    2.2 New Installation (Automated)
-    2.3 New Installation (Manual)
-3 Configuration
-    3.1 config.php
-    3.2 Administration Editor
-4 Tutorial
-    4.1 Adding a file
-    4.2 Adding a user
-    4.3 Authorizing a file
-    4.4 Checking out a file
-5 Credits
-6 Automated Installation and Upgrade Notes (For Developers)
-7 Changes
+2 Configuration
+    2.1 configs/config.php
+    2.2 Administration Editor
+3 Tutorial
+    3.1 Adding a file
+    3.2 Adding a user
+    3.3 Authorizing a file
+    3.4 Checking out a file
+4 Credits
+5 Automated Installation and Upgrade Notes (For Developers)
+6 Changes
     7.1 1.2rc1 - July 9th, 2003
     7.2 1.1-Final - May 6th, 2003
     7.3 1.1rc2 - March 23, 2003
@@ -102,7 +98,7 @@ centralized repository.
 
 * MySQL Server 5.0+ (http://www.mysql.com/)
 
-* PHP 5.4+ compiled with PDO-MySQL Support (http://www.php.net/)
+* PHP 7.2+ compiled with PDO-MySQL Support (http://www.php.net/)
 
 1.2.1 Partially Tested
 
@@ -110,77 +106,9 @@ centralized repository.
 
 * MS-Windows
 
-2 Installation and Updating
+2 Configuration
 
-2.1 Update Procedure
-
- To update your current version to the latest release:
-
- 1. Rename your current opendocman folder.
-
- 2. Unarchive opendocman into a new folder and rename it to the original folder name
-
- 3. Load the opendocman page in your web browser ( ex. http://www.example.com/opendocman/ )
-
- 4. You should follow the prompts for installation.
-
- 5. When you get to the end you will be able to choose an upgrade path
-
-2.2 New Installation (Automatic)
-
- 1. Un-tar/Unzip files into any dir in your web server documents dir
-
- 2. Create a MySQL database/username/password.
-
- 3. Make a directory for the files to be stored that is accessible
-  to the web server but not available by browsing. Ensure the
-  permissions are correct on this folder to allow for the web
-  server to write to it
-
-  ex.  $>mkdir /usr/local/opendocman/data
-
- 4. Load the opendocman page in your web browser
-(ex. http://www.example.com/opendocman/ ) and follow the prompts.
-
- 5. Login as "admin" (with the password you set during the installation). 
-
- 6. Edit your site settings at Admin->Site Settings
-
- 7. Add departments, categories, users, etc.
-
- 8. Enjoy!
-
-2.3 New Installation (Manual)
-
- 1. Un-tar/Unzip files into any dir in your web server documents dir
-
- 2. Create a MySQL database/username/password.
-
- 3. Make a directory for the files to be stored that is accessible
-  to the web server but not available by browsing. Ensure the
-  permissions are correct on this folder to allow for the web
-  server to write to it
-
-  ex.  $>mkdir /usr/local/opendocman/data
-
- 4. Copy the config-sample.php to config.php
- 
- 5. Edit the config.php to include your database parameters
-
- 6. Edit the database.sql file. You need to change the values set in the odm_settings table, specifically for these entries:
-    * dataDir
-    * base_url
-    Change those to reflect the correct locations.
-
-    You will also want to update the admin password being used where the admin user is added.
-
- 7. Import your database.sql file into your database
-
- 8. Visit the URL for your installation and login as admin with the password you added in the database.sql file
-
-3 Configuration
-
-3.1 Configuration values
+2.1 Configuration values
 
 Most of the configuration for OpenDocMan is controlled by the Admin->Edit Settings page.
 
@@ -230,16 +158,16 @@ Below are some of the configurable options:
 * allow_signup - This option determines whether or not to display
   the "Signup" link on the login page to allow users to self-register.
 
-3.2 Administration Editor
+2.2 Administration Editor
 
 When a user is set up as an "admin",
 they will see an admin menu in the upper right while they
 are logged in. There are options for User, Category, Department,
 and File Management under this menu item.
 
-4 Tutorial
+3 Tutorial
 
-4.1 Adding a file
+3.1 Adding a file
 
 1. Click on the "Add"
   icon in the menu area
@@ -275,13 +203,13 @@ and File Management under this menu item.
   If file moderation is turned off, you should see the file
   in the main file list now.
 
-4.2 Adding a user
+3.2 Adding a user
 
-4.3 Authorizing a file
+3.3 Authorizing a file
 
-4.4 Checking out a file
+3.4 Checking out a file
 
-5 Credits
+4 Credits
 
 Stephen Lawrence Jr. - Project Lead/Programmer
 
@@ -289,7 +217,7 @@ Khoa Nguyen (knguyen@ksys.serverbox.org) - PHP and Javascript Programming
 
 Originally inspired by an article called cracking the vault.
 
-6 Automated Installation and Upgrade Notes (For Developers)
+5 Automated Installation and Upgrade Notes (For Developers)
 
 There is a new folder named "install" which contains files
 use by the installation scrip. This is an automated
@@ -297,7 +225,7 @@ web-based update/installation script. Here is how it works
 for users:
 
 1. The user loads any page into their browser. The program will detect
-   if they have a config.php file or not. If they do not it will have them
+   if they have a configs/config.php file or not. If they do not it will have them
    create one.
 
 2. For a new installation:
@@ -308,7 +236,7 @@ for users:
 3. For updates:
 
   (a) The user will need to find their current version (which
-    comes from their old config.php), and they would then
+    comes from their old configs/config.php), and they would then
     click on the appropriate upgrade link. For example,
     if their version number is 1.0, they would click on
     the "Upgrade from 1.0" link. This will apply all necessary
@@ -349,6 +277,6 @@ new files need to be created and a current files modified.
 
 These files MUST be kept in sync for each release!
 
-7 Changelog
+6 Changelog
 Located at http://www.opendocman.com/category/changelog/
 
