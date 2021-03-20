@@ -17,18 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-// Bootloader to initialize variables
-// If the configs/config.php file is not found then an error
-// will be displayed asking the visitor to set up the
-// configs/config.php file.
-//
-// Will also search for configs/config.php in the OpenDocMan parent
-// directory to allow the OpenDocMan directory to remain
-// untouched.
-
-//echo "running odm-init.php in dir:" . __DIR__ . '<br>';
-//echo get_include_path() . "</br>";
-//require __DIR__ . '/vendor/autoload.php';
+// If we get here and there are no configs set yet then we should redirect to setup-config
+if (!defined('APP_DB_HOST')) {
+    Header('Location: setup-config');
+    exit;
+}
 
 /**
  * Set up the various view objects needed
@@ -44,35 +37,18 @@ $view_registry->set('access_log',  __DIR__ . '/views/access_log.php');
 $layout_registry = $view->getLayoutRegistry();
 $layout_registry->set('default', __DIR__ . '/layouts/default.php');
 
-/*
- * Connect to Database
- */
-
-$dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
-try {
-    $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
-} catch (PDOException $e) {
-    print "Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-//$GLOBALS['pdo'] = $pdo;
-
 ob_start();
 
 /*
 /*
  * Load the Settings class
  */
-//require_once('Settings_class.php');
 $settings = new Settings($pdo);
 $settings->load();
 
 $plugin = new Plugin();
 
 // Set the Smarty variables
-//require_once('../../../includes/smarty/Smarty.class.php');
 $GLOBALS['smarty'] = new Smarty();
 $GLOBALS['smarty']->template_dir = dirname(__FILE__) . '/views/' . $GLOBALS['CONFIG']['theme'] . '/';
 $GLOBALS['smarty']->compile_dir = dirname(__FILE__) . '/templates_c/';
@@ -91,12 +67,7 @@ foreach ($GLOBALS['lang'] as $key => $value) {
     $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
 }
 
-
-
 csrfProtector::init();
-
-/* Set language  vars */
-
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {
@@ -108,7 +79,6 @@ if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {
 /*
  * Load the allowed file types list
  */
-
 $filetypes = new FileTypes($pdo);
 $filetypes->load();
 

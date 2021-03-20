@@ -52,7 +52,7 @@ if (file_exists(__DIR__ . '/../application/configs/config.php')) {
 } else {
     $configExists = false;
     if ( false === strpos( $_SERVER['REQUEST_URI'], 'setup-config' ) ) {
-        header( 'Location: setup-config');
+        header( 'Location: /install/setup-config');
         exit;
     }
 }
@@ -60,8 +60,30 @@ if (file_exists(__DIR__ . '/../application/configs/config.php')) {
 
 
 if($configExists) {
-    require '../application/controllers/helpers/functions.php';
-    require '../application/odm-init.php';
+    /*
+    * Connect to Database to see if it exists yet (it should always exist if there is a config file)
+    */
+    $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
+    try {
+        $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
+    } catch (PDOException $e) {
+        print "Error!: " . $e->getMessage() . "<br/>";
+        die();
+    }
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Lets see if there is a table named *_odmsys so we can tell if the db installation is complete
+    try {
+        $table_count = $pdo->query("SHOW TABLES LIKE '%_odmsys%'")->fetch(PDO::FETCH_NUM);
+    } catch (Exception $e) {
+        // We got an exception == table not found so we must not have run the db installation yet
+    }
+
+    if (isset($table_count) && $table_count > 0) {
+        require '../application/controllers/helpers/functions.php';
+        require '../application/odm-init.php';
+    }
+
 }
 require '../application/vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
 require '../application/version.php';
@@ -110,11 +132,13 @@ $map->get("index.read", "/", function($request) {include("../application/control
 $map->post("index.write", "/", function($request) {include("../application/controllers/index.php");});
 $map->get("index.read-full", "/index", function($request) {include("../application/controllers/index.php");});
 $map->post("index.write-full", "/index", function($request) {include("../application/controllers/index.php");});
-$map->get("install-index.read", "/install", function($request) {
+$map->get("install-index.read", "/install/index", function($request) {
     include("../application/controllers/install/index.php");});
-$map->get("install-setupconfig.read", "/setup-config", function($request) {
+$map->post("install-index.write", "/install/index", function($request) {
+    include("../application/controllers/install/index.php");});
+$map->get("install-setupconfig.read", "/install/setup-config", function($request) {
     include("../application/controllers/install/setup-config.php");});
-$map->post("install-setupconfig.write", "/setup-config", function($request) {
+$map->post("install-setupconfig.write", "/install/setup-config", function($request) {
     include("../application/controllers/install/setup-config.php");});
 $map->get("logout.read", "/logout", function($request) {include("../application/controllers/logout.php");});
 $map->get("out.read", "/out", function($request) {include("../application/controllers/out.php");});

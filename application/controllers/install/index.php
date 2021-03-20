@@ -47,12 +47,12 @@ define('REQUIRED_DB_VERSION', '1.4.0');
 
 // Search for the config file in parent folder and the docker-compose configs mount directory
 // If not found, redirect to index for install routine
-if (file_exists(dirname(__FILE__) . '/../configs/config.php')) {
-    include(dirname(__FILE__) . '/../configs/config.php');
-} elseif (file_exists(dirname(__FILE__) . '/../configs/docker-configs/config.php'))  {
-    include(dirname(__FILE__) . '/../configs/docker-configs/config.php');
+if (file_exists(dirname(__FILE__) . '/../../configs/config.php')) {
+    include(dirname(__FILE__) . '/../../configs/config.php');
+} elseif (file_exists(dirname(__FILE__) . '/../../configs/docker-configs/config.php'))  {
+    include(dirname(__FILE__) . '/../../configs/docker-configs/config.php');
 } else {
-    Header('Location: ../index');
+    Header('Location: ../../index');
 }
 
 //// If we have a configs/config.php then we have been through the config setup already
@@ -482,7 +482,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </tr>
         <tr>
         <td>
-            <a href="index?op=install" class="button" onclick="return confirm('Are you sure? This will modify the database you have configured in configs/config.php. Only use this option for a FRESH INSTALL.')">
+            <a href="/install/index?op=install" class="button" onclick="return confirm('Are you sure? This will modify the database you have configured in configs/config.php. Only use this option for a FRESH INSTALL.')">
                 Click HERE To set up database for v<?php echo $GLOBALS['CONFIG']['current_version'];
     ?> release of OpenDocMan </a><br /><br />
         </td>
@@ -501,52 +501,52 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             <td>Upgrade your current database from a previous version<br/><br/></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>
+            <td><a href="/install/index?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_130">Upgrade from DB schema version 1.3.0</a><br><br></td>
+            <td><a href="/install/index?op=update_130">Upgrade from DB schema version 1.3.0</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_129">Upgrade from DB schema version 1.2.9</a><br><br></td>
+            <td><a href="/install/index?op=update_129">Upgrade from DB schema version 1.2.9</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_128">Upgrade from DB schema version 1.2.8</a><br><br></td>
+            <td><a href="/install/index?op=update_128">Upgrade from DB schema version 1.2.8</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1263">Upgrade from DB schema version 1.2.6.3</a><br><br></td>
+            <td><a href="/install/index?op=update_1263">Upgrade from DB schema version 1.2.6.3</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1262">Upgrade from DB schema version 1.2.6.2</a><br><br></td>
+            <td><a href="/install/index?op=update_1262">Upgrade from DB schema version 1.2.6.2</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1261">Upgrade from DB schema version 1.2.6.1</a><br><br></td>
+            <td><a href="/install/index?op=update_1261">Upgrade from DB schema version 1.2.6.1</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1257">Upgrade from DB schema version 1.2.5.7</a><br><br></td>
+            <td><a href="/install/index?op=update_1257">Upgrade from DB schema version 1.2.5.7</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1256">Upgrade from DB schema version 1.2.5.6</a><br><br></td>
+            <td><a href="/install/index?op=update_1256">Upgrade from DB schema version 1.2.5.6</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_1252">Upgrade from DB schema version 1.2.5.2</a><br><br></td>
+            <td><a href="/install/index?op=update_1252">Upgrade from DB schema version 1.2.5.2</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_124">Upgrade from DB schema version 1.2.4</a><br><br></td>
+            <td><a href="/install/index?op=update_124">Upgrade from DB schema version 1.2.4</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_12p3">Upgrade from DB schema version 1.2p3</a><br><br></td>
+            <td><a href="/install/index?op=update_12p3">Upgrade from DB schema version 1.2p3</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_12p1">Upgrade from DB schema version 1.2p1</a><br><br></td>
+            <td><a href="/install/index?op=update_12p1">Upgrade from DB schema version 1.2p1</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_11">Upgrade from DB schema version 1.1</a><br><br></td>
+            <td><a href="/install/index?op=update_11">Upgrade from DB schema version 1.1</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_11rc2">Upgrade from DB schema version 1.1rc2</a><br><br></td>
+            <td><a href="/install/index?op=update_11rc2">Upgrade from DB schema version 1.1rc2</a><br><br></td>
         </tr>
         <tr>
-            <td><a href="index?op=update_10">Upgrade from DB schema version 1.0</a><br><br></td>
+            <td><a href="/install/index?op=update_10">Upgrade from DB schema version 1.0</a><br><br></td>
         </tr>
         <?php
 

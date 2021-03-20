@@ -55,8 +55,6 @@ if (!file_exists(ABSPATH . '../configs/config-sample.php')) {
     exit;
 }
 
-$configFile = file(ABSPATH . '../configs/config-sample.php');
-
 // Check if configs/config.php has been created
 if (file_exists(ABSPATH . '../configs/config.php') || file_exists(ABSPATH . '../configs/docker-configs/config.php')) {
     echo("<p>The file 'configs/config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href=''>installing now</a>.</p>");
@@ -241,7 +239,7 @@ deny from all
             $prefix = 'odm_';
         }
 
-        // Require values from form fields
+
     // Validate $prefix: it can only contain letters, numbers and underscores
     if (preg_match('|[^a-z0-9_]|i', $prefix)) {
         die('<strong>ERROR</strong>: "Table Prefix" can only contain numbers, letters, and underscores.');
@@ -264,37 +262,38 @@ deny from all
             echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '../templates_c is writable by the web server';
         }
 
-        // We also need to guess at their base_url value
+    // Grab the sample as our source file for building a config.php file
+    $configFileSource = file(ABSPATH . '../configs/config-sample.php');
 
-        // Now replace the default config values with the real ones
-    foreach ($configFile as $line_num => $line) {
+    // Now replace the default config values with the real ones
+    foreach ($configFileSource as $line_num => $line) {
         switch (substr($line, 4, 20)) {
             case "define('APP_DB_NAME'":
-                $configFile[$line_num] = str_replace("database_name_here", APP_DB_NAME, $line);
+                $configFileSource[$line_num] = str_replace("database_name_here", APP_DB_NAME, $line);
                 break;
             case "define('APP_DB_USER'":
-                $configFile[$line_num] = str_replace("username_here", APP_DB_USER, $line);
+                $configFileSource[$line_num] = str_replace("username_here", APP_DB_USER, $line);
                 break;
             case "define('APP_DB_PASS'":
-                $configFile[$line_num] = str_replace("password_here", APP_DB_PASS, $line);
+                $configFileSource[$line_num] = str_replace("password_here", APP_DB_PASS, $line);
                 break;
             case "define('APP_DB_HOST'":
-                $configFile[$line_num] = str_replace("localhost", APP_DB_HOST, $line);
+                $configFileSource[$line_num] = str_replace("localhost", APP_DB_HOST, $line);
                 break;
             case '$GLOBALS[\'CONFIG':
-                $configFile[$line_num] = str_replace("'odm_'", "'$prefix'", $line);
+                $configFileSource[$line_num] = str_replace("'odm_'", "'$prefix'", $line);
                 break;
         }
     }
 
-    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? '../configs/docker-configs/' : '');
+    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? '../configs/docker-configs/' : '../configs/');
     if (! is_writable($config_folder)) {
         display_header();
         ?>
 <p>Sorry, but I can't write the <code>configs/config.php</code> file.</p>
 <p>You can create the <code>configs/config.php</code> manually and paste the following text into it.</p>
 <textarea cols="98" rows="15" class="code"><?php
-        foreach ($configFile as $line) {
+        foreach ($configFileSource as $line) {
             echo htmlentities($line, ENT_COMPAT, 'UTF-8');
         }
         ?></textarea>
@@ -305,7 +304,7 @@ deny from all
     } else {
 
         $handle = fopen($config_folder . "../configs/config.php", 'w');
-        foreach ($configFile as $line) {
+        foreach ($configFileSource as $line) {
             fwrite($handle, $line);
         }
         fclose($handle);
@@ -314,7 +313,7 @@ deny from all
         ?>
 <p>Great! You've made it through this part of the installation. OpenDocMan can now communicate with your database. If you are ready, time now to&hellip;</p>
 
-<p class="step"><a href="/install" class="button">Run the install</a></p>
+<p class="step"><a href="/install/index" class="button">Run the install</a></p>
 <?php
 
     }
