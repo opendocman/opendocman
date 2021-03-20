@@ -1,4 +1,4 @@
-January 12, 2011
+Updated: March 20, 2021
 
 Table of Contents
 
@@ -15,14 +15,6 @@ Table of Contents
     3.3 Authorizing a file
     3.4 Checking out a file
 4 Credits
-5 Automated Installation and Upgrade Notes (For Developers)
-6 Changes
-    7.1 1.2rc1 - July 9th, 2003
-    7.2 1.1-Final - May 6th, 2003
-    7.3 1.1rc2 - March 23, 2003
-    7.4 1.1rc1 - March 10, 2003
-    7.5 1.0 - Initial Release - December 19, 2003
-
 
 
 1 Introduction
@@ -89,22 +81,6 @@ centralized repository.
   one of either Remove from file list until renewed, Show
   in file list but locked, Send email to reviewer
   only, or Do Nothing.
-
-15. 
-
-1.2 Requirements
-
-* Apache web server 2.x (or any other web server, that supports PHP) (http://www.apache.org/)
-
-* MySQL Server 5.0+ (http://www.mysql.com/)
-
-* PHP 7.2+ compiled with PDO-MySQL Support (http://www.php.net/)
-
-1.2.1 Partially Tested
-
-* Microsoft IIS Server
-
-* MS-Windows
 
 2 Configuration
 
@@ -213,70 +189,7 @@ and File Management under this menu item.
 
 Stephen Lawrence Jr. - Project Lead/Programmer
 
-Khoa Nguyen (knguyen@ksys.serverbox.org) - PHP and Javascript Programming
+Many others as noted throughout the codebase.
 
 Originally inspired by an article called cracking the vault.
-
-5 Automated Installation and Upgrade Notes (For Developers)
-
-There is a new folder named "install" which contains files
-use by the installation scrip. This is an automated
-web-based update/installation script. Here is how it works
-for users:
-
-1. The user loads any page into their browser. The program will detect
-   if they have a configs/config.php file or not. If they do not it will have them
-   create one.
-
-2. For a new installation:
-
-  (a) The script will proceed to install all the necessary data structures and default
-    data entries for the most current version of ODM.
-
-3. For updates:
-
-  (a) The user will need to find their current version (which
-    comes from their old configs/config.php), and they would then
-    click on the appropriate upgrade link. For example,
-    if their version number is 1.0, they would click on
-    the "Upgrade from 1.0" link. This will apply all necessary
-    database changes to their current database.
-
-For developers, when there is a new version release, a few
-new files need to be created and a current files modified.
-
-1. upgrade_x.php - where x is the release name. This file
-  should follow the same format as the other upgrade_x.php
-  files and is used for upgrades only. This should be built
-  from the output of a program like mysqldiff.pl and is
-  the "diff"erence between the it's version, and the version
-  before it. 
-
-2. Setup.php - add a new function for the new version upgrade
-  (ex. "do_update_x()") where x is the release name. 
-
-  (a) Inside this new function, you must "include" each previous
-    upgrade file in succession (see upgrade_10.php for an
-    exmaple, which is for a user upgrading from 1.0 to the
-    latest). 
-
-  (b) Add a new case statement for the new upgrade call 
-
-  (c) Add a new link to print_intro() for the upgrade function
-
-3. odm.php - This file should follow the same format as the
-  current odm.php file, and should contain all the necessary
-  sql commands to create a new installation based on the
-  latest database schema. 
-
-4. database.sql - This should contain the same sql commands
-  as odm.php, only in a mysqldump format for users that
-  need to manually install the program for some reason.
-  This can be a mysqldump straight from the latest database
-  schema.
-
-These files MUST be kept in sync for each release!
-
-6 Changelog
-Located at http://www.opendocman.com/category/changelog/
 
