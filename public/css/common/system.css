@@ -26,7 +26,7 @@
         position:relative;
         color: #00529B;
         background-color: #BDE5F8;
-        background-image: url('../../../templates/common/images/info.png');
+        background-image: url('../../images/info.png');
     }
 
     label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }

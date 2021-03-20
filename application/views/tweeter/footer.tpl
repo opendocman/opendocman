@@ -1,5 +1,6 @@
 {if $g_demo eq 'True'}
-<script type="text/javascript"><!--
+<script type="text/javascript">
+<!--
  google_ad_client = "ca-pub-3696425351841264";
  /* 728x90_ODM_Demo */
  google_ad_slot = "8419809005";

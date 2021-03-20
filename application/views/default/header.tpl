@@ -24,7 +24,7 @@
 {* Must Include This Section *}
 {include file='common/head_include.tpl'}
 
-<link type="text/css" rel="stylesheet" href="{$g_base_url|escape:'html'}/templates/default/css/default.css">
+<link type="text/css" rel="stylesheet" href="{$g_base_url|escape:'html'}/css/default/default.css">
     </head>
     <body >
         <!-- ----------------begin_draw_menu----------------- -->
@@ -59,7 +59,7 @@
     <h1>Demo resets once per hour</h1>
 {/if}
 <!-- ----------------end_draw_menu----------------- -->
-<link rel="stylesheet" type="text/css" href="{$g_base_url}/linkcontrol.css">
+<link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/linkcontrol.css">
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
 <tr>
 {if $userName}

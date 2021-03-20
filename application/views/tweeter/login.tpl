@@ -6,8 +6,8 @@
 
     <!-- Le styles -->
 
-    <link href="{$g_base_url}/css/tweeter/bootstrap.css" rel="stylesheet">
-    <link href="{$g_base_url}/css/tweeter/tweeter.css" rel="stylesheet">
+    <link href="{$g_base_url}css/tweeter/bootstrap.css" rel="stylesheet">
+    <link href="{$g_base_url}css/tweeter/tweeter.css" rel="stylesheet">
     <style type="text/css">
         {literal}
       body {
@@ -17,21 +17,16 @@
       }
       {/literal}
     </style>
-    <link href="{$g_base_url}/css/tweeter/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{$g_base_url}css/tweeter/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-            <script src={$g_base_url}"/js/tweeter/html5.js"></script>
+            <script src={$g_base_url}"js/tweeter/html5.js"></script>
             <![endif]-->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{$g_base_url|escape:'html'}images/tweeter/favicon.ico">
 
-    <link rel="apple-touch-icon" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url|escape:'html'}/templates/tweeter/images/apple-touch-icon-114x114.png">
-    
-    
     {* Must Include This Section *}
     {include file='../common/head_include.tpl'}
     

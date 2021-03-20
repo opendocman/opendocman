@@ -23,17 +23,12 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-    <script src={$g_base_url}"js/tweeter/js/html5.js"></script>
+    <script src={$g_base_url}"js/tweeter/html5.js"></script>
     <![endif]-->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{$g_base_url}images/tweeter/favicon.ico">
 
-    <link rel="apple-touch-icon" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{$g_base_url}/templates/tweeter/images/apple-touch-icon-114x114.png">
-    
-    
     {* Must Include This Section *}
     {include file='../common/head_include.tpl'}
     
