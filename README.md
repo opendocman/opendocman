@@ -68,7 +68,7 @@ docker-compose deployment.
 
    ex.  $>`mkdir /var/www/document_repository`
 
-1. Copy the config-sample.php to config.php
+1. Copy the application/configs/config-sample.php to application/configs/config.php
 1. Edit the config.php to include your database parameters
 1. Edit the database.sql file. You need to change the values set in the odm_settings table, and odm_user tables, 
    specifically the dataDir value, and the password used for the admin user creation

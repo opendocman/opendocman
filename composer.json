@@ -1,13 +1,16 @@
 {
   "config": {
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "vendor-dir": "application/vendor"
   },
   "require": {
     "aura/html": "^2.4",
     "foa/html-view-bundle": "2.*",
-    "owasp/csrf-protector-php": "dev-master"
+    "owasp/csrf-protector-php": "dev-master",
+    "aura/router": "^3.1",
+    "zendframework/zend-diactoros": "dev-develop"
   },
   "require-dev": {
-    "phplint/phplint": "^0.0.1"
+    "overtrue/phplint": "^2.3"
   }
 }

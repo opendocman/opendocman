@@ -1,0 +1,22 @@
+{
+    "name": "n98/junit-xml",
+    "description": "JUnit XML Document generation library",
+    "license": "MIT",
+    "type": "library",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Christian Münch",
+            "email": "c.muench@netz98.de"
+        }
+    ],
+    "require": {
+
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+	    "psr-0": { "N98\\JUnitXml": "src/" }
+    }
+}

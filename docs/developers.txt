@@ -24,7 +24,7 @@ The user loads setup.php into their browser. They can either select the new inst
 
 For a new installation, the user will be prompted to enter a priviledged mysql username and password. This is for the database creation and grant assignments. The script will then proceed to install all the necessary data structures and default data entries for the most current version of ODM.
 
-For updates, the user will be shown their current version (which comes from config.php), and they would then click on the appropriate upgrade link. For example, if their version number is 1.0, they would click on the "Upgrade from 1.0" link. This will apply all necessary database changes to their current database.
+For updates, the user will be shown their current version (which comes from configs/config.php), and they would then click on the appropriate upgrade link. For example, if their version number is 1.0, they would click on the "Upgrade from 1.0" link. This will apply all necessary database changes to their current database.
 
 For developers, when their is a new version release, a few new files need to be created and a current files modified:
 
