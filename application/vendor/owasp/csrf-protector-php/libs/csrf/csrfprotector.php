@@ -138,7 +138,7 @@ if (!defined('__CSRF_PROTECTOR__')) {
             // config.php then check for a config/csrf_config.php file in the
             // root folder for composer installations
             $standard_config_location = __DIR__ ."/../config.php";
-            $composer_config_location = __DIR__ ."/../../../../../../config/csrf_config.php";
+            $composer_config_location = __DIR__ ."/../../../../../configs/csrf_config.php";
 
             if (file_exists($standard_config_location)) {
                 self::$config = include($standard_config_location);

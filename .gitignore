@@ -4,6 +4,7 @@
 ~$*
 .*.swp
 .idea
+.phplint-cache
 Thumbs.db
 /nbproject
 config.php
