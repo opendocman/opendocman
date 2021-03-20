@@ -19,4 +19,4 @@
 
 // version information
 
-$GLOBALS['CONFIG']['current_version'] = '1.4.3';
+$GLOBALS['CONFIG']['current_version'] = '1.4.4';
