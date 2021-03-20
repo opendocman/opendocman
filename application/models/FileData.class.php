@@ -46,18 +46,15 @@ if (!defined('FileData_class')) {
 
     class FileData extends databaseData
     {
-        public $category;
-        public $owner;
-        public $created_date;
-        public $description;
+        public int $category;
+        public int $owner;
+        public string $created_date;
+        public string $description;
         public $comment;
-        public $status;
-        public $department;
-        public $default_rights;
-        public $view_users;
+        public int $status;
+        public int $department;
+        public int $default_rights;
         public $read_users;
-        public $write_users;
-        public $admin_users;
         public $filesize;
         public $isLocked;
         protected $connection;

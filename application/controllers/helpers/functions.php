@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2000-2021. Stephen Lawrence
+ * Copyright (C) 2008-2021. Stephen Lawrence
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,17 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-//namespace opendocman\controllers\helpers\functions;
-//class Functions { const load = 1; }
-
-//echo "running functions.php in dir:" . __DIR__ . '<br>';
+// (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
 
 use Aura\Html\Escaper as e;
 
-// (C) 2002-2007 Stephen Lawrence Jr., Khoa Nguyen, Jon Miner
 // Various utility functions
 
-// BEGIN FUNCTIONS
 // function to format mySQL DATETIME values
 function fix_date($val)
 {
@@ -41,32 +36,6 @@ function fix_date($val)
     } else {
         return 0;
     }
-}
-
-// Return a copy of $string where all the spaces are converted into underscores
-function space_to_underscore($string)
-{
-    $string_len = strlen($string);
-    $index = 0;
-    while ($index < $string_len) {
-        if ($string[$index] == ' ') {
-            $string[$index] = '_';
-        }
-        $index++;
-    }
-    return $string;
-}
-
-// Draw the status bar for each page
-function draw_status_bar()
-{
-    return;
-}
-
-// This function draws the menu screen
-function draw_menu()
-{
-    return;
 }
 
 /*
@@ -110,7 +79,6 @@ function draw_header($pageTitle, $lastmessage = '')
     $GLOBALS['smarty']->assign('page_title', $pageTitle);
     $GLOBALS['smarty']->assign('lastmessage', urldecode($lastmessage));
     display_smarty_template('header.tpl');
-
 }
 
 function draw_error($message)
@@ -128,7 +96,7 @@ function draw_footer()
  * @param string $mail_body
  * @param string $mail_header
  */
-function email_all($mail_subject, $mail_body, $mail_header)
+function email_all(string $mail_subject, string $mail_body, string $mail_header)
 {
     global $pdo;
 
@@ -155,7 +123,7 @@ function email_all($mail_subject, $mail_body, $mail_header)
  * @param string $mail_body
  * @param string $mail_header
  */
-function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
+function email_dept(int $dept_id, string $mail_subject, string $mail_body, string $mail_header)
 {
     global $pdo;
 
@@ -181,12 +149,12 @@ function email_dept($dept_id, $mail_subject, $mail_body, $mail_header)
 }
 
 /**
- * @param obj $user_OBJ_array
+ * @param array $user_OBJ_array
  * @param string $mail_subject
  * @param string $mail_body
  * @param string $mail_header
  */
-function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_header)
+function email_users_obj(array $user_OBJ_array, string $mail_subject, string $mail_body, string $mail_header)
 {
     for ($i = 0; $i < sizeof($user_OBJ_array); $i++) {
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
@@ -201,7 +169,7 @@ function email_users_obj($user_OBJ_array, $mail_subject, $mail_body, $mail_heade
  * @param string $mail_body
  * @param string $mail_header
  */
-function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
+function email_users_id($user_ID_array, string $mail_subject, string $mail_body, string $mail_header)
 {
     global $pdo;
 
@@ -211,27 +179,23 @@ function email_users_id($user_ID_array, $mail_subject, $mail_body, $mail_header)
         }
     }
 
-    if (count($OBJ_array) > 0) {
-        email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+    if (!empty($OBJ_array)) {
+        if (count($OBJ_array) > 0) {
+            email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+        }
     }
-}
-
-function getmicrotime()
-{
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
 }
 
 /**
  * list_files - Display a list of files
- * @return NULL
  * @param array $fileid_array
  * @param object $userperms_obj
  * @param string $dataDir
  * @param boolean $showCheckBox
  * @param boolean $rejectpage
+ * @return NULL
  */
-function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = false, $rejectpage = false)
+function list_files(array $fileid_array, object $userperms_obj, string $dataDir, $showCheckBox = false, $rejectpage = false)
 {
     global $pdo;
 
@@ -295,7 +259,6 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
         }
 
         //Found the user right, now bold every below it.  For those that matches, make them different.
-        
         //For everything above it, blank out
         for ($i = $index_found + 1; $i < sizeof($rights); $i++) {
             $rights[$i][1] = '-';
@@ -320,18 +283,22 @@ function list_files($fileid_array, $userperms_obj, $dataDir, $showCheckBox = fal
     }
 
     $limit_reached = false;
-    if (count($file_list_arr) >= $GLOBALS['CONFIG']['max_query']) {
-        $limit_reached = true;
+    if (!empty($file_list_arr)) {
+        if (count($file_list_arr) >= $GLOBALS['CONFIG']['max_query']) {
+            $limit_reached = true;
+        }
     }
 
     $GLOBALS['smarty']->assign('limit_reached', $limit_reached);
     $GLOBALS['smarty']->assign('showCheckBox', $showCheckBox);
-    //print_r($file_list_arr);exit;
-    $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);
-    //print_r($GLOBALS['smarty']);
+    if (!empty($file_list_arr)) {
+        $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);
+    }
 
     // Call the plugin API
-    callPluginMethod('onBeforeListFiles', $file_list_arr);
+    if (!empty($file_list_arr)) {
+        callPluginMethod('onBeforeListFiles', $file_list_arr);
+    }
 
     display_smarty_template('out.tpl');
 
@@ -540,24 +507,7 @@ function sort_browser()
 
 }
 
-/////////////////////////////////////////////////Debuging function/////////////////////////////////
-function display_array($array)
-{
-    for ($i = 0; $i < sizeof($array); $i++) {
-        echo($i . ":" . $array[$i] . "<br>");
-    }
-}
-
-function display_array2D($array)
-{
-    for ($i = 0; $i < sizeof($array); $i++) {
-        for ($j = 0; $j < sizeof($array[$i]); $j++) {
-            echo($i . ":" . "$j" . ":" . $array[$i][$j] . "<br>");
-        }
-    }
-}
-
-function makeRandomPassword()
+function makeRandomPassword(): string
 {
     $pass = '';
     $salt = 'abchefghjkmnpqrstuvw3456789';
@@ -635,7 +585,7 @@ function display_filesize($file)
     }
 }
 
-function valid_username($username)
+function valid_username($username): bool
 {
     if (preg_match('/^\w+$/', $username)) {
         return true;
@@ -644,10 +594,8 @@ function valid_username($username)
     }
 }
 
-
 function cleanInput($input)
 {
-    $output = xss_clean($input);
     /*
     $search = array(
             '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
@@ -658,7 +606,7 @@ function cleanInput($input)
 
     $output = preg_replace($search, '', $input);
 */
-    return $output;
+    return xss_clean($input);
 }
 
 function sanitizeme($input)
@@ -671,12 +619,10 @@ function sanitizeme($input)
         if (get_magic_quotes_gpc()) {
             $input = stripslashes($input);
         }
-        //echo "Raw Input:" . $input . "<br />";
         $input = cleanInput($input);
-        //echo "Clean Input:" . $input . "<br />";
         $output = $input;
-        //echo "mysql_escape output" . $output . "<br />";
     }
+
     if (isset($output) && $output != '') {
         return $output;
     } else {
@@ -686,15 +632,15 @@ function sanitizeme($input)
 
 /**
  * Translate a string using the global lang set.
- * @param string $s
+ * @param string $string
  * @return string
  */
-function msg($s)
+function msg(string $string): string
 {
-    if (isset($GLOBALS['lang'][$s])) {
-        return e::h($GLOBALS['lang'][$s]);
+    if (isset($GLOBALS['lang'][$string])) {
+        return e::h($GLOBALS['lang'][$string]);
     } else {
-        return $s;
+        return $string;
     }
 }
 
@@ -720,7 +666,6 @@ function display_smarty_template($template_file)
  * @param string $args Any arguments that should be passed to the plugin method
  * @return null
  */
-
 function callPluginMethod($method, $args = '')
 {
     if (isset($GLOBALS['plugin'])) {
@@ -731,13 +676,6 @@ function callPluginMethod($method, $args = '')
             $plugin_obj = new $value;
             $plugin_obj->$method($args);
         }
-    }
-}
-
-function debug_query($file, $line, $query)
-{
-    if ($GLOBALS['CONFIG']['debug'] == 'True') {
-        $GLOBALS['debug_text'] .= $file . ': Line #' . $line . ": " . $query . '<br />';
     }
 }
 
@@ -834,7 +772,6 @@ function redirect_visitor($url = '')
     } else {
         // Lets make sure its not an outside URL
         if (!preg_match('#^(http|https|ftp)://#', $url)) {
-
             header('Location:' . htmlentities($url, ENT_QUOTES));
             exit;
         } else {
@@ -844,7 +781,8 @@ function redirect_visitor($url = '')
     }
 }
 
-function base_url(){
+function base_url(): string
+{
     // We don't want to re-write the base_url value when we are being called by a plugin
     if(!preg_match('/plug-ins*/', $_SERVER['REQUEST_URI'])) {
         return sprintf(
@@ -855,6 +793,5 @@ function base_url(){
     } else {
         // Set the base url relative to the plug-ins folder when being called from there
         return "../../";
-
     }
 }

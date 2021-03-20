@@ -36,10 +36,6 @@ if (!$user_obj->isAdmin()) {
     exit;
 }
 
-if (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] != 'Cancel') {
-    draw_menu($_SESSION['uid']);
-}
-
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_udf'), $last_message);
 
