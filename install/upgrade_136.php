@@ -31,7 +31,7 @@ $stmt->execute();
 
 
 echo 'Altering the settings table...<br />';
-$query = "ALTER TABLE `{$_SESSION['db_prefix']}settings` DROP CONSTRAINT `name`";
+$query = "ALTER TABLE `{$_SESSION['db_prefix']}settings` DROP INDEX `name`";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $query = "ALTER TABLE `{$_SESSION['db_prefix']}settings` ADD CONSTRAINT `name` UNIQUE (`name`(200))";
