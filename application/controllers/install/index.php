@@ -55,20 +55,9 @@ if (file_exists(dirname(__FILE__) . '/../../configs/config.php')) {
     Header('Location: ../../index');
 }
 
-//// If we have a configs/config.php then we have been through the config setup already
-//if (((file_exists(dirname(__FILE__) . '/../configs/config.php') || file_exists(dirname(__FILE__) . '/../docker-configs/config.php')) && (!isset($_SESSION['datadir'])))) {
-//    include(dirname(__FILE__) . '/../odm-load.php');
-//    $db_version = Settings::get_db_version($GLOBALS['CONFIG']['db_prefix']);
-//    if ($db_version == REQUIRED_DB_VERSION) {
-//        echo "<p>Looks like you don't need to update anything. If you need to re-install, please delete your configs/config.php file first. You may then <a href=''>try again</a>.</p>";
-//        exit;
-//    }
-//}
-
 use Aura\Html\Escaper as e;
 
 // Lets get a connection going
-
 $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
 try {
     $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);

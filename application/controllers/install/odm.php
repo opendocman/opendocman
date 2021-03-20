@@ -26,18 +26,6 @@ if (!isset($_SESSION['adminpass'])) {
 }
 $adminpass = $_SESSION['adminpass'];
 
-//// Lets get a connection going
-//
-//$dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
-//try {
-//    $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
-//} catch (PDOException $e) {
-//    print "Error!: " . $e->getMessage() . " - Please make sure you have created a database<br/>";
-//    die();
-//}
-//$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//
-
 // Access Log Table
 $query = "DROP TABLE IF EXISTS {$dbprefix}access_log";
 $stmt = $pdo->prepare($query);

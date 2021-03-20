@@ -190,13 +190,5 @@ if (!defined('Settings_class')) {
 
             return (!empty($result_array['sys_value']) ? $result_array['sys_value'] : 'Unknown');
         }
-
-//        public function settings_table_exists()
-//        {
-//            $query = "SELECT 1 from {$GLOBALS['CONFIG']['db_prefix']}settings LIMIT 1";
-//            $stmt = $this->connection->prepare($query);
-//            $result = $stmt->fetch();
-//            return $result;
-//        }
     }
 }

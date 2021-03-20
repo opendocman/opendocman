@@ -15,18 +15,10 @@ $request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
     $_FILES
 );
 
-//echo "running index.php in dir:" . __DIR__ . '<br>';
-
-//set_include_path(get_include_path() . PATH_SEPARATOR .'/');
-//set_include_path(get_include_path() . PATH_SEPARATOR .'../');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/controllers/helpers');
-//set_include_path(get_include_path() . PATH_SEPARATOR .'../application/configs');
-//set_include_path(get_include_path() . PATH_SEPARATOR .'../application/docker-configs');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/models');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/includes/smarty/');
-//set_include_path(get_include_path() . PATH_SEPARATOR .'../../models');
-//echo get_include_path();
 
 spl_autoload_register(function ($class) {
     include $class . '.class.php';
@@ -57,8 +49,6 @@ if (file_exists(__DIR__ . '/../application/configs/config.php')) {
     }
 }
 
-
-
 if($configExists) {
     /*
     * Connect to Database to see if it exists yet (it should always exist if there is a config file)
@@ -85,6 +75,7 @@ if($configExists) {
     }
 
 }
+
 require '../application/vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
 require '../application/version.php';
 require '../application/models/classHeaders.php';
@@ -126,7 +117,6 @@ $map->get("index.old", "/index.php/{page}", function($request) {
     $page = (string) $request->getAttribute('page');
     header('Location: /' . htmlentities($page, ENT_QUOTES));
     exit;
-//    redirect_visitor("/${page}");
 });
 $map->get("index.read", "/", function($request) {include("../application/controllers/index.php");});
 $map->post("index.write", "/", function($request) {include("../application/controllers/index.php");});
@@ -162,11 +152,7 @@ $map->get("view_file.read", "/view_file", function($request) {include("../applic
 
 $matcher = $routerContainer->getMatcher();
 
-//print_r($matcher);exit;
-
 $route = $matcher->match($request);
-
-//print_r($route);exit;
 
 if (! $route) {
     // get the first of the best-available non-matched routes
@@ -191,95 +177,9 @@ if (! $route) {
     exit;
 }
 
-//$generator = $routerContainer->getGenerator();
-//$path = $generator->generate('check-out.write', ['id' => '1', 'state', 'access_right']);
-//$href = htmlspecialchars($path, ENT_QUOTES, 'UTF-8');
-//echo $href;exit;
-
-//print_r($route);exit;
-
 foreach ($route->attributes as $key => $val) {
     $request = $request->withAttribute($key, $val);
 }
 
 $callable = $route->handler;
 $response = $callable($request);
-
-// emit the response
-//foreach ($response->getHeaders() as $name => $values) {
-//    foreach ($values as $value) {
-//        header(sprintf('%s: %s', $name, $value), false);
-//    }
-//}
-//http_response_code($response->getStatusCode());
-//echo $response->getBody();
-
-//
-//// Grabs the URI and breaks it apart in case we have querystring stuff
-//$request_uri = explode('?', $_SERVER['REQUEST_URI'], 2);
-//// Route it up!
-////print_r($request_uri);exit;
-//switch ($request_uri[0]) {
-//    // Home page
-//    case '/index':
-//    case '/':
-//        require '../application/index.php';
-//        break;
-//    case '/access_log':
-//        require '../application/access_log.php';
-//        break;
-//    case '/add':
-//        require '../application/add.php';
-//        break;
-//    case '/admin':
-//        require '../application/admin.php';
-//        break;
-//    case '/details':
-//        require '../application/details.php';
-//        break;
-//    case '/in':
-//        require '../application/in.php';
-//        break;
-//    case '/install/setup-config':
-//        require '../application/install/setup-config.php';
-//        break;
-//    case '/install/index':
-//        require '../application/install/index.php';
-//        break;
-//    case '/logout':
-//        require '../application/logout.php';
-//        break;
-//    case '/out':
-//        require '../application/out.php';
-//        break;
-//    case '/search':
-//        require '../application/search.php';
-//        break;
-//    case '/settings':
-//        require '../application/settings.php';
-//        break;
-//    case '/toBePublished':
-//        require '../application/toBePublished.php';
-//        break;
-//    default:
-//        header('HTTP/1.0 404 Not Found');
-//        require '../views/404.php';
-//        break;
-//}
-
-//print_r($request);exit;
-//switch ($request) {
-//    case '/access_log' :
-//        require __DIR__ . '/../access_log.php';
-//        break;
-////    case '' :
-////        require __DIR__ . '/views/index.php';
-////        break;
-////    case '/about' :
-////        require __DIR__ . '/views/about.php';
-////        break;
-//    default:
-//        http_response_code(404);
-//        require __DIR__ . '/../views/404.php';
-//        break;
-//}

@@ -145,11 +145,6 @@ deny from all
 
     case 1:
         display_header();
-//echo $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']);exit;
-//	$pieces = preg_split('/',$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']));
-//        array_pop($pieces);
-//        $computed_base_url = implode('/',$pieces);
-//        unset($pieces);
     ?>
 <form method="post" id="configform" action="setup-config?step=2">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
@@ -206,16 +201,15 @@ deny from all
     break;
 
     case 2:
-        // Test the db connection.
-    /**#@+
-     * @ignore
-     */
-    define('APP_DB_NAME', sanitizeme(trim($_POST['dbname'])));
-    define('APP_DB_USER', sanitizeme(trim($_POST['uname'])));
-    define('APP_DB_PASS', sanitizeme(trim($_POST['pwd'])));
-    define('APP_DB_HOST', sanitizeme(trim($_POST['dbhost'])));
+        /*
+         * We have the info, now lets write the config.php file
+         */
+        define('APP_DB_NAME', sanitizeme(trim($_POST['dbname'])));
+        define('APP_DB_USER', sanitizeme(trim($_POST['uname'])));
+        define('APP_DB_PASS', sanitizeme(trim($_POST['pwd'])));
+        define('APP_DB_HOST', sanitizeme(trim($_POST['dbhost'])));
 
-    // We'll fail here if the values are no good.
+        // We'll fail here if the values are no good.
         $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
         try {
             $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
@@ -239,11 +233,11 @@ deny from all
             $prefix = 'odm_';
         }
 
+        // Validate $prefix: it can only contain letters, numbers and underscores
+        if (preg_match('|[^a-z0-9_]|i', $prefix)) {
+            die('<strong>ERROR</strong>: "Table Prefix" can only contain numbers, letters, and underscores.');
+        }
 
-    // Validate $prefix: it can only contain letters, numbers and underscores
-    if (preg_match('|[^a-z0-9_]|i', $prefix)) {
-        die('<strong>ERROR</strong>: "Table Prefix" can only contain numbers, letters, and underscores.');
-    }
          $_SESSION['db_prefix'] = $prefix;
          $_SESSION['datadir'] = $datadir;
          $_SESSION['adminpass'] = $adminpass;

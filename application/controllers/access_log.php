@@ -16,14 +16,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 session_start();
+
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();
 }
 
-$pdo = $GLOBALS['pdo'];
+if (isset($GLOBALS)) {
+    $pdo = $GLOBALS['pdo'];
+    $view = $GLOBALS['view'];
+}
 
 $user_obj = new User($_SESSION['uid'], $pdo);
 if (!$user_obj->isAdmin()) {
@@ -79,14 +82,16 @@ foreach ($result as $row) {
     );
 }
 
-$view->setData([
-    'accesslog_array' => $accesslog_array,
-    'showCheckBox' => false,
-    'form' => 0
-]);
+if (!empty($view)) {
+    $view->setData([
+        'accesslog_array' => $accesslog_array,
+        'showCheckBox' => false,
+        'form' => 0
+    ]);
+    $view->setView('access_log');
+    $view->setLayout('default');
 
-$view->setView('access_log');
-$view->setLayout('default');
-echo $view->__invoke();
+    echo $view->__invoke();
+}
 
 draw_footer();

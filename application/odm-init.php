@@ -29,12 +29,14 @@ if (!defined('APP_DB_HOST')) {
  */
 $factory = new \Aura\Html\HelperLocatorFactory;
 $helpers = $factory->newInstance();
+
 $view_factory = new \Aura\View\ViewFactory;
-$view = $view_factory->newInstance($helpers);
-$view_registry = $view->getViewRegistry();
+$GLOBALS['view'] = $view_factory->newInstance($helpers);
+
+$view_registry = $GLOBALS['view']->getViewRegistry();
 $view_registry->set('access_log',  __DIR__ . '/views/access_log.php');
 
-$layout_registry = $view->getLayoutRegistry();
+$layout_registry = $GLOBALS['view']->getLayoutRegistry();
 $layout_registry->set('default', __DIR__ . '/layouts/default.php');
 
 ob_start();
