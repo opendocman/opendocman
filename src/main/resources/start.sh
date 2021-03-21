@@ -1,7 +1,9 @@
 #!/bin/bash
+mkdir /var/www/document_repository
 chown www-data:www-data /var/www/document_repository
 chown -R www-data:www-data /var/www/html
-chmod 777 /var/www/html/templates_c
+mkdir /var/www/html/application/templates_c
+chmod 777 /var/www/html/application/templates_c
 
 TABLES_EXIST=$(mysql -u$APP_DB_USER -p$APP_DB_PASS -h$APP_DB_HOST -P$DB_PORT $APP_DB_NAME -e "SHOW TABLES LIKE 'odm_settings'" | grep "odm_settings" > /dev/null; echo "$?")
 

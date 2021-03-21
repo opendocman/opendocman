@@ -15,7 +15,7 @@
         <tr>
         <td valign="top">
         <table border="0" cellspacing="5" cellpadding="5">
-        <form action="index" method="post">
+        <form action="/" method="post">
             {if $redirection}
                 <input type="hidden" name="redirection" value="{$redirection|escape}">
             {/if}

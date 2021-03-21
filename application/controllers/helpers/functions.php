@@ -653,10 +653,10 @@ function msg(string $string): string
 function display_smarty_template($template_file)
 {
     /* @var $template_file string */
-    if (file_exists(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
-        $GLOBALS['smarty']->display(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
+    if (file_exists(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
+        $GLOBALS['smarty']->display(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
     } else {
-        $GLOBALS['smarty']->display(ABSPATH . '../views/common/' . $template_file);
+        $GLOBALS['smarty']->display(ABSPATH . 'views/common/' . $template_file);
     }
 }
 
@@ -785,9 +785,16 @@ function base_url(): string
 {
     // We don't want to re-write the base_url value when we are being called by a plugin
     if(!preg_match('/plug-ins*/', $_SERVER['REQUEST_URI'])) {
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            $proto = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        } elseif (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+            $proto = 'https';
+        } else {
+            $proto = 'http';
+        }
         return sprintf(
             "%s://%s",
-            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $proto,
             $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])
         );
     } else {

@@ -1,6 +1,10 @@
 FROM php:7.4-apache
 MAINTAINER Logical Arts, LLC <info@logicalarts.net>
 
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+
 # Install packages
 RUN apt-get update \
   && apt-get install --no-install-recommends -y apt-utils vim git openssl ssl-cert sendmail default-mysql-client \

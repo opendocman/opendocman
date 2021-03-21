@@ -19,8 +19,6 @@
 
 // Main login form
 
-session_start();
-
 $pdo = $GLOBALS['pdo'];
 
 /*
@@ -138,7 +136,6 @@ if (isset($_POST['login'])) {
         } else {
             redirect_visitor('out');
         }
-        // close connection
     } else {
         // Login Failed
         // redirect to error page
@@ -150,7 +147,6 @@ if (isset($_POST['login'])) {
     }
 } elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] == 'mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
-
     $GLOBALS['smarty']->assign('redirection', htmlentities($redirection, ENT_QUOTES));
     display_smarty_template('login.tpl');
 } else {
