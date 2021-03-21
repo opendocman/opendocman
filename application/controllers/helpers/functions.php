@@ -766,18 +766,18 @@ function xss_clean($str)
  */
 function redirect_visitor($url = '')
 {
-    if ($url == '') {
-        header('Location:index?redirection=' . urlencode(e::h($_SERVER['PHP_SELF']) . '?' . e::h($_SERVER['QUERY_STRING'])));
+    if (isset($url) && $url != '') {
+        header('Location:' . htmlentities($url, ENT_QUOTES));
         exit;
-    } else {
+    } elseif (isset($_SERVER['REDIRECT_URL'])) {
         // Lets make sure its not an outside URL
-        if (!preg_match('#^(http|https|ftp)://#', $url)) {
-            header('Location:' . htmlentities($url, ENT_QUOTES));
-            exit;
-        } else {
-            header('Location:index');
+        if (!preg_match('#^(http|https|ftp)://#', $_SERVER['REDIRECT_URL'])) {
+            header('Location:index?redirection=' . htmlentities(ltrim($_SERVER['REDIRECT_URL'], '/'), ENT_QUOTES));
             exit;
         }
+    } else {
+        header('Location:index');
+        exit;
     }
 }
 

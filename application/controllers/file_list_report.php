@@ -26,7 +26,7 @@ session_start();
 $pdo = $GLOBALS['pdo'];
 
 if (!isset($_SESSION['uid'])) {
-    redirect_visitor('index?redirection=file_list_report');
+    redirect_visitor();
 }
 
 // open a connection to the database
