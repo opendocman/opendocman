@@ -84,3 +84,17 @@ To update your current version to the latest release:
 1. Copy your original config.php file into the new folder
 1. Load the opendocman /install address in your web browser ( ex. http://www.example.com/install )
 1. Follow the prompts for installation.
+
+## Contributing
+
+Anyone is welcome to contribute to OpenDocMan's codebase! If you have a fix or code change, feel free to submit it as a pull request directly to the "master" branch. In cases where the change is relatively small or does not affect other parts of the codebase, it may be merged in immediately by any one of the collaborators. On the other hand, if the change is particularly large or complex, it is expected that it will be discussed at length either well in advance of the pull request being submitted, or even directly on the pull request.
+
+## Donate
+Donations to the general fund are used to pay for the infrastructure costs that are currently covered by sponsors.
+
+General Fund
+You can donate Monero:
+
+Monero:
+495vHjEsWegDydtAvo18DU8B1Y4c3xH1SdHdGLsKwZo2j9JxrcZDZ85aVeiSjSGRGBj3dvKKf1Aj4XcLk9bpKR5R6jj5WuF
+
