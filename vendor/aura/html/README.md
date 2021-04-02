@@ -14,9 +14,9 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Html/release
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Html/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Html/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
-[![Build Status](https://travis-ci.org/auraphp/Aura.Html.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Html)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Html/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Html/badges/coverage.png?b=2.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Html/)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Html.png?branch=2.x)](https://travis-ci.org/auraphp/Aura.Html)
 
 To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
 
@@ -45,7 +45,7 @@ $helper = $factory->newInstance();
 
 ### Built-In Helpers
 
-Once you have a _HelperLocator_, you can then use the helpers by calling them as methods on the _HelperLocator_ instance.  See the [tag helpers](https://github.com/auraphp/Aura.Html/blob/develop-2/README-HELPERS.md) and [form helpers](https://github.com/auraphp/Aura.Html/blob/develop-2/README-FORMS.md) pages for more information.
+Once you have a _HelperLocator_, you can then use the helpers by calling them as methods on the _HelperLocator_ instance.  See the [tag helpers](https://github.com/auraphp/Aura.Html/blob/2.x/README-HELPERS.md) and [form helpers](https://github.com/auraphp/Aura.Html/blob/2.x/README-FORMS.md) pages for more information.
 
 > N.b.: All built-in helpers escape values appropriately; see the various helper class internals for more information.
 
@@ -114,7 +114,7 @@ Here is a contrived example of the various `escape()` helper methods:
 <head>
 
     <style>
-        body: {
+        body {
             color: <?= $this->escape()->css($theme->color) ?>;
             font-size: <?= $this->escape()->css($theme->font_size) ?>;
         }
@@ -159,7 +159,7 @@ $j = $this->escape()->js;
 <head>
 
     <style>
-        body: {
+        body {
             color: <?= $c($theme->color) ?>;
             font-size: <?= $c($theme->font_size) ?>;
         }
@@ -201,7 +201,7 @@ Here is a contrived example of the various static methods:
 <head>
 
     <style>
-        body: {
+        body {
             color: <?= e::c($theme->color) ?>;
             font-size: <?= e::c($theme->font_size) ?>;
         }

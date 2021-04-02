@@ -168,7 +168,7 @@ class Escaper
      *
      * Escapes for unquoted HTML attribute context.
      *
-     * @param string $raw The raw string.
+     * @param string|array $raw The raw attribute (or array of attributes).
      *
      * @return string The escaped string.
      *

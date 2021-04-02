@@ -11,15 +11,19 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
-use Symfony\Component\Console\Input\InputDefinition;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class InputDefinitionTest extends \PHPUnit_Framework_TestCase
+class InputDefinitionTest extends TestCase
 {
     protected static $fixtures;
 
-    protected $foo, $bar, $foo1, $foo2;
+    protected $foo;
+    protected $bar;
+    protected $foo1;
+    protected $foo2;
 
     public static function setUpBeforeClass()
     {

@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Formatter;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-class OutputFormatterTest extends \PHPUnit_Framework_TestCase
+class OutputFormatterTest extends TestCase
 {
     public function testEmptyTag()
     {
@@ -27,6 +28,9 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         $formatter = new OutputFormatter(true);
 
         $this->assertEquals('foo<bar', $formatter->format('foo\\<bar'));
+        $this->assertEquals('foo << bar', $formatter->format('foo << bar'));
+        $this->assertEquals('foo << bar \\', $formatter->format('foo << bar \\'));
+        $this->assertEquals("foo << \033[32mbar \\ baz\033[39m \\", $formatter->format('foo << <info>bar \\ baz</info> \\'));
         $this->assertEquals('<info>some info</info>', $formatter->format('\\<info>some info\\</info>'));
         $this->assertEquals('\\<info>some info\\</info>', OutputFormatter::escape('<info>some info</info>'));
 
@@ -98,8 +102,8 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         $formatter = new OutputFormatter(true);
 
         $this->assertEquals(
-            "(\033[32mz>=2.0,<a2.3\033[39m)",
-            $formatter->format('(<info>'.$formatter->escape('z>=2.0,<a2.3').'</info>)')
+            "(\033[32mz>=2.0,<<<a2.3\\\033[39m)",
+            $formatter->format('(<info>'.$formatter->escape('z>=2.0,<\\<<a2.3\\').'</info>)')
         );
 
         $this->assertEquals(
@@ -195,6 +199,9 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             'some question', $formatter->format('<question>some question</question>')
         );
+        $this->assertEquals(
+            'some text with inline style', $formatter->format('<fg=red>some text with inline style</>')
+        );
 
         $formatter->setDecorated(true);
 
@@ -210,6 +217,9 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             "\033[30;46msome question\033[39;49m", $formatter->format('<question>some question</question>')
         );
+        $this->assertEquals(
+            "\033[31msome text with inline style\033[39m", $formatter->format('<fg=red>some text with inline style</>')
+        );
     }
 
     public function testContentWithLineBreaks()
@@ -220,7 +230,7 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
 \033[32m
 some text\033[39m
 EOF
-            , $formatter->format(<<<EOF
+            , $formatter->format(<<<'EOF'
 <info>
 some text</info>
 EOF
@@ -230,7 +240,7 @@ EOF
 \033[32msome text
 \033[39m
 EOF
-            , $formatter->format(<<<EOF
+            , $formatter->format(<<<'EOF'
 <info>some text
 </info>
 EOF
@@ -241,7 +251,7 @@ EOF
 some text
 \033[39m
 EOF
-            , $formatter->format(<<<EOF
+            , $formatter->format(<<<'EOF'
 <info>
 some text
 </info>
@@ -254,7 +264,7 @@ some text
 more text
 \033[39m
 EOF
-            , $formatter->format(<<<EOF
+            , $formatter->format(<<<'EOF'
 <info>
 some text
 more text

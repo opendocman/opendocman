@@ -98,8 +98,21 @@ class TemplateRegistryTest extends \PHPUnit_Framework_TestCase
         $actual = $this->template_registry->get('zim');
         $this->assertSame($expect, $actual);
 
+
+        // test searching with a non-default template file extension
+        $this->template_registry = new FakeTemplateRegistry;
+        $this->template_registry->appendPath('/foo');
+        $this->template_registry->setTemplateFileExtension('.phtml');
+        $file = "/foo" . DIRECTORY_SEPARATOR . 'test.phtml';
+        $this->template_registry->fakefs[$file] = 'fake';
+
+        $expect = $file;
+        $actual = $this->template_registry->get('test');
+        $this->assertSame($expect, $actual);
+
         // look for a file that doesn't exist
         $this->setExpectedException('Aura\View\Exception\TemplateNotFound');
         $actual = $this->template_registry->get('no-such-template');
     }
+
 }

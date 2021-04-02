@@ -128,4 +128,46 @@ class CheckboxTest extends AbstractHelperTest
         $expect = '<input type="checkbox" value="1" checked />' . PHP_EOL;
         $this->assertSame($expect, $actual);
     }
+
+    public function testMultiCheckbox() {
+        $checkbox = $this->helper;
+        $actual = $checkbox(array(
+            'name' => 'foo',
+            'value' => 'yes',
+            'options' => array(
+                'yes' => 'Yes',
+                'no' => 'No',
+                'maybe' => 'Maybe'
+            ),
+            'attribs' => array(
+                'value' => 'yes',
+                'label' => 'Is ignored',
+            )
+        ))->__toString();
+        $expect = '<label><input type="checkbox" name="foo[]" value="yes" checked /> Yes</label>' . PHP_EOL
+                . '<label><input type="checkbox" name="foo[]" value="no" /> No</label>' . PHP_EOL
+                . '<label><input type="checkbox" name="foo[]" value="maybe" /> Maybe</label>' . PHP_EOL;
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testMultiCheckboxWithValues() {
+        $checkbox = $this->helper;
+        $actual = $checkbox(array(
+            'name' => 'foo',
+            'value' => array('yes', 'no'),
+            'options' => array(
+                'yes' => 'Yes',
+                'no' => 'No',
+                'maybe' => 'Maybe'
+            ),
+            'attribs' => array(
+                'value' => 'yes',
+                'label' => 'Is ignored',
+            )
+        ))->__toString();
+        $expect = '<label><input type="checkbox" name="foo[]" value="yes" checked /> Yes</label>' . PHP_EOL
+            . '<label><input type="checkbox" name="foo[]" value="no" checked /> No</label>' . PHP_EOL
+            . '<label><input type="checkbox" name="foo[]" value="maybe" /> Maybe</label>' . PHP_EOL;
+        $this->assertSame($expect, $actual);
+    }
 }

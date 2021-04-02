@@ -13,9 +13,9 @@ namespace Symfony\Component\Console\Tester;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * Eases the testing of console commands.
@@ -29,11 +29,6 @@ class CommandTester
     private $output;
     private $statusCode;
 
-    /**
-     * Constructor.
-     *
-     * @param Command $command A Command instance to test.
-     */
     public function __construct(Command $command)
     {
         $this->command = $command;
@@ -70,9 +65,7 @@ class CommandTester
         }
 
         $this->output = new StreamOutput(fopen('php://memory', 'w', false));
-        if (isset($options['decorated'])) {
-            $this->output->setDecorated($options['decorated']);
-        }
+        $this->output->setDecorated(isset($options['decorated']) ? $options['decorated'] : false);
         if (isset($options['verbosity'])) {
             $this->output->setVerbosity($options['verbosity']);
         }

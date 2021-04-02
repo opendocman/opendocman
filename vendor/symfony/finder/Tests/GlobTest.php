@@ -11,12 +11,14 @@
 
 namespace Symfony\Component\Finder\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Glob;
 
-class GlobTest extends \PHPUnit_Framework_TestCase
+class GlobTest extends TestCase
 {
     public function testGlobToRegexDelimiters()
     {
+        $this->assertEquals('#^(?=[^\.])\#$#', Glob::toRegex('#'));
         $this->assertEquals('#^\.[^/]*$#', Glob::toRegex('.*'));
         $this->assertEquals('^\.[^/]*$', Glob::toRegex('.*', true, true, ''));
         $this->assertEquals('/^\.[^/]*$/', Glob::toRegex('.*', true, true, '/'));

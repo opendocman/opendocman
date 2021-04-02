@@ -63,6 +63,10 @@ class HelperLocatorFactory
             'anchorRaw'         => function () use ($escaper) { return new Helper\AnchorRaw($escaper); },
             'base'              => function () use ($escaper) { return new Helper\Base($escaper); },
             'escape'            => function () use ($escaper) { return $escaper; },
+            'element'           => function () use ($escaper) { return new Helper\Element($escaper); },
+            'ele'               => function () use ($escaper) { return new Helper\Element($escaper); },
+            'elementRaw'        => function () use ($escaper) { return new Helper\ElementRaw($escaper); },
+            'eleRaw'            => function () use ($escaper) { return new Helper\ElementRaw($escaper); },
             'form'              => function () use ($escaper) { return new Helper\Form($escaper); },
             'img'               => function () use ($escaper) { return new Helper\Img($escaper); },
             'image'             => function () use ($escaper) { return new Helper\Img($escaper); },
@@ -77,6 +81,7 @@ class HelperLocatorFactory
             'tag'               => function () use ($escaper) { return new Helper\Tag($escaper); },
             'title'             => function () use ($escaper) { return new Helper\Title($escaper); },
             'ul'                => function () use ($escaper) { return new Helper\Ul($escaper); },
+            'void'              => function () use ($escaper) { return new Helper\VoidTag($escaper); }
         ));
     }
 

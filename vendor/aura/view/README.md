@@ -76,8 +76,9 @@ The `browse.php` file may look something like this:
 <?php
 foreach ($this->items as $item) {
     $id = htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8');
-    $name = htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8')
+    $name = htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8');
     echo "Item ID #{$id} is '{$name}'." . PHP_EOL;
+}
 ?>
 ```
 
@@ -224,7 +225,7 @@ In addition, the `setSection()` method can be used to set the section body direc
 
 ```php
 <?php
-$this->setSection('local-nav', $this->render('_local-nav.php'));
+$this->setSection('local-nav', $this->render('_local-nav'));
 ?>
 ```
 
@@ -382,3 +383,63 @@ $view_registry->setPaths(array(
 ```
 
 When we refer to named templates later, the registry will search from the first directory to the last. For finer control over the search paths, we can call `prependPath()` to add a directory to search earlier, or `appendPath()` to add a directory to search later. Regardless, the _View_ will auto-append `.php` to the end of template names when searching through the directories.
+
+### Changing The Template File Extension
+
+By default, each _TemplateRegistry_ will auto-append `.php` to template file names. If the template files end with a different extension, change it usin the `setTemplateFileExtension()` method:
+
+```php
+<?php
+$view_registry = $view->getViewRegistry();
+$view_registry->setTemplateFileExtension('.phtml');
+?>
+```
+
+The _TemplateRegistry_ instance used for the layouts is separate from the one for the views, so it may be necessary to change the template file extension on it as well:
+
+```php
+<?php
+$layout_registry = $view->getLayoutRegistry();
+$layout_registry->setTemplateFileExtension('.phtml');
+?>
+```
+
+### Advanced Configuration
+
+Alternatively you can pass [$helpers](https://github.com/auraphp/Aura.View#custom-helper-managers),
+mapping information or paths for views and layouts as below.
+
+```php
+<?php
+$view_factory = new \Aura\View\ViewFactory;
+$view = $view_factory->newInstance(
+    $helpers = null,
+    [
+        'browse' => '/path/to/views/browse.php'
+    ],
+    [
+        '/path/to/views/welcome',
+        '/path/to/views/user',
+    ],
+    [
+        'layout' => '/path/to/layouts/default.php'
+    ],    
+    [
+        '/path/to/layouts',
+    ],
+);
+?>
+```
+
+If you are passing the mapping information or paths to `views` and `layouts` you don't need to
+call the `getViewRegistry` or `getLayoutRegistry` and `set` the mapping information.
+
+Eg :
+
+```php
+$view_registry = $view->getViewRegistry();
+$view_registry->set('browse', '/path/to/views/browse.php');
+
+$layout_registry = $view->getLayoutRegistry();
+$layout_registry->set('default', '/path/to/layouts/default.php');
+```

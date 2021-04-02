@@ -46,6 +46,15 @@ class TemplateRegistry
 
     /**
      *
+     * File extension to use when searching the path list for templates.
+     *
+     * @var string
+     *
+     */
+    protected $templateFileExtension = '.php';
+
+    /**
+     *
      * Constructor.
      *
      * @param array $map A map of explicit template names and locations.
@@ -147,7 +156,7 @@ class TemplateRegistry
      *
      * @param array|string $path The directories to add to the paths.
      *
-     * @return void
+     * @return null
      *
      */
     public function prependPath($path)
@@ -168,7 +177,7 @@ class TemplateRegistry
      *
      * @param array|string $path The directories to add to the paths.
      *
-     * @return void
+     * @return null
      *
      */
     public function appendPath($path)
@@ -191,13 +200,27 @@ class TemplateRegistry
      *
      * @param array $paths The paths to set.
      *
-     * @return void
+     * @return null
      *
      */
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
         $this->found = [];
+    }
+
+    /**
+     *
+     * Sets the extension to be used when searching for templates via find().
+     *
+     * @param string $templateFileExtension
+     *
+     * @return null
+     *
+     */
+    public function setTemplateFileExtension($templateFileExtension)
+    {
+        $this->templateFileExtension = $templateFileExtension;
     }
 
     /**
@@ -216,7 +239,7 @@ class TemplateRegistry
         }
 
         foreach ($this->paths as $path) {
-            $file = $path . DIRECTORY_SEPARATOR . $name . '.php';
+            $file = $path . DIRECTORY_SEPARATOR . $name . $this->templateFileExtension;
             if ($this->isReadable($file)) {
                 $this->found[$name] = $this->enclose($file);
                 return true;

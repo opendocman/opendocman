@@ -11,17 +11,19 @@
 
 namespace Symfony\Component\Console\Tests\Helper;
 
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\FormatterHelper;
-use Symfony\Component\Console\Output\StreamOutput;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * @group legacy
  */
-class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
+class LegacyDialogHelperTest extends TestCase
 {
     public function testSelect()
     {
@@ -55,6 +57,22 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('0', '1'), $dialog->select($this->getOutputStream(), 'What is your favorite superhero?', $heroes, ' 0 , 1 ', false, 'Input "%s" is not a superhero!', true));
     }
 
+    public function testSelectOnErrorOutput()
+    {
+        $dialog = new DialogHelper();
+
+        $helperSet = new HelperSet(array(new FormatterHelper()));
+        $dialog->setHelperSet($helperSet);
+
+        $heroes = array('Superman', 'Batman', 'Spiderman');
+
+        $dialog->setInputStream($this->getInputStream("Stdout\n1\n"));
+        $this->assertEquals('1', $dialog->select($output = $this->getConsoleOutput($this->getOutputStream()), 'What is your favorite superhero?', $heroes, null, false, 'Input "%s" is not a superhero!', false));
+
+        rewind($output->getErrorOutput()->getStream());
+        $this->assertContains('Input "Stdout" is not a superhero!', stream_get_contents($output->getErrorOutput()->getStream()));
+    }
+
     public function testAsk()
     {
         $dialog = new DialogHelper();
@@ -66,6 +84,22 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
 
         rewind($output->getStream());
         $this->assertEquals('What time is it?', stream_get_contents($output->getStream()));
+    }
+
+    public function testAskOnErrorOutput()
+    {
+        if (!$this->hasSttyAvailable()) {
+            $this->markTestSkipped('`stderr` is required to test stderr output functionality');
+        }
+
+        $dialog = new DialogHelper();
+
+        $dialog->setInputStream($this->getInputStream("not stdout\n"));
+
+        $this->assertEquals('not stdout', $dialog->ask($output = $this->getConsoleOutput($this->getOutputStream()), 'Where should output go?', 'stderr'));
+
+        rewind($output->getErrorOutput()->getStream());
+        $this->assertEquals('Where should output go?', stream_get_contents($output->getErrorOutput()->getStream()));
     }
 
     public function testAskWithAutocomplete()
@@ -104,7 +138,7 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testAskHiddenResponse()
     {
-        if ('\\' === DIRECTORY_SEPARATOR) {
+        if ('\\' === \DIRECTORY_SEPARATOR) {
             $this->markTestSkipped('This test is not supported on Windows');
         }
 
@@ -113,6 +147,25 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
         $dialog->setInputStream($this->getInputStream("8AM\n"));
 
         $this->assertEquals('8AM', $dialog->askHiddenResponse($this->getOutputStream(), 'What time is it?'));
+    }
+
+    /**
+     * @group tty
+     */
+    public function testAskHiddenResponseOnErrorOutput()
+    {
+        if ('\\' === \DIRECTORY_SEPARATOR) {
+            $this->markTestSkipped('This test is not supported on Windows');
+        }
+
+        $dialog = new DialogHelper();
+
+        $dialog->setInputStream($this->getInputStream("8AM\n"));
+
+        $this->assertEquals('8AM', $dialog->askHiddenResponse($output = $this->getConsoleOutput($this->getOutputStream()), 'What time is it?'));
+
+        rewind($output->getErrorOutput()->getStream());
+        $this->assertContains('What time is it?', stream_get_contents($output->getErrorOutput()->getStream()));
     }
 
     public function testAskConfirmation()
@@ -141,7 +194,7 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
         $question = 'What color was the white horse of Henry IV?';
         $error = 'This is not a color!';
         $validator = function ($color) use ($error) {
-            if (!in_array($color, array('white', 'black'))) {
+            if (!\in_array($color, array('white', 'black'))) {
                 throw new InvalidArgumentException($error);
             }
 
@@ -154,10 +207,12 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
 
         $dialog->setInputStream($this->getInputStream("green\nyellow\norange\n"));
         try {
-            $this->assertEquals('white', $dialog->askAndValidate($this->getOutputStream(), $question, $validator, 2, 'white'));
+            $this->assertEquals('white', $dialog->askAndValidate($output = $this->getConsoleOutput($this->getOutputStream()), $question, $validator, 2, 'white'));
             $this->fail();
         } catch (\InvalidArgumentException $e) {
             $this->assertEquals($error, $e->getMessage());
+            rewind($output->getErrorOutput()->getStream());
+            $this->assertContains('What color was the white horse of Henry IV?', stream_get_contents($output->getErrorOutput()->getStream()));
         }
     }
 
@@ -187,10 +242,18 @@ class LegacyDialogHelperTest extends \PHPUnit_Framework_TestCase
         return new StreamOutput(fopen('php://memory', 'r+', false));
     }
 
+    protected function getConsoleOutput($stderr)
+    {
+        $output = new ConsoleOutput();
+        $output->setErrorOutput($stderr);
+
+        return $output;
+    }
+
     private function hasSttyAvailable()
     {
         exec('stty 2>&1', $output, $exitcode);
 
-        return $exitcode === 0;
+        return 0 === $exitcode;
     }
 }

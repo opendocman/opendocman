@@ -11,6 +11,8 @@
 
 namespace Symfony\Component\Console\Helper;
 
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -26,7 +28,6 @@ class ProgressIndicator
     private $indicatorCurrent;
     private $indicatorChangeInterval;
     private $indicatorUpdateTime;
-    private $lastMessagesLength;
     private $started = false;
 
     private static $formatters;
@@ -52,8 +53,8 @@ class ProgressIndicator
 
         $indicatorValues = array_values($indicatorValues);
 
-        if (2 > count($indicatorValues)) {
-            throw new \InvalidArgumentException('Must have at least 2 indicator value characters.');
+        if (2 > \count($indicatorValues)) {
+            throw new InvalidArgumentException('Must have at least 2 indicator value characters.');
         }
 
         $this->format = self::getFormatDefinition($format);
@@ -107,7 +108,7 @@ class ProgressIndicator
      */
     public function getCurrentValue()
     {
-        return $this->indicatorValues[$this->indicatorCurrent % count($this->indicatorValues)];
+        return $this->indicatorValues[$this->indicatorCurrent % \count($this->indicatorValues)];
     }
 
     /**
@@ -118,12 +119,11 @@ class ProgressIndicator
     public function start($message)
     {
         if ($this->started) {
-            throw new \LogicException('Progress indicator already started.');
+            throw new LogicException('Progress indicator already started.');
         }
 
         $this->message = $message;
         $this->started = true;
-        $this->lastMessagesLength = 0;
         $this->startTime = time();
         $this->indicatorUpdateTime = $this->getCurrentTimeInMilliseconds() + $this->indicatorChangeInterval;
         $this->indicatorCurrent = 0;
@@ -137,7 +137,7 @@ class ProgressIndicator
     public function advance()
     {
         if (!$this->started) {
-            throw new \LogicException('Progress indicator has not yet been started.');
+            throw new LogicException('Progress indicator has not yet been started.');
         }
 
         if (!$this->output->isDecorated()) {
@@ -164,7 +164,7 @@ class ProgressIndicator
     public function finish($message)
     {
         if (!$this->started) {
-            throw new \LogicException('Progress indicator has not yet been started.');
+            throw new LogicException('Progress indicator has not yet been started.');
         }
 
         $this->message = $message;
@@ -232,7 +232,7 @@ class ProgressIndicator
 
         $this->overwrite(preg_replace_callback("{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) use ($self) {
             if ($formatter = $self::getPlaceholderFormatterDefinition($matches[1])) {
-                return call_user_func($formatter, $self);
+                return \call_user_func($formatter, $self);
             }
 
             return $matches[0];
@@ -260,26 +260,11 @@ class ProgressIndicator
      */
     private function overwrite($message)
     {
-        // append whitespace to match the line's length
-        if (null !== $this->lastMessagesLength) {
-            if ($this->lastMessagesLength > Helper::strlenWithoutDecoration($this->output->getFormatter(), $message)) {
-                $message = str_pad($message, $this->lastMessagesLength, "\x20", STR_PAD_RIGHT);
-            }
-        }
-
         if ($this->output->isDecorated()) {
-            $this->output->write("\x0D");
+            $this->output->write("\x0D\x1B[2K");
             $this->output->write($message);
         } else {
             $this->output->writeln($message);
-        }
-
-        $this->lastMessagesLength = 0;
-
-        $len = Helper::strlenWithoutDecoration($this->output->getFormatter(), $message);
-
-        if ($len > $this->lastMessagesLength) {
-            $this->lastMessagesLength = $len;
         }
     }
 

@@ -36,9 +36,6 @@
             "config": {
                 "common": "Aura\\View\\_Config\\Common"
             }
-        },
-        "branch-alias": {
-            "dev-develop-2": "2.0.x-dev"
         }
     },
     "require-dev": {

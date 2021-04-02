@@ -58,7 +58,6 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $GLOBALS['pdo'] = $pdo;
 
 ob_start();
-include('includes/FirePHPCore/fb.php');
 
 /*
 /*

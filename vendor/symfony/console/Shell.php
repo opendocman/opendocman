@@ -14,8 +14,8 @@ namespace Symfony\Component\Console;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * A Shell wraps an Application to add shell capabilities to it.
@@ -37,18 +37,14 @@ class Shell
     private $processIsolation = false;
 
     /**
-     * Constructor.
-     *
      * If there is no readline support for the current PHP executable
      * a \RuntimeException exception is thrown.
-     *
-     * @param Application $application An application instance
      */
     public function __construct(Application $application)
     {
         @trigger_error('The '.__CLASS__.' class is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 
-        $this->hasReadline = function_exists('readline');
+        $this->hasReadline = \function_exists('readline');
         $this->application = $application;
         $this->history = getenv('HOME').'/.history_'.$application->getName();
         $this->output = new ConsoleOutput();
@@ -72,7 +68,7 @@ class Shell
         if ($this->processIsolation) {
             $finder = new PhpExecutableFinder();
             $php = $finder->find();
-            $this->output->writeln(<<<EOF
+            $this->output->writeln(<<<'EOF'
 <info>Running with process isolation, you should consider this:</info>
   * each command is executed as separate process,
   * commands don't support interactivity, all params must be passed explicitly,

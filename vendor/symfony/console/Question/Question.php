@@ -31,8 +31,6 @@ class Question
     private $normalizer;
 
     /**
-     * Constructor.
-     *
      * @param string $question The question to ask to the user
      * @param mixed  $default  The default answer to return if the user enters nothing
      */
@@ -77,7 +75,7 @@ class Question
      *
      * @param bool $hidden
      *
-     * @return Question The current instance
+     * @return $this
      *
      * @throws LogicException In case the autocompleter is also used
      */
@@ -107,7 +105,7 @@ class Question
      *
      * @param bool $fallback
      *
-     * @return Question The current instance
+     * @return $this
      */
     public function setHiddenFallback($fallback)
     {
@@ -119,7 +117,7 @@ class Question
     /**
      * Gets values for the autocompleter.
      *
-     * @return null|array|\Traversable
+     * @return iterable|null
      */
     public function getAutocompleterValues()
     {
@@ -129,23 +127,21 @@ class Question
     /**
      * Sets values for the autocompleter.
      *
-     * @param null|array|\Traversable $values
+     * @param iterable|null $values
      *
-     * @return Question The current instance
+     * @return $this
      *
      * @throws InvalidArgumentException
      * @throws LogicException
      */
     public function setAutocompleterValues($values)
     {
-        if (is_array($values) && $this->isAssoc($values)) {
-            $values = array_merge(array_keys($values), array_values($values));
+        if (\is_array($values)) {
+            $values = $this->isAssoc($values) ? array_merge(array_keys($values), array_values($values)) : array_values($values);
         }
 
-        if (null !== $values && !is_array($values)) {
-            if (!$values instanceof \Traversable || $values instanceof \Countable) {
-                throw new InvalidArgumentException('Autocompleter values can be either an array, `null` or an object implementing both `Countable` and `Traversable` interfaces.');
-            }
+        if (null !== $values && !\is_array($values) && !$values instanceof \Traversable) {
+            throw new InvalidArgumentException('Autocompleter values can be either an array, `null` or a `Traversable` object.');
         }
 
         if ($this->hidden) {
@@ -160,9 +156,9 @@ class Question
     /**
      * Sets a validator for the question.
      *
-     * @param null|callable $validator
+     * @param callable|null $validator
      *
-     * @return Question The current instance
+     * @return $this
      */
     public function setValidator($validator)
     {
@@ -174,7 +170,7 @@ class Question
     /**
      * Gets the validator for the question.
      *
-     * @return null|callable
+     * @return callable|null
      */
     public function getValidator()
     {
@@ -186,11 +182,11 @@ class Question
      *
      * Null means an unlimited number of attempts.
      *
-     * @param null|int $attempts
+     * @param int|null $attempts
      *
-     * @return Question The current instance
+     * @return $this
      *
-     * @throws InvalidArgumentException In case the number of attempts is invalid.
+     * @throws InvalidArgumentException in case the number of attempts is invalid
      */
     public function setMaxAttempts($attempts)
     {
@@ -208,7 +204,7 @@ class Question
      *
      * Null means an unlimited number of attempts.
      *
-     * @return null|int
+     * @return int|null
      */
     public function getMaxAttempts()
     {
@@ -222,7 +218,7 @@ class Question
      *
      * @param callable $normalizer
      *
-     * @return Question The current instance
+     * @return $this
      */
     public function setNormalizer($normalizer)
     {
@@ -245,6 +241,6 @@ class Question
 
     protected function isAssoc($array)
     {
-        return (bool) count(array_filter(array_keys($array), 'is_string'));
+        return (bool) \count(array_filter(array_keys($array), 'is_string'));
     }
 }

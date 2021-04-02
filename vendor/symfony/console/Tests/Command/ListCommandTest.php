@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Command;
 
-use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
-class ListCommandTest extends \PHPUnit_Framework_TestCase
+class ListCommandTest extends TestCase
 {
     public function testExecuteListsCommands()
     {
@@ -38,7 +39,7 @@ class ListCommandTest extends \PHPUnit_Framework_TestCase
         $application = new Application();
         $commandTester = new CommandTester($command = $application->get('list'));
         $commandTester->execute(array('command' => $command->getName(), '--raw' => true));
-        $output = <<<EOF
+        $output = <<<'EOF'
 help   Displays help for a command
 list   Lists commands
 
@@ -54,7 +55,7 @@ EOF;
         $application->add(new \FooCommand());
         $commandTester = new CommandTester($command = $application->get('list'));
         $commandTester->execute(array('command' => $command->getName(), 'namespace' => 'foo', '--raw' => true));
-        $output = <<<EOF
+        $output = <<<'EOF'
 foo:bar   The foo:bar command
 
 EOF;
@@ -69,7 +70,7 @@ EOF;
         $application->add(new \Foo6Command());
         $commandTester = new CommandTester($command = $application->get('list'));
         $commandTester->execute(array('command' => $command->getName()), array('decorated' => false));
-        $output = <<<EOF
+        $output = <<<'EOF'
 Console Tool
 
 Usage:
@@ -101,7 +102,7 @@ EOF;
         $application->add(new \Foo6Command());
         $commandTester = new CommandTester($command = $application->get('list'));
         $commandTester->execute(array('command' => $command->getName(), '--raw' => true));
-        $output = <<<EOF
+        $output = <<<'EOF'
 help       Displays help for a command
 list       Lists commands
 0foo:bar   0foo:bar command

@@ -98,11 +98,11 @@ abstract class AbstractChecked extends AbstractInput
         }
 
         if ($this->strict) {
-            $this->attribs['checked'] = $this->value === $this->attribs['value'];
+            $this->attribs['checked'] = in_array($this->attribs['value'], (array)$this->value, true);
             return;
         }
 
-        $this->attribs['checked'] = $this->value == $this->attribs['value'];
+        $this->attribs['checked'] = in_array($this->attribs['value'], (array)$this->value, false);
     }
 
     /**

@@ -16,10 +16,12 @@ class ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Finder\\' => 25,
+            'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\Console\\' => 26,
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Phplint\\' => 8,
         ),
         'F' => 
@@ -49,9 +51,17 @@ class ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
+        'Symfony\\Component\\Debug\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/debug',
+        ),
         'Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Phplint\\' => 
         array (
@@ -83,11 +93,16 @@ class ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a
         ),
     );
 
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a::$classMap;
 
         }, null, ClassLoader::class);
     }

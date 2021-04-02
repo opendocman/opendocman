@@ -14,8 +14,9 @@ Use a helper by calling it as a method on the _HelperLocator_. The available hel
 - [tag](#tag)
 - [title](#title)
 - [ul](#ul)
+- [void](#void)
 
-There is also a series of [helpers for forms](https://github.com/auraphp/Aura.Html/blob/develop-2/README-FORMS.md).
+There is also a series of [helpers for forms](https://github.com/auraphp/Aura.Html/blob/2.x/README-FORMS.md).
 
 ## a
 
@@ -182,7 +183,7 @@ $helper->metas()->addName(
 );
 
 // output the metas
-echo $helper->meta();
+echo $helper->metas();
 ?>
 <meta http-equiv="Location" content="/redirect/to/here">
 <meta name="foo" content="bar">
@@ -280,23 +281,71 @@ $helper->scripts()->add('/js/middle.js');
 $helper->scripts()->add('/js/last.js');
 
 // add another at a specific priority order
-echo $helper->scripts->add(
+echo $helper->scripts()->add(
     '/js/first.js',     // (string) the script src
     50                  // (int) optional priority order (default 100)
 );
 
 // add a conditional script
-$helper->scripts->addCond(
+$helper->scripts()->addCond(
     'ie6',              // (string) the condition
     '/js/ie6.js',       // (string) the script src
     25                  // (int) optional priority order (default 100)
 ));
+
+// add an internal script
+$helper->scripts()->addInternal(
+    'alert("foo");',     // (string) script
+    1000                // (int) optional priority order (default 100)
+);
+
+// add an internal conditional script
+$helper->scripts()->addCondInternal(
+    'ie6',                // (string) the condition
+    'alert("ie6");',     // (string) script
+    1000                // (int) optional priority order (default 100)
+);
+
+// capture an internal script
+$helper->scripts()->beginInternal(
+    1000                // (int) optional priority order (default 100)
+);
+echo 'alert("captured")';
+$helper->scripts()->endInternal();
+
+// capture an internal conditional script
+$helper->scripts()->beginCondInternal(
+    'ie6',                    // (string) the condition
+    'alert("capture ie6");',  // (string) script
+    1000                      // (int) optional priority order (default 100)
+);
+echo 'alert("capture ie6")';
+$helper->scripts()->endInternal();
+
+// add a script tag with additional attributes
+// by passing an attribute array as the last parameter of any of the method
+$helper->scripts()->add(
+    'https://cdn.tld/foo.js',
+    100,
+    [
+        'async' => true,
+        'defer' => true,
+        'crossorigin' => 'anonymous',
+        'integrity' => 'sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo='
+    ]
+);
 
 ?>
 <!--[if ie6]><script src="/js/ie6.js" type="text/javascript"></script><![endif]-->
 <script src="/js/first.js" type="text/javascript"></script>
 <script src="/js/middle.js" type="text/javascript"></script>
 <script src="/js/last.js" type="text/javascript"></script>
+<script type="text/javascript">alert("foo");</script>
+<!--[if ie6]><script type="text/javascript">alert("ie6");</script><![endif]-->
+<script type="text/javascript">alert("captured");</script>
+<!--[if ie6]><script type="text/javascript">alert("capture ie6");</script><![endif]-->
+<script src="http://cdn.tld/foo.js" type="text/javascript" async defer crossorigin="anonymous" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="></script>
+
 ```
 
 > N.b.: The `scriptsFoot()` helper works the same way, but is intended for placing a separate set of scripts at the end of the HTML body.
@@ -341,6 +390,38 @@ $helper->styles()->addCond(
     25                          // (int) optional priority order (default 100)
 );
 
+// add an internal style
+$helper->styles()->addInternal(
+    '.foo{color:red;}', // (string) style
+    null,              // (array) optional attributes
+    1000              // (int) optional priority order (default 100)
+);
+
+// add an internal conditional style
+$helper->styles()->addCondInternal(
+    'ie6',                 // (string) the condition
+    '.foo{color:pink;}',  // (string) style
+    null,                // (array) optional attributes
+    1000                // (int) optional priority order (default 100)
+);
+
+// capture an internal style
+$helper->styles()->beginInternal(
+    null,                // (array) optional attributes
+    1000,               // (int) optional priority order (default 100)
+);
+echo '.bar{color:red;}';
+$helper->styles()->endInternal();
+
+// capture an internal conditional style
+$helper->styles()->beginCondInternal(
+    'ie6',                // (string) the condition
+    null,                // (array) optional attributes
+    1000                // (int) optional priority order (default 100)
+);
+echo '.bar{color:pink;}';
+$helper->styles()->endInternal();
+
 // output the stylesheet links
 echo $helper->styles();
 ?>
@@ -348,6 +429,10 @@ echo $helper->styles();
 <link rel="stylesheet" href="/css/first.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="/css/middle.css" type="text/css" media="print" />
 <link rel="stylesheet" href="/css/last.css" type="text/css" media="screen" />
+<style type="text/css" media="screen">.foo{color:red;}</style>
+<!--[if ie6]><style type="text/css" media="screen">.foo{color:pink;}</style><![endif]-->
+<style type="text/css" media="screen">.bar{color:red;}</style>
+<!--[if ie6]><style type="text/css" media="screen">.bar{color:pink;}</style><![endif]-->
 ?>
 ```
 
@@ -472,3 +557,15 @@ echo $helper->ul();
 </ul>
 ```
 
+## void
+
+Helper for self closing void tags.
+
+```html+php
+<?php
+echo $helper->void('meta', ['itemprop' => 'duration', 'content' => 'T1M33S']);
+echo $helper->void('br');
+?>
+<meta itemprop="duration" content="T1M33S" />
+<br  />
+```

@@ -54,4 +54,29 @@ class StylesTest extends AbstractHelperTest
 
         $this->assertSame($expect, $actual);
     }
+
+    public function testInternal()
+    {
+        $styles = $this->helper;
+        $styles->addInternal('.foo{color:red;}');
+        $styles->addCondInternal('ie6', '.foo{color:yellow;}');
+
+        $styles->beginInternal();
+        echo ".bar{color:green;}";
+        $styles->endInternal();
+
+        $styles->beginCondInternal('ie6');
+        echo ".bar{color:pink;}";
+        $styles->endInternal();
+
+
+        $actual = $styles->__toString();
+
+        $expect = '    <style type="text/css" media="screen">.foo{color:red;}</style>' . PHP_EOL
+            . '    <!--[if ie6]><style type="text/css" media="screen">.foo{color:yellow;}</style><![endif]-->' . PHP_EOL
+            . '    <style type="text/css" media="screen">.bar{color:green;}</style>' . PHP_EOL
+            . '    <!--[if ie6]><style type="text/css" media="screen">.bar{color:pink;}</style><![endif]-->' . PHP_EOL;
+
+        $this->assertSame($expect, $actual);
+    }
 }

@@ -11,12 +11,13 @@
 
 namespace Symfony\Component\Console\Tests\Input;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
-class ArgvInputTest extends \PHPUnit_Framework_TestCase
+class ArgvInputTest extends TestCase
 {
     public function testConstructor()
     {
@@ -70,6 +71,18 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
                 array(new InputOption('foo', 'f', InputOption::VALUE_REQUIRED)),
                 array('foo' => 'bar'),
                 '->parse() parses long options with a required value (with a space separator)',
+            ),
+            array(
+                array('cli.php', '--foo='),
+                array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL)),
+                array('foo' => null),
+                '->parse() parses long options with optional value which is empty (with a = separator) as null',
+            ),
+            array(
+                array('cli.php', '--foo=', 'bar'),
+                array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL), new InputArgument('name', InputArgument::REQUIRED)),
+                array('foo' => null),
+                '->parse() parses long options with optional value which is empty (with a = separator) followed by an argument',
             ),
             array(
                 array('cli.php', '-f'),
@@ -151,7 +164,12 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidInput($argv, $definition, $expectedExceptionMessage)
     {
-        $this->setExpectedException('RuntimeException', $expectedExceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException('RuntimeException');
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        } else {
+            $this->setExpectedException('RuntimeException', $expectedExceptionMessage);
+        }
 
         $input = new ArgvInput($argv);
         $input->bind($definition);
@@ -183,7 +201,17 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
             array(
                 array('cli.php', 'foo', 'bar'),
                 new InputDefinition(),
-                'Too many arguments.',
+                'No arguments expected, got "foo".',
+            ),
+            array(
+                array('cli.php', 'foo', 'bar'),
+                new InputDefinition(array(new InputArgument('number'))),
+                'Too many arguments, expected arguments "number".',
+            ),
+            array(
+                array('cli.php', 'foo', 'bar', 'zzz'),
+                new InputDefinition(array(new InputArgument('number'), new InputArgument('county'))),
+                'Too many arguments, expected arguments "number" "county".',
             ),
             array(
                 array('cli.php', '--foo'),
@@ -199,6 +227,11 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
                 array('cli.php', '-1'),
                 new InputDefinition(array(new InputArgument('number'))),
                 'The "-1" option does not exist.',
+            ),
+            array(
+                array('cli.php', '-fЩ'),
+                new InputDefinition(array(new InputOption('foo', 'f', InputOption::VALUE_NONE))),
+                'The "-Щ" option does not exist.',
             ),
         );
     }
@@ -268,6 +301,10 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
         $input = new ArgvInput(array('cli.php', '-f', 'foo'));
         $this->assertTrue($input->hasParameterOption('-f'), '->hasParameterOption() returns true if the given short option is in the raw input');
 
+        $input = new ArgvInput(array('cli.php', '-etest'));
+        $this->assertTrue($input->hasParameterOption('-e'), '->hasParameterOption() returns true if the given short option is in the raw input');
+        $this->assertFalse($input->hasParameterOption('-s'), '->hasParameterOption() returns true if the given short option is in the raw input');
+
         $input = new ArgvInput(array('cli.php', '--foo', 'foo'));
         $this->assertTrue($input->hasParameterOption('--foo'), '->hasParameterOption() returns true if the given short option is in the raw input');
 
@@ -276,6 +313,46 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
 
         $input = new ArgvInput(array('cli.php', '--foo=bar'));
         $this->assertTrue($input->hasParameterOption('--foo'), '->hasParameterOption() returns true if the given option with provided value is in the raw input');
+    }
+
+    public function testHasParameterOptionEdgeCasesAndLimitations()
+    {
+        $input = new ArgvInput(array('cli.php', '-fh'));
+        // hasParameterOption does not know if the previous short option, -f,
+        // takes a value or not. If -f takes a value, then -fh does NOT include
+        // -h; Otherwise it does. Since we do not know which short options take
+        // values, hasParameterOption does not support this use-case.
+        $this->assertFalse($input->hasParameterOption('-h'), '->hasParameterOption() returns true if the given short option is in the raw input');
+        // hasParameterOption does detect that `-fh` contains `-f`, since
+        // `-f` is the first short option in the set.
+        $this->assertTrue($input->hasParameterOption('-f'), '->hasParameterOption() returns true if the given short option is in the raw input');
+        // The test below happens to pass, although it might make more sense
+        // to disallow it, and require the use of
+        // $input->hasParameterOption('-f') && $input->hasParameterOption('-h')
+        // instead.
+        $this->assertTrue($input->hasParameterOption('-fh'), '->hasParameterOption() returns true if the given short option is in the raw input');
+        // In theory, if -fh is supported, then -hf should also work.
+        // However, this is not supported.
+        $this->assertFalse($input->hasParameterOption('-hf'), '->hasParameterOption() returns true if the given short option is in the raw input');
+
+        $input = new ArgvInput(array('cli.php', '-f', '-h'));
+        // If hasParameterOption('-fh') is supported for 'cli.php -fh', then
+        // one might also expect that it should also be supported for
+        // 'cli.php -f -h'. However, this is not supported.
+        $this->assertFalse($input->hasParameterOption('-fh'), '->hasParameterOption() returns true if the given short option is in the raw input');
+    }
+
+    public function testNoWarningOnInvalidParameterOption()
+    {
+        $input = new ArgvInput(array('cli.php', '-edev'));
+
+        $this->assertTrue($input->hasParameterOption(array('-e', '')));
+        // No warning thrown
+        $this->assertFalse($input->hasParameterOption(array('-m', '')));
+
+        $this->assertEquals('dev', $input->getParameterOption(array('-e', '')));
+        // No warning thrown
+        $this->assertFalse($input->getParameterOption(array('-m', '')));
     }
 
     public function testToString()
@@ -299,6 +376,7 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
     public function provideGetParameterOptionValues()
     {
         return array(
+            array(array('app/console', 'foo:bar', '-edev'), '-e', 'dev'),
             array(array('app/console', 'foo:bar', '-e', 'dev'), '-e', 'dev'),
             array(array('app/console', 'foo:bar', '--env=dev'), '--env', 'dev'),
             array(array('app/console', 'foo:bar', '-e', 'dev'), array('-e', '--env'), 'dev'),
@@ -313,5 +391,31 @@ class ArgvInputTest extends \PHPUnit_Framework_TestCase
         $input = new ArgvInput(array('cli.php', '-'));
         $input->bind(new InputDefinition(array(new InputArgument('file'))));
         $this->assertEquals(array('file' => '-'), $input->getArguments(), '->parse() parses single dash as an argument');
+    }
+
+    public function testParseOptionWithValueOptionalGivenEmptyAndRequiredArgument()
+    {
+        $input = new ArgvInput(array('cli.php', '--foo=', 'bar'));
+        $input->bind(new InputDefinition(array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL), new InputArgument('name', InputArgument::REQUIRED))));
+        $this->assertEquals(array('foo' => null), $input->getOptions(), '->parse() parses optional options with empty value as null');
+        $this->assertEquals(array('name' => 'bar'), $input->getArguments(), '->parse() parses required arguments');
+
+        $input = new ArgvInput(array('cli.php', '--foo=0', 'bar'));
+        $input->bind(new InputDefinition(array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL), new InputArgument('name', InputArgument::REQUIRED))));
+        $this->assertEquals(array('foo' => '0'), $input->getOptions(), '->parse() parses optional options with empty value as null');
+        $this->assertEquals(array('name' => 'bar'), $input->getArguments(), '->parse() parses required arguments');
+    }
+
+    public function testParseOptionWithValueOptionalGivenEmptyAndOptionalArgument()
+    {
+        $input = new ArgvInput(array('cli.php', '--foo=', 'bar'));
+        $input->bind(new InputDefinition(array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL), new InputArgument('name', InputArgument::OPTIONAL))));
+        $this->assertEquals(array('foo' => null), $input->getOptions(), '->parse() parses optional options with empty value as null');
+        $this->assertEquals(array('name' => 'bar'), $input->getArguments(), '->parse() parses optional arguments');
+
+        $input = new ArgvInput(array('cli.php', '--foo=0', 'bar'));
+        $input->bind(new InputDefinition(array(new InputOption('foo', 'f', InputOption::VALUE_OPTIONAL), new InputArgument('name', InputArgument::OPTIONAL))));
+        $this->assertEquals(array('foo' => '0'), $input->getOptions(), '->parse() parses optional options with empty value as null');
+        $this->assertEquals(array('name' => 'bar'), $input->getArguments(), '->parse() parses optional arguments');
     }
 }

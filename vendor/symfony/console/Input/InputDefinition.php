@@ -13,9 +13,9 @@ namespace Symfony\Component\Console\Input;
 
 use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Console\Descriptor\XmlDescriptor;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * A InputDefinition represents a set of valid command line arguments and options.
@@ -23,8 +23,8 @@ use Symfony\Component\Console\Exception\LogicException;
  * Usage:
  *
  *     $definition = new InputDefinition(array(
- *       new InputArgument('name', InputArgument::REQUIRED),
- *       new InputOption('foo', 'f', InputOption::VALUE_REQUIRED),
+ *         new InputArgument('name', InputArgument::REQUIRED),
+ *         new InputOption('foo', 'f', InputOption::VALUE_REQUIRED),
  *     ));
  *
  * @author Fabien Potencier <fabien@symfony.com>
@@ -39,8 +39,6 @@ class InputDefinition
     private $shortcuts;
 
     /**
-     * Constructor.
-     *
      * @param array $definition An array of InputArgument and InputOption instance
      */
     public function __construct(array $definition = array())
@@ -50,8 +48,6 @@ class InputDefinition
 
     /**
      * Sets the definition of the input.
-     *
-     * @param array $definition The definition array
      */
     public function setDefinition(array $definition)
     {
@@ -98,10 +94,6 @@ class InputDefinition
     }
 
     /**
-     * Adds an InputArgument object.
-     *
-     * @param InputArgument $argument An InputArgument object
-     *
      * @throws LogicException When incorrect argument is given
      */
     public function addArgument(InputArgument $argument)
@@ -146,7 +138,7 @@ class InputDefinition
             throw new InvalidArgumentException(sprintf('The "%s" argument does not exist.', $name));
         }
 
-        $arguments = is_int($name) ? array_values($this->arguments) : $this->arguments;
+        $arguments = \is_int($name) ? array_values($this->arguments) : $this->arguments;
 
         return $arguments[$name];
     }
@@ -160,7 +152,7 @@ class InputDefinition
      */
     public function hasArgument($name)
     {
-        $arguments = is_int($name) ? array_values($this->arguments) : $this->arguments;
+        $arguments = \is_int($name) ? array_values($this->arguments) : $this->arguments;
 
         return isset($arguments[$name]);
     }
@@ -182,7 +174,7 @@ class InputDefinition
      */
     public function getArgumentCount()
     {
-        return $this->hasAnArrayArgument ? PHP_INT_MAX : count($this->arguments);
+        return $this->hasAnArrayArgument ? PHP_INT_MAX : \count($this->arguments);
     }
 
     /**
@@ -235,10 +227,6 @@ class InputDefinition
     }
 
     /**
-     * Adds an InputOption object.
-     *
-     * @param InputOption $option An InputOption object
-     *
      * @throws LogicException When option given already exist
      */
     public function addOption(InputOption $option)
@@ -284,6 +272,9 @@ class InputDefinition
     /**
      * Returns true if an InputOption object exists by name.
      *
+     * This method can't be used to check if the user included the option when
+     * executing the command (use getOption() instead).
+     *
      * @param string $name The InputOption name
      *
      * @return bool true if the InputOption object exists, false otherwise
@@ -318,7 +309,7 @@ class InputDefinition
     /**
      * Gets an InputOption by shortcut.
      *
-     * @param string $shortcut the Shortcut name
+     * @param string $shortcut The Shortcut name
      *
      * @return InputOption An InputOption object
      */
@@ -390,7 +381,7 @@ class InputDefinition
             }
         }
 
-        if (count($elements) && $this->getArguments()) {
+        if (\count($elements) && $this->getArguments()) {
             $elements[] = '[--]';
         }
 
@@ -399,7 +390,7 @@ class InputDefinition
             if (!$argument->isRequired()) {
                 $element = '['.$element.']';
             } elseif ($argument->isArray()) {
-                $element = $element.' ('.$element.')';
+                $element .= ' ('.$element.')';
             }
 
             if ($argument->isArray()) {
@@ -421,7 +412,7 @@ class InputDefinition
      */
     public function asText()
     {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.3 and will be removed in 3.0.', E_USER_DEPRECATED);
+        @trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.3 and will be removed in 3.0.', E_USER_DEPRECATED);
 
         $descriptor = new TextDescriptor();
         $output = new BufferedOutput(BufferedOutput::VERBOSITY_NORMAL, true);
@@ -441,7 +432,7 @@ class InputDefinition
      */
     public function asXml($asDom = false)
     {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 2.3 and will be removed in 3.0.', E_USER_DEPRECATED);
+        @trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.3 and will be removed in 3.0.', E_USER_DEPRECATED);
 
         $descriptor = new XmlDescriptor();
 

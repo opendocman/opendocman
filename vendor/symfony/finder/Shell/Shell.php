@@ -11,7 +11,7 @@
 
 namespace Symfony\Component\Finder\Shell;
 
-@trigger_error('The '.__NAMESPACE__.'\Shell class is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__NAMESPACE__.'\Shell class is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
@@ -54,7 +54,7 @@ class Shell
      */
     public function testCommand($command)
     {
-        if (!function_exists('exec')) {
+        if (!\function_exists('exec')) {
             return false;
         }
 
@@ -68,7 +68,7 @@ class Shell
 
         exec($testCommand.$command, $output, $code);
 
-        return 0 === $code && count($output) > 0;
+        return 0 === $code && \count($output) > 0;
     }
 
     /**
