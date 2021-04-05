@@ -73,7 +73,7 @@ docker-compose deployment.
 1. Edit the database.sql file. You need to change the values set in the odm_settings table, and odm_user tables, 
    specifically the dataDir value, and the password used for the admin user creation
 1. Import your database.sql file into your database
-1. Visit the URL for your installation and login as admin (no password)
+1. Visit the URL for your installation and login as admin/admin. Change your admin password once you login.
 
 ## Update Procedure
 
