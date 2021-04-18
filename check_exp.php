@@ -24,7 +24,7 @@ use Aura\Html\Escaper as e;
 
 include('odm-load.php');
 $start_time = time();
-session_start();
+if(!session_id()) session_start();
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
