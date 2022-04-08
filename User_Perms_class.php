@@ -47,7 +47,7 @@ if (!defined('User_Perms_class')) {
          * @param int $id
          * @param PDO $connection
          */
-        public function User_Perms($id, PDO $connection)
+        public function __construct($id, PDO $connection)
         {
             $this->id = $id;  // this can be fid or uid
             $this->user_obj = new User($id, $connection);

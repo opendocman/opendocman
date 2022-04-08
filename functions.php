@@ -705,7 +705,7 @@ function sanitizeme($input)
             $output[$var] = sanitizeme($val);
         }
     } else {
-        if (get_magic_quotes_gpc()) {
+        if (/*get_magic_quotes_gpc()*/false) {
             $input = stripslashes($input);
         }
         //echo "Raw Input:" . $input . "<br />";
