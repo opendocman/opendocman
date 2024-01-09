@@ -25,18 +25,18 @@ if (!defined('config')) {
 
     // config.php - you should not need to change these
     /** The name of the database for [OpenDocMan */
-    define('APP_DB_NAME', isset($_ENV['APP_DB_NAME']) ? $_ENV['APP_DB_NAME'] : 'database_name_here');
+    define('APP_DB_NAME', getenv('APP_DB_NAME') ? getenv('APP_DB_NAME') : 'database_name_here');
 
     /** MySQL database username */
-    define('APP_DB_USER', isset($_ENV['APP_DB_USER']) ? $_ENV['APP_DB_USER'] : 'username_here');
+    define('APP_DB_USER', getenv('APP_DB_USER') ? getenv('APP_DB_USER') : 'username_here');
 
     /** MySQL database password */
-    define('APP_DB_PASS', isset($_ENV['APP_DB_PASS'])? $_ENV['APP_DB_PASS'] : 'password_here');
+    define('APP_DB_PASS', getenv('APP_DB_PASS') ? getenv('APP_DB_PASS') : 'password_here');
 
     /** MySQL hostname */
     /* The MySQL server. It can also include a port number. e.g. "hostname;port=3306" or a path to a
      * local socket e.g. ":/path/to/socket" for the localhost.  */
-    define('APP_DB_HOST', isset($_ENV['APP_DB_HOST']) ? $_ENV['APP_DB_HOST'] : 'localhost');
+    define('APP_DB_HOST', getenv('APP_DB_HOST') ? getenv('APP_DB_HOST') : 'localhost');
 
     /**
      * Prefix to append to each table name in the database (ex. odm_ would make the tables
@@ -46,7 +46,7 @@ if (!defined('config')) {
      * @DEFAULT 'odm_'
      * @ARG String
      */
-    $GLOBALS['CONFIG']['db_prefix'] = isset($_ENV['DB_PREFIX']) ? $_ENV['DB_PREFIX'] : 'odm_';
+    $GLOBALS['CONFIG']['db_prefix'] = getenv('DB_PREFIX') ? getenv('DB_PREFIX') : 'odm_';
 
     /*** DO NOT EDIT BELOW THIS LINE ***/
 
@@ -54,7 +54,7 @@ if (!defined('config')) {
 
     /** Absolute path to the OpenDocMan directory. */
     if (!defined('ABSPATH')) {
-        if(isset($_ENV['IS_DOCKER'])) {
+        if(getenv('IS_DOCKER')) {
             define('ABSPATH', dirname(__FILE__) . '/../');
         } else {
             define('ABSPATH', dirname(__FILE__) . '/');
