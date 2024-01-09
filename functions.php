@@ -891,7 +891,7 @@ function base_url(){
         return sprintf(
             "%s://%s",
             $proto,
-            $_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI'])
+            $_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])
         );
     } else {
         // Set the base url relative to the plug-ins folder when being called from there
