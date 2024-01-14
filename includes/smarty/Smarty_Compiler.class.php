@@ -26,7 +26,7 @@
  * @package Smarty
  */
 
-/* $Id: Smarty_Compiler.class.php 4779 2013-09-30 19:14:32Z Uwe.Tews@googlemail.com $ */
+/* $Id$ */
 
 /**
  * Template compiling class
@@ -78,7 +78,7 @@ class Smarty_Compiler extends Smarty {
     /**
      * The class constructor.
      */
-    function Smarty_Compiler()
+    public function __construct()
     {
         // matches double quoted strings:
         // "foobar"
@@ -262,6 +262,7 @@ class Smarty_Compiler extends Smarty {
         reset($this->_folded_blocks);
 
         /* replace special blocks by "{php}" */
+//        die($this->left_delimiter);
         $source_content = preg_replace_callback($search, create_function ('$matches', "return '"
                                        . $this->_quote_replace($this->left_delimiter) . 'php'
                                        . "' . str_repeat(\"\n\", substr_count('\$matches[1]', \"\n\")) .'"

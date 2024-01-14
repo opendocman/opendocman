@@ -40,7 +40,7 @@ if (!defined('UserPermission_class')) {
          * @param int $uid
          * @param PDO $connection
          */
-        public function UserPermission($uid, PDO $connection)
+        public function __construct($uid, PDO $connection)
         {
             $this->uid = $uid;
             $this->connection = $connection;
