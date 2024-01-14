@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "opendocman.fullname" . }}-appconfig
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.appconfig.size }}
+  storageClassName: {{ .Values.appconfig.storageClassName }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "opendocman.fullname" . }}-appdata
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.appdata.size }}
+  storageClassName: {{ .Values.appdata.storageClassName }}
