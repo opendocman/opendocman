@@ -297,7 +297,7 @@ deny from all
 
     } else {
 
-        $handle = fopen($config_folder . "../configs/config.php", 'w');
+        $handle = fopen($config_folder . "config.php", 'w');
         foreach ($configFileSource as $line) {
             fwrite($handle, $line);
         }

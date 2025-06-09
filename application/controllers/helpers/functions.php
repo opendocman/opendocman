@@ -653,10 +653,10 @@ function msg(string $string): string
 function display_smarty_template($template_file)
 {
     /* @var $template_file string */
-    if (file_exists(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
-        $GLOBALS['smarty']->display(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
+    if (file_exists(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
+        $GLOBALS['smarty']->display(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
     } else {
-        $GLOBALS['smarty']->display(ABSPATH . 'views/common/' . $template_file);
+        $GLOBALS['smarty']->display(ABSPATH . '../views/common/' . $template_file);
     }
 }
 
