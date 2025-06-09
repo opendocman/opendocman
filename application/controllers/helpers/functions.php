@@ -651,7 +651,7 @@ function msg(string $string): string
  * @param string $template_file The name of the template file ending in .tpl
 */
 function display_smarty_template($template_file)
-{   
+{
     /* @var $template_file string */
     if (file_exists(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
         $GLOBALS['smarty']->display(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
