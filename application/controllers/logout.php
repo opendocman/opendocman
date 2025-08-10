@@ -87,5 +87,5 @@ if ($GLOBALS["CONFIG"]["authen"] == 'kerbauth') {
     // Call the plugin API
     callPluginMethod('onAfterLogout');
 
-    header('Location:index');
+    header('Location: index');
 }

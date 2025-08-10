@@ -1,18 +1,19 @@
 <?php
 namespace Aura\Router;
 
-use Zend\Diactoros\ServerRequestFactory;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use GuzzleHttp\Psr7\ServerRequest;
 
-class MatcherTest extends \PHPUnit_Framework_TestCase
+class MatcherTest extends TestCase
 {
     protected $map;
     protected $matcher;
     protected $logger;
     protected $request;
 
-    protected function setUp()
+    protected function set_up()
     {
-        parent::setUp();
+        parent::set_up();
         $container = new RouterContainer();
         $this->map = $container->getMap();
         $this->matcher = $container->getMatcher();
@@ -22,7 +23,10 @@ class MatcherTest extends \PHPUnit_Framework_TestCase
     {
         $server['REQUEST_URI'] = $path;
         $server = array_merge($_SERVER, $server);
-        return ServerRequestFactory::fromGlobals($server);
+
+        $method = isset($server['REQUEST_METHOD']) ? $server['REQUEST_METHOD'] : 'GET';
+
+        return new ServerRequest($method, $path, [], null, '1.1', $server);
     }
 
     protected function assertIsRoute($actual)
@@ -186,6 +190,29 @@ class MatcherTest extends \PHPUnit_Framework_TestCase
         $this->assertRoute($expect, $this->matcher->getMatchedRoute());
     }
 
+    public function testMatchWithFastRouteFormat()
+    {
+        $route = $this->map->route('test',
+            '/{controller:[a-zA-Z][a-zA-Z0-9_-]{1,}}' .
+            '/{action:[a-zA-Z][a-zA-Z0-9_-]+}' .
+            '/{id:[0-9]+}' .
+            '{format: (\.[^/]+)?}'
+        );
+
+        $request = $this->newRequest('/foo/bar/42');
+        $actual = $this->matcher->match($request);
+
+        $expect = [
+            'attributes' => [
+                'controller' => 'foo',
+                'action' => 'bar',
+                'id' => '42',
+                'format' => null,
+            ]
+        ];
+        $this->assertRoute($expect, $actual);
+    }
+
     public function testGetFailedRouteIsBestMatch()
     {
         $expect = $this->map->post('bar', '/bar');
@@ -211,12 +238,12 @@ class MatcherTest extends \PHPUnit_Framework_TestCase
         $failed = $this->matcher->getFailedRoute();
         $this->assertSame($expect->name, $failed->name);
     }
-
     public function testLogger()
     {
+        $logger = PHP_MAJOR_VERSION <= 7 ? new FakeLogger() : new FakeLoggerV3();
         $container = new RouterContainer();
-        $container->setLoggerFactory(function () {
-            return new FakeLogger();
+        $container->setLoggerFactory(function () use ($logger) {
+            return $logger;
         });
 
         $map = $container->getMap();

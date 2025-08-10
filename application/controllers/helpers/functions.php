@@ -88,6 +88,7 @@ function draw_error($message)
 
 function draw_footer()
 {
+    $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
     display_smarty_template('footer.tpl');
 }
 
@@ -616,9 +617,7 @@ function sanitizeme($input)
             $output[$var] = sanitizeme($val);
         }
     } else {
-        if (get_magic_quotes_gpc()) {
-            $input = stripslashes($input);
-        }
+
         $input = cleanInput($input);
         $output = $input;
     }
@@ -653,10 +652,10 @@ function msg(string $string): string
 function display_smarty_template($template_file)
 {
     /* @var $template_file string */
-    if (file_exists(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
-        $GLOBALS['smarty']->display(ABSPATH . '../views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
+    if (file_exists(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file)) {
+        $GLOBALS['smarty']->display(ABSPATH . 'views/' . $GLOBALS['CONFIG']['theme'] . '/' . $template_file);
     } else {
-        $GLOBALS['smarty']->display(ABSPATH . '../views/common/' . $template_file);
+        $GLOBALS['smarty']->display(ABSPATH . 'views/common/' . $template_file);
     }
 }
 
@@ -767,16 +766,16 @@ function xss_clean($str)
 function redirect_visitor($url = '')
 {
     if (isset($url) && $url != '') {
-        header('Location:' . htmlentities($url, ENT_QUOTES));
+        header('Location: ' . $url);
         exit;
     } elseif (isset($_SERVER['REDIRECT_URL'])) {
         // Lets make sure its not an outside URL
         if (!preg_match('#^(http|https|ftp)://#', $_SERVER['REDIRECT_URL'])) {
-            header('Location:index?redirection=' . htmlentities(ltrim($_SERVER['REDIRECT_URL'], '/'), ENT_QUOTES));
+            header('Location: index?redirection=' . urlencode(ltrim($_SERVER['REDIRECT_URL'], '/')));
             exit;
         }
     } else {
-        header('Location:index');
+        header('Location: index');
         exit;
     }
 }

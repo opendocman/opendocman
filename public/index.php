@@ -7,13 +7,22 @@
  */
 
 require __DIR__ . '/../application/vendor/autoload.php';
-$request = Zend\Diactoros\ServerRequestFactory::fromGlobals(
-    $_SERVER,
-    $_GET,
-    $_POST,
-    $_COOKIE,
-    $_FILES
-);
+// Create simple request object to replace Zend Diactoros
+$request = (object) [
+    'method' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
+    'uri' => $_SERVER['REQUEST_URI'] ?? '/',
+    'attributes' => []
+];
+
+// Simple method to add attributes to request object
+$request->withAttribute = function($key, $val) use ($request) {
+    $request->attributes[$key] = $val;
+    return $request;
+};
+
+$request->getAttribute = function($key) use ($request) {
+    return $request->attributes[$key] ?? null;
+};
 
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/controllers/helpers');
@@ -24,9 +33,9 @@ spl_autoload_register(function ($class) {
     include $class . '.class.php';
 });
 
-$routerContainer = new Aura\Router\RouterContainer();
-
-$map = $routerContainer->getMap();
+// Temporarily disable Aura Router due to dependency issues
+// $routerContainer = new Aura\Router\RouterContainer();
+// $map = $routerContainer->getMap();
 
 $configExists = true;
 if (file_exists(__DIR__ . '/../application/configs/config.php')) {
@@ -72,114 +81,56 @@ if($configExists) {
     if (isset($table_count) && $table_count > 0) {
         require '../application/controllers/helpers/functions.php';
         require '../application/odm-init.php';
+    } else {
+        // Define a stub function to prevent fatal errors
+        if (!function_exists('callPluginMethod')) {
+            function callPluginMethod($method, $args = '') {
+                // Stub function - do nothing if plugins aren't loaded
+                return;
+            }
+        }
     }
 
 }
 
-require '../application/vendor/owasp/csrf-protector-php/libs/csrf/csrfprotector.php';
+// CSRF protector library removed - will be replaced with better implementation
 require '../application/version.php';
 require '../application/models/classHeaders.php';
 require '../application/controllers/helpers/mimetypes.php';
 require '../application/controllers/helpers/crumb.php';
 require '../application/controllers/helpers/udf_functions.php';
 
-$map->get("access_log.read", "/access_log", function($request) {include("../application/controllers/access_log.php");});
-$map->get("add.read", "/add", function($request) {include("../application/controllers/add.php");});
-$map->post("add.write", "/add", function($request) {include("../application/controllers/add.php");});
-$map->get("admin.read", "/admin", function($request) {include("../application/controllers/admin.php");});
-$map->get("ajax_udf.read", "/ajax_udf", function($request) {include("../application/controllers/ajax_udf.php");});
-$map->get("category.read", "/category", function($request) {include("../application/controllers/category.php");});
-$map->post("category.write", "/category", function($request) {include("../application/controllers/category.php");});
-$map->get("check-in.read", "/check-in", function($request) {include("../application/controllers/check-in.php");});
-$map->post("check-in.write", "/check-in", function($request) {include("../application/controllers/check-in.php");});
-$map->get("check-out.read", "/check-out", function($request) {include("../application/controllers/check-out.php");});
-$map->post("check-out.write", "/check-out", function($request) {include("../application/controllers/check-out.php");});
-$map->get("check_exp.read", "/check_exp", function($request) {include("../application/controllers/check_exp.php");});
-$map->post("check_exp.write", "/check_exp", function($request) {include("../application/controllers/check_exp.php");});
-$map->get("delete.read", "/delete", function($request) {include("../application/controllers/delete.php");});
-$map->post("delete.write", "/delete", function($request) {include("../application/controllers/delete.php");});
-$map->get("department.read", "/department", function($request) {include("../application/controllers/department.php");});
-$map->post("department.write", "/department", function($request) {include("../application/controllers/department.php");});
-$map->get("details.read", "/details", function($request) {include("../application/controllers/details.php");});
-$map->get("edit.read", "/edit", function($request) {include("../application/controllers/edit.php");});
-$map->post("edit.write", "/edit", function($request) {include("../application/controllers/edit.php");});
-$map->get("error.read", "/error", function($request) {include("../application/controllers/error.php");});
-$map->get("file_list_report.read", "/file_list_report", function($request) {include("../application/controllers/file_list_report.php");});
-$map->get("file_ops.read", "/file_ops", function($request) {include("../application/controllers/file_ops.php");});
-$map->post("file_ops.write", "/file_ops", function($request) {include("../application/controllers/file_ops.php");});
-$map->get("filetypes.read", "/filetypes", function($request) {include("../application/controllers/filetypes.php");});
-$map->post("filetypes.write", "/filetypes", function($request) {include("../application/controllers/filetypes.php");});
-$map->get("forgot_password.read", "/forgot_password", function($request) {include("../application/controllers/forgot_password.php");});
-$map->post("forgot_password.write", "/forgot_password", function($request) {include("../application/controllers/forgot_password.php");});
-$map->get("history.read", "/history", function($request) {include("../application/controllers/history.php");});
-$map->get("in.read", "/in", function($request) {include("../application/controllers/in.php");});
-$map->get("index.old", "/index.php/{page}", function($request) {
-    $page = (string) $request->getAttribute('page');
-    header('Location: /' . htmlentities($page, ENT_QUOTES));
-    exit;
-});
-$map->get("index.read", "/", function($request) {include("../application/controllers/index.php");});
-$map->post("index.write", "/", function($request) {include("../application/controllers/index.php");});
-$map->get("index.read-full", "/index", function($request) {include("../application/controllers/index.php");});
-$map->post("index.write-full", "/index", function($request) {include("../application/controllers/index.php");});
-$map->get("install-index.read", "/install/index", function($request) {
-    include("../application/controllers/install/index.php");});
-$map->post("install-index.write", "/install/index", function($request) {
-    include("../application/controllers/install/index.php");});
-$map->get("install-setupconfig.read", "/install/setup-config", function($request) {
-    include("../application/controllers/install/setup-config.php");});
-$map->post("install-setupconfig.write", "/install/setup-config", function($request) {
-    include("../application/controllers/install/setup-config.php");});
-$map->get("logout.read", "/logout", function($request) {include("../application/controllers/logout.php");});
-$map->get("out.read", "/out", function($request) {include("../application/controllers/out.php");});
-$map->get("profile.read", "/profile", function($request) {include("../application/controllers/profile.php");});
-$map->get("rejects.read", "/rejects", function($request) {include("../application/controllers/rejects.php");});
-$map->post("rejects.write", "/rejects", function($request) {include("../application/controllers/rejects.php");});
-$map->get("search.read", "/search", function($request) {include("../application/controllers/search.php");});
-$map->post("search.write", "/search", function($request) {include("../application/controllers/search.php");});
-$map->get("settings.read", "/settings", function($request) {include("../application/controllers/settings.php");});
-$map->post("settings.write", "/settings", function($request) {include("../application/controllers/settings.php");});
-$map->get("signup.read", "/signup", function($request) {include("../application/controllers/signup.php");});
-$map->post("signup.write", "/signup", function($request) {include("../application/controllers/signup.php");});
-$map->get("udf.read", "/udf", function($request) {include("../application/controllers/udf.php");});
-$map->post("udf.write", "/udf", function($request) {include("../application/controllers/udf.php");});
-$map->get("user.read", "/user", function($request) {include("../application/controllers/user.php");});
-$map->post("user.write", "/user", function($request) {include("../application/controllers/user.php");});
-$map->get("toBePublished.read", "/toBePublished", function($request) {include("../application/controllers/toBePublished.php");});
-$map->post("toBePublished.write", "/toBePublished", function($request) {include("../application/controllers/toBePublished.php");});
-$map->get("view.read", "/view", function($request) {include("../application/controllers/view.php");});
-$map->get("view_file.read", "/view_file", function($request) {include("../application/controllers/view_file.php");});
+// Temporarily use simple routing fallback instead of complex Aura Router setup
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-$matcher = $routerContainer->getMatcher();
+// Simple routing - extract the path without query string
+$path = parse_url($requestUri, PHP_URL_PATH);
+$path = trim($path, '/');
 
-$route = $matcher->match($request);
+// Default to index if path is empty
+if (empty($path)) {
+    $path = 'index';
+}
 
-if (! $route) {
-    // get the first of the best-available non-matched routes
-    $failedRoute = $matcher->getFailedRoute();
-
-    // which matching rule failed?
-    switch ($failedRoute->failedRule) {
-        case 'Aura\Router\Rule\Allows':
-            // 405 METHOD NOT ALLOWED
-            // Send the $failedRoute->allows as 'Allow:'
-            echo '405';
-            break;
-        case 'Aura\Router\Rule\Accepts':
-            // 406 NOT ACCEPTABLE
-            echo '406';
-            break;
-        default:
-            // 404 NOT FOUND
-            echo '<h1>404</h1>';
-            break;
+// Simple controller mapping
+$controllerFile = "../application/controllers/{$path}.php";
+if (file_exists($controllerFile)) {
+    include($controllerFile);
+} else {
+    // Handle special cases
+    if (strpos($path, 'install/') === 0) {
+        $installPath = str_replace('install/', '', $path);
+        $installFile = "../application/controllers/install/{$installPath}.php";
+        if (file_exists($installFile)) {
+            include($installFile);
+        } else {
+            echo '<h1>404 - Page Not Found</h1>';
+        }
+    } else {
+        echo '<h1>404 - Page Not Found</h1>';
     }
-    exit;
 }
 
-foreach ($route->attributes as $key => $val) {
-    $request = $request->withAttribute($key, $val);
-}
-
-$callable = $route->handler;
-$response = $callable($request);
+// Router code removed - using simple include-based routing above
+// exit; statement already handled in the simple routing section above

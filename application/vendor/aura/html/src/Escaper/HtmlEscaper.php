@@ -59,11 +59,13 @@ class HtmlEscaper extends AbstractEscaper
      *
      * @param mixed $raw The value to be escaped.
      *
-     * @return mixed The escaped value.
+     * @return string The escaped value.
      *
      */
     public function __invoke($raw)
     {
+        $raw = (string) $raw;
+
         // pre-empt escaping
         if ($raw === '' || ctype_digit($raw)) {
             return $raw;

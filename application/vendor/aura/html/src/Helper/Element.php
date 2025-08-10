@@ -15,7 +15,7 @@ namespace Aura\Html\Helper;
  * @package Aura.Html
  *
  */
-class Element extends AbstractHelper
+class Element extends AbstractElement
 {
     /**
      *
@@ -32,10 +32,6 @@ class Element extends AbstractHelper
      */
     public function __invoke($tag, $content, array $attr = array())
     {
-        $attr = $this->escaper->attr($attr);
-        $out = $attr ? "<{$tag} $attr>" : "<{$tag}>";
-        $out .= $this->escaper->html($content);
-        $out .= "</$tag>";
-        return $out;
+        return $this->escaped($tag, $content, $attr);
     }
 }

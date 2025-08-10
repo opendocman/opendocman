@@ -17,6 +17,8 @@ use Symfony\Component\Process\Exception\RuntimeException;
  * Provides a way to continuously write to the input of a Process until the InputStream is closed.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @implements \IteratorAggregate<int, string>
  */
 class InputStream implements \IteratorAggregate
 {
@@ -28,7 +30,7 @@ class InputStream implements \IteratorAggregate
     /**
      * Sets a callback that is called when the write buffer becomes empty.
      */
-    public function onEmpty(callable $onEmpty = null)
+    public function onEmpty(?callable $onEmpty = null)
     {
         $this->onEmpty = $onEmpty;
     }
@@ -67,8 +69,9 @@ class InputStream implements \IteratorAggregate
     }
 
     /**
-     * @return \Traversable
+     * @return \Traversable<int, string>
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $this->open = true;

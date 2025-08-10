@@ -1,7 +1,7 @@
-		{$mode|escape:'html'}
+		{if isset($mode)}{$mode|escape:'html'}{/if}
                 {$g_lang_email_note_to_authors}
 		<form name="author_note_form"
-			{if $mode eq 'root'}
+			{if isset($mode) && $mode eq 'root'}
 			 action="toBePublished?mode=root" method="POST">
 			{else}
 			 action="toBePublished" method="POST">

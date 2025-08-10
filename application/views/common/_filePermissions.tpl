@@ -45,22 +45,16 @@
             </thead>
             <tbody>
                 {foreach from=$avail_depts item=dept}
-                    {if $dept.selected eq 'selected'}
-                        {assign var="selected" value="checked='checked'"}
-                    {else}
-                        {assign var="noneselected" value="checked='checked'"}
-                    {/if}
                 <tr>
                     <td>{$dept.name|escape:'html'}</td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="-1" {if $dept.rights eq '-1'}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="0" {if $dept.rights eq '0'}checked="checked"{/if} {$noneselected}/></td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="1" {if $dept.rights eq 1}checked="checked"{/if} {$selected} /></td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="2" {if $dept.rights eq 2}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="3" {if $dept.rights eq 3}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="department_permission[{$dept.id}]" value="4" {if $dept.rights eq 4}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="-1" {if isset($dept.rights) && $dept.rights eq '-1'}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="0" {if isset($dept.rights) && $dept.rights eq '0'}checked="checked"{elseif !isset($dept.rights) || $dept.rights eq ''}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="1" {if isset($dept.rights) && $dept.rights eq 1}checked="checked"{elseif isset($dept.selected) && $dept.selected eq 'selected' && (!isset($dept.rights) || $dept.rights eq '')}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="2" {if isset($dept.rights) && $dept.rights eq 2}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="3" {if isset($dept.rights) && $dept.rights eq 3}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="department_permission[{$dept.id}]" value="4" {if isset($dept.rights) && $dept.rights eq 4}checked="checked"{/if} /></td>
                 </tr>
-                    {assign var="selected" value=""}
-                {/foreach}       
+                {/foreach}
             </tbody>
         </table>
     </dd>
@@ -80,19 +74,15 @@
             </thead>
             <tbody>
                 {foreach from=$avail_users item=user}
-                {if $user.rights eq ''}
-                    {assign var="selected" value="checked='checked'"}
-                {/if} 
-
                 <tr>
                     <td>{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</td>
-                    <td><input type="radio" name="user_permission[{$user.id}]" value="-1" {if $user.rights eq '-1'}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="user_permission[{$user.id}]" value="1" {if $user.rights eq 1}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="user_permission[{$user.id}]" value="2" {if $user.rights eq 2}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="user_permission[{$user.id}]" value="3" {if $user.rights eq 3}checked="checked"{/if} /></td>
-                    <td><input type="radio" name="user_permission[{$user.id}]" value="4" {if $user.rights eq 4 || ($user.id eq $user_id && $user.rights eq '') }checked="checked"{/if} /></td>
+                    <td><input type="radio" name="user_permission[{$user.id}]" value="-1" {if isset($user.rights) && $user.rights eq '-1'}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="user_permission[{$user.id}]" value="1" {if isset($user.rights) && $user.rights eq 1}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="user_permission[{$user.id}]" value="2" {if isset($user.rights) && $user.rights eq 2}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="user_permission[{$user.id}]" value="3" {if isset($user.rights) && $user.rights eq 3}checked="checked"{/if} /></td>
+                    <td><input type="radio" name="user_permission[{$user.id}]" value="4" {if (isset($user.rights) && $user.rights eq 4) || ($user.id eq $user_id && (!isset($user.rights) || $user.rights eq '')) }checked="checked"{/if} /></td>
                 </tr>
-                {/foreach}       
+                {/foreach}
             </tbody>
         </table>
     </dd>

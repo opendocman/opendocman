@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<phpunit colors="true" strict="true">
-    <testsuites>
-        <testsuite name="N98 JunitXml Test">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>

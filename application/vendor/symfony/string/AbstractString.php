@@ -245,7 +245,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
     public function collapseWhitespace(): self
     {
         $str = clone $this;
-        $str->string = trim(preg_replace('/(?:\s{2,}+|[^\S ])/', ' ', $str->string));
+        $str->string = trim(preg_replace("/(?:[ \n\r\t\x0C]{2,}+|[\n\r\t\x0C])/", ' ', $str->string), " \n\r\t\x0C");
 
         return $str;
     }
@@ -399,7 +399,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
     /**
      * @return static
      */
-    abstract public function join(array $strings, string $lastGlue = null): self;
+    abstract public function join(array $strings, ?string $lastGlue = null): self;
 
     public function jsonSerialize(): string
     {
@@ -477,7 +477,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
     /**
      * @return static
      */
-    abstract public function slice(int $start = 0, int $length = null): self;
+    abstract public function slice(int $start = 0, ?int $length = null): self;
 
     /**
      * @return static
@@ -487,12 +487,12 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
     /**
      * @return static
      */
-    abstract public function splice(string $replacement, int $start = 0, int $length = null): self;
+    abstract public function splice(string $replacement, int $start = 0, ?int $length = null): self;
 
     /**
      * @return static[]
      */
-    public function split(string $delimiter, int $limit = null, int $flags = null): array
+    public function split(string $delimiter, ?int $limit = null, ?int $flags = null): array
     {
         if (null === $flags) {
             throw new \TypeError('Split behavior when $flags is null must be implemented by child classes.');
@@ -560,7 +560,7 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
      */
     abstract public function title(bool $allWords = false): self;
 
-    public function toByteString(string $toEncoding = null): ByteString
+    public function toByteString(?string $toEncoding = null): ByteString
     {
         $b = new ByteString();
 
@@ -577,8 +577,11 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
         try {
             try {
                 $b->string = mb_convert_encoding($this->string, $toEncoding, 'UTF-8');
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException|\ValueError $e) {
                 if (!\function_exists('iconv')) {
+                    if ($e instanceof \ValueError) {
+                        throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+                    }
                     throw $e;
                 }
 
@@ -617,9 +620,77 @@ abstract class AbstractString implements \Stringable, \JsonSerializable
     abstract public function trimEnd(string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}"): self;
 
     /**
+     * @param string|string[] $prefix
+     *
+     * @return static
+     */
+    public function trimPrefix($prefix): self
+    {
+        if (\is_array($prefix) || $prefix instanceof \Traversable) {
+            foreach ($prefix as $s) {
+                $t = $this->trimPrefix($s);
+
+                if ($t->string !== $this->string) {
+                    return $t;
+                }
+            }
+
+            return clone $this;
+        }
+
+        $str = clone $this;
+
+        if ($prefix instanceof self) {
+            $prefix = $prefix->string;
+        } else {
+            $prefix = (string) $prefix;
+        }
+
+        if ('' !== $prefix && \strlen($this->string) >= \strlen($prefix) && 0 === substr_compare($this->string, $prefix, 0, \strlen($prefix), $this->ignoreCase)) {
+            $str->string = substr($this->string, \strlen($prefix));
+        }
+
+        return $str;
+    }
+
+    /**
      * @return static
      */
     abstract public function trimStart(string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}"): self;
+
+    /**
+     * @param string|string[] $suffix
+     *
+     * @return static
+     */
+    public function trimSuffix($suffix): self
+    {
+        if (\is_array($suffix) || $suffix instanceof \Traversable) {
+            foreach ($suffix as $s) {
+                $t = $this->trimSuffix($s);
+
+                if ($t->string !== $this->string) {
+                    return $t;
+                }
+            }
+
+            return clone $this;
+        }
+
+        $str = clone $this;
+
+        if ($suffix instanceof self) {
+            $suffix = $suffix->string;
+        } else {
+            $suffix = (string) $suffix;
+        }
+
+        if ('' !== $suffix && \strlen($this->string) >= \strlen($suffix) && 0 === substr_compare($this->string, $suffix, -\strlen($suffix), null, $this->ignoreCase)) {
+            $str->string = substr($this->string, 0, -\strlen($suffix));
+        }
+
+        return $str;
+    }
 
     /**
      * @return static

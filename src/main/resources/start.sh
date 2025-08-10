@@ -1,9 +1,14 @@
 #!/bin/bash
-mkdir /var/www/document_repository
+mkdir -p /var/www/document_repository
 chown www-data:www-data /var/www/document_repository
 chown -R www-data:www-data /var/www/html
-mkdir /var/www/html/application/templates_c
+mkdir -p /var/www/html/application/templates_c
 chmod 777 /var/www/html/application/templates_c
+
+# Create mail log file and set permissions
+touch /var/log/mail.log
+chown www-data:www-data /var/log/mail.log
+chmod 644 /var/log/mail.log
 
 TABLES_EXIST=$(mysql -u$APP_DB_USER -p$APP_DB_PASS -h$APP_DB_HOST -P$DB_PORT $APP_DB_NAME -e "SHOW TABLES LIKE 'odm_settings'" | grep "odm_settings" > /dev/null; echo "$?")
 

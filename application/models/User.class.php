@@ -46,11 +46,21 @@ if (!defined('User_class')) {
             $this->root_id = $GLOBALS['CONFIG']['root_id'];
             $this->field_name = 'username';
             $this->field_id = 'id';
-            $this->tablename = $GLOBALS['CONFIG']['db_prefix'] . $this->TABLE_USER;
+            $this->tablename = $this->TABLE_USER;
             $this->result_limit = 1; //there is only 1 user with a certain user_name or user_id
 
-            databaseData::setTableName($this->TABLE_USER);
-            databaseData::__construct($id, $connection);
+            // Set connection and initialize without calling setId yet
+            $this->connection = $connection;
+            
+            // Add error handling for setId call
+            try {
+                // Now we can safely call setId since tablename is set
+                $this->setId($id);
+            } catch (Exception $e) {
+                error_log("User constructor error: " . $e->getMessage());
+                $this->error = "Failed to initialize user with ID: " . $id;
+                return;
+            }
 
             $query = "
                     SELECT 
@@ -68,9 +78,16 @@ if (!defined('User_class')) {
                         {$GLOBALS['CONFIG']['db_prefix']}user 
                     WHERE 
                         id = :id";
-            $stmt = $connection->prepare($query);
+            $stmt = $this->connection->prepare($query);
             $stmt->execute(array(':id' => $this->id));
             $result = $stmt->fetch();
+
+            // Check if user was found in database
+            if ($result === false) {
+                $this->error = "User not found in database for ID: " . $this->id;
+                error_log("User constructor - User not found for ID: " . $this->id);
+                return;
+            }
 
             list(
                     $this->id,
@@ -568,6 +585,7 @@ if (!defined('User_class')) {
          */
         public function getFullName()
         {
+            $full_name = array();
             $full_name[0] = $this->first_name;
             $full_name[1] = $this->last_name;
 
@@ -610,9 +628,11 @@ if (!defined('User_class')) {
          * @param $pdo
          * @return array
          */
-        public static function getAllUsers($pdo)
+        public static function getAllUsers(PDO $pdo)
         {
-            $query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
+            $userListArray = array();
+            // query to get a list of available users
+            $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY username";
             $stmt = $pdo->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll();

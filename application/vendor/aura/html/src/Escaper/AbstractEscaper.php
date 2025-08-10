@@ -110,11 +110,13 @@ abstract class AbstractEscaper
      *
      * @param string $regex The regex to determine what characters to replace.
      *
-     * @return mixed The escaped value.
+     * @return string The escaped value.
      *
      */
     protected function replace($raw, $regex)
     {
+        $raw = (string) $raw;
+
         // pre-empt replacement
         if ($raw === '' || ctype_digit($raw)) {
             return $raw;

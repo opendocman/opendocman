@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.2.29-apache
 MAINTAINER Logical Arts, LLC <info@logicalarts.net>
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -27,6 +27,16 @@ COPY . /var/www/html
 
 # Change file permissions
 RUN usermod -u 1000 www-data
+
+# Create and set proper ownership and permissions for OpenDocMan directories
+RUN mkdir -p /var/www/document_repository \
+    && mkdir -p /var/www/html/application/configs/docker-configs \
+    && chown -R www-data:www-data /var/www/html/application/templates_c \
+    && chown -R www-data:www-data /var/www/html/application/configs \
+    && chown -R www-data:www-data /var/www/document_repository \
+    && chmod -R 755 /var/www/html/application/templates_c \
+    && chmod -R 755 /var/www/html/application/configs \
+    && chmod -R 755 /var/www/document_repository
 
 # Copy startup command
 COPY src/main/resources/*.sh /

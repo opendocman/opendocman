@@ -66,7 +66,8 @@ if (!defined('FileData_class')) {
             $this->result_limit = 1;  //EVERY FILE IS LISTED UNIQUELY ON THE DATABASE DATA;
             $this->tablename = $this->TABLE_DATA;
             $this->connection = $connection;
-            databaseData::__construct($id, $connection);
+            // Initialize without calling parent constructor to avoid premature setId call
+            $this->setId($id);
 
             $this->loadData();
         }

@@ -26,7 +26,7 @@ use Aura\Html\Escaper as e;
 // check session
 session_start();
 if (!isset($_SESSION['uid'])) {
-    header('Location:error?ec=1');
+    header('Location: error?ec=1');
     exit;
 }
 
@@ -48,7 +48,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
         // Make sure directory is writable
         if (!mkdir($GLOBALS['CONFIG']['archiveDir'], 0775)) {
             $last_message='Could not create ' . $GLOBALS['CONFIG']['archiveDir'];
-            header('Location:error?ec=23&last_message=' . urlencode($last_message));
+            header('Location: error?ec=23&last_message=' . urlencode($last_message));
             exit;
         }
     }
@@ -57,7 +57,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
         if (isset($_REQUEST['id' . $i])) {
             $id = $_REQUEST['id' . $i];
             if (strchr($id, '_')) {
-                header('Location:error?ec=20');
+                header('Location: error?ec=20');
             }
             if ($userperm_obj->canAdmin($id)) {
                 $file_obj = new FileData($id, $pdo);
@@ -113,7 +113,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             exit;
         }
     }
-    header('Location:' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
+    header('Location: ' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Undelete') {
     if (isset($_REQUEST['checkbox'])) {
         foreach ($_REQUEST['checkbox'] as $fileId) {
@@ -122,7 +122,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
         }
     }
-    header('Location:' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
+    header('Location: ' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
 }
 
 draw_footer();
@@ -144,7 +144,7 @@ function pmt_delete($id)
     // all ok, proceed!
     if (isset($id)) {
         if (strchr($id, '_')) {
-            header('Location:error?ec=20');
+            header('Location: error?ec=20');
         }
         if ($userperm_obj->canAdmin($id)) {
             // delete from db

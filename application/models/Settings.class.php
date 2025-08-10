@@ -120,7 +120,7 @@ if (!defined('Settings_class')) {
          */
         public function getThemes()
         {
-            $themes = $this->getFolders(ABSPATH . '../views');
+            $themes = $this->getFolders(ABSPATH . 'views');
             return $themes;
         }
 
@@ -129,7 +129,7 @@ if (!defined('Settings_class')) {
          */
         public function getLanguages()
         {
-            $languages = $this->getFolders(ABSPATH . '../../includes/language');
+            $languages = $this->getFolders(ABSPATH . 'includes/language');
             return str_replace('.php', '', $languages);
         }
 

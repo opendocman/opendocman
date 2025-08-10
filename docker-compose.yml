@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     ports:
-      - 80:80
+      - 8080:80
       - 443:443
       - 9000:9000
     hostname: odm.local

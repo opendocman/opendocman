@@ -88,6 +88,8 @@ if (!isset($_POST['submit'])) {
         } else {
             $avail_user['selected'] = '';
         }
+        // Add rights field for file permissions template
+        $avail_user['rights'] = '';
         
         array_push($users_array, $avail_user);
     }
@@ -103,6 +105,8 @@ if (!isset($_POST['submit'])) {
         } else {
             $avail_department['selected'] = '';
         }
+        // Add rights field for file permissions template
+        $avail_department['rights'] = '';
         array_push($departments_array, $avail_department);
     }
 
@@ -118,6 +122,7 @@ if (!isset($_POST['submit'])) {
     foreach ($departments_array as $dept) {
         $avail_dept_perms['name'] = $dept['name'];
         $avail_dept_perms['id'] = $dept['id'];
+        $avail_dept_perms['rights'] = $dept['rights'];
         array_push($dept_perms_array, $avail_dept_perms);
     }
   

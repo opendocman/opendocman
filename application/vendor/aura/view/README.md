@@ -20,11 +20,11 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.View/release
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.View/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.View/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.View/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.View/)
-[![Build Status](https://travis-ci.org/auraphp/Aura.View.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.View)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.View/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/auraphp/Aura.View/)
+[![codecov](https://codecov.io/gh/auraphp/Aura.View/branch/2.x/graph/badge.svg?token=UASDouLxyc)](https://codecov.io/gh/auraphp/Aura.View)
+[![Continuous Integration](https://github.com/auraphp/Aura.View/actions/workflows/continuous-integration.yml/badge.svg?branch=2.x)](https://github.com/auraphp/Aura.View/actions/workflows/continuous-integration.yml)
 
-To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
+To run the unit tests at the command line, issue `composer install` and then `./vendor/bin/phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`.
 
 This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
 you notice compliance oversights, please send a patch via pull request.
@@ -384,9 +384,26 @@ $view_registry->setPaths(array(
 
 When we refer to named templates later, the registry will search from the first directory to the last. For finer control over the search paths, we can call `prependPath()` to add a directory to search earlier, or `appendPath()` to add a directory to search later. Regardless, the _View_ will auto-append `.php` to the end of template names when searching through the directories.
 
+#### Template Namespaces
+
+We can also add namespaced templates which we can refer to with the syntax `namespace::template`.
+We can add directories that correspond to namespaces:
+
+```php
+<?php
+$view_registry = $view->getViewRegistry();
+$view_registry->appendPath('/path/to/templates', 'my-namespace');
+
+$view->setView('my-namespace::browse');
+```
+
+When we refer to namespaced templates, only the paths associated with that
+namespace will be searched.
+
+
 ### Changing The Template File Extension
 
-By default, each _TemplateRegistry_ will auto-append `.php` to template file names. If the template files end with a different extension, change it usin the `setTemplateFileExtension()` method:
+By default, each _TemplateRegistry_ will auto-append `.php` to template file names. If the template files end with a different extension, change it using the `setTemplateFileExtension()` method:
 
 ```php
 <?php
@@ -423,7 +440,7 @@ $view = $view_factory->newInstance(
     ],
     [
         'layout' => '/path/to/layouts/default.php'
-    ],    
+    ],
     [
         '/path/to/layouts',
     ],

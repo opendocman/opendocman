@@ -11,9 +11,9 @@ namespace Aura\Html\Escaper;
  */
 class CssEscaperTest extends AbstractEscaperTest
 {
-    public function setUp()
+    public function set_up()
     {
-        parent::setUp();
+        parent::set_up();
         $this->escaper = new CssEscaper;
     }
 

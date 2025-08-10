@@ -1,13 +1,15 @@
 <?php
 namespace Aura\Router\Rule;
 
-class RuleIteratorTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class RuleIteratorTest extends TestCase
 {
     protected $ruleIterator;
 
-    protected function setUp()
+    protected function set_up()
     {
-        parent::setUp();
+        parent::set_up();
         $this->ruleIterator = new RuleIterator();
     }
 
@@ -46,9 +48,8 @@ class RuleIteratorTest extends \PHPUnit_Framework_TestCase
             function () { return 'string'; }
         ]);
 
-        $this->setExpectedException(
-            'Aura\Router\Exception\UnexpectedValue',
-            'string'
+        $this->expectException(
+            'Aura\Router\Exception\UnexpectedValue'
         );
 
         $this->ruleIterator->current();
@@ -60,9 +61,8 @@ class RuleIteratorTest extends \PHPUnit_Framework_TestCase
             function () { return (object) []; }
         ]);
 
-        $this->setExpectedException(
-            'Aura\Router\Exception\UnexpectedValue',
-            'object of type stdClass'
+        $this->expectException(
+            'Aura\Router\Exception\UnexpectedValue'
         );
 
         $this->ruleIterator->current();

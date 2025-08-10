@@ -2,6 +2,7 @@
 namespace Aura\Html\Escaper;
 
 use Aura\Html\FakePhp;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 // trick PHP into using this function instead of the native function
 function function_exists($name)
@@ -17,13 +18,13 @@ function function_exists($name)
  * under the New BSD License (http://framework.zend.com/license/new-bsd).
  *
  */
-abstract class AbstractEscaperTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractEscaperTest extends TestCase
 {
     protected $escaper;
 
     abstract public function test__construct();
 
-    protected function setUp()
+    protected function set_up()
     {
         FakePhp::$function_exists['iconv'] = \function_exists('iconv');
         FakePhp::$function_exists['mb_convert_encoding'] = \function_exists('mb_convert_encoding');
@@ -52,7 +53,7 @@ abstract class AbstractEscaperTest extends \PHPUnit_Framework_TestCase
         FakePhp::$function_exists['iconv'] = false;
         FakePhp::$function_exists['mb_convert_encoding'] = false;
         $this->escaper->setEncoding('iso-8859-1');
-        $this->setExpectedException('Aura\Html\Exception\ExtensionNotInstalled');
+        $this->expectException('Aura\Html\Exception\ExtensionNotInstalled');
         $this->escaper->toUtf8('x');
     }
 
@@ -61,7 +62,7 @@ abstract class AbstractEscaperTest extends \PHPUnit_Framework_TestCase
         $this->escaper->setEncoding('macroman');
         $this->assertEquals('macroman', $this->escaper->getEncoding());
 
-        $this->setExpectedException('Aura\Html\Exception\EncodingNotSupported');
+        $this->expectException('Aura\Html\Exception\EncodingNotSupported');
         $this->escaper->setEncoding('invalid-encoding');
     }
 
@@ -75,7 +76,7 @@ abstract class AbstractEscaperTest extends \PHPUnit_Framework_TestCase
     public function testToUtf8_invalid()
     {
         // http://stackoverflow.com/questions/11709410/regex-to-detect-invalid-utf-8-string
-        $this->setExpectedException('Aura\Html\Exception\InvalidUtf8');
+        $this->expectException('Aura\Html\Exception\InvalidUtf8');
         $this->escaper->toUtf8(chr(0xC0) . chr(0x80));
     }
 

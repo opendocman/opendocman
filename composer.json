@@ -4,13 +4,24 @@
     "vendor-dir": "application/vendor"
   },
   "require": {
+    "php": ">=7.4",
     "aura/html": "^2.4",
     "foa/html-view-bundle": "2.*",
-    "owasp/csrf-protector-php": "dev-master",
-    "aura/router": "^3.1",
-    "zendframework/zend-diactoros": "dev-develop"
+    "aura/router": "^3.1"
   },
   "require-dev": {
-    "overtrue/phplint": "^2.3"
+    "overtrue/phplint": "^2.3",
+    "php-webdriver/webdriver": "^1.15",
+    "phpunit/phpunit": "^9.5",
+    "mockery/mockery": "^1.4"
+  },
+  "scripts": {
+    "test": "FORCE_COLOR=1 phpunit 2>&1 | grep -v 'stty:' | grep -v 'User constructor - User not found'",
+    "test-coverage": "FORCE_COLOR=1 phpunit --coverage-html coverage 2>&1 | grep -v 'stty:' | grep -v 'User constructor - User not found'"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
   }
 }

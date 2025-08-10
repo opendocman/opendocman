@@ -228,9 +228,16 @@ if (!isset($_GET['submit'])) {
         }
         return array_values(array_intersect($id_array, $search_array));
     }
-    $current_user = new User($_SESSION['uid'], $pdo);
-    $user_perms = new User_Perms($_SESSION['uid'], $pdo);
-    $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
+    try {
+        $current_user = new User($_SESSION['uid'], $pdo);
+        $user_perms = new User_Perms($_SESSION['uid'], $pdo);
+        $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
+    } catch (Exception $e) {
+        error_log("Search.php - Error creating user objects: " . $e->getMessage());
+        error_log("Search.php - Session UID: " . (isset($_SESSION['uid']) ? $_SESSION['uid'] : 'NOT SET'));
+        header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
+        exit;
+    }
     //$s_getFTime = getmicrotime();
     if ($_GET['where'] == 'author_locked_files') {
         $view_able_files_id = $current_user->getExpiredFileIds();

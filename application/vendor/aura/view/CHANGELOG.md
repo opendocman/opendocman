@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.4.0
+
+* Added namespace support to TemplateRegistry by @jakejohns https://github.com/auraphp/Aura.View/pull/83.
+* Updated CI to support php versions from 5.4 to 8.1 by @harikt
+
 ## 2.3.0
 
 * Added ability to set map and path in ViewFactory.  https://github.com/auraphp/Aura.View/pull/73

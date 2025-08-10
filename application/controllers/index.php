@@ -19,6 +19,17 @@
 
 // Main login form
 
+// Configure session for Docker environment
+if (getenv('IS_DOCKER')) {
+    ini_set('session.cookie_domain', '');
+    ini_set('session.cookie_path', '/');
+    ini_set('session.cookie_secure', false);
+    ini_set('session.cookie_httponly', true);
+    ini_set('session.use_strict_mode', true);
+}
+
+session_start();
+
 $pdo = $GLOBALS['pdo'];
 
 /*
@@ -54,9 +65,19 @@ if (!isset($_REQUEST['last_message'])) {
     $_REQUEST['last_message'] = '';
 }
 
+// Check if system is properly installed before proceeding
+if (!isset($GLOBALS['CONFIG']['authen'])) {
+    // System not installed yet, redirect to installation
+    header('Location: install/setup-config');
+    exit;
+}
 
-// Call the plugin API
-callPluginMethod('onBeforeLogin');
+// Call the plugin API (only if function exists)
+if (function_exists('callPluginMethod')) {
+    callPluginMethod('onBeforeLogin');
+}
+
+
 
 if (isset($_SESSION['uid'])) {
     // redirect to main page
@@ -127,8 +148,10 @@ if (isset($_POST['login'])) {
         // initiate a session
         $_SESSION['uid'] = $id;
 
-        // Run the plugin API
-        callPluginMethod('onAfterLogin');
+        // Run the plugin API (only if function exists)
+        if (function_exists('callPluginMethod')) {
+            callPluginMethod('onAfterLogin');
+        }
 
         // redirect to main page
         if (isset($_REQUEST['redirection'])) {
@@ -140,8 +163,10 @@ if (isset($_POST['login'])) {
         // Login Failed
         // redirect to error page
 
-        // Call the plugin API
-        callPluginMethod('onFailedLogin');
+        // Call the plugin API (only if function exists)
+        if (function_exists('callPluginMethod')) {
+            callPluginMethod('onFailedLogin');
+        }
 
         header('Location: error?ec=0');
     }

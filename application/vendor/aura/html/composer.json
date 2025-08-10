@@ -39,8 +39,7 @@
         }
     },
     "require-dev": {
-        "aura/di": "~2.0",
-        "phpunit/phpunit": "~5.7 || ~4.8"
+        "yoast/phpunit-polyfills": "~1.0"
     },
     "autoload-dev": {
         "psr-4": {

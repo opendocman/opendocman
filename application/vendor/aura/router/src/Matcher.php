@@ -8,7 +8,6 @@
  */
 namespace Aura\Router;
 
-use Aura\Router\Exception;
 use Aura\Router\Rule\RuleIterator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -26,7 +25,7 @@ class Matcher
      *
      * Logging information about which routes were attempted to match.
      *
-     * @var array
+     * @var LoggerInterface
      *
      */
     protected $logger;
@@ -53,7 +52,7 @@ class Matcher
      *
      * The Route object matched by the router.
      *
-     * @var Route|false
+     * @var Route|false|null
      *
      */
     protected $matchedRoute;
@@ -62,7 +61,7 @@ class Matcher
      *
      * The first of the closest-matching failed routes.
      *
-     * @var Route
+     * @var Route|null
      *
      */
     protected $failedRoute;
@@ -240,7 +239,7 @@ class Matcher
      *
      * Get the first of the closest-matching failed routes.
      *
-     * @return Route
+     * @return ?Route
      *
      */
     public function getFailedRoute()

@@ -46,17 +46,17 @@ define('ODM_SETUP_CONFIG', true);
  */
 error_reporting(15);
 
-define('ABSPATH', dirname(dirname(__FILE__)) . '/');
+define('ABSPATH', dirname(dirname(dirname(__FILE__))) . '/');
 
 /**#@-*/
 
-if (!file_exists(ABSPATH . '../configs/config-sample.php')) {
+if (!file_exists(ABSPATH . 'configs/config-sample.php')) {
     echo('Sorry, I need a config-sample.php file to work from. Please re-upload this file from your OpenDocMan installation.');
     exit;
 }
 
 // Check if configs/config.php has been created
-if (file_exists(ABSPATH . '../configs/config.php') || file_exists(ABSPATH . '../configs/docker-configs/config.php')) {
+if (file_exists(ABSPATH . 'configs/config.php') || file_exists(ABSPATH . 'configs/docker-configs/config.php')) {
     echo("<p>The file 'configs/config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href=''>installing now</a>.</p>");
     exit;
 }
@@ -252,12 +252,12 @@ deny from all
         }
 
         // Verify the templates_c is writable
-        if (!is_writable(ABSPATH . '../templates_c')) {
-            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . '../templates_c is writable by the web server';
+        if (!is_writable(ABSPATH . 'templates_c')) {
+            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . 'templates_c is writable by the web server';
         }
 
     // Grab the sample as our source file for building a config.php file
-    $configFileSource = file(ABSPATH . '../configs/config-sample.php');
+    $configFileSource = file(ABSPATH . 'configs/config-sample.php');
 
     // Now replace the default config values with the real ones
     foreach ($configFileSource as $line_num => $line) {
@@ -280,7 +280,7 @@ deny from all
         }
     }
 
-    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? '../configs/docker-configs/' : '../configs/');
+    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? 'configs/docker-configs/' : 'configs/');
     if (! is_writable($config_folder)) {
         display_header();
         ?>
@@ -302,7 +302,7 @@ deny from all
             fwrite($handle, $line);
         }
         fclose($handle);
-        chmod($config_folder . '../configs/config.php', 0666);
+        chmod($config_folder . 'config.php', 0666);
         display_header();
         ?>
 <p>Great! You've made it through this part of the installation. OpenDocMan can now communicate with your database. If you are ready, time now to&hellip;</p>
@@ -333,9 +333,7 @@ function sanitizeme($input)
             $output[$var] = sanitizeme($val);
         }
     } else {
-        if (get_magic_quotes_gpc()) {
-            $input = stripslashes($input);
-        }
+
         //echo "Raw Input:" . $input . "<br />";
         $input  = cleanInput($input);
         $input = strip_tags($input); // Remove HTML

@@ -1,11 +1,13 @@
 <?php
 namespace Aura\View;
 
-class HelperRegistryTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class HelperRegistryTest extends TestCase
 {
     protected $helper_registry;
 
-    protected function setUp()
+    protected function set_up()
     {
         $this->helper_registry = new HelperRegistry;
     }
@@ -24,7 +26,7 @@ class HelperRegistryTest extends \PHPUnit_Framework_TestCase
         $helper = $this->helper_registry->get('foo');
         $this->assertSame($foo, $helper);
 
-        $this->setExpectedException('Aura\View\Exception\HelperNotFound');
+        $this->expectException('Aura\View\Exception\HelperNotFound');
         $this->helper_registry->get('bar');
     }
 

@@ -1,3 +1,4 @@
+{assign var=form value=0}
 <div id="filetable_wrapper">
 <form name="table" method="post" ">
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
@@ -69,11 +70,12 @@
             <th>{$g_lang_label_status}</th>
         </tr>
     </tfoot>
+    </table>
     {if $form ne '1'}
 </form>
     {/if}
-</table>
 </div>
+
 {if $limit_reached}
     <div class="text-warning">{$g_lang_message_max_number_of_results}</div>
 {/if}

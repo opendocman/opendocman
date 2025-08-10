@@ -301,7 +301,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     {
         define('ODM_INSTALLING', 'true');
         echo 'Checking that templates_c folder is writable...<br />';
-        if (!is_writable(ABSPATH . '../templates_c')) {
+        if (!is_writable(ABSPATH . 'templates_c')) {
             echo 'templates_c folder is <strong>Not writable</strong> - Fix and go <a href="javascript: history.back()" class="button">Back</a><br />';
             exit;
         } else {
@@ -436,8 +436,8 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 
     function print_intro(PDO $pdo)
     {
-        include_once(__DIR__ . '/../version.php');
-        include_once(__DIR__ . '/../models/Settings.class.php');
+        include_once(__DIR__ . '/../../version.php');
+        include_once(__DIR__ . '/../../models/Settings.class.php');
 
         $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
         $db_version = Settings::get_db_version($pdo, $prefix);

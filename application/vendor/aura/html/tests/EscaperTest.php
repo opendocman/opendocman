@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Html;
 
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
 /**
  *
  * Based almost entirely on Zend\Escaper by Padraic Brady et al. and modified
@@ -9,11 +11,11 @@ namespace Aura\Html;
  * under the New BSD License (http://framework.zend.com/license/new-bsd).
  *
  */
-class EscaperTest extends \PHPUnit_Framework_TestCase
+class EscaperTest extends TestCase
 {
     protected $escaper;
 
-    public function setUp()
+    public function set_up()
     {
         $escaper_factory = new EscaperFactory;
         $this->escaper = $escaper_factory->newInstance();

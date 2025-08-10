@@ -1,11 +1,13 @@
 <?php
 namespace Aura\Html;
 
-class HelperLocatorTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class HelperLocatorTest extends TestCase
 {
     protected $helper_locator;
 
-    protected function setUp()
+    protected function set_up()
     {
         $factory = new HelperLocatorFactory;
         $this->helper_locator = $factory->newInstance();
@@ -25,7 +27,28 @@ class HelperLocatorTest extends \PHPUnit_Framework_TestCase
         $actual = $this->helper_locator->mockHelper('World');
         $this->assertSame($expect, $actual);
 
-        $this->setExpectedException('Aura\Html\Exception\HelperNotFound');
+        $this->expectException('Aura\Html\Exception\HelperNotFound');
         $this->helper_locator->get('noSuchHelper');
+    }
+
+    public function testFactoryAddHelpers()
+    {
+        $factory = new HelperLocatorFactory;
+        $override = array('a' => function () {
+            return new Helper\MockHelper;
+        });
+        $helpers = $factory->newInstance($override);
+        $expect = 'Aura\Html\Helper\MockHelper';
+        $actual = $helpers->get('a');
+        $this->assertInstanceOf($expect, $actual);
+
+
+        $additional = array('mockHelper' => function () {
+            return new Helper\MockHelper;
+        });
+        $helpers = $factory->newInstance($additional);
+        $expect = 'Aura\Html\Helper\MockHelper';
+        $actual = $helpers->get('mockHelper');
+        $this->assertInstanceOf($expect, $actual);
     }
 }

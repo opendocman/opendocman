@@ -55,9 +55,10 @@ class Host implements RuleInterface
             return true;
         }
 
+        $hostWithPort = $request->getUri()->getPort() ? $request->getUri()->getHost() . ':' . $request->getUri()->getPort() : $request->getUri()->getHost();
         $match = preg_match(
             $this->buildRegex($route),
-            $request->getUri()->getHost(),
+            $hostWithPort,
             $matches
         );
 
@@ -134,7 +135,7 @@ class Host implements RuleInterface
 
     /**
      *
-     * Returns a named subpattern for a attribute name.
+     * Returns a named subpattern for an attribute name.
      *
      * @param string $name The attribute name.
      *

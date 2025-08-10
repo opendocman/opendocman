@@ -129,13 +129,17 @@ function draw_ldap_info($ldap_request)
                     // SORTING
                         function aSortBySecondIndex($multiArray, $secondIndex)
                         {
-                            while (list($firstIndex, ) = each($multiArray))
+                            $indexMap = array();
+                            foreach ($multiArray as $firstIndex => $value) {
                                 $indexMap[$firstIndex] = $multiArray[$firstIndex][$secondIndex];
+                            }
                             asort($indexMap);
-                            while (list($firstIndex, ) = each($indexMap))
+                            $sortedArray = array();
+                            foreach ($indexMap as $firstIndex => $value) {
                                 if (is_numeric($firstIndex))
                                     $sortedArray[] = $multiArray[$firstIndex];
                                 else $sortedArray[$firstIndex] = $multiArray[$firstIndex];
+                            }
                             return $sortedArray;
                         }
 

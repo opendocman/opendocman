@@ -151,6 +151,13 @@ if (!defined("databaseData_class"));
         public function findName()
         {
             $name = '';
+            
+            // Safety check to prevent SQL errors with empty table names
+            if (empty($this->tablename)) {
+                $this->error = 'Error: table name not set';
+                return '';
+            }
+            
             $query = "SELECT
                         $this->field_name
                       FROM

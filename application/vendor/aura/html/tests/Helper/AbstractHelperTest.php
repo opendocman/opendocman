@@ -2,14 +2,15 @@
 namespace Aura\Html\Helper;
 
 use Aura\Html\EscaperFactory;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-abstract class AbstractHelperTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractHelperTest extends TestCase
 {
     protected $helper;
 
-    protected function setUp()
+    protected function set_up()
     {
-        parent::setUp();
+        parent::set_up();
         $this->helper = $this->newHelper();
     }
 

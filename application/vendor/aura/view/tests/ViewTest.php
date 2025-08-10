@@ -1,11 +1,13 @@
 <?php
 namespace Aura\View;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class ViewTest extends TestCase
 {
     protected $view;
 
-    protected function setUp()
+    protected function set_up()
     {
         $view_factory = new ViewFactory;
         $this->view = $view_factory->newInstance();
@@ -54,7 +56,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidHelpersObject()
     {
-        $this->setExpectedException('Aura\View\Exception\InvalidHelpersObject');
+        $this->expectException('Aura\View\Exception\InvalidHelpersObject');
         new View(new TemplateRegistry, new TemplateRegistry, 'invalid');
     }
 

@@ -46,12 +46,18 @@ if (!defined('Dept_Perms_class')) {
         /**
          * @param int $id
          * @param PDO $connection
+         * @param User|null $user_obj Optional User object to avoid circular dependency
          */
-        public function __construct($id, PDO $connection)
+        public function __construct($id, PDO $connection, $user_obj = null)
         {
             // this can be fid or uid
             $this->id = $id;
             $this->connection = $connection;
+            
+            // Store user object if provided to avoid re-creation
+            if ($user_obj !== null) {
+                $this->user_obj = $user_obj;
+            }
         }
 
         /**

@@ -40,13 +40,53 @@ if (!defined('UserPermission_class')) {
          * @param int $uid
          * @param PDO $connection
          */
-        public function UserPermission($uid, PDO $connection)
+        public function __construct($uid, PDO $connection)
         {
             $this->uid = $uid;
             $this->connection = $connection;
-            $this->user_obj = new User($this->uid, $this->connection);
-            $this->user_perms_obj = new User_Perms($this->user_obj->getId(), $connection);
-            $this->dept_perms_obj = new Dept_Perms($this->user_obj->getDeptId(), $connection);
+            
+            // Validate UID before proceeding
+            if (empty($uid) || !is_numeric($uid)) {
+                throw new Exception("Invalid UID provided to UserPermission constructor: " . var_export($uid, true));
+            }
+            
+            try {
+                $this->user_obj = new User($this->uid, $this->connection);
+            } catch (Exception $e) {
+                error_log("UserPermission constructor - Failed to create User object: " . $e->getMessage());
+                throw new Exception("Failed to create User object for UID: " . $uid . " - " . $e->getMessage());
+            }
+            
+            // Check if user object was created successfully and user exists
+            if ($this->user_obj === null) {
+                throw new Exception("User object is null for UID: " . $uid);
+            }
+            
+            if (!empty($this->user_obj->error)) {
+                error_log("UserPermission constructor - User object has error: " . $this->user_obj->error);
+                throw new Exception("User object error for UID: " . $uid . " - " . $this->user_obj->error);
+            }
+            
+            // Ensure user ID is valid before creating dependent objects
+            $userId = $this->user_obj->getId();
+            if (empty($userId)) {
+                throw new Exception("User object has no valid ID for UID: " . $uid);
+            }
+            
+            // Create User_Perms object
+            $this->user_perms_obj = new User_Perms($userId, $connection, $this->user_obj);
+            
+            if ($this->user_perms_obj === null) {
+                throw new Exception("User_Perms object is null after creation");
+            }
+            
+            // Create Dept_Perms object
+            $deptId = $this->user_obj->getDeptId();
+            $this->dept_perms_obj = new Dept_Perms($deptId, $connection, $this->user_obj);
+            
+            if ($this->dept_perms_obj === null) {
+                throw new Exception("Dept_Perms object is null");
+            }
             $this->FORBIDDEN_RIGHT = $this->user_perms_obj->FORBIDDEN_RIGHT;
             $this->NONE_RIGHT = $this->user_perms_obj->NONE_RIGHT;
             $this->VIEW_RIGHT = $this->user_perms_obj->VIEW_RIGHT;
@@ -87,6 +127,8 @@ if (!defined('UserPermission_class')) {
         public function getViewableFileIds($limit = true)
         {
             //These 2 below takes half of the execution time for this function
+            
+
             $user_perms_file_array = ($this->user_perms_obj->getCurrentViewOnly($limit));
             $dept_perms_file_array = ($this->dept_perms_obj->getCurrentViewOnly($limit));
 
@@ -223,6 +265,12 @@ if (!defined('UserPermission_class')) {
         {
             $data_id = (int) $data_id;
             $fileData = new FileData($data_id, $this->connection);
+
+            // Add null check for user_obj before calling methods
+            if ($this->user_obj === null) {
+                error_log("UserPermission::getAuthority - user_obj is null for UID: " . $this->uid);
+                return $this->FORBIDDEN_RIGHT;
+            }
 
             if ($this->user_obj->isAdmin() || $this->user_obj->isReviewerForFile($data_id)) {
                 return $this->ADMIN_RIGHT;

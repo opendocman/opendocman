@@ -24,13 +24,12 @@ class ParseException extends RuntimeException
     private $rawMessage;
 
     /**
-     * @param string          $message    The error message
-     * @param int             $parsedLine The line where the error occurred
-     * @param string|null     $snippet    The snippet of code near the problem
-     * @param string|null     $parsedFile The file name where the error occurred
-     * @param \Exception|null $previous   The previous exception
+     * @param string      $message    The error message
+     * @param int         $parsedLine The line where the error occurred
+     * @param string|null $snippet    The snippet of code near the problem
+     * @param string|null $parsedFile The file name where the error occurred
      */
-    public function __construct(string $message, int $parsedLine = -1, string $snippet = null, string $parsedFile = null, \Throwable $previous = null)
+    public function __construct(string $message, int $parsedLine = -1, ?string $snippet = null, ?string $parsedFile = null, ?\Throwable $previous = null)
     {
         $this->parsedFile = $parsedFile;
         $this->parsedLine = $parsedLine;
@@ -45,7 +44,7 @@ class ParseException extends RuntimeException
     /**
      * Gets the snippet of code near the error.
      *
-     * @return string The snippet of code
+     * @return string
      */
     public function getSnippet()
     {
@@ -67,7 +66,7 @@ class ParseException extends RuntimeException
      *
      * This method returns null if a string is parsed.
      *
-     * @return string The filename
+     * @return string
      */
     public function getParsedFile()
     {
@@ -87,7 +86,7 @@ class ParseException extends RuntimeException
     /**
      * Gets the line where the error occurred.
      *
-     * @return int The file line
+     * @return int
      */
     public function getParsedLine()
     {

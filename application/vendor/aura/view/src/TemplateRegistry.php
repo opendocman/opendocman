@@ -37,6 +37,15 @@ class TemplateRegistry
 
     /**
      *
+     * The namespaced paths to search for implicit template names.
+     *
+     * @var array
+     *
+     */
+    protected $namespaces = array();
+
+    /**
+     *
      * Templates found in the search paths.
      *
      * @var array
@@ -61,15 +70,19 @@ class TemplateRegistry
      *
      * @param array $paths A map of filesystem paths to search for templates.
      *
+     * @param array $namespaces A map of filesystem paths to search for namespaced templates.
+     *
      */
     public function __construct(
         array $map = array(),
-        array $paths = array()
+        array $paths = array(),
+        array $namespaces = array()
     ) {
         foreach ($map as $name => $spec) {
             $this->set($name, $spec);
         }
         $this->setPaths($paths);
+        $this->setNamespaces($namespaces);
     }
 
     /**
@@ -108,6 +121,20 @@ class TemplateRegistry
     public function has($name)
     {
         return isset($this->map[$name]) || $this->find($name);
+    }
+
+    /**
+     *
+     * Is a namespace registered?
+     *
+     * @param string $name The namespace.
+     *
+     * @return bool
+     *
+     */
+    public function hasNamespace($namespace)
+    {
+        return isset($this->namespaces[$namespace]);
     }
 
     /**
@@ -154,15 +181,25 @@ class TemplateRegistry
      *     // $this->getPaths() reveals that the directory search
      *     // order will be '/path/3/', '/path/2/', '/path/1/'.
      *
-     * @param array|string $path The directories to add to the paths.
+     * @param string $path The directories to add to the paths.
+     * @param string|null $namespace The directory namespace
      *
      * @return null
      *
      */
-    public function prependPath($path)
+    public function prependPath($path, $namespace = null)
     {
-        array_unshift($this->paths, rtrim($path, DIRECTORY_SEPARATOR));
         $this->found = [];
+        $path = rtrim($path, DIRECTORY_SEPARATOR);
+
+        if ($namespace !== null) {
+            if (! $this->hasNamespace($namespace)) {
+                $this->namespaces[$namespace] = [];
+            }
+            array_unshift($this->namespaces[$namespace], $path);
+            return;
+        }
+        array_unshift($this->paths, $path);
     }
 
     /**
@@ -176,14 +213,25 @@ class TemplateRegistry
      *     // order will be '/path/1/', '/path/2/', '/path/3/'.
      *
      * @param array|string $path The directories to add to the paths.
+     * @param string|null $namespace The directory namespace
      *
      * @return null
      *
      */
-    public function appendPath($path)
+    public function appendPath($path, $namespace = null)
     {
-        $this->paths[] = rtrim($path, DIRECTORY_SEPARATOR);
         $this->found = [];
+        $path = rtrim($path, DIRECTORY_SEPARATOR);
+
+        if ($namespace !== null) {
+            if (! $this->hasNamespace($namespace)) {
+                $this->namespaces[$namespace] = [];
+            }
+            $this->namespaces[$namespace][] = $path;
+            return;
+        }
+
+        $this->paths[] = $path;
     }
 
     /**
@@ -206,6 +254,21 @@ class TemplateRegistry
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
+        $this->found = [];
+    }
+
+    /**
+     * Set namespaces directly
+     *
+     * @param array $namespaces array of namesspaces
+     *
+     * @return void
+     *
+     * @access public
+     */
+    public function setNamespaces(array $namespaces)
+    {
+        $this->namespaces = $namespaces;
         $this->found = [];
     }
 
@@ -238,8 +301,88 @@ class TemplateRegistry
             return true;
         }
 
+        if ($this->isNamespaced($name)) {
+            return $this->findNamespaced($name);
+        }
+
         foreach ($this->paths as $path) {
             $file = $path . DIRECTORY_SEPARATOR . $name . $this->templateFileExtension;
+            if ($this->isReadable($file)) {
+                $this->found[$name] = $this->enclose($file);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Parse namespaced template name
+     *
+     * @param string $name namespaced template name
+     *
+     * @return array
+     * @throws InvalidArgumentException if invalid template name
+     *
+     * @access protected
+     */
+    protected function parseName($name)
+    {
+        $info  = explode('::', $name);
+        $count = count($info);
+
+        if ($count == 1) {
+            return array('name' => $info[0]);
+        }
+
+        if ($count == 2) {
+            return array(
+                'namespace' => $info[0],
+                'name'      => $info[1]
+            );
+        }
+
+        throw new \InvalidArgumentException('Invalid name: ' . $name);
+    }
+
+    /**
+     * Is template name namespaced?
+     *
+     * @param string $name name to check
+     *
+     * @return bool
+     *
+     * @access protected
+     */
+    protected function isNamespaced($name)
+    {
+        $info = $this->parseName($name);
+        return isset($info['namespace']);;
+    }
+
+    /**
+     * Fine a namespaced template
+     *
+     * @param string $name namespaced template name
+     *
+     * @return bool
+     *
+     * @access protected
+     */
+    protected function findNamespaced($name)
+    {
+        $info = $this->parseName($name);
+        $namespace = $info['namespace'];
+        $shortname = $info['name'];
+
+        if (! $this->hasNamespace($namespace)) {
+            return false;
+        }
+
+        $paths = $this->namespaces[$namespace];
+
+        foreach ($paths as $path) {
+            $file = $path . DIRECTORY_SEPARATOR . $shortname . $this->templateFileExtension;
             if ($this->isReadable($file)) {
                 $this->found[$name] = $this->enclose($file);
                 return true;

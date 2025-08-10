@@ -46,13 +46,45 @@ if (!defined('User_Perms_class')) {
         /**
          * @param int $id
          * @param PDO $connection
+         * @param User|null $user_obj Optional User object to avoid circular dependency
          */
-        public function User_Perms($id, PDO $connection)
+        public function __construct($id, PDO $connection, $user_obj = null)
         {
             $this->id = $id;  // this can be fid or uid
-            $this->user_obj = new User($id, $connection);
-            $this->dept_perms_obj = new Dept_Perms($this->user_obj->GetDeptId(), $connection);
             $this->connection = $connection;
+            
+            // Validate ID before proceeding
+            if (empty($id) || !is_numeric($id)) {
+                throw new Exception("Invalid ID provided to User_Perms constructor: " . var_export($id, true));
+            }
+            
+            try {
+                // Use provided user object or create new one
+                if ($user_obj !== null) {
+                    $this->user_obj = $user_obj;
+                } else {
+                    $this->user_obj = new User($id, $connection);
+                }
+                
+                // Check if user object is valid
+                if ($this->user_obj === null || !empty($this->user_obj->error)) {
+                    throw new Exception("Failed to create User object or user not found for ID: " . $id);
+                }
+                
+                // Create Dept_Perms object
+                $deptId = $this->user_obj->getDeptId();
+                if (empty($deptId)) {
+                    throw new Exception("User has no valid department ID");
+                }
+                
+                $this->dept_perms_obj = new Dept_Perms($deptId, $connection);
+                if ($this->dept_perms_obj === null) {
+                    throw new Exception("Failed to create Dept_Perms object");
+                }
+                
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
 
         /**

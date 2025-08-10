@@ -35,8 +35,15 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_rejected'), $last_message);
 
-    $user_obj = new User($_SESSION['uid'], $pdo);
-    $user_perms_obj = new UserPermission($_SESSION['uid'], $pdo);
+    try {
+        $user_obj = new User($_SESSION['uid'], $pdo);
+        $user_perms_obj = new UserPermission($_SESSION['uid'], $pdo);
+    } catch (Exception $e) {
+        error_log("Rejects.php - Error creating user objects: " . $e->getMessage());
+        error_log("Rejects.php - Session UID: " . (isset($_SESSION['uid']) ? $_SESSION['uid'] : 'NOT SET'));
+        header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
+        exit;
+    }
     if ($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root') {
         $fileid_array = $user_obj->getAllRejectedFileIds();
     } else {

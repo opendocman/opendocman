@@ -37,6 +37,7 @@ if (!defined('Category_class')) {
             $stmt->execute();
             $result = $stmt->fetchAll();
 
+            $categoryListArray = [];
             foreach ($result as $row) {
                 $categoryListArray[] = $row;
             }

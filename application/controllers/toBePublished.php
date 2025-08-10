@@ -51,6 +51,7 @@ if (!isset($_REQUEST['submit'])) {
 
     $list_status = list_files($id_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true);
     if ($list_status != -1) {
+        $GLOBALS['smarty']->assign('lmode', '');
         display_smarty_template('toBePublished.tpl');
     }
 } elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' || $_REQUEST['submit'] == 'commentReject')) {
@@ -94,6 +95,8 @@ if (!isset($_REQUEST['submit'])) {
     $GLOBALS['smarty']->assign('user_info', $result);
     $GLOBALS['smarty']->assign('submit_value', $submit_value);
     $GLOBALS['smarty']->assign('checkbox', $checkbox);
+    $GLOBALS['smarty']->assign('access_mode', '');
+    $GLOBALS['smarty']->assign('mode', '');
     display_smarty_template('commentform.tpl');
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject') {
     $to = isset($_POST['to']) ? e::h($_POST['to']) : '';
@@ -190,8 +193,8 @@ if (!isset($_REQUEST['submit'])) {
     $full_name = $get_full_name[0].' '.$get_full_name[1];
     $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : msg('email_subject_review_status'));
     $mail_from= e::h($full_name) . ' <'.$user_obj->getEmailAddress().'>';
-    $mail_headers = "From: ". e::h($mail_from) .PHP_EOL.PHP_EOL;
-    $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL . PHP_EOL;
+    $mail_headers = "From: ". e::h($mail_from) .PHP_EOL;
+    $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL;
 
     if ($user_obj->isAdmin()) {
         $id_array = $user_obj->getAllRevieweeIds();

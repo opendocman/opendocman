@@ -55,7 +55,7 @@ if (!defined('config')) {
     /** Absolute path to the OpenDocMan directory. */
     if (!defined('ABSPATH')) {
         if(getenv('IS_DOCKER')) {
-            define('ABSPATH', dirname(__FILE__) . '/../');
+            define('ABSPATH', dirname(__FILE__) . '/../../');
         } else {
             define('ABSPATH', dirname(__FILE__) . '/');
         }

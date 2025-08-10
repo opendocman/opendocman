@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.6.0
+- ADD: Nested HTML snippet/structure helper via #41 by @jakejohns
+- ADD: Overriding helper factories via #55 by @jakejohns
+- Fix: ctype_digit deprecation error on 8.1 via #62 by @arokettu
+- Update continuous integration to support upto 8.1 via #60, #61 by @harikt
+
 ## 2.5.0
 
 - ADD: VoidTag helper

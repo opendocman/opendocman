@@ -4,19 +4,19 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use \N98\JUnitXml\Document;
 
-class TestUnitTest extends \PHPUnit_Framework_TestCase
+class TestUnitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Document
      */
     protected $document;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->document = new Document();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->document);
     }

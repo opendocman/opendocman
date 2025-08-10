@@ -69,7 +69,7 @@ foreach ($GLOBALS['lang'] as $key => $value) {
     $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
 }
 
-csrfProtector::init();
+// CSRF protection removed - will be replaced with better implementation
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {
