@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/multiSelect112/smoothness/jquery-ui-1.8.18.custom.css" />
 
 <script type="text/javascript" src="{$g_base_url}js/jquery.min.js"></script>
+<script type="text/javascript" src="{$g_base_url}js/jquery-compatibility.js"></script>
 <script type="text/javascript" src="{$g_base_url}js/DataTables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{$g_base_url}js/common/multiSelect112/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="{$g_base_url}js/jquery.validate.min.js"></script>

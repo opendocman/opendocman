@@ -299,6 +299,31 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 
     function do_install(PDO $pdo)
     {
+        // Check if this is a forced fresh installation
+        $force_fresh = isset($_GET['force_fresh']) && $_GET['force_fresh'] == '1';
+        
+        if ($force_fresh) {
+            // Drop all existing tables for fresh installation
+            $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
+            
+            try {
+                // Get list of tables with our prefix
+                $stmt = $pdo->prepare("SHOW TABLES LIKE :prefix");
+                $stmt->execute([':prefix' => $prefix . '%']);
+                $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                
+                // Drop each table
+                foreach ($tables as $table) {
+                    $pdo->exec("DROP TABLE IF EXISTS `$table`");
+                }
+                
+                echo "<p style='color: green;'>Existing tables dropped successfully. Proceeding with fresh installation...</p>";
+            } catch (Exception $e) {
+                echo "<p style='color: orange;'>Note: Some tables may not have existed. Proceeding with installation...</p>";
+            }
+        }
+        
+        // Continue with normal installation process
         define('ODM_INSTALLING', 'true');
         echo 'Checking that templates_c folder is writable...<br />';
         if (!is_writable(ABSPATH . 'templates_c')) {
@@ -484,6 +509,16 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     ?></strong><br/><br/>
                 Required Database schema version: <?php echo REQUIRED_DB_VERSION;
     ?><br/><br />
+            </td>
+        </tr>
+        <tr>
+            <td><strong>FORCE FRESH INSTALLATION</strong> (Will delete ALL existing data!)<br/><br/></td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/install/index?op=install&force_fresh=1" class="button" onclick="return confirm('WARNING: This will DELETE ALL existing data and create a fresh installation. Are you absolutely sure?')" style="background-color: #ff6b6b; color: white; padding: 10px;">
+                    FORCE Fresh Install - DELETE ALL DATA
+                </a><br/><br/>
             </td>
         </tr>
         <tr>
