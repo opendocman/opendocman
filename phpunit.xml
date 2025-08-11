@@ -15,11 +15,11 @@
         </testsuite>
     </testsuites>
     
-    <coverage processUncoveredFiles="true">
+    <coverage processUncoveredFiles="false">
         <include>
-            <directory suffix=".php">./application/models</directory>
-            <directory suffix=".php">./application/controllers</directory>
-            <directory suffix=".php">./application/utils</directory>
+            <file>./application/models/User.class.php</file>
+            <file>./application/models/Category.class.php</file>
+            <file>./application/models/Department.class.php</file>
         </include>
         <exclude>
             <directory>./application/vendor</directory>

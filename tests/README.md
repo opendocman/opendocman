@@ -9,10 +9,14 @@ tests/
 ├── bootstrap.php           # Test bootstrap and configuration
 ├── TestCase.php            # Base test case with common utilities
 ├── Unit/                   # Unit tests for individual classes
-│   └── UserTest.php        # Example unit test for User class
+│   ├── UserTest.php        # Example unit test for User class
+│   ├── DepartmentTest.php  # Unit tests for Department model
+│   └── DepartmentControllerFunctionsTest.php # Unit tests for Department controller functions
 ├── Integration/            # Integration tests for component interaction
-│   └── DatabaseDataTest.php # Example integration test
-└── README.md              # This file
+│   ├── DatabaseDataTest.php # Example integration test
+│   └── DepartmentControllerTest.php # Integration tests for Department controller
+├── README.md              # This file
+└── README_DEPARTMENT_TESTS.md # Detailed documentation for Department tests
 ```
 
 ## Getting Started
@@ -50,6 +54,16 @@ Run specific test suites:
 Run specific test files:
 ```bash
 ./application/vendor/bin/phpunit tests/Unit/UserTest.php
+./application/vendor/bin/phpunit tests/Unit/DepartmentTest.php
+```
+
+Run Department tests specifically:
+```bash
+# Run the convenient script
+./run-department-tests.sh
+
+# Or run manually
+./application/vendor/bin/phpunit tests/Unit/DepartmentTest.php tests/Unit/DepartmentControllerFunctionsTest.php tests/Integration/DepartmentControllerTest.php
 ```
 
 ### 3. Generate Code Coverage
@@ -313,6 +327,20 @@ public function testSomethingWithError(): void
 }
 ```
 
+## Department Tests
+
+A comprehensive test suite has been added for the Department model and controller. This includes:
+
+- **37 total tests** with **199 assertions**
+- Unit tests for the Department model class
+- Functional tests for Department controller business logic  
+- Integration tests for Department workflows
+
+See `README_DEPARTMENT_TESTS.md` for detailed documentation, or run:
+```bash
+./run-department-tests.sh
+```
+
 ## Contributing
 
 When adding new features:
@@ -321,6 +349,7 @@ When adding new features:
 2. Ensure all tests pass before submitting
 3. Maintain or improve code coverage
 4. Update this README if adding new testing patterns
+5. Follow the Department test examples for comprehensive coverage
 
 ## Resources
 

@@ -7,7 +7,7 @@ OpenDocMan can be tested using the Katalon Recorder or other compatible apps.
 ### How-To Test
 
 * Install the Katalon Recorder plugin for Chrome
-* Copy the resources/test.txt file to /var/www/test.txt  on your mac or linux computer 
+* Copy the application/test/katalon/resources/test.txt file to /var/www/test.txt  on your mac or linux computer
 * Start a local docker-compose deployment:
   `docker-compose up -d --build`
 * Load a test suite and choose a suite from the /tests folder in the opendocman codebase
