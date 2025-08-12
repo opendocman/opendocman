@@ -70,7 +70,7 @@ CREATE TABLE odm_data (
   KEY id (id),
   KEY id_2 (id),
   KEY publishable (publishable),
-  KEY description (description)
+  KEY description (description(200))
 ) ENGINE = MYISAM;
 
 #
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.3.6');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.4.0');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `odm_settings` (
 `description` VARCHAR( 255 ) NOT NULL ,
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
-UNIQUE ( `name` )
+UNIQUE ( `name`(200))
 ) ENGINE = MYISAM;
 
 INSERT INTO `odm_settings` VALUES(NULL,'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
