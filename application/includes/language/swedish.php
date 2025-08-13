@@ -26,7 +26,7 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Tryck här för att se publika filer anonymt';
 $lang['forgotpassword'] = '<br>Glömt ditt lösenord?';
-$lang['install_folder']  = 'Säkerhetsnotis: Om du redan har installerat/uppdaterat ska du ta bort \'install\'-katalogen innan du fortsätter';
+
 $lang['signup'] = 'Registrera dig för ett användarkonto';
 $lang['welcome'] = 'Välkommen till OpenDocMan vårt dokumenhanteringssystem';
 $lang['welcome2'] = 'Logga in för att börja använda systemets kraftfulla möjligheter för lagring, publicering och revionshantering.';
@@ -463,6 +463,9 @@ $lang['userpage_username'] = 'Användarnamn';
 $lang['userpage_yes'] = 'Ja';
 
 // Admin Page
+$lang['adminpage_about_section_title'] = 'About';
+$lang['adminpage_about_section_app_version'] = 'App Version';
+$lang['adminpage_about_section_db_version'] = 'Database Version';
 $lang['adminpage_edit_filetypes'] = 'Ändra filtyper';
 $lang['adminpage_edit_settings'] = 'Ändra inställningar';
 $lang['adminpage_reports'] = 'Rapporter';
@@ -495,3 +498,61 @@ $lang['searchpage_all_meta'] = 'Alla utan-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Programbuggar';
+
+// Email Queue Interface
+$lang['email_queue_monitor'] = 'E-post kö övervakare';
+$lang['email_queue_status'] = 'E-post kö status';
+$lang['email_queue_pending'] = 'Väntande';
+$lang['email_queue_sent'] = 'Skickat';
+$lang['email_queue_failed'] = 'Misslyckades';
+$lang['email_queue_retry'] = 'Försök igen';
+$lang['email_queue_total'] = 'Totalt';
+$lang['email_queue_process'] = 'Bearbeta kö';
+$lang['email_queue_retry_failed'] = 'Försök igen misslyckade e-postmeddelanden';
+$lang['email_queue_delete_old'] = 'Ta bort gamla';
+$lang['email_queue_batch_size'] = 'Batchstorlek';
+$lang['email_queue_delete_sent_older_than'] = 'Ta bort skickade e-postmeddelanden äldre än';
+$lang['email_queue_days'] = 'dagar';
+$lang['email_queue_no_emails'] = 'Inga e-postmeddelanden hittades i kön';
+$lang['email_queue_confirm_retry'] = 'Återställ alla misslyckade e-postmeddelanden för nytt försök?';
+$lang['email_queue_confirm_delete'] = 'Ta bort gamla skickade e-postmeddelanden?';
+$lang['email_queue_confirm_delete_single'] = 'Ta bort detta e-postmeddelande?';
+$lang['email_queue_cron_setup'] = 'Cron Job-inställning';
+$lang['email_queue_manual_processing'] = 'Manuell bearbetning';
+$lang['email_queue_auto_refresh'] = 'Sidan uppdateras automatiskt var 30:e sekund';
+$lang['email_queue_back_to_admin'] = 'Tillbaka till OpenDocMan';
+$lang['email_queue_details'] = 'Detaljer';
+$lang['email_queue_delete'] = 'Ta bort';
+$lang['email_queue_filter_by_status'] = 'Filtrera efter status';
+$lang['email_queue_all_statuses'] = 'Alla statusar';
+$lang['email_queue_limit'] = 'Gräns';
+$lang['email_queue_refresh_now'] = 'Uppdatera nu';
+$lang['email_queue_last_updated'] = 'Senast uppdaterad';
+
+// Email Queue Interface - Additional Strings
+$lang['email_queue_monitor_title'] = 'E-post kö övervakare - OpenDocMan';
+$lang['email_queue_monitor_description'] = 'Övervaka och hantera OpenDocMan e-post notifikationskö. Sidan uppdateras automatiskt var 30:e sekund.';
+$lang['email_queue_back_to_opendocman'] = 'Tillbaka till OpenDocMan';
+$lang['email_queue_queue_actions'] = 'Kö-åtgärder';
+$lang['email_queue_batch_size_label'] = 'Batchstorlek:';
+$lang['email_queue_delete_sent_older_than_label'] = 'Ta bort skickade e-postmeddelanden äldre än:';
+$lang['email_queue_email_list'] = 'E-postlista';
+$lang['email_queue_id'] = 'ID';
+$lang['email_queue_to'] = 'Till';
+$lang['email_queue_subject'] = 'Ämne';
+$lang['email_queue_status_column'] = 'Status';
+$lang['email_queue_retries'] = 'Försök';
+$lang['email_queue_created'] = 'Skapad';
+$lang['email_queue_sent_time'] = 'Skickad';
+$lang['email_queue_file_id'] = 'Fil-ID';
+$lang['email_queue_actions'] = 'Åtgärder';
+$lang['email_queue_error'] = 'Fel';
+$lang['email_queue_cron_setup_title'] = 'Cron Job-inställning';
+$lang['email_queue_cron_description'] = 'För att automatiskt bearbeta e-postkön, lägg till denna rad i din crontab:';
+$lang['email_queue_cron_every_minute'] = '# Bearbeta e-postkö varje minut';
+$lang['email_queue_cron_every_5_minutes'] = '# Eller var 5:e minut för lägre serverbelastning';
+$lang['email_queue_manual_processing_title'] = 'Manuell bearbetning:';
+$lang['email_queue_processed_emails'] = 'Bearbetade {count} e-postmeddelanden. Skickade: {sent}, Misslyckade: {failed}';
+$lang['email_queue_reset_failed_emails'] = 'Återställde {count} misslyckade e-postmeddelanden för nytt försök';
+$lang['email_queue_deleted_old_emails'] = 'Tog bort {count} gamla skickade e-postmeddelanden (äldre än {days} dagar)';
+$lang['email_queue_email_deleted'] = 'E-postmeddelande borttaget';

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (C) 2000-2021. Stephen Lawrence
+ * Copyright (C) 2000-2025. Stephen Lawrence
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,5 +18,7 @@
  */
 
 // version information
+$GLOBALS['CONFIG']['current_version'] = '1.4.5';
 
-$GLOBALS['CONFIG']['current_version'] = '1.4.4';
+// Database schema version required by this application version. May differ from current version.
+$GLOBALS['CONFIG']['required_db_version'] = '1.4.5';

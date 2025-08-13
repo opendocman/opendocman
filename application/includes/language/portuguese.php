@@ -493,6 +493,64 @@ $lang['categoryviewpage_list_of_files_title'] = 'Arquivos atribuídos a esta cat
 $lang['searchpage_all_meta'] = 'Todos os metadados não udf';
 
 // Footer
-$lang['footer_support'] = 'Suporte';
+$lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+
+// Email Queue Interface
+$lang['email_queue_monitor'] = 'Monitor de Fila de Email';
+$lang['email_queue_status'] = 'Status da Fila de Email';
+$lang['email_queue_pending'] = 'Pendente';
+$lang['email_queue_sent'] = 'Enviado';
+$lang['email_queue_failed'] = 'Falhou';
+$lang['email_queue_retry'] = 'Tentar Novamente';
+$lang['email_queue_total'] = 'Total';
+$lang['email_queue_process'] = 'Processar Fila';
+$lang['email_queue_retry_failed'] = 'Tentar Novamente Emails Falhados';
+$lang['email_queue_delete_old'] = 'Excluir Antigos';
+$lang['email_queue_batch_size'] = 'Tamanho do lote';
+$lang['email_queue_delete_sent_older_than'] = 'Excluir emails enviados anteriores a';
+$lang['email_queue_days'] = 'dias';
+$lang['email_queue_no_emails'] = 'Nenhum email encontrado na fila';
+$lang['email_queue_confirm_retry'] = 'Redefinir todos os emails falhados para nova tentativa?';
+$lang['email_queue_confirm_delete'] = 'Excluir emails antigos enviados?';
+$lang['email_queue_confirm_delete_single'] = 'Excluir este email?';
+$lang['email_queue_cron_setup'] = 'Configuração de Tarefa Cron';
+$lang['email_queue_manual_processing'] = 'Processamento manual';
+$lang['email_queue_auto_refresh'] = 'A página atualiza automaticamente a cada 30 segundos';
+$lang['email_queue_back_to_admin'] = 'Voltar ao OpenDocMan';
+$lang['email_queue_details'] = 'Detalhes';
+$lang['email_queue_delete'] = 'Excluir';
+$lang['email_queue_filter_by_status'] = 'Filtrar por status';
+$lang['email_queue_all_statuses'] = 'Todos os status';
+$lang['email_queue_limit'] = 'Limite';
+$lang['email_queue_refresh_now'] = 'Atualizar agora';
+$lang['email_queue_last_updated'] = 'Última atualização';
+
+// Email Queue Interface - Additional Strings
+$lang['email_queue_monitor_title'] = 'Monitor de Fila de Email - OpenDocMan';
+$lang['email_queue_monitor_description'] = 'Monitorar e gerenciar a fila de notificações de email do OpenDocMan. A página atualiza automaticamente a cada 30 segundos.';
+$lang['email_queue_back_to_opendocman'] = 'Voltar ao OpenDocMan';
+$lang['email_queue_queue_actions'] = 'Ações da Fila';
+$lang['email_queue_batch_size_label'] = 'Tamanho do lote:';
+$lang['email_queue_delete_sent_older_than_label'] = 'Excluir emails enviados anteriores a:';
+$lang['email_queue_email_list'] = 'Lista de Emails';
+$lang['email_queue_id'] = 'ID';
+$lang['email_queue_to'] = 'Para';
+$lang['email_queue_subject'] = 'Assunto';
+$lang['email_queue_status_column'] = 'Status';
+$lang['email_queue_retries'] = 'Tentativas';
+$lang['email_queue_created'] = 'Criado';
+$lang['email_queue_sent_time'] = 'Enviado';
+$lang['email_queue_file_id'] = 'ID do Arquivo';
+$lang['email_queue_actions'] = 'Ações';
+$lang['email_queue_error'] = 'Erro';
+$lang['email_queue_cron_setup_title'] = 'Configuração de Tarefa Cron';
+$lang['email_queue_cron_description'] = 'Para processar automaticamente a fila de email, adicione esta linha ao seu crontab:';
+$lang['email_queue_cron_every_minute'] = '# Processar fila de email a cada minuto';
+$lang['email_queue_cron_every_5_minutes'] = '# Ou a cada 5 minutos para menor carga do servidor';
+$lang['email_queue_manual_processing_title'] = 'Processamento manual:';
+$lang['email_queue_processed_emails'] = 'Processados {count} emails. Enviados: {sent}, Falhados: {failed}';
+$lang['email_queue_reset_failed_emails'] = 'Redefinidos {count} emails falhados para nova tentativa';
+$lang['email_queue_deleted_old_emails'] = 'Excluídos {count} emails antigos enviados (anteriores a {days} dias)';
+$lang['email_queue_email_deleted'] = 'Email excluído';

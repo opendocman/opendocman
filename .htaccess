@@ -1,0 +1,90 @@
+# OpenDocMan Performance Optimization
+# Increase PHP upload and execution limits for better file upload performance
+
+# Enable PHP configuration overrides
+php_flag file_uploads On
+
+# Increase upload file size limit to 100MB
+php_value upload_max_filesize 100M
+
+# Increase POST data size limit to 110MB (should be larger than upload_max_filesize)
+php_value post_max_size 110M
+
+# Increase memory limit to handle large file uploads
+php_value memory_limit 256M
+
+# Increase maximum execution time to 5 minutes for large uploads
+php_value max_execution_time 300
+
+# Increase maximum input time to 5 minutes
+php_value max_input_time 300
+
+# Increase maximum number of files that can be uploaded simultaneously
+php_value max_file_uploads 20
+
+# Increase maximum number of input variables (useful for forms with many fields)
+php_value max_input_vars 3000
+
+# Security: Disable dangerous PHP functions
+php_value disable_functions "exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source"
+
+# Security: Hide PHP version
+php_flag expose_php Off
+
+# Security: Disable allow_url_include
+php_flag allow_url_include Off
+
+# Security: Disable allow_url_fopen (comment out if needed for email functionality)
+# php_flag allow_url_fopen Off
+
+# Performance: Enable output compression
+php_flag zlib.output_compression On
+
+# Performance: Set compression level
+php_value zlib.output_compression_level 6
+
+# Error handling: Log errors but don't display them in production
+php_flag display_errors Off
+php_flag log_errors On
+
+# Session security
+php_flag session.cookie_httponly On
+php_flag session.cookie_secure On
+php_value session.cookie_samesite "Strict"
+
+# File upload security: Restrict upload directory access
+<Files ~ "\.dat$">
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(inc|conf|config|cfg|ini)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Prevent access to backup files
+<FilesMatch "\.(bak|backup|old|orig|save|tmp)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Browser caching for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/ico "access plus 1 month"
+    ExpiresByType image/icon "access plus 1 month"
+    ExpiresByType text/plain "access plus 1 month"
+</IfModule>
+
+# Gzip compression for better performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript
+</IfModule>

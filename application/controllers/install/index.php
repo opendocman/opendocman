@@ -43,7 +43,8 @@ if (false) {
 
 session_start();
 
-define('REQUIRED_DB_VERSION', '1.4.0');
+// Include version file to get required_db_version
+require_once(__DIR__ . '/../../version.php');
 
 // Search for the config file in parent folder and the docker-compose configs mount directory
 // If not found, redirect to index for install routine
@@ -110,6 +111,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 11rc2 and is upgrading
@@ -129,6 +131,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 11 and is upgrading
@@ -147,6 +150,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 12p1 and is upgrading
@@ -164,6 +168,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 12p3 and is upgrading
@@ -180,6 +185,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 124 and is upgrading
@@ -195,6 +201,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1252 and is upgrading
@@ -209,6 +216,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1256 and is upgrading
@@ -222,6 +230,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1257 or 126beta and is upgrading
@@ -234,6 +243,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1261 and is upgrading
@@ -245,6 +255,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1262 and is upgrading
@@ -255,6 +266,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has version 1262 and is upgrading
@@ -264,6 +276,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has DB version 128 and is upgrading
@@ -272,6 +285,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
+            do_update_140();
             break;
 
         // User has DB version 129 and is upgrading
@@ -290,6 +304,12 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         // User has DB version 136 and is upgrading
         case "update_136":
             do_update_136();
+            do_update_140();
+            break;
+
+        // User has DB version 140 and is upgrading
+        case "update_140":
+            do_update_140();
             break;
 
         default:
@@ -301,28 +321,28 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
     {
         // Check if this is a forced fresh installation
         $force_fresh = isset($_GET['force_fresh']) && $_GET['force_fresh'] == '1';
-        
+
         if ($force_fresh) {
             // Drop all existing tables for fresh installation
             $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
-            
+
             try {
                 // Get list of tables with our prefix
                 $stmt = $pdo->prepare("SHOW TABLES LIKE :prefix");
                 $stmt->execute([':prefix' => $prefix . '%']);
                 $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
-                
+
                 // Drop each table
                 foreach ($tables as $table) {
                     $pdo->exec("DROP TABLE IF EXISTS `$table`");
                 }
-                
+
                 echo "<p style='color: green;'>Existing tables dropped successfully. Proceeding with fresh installation...</p>";
             } catch (Exception $e) {
                 echo "<p style='color: orange;'>Note: Some tables may not have existed. Proceeding with installation...</p>";
             }
         }
-        
+
         // Continue with normal installation process
         define('ODM_INSTALLING', 'true');
         echo 'Checking that templates_c folder is writable...<br />';
@@ -340,7 +360,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'Database Created<br />';
 
         include_once("odm.php");
-        
+
         // Helper function to get environment variables with fallbacks
         function getEnvVar($name, $default = null) {
             if (isset($_ENV[$name]) && $_ENV[$name] !== '') {
@@ -355,32 +375,32 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             }
             return $default;
         }
-        
+
         // Enhanced completion message for Docker environments
         echo '<div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 10px 0; border-radius: 5px;">';
         echo '<h3 style="color: #155724; margin-top: 0;">🎉 Installation Complete!</h3>';
-        
+
         if (getEnvVar('IS_DOCKER') === 'true') {
             echo '<p><strong>🐳 Docker Environment Detected</strong></p>';
             $http_port = getEnvVar('HTTP_PORT', '8080');
             $hostname = getEnvVar('ODM_HOSTNAME', 'localhost');
             echo '<p><strong>Access URL:</strong> <a href="http://' . $hostname . ':' . $http_port . '" target="_blank">http://' . $hostname . ':' . $http_port . '</a></p>';
         }
-        
+
         echo '<p><strong>Login Credentials:</strong></p>';
         echo '<ul>';
         echo '<li><strong>Username:</strong> admin</li>';
         echo '<li><strong>Password:</strong> <code style="background-color: #f8f9fa; padding: 2px 4px; border-radius: 3px;">' . $_SESSION['adminpass'] . '</code>';
-        
+
         if (getEnvVar('IS_DOCKER') === 'true') {
             echo ' <em>(from environment)</em>';
         } else {
             echo ' <em>(WRITE THIS DOWN!)</em>';
         }
-        
+
         echo '</li>';
         echo '</ul>';
-        
+
         if (getEnvVar('IS_DOCKER') === 'true') {
             echo '<p><strong>💡 Next Steps:</strong></p>';
             echo '<ul>';
@@ -390,10 +410,10 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             echo '<li>Use <code>make backup</code> to create backups</li>';
             echo '</ul>';
         }
-        
+
         echo '</div>';
         echo '<p><a href="../settings?submit=update" class="button">Configure Site Settings</a></p>';
-        
+
         unset($_SESSION['datadir']);
     } // End Install
 
@@ -512,6 +532,26 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'All Done with update! Click <a href="../index">HERE</a> to login<br>';
     }
 
+    function do_update_140()
+    {
+        echo 'Updating from DB versions 1.4.0...<br />';
+        include("upgrade_140.php");
+
+        echo '<hr style="border: 2px solid green; margin: 20px 0;">';
+        echo '<h3 style="color: green;">✓ Email Queue System Upgrade Complete!</h3>';
+        echo '<p><strong>Your database has been successfully upgraded to version 1.4.5.</strong></p>';
+        echo '<p>The new email queue system has been installed and requires configuration.</p>';
+        echo '<br>';
+        echo '<p><strong>Recommended Next Steps:</strong></p>';
+        echo '<p>1. <a href="../settings" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">📧 Configure Email Queue Settings</a></p>';
+        echo '<p>2. Set up a cron job to process emails: <code>*/5 * * * * php /path/to/opendocman/application/cron/process_email_queue.php</code></p>';
+        echo '<br>';
+        echo '<p><em>Or skip configuration for now:</em></p>';
+        echo '<p><a href="../index" style="background-color: #28a745; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px;">Continue to Application</a></p>';
+        echo '<hr style="border: 2px solid green; margin: 20px 0;">';
+    }
+
+
     function print_intro(PDO $pdo)
     {
         include_once(__DIR__ . '/../../version.php');
@@ -519,7 +559,7 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
 
         $prefix = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix'] : $GLOBALS['CONFIG']['db_prefix'];
         $db_version = Settings::get_db_version($pdo, $prefix);
-        $is_upgrade = ($db_version != REQUIRED_DB_VERSION);
+        $is_upgrade = ($db_version != $GLOBALS['CONFIG']['required_db_version']);
 
         ?>
     <h3>Welcome to the OpenDocMan Database Installer/Updater Tool</h3>
@@ -560,22 +600,15 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         <tr>
             <td>Your current Database schema version: <strong><?php echo(htmlentities($db_version));
     ?></strong><br/><br/>
-                Required Database schema version: <?php echo REQUIRED_DB_VERSION;
+            Required Database schema version: <?php echo $GLOBALS['CONFIG']['required_db_version'];
     ?><br/><br />
             </td>
         </tr>
         <tr>
-            <td><strong>FORCE FRESH INSTALLATION</strong> (Will delete ALL existing data!)<br/><br/></td>
-        </tr>
-        <tr>
-            <td>
-                <a href="/install/index?op=install&force_fresh=1" class="button" onclick="return confirm('WARNING: This will DELETE ALL existing data and create a fresh installation. Are you absolutely sure?')" style="background-color: #ff6b6b; color: white; padding: 10px;">
-                    FORCE Fresh Install - DELETE ALL DATA
-                </a><br/><br/>
-            </td>
-        </tr>
-        <tr>
             <td>Upgrade your current database from a previous version<br/><br/></td>
+        </tr>
+        <tr>
+            <td><a href="/install/index?op=update_140">Upgrade from DB schema version 1.4.0</a><br><br></td>
         </tr>
         <tr>
             <td><a href="/install/index?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>
@@ -624,6 +657,22 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </tr>
         <tr>
             <td><a href="/install/index?op=update_10">Upgrade from DB schema version 1.0</a><br><br></td>
+        </tr>
+        <tr>
+            <td><hr style="margin: 20px 0;"></td>
+        </tr>
+        <tr>
+            <td><strong style="color: #ff6b6b;">DANGER ZONE</strong><br/><br/></td>
+        </tr>
+        <tr>
+            <td><strong>FORCE FRESH INSTALLATION</strong> (Will delete ALL existing data!)<br/><br/></td>
+        </tr>
+        <tr>
+            <td>
+                <a href="/install/index?op=install&force_fresh=1" class="button" onclick="return confirm('WARNING: This will DELETE ALL existing data and create a fresh installation. Are you absolutely sure?')" style="background-color: #ff6b6b; color: white; padding: 10px;">
+                    FORCE Fresh Install - DELETE ALL DATA
+                </a><br/><br/>
+            </td>
         </tr>
         <?php
 

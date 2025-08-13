@@ -33,6 +33,7 @@ spl_autoload_register(function ($class) {
     include $class . '.class.php';
 });
 
+// @TODO: Re-enable aura router
 // Temporarily disable Aura Router due to dependency issues
 // $routerContainer = new Aura\Router\RouterContainer();
 // $map = $routerContainer->getMap();
@@ -79,6 +80,27 @@ if($configExists) {
     }
 
     if (isset($table_count) && $table_count > 0) {
+        // Database exists - now check if schema version matches required version
+        // But only if we're not already accessing an install route
+        $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+        $path = parse_url($requestUri, PHP_URL_PATH);
+        $path = trim($path, '/');
+
+        if (strpos($path, 'install/') !== 0) {
+            // Not an install route - check database version
+            require '../application/version.php';
+            require '../application/models/Settings.class.php';
+
+            $current_db_version = Settings::get_db_version($pdo);
+
+            if ($current_db_version !== $GLOBALS['CONFIG']['required_db_version']) {
+                // Database upgrade needed - redirect to installer
+                header('Location: /install/index');
+                exit;
+            }
+        }
+
+        // Database version is current or we're accessing install routes - proceed normally
         require '../application/controllers/helpers/functions.php';
         require '../application/odm-init.php';
     } else {
