@@ -31,7 +31,7 @@ class EmailQueue
     const STATUS_PENDING = 'pending';
     const STATUS_SENT = 'sent';
     const STATUS_FAILED = 'failed';
-    const STATUS_RETRY = 'retry';
+    const STATUS_RETRY = 'processing';
     
     // Maximum retry attempts
     const MAX_RETRIES = 3;
@@ -52,24 +52,23 @@ class EmailQueue
             CREATE TABLE IF NOT EXISTS `{$this->table_name}` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,
                 `to_email` varchar(255) NOT NULL,
-                `to_name` varchar(255) DEFAULT NULL,
                 `from_email` varchar(255) NOT NULL,
-                `from_name` varchar(255) DEFAULT NULL,
                 `subject` varchar(500) NOT NULL,
                 `body` text NOT NULL,
                 `headers` text DEFAULT NULL,
-                `status` enum('pending','sent','failed','retry') DEFAULT 'pending',
-                `retry_count` int(3) DEFAULT 0,
-                `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-                `sent_at` timestamp NULL DEFAULT NULL,
+                `priority` int(11) DEFAULT 5,
+                `status` enum('pending','processing','sent','failed') DEFAULT 'pending',
+                `attempts` int(11) DEFAULT 0,
+                `max_attempts` int(11) DEFAULT 3,
                 `error_message` text DEFAULT NULL,
-                `priority` int(3) DEFAULT 5,
-                `file_id` int(11) DEFAULT NULL,
-                INDEX `idx_status` (`status`),
-                INDEX `idx_created_at` (`created_at`),
-                INDEX `idx_priority` (`priority`),
-                INDEX `idx_file_id` (`file_id`),
-                PRIMARY KEY (`id`)
+                `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+                `scheduled_at` timestamp NULL DEFAULT NULL,
+                `sent_at` timestamp NULL DEFAULT NULL,
+                `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                KEY `status_scheduled` (`status`, `scheduled_at`),
+                KEY `created_at` (`created_at`),
+                KEY `priority` (`priority`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ";
         
@@ -217,8 +216,8 @@ class EmailQueue
         // Get pending emails ordered by priority and creation time
         $query = "
             SELECT * FROM `{$this->table_name}` 
-            WHERE status IN (:pending, :retry) 
-            AND retry_count < :max_retries
+            WHERE status IN (:pending, :processing) 
+            AND attempts < max_attempts
             ORDER BY priority ASC, created_at ASC
             LIMIT :limit
         ";
@@ -226,8 +225,7 @@ class EmailQueue
         try {
             $stmt = $this->connection->prepare($query);
             $stmt->bindValue(':pending', self::STATUS_PENDING);
-            $stmt->bindValue(':retry', self::STATUS_RETRY);
-            $stmt->bindValue(':max_retries', self::MAX_RETRIES, PDO::PARAM_INT);
+            $stmt->bindValue(':processing', self::STATUS_RETRY);
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
             $stmt->execute();
             $emails = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -338,10 +336,10 @@ class EmailQueue
     {
         $query = "
             UPDATE `{$this->table_name}` 
-            SET retry_count = retry_count + 1, 
+            SET attempts = attempts + 1, 
                 status = CASE 
-                    WHEN retry_count + 1 >= :max_retries THEN :failed_status
-                    ELSE :retry_status
+                    WHEN attempts + 1 >= max_attempts THEN :failed_status
+                    ELSE :processing_status
                 END,
                 error_message = :error_message
             WHERE id = :id
@@ -350,9 +348,8 @@ class EmailQueue
         try {
             $stmt = $this->connection->prepare($query);
             $stmt->execute([
-                ':max_retries' => self::MAX_RETRIES,
                 ':failed_status' => self::STATUS_FAILED,
-                ':retry_status' => self::STATUS_RETRY,
+                ':processing_status' => self::STATUS_RETRY,
                 ':error_message' => $error_message,
                 ':id' => $email_id
             ]);

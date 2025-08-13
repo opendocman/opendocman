@@ -44,6 +44,9 @@ require_once 'models/EmailQueue.class.php';
 $email_queue = new EmailQueue($pdo);
 $table_name = $GLOBALS['CONFIG']['db_prefix'] . 'email_queue';
 
+// Define app directory for cron setup instructions
+$app_dir = dirname(__DIR__);
+
 // Handle POST actions and redirect to prevent resubmission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
@@ -64,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'retry_failed':
-            $query = "UPDATE `{$table_name}` SET status = 'retry', retry_count = 0 WHERE status = 'failed'";
+            $query = "UPDATE `{$table_name}` SET status = 'processing', attempts = 0 WHERE status = 'failed'";
             $stmt = $pdo->prepare($query);
             $result = $stmt->execute();
             $affected = $stmt->rowCount();
@@ -260,7 +263,7 @@ $emails = $stmt->fetchAll();
                 <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>><?php echo msg('email_queue_pending'); ?></option>
                 <option value="sent" <?php echo $status_filter === 'sent' ? 'selected' : ''; ?>><?php echo msg('email_queue_sent'); ?></option>
                 <option value="failed" <?php echo $status_filter === 'failed' ? 'selected' : ''; ?>><?php echo msg('email_queue_failed'); ?></option>
-                <option value="retry" <?php echo $status_filter === 'retry' ? 'selected' : ''; ?>><?php echo msg('email_queue_retry'); ?></option>
+                <option value="processing" <?php echo $status_filter === 'processing' ? 'selected' : ''; ?>><?php echo msg('email_queue_retry'); ?></option>
             </select>
 
             <label style="margin-left: 20px;"><?php echo msg('email_queue_limit'); ?>:</label>
