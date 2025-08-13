@@ -10,3 +10,6 @@ Thumbs.db
 config.php
 **/*.tpl.php
 .phpunit.result.cache
+.env
+.env.backup.*
+test-env.php

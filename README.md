@@ -36,10 +36,179 @@ Features
 
 Installing via Docker is the easiest option. This will run the database and app inside a docker-compose deployment.
 The docker-configs folder and the files-data folder will be created to persist when you stop/start/update your
-docker-compose deployment. 
+docker-compose deployment.
 
-1. Ensure you have a Docker service available
-1. `docker up -d --build`
+#### Quick Setup (Recommended)
+
+For the fastest setup with automatically generated secure passwords:
+
+1. **Generate environment configuration:**
+   ```bash
+   ./generate-env-secrets.sh
+   ```
+   This script will:
+   - Create a `.env` file from the template
+   - Generate secure passwords for database and admin user
+   - Prompt you for basic configuration (ports, hostname, email)
+   - Validate your configuration
+
+2. **Start the application:**
+   ```bash
+   make up
+   # OR
+   docker-compose up -d --build
+   ```
+
+3. **Access your application:**
+   - URL: `http://localhost:8080` (or your configured port)
+   - Username: `admin`
+   - Password: (shown during setup or check your `.env` file)
+
+#### Manual Environment Configuration
+
+If you prefer to configure manually:
+
+1. **Copy the environment template:**
+   ```bash
+   cp .env.sample .env
+   ```
+
+2. **Edit the `.env` file:**
+   ```bash
+   nano .env
+   ```
+
+   **Required settings to change:**
+   - `MYSQL_PASSWORD` - Set a secure database password
+   - `MYSQL_ROOT_PASSWORD` - Set a secure root password  
+   - `APP_DB_PASS` - Must match `MYSQL_PASSWORD`
+   - `ADMIN_PASSWORD` - Set the initial admin user password
+   - `SESSION_SECRET` - Set a random string for session encryption
+
+3. **Validate your configuration:**
+   ```bash
+   ./validate-env.sh
+   ```
+
+#### Environment Management Tools
+
+Several helper scripts are provided for managing your Docker environment:
+
+- **`./generate-env-secrets.sh`** - Interactive setup with secure password generation
+- **`./validate-env.sh`** - Validate your `.env` configuration
+- **`make help`** - Show all available Makefile commands
+- **`make setup`** - Complete setup (generate + validate + start)
+- **`make status`** - Show service status and access information
+- **`make backup`** - Create backup of database and files
+- **`make logs`** - View application logs
+
+#### Environment Diagnostics
+
+If you encounter issues with your Docker setup, use the built-in diagnostics:
+
+- **Environment Diagnostics Page**: Visit `/install/env-check.php` to view a comprehensive report of your environment configuration
+- **During Installation**: Look for the "🔧 View Environment Diagnostics" link on the setup page
+- **Troubleshooting**: The diagnostics page shows configuration status, missing variables, and security recommendations
+
+#### Makefile Commands
+
+Use these convenient commands for managing your installation:
+
+```bash
+make setup      # Complete setup from scratch
+make up         # Start services  
+make down       # Stop services
+make restart    # Restart services
+make logs       # View logs
+make status     # Show status and access URLs
+make backup     # Create backup
+make clean      # Remove all data (WARNING: destructive)
+```
+
+#### Environment Variables Reference
+
+The `.env` file supports comprehensive configuration across these categories:
+
+- **Database Configuration**: MySQL/MariaDB settings and connection parameters
+- **Application Configuration**: OpenDocMan-specific settings  
+- **Port Configuration**: External port mappings for web and database services
+- **Security Configuration**: Passwords, secrets, and file upload limits
+- **Email Configuration**: SMTP settings for notifications
+- **SSL/TLS Configuration**: Certificate paths and SSL settings
+- **Volume Mount Paths**: Optional host directory mappings
+- **Development Settings**: Debug mode and logging configuration
+- **Backup Configuration**: Automated backup settings
+
+For a complete list of available variables and their descriptions, see the `.env.sample` file.
+
+#### Installation Form Auto-Population
+
+When running in Docker, the installation form at `/install/setup-config.php` will automatically pre-populate fields with values from your `.env` file:
+
+- **Database settings** (host, name, user, password)
+- **Admin password** (from `ADMIN_PASSWORD`)
+- **Table prefix** (from `DB_PREFIX`)
+- **Data directory** (from `ODM_DATA_DIR`)
+
+This eliminates manual entry and reduces configuration errors during setup.
+
+#### Docker Environment Features Summary
+
+This OpenDocMan installation includes comprehensive Docker environment management with the following features:
+
+**🔧 Environment Management Tools:**
+- **`.env.sample`** - Template with 140+ configuration options across 8 categories
+- **`generate-env-secrets.sh`** - Interactive setup with automatic secure password generation
+- **`validate-env.sh`** - Configuration validation with security checks and recommendations
+- **`Makefile`** - 25+ commands for container management, backup, and maintenance
+
+**🔒 Security Features:**
+- Automatic generation of secure passwords (24-32 characters)
+- Session secret generation (64-character hex)
+- Password strength validation and security warnings
+- Environment variable masking in diagnostics
+- `.env` file automatically excluded from version control
+
+**📋 Installation Auto-Population:**
+- Database configuration pre-filled from environment variables
+- Admin password automatically populated from `ADMIN_PASSWORD`
+- Table prefix, data directory, and other settings pre-configured
+- Docker environment detection with helpful UI indicators
+
+**🛠️ Diagnostics and Troubleshooting:**
+- **Environment Diagnostics** (`/install/env-check.php`) - Comprehensive configuration analysis
+- **Test Script** (`/test-env.php`) - Quick environment variable verification
+- Real-time validation during installation process
+- Detailed status reporting and recommendations
+
+**📦 Configuration Categories:**
+- Database settings (MySQL/MariaDB)
+- Security configuration (passwords, secrets, file limits)
+- Port configuration (HTTP, HTTPS, database, PHP-FPM)
+- Email/SMTP settings for notifications
+- SSL/TLS certificate configuration
+- Volume mount paths (optional host directory mapping)
+- Development settings (debug mode, logging)
+- Backup and maintenance configuration
+
+**🚀 Management Commands:**
+```bash
+make setup      # Complete setup with secure password generation
+make up         # Start services with environment validation
+make status     # Show service status and access URLs
+make backup     # Create database and file backups
+make logs       # View application logs
+make clean      # Remove all data (with confirmation)
+```
+
+#### Security Notes
+
+- Your `.env` file contains sensitive passwords and secrets
+- Never commit `.env` to version control (it's in `.gitignore`)
+- Keep a secure backup of your `.env` file
+- Use the validation script to check for common security issues
+- Environment diagnostics automatically mask sensitive values
+- Generated passwords meet security best practices
 
 ### Installing to a web server (Automatic)
 

@@ -340,7 +340,60 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'Database Created<br />';
 
         include_once("odm.php");
-        echo 'All Done with installation! <p><strong>Username: admin</strong></p><p><strong>Password (WRITE IT DOWN): ' . $_SESSION['adminpass'] . '</strong></p></br />Click <a href="../settings?submit=update">HERE</a> to edit your site settings';
+        
+        // Helper function to get environment variables with fallbacks
+        function getEnvVar($name, $default = null) {
+            if (isset($_ENV[$name]) && $_ENV[$name] !== '') {
+                return $_ENV[$name];
+            }
+            $value = getenv($name);
+            if ($value !== false && $value !== '') {
+                return $value;
+            }
+            if (isset($_SERVER[$name]) && $_SERVER[$name] !== '') {
+                return $_SERVER[$name];
+            }
+            return $default;
+        }
+        
+        // Enhanced completion message for Docker environments
+        echo '<div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin: 10px 0; border-radius: 5px;">';
+        echo '<h3 style="color: #155724; margin-top: 0;">🎉 Installation Complete!</h3>';
+        
+        if (getEnvVar('IS_DOCKER') === 'true') {
+            echo '<p><strong>🐳 Docker Environment Detected</strong></p>';
+            $http_port = getEnvVar('HTTP_PORT', '8080');
+            $hostname = getEnvVar('ODM_HOSTNAME', 'localhost');
+            echo '<p><strong>Access URL:</strong> <a href="http://' . $hostname . ':' . $http_port . '" target="_blank">http://' . $hostname . ':' . $http_port . '</a></p>';
+        }
+        
+        echo '<p><strong>Login Credentials:</strong></p>';
+        echo '<ul>';
+        echo '<li><strong>Username:</strong> admin</li>';
+        echo '<li><strong>Password:</strong> <code style="background-color: #f8f9fa; padding: 2px 4px; border-radius: 3px;">' . $_SESSION['adminpass'] . '</code>';
+        
+        if (getEnvVar('IS_DOCKER') === 'true') {
+            echo ' <em>(from environment)</em>';
+        } else {
+            echo ' <em>(WRITE THIS DOWN!)</em>';
+        }
+        
+        echo '</li>';
+        echo '</ul>';
+        
+        if (getEnvVar('IS_DOCKER') === 'true') {
+            echo '<p><strong>💡 Next Steps:</strong></p>';
+            echo '<ul>';
+            echo '<li>Your admin password is stored in your <code>.env</code> file</li>';
+            echo '<li>You can change settings using the admin panel</li>';
+            echo '<li>Use <code>make logs</code> to view application logs</li>';
+            echo '<li>Use <code>make backup</code> to create backups</li>';
+            echo '</ul>';
+        }
+        
+        echo '</div>';
+        echo '<p><a href="../settings?submit=update" class="button">Configure Site Settings</a></p>';
+        
         unset($_SESSION['datadir']);
     } // End Install
 

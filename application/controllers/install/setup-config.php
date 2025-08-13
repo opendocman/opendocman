@@ -48,6 +48,60 @@ error_reporting(15);
 
 define('ABSPATH', dirname(dirname(dirname(__FILE__))) . '/');
 
+/**
+ * Load environment variables into $_ENV if not already available
+ * This fixes issues where Docker environment variables aren't accessible via $_ENV
+ */
+if (!isset($_ENV['IS_DOCKER']) && getenv('IS_DOCKER')) {
+    // Force populate $_ENV from environment if it's not already populated
+    foreach ($_SERVER as $key => $value) {
+        if (!isset($_ENV[$key])) {
+            $_ENV[$key] = $value;
+        }
+    }
+    
+    // Also try to get environment variables directly
+    $env_vars = [
+        'IS_DOCKER', 'ADMIN_PASSWORD', 'SESSION_SECRET',
+        'APP_DB_HOST', 'APP_DB_NAME', 'APP_DB_USER', 'APP_DB_PASS',
+        'MYSQL_DATABASE', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_ROOT_PASSWORD',
+        'ODM_DATA_DIR', 'DB_PREFIX', 'ODM_HOSTNAME',
+        'HTTP_PORT', 'HTTPS_PORT', 'DB_EXTERNAL_PORT'
+    ];
+    
+    foreach ($env_vars as $var) {
+        if (!isset($_ENV[$var])) {
+            $value = getenv($var);
+            if ($value !== false) {
+                $_ENV[$var] = $value;
+            }
+        }
+    }
+}
+
+/**
+ * Helper function to get environment variables with fallback methods
+ */
+function getEnvVar($name, $default = null) {
+    // Try $_ENV first
+    if (isset($_ENV[$name]) && $_ENV[$name] !== '') {
+        return $_ENV[$name];
+    }
+    
+    // Try getenv() as fallback
+    $value = getenv($name);
+    if ($value !== false && $value !== '') {
+        return $value;
+    }
+    
+    // Try $_SERVER as last resort
+    if (isset($_SERVER[$name]) && $_SERVER[$name] !== '') {
+        return $_SERVER[$name];
+    }
+    
+    return $default;
+}
+
 /**#@-*/
 
 if (!file_exists(ABSPATH . 'configs/config-sample.php')) {
@@ -149,42 +203,57 @@ deny from all
     ?>
 <form method="post" id="configform" action="setup-config?step=2">
 	<p>Below you should enter your database connection details. If you're not sure about these, contact your host. </p>
+	<?php if (getEnvVar('IS_DOCKER') === 'true'): ?>
+	<div style="background-color: #e7f3ff; border: 1px solid #b3d4fc; padding: 10px; margin: 10px 0; border-radius: 4px;">
+		<strong>🐳 Docker Environment Detected:</strong> Configuration values have been pre-populated from your environment variables (.env file). You can modify them below if needed.
+	</div>
+	<?php endif; ?>
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="dbname">Database Name</label></th>
-			<td><input name="dbname" id="dbname" type="text" size="25" value="<?php echo (isset($_ENV['APP_DB_NAME']) ? $_ENV['APP_DB_NAME'] : 'opendocman'); ?>" class="required" minlength="2" /></td>
+			<td><input name="dbname" id="dbname" type="text" size="25" value="<?php echo getEnvVar('APP_DB_NAME', 'opendocman'); ?>" class="required" minlength="2" /></td>
 			<td>The name of the database you want to run OpenDocMan in. </td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="uname">User Name</label></th>
-			<td><input name="uname" id="uname" type="text" size="25" value="<?php echo (isset($_ENV['APP_DB_USER'])? $_ENV['APP_DB_USER'] : 'opendocman'); ?>" class="required" minlength="2"/></td>
+			<td><input name="uname" id="uname" type="text" size="25" value="<?php echo getEnvVar('APP_DB_USER', 'opendocman'); ?>" class="required" minlength="2"/></td>
 			<td>Your MySQL username</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="pwd">Password</label></th>
-			<td><input name="pwd" id="pwd" type="password" size="25" value="<?php echo (isset($_ENV['APP_DB_PASS']) ? $_ENV['APP_DB_PASS'] : 'opendocman'); ?>" /></td>
-			<td>...and MySQL password.</td>
+			<td>
+				<input name="pwd" id="pwd" type="password" size="25" value="<?php echo getEnvVar('APP_DB_PASS', 'opendocman'); ?>" />
+				<?php if (getEnvVar('APP_DB_PASS') !== null && getEnvVar('APP_DB_PASS') !== ''): ?>
+				<button type="button" id="toggleDbPassword" style="margin-left: 5px; padding: 2px 8px; font-size: 12px;">Show</button>
+				<?php endif; ?>
+			</td>
+			<td>...and MySQL password.<?php echo (getEnvVar('APP_DB_PASS') !== null ? ' <em>(Pre-filled from environment)</em>' : ''); ?></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="dbhost">Database Host</label></th>
-			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo (isset($_ENV['APP_DB_HOST']) ? $_ENV['APP_DB_HOST'] : 'localhost') ?>" class="required" minlength="2"/></td>
+			<td><input name="dbhost" id="dbhost" type="text" size="25" value="<?php echo getEnvVar('APP_DB_HOST', 'localhost'); ?>" class="required" minlength="2"/></td>
 			<td>You should be able to get this info from your web host, if <code>localhost</code> does not work.
                             It can also include a port number. e.g. "hostname;port=3306" or a path to a local socket e.g. ":/path/to/socket" for the localhost.
                         </td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Table Prefix</label></th>
-			<td><input name="prefix" id="prefix" type="text" value="odm_" size="8" class="required" minlength="2"/></td>
-			<td>If you want to run multiple OpenDocMan installations in a single database, change this.</td>
+			<td><input name="prefix" id="prefix" type="text" value="<?php echo getEnvVar('DB_PREFIX', 'odm_'); ?>" size="8" class="required" minlength="2"/></td>
+			<td>If you want to run multiple OpenDocMan installations in a single database, change this.<?php echo (getEnvVar('DB_PREFIX') !== null ? ' <em>(Pre-filled from environment)</em>' : ''); ?></td>
 		</tr>
                 <tr>
 			<th scope="row"><label for="adminpass">Administrator Password</label></th>
-			<td><input name="adminpass" id="adminpass" type="password" value="" size="8" class="required" minlength="5"/></td>
-			<td>Enter an administrator password here. Write it down! (only used for new installs)</td>
+			<td>
+				<input name="adminpass" id="adminpass" type="password" value="<?php echo getEnvVar('ADMIN_PASSWORD', ''); ?>" size="8" class="required" minlength="5"/>
+				<?php if (getEnvVar('ADMIN_PASSWORD') !== null && getEnvVar('ADMIN_PASSWORD') !== ''): ?>
+				<button type="button" id="togglePassword" style="margin-left: 5px; padding: 2px 8px; font-size: 12px;">Show</button>
+				<?php endif; ?>
+			</td>
+			<td>Enter an administrator password here. Write it down! (only used for new installs)<?php echo (getEnvVar('ADMIN_PASSWORD') !== null ? ' <em>(Pre-filled from environment)</em>' : ''); ?></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="prefix">Data Directory</label></th>
-			<td colspan="2"><input name="datadir" id="datadir" type="text" value="<?php echo (isset($_ENV['ODM_DATA_DIR']) ? $_ENV['ODM_DATA_DIR'] : dirname($_SERVER['DOCUMENT_ROOT']) . '/odm_data/');?>" size="45" class="required" minlength="2"/>
+			<td colspan="2"><input name="datadir" id="datadir" type="text" value="<?php echo getEnvVar('ODM_DATA_DIR', dirname($_SERVER['DOCUMENT_ROOT']) . '/odm_data/');?>" size="45" class="required" minlength="2"/>
                             <br/>Enter in a web-writable folder that you have created on your server to store the data files. We have tried to guess for one.<br/>
                             <ul>
                                 <li><em>Windows Example:</em> c:/document_repository/</li>
@@ -223,6 +292,16 @@ deny from all
         $prefix  = sanitizeme(trim($_POST['prefix']));
         $adminpass  = sanitizeme(trim($_POST['adminpass']));
         $datadir  = sanitizeme(trim($_POST['datadir']));
+
+        // Validate admin password is not empty
+        if (empty($adminpass)) {
+            die('<strong>ERROR</strong>: "Administrator Password" cannot be empty. Please provide a password of at least 5 characters.');
+        }
+        
+        // Validate admin password length
+        if (strlen($adminpass) < 5) {
+            die('<strong>ERROR</strong>: "Administrator Password" must be at least 5 characters long.');
+        }
 
         // Clean up the datadir a bit to make sure it ends with slash
         if (substr($datadir, -1) != '/') {
@@ -281,7 +360,7 @@ deny from all
         }
     }
 
-    $config_folder = ABSPATH . (isset($_ENV['IS_DOCKER']) ? 'configs/docker-configs/' : 'configs/');
+    $config_folder = ABSPATH . (getEnvVar('IS_DOCKER') === 'true' ? 'configs/docker-configs/' : 'configs/');
     if (! is_writable($config_folder)) {
         display_header();
         ?>
@@ -350,5 +429,54 @@ function sanitizeme($input)
     }
 }
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Password toggle functionality for pre-populated admin password
+    $('#togglePassword').click(function() {
+        var passwordField = $('#adminpass');
+        var button = $(this);
+        
+        if (passwordField.attr('type') === 'password') {
+            passwordField.attr('type', 'text');
+            button.text('Hide');
+        } else {
+            passwordField.attr('type', 'password');
+            button.text('Show');
+        }
+    });
+    
+    // Password toggle functionality for pre-populated MySQL password
+    $('#toggleDbPassword').click(function() {
+        var passwordField = $('#pwd');
+        var button = $(this);
+        
+        if (passwordField.attr('type') === 'password') {
+            passwordField.attr('type', 'text');
+            button.text('Hide');
+        } else {
+            passwordField.attr('type', 'password');
+            button.text('Show');
+        }
+    });
+    
+    // Form validation enhancement
+    $('#configform').validate({
+        rules: {
+            adminpass: {
+                required: true,
+                minlength: 5
+            }
+        },
+        messages: {
+            adminpass: {
+                required: "Administrator password is required",
+                minlength: "Password must be at least 5 characters long"
+            }
+        }
+    });
+});
+</script>
+
 </body>
 </html>

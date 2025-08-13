@@ -3,14 +3,15 @@ services:
   db:
     image: mariadb:10.4
     volumes:
-      - odm-db-data:/var/lib/mysql
+      - ${HOST_DB_PATH:-odm-db-data}:/var/lib/mysql
     environment:
-      - MYSQL_DATABASE=opendocman
-      - MYSQL_USER=opendocman
-      - MYSQL_PASSWORD=opendocman
-      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=${TZ:-UTC}
     ports:
-      - 3306:3306
+      - ${DB_EXTERNAL_PORT:-3306}:3306
 
 
   app:
@@ -18,22 +19,44 @@ services:
     depends_on:
       - db
     ports:
-      - 8080:80
-      - 443:443
-      - 9000:9000
-    hostname: odm.local
+      - ${HTTP_PORT:-8080}:80
+      - ${HTTPS_PORT:-443}:443
+      - ${PHP_FPM_PORT:-9000}:9000
+    hostname: ${ODM_HOSTNAME:-odm.local}
     environment:
-      - APP_DB_HOST=db
-      - DB_PORT=3306
-      - APP_DB_NAME=opendocman
-      - APP_DB_USER=opendocman
-      - APP_DB_PASS=opendocman
-      - ODM_DATA_DIR=/var/www/document_repository
-      - IS_DOCKER=true
+      - APP_DB_HOST=${APP_DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - APP_DB_NAME=${APP_DB_NAME}
+      - APP_DB_USER=${APP_DB_USER}
+      - APP_DB_PASS=${APP_DB_PASS}
+      - ODM_DATA_DIR=${ODM_DATA_DIR}
+      - IS_DOCKER=${IS_DOCKER}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - TZ=${TZ:-UTC}
+      - DEBUG_MODE=${DEBUG_MODE:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-warning}
+      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}
+      - PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME:-300}
+      - UPLOAD_MAX_FILESIZE=${UPLOAD_MAX_FILESIZE:-50M}
+      - POST_MAX_SIZE=${POST_MAX_SIZE:-60M}
+      - DB_PREFIX=${DB_PREFIX:-odm_}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-english}
+      - DEFAULT_THEME=${DEFAULT_THEME:-tweeter}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_ENCRYPTION=${SMTP_ENCRYPTION}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME}
+      - SSL_ENABLED=${SSL_ENABLED:-false}
+      - SSL_CERT_PATH=${SSL_CERT_PATH}
+      - SSL_KEY_PATH=${SSL_KEY_PATH}
     command: ["./wait-for-mysql.sh", "db", "/start.sh"]
     volumes:
-      - odm-files-data:/var/www/document_repository
-      - odm-docker-configs:/var/www/html/application/configs/docker-configs
+      - ${HOST_DATA_PATH:-odm-files-data}:/var/www/document_repository
+      - ${HOST_CONFIG_PATH:-odm-docker-configs}:/var/www/html/application/configs/docker-configs
 
 volumes:
   odm-files-data:
