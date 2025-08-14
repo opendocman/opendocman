@@ -111,7 +111,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 11rc2 and is upgrading
@@ -131,7 +130,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 11 and is upgrading
@@ -150,7 +148,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 12p1 and is upgrading
@@ -168,7 +165,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 12p3 and is upgrading
@@ -185,7 +181,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 124 and is upgrading
@@ -201,7 +196,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1252 and is upgrading
@@ -216,7 +210,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1256 and is upgrading
@@ -230,7 +223,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1257 or 126beta and is upgrading
@@ -243,7 +235,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1261 and is upgrading
@@ -255,7 +246,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1262 and is upgrading
@@ -266,7 +256,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has version 1262 and is upgrading
@@ -276,7 +265,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has DB version 128 and is upgrading
@@ -285,7 +273,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
             do_update_129();
             do_update_130();
             do_update_136();
-            do_update_140();
             break;
 
         // User has DB version 129 and is upgrading
@@ -304,12 +291,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         // User has DB version 136 and is upgrading
         case "update_136":
             do_update_136();
-            do_update_140();
-            break;
-
-        // User has DB version 140 and is upgrading
-        case "update_140":
-            do_update_140();
             break;
 
         default:
@@ -529,28 +510,13 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         echo 'Updating from DB versions 1.3.6...<br />';
         include("../configs/config.php");
         include("upgrade_136.php");
-        echo 'All Done with update! Click <a href="../index">HERE</a> to login<br>';
-    }
-
-    function do_update_140()
-    {
-        echo 'Updating from DB versions 1.4.0...<br />';
-        include("upgrade_140.php");
-
         echo '<hr style="border: 2px solid green; margin: 20px 0;">';
-        echo '<h3 style="color: green;">✓ Email Queue System Upgrade Complete!</h3>';
-        echo '<p><strong>Your database has been successfully upgraded to version 1.4.5.</strong></p>';
-        echo '<p>The new email queue system has been installed and requires configuration.</p>';
+        echo '<h3 style="color: green;">✓ Database Upgrade Complete!</h3>';
+        echo '<p><strong>Your database has been successfully upgraded.</strong></p>';
         echo '<br>';
-        echo '<p><strong>Recommended Next Steps:</strong></p>';
-        echo '<p>1. <a href="../settings" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">📧 Configure Email Queue Settings</a></p>';
-        echo '<p>2. Set up a cron job to process emails: <code>*/5 * * * * php /path/to/opendocman/application/cron/process_email_queue.php</code></p>';
-        echo '<br>';
-        echo '<p><em>Or skip configuration for now:</em></p>';
         echo '<p><a href="../index" style="background-color: #28a745; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px;">Continue to Application</a></p>';
         echo '<hr style="border: 2px solid green; margin: 20px 0;">';
     }
-
 
     function print_intro(PDO $pdo)
     {
@@ -606,9 +572,6 @@ $_SESSION['db_prefix'] = !empty($_SESSION['db_prefix']) ? $_SESSION['db_prefix']
         </tr>
         <tr>
             <td>Upgrade your current database from a previous version<br/><br/></td>
-        </tr>
-        <tr>
-            <td><a href="/install/index?op=update_140">Upgrade from DB schema version 1.4.0</a><br><br></td>
         </tr>
         <tr>
             <td><a href="/install/index?op=update_136">Upgrade from DB schema version 1.3.6</a><br><br></td>

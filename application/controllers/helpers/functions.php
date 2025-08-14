@@ -103,13 +103,13 @@ function email_all(string $mail_subject, string $mail_body, string $mail_header)
 
     $query = "
       SELECT
-        Email
+        Email, first_name, last_name
       FROM
         {$GLOBALS['CONFIG']['db_prefix']}user
     ";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
-    $result = $stmt->fetchColumn();
+    $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
@@ -130,16 +130,15 @@ function email_dept(int $dept_id, string $mail_subject, string $mail_body, strin
 
     $query = "
       SELECT
-        Email
+        Email, first_name, last_name
       FROM
         {$GLOBALS['CONFIG']['db_prefix']}user
       WHERE
         department = :dept_id
     ";
     $stmt = $pdo->prepare($query);
-    $stmt->execute(array(
-        ':dept_id' => $dept_id
-    ));
+    $stmt->bindParam(':dept_id', $dept_id);
+    $stmt->execute();
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
@@ -174,6 +173,8 @@ function email_users_id($user_ID_array, string $mail_subject, string $mail_body,
 {
     global $pdo;
 
+    $OBJ_array = array();
+    
     for ($i = 0; $i < sizeof($user_ID_array); $i++) {
         if (($user_ID_array[$i] > 0)) {
             $OBJ_array[$i] = new User($user_ID_array[$i], $pdo);

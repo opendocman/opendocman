@@ -181,8 +181,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         $mail_to = $new_user_obj->getEmailAddress();
         $mail_flags = "-f".$user_obj->getEmailAddress();
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
-            mail($mail_to, $mail_subject, ($mail_greeting . ' ' . $mail_body . $mail_salute), $mail_headers,
-                $mail_flags);
+            mail($mail_to, $mail_subject, $mail_greeting . ' ' . $mail_body . $mail_salute, $mail_headers);
         }
         $last_message = urlencode(msg('message_user_successfully_added'));
 

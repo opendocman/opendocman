@@ -130,7 +130,7 @@ if ($GLOBALS['CONFIG']['file_expired_action'] != 4) {
         $user_obj = new User($file_obj->getOwner(), $pdo);
         $mail_to = $user_obj->getEmailAddress();
         if ($GLOBALS['CONFIG']['demo'] == 'False') {
-            mail($mail_to, $mail_subject . $file_obj->getName(), ($mail_greeting . $file_obj->getName() . ' ' . $mail_body . $mail_salute), $mail_headers);
+            mail($mail_to, $mail_subject . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body . $mail_salute, $mail_headers);
         }
     }
 }

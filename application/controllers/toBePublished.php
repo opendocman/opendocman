@@ -148,7 +148,7 @@ if (!isset($_REQUEST['submit'])) {
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
 
                 if ($GLOBALS['CONFIG']['demo'] == 'False') {
-                    mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), ($mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute), $mail_headers);
+                    mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute, $mail_headers);
                 }
             }
             
@@ -229,7 +229,7 @@ if (!isset($_REQUEST['submit'])) {
                 $mail_body1.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
                 if ($GLOBALS['CONFIG']['demo'] == 'False')
                 {
-                    mail($mail_to, $mail_subject . " " . $file_obj->getName(), $mail_body1, $mail_headers);
+                    mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute, $mail_headers);
                 }
             }
             

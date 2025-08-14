@@ -366,7 +366,7 @@ if (!isset($_POST['submit'])) {
         $message = urlencode(msg('message_document_added'));
         
         /**
-         * Send out email notifications to reviewers
+         * Queue email notifications to reviewers for background processing
          */
         $file_obj = new FileData($fileId, $pdo);
         $get_full_name = $user_obj->getFullName();
@@ -391,6 +391,7 @@ if (!isset($_POST['submit'])) {
         $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
         $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
         
+        // Send notification emails to reviewers
         $email_obj = new Email();
         $email_obj->setFullName($full_name);
         $email_obj->setSubject($mail_subject);

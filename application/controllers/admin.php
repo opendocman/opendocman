@@ -164,10 +164,7 @@ $request_state = e::h(($_REQUEST['state']+1));
                  <td><b><a href="file_list_report"><?php echo msg('adminpage_reports_file_list');
     ?></a></b></td>
              </tr>
-             <tr>
-                 <td><b><a href="view_email_queue"><?php echo msg('email_queue_status');
-    ?></a></b></td>
-             </tr>
+
          </table>
      </td>
      <td>

@@ -213,7 +213,7 @@ else {
         fwrite($file_handler, $file_content);
         fclose($file_handler);
         // all OK, proceed!
-
+        
         $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(':uid' => $_SESSION['uid']));
@@ -251,38 +251,8 @@ else {
     
         AccessLog::addLogEntry($id, 'I', $pdo);
     
-        /**
-         * Send out email notifications to reviewers
-         */
-        $file_obj = new FileData($id, $pdo);
-        $get_full_name = $user_obj->getFullName();
-        $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
-        
-        $department = $file_obj->getDepartment();
-        
-        $reviewer_obj = new Reviewer($id, $pdo);
-        $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
-
-        $date = date('Y-m-d H:i:s T');
-        
-        // Build email for general notices
-        $mail_subject = msg('checkinpage_file_was_checked_in');
-        $mail_body2 = msg('checkinpage_file_was_checked_in') . PHP_EOL;
-        $mail_body2.=msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL;
-        $mail_body2.=msg('label_status') . ': ' . msg('addpage_new') . PHP_EOL;
-        $mail_body2.=msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
-        $mail_body2.=msg('addpage_uploader') . ': ' . e::h($full_name) . PHP_EOL . PHP_EOL;
-        $mail_body2.=msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
-        $mail_body2.=msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
-        $mail_body2.=$GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
-        
-        $email_obj = new Email();
-        $email_obj->setFullName($full_name);
-        $email_obj->setSubject($mail_subject);
-        $email_obj->setFrom($full_name . ' <' . $user_obj->getEmailAddress() . '>');
-        $email_obj->setRecipients($reviewer_list);
-        $email_obj->setBody($mail_body2);
-        $email_obj->sendEmail();
+        // Email notifications will be handled by the email queue processor
+        error_log("Check-in: File checked in successfully - file ID {$id}");
         
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');
