@@ -195,6 +195,8 @@ if (!isset($_REQUEST['submit'])) {
     $mail_from= e::h($full_name) . ' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: ". e::h($mail_from) .PHP_EOL;
     $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL;
+    $mail_greeting=msg('email_greeting'). ":" . PHP_EOL . "\t" . msg('email_i_would_like_to_inform');
+    $mail_salute=PHP_EOL . PHP_EOL . msg('email_salute') . ",". PHP_EOL . $full_name;
 
     if ($user_obj->isAdmin()) {
         $id_array = $user_obj->getAllRevieweeIds();

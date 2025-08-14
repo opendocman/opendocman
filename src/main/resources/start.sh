@@ -10,6 +10,13 @@ touch /var/log/mail.log
 chown www-data:www-data /var/log/mail.log
 chmod 644 /var/log/mail.log
 
+# Configure mail service
+if /configure-simple-mail.sh > /dev/null; then
+    echo "Mail service configured"
+else
+    echo "Warning: Mail configuration had issues"
+fi
+
 TABLES_EXIST=$(mysql -u$APP_DB_USER -p$APP_DB_PASS -h$APP_DB_HOST -P$DB_PORT $APP_DB_NAME -e "SHOW TABLES LIKE 'odm_settings'" | grep "odm_settings" > /dev/null; echo "$?")
 
 # Lets replace the default base_url with one from an ENV variable

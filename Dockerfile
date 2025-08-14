@@ -7,7 +7,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 # Install packages
 RUN apt-get update \
-  && apt-get install --no-install-recommends -y apt-utils vim git openssl ssl-cert sendmail default-mysql-client \
+  && apt-get install --no-install-recommends -y apt-utils vim git openssl ssl-cert default-mysql-client msmtp msmtp-mta \
   && docker-php-ext-install pdo_mysql pdo \
   && rm -rf /var/lib/apt/lists/*
 
@@ -38,9 +38,13 @@ RUN mkdir -p /var/www/document_repository \
     && chmod -R 755 /var/www/html/application/configs \
     && chmod -R 755 /var/www/document_repository
 
-# Copy startup command
+# Copy startup command and mail configuration scripts
 COPY src/main/resources/*.sh /
 RUN chmod 755 /*.sh
+
+
+
+
 
 EXPOSE 80 443
 
