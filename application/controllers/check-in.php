@@ -251,8 +251,45 @@ else {
     
         AccessLog::addLogEntry($id, 'I', $pdo);
     
-        // Email notifications will be handled by the email queue processor
-        error_log("Check-in: File checked in successfully - file ID {$id}");
+        // Send email notifications to reviewers if authorization is required
+        if ($GLOBALS['CONFIG']['authorization'] == 'True') {
+            $file_obj = new FileData($id, $pdo);
+            $get_full_name = $user_obj->getFullName();
+            $full_name = $get_full_name[0] . ' ' . $get_full_name[1];
+            $from = $user_obj->getEmailAddress();
+
+            $department = $file_obj->getDepartment();
+
+            $reviewer_obj = new Reviewer($id, $pdo);
+            $reviewer_list = $reviewer_obj->getReviewersForDepartment($department);
+
+            if ($reviewer_list && count($reviewer_list) > 0) {
+                $date = date('Y-m-d H:i:s T');
+
+                // Build email for reviewer notification
+                $mail_subject = msg('email_subject_review_status') . $file_obj->getName();
+                $mail_body = msg('message_document_checked_in') . ' - ' . msg('email_comments_regarding_review') . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('label_filename') . ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('label_status') . ': ' . msg('message_document_checked_in') . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('date') . ': ' . $date . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('author') . ': ' . $full_name . PHP_EOL . PHP_EOL;
+                if (!empty($_POST['note'])) {
+                    $mail_body .= msg('label_note_for_revision_log') . ': ' . $_POST['note'] . PHP_EOL . PHP_EOL;
+                }
+                $mail_body .= msg('email_thank_you') . ',' . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('email_automated_document_messenger') . PHP_EOL . PHP_EOL;
+                $mail_body .= $GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
+
+                // Send notification emails to reviewers
+                $email_obj = new Email();
+                $email_obj->setFullName($full_name);
+                $email_obj->setSubject($mail_subject);
+                $email_obj->setFrom($from);
+                $email_obj->setRecipients($reviewer_list);
+                $email_obj->setBody($mail_body);
+                $email_obj->sendEmail();
+            }
+        }
         
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');
