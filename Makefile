@@ -1,12 +1,21 @@
-# OpenDocMan Docker Management Makefile
-# Provides convenient commands for development and deployment
+# OpenDocMan Management Makefile
+# Provides convenient commands for development, testing, and deployment
 
 .PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore
+.PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install
+.PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
+.PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config
+.PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check
 
 # Default target
 help: ## Show this help message
-	@echo "OpenDocMan Docker Management Commands"
-	@echo "===================================="
+	@echo "OpenDocMan Management Commands"
+	@echo "=============================="
+	@echo ""
+	@echo "🚀 Quick Start:"
+	@echo "  make setup     - Complete setup: generate .env, validate, and start services"
+	@echo "  make test      - Run all tests"
+	@echo "  make up        - Start services"
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
@@ -15,7 +24,10 @@ help: ## Show this help message
 	@echo "  COMPOSE_FILE          - Override docker-compose file"
 	@echo "  ODM_ENV               - Set environment (dev, prod, test)"
 
-# Environment setup
+# =============================================================================
+# Environment Setup
+# =============================================================================
+
 setup: ## Complete setup: generate .env, validate, and start services
 	@echo "🚀 Setting up OpenDocMan..."
 	@$(MAKE) env-generate
@@ -25,11 +37,11 @@ setup: ## Complete setup: generate .env, validate, and start services
 
 env-generate: ## Generate .env file from template with secure passwords
 	@echo "🔑 Generating environment configuration..."
-	@./generate-env-secrets.sh
+	@./scripts/generate-env-secrets.sh
 
 env-validate: ## Validate .env file configuration
 	@echo "🔍 Validating environment configuration..."
-	@./validate-env.sh
+	@./scripts/validate-env.sh
 
 env-check: ## Check if .env file exists
 	@if [ ! -f .env ]; then \
@@ -37,7 +49,10 @@ env-check: ## Check if .env file exists
 		exit 1; \
 	fi
 
-# Docker operations
+# =============================================================================
+# Docker Operations
+# =============================================================================
+
 build: env-check ## Build Docker images
 	@echo "🏗️  Building Docker images..."
 	@docker-compose build
@@ -79,7 +94,89 @@ status: ## Show status of services
 	@echo "   Username: admin"
 	@echo "   Password: $$(grep ADMIN_PASSWORD .env 2>/dev/null | cut -d'=' -f2 || echo '[check .env file]')"
 
-# Development commands
+# =============================================================================
+# Testing Commands
+# =============================================================================
+
+test: ## Run all tests
+	@echo "🧪 Running all tests..."
+	@./scripts/run-tests.sh all
+
+test-unit: ## Run only unit tests
+	@echo "🧪 Running unit tests..."
+	@./scripts/run-tests.sh unit
+
+test-integration: ## Run only integration tests
+	@echo "🧪 Running integration tests..."
+	@./scripts/run-tests.sh integration
+
+test-user: ## Run all user-related tests
+	@echo "🧪 Running user tests..."
+	@./scripts/run-user-tests.sh
+
+test-department: ## Run all department-related tests
+	@echo "🧪 Running department tests..."
+	@./scripts/run-department-tests.sh
+
+test-class: ## Run tests for specific class (usage: make test-class CLASS=User)
+	@if [ -z "$(CLASS)" ]; then \
+		echo "❌ Please specify CLASS. Example: make test-class CLASS=User"; \
+		exit 1; \
+	fi
+	@echo "🧪 Running tests for class: $(CLASS)"
+	@./scripts/run-tests.sh class $(CLASS)
+
+test-file: ## Run specific test file (usage: make test-file FILE=CategoryTest)
+	@if [ -z "$(FILE)" ]; then \
+		echo "❌ Please specify FILE. Example: make test-file FILE=CategoryTest"; \
+		exit 1; \
+	fi
+	@echo "🧪 Running test file: $(FILE)"
+	@./scripts/run-tests.sh file $(FILE)
+
+test-list: ## List all available test files
+	@echo "📋 Available test files:"
+	@./scripts/run-tests.sh list
+
+test-quiet: ## Run all tests with minimal output
+	@echo "🧪 Running tests (quiet mode)..."
+	@./scripts/run-tests.sh quiet
+
+test-watch: ## Watch files and run tests on changes (requires inotify-tools)
+	@echo "👀 Watching for file changes..."
+	@./scripts/run-tests.sh watch
+
+test-install: ## Install test dependencies
+	@echo "📦 Installing test dependencies..."
+	@./scripts/run-tests.sh install
+
+# =============================================================================
+# Code Coverage
+# =============================================================================
+
+coverage: ## Generate text coverage report
+	@echo "📊 Generating code coverage report..."
+	@./scripts/run-coverage.sh text
+
+coverage-html: ## Generate HTML coverage report
+	@echo "📊 Generating HTML coverage report..."
+	@./scripts/run-coverage.sh html
+
+coverage-xml: ## Generate XML coverage report
+	@echo "📊 Generating XML coverage report..."
+	@./scripts/run-coverage.sh xml
+
+coverage-all: ## Generate all coverage report formats
+	@echo "📊 Generating all coverage formats..."
+	@./scripts/run-coverage.sh all
+
+# Legacy aliases for backward compatibility
+test-coverage: coverage-html ## Alias for coverage-html
+
+# =============================================================================
+# Development Commands
+# =============================================================================
+
 dev: ## Start in development mode with live reload
 	@echo "🧪 Starting in development mode..."
 	@ODM_ENV=dev docker-compose up
@@ -90,7 +187,10 @@ shell: ## Open shell in running app container
 shell-db: ## Open MySQL shell in database container
 	@docker-compose exec db mysql -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2)
 
-# Maintenance commands
+# =============================================================================
+# Maintenance Commands
+# =============================================================================
+
 clean: ## Stop containers and remove volumes (DATA LOSS WARNING!)
 	@echo "⚠️  WARNING: This will delete all data including uploaded files and database!"
 	@read -p "Are you sure? Type 'yes' to continue: " confirm && [ "$$confirm" = "yes" ] || exit 1
@@ -105,7 +205,10 @@ rebuild: ## Rebuild and restart everything
 	@docker-compose up -d
 	@$(MAKE) status
 
-# Installation and updates
+# =============================================================================
+# Installation and Updates
+# =============================================================================
+
 install: ## Fresh installation (removes existing data)
 	@echo "📦 Fresh OpenDocMan installation..."
 	@$(MAKE) down
@@ -119,7 +222,10 @@ update: ## Update to latest version
 	@docker-compose pull
 	@$(MAKE) rebuild
 
-# Backup and restore
+# =============================================================================
+# Backup and Restore
+# =============================================================================
+
 backup: ## Create backup of database and files
 	@echo "💾 Creating backup..."
 	@mkdir -p backups
@@ -150,7 +256,10 @@ restore-files: ## Restore files from backup (specify BACKUP_FILE=filename)
 	@docker run --rm -v opendocman_odm-files-data:/data -v $$(pwd)/backups:/backup alpine tar xzf /backup/$$(basename $(BACKUP_FILE)) -C /data
 	@echo "✅ Files restored!"
 
-# Utility commands
+# =============================================================================
+# Utility Commands
+# =============================================================================
+
 clean-volumes: ## Remove all Docker volumes (DATA LOSS WARNING!)
 	@echo "⚠️  WARNING: This will delete all data!"
 	@read -p "Are you sure? Type 'yes' to continue: " confirm && [ "$$confirm" = "yes" ] || exit 1
@@ -166,30 +275,20 @@ top: ## Show running processes in containers
 stats: ## Show container resource usage
 	@docker stats $$(docker-compose ps -q)
 
-# Testing commands
-test: ## Run tests
-	@echo "🧪 Running tests..."
-	@docker-compose exec app php vendor/bin/phpunit
+# =============================================================================
+# Security Commands
+# =============================================================================
 
-test-coverage: ## Run tests with coverage report
-	@echo "🧪 Running tests with coverage..."
-	@docker-compose exec app php vendor/bin/phpunit --coverage-html coverage-report
-
-# Security commands
 security-scan: ## Run security scan on containers
 	@echo "🔒 Running security scan..."
 	@docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 		-v $$(pwd):/src aquasec/trivy image --exit-code 0 --severity HIGH,CRITICAL \
 		opendocman_app:latest || echo "Security scan completed with findings"
 
-# Quick commands
-start: up ## Alias for 'up'
-stop: down ## Alias for 'down'
-reset: ## Reset everything (clean + setup)
-	@$(MAKE) clean
-	@$(MAKE) setup
+# =============================================================================
+# Information Commands
+# =============================================================================
 
-# Information commands
 version: ## Show version information
 	@echo "OpenDocMan Docker Environment"
 	@echo "============================="
@@ -209,6 +308,36 @@ version: ## Show version information
 
 config: ## Show current Docker Compose configuration
 	@docker-compose config
+
+# =============================================================================
+# Quick Aliases
+# =============================================================================
+
+start: up ## Alias for 'up'
+stop: down ## Alias for 'down'
+reset: ## Reset everything (clean + setup)
+	@$(MAKE) clean
+	@$(MAKE) setup
+
+# =============================================================================
+# Script Management
+# =============================================================================
+
+scripts-help: ## Show help for individual scripts
+	@echo "📋 Individual Script Help:"
+	@echo "=========================="
+	@echo ""
+	@echo "Testing Scripts:"
+	@echo "  ./scripts/run-tests.sh help        - Main test runner help"
+	@echo "  ./scripts/run-coverage.sh help     - Coverage script help"
+	@echo ""
+	@echo "Environment Scripts:"
+	@echo "  ./scripts/generate-env-secrets.sh  - Generate .env file"
+	@echo "  ./scripts/validate-env.sh          - Validate .env file"
+	@echo ""
+	@echo "Component-specific Scripts:"
+	@echo "  ./scripts/run-user-tests.sh        - User component tests"
+	@echo "  ./scripts/run-department-tests.sh  - Department component tests"
 
 # Default environment
 export COMPOSE_PROJECT_NAME ?= opendocman

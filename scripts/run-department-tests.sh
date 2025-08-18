@@ -8,8 +8,8 @@ echo "OpenDocMan Department Tests Runner"
 echo "======================================"
 echo ""
 
-# Set script directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Set script directory - go to parent directory (project root)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$SCRIPT_DIR"
 
 # Check if PHPUnit exists

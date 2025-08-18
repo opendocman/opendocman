@@ -3,8 +3,8 @@
 # OpenDocMan Code Coverage Script
 # This script runs PHPUnit tests with code coverage reporting
 
-# Set the working directory to the script's location
-cd "$(dirname "$0")"
+# Set the working directory to the project root (parent of scripts directory)
+cd "$(dirname "$0")/.."
 
 # Colors for output
 GREEN='\033[0;32m'
