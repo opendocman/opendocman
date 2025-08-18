@@ -80,6 +80,12 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     draw_footer();
 } elseif (isset($_POST['submit']) && 'Add User' == $_POST['submit']) {
+    // Validate CSRF token for Add User operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');
         exit;
@@ -191,6 +197,12 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         header('Location: admin?last_message=' . urlencode($last_message));
     }
 } elseif (isset($_POST['submit']) && 'Delete User' == $_POST['submit']) {
+    // Validate CSRF token for Delete User operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');
@@ -221,6 +233,12 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
+    // Validate CSRF token for Delete operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // If demo mode, don't allow them to update the demo account
     if (@$GLOBALS['CONFIG']['demo'] == 'True') {
         draw_header('Delete User ', $last_message);
@@ -253,6 +271,12 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     display_smarty_template('user_delete_pick.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
+    // Validate CSRF token for Show User operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     $user_obj = new User($_POST['item'], $pdo);
     draw_header(msg('userpage_show_user') . $user_obj->getName(), $last_message);
 
@@ -282,6 +306,12 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
+    // Validate CSRF token for Modify User operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // If demo mode, don't allow them to update the demo account
     if (@$GLOBALS['CONFIG']['demo'] == 'True') {
         draw_header(msg('userpage_update_user'), $last_message);
@@ -367,6 +397,11 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     draw_footer();
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
+    // Validate CSRF token for Update User operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
 
     // Check to make sue they are either the user being modified or an admin
     if (($_POST['id'] != $_SESSION['uid']) && !$user_obj->isAdmin()) {

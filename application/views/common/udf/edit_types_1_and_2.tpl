@@ -1,4 +1,5 @@
 <form id="editUdfForm" method="post">
+    {$csrf_token_field}
     <input type="hidden" name="submit" value="edit">
     <input type="hidden" name="udf" value="{$udf|escape:'html'}">
     <table>

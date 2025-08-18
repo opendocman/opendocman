@@ -43,12 +43,22 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     display_smarty_template('udf/add.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Add User Defined Field') {
+    // Validate CSRF token for Add UDF operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
 
     udf_functions_add_udf();
 
     $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item']))) {
+    // Validate CSRF token for Delete UDF selection
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
 
     draw_header(msg('label_delete') . ' ' . msg('label_user_defined_fields'), $last_message);
 
@@ -72,6 +82,12 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     draw_footer();
 } elseif (isset($_REQUEST['deleteudf'])) {
+    // Validate CSRF token for Delete UDF operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');
@@ -107,6 +123,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $last_message = urlencode('Action canceled');
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit') {
+    // Validate CSRF token for Edit UDF operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
 
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
 

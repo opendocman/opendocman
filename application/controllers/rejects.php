@@ -52,8 +52,10 @@ if (!isset($_POST['submit'])) {
 
     if (@$_REQUEST['mode']=='root') {
         echo '<form name="author_note_form" action="rejects?mode=root" method="post">';
+        echo $GLOBALS['csrf']->getTokenField();
     } else {
         echo '<form name="author_note_form" action="rejects" method="post">';
+        echo $GLOBALS['csrf']->getTokenField();
     }
     ?>
 <table border="0">
@@ -88,6 +90,12 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
 <?php
            draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'resubmit') {
+    // Validate CSRF token for resubmit operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if (!isset($_REQUEST['checkbox'])) {
         header('Location:rejects?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;
@@ -102,6 +110,12 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
     }
     header('Location:rejects?mode=' . urlencode(@$_REQUEST['mode']) . '&last_message='. urlencode(msg('message_file_authorized')));
 } elseif ($_POST['submit'] == 'delete') {
+    // Validate CSRF token for delete operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if (!isset($_REQUEST['checkbox'])) {
         header('Location: rejects?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
         exit;

@@ -42,6 +42,7 @@ $flag = 0;
 if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
     draw_header(msg('label_checked_out_files'), $last_message);
     echo PHP_EOL . '<form name="table" action="file_ops" method="POST">';
+    echo PHP_EOL . $GLOBALS['csrf']->getTokenField();
     echo PHP_EOL . '<input name="submit" type="hidden" value="Clear Status">';
 
     $file_id_array = $user_obj->getCheckedOutFiles();
@@ -55,6 +56,12 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
     }
     draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Clear Status') {
+    // Validate CSRF token for Clear Status operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if (isset($_POST["checkbox"])) {
         foreach ($_POST['checkbox'] as $cbox) {
             $file_id = $cbox;

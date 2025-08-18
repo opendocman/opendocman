@@ -28,6 +28,11 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
 
     // Submitted so insert data now
     if (isset($_REQUEST['adduser'])) {
+        // Validate CSRF token for signup operation
+        if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+            header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+            exit;
+        }
         // Check to make sure user does not already exist
         $query = "
           SELECT
@@ -109,6 +114,7 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
 
         <table border="0" cellspacing="5" cellpadding="5">
         <form name="add_user" action="signup" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <tr><td><b><?php echo msg('label_last_name');
     ?></b></td><td><input name="last_name" type="text"></td></tr>
         <tr><td><b><?php echo msg('label_first_name');

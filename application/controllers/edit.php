@@ -158,6 +158,12 @@ if (!isset($_REQUEST['submit'])) {
         display_smarty_template('_edit_footer.tpl');
     }//end else
 } else {
+    // Validate CSRF token for edit form
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location:error?ec=29&last_message=' . urlencode('Security token validation failed'));
+        exit;
+    }
+    
     // form submitted, process data
     $fileId = $_REQUEST['id'];
     $filedata = new FileData($fileId, $pdo);

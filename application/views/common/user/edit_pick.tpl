@@ -1,4 +1,5 @@
 <form action="user" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
     <input type="hidden" name="state" value="{$state|escape:'html'}" />
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>

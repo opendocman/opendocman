@@ -1,4 +1,5 @@
 <form action="filetypes" method="POST" enctype="multipart/form-data">
+{$csrf_token_field}
 <table class="form-table" style="width: 200px;">
         <thead>
             <tr>

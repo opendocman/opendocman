@@ -23,6 +23,8 @@ return array(
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'ParagonIE\\ConstantTime\\' => array($vendorDir . '/paragonie/constant_time_encoding/src'),
+    'ParagonIE\\AntiCSRF\\' => array($vendorDir . '/paragonie/anti-csrf/src'),
     'Overtrue\\PHPLint\\' => array($vendorDir . '/overtrue/phplint/src'),
     'N98\\JUnitXml\\' => array($vendorDir . '/n98/junit-xml/src/N98/JUnitXml'),
     'Mockery\\' => array($vendorDir . '/mockery/mockery/library/Mockery'),

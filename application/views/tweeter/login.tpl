@@ -49,6 +49,7 @@
             {if $redirection}
                 <input type="hidden" name="redirection" value="{$redirection|escape:'html'}">
             {/if}
+            {$csrf_token_field}
             
          <tr>
         <td>{$g_lang_username}</td>

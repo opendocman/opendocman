@@ -43,6 +43,12 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     $filetypes->edit();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
+    // Validate CSRF token for Save operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     draw_header(msg('label_filetypes'), $last_message);
 
     if ($filetypes->save($_POST)) {
@@ -60,6 +66,12 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     display_smarty_template('filetype_add.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave') {
+    // Validate CSRF token for Add operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if ($filetypes->add($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
     } else {
@@ -77,6 +89,12 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     $filetypes->deleteSelect();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
+    // Validate CSRF token for Delete operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if ($filetypes->delete($_POST)) {
         $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
     } else {

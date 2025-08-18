@@ -6,6 +6,7 @@
 			{else}
 			 action="toBePublished" method="POST">
                         {/if}
+		{$csrf_token_field}
 		<table name="author_note_table">
 		<tr>
 		<td>{$g_lang_email_to}</td>

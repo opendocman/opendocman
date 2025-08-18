@@ -11,6 +11,7 @@
             <tr>
                 <td>
                     <form action="filetypes" method="POST" enctype="multipart/form-data">
+            {$csrf_token_field}
             <input type="hidden" name="Submit" value="add" />
             ex.: application/pdf<br />
             <input type="text" name="filetype" />

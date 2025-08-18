@@ -1,4 +1,5 @@
 {* Always include this file inside the <head></head> of your header.tpl file *}
+<meta name="csrf-token" content="{$csrf_token_value}" />
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/system.css" />
 <link type="text/css" rel="stylesheet" href="{$g_base_url}css/DataTables/demo_table.css" />
 
@@ -18,7 +19,12 @@
 <script type="text/javascript" src="{$g_base_url}js/common/multiSelect112/jquery.multiselect.filter.js"></script>
 
 <script type="text/javascript" src="{$g_base_url}js/default.js"></script>
+<script type="text/javascript" src="{$g_base_url}js/csrf-helper.js"></script>
 <script>
+    // CSRF token for JavaScript access
+    window.csrf_token = '{$csrf_token_value}';
+    window.csrf_field_name = '{$csrf_field_name}';
+    
     // Here are the translations for the multiselect area of this page
     var langUncheckAll = '{$g_lang_editpage_uncheck_all}';
     var langCheckAll = '{$g_lang_editpage_check_all}';

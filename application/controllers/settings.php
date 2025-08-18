@@ -46,6 +46,12 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
+    // Validate CSRF token for settings form
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location:error?ec=29&last_message=' . urlencode('Security token validation failed'));
+        exit;
+    }
+    
     draw_header(msg('label_settings'), $last_message);
 
     // Clean up the datadir a bit to make sure it ends with slash

@@ -10,6 +10,7 @@
                 <tr>
                     <td>
                     <form action="filetypes" method="POST" enctype="multipart/form-data">
+                        {$csrf_token_field}
                         <select class="multiView" id="types" multiple="multiple" name="types[]">
                         {foreach from=$filetypes_array item=i}
                             <option value="{$i.id|escape}">{$i.type|escape:'html'}</option>

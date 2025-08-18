@@ -42,7 +42,8 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
     ?>
-    <form id="categoryAddForm" action="category" method="GET" enctype="multipart/form-data">
+    <form id="categoryAddForm" action="category" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <table border="0" cellspacing="5" cellpadding="5">
             <tr>
                 <td><b><?php echo msg('category')?></b></td>
@@ -68,6 +69,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     <?php
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category') {
+    // Validate CSRF token for Add Category operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location:error?ec=4');
@@ -105,6 +111,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     echo '<tr><td>'.msg('label_name').' :</td><td>' . e::h($result['name']) . '</td></tr>';
     ?>
     <form action="category" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="id" value="<?php echo e::h($item);
     ?>">
         <tr>
@@ -143,6 +150,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     <?php
     draw_footer();
 } elseif (isset($_REQUEST['deletecategory'])) {
+    // Validate CSRF token for Delete Category operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     // Delete category
     //
     //
@@ -173,6 +185,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="category" method="POST" enctype="multipart/form-data">
+            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
             <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
@@ -228,6 +241,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     }
     ?>
 <form action="admin" method="POST" enctype="multipart/form-data">
+    <?php echo $GLOBALS['csrf']->getTokenField(); ?>
     <tr>
         <td colspan="4" align="center"><div class="buttons"><button class="regular" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div></td>
     </tr>
@@ -253,6 +267,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="category" method="POST" enctype="multipart/form-data">
+            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
             <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
             <tr>
@@ -288,6 +303,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_update_category'), $last_message);
     ?>
 <form id="updateCategoryForm" action="category" method="POST" enctype="multipart/form-data">
+    <?php echo $GLOBALS['csrf']->getTokenField(); ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
 <?php
@@ -333,6 +349,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_update_category'). ': ' .msg('choose'), $last_message);
     ?>
     <form action="category" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
         <table border="0">
@@ -369,6 +386,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     <?php
     draw_footer();
 } elseif (isset($_REQUEST['updatecategory'])) {
+    // Validate CSRF token for Update Category operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');

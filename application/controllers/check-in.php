@@ -76,6 +76,7 @@ if (!isset($_POST['submit'])) {
         ?>
 <table border="0" cellspacing="5" cellpadding="5">
     <form action="check-in" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
         ?>">
         <tr>
@@ -131,6 +132,12 @@ if (!isset($_POST['submit'])) {
     }//end else
 }//end if (!$submit)
 else {
+    // Validate CSRF token for check-in operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     if ($GLOBALS['CONFIG']['authorization'] == 'True') {
         $publishable = '0';
     } else {

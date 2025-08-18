@@ -1,4 +1,5 @@
 <form name="update" id="modifyUserForm" action="user" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
             <td><b>{$g_lang_userpage_id}</b></td><td colspan=4>{$user->id|escape:'html'}</td>

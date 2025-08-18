@@ -40,6 +40,11 @@ if (
     && isset($_POST['user_id'])
     && $_POST['user_id'] + 0 > 0
 ) {
+    // Validate CSRF token for password reset
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     // reset their password and code
     $newPass = trim($_POST['password']);
     $oldCode = str_replace(' ', '', $_POST['code']);
@@ -125,6 +130,7 @@ if (
             <p><?php echo msg('message_set_your_new_password')?></p>
 
             <form action="forgot_password" method="post">
+            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
             <input type="hidden" name="action" value="forgot">
             <input type="hidden" name="user_id" value="<?php echo e::h($user_id);
         ?>">
@@ -161,6 +167,12 @@ if (
              */
     }
 } elseif (isset($_POST['username']) && strlen($_POST['username']) > 0) {
+    // Validate CSRF token for username submission
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // they have sent an username
     $username = trim($_POST['username']);
 
@@ -244,6 +256,7 @@ else {
 
 
         <form action="forgot_password" method="post">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <table border="0">
         <tr>
         <th><?php echo msg('username')?>    :</th>

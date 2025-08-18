@@ -2,6 +2,7 @@
 
 <!-- file upload formu using ENCTYPE -->
 <form id="addeditform" name="main" class="display dataTable" action="edit" method="POST" enctype="multipart/form-data" onsubmit="return checksec(); ">
+    {$csrf_token_field}
     <input type="hidden" id="db_prefix" value="{$db_prefix}" />
 <table border="0" cellspacing="5" cellpadding="5">
 {assign var='i' value='0'}    

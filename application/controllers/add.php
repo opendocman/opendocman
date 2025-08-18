@@ -147,6 +147,12 @@ if (!isset($_POST['submit'])) {
 
     display_smarty_template('_add_footer.tpl');
 } else {
+    // Validate CSRF token for file upload
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location:error?ec=29&last_message=' . urlencode('Security token validation failed'));
+        exit;
+    }
+    
     //invalid file
     if (empty($_FILES)) {
         header('Location:error?ec=11');

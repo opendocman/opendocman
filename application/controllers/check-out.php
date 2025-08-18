@@ -72,6 +72,7 @@ if (!isset($_GET['submit'])) {
 }
 // form submitted - download
 else {
+
     $id = (int) $_REQUEST['id'];
 
     checkUserPermission($id, $file_data_obj->WRITE_RIGHT, $file_data_obj);

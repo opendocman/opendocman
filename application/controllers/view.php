@@ -65,6 +65,12 @@ if ($filedata->getError() != '') {
     }
     // form submitted - begin download
     else {
+        // Validate CSRF token for file download operation
+        if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+            header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+            exit;
+        }
+        
         $id = $filedata->getId();
         $realname = $filedata->getName();
 

@@ -99,6 +99,12 @@ if (!isset($_REQUEST['submit'])) {
     $GLOBALS['smarty']->assign('mode', '');
     display_smarty_template('commentform.tpl');
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject') {
+    // Validate CSRF token for Reject operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     $to = isset($_POST['to']) ? e::h($_POST['to']) : '';
     $subject = isset($_POST['subject']) ? e::h($_POST['subject']) : '';
     $checkbox = isset($_POST['checkbox']) ? e::h($_POST['checkbox']) : '';
@@ -185,6 +191,12 @@ if (!isset($_REQUEST['submit'])) {
     }
     header("Location: out?last_message=" .urlencode(msg('message_file_rejected')));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize') {
+    // Validate CSRF token for Authorize operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     $checkbox = isset($_REQUEST['checkbox']) ? e::h($_REQUEST['checkbox']) : '';
     $reviewer_comments = "To= " . e::h($_POST['to']) . ";Subject=" . e::h($_POST['subject']) . ";Comments=" . e::h($_POST['comments']) . ";";
     $user_obj = new User($_SESSION['uid'], $pdo);

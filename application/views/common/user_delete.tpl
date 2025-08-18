@@ -1,5 +1,6 @@
 <table border="0" cellspacing="5" cellpadding="5">
     <form action="user" method="POST" enctype="multipart/form-data">
+        {$csrf_token_field}
         <tr>
             <td valign="top">{$g_lang_userpage_are_sure}
                 <input type="hidden" name="id" value="{$user_id|escape:'html'}">

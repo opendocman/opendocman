@@ -28,6 +28,7 @@
             </td>
         </tr>
     <form action="admin" method="POST" enctype="multipart/form-data">
+        {$csrf_token_field}
         <tr>
             <td colspan="4" align="center">
                 <div class="buttons">

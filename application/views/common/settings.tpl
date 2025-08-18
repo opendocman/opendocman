@@ -1,5 +1,6 @@
         <form action="settings" method="POST" enctype="multipart/form-data" id="settingsForm">
-        <table class="form-table">        
+        {$csrf_token_field}
+        <table class="form-table">
             <tr>
                 <th>{$g_lang_label_name}</th><th>{$g_lang_value}</th><th>{$g_lang_label_description}</th>{$g_lang_label_settings}</th>
             </tr>

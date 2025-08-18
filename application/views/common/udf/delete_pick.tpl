@@ -1,4 +1,5 @@
 <form action="udf" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
 
         <input type="hidden" name="state" value="{$state}">

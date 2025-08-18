@@ -48,6 +48,8 @@ class ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
+            'ParagonIE\\ConstantTime\\' => 23,
+            'ParagonIE\\AntiCSRF\\' => 19,
         ),
         'O' => 
         array (
@@ -150,6 +152,14 @@ class ComposerStaticInitb45404c84f0ffc8156ae02e0114ed51a
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'ParagonIE\\ConstantTime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
+        'ParagonIE\\AntiCSRF\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/anti-csrf/src',
         ),
         'Overtrue\\PHPLint\\' => 
         array (

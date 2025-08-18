@@ -1,5 +1,6 @@
 <table border="0" cellspacing="5" cellpadding="5">
     <form action="user" method="POST" enctype="multipart/form-data">
+        {$csrf_token_field}
         {assign var="nextstate" value=$state+1}
         <input type="hidden" name="state" value="{$nextstate|escape:'html'}">
         <tr>

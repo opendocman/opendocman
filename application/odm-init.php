@@ -69,7 +69,19 @@ foreach ($GLOBALS['lang'] as $key => $value) {
     $GLOBALS['smarty']->assign('g_lang_' . $key, msg($key));
 }
 
-// CSRF protection removed - will be replaced with better implementation
+// Initialize CSRF protection using Paragonie Anti-CSRF library
+require_once __DIR__ . '/includes/csrf/CsrfProtection.php';
+$csrf = CsrfProtection::getInstance();
+
+// Make CSRF protection available globally
+$GLOBALS['csrf'] = $csrf;
+
+// Assign CSRF token to Smarty for forms
+$csrf_data = $csrf->getTokenForTemplate();
+$GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+$GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+$GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+$GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {

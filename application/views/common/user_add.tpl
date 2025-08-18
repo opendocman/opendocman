@@ -1,4 +1,5 @@
 <form name="add_user" id="add_user" action="user" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
         {$onBeforeAddUser}
         <tr><td><b>{$g_lang_label_last_name}</b></td><td><input name="last_name" type="text" class="required" minlength="2" maxlength="255"></td></tr>

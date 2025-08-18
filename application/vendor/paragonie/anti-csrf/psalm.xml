@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<psalm useDocblockTypes="true">
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+    <issueHandlers>
+        <MixedArgument errorLevel="info" />
+        <MixedArrayAccess errorLevel="info" />
+        <MoreSpecificImplementedParamType errorLevel="info" />
+        <RedundantCondition errorLevel="suppress" />
+        <RedundantConditionGivenDocblockType errorLevel="suppress" />
+        <RedundantCast errorLevel="info" />
+        <DocblockTypeContradiction errorLevel="info" />
+        <TypeDoesNotContainType errorLevel="info" />
+        <MixedArgumentTypeCoercion errorLevel="info" />
+        <UnnecessaryVarAnnotation errorLevel="info" />
+        <PossiblyInvalidArrayOffset errorLevel="info" />
+    </issueHandlers>
+</psalm>

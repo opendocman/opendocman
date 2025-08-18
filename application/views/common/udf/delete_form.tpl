@@ -1,4 +1,5 @@
 <form action="udf" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
     <table border=0>
 
             <tr><th align=right>{$g_lang_label_name}:</th><td>{$udf.table_name|escape:'html'}</td></tr>
