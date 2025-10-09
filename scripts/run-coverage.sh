@@ -43,9 +43,9 @@ case "$1" in
         COVERAGE_DIR="/tmp/opendocman-coverage-$(date +%s)"
         mkdir -p "$COVERAGE_DIR"
         
-        php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-html "$COVERAGE_DIR"
+        { php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-html "$COVERAGE_DIR" 2>&1 | grep -Ev 'User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
         
-        if [ $? -eq 0 ] && [ -f "$COVERAGE_DIR/index.html" ]; then
+        if [ $status -eq 0 ] && [ -f "$COVERAGE_DIR/index.html" ]; then
             echo ""
             echo -e "${GREEN}HTML coverage report generated successfully!${NC}"
             echo -e "Location: ${BLUE}$COVERAGE_DIR/index.html${NC}"
@@ -65,9 +65,9 @@ case "$1" in
         echo "Generating XML coverage report..."
         XML_FILE="/tmp/opendocman-coverage-$(date +%s).xml"
         
-        php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-clover "$XML_FILE"
+        { php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-clover "$XML_FILE" 2>&1 | grep -Ev 'User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
         
-        if [ $? -eq 0 ] && [ -f "$XML_FILE" ]; then
+        if [ $status -eq 0 ] && [ -f "$XML_FILE" ]; then
             cp "$XML_FILE" ./coverage.xml
             echo ""
             echo -e "${GREEN}XML coverage report generated as coverage.xml${NC}"
@@ -85,9 +85,9 @@ case "$1" in
         php -d xdebug.mode=coverage ./application/vendor/bin/phpunit \
             --coverage-html "$COVERAGE_DIR" \
             --coverage-clover "$XML_FILE" \
-            --coverage-text
+            --coverage-text 2>&1 | grep -Ev 'User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}
         
-        if [ $? -eq 0 ]; then
+        if [ $status -eq 0 ]; then
             echo ""
             echo -e "${GREEN}All coverage reports generated successfully!${NC}"
             [ -f "$COVERAGE_DIR/index.html" ] && echo -e "HTML: ${BLUE}$COVERAGE_DIR/index.html${NC}"
@@ -101,7 +101,7 @@ case "$1" in
         ;;
     "text"|"")
         echo "Generating text coverage report..."
-        php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-text
+        { php -d xdebug.mode=coverage ./application/vendor/bin/phpunit --coverage-text 2>&1 | grep -Ev 'User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
         ;;
     "help"|"-h"|"--help")
         echo -e "${BLUE}Usage:${NC}"

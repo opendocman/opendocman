@@ -23,7 +23,17 @@
         </testsuite>
     </testsuites>
 
-
+    <coverage>
+        <include>
+            <directory suffix=".php">./application</directory>
+        </include>
+        <exclude>
+            <directory>./application/vendor</directory>
+            <directory>./application/test</directory>
+            <directory>./application/templates_c</directory>
+            <directory>./application/views</directory>
+        </exclude>
+    </coverage>
 
     <logging>
         <junit outputFile="build/logs/junit.xml"/>

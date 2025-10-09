@@ -17,7 +17,7 @@ Features
 - GPL 2.0
 
 # Technologies
-- PHP 7.4 
+- PHP 8.2
 - Database: MySQL 8+, MariaDB 10.0+
 - PHP Capable web server
 
@@ -80,7 +80,7 @@ If you prefer to configure manually:
 
    **Required settings to change:**
    - `MYSQL_PASSWORD` - Set a secure database password
-   - `MYSQL_ROOT_PASSWORD` - Set a secure root password  
+   - `MYSQL_ROOT_PASSWORD` - Set a secure root password
    - `APP_DB_PASS` - Must match `MYSQL_PASSWORD`
    - `ADMIN_PASSWORD` - Set the initial admin user password
    - `SESSION_SECRET` - Set a random string for session encryption
@@ -116,7 +116,7 @@ Use these convenient commands for managing your installation:
 
 ```bash
 make setup      # Complete setup from scratch
-make up         # Start services  
+make up         # Start services
 make down       # Stop services
 make restart    # Restart services
 make logs       # View logs
@@ -130,7 +130,7 @@ make clean      # Remove all data (WARNING: destructive)
 The `.env` file supports comprehensive configuration across these categories:
 
 - **Database Configuration**: MySQL/MariaDB settings and connection parameters
-- **Application Configuration**: OpenDocMan-specific settings  
+- **Application Configuration**: OpenDocMan-specific settings
 - **Port Configuration**: External port mappings for web and database services
 - **Security Configuration**: Passwords, secrets, and file upload limits
 - **Email Configuration**: SMTP settings for notifications
@@ -238,7 +238,7 @@ make clean      # Remove all data (with confirmation)
    ex.  $>`mkdir /var/www/document_repository`
 1. Copy the application/configs/config-sample.php to application/configs/config.php
 1. Edit the config.php to include your database parameters
-1. Edit the database.sql file. You need to change the values set in the odm_settings table, and odm_user tables, 
+1. Edit the database.sql file. You need to change the values set in the odm_settings table, and odm_user tables,
    specifically the dataDir value, and the password used for the admin user creation
 1. Import your database.sql file into your database
 1. Visit the URL for your installation and login as admin (no password)
@@ -256,40 +256,40 @@ To update your current version to the latest release:
 ## Developer Notes
 
 ### The automated installation and upgrade:
-There is a folder named "application/controllers/install" which contains 
-files use by the setup script. This is an automated web-based 
+There is a folder named "application/controllers/install" which contains
+files use by the setup script. This is an automated web-based
 update/installation process. Here is how it works:
 
-The user loads the public/index.php into their browser. They can either 
-select the new installation link, or one of the upgrade links. For a new 
-installation, the user will be prompted to enter a priviledged mysql username 
-and password. This is for the database creation and grant assignments. The 
-script will then proceed to install all the necessary data structures and 
+The user loads the public/index.php into their browser. They can either
+select the new installation link, or one of the upgrade links. For a new
+installation, the user will be prompted to enter a priviledged mysql username
+and password. This is for the database creation and grant assignments. The
+script will then proceed to install all the necessary data structures and
 default data entries for the most current version of ODM.
 
-For updates, the user will be shown their current version (which comes from 
-configs/config.php), and they would then click on the appropriate upgrade 
-link. For example, if their version number is 1.0, they would click on the 
-"Upgrade from 1.0" link. This will apply all necessary database changes to 
+For updates, the user will be shown their current version (which comes from
+configs/config.php), and they would then click on the appropriate upgrade
+link. For example, if their version number is 1.0, they would click on the
+"Upgrade from 1.0" link. This will apply all necessary database changes to
 their current database.
 
-For developers, when there is a new version release, a few new files need 
+For developers, when there is a new version release, a few new files need
 to be created current files modified:
 
-1. upgrade_x.php - where x is the release name. This file should follow the 
-   same format as the other upgrade_x.php files and is used for upgrades only. 
-   This should be built from the output of a program like mysqldiff.pl and 
+1. upgrade_x.php - where x is the release name. This file should follow the
+   same format as the other upgrade_x.php files and is used for upgrades only.
+   This should be built from the output of a program like mysqldiff.pl and
    is the difference between the new version, and the version before it.
 2. setup-config.php - This is where we convert user input during the install
    into a config.php file
-3. index.php - add a new function for the new version upgrade 
+3. index.php - add a new function for the new version upgrade
    (ex. "do_update_x()") where x is the release name.
-   1. Inside this new function, you must "include" each previous upgrade 
+   1. Inside this new function, you must "include" each previous upgrade
       file in succession (see upgrade_10.php for an example).
    2. Add a new case statement for the new upgrade call
 4. odm.php - This file contains all the current SQL commands needed to install
-5. database.sql  - This should contain the same sql commands as odm.php, 
-   only in a mysqldump format for users that need to manually install the 
+5. database.sql  - This should contain the same sql commands as odm.php,
+   only in a mysqldump format for users that need to manually install the
    program for some reason.
 
 These files MUST be kept syncronized for each release!

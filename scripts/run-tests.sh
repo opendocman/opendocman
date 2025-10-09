@@ -72,27 +72,27 @@ install_dependencies() {
 run_all_tests() {
     check_phpunit
     print_color $BLUE "Running all tests..."
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit --verbose 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit --verbose 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
 }
 
 # Function to run unit tests only
 run_unit_tests() {
     check_phpunit
     print_color $BLUE "Running unit tests..."
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit --testsuite Unit --verbose 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit --testsuite Unit --verbose 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
 }
 
 # Function to run integration tests only
 run_integration_tests() {
     check_phpunit
     print_color $BLUE "Running integration tests..."
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit --testsuite Integration --verbose 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit --testsuite Integration --verbose 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
 }
 
 # Function to generate coverage report
@@ -106,9 +106,9 @@ generate_coverage() {
         print_color $YELLOW "Install xdebug with: sudo apt-get install php-xdebug"
     fi
     
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit --coverage-html coverage --coverage-text 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit --coverage-html coverage --coverage-text 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
     
     if [ -d "coverage" ]; then
         print_color $GREEN "Coverage report generated in 'coverage/' directory"
@@ -139,9 +139,9 @@ run_class_tests() {
     fi
     
     print_color $BLUE "Running tests for class: $class_name"
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit "$test_file" --verbose 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit "$test_file" --verbose 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
 }
 
 # Function to run a specific test file
@@ -174,9 +174,9 @@ run_test_file() {
     fi
     
     print_color $BLUE "Running test file: $test_file"
-    FORCE_COLOR=1 ./application/vendor/bin/phpunit "$test_file" --verbose 2>&1 | \
-        grep -v "stty:" | \
-        grep -v "User constructor - User not found"
+    { FORCE_COLOR=1 ./application/vendor/bin/phpunit "$test_file" --verbose 2>&1 | \
+        grep -Ev 'stty:|User constructor - User not found for ID:|User constructor error: Undefined array key|Received Mockery_.*PDOStatement::fetchAll\(\), but no expectations were specified' ; status=${PIPESTATUS[0]}; }
+    if [ $status -ne 0 ]; then exit $status; fi
 }
 
 # Function to list available tests

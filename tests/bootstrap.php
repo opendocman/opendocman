@@ -46,7 +46,8 @@ require_once __DIR__ . '/TestCase.php';
 date_default_timezone_set('UTC');
 
 // Set up quiet testing environment
-ini_set('log_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', '/dev/null');
  
 // Prevent output during tests
 ob_start();
