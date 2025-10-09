@@ -22,7 +22,9 @@
 
 use Aura\Html\Escaper as e;
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();
@@ -39,29 +41,43 @@ if (!$user_obj->isReviewer()) {
 
 $comments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) : '';
 
-if (!isset($_REQUEST['submit'])) {
+if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_waiting'), $last_message);
     $userpermission = new UserPermission($_SESSION['uid'], $pdo);
-  
+
     if ($user_obj->isAdmin()) {
         $id_array = $user_obj->getAllRevieweeIds();
     } else {
         $id_array = $user_obj->getRevieweeIds();
     }
 
+    // Ensure fresh CSRF token for the file list form
+    if (isset($GLOBALS['csrf'])) {
+        $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/toBePublished');
+        $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+        $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+        $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+        $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+    }
     $list_status = list_files($id_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true);
     if ($list_status != -1) {
         $GLOBALS['smarty']->assign('lmode', '');
         display_smarty_template('toBePublished.tpl');
     }
-} elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] =='commentAuthorize' || $_REQUEST['submit'] == 'commentReject')) {
-    if (!isset($_REQUEST['checkbox'])) {
+} elseif (isset($_POST['submit']) && ($_POST['submit'] =='commentAuthorize' || $_POST['submit'] == 'commentReject')) {
+    // Validate CSRF token for Approve/Deny initial POST
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
+
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    if (!isset($_POST['checkbox'])) {
         header('Location: toBePublished?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
     }
 
     draw_header(msg('label_comment'), $last_message);
-    
-    $checkbox = isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
+
+    $checkbox = isset($_POST['checkbox']) ? $_POST['checkbox'] : '';
 /*    if($mode == 'reviewer')
     {
         $access_mode = 'enabled';
@@ -72,9 +88,9 @@ if (!isset($_REQUEST['submit'])) {
     }
 
 */
-    if ($_REQUEST['submit'] == 'commentReject') {
+    if ($_POST['submit'] == 'commentReject') {
         $submit_value='Reject';
-    } elseif ($_REQUEST['submit'] == 'commentAuthorize') {
+    } elseif ($_POST['submit'] == 'commentAuthorize') {
         $submit_value='Authorize';
     } else {
         $submit_value='None';
@@ -97,14 +113,23 @@ if (!isset($_REQUEST['submit'])) {
     $GLOBALS['smarty']->assign('checkbox', $checkbox);
     $GLOBALS['smarty']->assign('access_mode', '');
     $GLOBALS['smarty']->assign('mode', '');
+    // Refresh CSRF token for the comment form to avoid using a consumed token
+    if (isset($GLOBALS['csrf'])) {
+        $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/toBePublished');
+        $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+        $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+        $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+        $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+    }
     display_smarty_template('commentform.tpl');
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject') {
     // Validate CSRF token for Reject operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
+
         header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
         exit;
     }
-    
+
     $to = isset($_POST['to']) ? e::h($_POST['to']) : '';
     $subject = isset($_POST['subject']) ? e::h($_POST['subject']) : '';
     $checkbox = isset($_POST['checkbox']) ? e::h($_POST['checkbox']) : '';
@@ -157,7 +182,7 @@ if (!isset($_REQUEST['submit'])) {
                     mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute, $mail_headers);
                 }
             }
-            
+
             $file_obj->Publishable(-1);
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid, 'R', $pdo);
@@ -192,18 +217,19 @@ if (!isset($_REQUEST['submit'])) {
     header("Location: out?last_message=" .urlencode(msg('message_file_rejected')));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize') {
     // Validate CSRF token for Authorize operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
+
         header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
         exit;
     }
-    
-    $checkbox = isset($_REQUEST['checkbox']) ? e::h($_REQUEST['checkbox']) : '';
+
+    $checkbox = isset($_POST['checkbox']) ? e::h($_POST['checkbox']) : '';
     $reviewer_comments = "To= " . e::h($_POST['to']) . ";Subject=" . e::h($_POST['subject']) . ";Comments=" . e::h($_POST['comments']) . ";";
     $user_obj = new User($_SESSION['uid'], $pdo);
     $date = date('Y-m-d H:i:s T'); //locale insensitive
     $get_full_name = $user_obj->getFullName();
     $full_name = $get_full_name[0].' '.$get_full_name[1];
-    $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : msg('email_subject_review_status'));
+    $mail_subject = (!empty($_POST['subject']) ? stripslashes(e::h($_POST['subject'])) : msg('email_subject_review_status'));
     $mail_from= e::h($full_name) . ' <'.$user_obj->getEmailAddress().'>';
     $mail_headers = "From: ". e::h($mail_from) .PHP_EOL;
     $mail_headers .="Content-Type: text/plain; charset=UTF-8".PHP_EOL;
@@ -226,7 +252,7 @@ if (!isset($_REQUEST['submit'])) {
             $user_obj = new User($file_obj->getOwner(), $pdo);
             $mail_to = $user_obj->getEmailAddress();
             $dept_id = $file_obj->getDepartment();
-            
+
             // Build email for author notification
             if (isset($_POST['send_to_users'][0]) && in_array('owner', $_POST['send_to_users'])) {
                 // Lets unset this now so the new array will just be user_id's
@@ -246,13 +272,13 @@ if (!isset($_REQUEST['submit'])) {
                     mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute, $mail_headers);
                 }
             }
-            
+
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid, 'Y', $pdo);
-            
+
             // Build email for general notices
-            $mail_subject = (!empty($_REQUEST['subject']) ? stripslashes(e::h($_REQUEST['subject'])) : $file_obj->getName().' ' .msg('email_added_to_repository'));
+            $mail_subject = (!empty($_POST['subject']) ? stripslashes(e::h($_POST['subject'])) : $file_obj->getName().' ' .msg('email_added_to_repository'));
             $mail_body2=$comments . PHP_EOL . PHP_EOL;
             $mail_body2.=msg('email_a_new_file_has_been_added'). PHP_EOL . PHP_EOL;
             $mail_body2.=msg('label_filename'). ':  ' . $file_obj->getName() . PHP_EOL . PHP_EOL;
@@ -266,7 +292,7 @@ if (!isset($_REQUEST['submit'])) {
             if (isset($_POST['send_to_all'])) {
                 email_all($mail_subject, $mail_body2, $mail_headers);
             }
-            
+
             if (isset($_POST['send_to_dept'])) {
                 email_dept($dept_id, $mail_subject, $mail_body2, $mail_headers);
             }
@@ -279,14 +305,14 @@ if (!isset($_REQUEST['submit'])) {
         }
     }
     header('Location: out?last_message=' .urlencode(msg('message_file_authorized')));
-} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'comments' && isset($_REQUEST['id'])) {
+} elseif (isset($_POST['submit']) && $_POST['submit'] == 'comments' && isset($_POST['id'])) {
     /*
      * Used to display the reviewer comments in a popup
      */
-    $file_id = (int) $_REQUEST['id'];
+    $file_id = (int) $_POST['id'];
     $file_obj = new FileData($file_id, $pdo);
     echo $file_obj->getReviewerComments();
-} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Cancel') {
+} elseif (isset($_POST['submit']) && $_POST['submit'] == 'Cancel') {
     $last_message=urlencode(msg('message_action_cancelled'));
     header('Location: toBePublished?last_message=' . urlencode($last_message));
 }

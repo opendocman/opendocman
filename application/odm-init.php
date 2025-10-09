@@ -76,12 +76,18 @@ $csrf = CsrfProtection::getInstance();
 // Make CSRF protection available globally
 $GLOBALS['csrf'] = $csrf;
 
-// Assign CSRF token to Smarty for forms
-$csrf_data = $csrf->getTokenForTemplate();
-$GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
-$GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
-$GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
-$GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+// Assign CSRF token to Smarty for forms (avoid generating new token on POST)
+$__req_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+if (strtoupper($__req_method) !== 'POST') {
+    $csrf_data = $csrf->getTokenForTemplate();
+    $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+    $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+    $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+    $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+
+} else {
+    // Do not generate a new token on POST to avoid invalidating submitted tokens
+}
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {

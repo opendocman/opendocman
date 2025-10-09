@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    bootstrap="tests/bootstrap.php"
+    colors="true"
+    cacheResult="true"
+    cacheResultFile=".phpunit.result.cache"
+    executionOrder="default"
+    failOnWarning="false"
+    failOnRisky="false"
+    beStrictAboutTestsThatDoNotTestAnything="false"
+>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="1"/>
+        <server name="APP_ENV" value="test"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="All Tests">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+
+
+    <logging>
+        <junit outputFile="build/logs/junit.xml"/>
+        <testdoxHtml outputFile="build/testdox.html"/>
+    </logging>
+</phpunit>

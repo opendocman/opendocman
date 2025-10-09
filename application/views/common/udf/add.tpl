@@ -1,4 +1,5 @@
 <form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="GET" enctype="multipart/form-data">
+    {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
             <td><b>{$g_lang_label_name}(limit 5)</b></td>

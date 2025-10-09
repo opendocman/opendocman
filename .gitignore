@@ -13,3 +13,5 @@ config.php
 .env
 .env.backup.*
 test-env.php
+phpunit.xml
+build/

@@ -57,9 +57,16 @@ class CsrfProtection
             ini_set('session.use_strict_mode', true);
         }
         
-        // Start session if not already started
+        // Start session if not already started (avoid headers already sent issues)
         if (session_status() == PHP_SESSION_NONE) {
-            session_start();
+            if (!headers_sent()) {
+                session_start();
+            } else {
+                // Fallback: Ensure $_SESSION exists as an array so AntiCSRF can use native session storage
+                if (!isset($_SESSION) || !is_array($_SESSION)) {
+                    $_SESSION = [];
+                }
+            }
         }
         
         // Initialize AntiCSRF with default settings

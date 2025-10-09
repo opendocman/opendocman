@@ -1,6 +1,6 @@
 {assign var=form value=0}
 <div id="filetable_wrapper">
-<form name="table" method="post" ">
+<form name="table" method="post">
     {$csrf_token_field}
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>

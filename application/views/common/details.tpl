@@ -1,5 +1,6 @@
 <table border="0" width=100% cellspacing="4" cellpadding="1">
     <form name="data">
+        {$csrf_token_field}
         <input type="hidden" name="to" value="{$file_detail.to_value|escape:'html'}" />
         <input type="hidden" name="subject" value="{$file_detail.subject_value|escape:'html'}" />
         <input type="hidden" name="comments" value="{$file_detail.comments_value|escape:'html'}" />
@@ -107,7 +108,7 @@
 	var mesg_window_frm;
 	function my_delete()
 	{
-		if(window.confirm("{/literal}{$g_lang_detailspage_are_sure}{literal}")) {	
+		if(window.confirm("{/literal}{$g_lang_detailspage_are_sure}{literal}")) {
 		window.location = "{/literal}{$my_delete_link}{literal}";
 		}
 	}

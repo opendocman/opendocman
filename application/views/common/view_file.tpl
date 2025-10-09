@@ -1,8 +1,9 @@
 <form action="view_file" name="view_file_form" method="get">
+    {$csrf_token_field}
     <input type="hidden" name="id" value="{$file_id|escape:'html'}">
     <input type="hidden" name="mimetype" value="{$mimetype|escape:'html'}">
     <br />
-    {$g_lang_message_to_view_your_file} 
+    {$g_lang_message_to_view_your_file}
         <a class="body" style="text-decoration:none" target="_new" href="view_file?submit=view&id={$file_id|escape:'html'}&mimetype={$mimetype|escape:'html'}">{$g_lang_button_click_here}</a>
     <br><br>
     <div class="buttons">
