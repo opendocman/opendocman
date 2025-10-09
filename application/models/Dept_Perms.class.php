@@ -33,6 +33,7 @@ if (!defined('Dept_Perms_class')) {
         public $chosen_mode;
         protected $connection;
         public $error_flag = false;
+        public $user_obj;
 
         public $NONE_RIGHT = 0;
         public $VIEW_RIGHT = 1;
@@ -53,7 +54,7 @@ if (!defined('Dept_Perms_class')) {
             // this can be fid or uid
             $this->id = $id;
             $this->connection = $connection;
-            
+
             // Store user object if provided to avoid re-creation
             if ($user_obj !== null) {
                 $this->user_obj = $user_obj;

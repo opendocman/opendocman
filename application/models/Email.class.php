@@ -147,7 +147,7 @@ class Email
     {
         if ((count($this->getRecipients()) > 0)) {
             $this->setHeaders();
-            email_users_id($this->getRecipients(), $this->getSubject(), $this->getBody(), $this->getHeaders());
+            email_users_id($this->getRecipients(), $this->getSubject(), $this->getBody(), $this->getHeaders() ?? '');
         }
         return true;
     }
