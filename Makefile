@@ -1,14 +1,28 @@
 # OpenDocMan Management Makefile
 # Provides convenient commands for development, testing, and deployment
+#
+# Docker Compose Compatibility:
+# This Makefile automatically detects and uses the appropriate Docker Compose command:
+# - Prefers 'docker-compose' (standalone binary) if available
+# - Falls back to 'docker compose' (Docker CLI plugin) if docker-compose is not found
+# - Provides clear error message if neither is available
+# Use 'make docker-compose-version' to see which version is being used
 
-# Docker Compose command (use modern 'docker compose' instead of legacy 'docker-compose')
-DOCKER_COMPOSE := docker compose
+# Docker Compose command - automatically detect available version
+DOCKER_COMPOSE := $(shell \
+	if command -v docker-compose >/dev/null 2>&1; then \
+		echo "docker-compose"; \
+	elif docker compose version >/dev/null 2>&1; then \
+		echo "docker compose"; \
+	else \
+		echo "echo 'Error: Neither docker-compose nor docker compose found. Please install Docker Compose.' && exit 1"; \
+	fi)
 
 .PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore
 .PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install
 .PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
 .PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
-.PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check
+.PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check docker-compose-version
 
 # Default target
 help: ## Show this help message
@@ -26,6 +40,10 @@ help: ## Show this help message
 	@echo "  COMPOSE_PROJECT_NAME  - Set custom project name (default: opendocman)"
 	@echo "  COMPOSE_FILE          - Override docker-compose file"
 	@echo "  ODM_ENV               - Set environment (dev, prod, test)"
+	@echo ""
+	@echo "Docker Compose:"
+	@echo "  Auto-detects 'docker-compose' or 'docker compose' command"
+	@echo "  Use 'make docker-compose-version' to see which version is being used"
 
 # =============================================================================
 # Environment Setup
@@ -343,6 +361,22 @@ version: ## Show version information
 	else \
 		echo "No .env file found. Run 'make env-generate' first."; \
 	fi
+
+docker-compose-version: ## Show which Docker Compose command is being used
+	@echo "Docker Compose Command Detection:"
+	@echo "================================="
+	@echo "Using: $(DOCKER_COMPOSE)"
+	@echo ""
+	@if echo "$(DOCKER_COMPOSE)" | grep -q "docker-compose"; then \
+		echo "✅ Using legacy docker-compose command"; \
+	elif echo "$(DOCKER_COMPOSE)" | grep -q "docker compose"; then \
+		echo "✅ Using modern docker compose command"; \
+	else \
+		echo "❌ Docker Compose command detection failed"; \
+	fi
+	@echo ""
+	@echo "Version information:"
+	@$(DOCKER_COMPOSE) version
 
 config: ## Show current Docker Compose configuration
 	@$(DOCKER_COMPOSE) config
