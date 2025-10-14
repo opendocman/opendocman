@@ -202,7 +202,7 @@ function list_files(array $fileid_array, object $userperms_obj, string $dataDir,
     global $pdo;
 
     if (sizeof($fileid_array) == 0 || !isset($fileid_array[0])) {
-        echo '<img src="images/exclamation.gif">' . msg('message_no_files_found') . PHP_EOL;
+        echo '<img src="images/exclamation.gif"> ' . msg('message_no_files_found') . PHP_EOL;
         return -1;
     }
 

@@ -245,9 +245,7 @@ deny from all
 			<th scope="row"><label for="adminpass">Administrator Password</label></th>
 			<td>
 				<input name="adminpass" id="adminpass" type="password" value="<?php echo getEnvVar('ADMIN_PASSWORD', ''); ?>" size="8" class="required" minlength="5"/>
-				<?php if (getEnvVar('ADMIN_PASSWORD') !== null && getEnvVar('ADMIN_PASSWORD') !== ''): ?>
 				<button type="button" id="togglePassword" style="margin-left: 5px; padding: 2px 8px; font-size: 12px;">Show</button>
-				<?php endif; ?>
 			</td>
 			<td>Enter an administrator password here. Write it down! (only used for new installs)<?php echo (getEnvVar('ADMIN_PASSWORD') !== null ? ' <em>(Pre-filled from environment)</em>' : ''); ?></td>
 		</tr>
