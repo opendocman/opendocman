@@ -57,7 +57,7 @@ if (!defined('config')) {
         if(getenv('IS_DOCKER')) {
             define('ABSPATH', dirname(__FILE__) . '/../../');
         } else {
-            define('ABSPATH', dirname(__FILE__) . '/');
+            define('ABSPATH', dirname(__FILE__) . '/../');
         }
     }
 }

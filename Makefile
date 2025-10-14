@@ -1,10 +1,13 @@
 # OpenDocMan Management Makefile
 # Provides convenient commands for development, testing, and deployment
 
+# Docker Compose command (use modern 'docker compose' instead of legacy 'docker-compose')
+DOCKER_COMPOSE := docker compose
+
 .PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore
 .PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install
 .PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
-.PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config
+.PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
 .PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check
 
 # Default target
@@ -55,36 +58,36 @@ env-check: ## Check if .env file exists
 
 build: env-check ## Build Docker images
 	@echo "🏗️  Building Docker images..."
-	@docker-compose build
+	@$(DOCKER_COMPOSE) build
 
 up: env-check ## Start services in background
 	@echo "🚀 Starting OpenDocMan services..."
-	@docker-compose up -d
+	@$(DOCKER_COMPOSE) up -d --build
 	@echo "✅ Services started!"
 	@$(MAKE) status
 
 down: ## Stop and remove containers
 	@echo "🛑 Stopping OpenDocMan services..."
-	@docker-compose down
+	@$(DOCKER_COMPOSE) down
 	@echo "✅ Services stopped!"
 
 restart: ## Restart all services
 	@echo "🔄 Restarting OpenDocMan services..."
-	@docker-compose restart
+	@$(DOCKER_COMPOSE) restart
 	@$(MAKE) status
 
 logs: ## View logs from all services
-	@docker-compose logs -f
+	@$(DOCKER_COMPOSE) logs -f
 
 logs-app: ## View application logs only
-	@docker-compose logs -f app
+	@$(DOCKER_COMPOSE) logs -f app
 
 logs-db: ## View database logs only
-	@docker-compose logs -f db
+	@$(DOCKER_COMPOSE) logs -f db
 
 status: ## Show status of services
 	@echo "📊 Service Status:"
-	@docker-compose ps
+	@$(DOCKER_COMPOSE) ps
 	@echo ""
 	@echo "🌐 Access URLs:"
 	@echo "   HTTP:  http://localhost:$$(grep HTTP_PORT .env 2>/dev/null | cut -d'=' -f2 || echo '8080')"
@@ -179,13 +182,48 @@ test-coverage: coverage-html ## Alias for coverage-html
 
 dev: ## Start in development mode with live reload
 	@echo "🧪 Starting in development mode..."
-	@ODM_ENV=dev docker-compose up
+	@ODM_ENV=dev $(DOCKER_COMPOSE) up
 
 shell: ## Open shell in running app container
-	@docker-compose exec app /bin/bash
+	@$(DOCKER_COMPOSE) exec app /bin/bash
 
 shell-db: ## Open MySQL shell in database container
-	@docker-compose exec db mysql -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2)
+	@$(DOCKER_COMPOSE) exec db mysql -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2)
+
+serve-local: env-check ## Run local PHP server on /public with Docker DB service
+	@echo "🚀 Starting local development environment..."
+	@echo ""
+	@echo "📦 Starting database service..."
+	@$(DOCKER_COMPOSE) up -d db
+	@echo ""
+	@echo "⏳ Waiting for database to be ready..."
+	@sleep 5
+	@echo ""
+	@echo "✅ Database service started!"
+	@echo ""
+	@echo "📊 Database Connection Info:"
+	@echo "  Host:     127.0.0.1"
+	@echo "  Port:     $$(grep DB_EXTERNAL_PORT .env 2>/dev/null | cut -d'=' -f2 || echo '3306')"
+	@echo "  Database: $$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')"
+	@echo "  Username: $$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')"
+	@echo "  Password: $$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2 || echo '[check .env file]')"
+	@echo ""
+	@echo "🌐 Starting PHP development server..."
+	@echo "   URL: http://localhost:8000"
+	@echo ""
+	@echo "Press Ctrl+C to stop the server"
+	@echo ""
+	@export APP_DB_HOST="127.0.0.1;port=$$(grep DB_EXTERNAL_PORT .env 2>/dev/null | cut -d'=' -f2 || echo '3306')" && \
+	export APP_DB_NAME="$$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
+	export APP_DB_USER="$$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
+	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
+	cd public && php -S localhost:8000
+
+serve-local-stop: ## Stop local PHP server and database service
+	@echo "🛑 Stopping local development environment..."
+	@$(DOCKER_COMPOSE) stop db
+	@echo "✅ Database service stopped!"
+	@echo "💡 Tip: Use 'make serve-local' to start again"
 
 # =============================================================================
 # Maintenance Commands
@@ -194,15 +232,15 @@ shell-db: ## Open MySQL shell in database container
 clean: ## Stop containers and remove volumes (DATA LOSS WARNING!)
 	@echo "⚠️  WARNING: This will delete all data including uploaded files and database!"
 	@read -p "Are you sure? Type 'yes' to continue: " confirm && [ "$$confirm" = "yes" ] || exit 1
-	@docker-compose down -v
+	@$(DOCKER_COMPOSE) down -v
 	@docker system prune -f
 	@echo "🧹 Cleanup complete!"
 
 rebuild: ## Rebuild and restart everything
 	@echo "🔧 Rebuilding OpenDocMan..."
-	@docker-compose down
-	@docker-compose build --no-cache
-	@docker-compose up -d
+	@$(DOCKER_COMPOSE) down
+	@$(DOCKER_COMPOSE) build --no-cache
+	@$(DOCKER_COMPOSE) up -d
 	@$(MAKE) status
 
 # =============================================================================
@@ -219,7 +257,7 @@ install: ## Fresh installation (removes existing data)
 update: ## Update to latest version
 	@echo "⬆️  Updating OpenDocMan..."
 	@git pull
-	@docker-compose pull
+	@$(DOCKER_COMPOSE) pull
 	@$(MAKE) rebuild
 
 # =============================================================================
@@ -230,7 +268,7 @@ backup: ## Create backup of database and files
 	@echo "💾 Creating backup..."
 	@mkdir -p backups
 	@BACKUP_DATE=$$(date +%Y%m%d_%H%M%S) && \
-	docker-compose exec -T db mysqldump -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2) > backups/db_$$BACKUP_DATE.sql && \
+	$(DOCKER_COMPOSE) exec -T db mysqldump -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2) > backups/db_$$BACKUP_DATE.sql && \
 	docker run --rm -v opendocman_odm-files-data:/data -v $$(pwd)/backups:/backup alpine tar czf /backup/files_$$BACKUP_DATE.tar.gz -C /data . && \
 	echo "✅ Backup created: backups/db_$$BACKUP_DATE.sql and backups/files_$$BACKUP_DATE.tar.gz"
 
@@ -242,7 +280,7 @@ restore-db: ## Restore database from backup file (specify BACKUP_FILE=filename)
 		exit 1; \
 	fi
 	@echo "📥 Restoring database from $(BACKUP_FILE)..."
-	@docker-compose exec -T db mysql -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2) < $(BACKUP_FILE)
+	@$(DOCKER_COMPOSE) exec -T db mysql -u$$(grep MYSQL_USER .env | cut -d'=' -f2) -p$$(grep MYSQL_PASSWORD .env | cut -d'=' -f2) $$(grep MYSQL_DATABASE .env | cut -d'=' -f2) < $(BACKUP_FILE)
 	@echo "✅ Database restored!"
 
 restore-files: ## Restore files from backup (specify BACKUP_FILE=filename)
@@ -267,13 +305,13 @@ clean-volumes: ## Remove all Docker volumes (DATA LOSS WARNING!)
 	@echo "🧹 Volumes removed!"
 
 ps: ## Show running containers
-	@docker-compose ps
+	@$(DOCKER_COMPOSE) ps
 
 top: ## Show running processes in containers
-	@docker-compose top
+	@$(DOCKER_COMPOSE) top
 
 stats: ## Show container resource usage
-	@docker stats $$(docker-compose ps -q)
+	@docker stats $$($(DOCKER_COMPOSE) ps -q)
 
 # =============================================================================
 # Security Commands
@@ -295,7 +333,7 @@ version: ## Show version information
 	@echo "Docker version:"
 	@docker --version
 	@echo "Docker Compose version:"
-	@docker-compose --version || docker compose version
+	@$(DOCKER_COMPOSE) version
 	@echo ""
 	@if [ -f .env ]; then \
 		echo "Current configuration:"; \
@@ -307,7 +345,7 @@ version: ## Show version information
 	fi
 
 config: ## Show current Docker Compose configuration
-	@docker-compose config
+	@$(DOCKER_COMPOSE) config
 
 # =============================================================================
 # Quick Aliases
