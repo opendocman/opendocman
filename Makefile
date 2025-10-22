@@ -219,6 +219,38 @@ serve-local: env-check ## Run local PHP server on /public with Docker DB service
 	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
 	cd public && php -S localhost:8000
 
+serve-local-quiet: env-check ## Run local PHP server with minimal logging (access logs hidden)
+	@echo "🚀 Starting local development environment (quiet mode)..."
+	@echo ""
+	@echo "📦 Starting database service..."
+	@$(DOCKER_COMPOSE) up -d db
+	@echo ""
+	@echo "⏳ Waiting for database to be ready..."
+	@sleep 5
+	@echo ""
+	@echo "✅ Database service started!"
+	@echo ""
+	@echo "📊 Database Connection Info:"
+	@echo "  Host:     127.0.0.1"
+	@echo "  Port:     $$(grep DB_EXTERNAL_PORT .env 2>/dev/null | cut -d'=' -f2 || echo '3306')"
+	@echo "  Database: $$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')"
+	@echo "  Username: $$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')"
+	@echo "  Password: $$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2 || echo '[check .env file]')"
+	@echo ""
+	@echo "🌐 Starting PHP development server (logs redirected to php-server.log)..."
+	@echo "   URL: http://localhost:8000"
+	@echo ""
+	@echo "💡 Tip: Run 'tail -f php-server.log' in another terminal to view logs"
+	@echo ""
+	@echo "Press Ctrl+C to stop the server"
+	@echo ""
+	@export APP_DB_HOST="127.0.0.1;port=$$(grep DB_EXTERNAL_PORT .env 2>/dev/null | cut -d'=' -f2 || echo '3306')" && \
+	export APP_DB_NAME="$$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
+	export APP_DB_USER="$$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
+	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
+	export DISABLE_CSRF="true" && \
+	cd public && php -d display_errors=Off -d error_reporting=0 -S localhost:8000 >> ../php-server.log 2>&1
+
 serve-local-stop: ## Stop local PHP server and database service
 	@echo "🛑 Stopping local development environment..."
 	@$(DOCKER_COMPOSE) stop db
