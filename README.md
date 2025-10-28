@@ -241,7 +241,7 @@ make clean      # Remove all data (with confirmation)
 1. Edit the database.sql file. You need to change the values set in the odm_settings table, and odm_user tables,
    specifically the dataDir value, and the password used for the admin user creation
 1. Import your database.sql file into your database
-1. Visit the URL for your installation and login as admin (no password)
+1. Visit the URL for your installation and login as admin/admin. Change your admin password once you login.
 
 ## Update Procedure
 
@@ -253,6 +253,7 @@ To update your current version to the latest release:
 1. Load the opendocman /install address in your web browser ( ex. http://www.example.com/install )
 1. Follow the prompts for installation.
 
+<<<<<<< HEAD
 ## Developer Notes
 
 ### The automated installation and upgrade:
@@ -293,3 +294,16 @@ to be created current files modified:
    program for some reason.
 
 These files MUST be kept syncronized for each release!
+
+## Contributing
+
+Anyone is welcome to contribute to OpenDocMan's codebase! If you have a fix or code change, feel free to submit it as a pull request directly to the "master" branch. In cases where the change is relatively small or does not affect other parts of the codebase, it may be merged in immediately by any one of the collaborators. On the other hand, if the change is particularly large or complex, it is expected that it will be discussed at length either well in advance of the pull request being submitted, or even directly on the pull request.
+
+## Donate
+Donations to the general fund are used to pay for the infrastructure costs that are currently covered by sponsors.
+
+General Fund
+You can donate Monero:
+
+Monero:
+495vHjEsWegDydtAvo18DU8B1Y4c3xH1SdHdGLsKwZo2j9JxrcZDZ85aVeiSjSGRGBj3dvKKf1Aj4XcLk9bpKR5R6jj5WuF
