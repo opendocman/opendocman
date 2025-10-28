@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenDocMan jQuery Diagnostics Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .warning { color: #f39c12; }
+        .info { color: #3498db; }
+        .status-box {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .test-form {
+            background: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .test-form input, .test-form select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .test-form button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .test-form button:hover {
+            background: #2980b9;
+        }
+        .error {
+            border-color: #e74c3c !important;
+            background-color: #fdf2f2 !important;
+        }
+        .error-message {
+            display: block;
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .console-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        .test-controls {
+            margin: 20px 0;
+        }
+        .test-controls button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        #results {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenDocMan jQuery Diagnostics Test Page</h1>
+        <p>This page helps diagnose jQuery compatibility issues after upgrading from 1.7.1 to 1.12.4</p>
+        
+        <div class="test-controls">
+            <button class="btn-primary" onclick="runAllTests()">Run All Tests</button>
+            <button class="btn-success" onclick="runValidationTest()">Test Validation</button>
+            <button class="btn-warning" onclick="runCompatibilityTest()">Test Compatibility</button>
+            <button class="btn-danger" onclick="clearResults()">Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+        
+        <div class="test-section">
+            <h3>1. jQuery Environment Test</h3>
+            <div id="jquery-status">Checking jQuery...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Form Validation Test</h3>
+            <p>This form should validate required fields and show error messages:</p>
+            
+            <form id="test-form" class="test-form">
+                <label>Required Text Fiel</label>d:</label>
+                <input type="text" name="required_text" required>
+                
+                <label>Required Email:</label>
+                <input type="email" name="required_email" required>
+                
+                <label>Required Number (min: 5, max: 100):</label>
+                <input type="number" name="required_number" min="5" max="100" required>
+                
+                <label>Optional Field:</label>
+                <input type="text" name="optional_field">
+                
+                <button type="submit">Test Form Submission</button>
+            </form>
+            
+            <div id="form-test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Event Handling Test</h3>
+            <button id="event-test-button" class="btn-primary">Click Me to Test Events</button>
+            <div id="event-test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. AJAX Test</h3>
+            <button id="ajax-test-button" class="btn-primary">Test AJAX Functionality</button>
+            <div id="ajax-test-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. Console Output</h3>
+            <div id="console-output" class="console-output">
+                Console messages will appear here...
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>6. Recommendations</h3>
+            <div id="recommendations"></div>
+        </div>
+    </div>
+    
+    <!-- Load jQuery -->
+    <script src="js/jquery.min.js"></script>
+    <!-- Load compatibility script if it exists -->
+    <script src="js/jquery-compatibility.js"></script>
+    <!-- Load validation plugin -->
+    <script src="js/jquery.validate.min.js"></script>
+    
+    <script>
+        // Console capture for display
+        var consoleMessages = [];
+        var originalLog = console.log;
+        var originalError = console.error;
+        var originalWarn = console.warn;
+        
+        function addConsoleMessage(type, message) {
+            consoleMessages.push({
+                type: type,
+                message: message,
+                time: new Date().toLocaleTimeString()
+            });
+            updateConsoleDisplay();
+        }
+        
+        console.log = function() {
+            originalLog.apply(console, arguments);
+            addConsoleMessage('log', Array.prototype.slice.call(arguments).join(' '));
+        };
+        
+        console.error = function() {
+            originalError.apply(console, arguments);
+            addConsoleMessage('error', Array.prototype.slice.call(arguments).join(' '));
+        };
+        
+        console.warn = function() {
+            originalWarn.apply(console, arguments);
+            addConsoleMessage('warn', Array.prototype.slice.call(arguments).join(' '));
+        };
+        
+        function updateConsoleDisplay() {
+            var output = document.getElementById('console-output');
+            var html = '';
+            consoleMessages.slice(-20).forEach(function(msg) {
+                var color = msg.type === 'error' ? '#e74c3c' : 
+                           msg.type === 'warn' ? '#f39c12' : '#ecf0f1';
+                html += '<div style="color: ' + color + '">[' + msg.time + '] ' + msg.message + '</div>';
+            });
+            output.innerHTML = html;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        function addResult(id, content, type) {
+            var element = document.getElementById(id);
+            var className = 'status-' + (type || 'info');
+            element.innerHTML = '<div class="status-box ' + className + '">' + content + '</div>';
+        }
+        
+        function checkJQueryEnvironment() {
+            console.log('=== jQuery Environment Check ===');
+            
+            if (typeof jQuery === 'undefined') {
+                addResult('jquery-status', '❌ jQuery is not loaded!', 'error');
+                return false;
+            }
+            
+            var version = jQuery.fn.jquery;
+            console.log('jQuery Version:', version);
+            
+            var statusHtml = '✅ jQuery ' + version + ' is loaded<br>';
+            
+            // Check for validation plugin
+            if (typeof jQuery.fn.validate === 'undefined') {
+                statusHtml += '❌ jQuery Validation plugin is not loaded<br>';
+                console.error('jQuery Validation plugin is missing');
+            } else {
+                statusHtml += '✅ jQuery Validation plugin is loaded<br>';
+                console.log('jQuery Validation plugin is available');
+            }
+            
+            // Check for deprecated methods
+            var deprecatedMethods = ['live', 'die'];
+            deprecatedMethods.forEach(function(method) {
+                if (typeof jQuery.fn[method] === 'undefined') {
+                    statusHtml += '⚠️ jQuery.' + method + '() not available (compatibility script needed)<br>';
+                    console.warn('Method ' + method + ' is not available');
+                } else {
+                    statusHtml += '✅ jQuery.' + method + '() available (compatibility script loaded)<br>';
+                    console.log('Method ' + method + ' is available');
+                }
+            });
+            
+            // Check browser object
+            if (typeof jQuery.browser === 'undefined') {
+                statusHtml += '⚠️ jQuery.browser not available (compatibility script needed)<br>';
+                console.warn('jQuery.browser object is not available');
+            } else {
+                statusHtml += '✅ jQuery.browser available<br>';
+                console.log('jQuery.browser object is available');
+            }
+            
+            addResult('jquery-status', statusHtml, 'success');
+            return true;
+        }
+        
+        function runValidationTest() {
+            console.log('=== Form Validation Test ===');
+            
+            if (typeof jQuery.fn.validate === 'undefined') {
+                addResult('form-test-results', '❌ Cannot test validation - plugin not loaded', 'error');
+                return;
+            }
+            
+            try {
+                var form = jQuery('#test-form');
+                
+                // Initialize validation
+                var validator = form.validate({
+                    rules: {
+                        required_text: "required",
+                        required_email: {
+                            required: true,
+                            email: true
+                        },
+                        required_number: {
+                            required: true,
+                            min: 5,
+                            max: 100
+                        }
+                    },
+                    messages: {
+                        required_text: "This field is required",
+                        required_email: {
+                            required: "Email is required",
+                            email: "Please enter a valid email"
+                        },
+                        required_number: {
+                            required: "Number is required",
+                            min: "Minimum value is 5",
+                            max: "Maximum value is 100"
+                        }
+                    },
+                    errorClass: "error",
+                    errorElement: "span",
+                    errorPlacement: function(error, element) {
+                        error.addClass("error-message");
+                        error.insertAfter(element);
+                    }
+                });
+                
+                console.log('Form validation initialized successfully');
+                addResult('form-test-results', '✅ Form validation initialized. Try submitting the form with empty fields to test.', 'success');
+                
+                // Test validation programmatically
+                var isValid = validator.form();
+                console.log('Current form validity:', isValid);
+                
+            } catch (e) {
+                console.error('Validation test failed:', e.message);
+                addResult('form-test-results', '❌ Validation test failed: ' + e.message, 'error');
+            }
+        }
+        
+        function runCompatibilityTest() {
+            console.log('=== Compatibility Test ===');
+            
+            var results = [];
+            
+            try {
+                // Test event binding
+                jQuery(document).off('click.test').on('click.test', function() {
+                    console.log('Event binding test successful');
+                });
+                results.push('✅ Event binding (.on/.off) works');
+                
+                // Test AJAX setup
+                jQuery.ajaxSetup({
+                    timeout: 5000
+                });
+                results.push('✅ AJAX setup works');
+                
+                // Test selector performance
+                var testElements = jQuery('div, p, span');
+                results.push('✅ Selector engine works (' + testElements.length + ' elements found)');
+                
+                // Test animation support
+                if (typeof jQuery.fn.animate === 'function') {
+                    results.push('✅ Animation support available');
+                } else {
+                    results.push('⚠️ Animation support not available');
+                }
+                
+                console.log('Compatibility tests completed successfully');
+                addResult('results', results.join('<br>'), 'success');
+                
+            } catch (e) {
+                console.error('Compatibility test failed:', e.message);
+                addResult('results', '❌ Compatibility test failed: ' + e.message, 'error');
+            }
+        }
+        
+        function runAllTests() {
+            console.log('=== Running All Tests ===');
+            clearResults();
+            
+            checkJQueryEnvironment();
+            runValidationTest();
+            runCompatibilityTest();
+            
+            // Generate recommendations
+            setTimeout(generateRecommendations, 1000);
+        }
+        
+        function generateRecommendations() {
+            console.log('=== Generating Recommendations ===');
+            
+            var recommendations = [];
+            
+            if (typeof jQuery === 'undefined') {
+                recommendations.push('🚨 <strong>CRITICAL:</strong> Install jQuery library');
+            }
+            
+            if (typeof jQuery.fn.validate === 'undefined') {
+                recommendations.push('🚨 <strong>CRITICAL:</strong> Install jQuery Validation plugin');
+            }
+            
+            if (typeof jQuery.fn.live === 'undefined') {
+                recommendations.push('⚠️ <strong>WARNING:</strong> Include jquery-compatibility.js for deprecated method support');
+            }
+            
+            if (consoleMessages.some(function(msg) { return msg.type === 'error'; })) {
+                recommendations.push('❌ <strong>ERRORS DETECTED:</strong> Check console output and fix JavaScript errors');
+            }
+            
+            if (recommendations.length === 0) {
+                recommendations.push('✅ <strong>ALL GOOD:</strong> No major issues detected. Your jQuery upgrade appears successful!');
+                recommendations.push('💡 <strong>NEXT STEPS:</strong> Test your application thoroughly in all browsers');
+            }
+            
+            recommendations.push('🔧 <strong>GENERAL:</strong> Clear browser cache if you experience issues');
+            recommendations.push('📋 <strong>TESTING:</strong> Test all forms, login, and interactive features');
+            
+            document.getElementById('recommendations').innerHTML = recommendations.join('<br><br>');
+        }
+        
+        function clearResults() {
+            consoleMessages = [];
+            updateConsoleDisplay();
+            document.getElementById('recommendations').innerHTML = '';
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        // Event handlers
+        jQuery(document).ready(function() {
+            console.log('Document ready - initializing tests');
+            
+            // Form submission handler
+            jQuery('#test-form').on('submit', function(e) {
+                e.preventDefault();
+                console.log('Form submission intercepted for testing');
+                
+                var validator = jQuery(this).data('validator');
+                if (validator) {
+                    var isValid = validator.form();
+                    console.log('Form validation result:', isValid);
+                    
+                    if (isValid) {
+                        addResult('form-test-results', '✅ Form is valid! Validation working correctly.', 'success');
+                    } else {
+                        addResult('form-test-results', '⚠️ Form has errors. This is expected for testing.', 'warning');
+                    }
+                } else {
+                    addResult('form-test-results', '❌ No validator found on form', 'error');
+                }
+            });
+            
+            // Event test button
+            jQuery('#event-test-button').on('click', function() {
+                console.log('Event test button clicked');
+                addResult('event-test-results', '✅ Click event handler working correctly', 'success');
+            });
+            
+            // AJAX test button
+            jQuery('#ajax-test-button').on('click', function() {
+                console.log('Testing AJAX functionality');
+                
+                jQuery.ajax({
+                    url: 'jquery-test.html', // Self-reference for testing
+                    method: 'HEAD',
+                    timeout: 5000
+                }).done(function() {
+                    console.log('AJAX test successful');
+                    addResult('ajax-test-results', '✅ AJAX request completed successfully', 'success');
+                }).fail(function(xhr, status, error) {
+                    console.log('AJAX test failed:', status, error);
+                    addResult('ajax-test-results', '⚠️ AJAX test failed: ' + status + ' (' + error + '). This may be normal for file:// URLs.', 'warning');
+                });
+            });
+            
+            // Auto-run environment check
+            checkJQueryEnvironment();
+        });
+    </script>
+</body>
+</html>

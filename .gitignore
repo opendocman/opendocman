@@ -4,6 +4,15 @@
 ~$*
 .*.swp
 .idea
+.phplint-cache
 Thumbs.db
 /nbproject
 config.php
+**/*.tpl.php
+.phpunit.result.cache
+.env
+.env.backup.*
+test-env.php
+phpunit.xml
+build/
+php-server.log

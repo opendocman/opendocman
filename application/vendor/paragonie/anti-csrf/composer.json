@@ -1,0 +1,38 @@
+{
+    "name":         "paragonie/anti-csrf",
+    "description":  "Paragon Initiative's Anti-CSRF Security Library",
+    "keywords": [
+            "security",
+            "csrf",
+            "appsec",
+            "session"
+        ],
+    "license":      "(MIT or AGPL-3.0)",
+    "type":         "library",
+    "authors": [
+            {
+                "name":     "Scott Arciszewski",
+                "email":    "scott@paragonie.com",
+                "homepage": "https://paragonie.com",
+                "role":     "Developer"
+            }
+        ],
+    "support": {
+        "issues":   "https://github.com/paragonie/anti-csrf/issues",
+        "email":    "info@paragonie.com",
+        "source":   "https://github.com/paragonie/anti-csrf"
+    },
+    "autoload": {
+        "psr-4": {
+            "ParagonIE\\AntiCSRF\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7|^8",
+        "paragonie/constant_time_encoding": "^2|^3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6|^7|^8|^9",
+        "vimeo/psalm": "^1|^3|^4"
+    }
+}

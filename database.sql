@@ -70,7 +70,7 @@ CREATE TABLE odm_data (
   KEY id (id),
   KEY id_2 (id),
   KEY publishable (publishable),
-  KEY description (description)
+  KEY description (description(200))
 ) ENGINE = MYISAM;
 
 #
@@ -188,7 +188,7 @@ CREATE TABLE odm_user (
 # Dumping data for table 'odm_user'
 #
 
-INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','admin@mailinator.com','User','Admin','', 1, 1);
+INSERT INTO odm_user VALUES (NULL,'admin',md5('admin'),1,'5555551212','odm-test@mailinator.com','User','Admin','', 1, 1);
 
 #
 # Table structure for table 'odm_user_perms'
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS odm_odmsys
     sys_value    varchar(255)
 ) ENGINE = MYISAM;
 
-INSERT INTO odm_odmsys VALUES (NULL,'version','1.3.6');
+INSERT INTO odm_odmsys VALUES (NULL,'version','1.4.0');
 
 CREATE TABLE IF NOT EXISTS `odm_settings` (
 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `odm_settings` (
 `description` VARCHAR( 255 ) NOT NULL ,
 `validation` VARCHAR( 255 ) NOT NULL ,
 PRIMARY KEY ( `id` ) ,
-UNIQUE ( `name` )
+UNIQUE ( `name`(200))
 ) ENGINE = MYISAM;
 
 INSERT INTO `odm_settings` VALUES(NULL,'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
@@ -265,6 +265,7 @@ INSERT INTO `odm_settings` VALUES(NULL,'try_nis', 'False', 'Attempt NIS password
 INSERT INTO `odm_settings` VALUES(NULL,'theme', 'tweeter', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL,'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
 INSERT INTO `odm_settings` VALUES(NULL,'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing.', 'num');
+
 
 CREATE  TABLE IF NOT EXISTS `odm_filetypes` (
 `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,

@@ -1,0 +1,38 @@
+{
+    "name": "aura/router",
+    "type": "library",
+    "description": "Powerful, flexible web routing for PSR-7 requests.",
+    "keywords": [
+        "route",
+        "router",
+        "routing",
+        "psr-7"
+    ],
+    "homepage": "https://github.com/auraphp/Aura.Router",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aura.Router Contributors",
+            "homepage": "https://github.com/auraphp/Aura.Router/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aura\\Router\\": "src/"
+        }
+    },
+    "require-dev": {
+        "guzzlehttp/psr7": "^1.0 || ^2.0",
+        "yoast/phpunit-polyfills": "~1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Router\\": "tests/"
+        }
+    }
+}
