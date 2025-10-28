@@ -22,8 +22,8 @@ Features
 - PHP Capable web server
 
 # Support
-- [Discord Server] (https://discord.gg/c92ksu4x)
-- [Discorse Server] (https://discourse.opendocman.com/)
+- [Discord Server](https://discord.gg/c92ksu4x)
+- [Discorse Server](https://discourse.opendocman.com/)
 
 # Installation
 
