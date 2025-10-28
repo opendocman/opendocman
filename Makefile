@@ -23,6 +23,7 @@ DOCKER_COMPOSE := $(shell \
 .PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
 .PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
 .PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check docker-compose-version
+.PHONY: copyright-update copyright-dynamic copyright-check
 
 # Default target
 help: ## Show this help message
@@ -44,6 +45,14 @@ help: ## Show this help message
 	@echo "Docker Compose:"
 	@echo "  Auto-detects 'docker-compose' or 'docker compose' command"
 	@echo "  Use 'make docker-compose-version' to see which version is being used"
+	@echo ""
+	@echo "Copyright Management:"
+	@echo "  make copyright-check        - Check current copyright status"
+	@echo "  make copyright-update       - Update static copyright years to 2025"  
+	@echo "  make copyright-dynamic      - Set up automatic yearly copyright updates"
+	@echo "  make copyright-all          - Complete copyright setup (static + dynamic)"
+	@echo "  make copyright-auto         - Automated setup with maintenance scheduling"
+	@echo "  make copyright-report       - Generate detailed copyright report"
 
 # =============================================================================
 # Environment Setup
@@ -412,6 +421,34 @@ docker-compose-version: ## Show which Docker Compose command is being used
 
 config: ## Show current Docker Compose configuration
 	@$(DOCKER_COMPOSE) config
+
+# =============================================================================
+# Copyright Management Commands
+# =============================================================================
+
+copyright-check: ## Check current copyright status
+	@echo "🔍 Checking copyright status..."
+	@./scripts/copyright-maintenance.sh check
+
+copyright-update: ## Update static copyright years to 2025
+	@echo "📅 Updating static copyright years to 2025..."
+	@./scripts/copyright-maintenance.sh update-static
+
+copyright-dynamic: ## Set up automatic yearly copyright updates  
+	@echo "🔄 Setting up dynamic copyright system..."
+	@./scripts/copyright-maintenance.sh update-dynamic
+
+copyright-all: ## Complete copyright setup (static + dynamic)
+	@echo "🎯 Setting up complete copyright management..."
+	@./scripts/copyright-maintenance.sh update-all
+
+copyright-auto: ## Automated setup with maintenance scheduling
+	@echo "🤖 Running automated copyright setup..."
+	@./scripts/copyright-maintenance.sh auto-setup
+
+copyright-report: ## Generate detailed copyright report
+	@echo "📊 Generating copyright report..."
+	@./scripts/copyright-maintenance.sh report
 
 # =============================================================================
 # Quick Aliases
