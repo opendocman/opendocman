@@ -21,6 +21,10 @@ Features
 - Database: MySQL 8+, MariaDB 10.0+
 - PHP Capable web server
 
+# Support
+- [Discord Server] (https://discord.gg/c92ksu4x)
+- [Discorse Server] (https://discourse.opendocman.com/)
+
 # Installation
 
 ## Setting Up The Database
@@ -253,7 +257,6 @@ To update your current version to the latest release:
 1. Load the opendocman /install address in your web browser ( ex. http://www.example.com/install )
 1. Follow the prompts for installation.
 
-<<<<<<< HEAD
 ## Developer Notes
 
 ### The automated installation and upgrade:
