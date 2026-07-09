@@ -118,7 +118,7 @@ $request_state = e::h(($_REQUEST['state']+1));
     ?>"><?php echo msg('label_rejections')?></a></b></td>
         </tr>
         <tr>
-            <td><b><a href="<?php echo 'check_exp?&state=' . $request_state;
+            <td><b><a href="<?php echo 'check-exp?&state=' . $request_state;
     ?>"><?php echo msg('label_check_expiration')?></a></b></td>
         </tr>
         <tr>

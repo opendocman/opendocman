@@ -149,21 +149,6 @@ function email_dept(int $dept_id, string $mail_subject, string $mail_body, strin
 }
 
 /**
- * @param array $user_OBJ_array
- * @param string $mail_subject
- * @param string $mail_body
- * @param string $mail_header
- */
-function email_users_obj(array $user_OBJ_array, string $mail_subject, string $mail_body, string $mail_header)
-{
-    for ($i = 0; $i < sizeof($user_OBJ_array); $i++) {
-        if ($GLOBALS['CONFIG']['demo'] == 'False') {
-            mail($user_OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
-        }
-    }
-}
-
-/**
  * @param array $user_ID_array
  * @param string $mail_subject
  * @param string $mail_body
@@ -183,7 +168,11 @@ function email_users_id($user_ID_array, string $mail_subject, string $mail_body,
 
     if (!empty($OBJ_array)) {
         if (count($OBJ_array) > 0) {
-            email_users_obj($OBJ_array, $mail_subject, $mail_body, $mail_header);
+            for ($i = 0; $i < sizeof($OBJ_array); $i++) {
+                if ($GLOBALS['CONFIG']['demo'] == 'False') {
+                    mail($OBJ_array[$i]->getEmailAddress(), $mail_subject, $mail_body, $mail_header);
+                }
+            }
         }
     }
 }
@@ -587,30 +576,6 @@ function display_filesize($file)
     }
 }
 
-function valid_username($username): bool
-{
-    if (preg_match('/^\w+$/', $username)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function cleanInput($input)
-{
-    /*
-    $search = array(
-            '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
-            '@<[\/\!]*?[^<>]*?>@si',            // Strip out HTML tags
-            '@<style[^>]*?>.*?</style>@siU',    // Strip style tags properly
-            '@<![\s\S]*?--[ \t\n\r]*>@'         // Strip multi-line comments
-    );
-
-    $output = preg_replace($search, '', $input);
-*/
-    return xss_clean($input);
-}
-
 function sanitizeme($input)
 {
     if (is_array($input)) {
@@ -619,7 +584,7 @@ function sanitizeme($input)
         }
     } else {
 
-        $input = cleanInput($input);
+        $input = xss_clean($input);
         $output = $input;
     }
 
@@ -670,7 +635,7 @@ function callPluginMethod($method, $args = '')
 {
     if (isset($GLOBALS['plugin'])) {
         foreach ($GLOBALS['plugin']->pluginslist as $value) {
-            if (!valid_username($value)) {
+            if (!preg_match('/^\w+$/', $value)) {
                 echo 'Sorry, your plugin ' . e::h($value) . ' is not setup properly';
             }
             $plugin_obj = new $value;
