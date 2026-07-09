@@ -104,13 +104,13 @@ function getEnvVar($name, $default = null) {
 
 /**#@-*/
 
-if (!file_exists(ABSPATH . 'configs/config-sample.php')) {
+if (!file_exists(dirname(dirname(dirname(__FILE__))) . '/configs/config-sample.php')) {
     echo('Sorry, I need a config-sample.php file to work from. Please re-upload this file from your OpenDocMan installation.');
     exit;
 }
 
 // Check if configs/config.php has been created
-if (file_exists(ABSPATH . 'configs/config.php') || file_exists(ABSPATH . 'configs/docker-configs/config.php')) {
+if (file_exists(dirname(dirname(dirname(__FILE__))) . '/configs/config.php') || file_exists(dirname(dirname(dirname(__FILE__))) . '/configs/docker-configs/config.php')) {
     echo("<p>The file 'configs/config.php' already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href=''>installing now</a>.</p>");
     exit;
 }
@@ -330,12 +330,12 @@ deny from all
         }
 
         // Verify the templates_c is writable
-        if (!is_writable(ABSPATH . 'templates_c')) {
-            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . ABSPATH . 'templates_c is writable by the web server';
+        if (!is_writable(dirname(dirname(dirname(__FILE__))) . '/templates_c')) {
+            echo 'Sorry, we were unable to write to the templates_c folder. You will need to make sure that ' . dirname(dirname(dirname(__FILE__))) . '/templates_c is writable by the web server';
         }
 
     // Grab the sample as our source file for building a config.php file
-    $configFileSource = file(ABSPATH . 'configs/config-sample.php');
+    $configFileSource = file(dirname(dirname(dirname(__FILE__))) . '/configs/config-sample.php');
 
     // Now replace the default config values with the real ones
     foreach ($configFileSource as $line_num => $line) {
@@ -358,7 +358,7 @@ deny from all
         }
     }
 
-    $config_folder = ABSPATH . (getEnvVar('IS_DOCKER') === 'true' ? 'configs/docker-configs/' : 'configs/');
+    $config_folder = dirname(dirname(dirname(__FILE__))) . '/configs/' . (getEnvVar('IS_DOCKER') === 'true' ? 'docker-configs/' : '');
     if (! is_writable($config_folder)) {
         display_header();
         ?>
