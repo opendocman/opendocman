@@ -18,7 +18,7 @@ DOCKER_COMPOSE := $(shell \
 		echo "echo 'Error: Neither docker-compose nor docker compose found. Please install Docker Compose.' && exit 1"; \
 	fi)
 
-.PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore
+.PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore dump-sql
 .PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install
 .PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
 .PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
@@ -305,6 +305,10 @@ rebuild: ## Rebuild and restart everything
 # =============================================================================
 # Installation and Updates
 # =============================================================================
+
+dump-sql: ## Regenerate database.sql from the canonical schema definition
+	@php application/installer/cli.php dump-sql > database.sql
+	@echo "database.sql regenerated from SchemaBuilder"
 
 install: ## Fresh installation (removes existing data)
 	@echo "📦 Fresh OpenDocMan installation..."

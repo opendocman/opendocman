@@ -24,6 +24,15 @@ $request->getAttribute = function($key) use ($request) {
     return $request->attributes[$key] ?? null;
 };
 
+// Configure session for Docker environment (before any session_start)
+if (getenv('IS_DOCKER')) {
+    ini_set('session.cookie_domain', '');
+    ini_set('session.cookie_path', '/');
+    ini_set('session.cookie_secure', false);
+    ini_set('session.cookie_httponly', true);
+    ini_set('session.use_strict_mode', true);
+}
+
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/controllers/helpers');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/models');
@@ -33,86 +42,66 @@ spl_autoload_register(function ($class) {
     include $class . '.class.php';
 });
 
+// Load installer classes
+require_once __DIR__ . '/../application/installer/ConfigManager.php';
+require_once __DIR__ . '/../application/installer/DatabaseManager.php';
+
 // @TODO: Re-enable aura router
 // Temporarily disable Aura Router due to dependency issues
 // $routerContainer = new Aura\Router\RouterContainer();
 // $map = $routerContainer->getMap();
 
 $configExists = true;
-if (file_exists(__DIR__ . '/../application/configs/config.php')) {
-    // In the case of root folder calls
-    require('configs/config.php');
-} elseif (file_exists(__DIR__ . '/../application/configs/docker-configs/config.php')) {
-    // In case we are running from Docker
-    require('configs/docker-configs/config.php');
-} elseif (file_exists(__DIR__ . '/../../config.php')) {
-    // In the case of subfolders
-    require('../../configs/config.php');
-} elseif (file_exists(__DIR__ . '/../../../configs/config.php')) {
-    // In the case of plugins
-    require('../../../configs/config.php');
+$configManager = new ConfigManager();
+if ($configManager->configExists()) {
+    $configManager->loadConfig();
 } else {
     $configExists = false;
-    if ( false === strpos( $_SERVER['REQUEST_URI'], 'setup-config' ) ) {
-        header( 'Location: /install/setup-config');
+    if (false === strpos($_SERVER['REQUEST_URI'], 'setup-config')
+        && false === strpos($_SERVER['REQUEST_URI'], 'installer')) {
+        header('Location: /installer/setup-config');
         exit;
     }
 }
 
-if($configExists) {
-    /*
-    * Connect to Database to see if it exists yet (it should always exist if there is a config file)
-    */
-    $dsn = "mysql:host=" . APP_DB_HOST . ";dbname=" . APP_DB_NAME . ";charset=utf8";
+if ($configExists) {
     try {
-        $pdo = new PDO($dsn, APP_DB_USER, APP_DB_PASS);
+        $dbManager = new DatabaseManager(APP_DB_HOST, APP_DB_NAME, APP_DB_USER, APP_DB_PASS);
+        $pdo = $dbManager->connect();
     } catch (PDOException $e) {
         print "Error!: " . $e->getMessage() . "<br/>";
         die();
     }
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Lets see if there is a table named *_odmsys so we can tell if the db installation is complete
-    try {
-        $table_count = $pdo->query("SHOW TABLES LIKE '%_odmsys%'")->fetch(PDO::FETCH_NUM);
-    } catch (Exception $e) {
-        // We got an exception == table not found so we must not have run the db installation yet
-    }
+    $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
+    $odmsysExists = $dbManager->odmsysTableExists($prefix);
 
-    if (isset($table_count) && $table_count > 0) {
-        // Database exists - now check if schema version matches required version
-        // But only if we're not already accessing an install route
+    if ($odmsysExists) {
         $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
         $path = parse_url($requestUri, PHP_URL_PATH);
         $path = trim($path, '/');
 
-        if (strpos($path, 'install/') !== 0) {
-            // Not an install route - check database version
+        if (strpos($path, 'install/') !== 0 && strpos($path, 'installer') !== 0) {
             require '../application/version.php';
             require '../application/models/Settings.class.php';
 
             $current_db_version = Settings::get_db_version($pdo);
 
             if ($current_db_version !== $GLOBALS['CONFIG']['required_db_version']) {
-                // Database upgrade needed - redirect to installer
-                header('Location: /install/index');
+                header('Location: /installer');
                 exit;
             }
         }
 
-        // Database version is current or we're accessing install routes - proceed normally
         require '../application/controllers/helpers/functions.php';
         require '../application/odm-init.php';
     } else {
-        // Define a stub function to prevent fatal errors
         if (!function_exists('callPluginMethod')) {
             function callPluginMethod($method, $args = '') {
-                // Stub function - do nothing if plugins aren't loaded
                 return;
             }
         }
     }
-
 }
 
 // CSRF protector library removed - will be replaced with better implementation
@@ -141,7 +130,9 @@ if (file_exists($controllerFile)) {
     include($controllerFile);
 } else {
     // Handle special cases
-    if (strpos($path, 'install/') === 0) {
+    if (strpos($path, 'installer') === 0) {
+        require '../application/installer/InstallerController.php';
+    } elseif (strpos($path, 'install/') === 0) {
         $installPath = str_replace('install/', '', $path);
         $installFile = "../application/controllers/install/{$installPath}.php";
         if (file_exists($installFile)) {

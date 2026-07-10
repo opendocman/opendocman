@@ -54,6 +54,10 @@ $plugin = new Plugin();
 $GLOBALS['smarty'] = new Smarty();
 $GLOBALS['smarty']->template_dir = dirname(__FILE__) . '/views/' . $GLOBALS['CONFIG']['theme'] . '/';
 $GLOBALS['smarty']->compile_dir = dirname(__FILE__) . '/templates_c/';
+$GLOBALS['smarty']->plugins_dir = array_merge(
+    (array)$GLOBALS['smarty']->plugins_dir,
+    [dirname(__FILE__) . '/views/common/plugins/']
+);
 
 $GLOBALS['CONFIG']['base_url'] = base_url();
 
