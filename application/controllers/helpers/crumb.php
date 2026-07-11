@@ -55,19 +55,6 @@ class crumb
 
 
     /**
-     * @return void
-     * @param level int
-     * @desc Deletes a bread crumb.
-     */
-    public function delCrumb($level)
-    {
-        if (isset($_SESSION['crumbs'][$level])) {
-            unset($_SESSION['crumbs'][$level]);
-        }
-    } //end delCrumb()
-
-
-    /**
      * @return string $trail
      * @param cur_level int
      * @desc Print out the current crumb trail from $cur_level on down.
