@@ -45,7 +45,6 @@ if (!isset($_GET['submit'])) {
     $realname = $file_obj->getName();
 
     // Get the suffix of the file so we can look it up
-    // in the $mimetypes array
     $suffix = '';
     if (strchr($realname, '.')) {
         // Fix by blackwes
