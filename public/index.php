@@ -107,7 +107,7 @@ if ($configExists) {
 // CSRF protector library removed - will be replaced with better implementation
 require '../application/version.php';
 require '../application/models/classHeaders.php';
-require '../application/controllers/helpers/mimetypes.php';
+require '../application/models/File.class.php';
 require '../application/controllers/helpers/crumb.php';
 require '../application/controllers/helpers/udf_functions.php';
 
