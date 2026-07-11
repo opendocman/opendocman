@@ -13,6 +13,9 @@ ini_set('display_errors', 1);
 define('BASE_PATH', dirname(__DIR__));
 define('APPLICATION_PATH', BASE_PATH . '/application');
 
+// Prevent output during tests — must be set before any includes
+ob_start();
+
 // Set up autoloading for Composer dependencies
 require_once APPLICATION_PATH . '/vendor/autoload.php';
 
@@ -48,6 +51,3 @@ date_default_timezone_set('UTC');
 // Set up quiet testing environment
 ini_set('log_errors', 1);
 ini_set('error_log', '/dev/null');
- 
-// Prevent output during tests
-ob_start();
