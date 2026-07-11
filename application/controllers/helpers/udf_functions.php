@@ -579,7 +579,7 @@ if (!defined('udf_functions')) {
         
         $table_name = str_replace(' ', '', $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $_REQUEST['table_name']);
 
-        if(!is_valid_udf_name($table_name))
+        if(!preg_match('/^\w+$/', $table_name))
         {
             header('Location: admin?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
             exit;
@@ -793,7 +793,7 @@ if (!defined('udf_functions')) {
     {
         global $pdo;
 
-        if(!is_valid_udf_name($_REQUEST['id'])) {
+        if(!preg_match('/^\w+$/', $_REQUEST['id'])) {
             header('Location: admin?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
             exit;
         }
@@ -884,12 +884,4 @@ if (!defined('udf_functions')) {
         return array($query_pre,$query);
     }
 
-    /**
-     * @param string $name
-     * @return int
-     */
-    function is_valid_udf_name($name) 
-    {
-        return preg_match('/^\w+$/', $name);
     }
-}

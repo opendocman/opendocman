@@ -37,7 +37,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 
 //  was tinyint(4) NOT NULL default '0'
-$$query = "ALTER TABLE data CHANGE COLUMN department department smallint(6) unsigned default NULL";
+$query = "ALTER TABLE data CHANGE COLUMN department department smallint(6) unsigned default NULL";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 

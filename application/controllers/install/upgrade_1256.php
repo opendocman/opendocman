@@ -59,7 +59,7 @@ foreach ($result as $row) {
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 
-    $query = "ALTER TABLE $table_name RENAME {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']}";
+    $query = "ALTER TABLE {$row['table_name']} RENAME {$GLOBALS['CONFIG']['db_prefix']}udftbl_{$row['table_name']}";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
 }
