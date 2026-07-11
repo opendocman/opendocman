@@ -23,24 +23,29 @@ have a chance of keeping ontop of things.
     `master` branch.
 * Make commits of logical units.
 * Check for unnecessary whitespace with `git diff --check` before committing.
-* Make sure your commit messages are in the proper format.
+* Make sure your commit messages use [Conventional Commits](https://www.conventionalcommits.org/):
 
-````
-    (issuexxx) Make the example in CONTRIBUTING imperative and concrete
+  ````
+      feat: add unified installer & migration system
 
-    Without this patch applied the example commit message in the CONTRIBUTING
-    document is not a concrete example.  This is a problem because the
-    contributor is left to imagine what the commit message should look like
-    based on a description rather than an example.  This patch fixes the
-    problem by making the example concrete and imperative.
+      Overhauls the installation system with versioned migrations,
+      config wizard, and CLI support.
 
-    The first line is a real life imperative statement with a ticket number
-    from our issue tracker.  The body describes the behavior without the patch,
-    why this is a problem, and how the patch fixes the problem when applied.
-````
+  ````
 
-* Make sure you have added the necessary tests for your changes.
-* Run _all_ the tests to assure nothing else was accidentally broken.
+  | Prefix         | Effect on version |
+  |----------------|-------------------|
+  | `feat:`        | Minor bump (1.0.0 → 1.1.0) |
+  | `fix:`         | Patch bump (1.0.0 → 1.0.1) |
+  | `BREAKING CHANGE:` or `feat!:` | Major bump (1.0.0 → 2.0.0) |
+  | `docs:`, `chore:`, `ci:`, `refactor:` | No bump |
+
+  Commits without a recognized prefix are still accepted but won't
+  trigger a version bump or appear in the changelog.
+
+* Run _all_ the tests before pushing (automatic via pre-push hook):
+
+      make test
 
 ## Making Trivial Changes
 
@@ -72,6 +77,19 @@ an issue number.
 * Submit a pull request to the repository in the opendocman organization.
 * After feedback has been given we expect responses within two weeks. After two
   weeks will may close the pull request if it isn't showing any activity.
+
+## Release Process
+
+OpenDocMan uses [Release Please](https://github.com/googleapis/release-please-action)
+for automated semantic versioning. No manual version bumps needed.
+
+1. Merge feature/fix PRs into `master` using conventional commit messages.
+2. Release Please maintains a "Release PR" that accumulates changes.
+3. When ready to ship, merge the Release PR — it will:
+   - Bump the version in `application/version.php`
+   - Update `CHANGELOG.md`
+   - Create a git tag (e.g. `v2.1.0`)
+   - Publish a GitHub Release with auto-generated notes
 
 # Additional Resources
 
