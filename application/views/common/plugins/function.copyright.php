@@ -5,9 +5,7 @@
  */
 
 function smarty_function_copyright($params, $smarty) {
-    if (!class_exists('CopyrightHelper')) {
-        require_once dirname(__FILE__) . '/../../../controllers/helpers/copyright_helper.php';
-    }
+    require_once dirname(__FILE__) . '/../../../controllers/helpers/CopyrightHelper.class.php';
     
     $holder = isset($params['holder']) ? $params['holder'] : 'Stephen Lawrence Jr.';
     $startYear = isset($params['start']) ? (int)$params['start'] : 2000;

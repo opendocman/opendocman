@@ -19,15 +19,6 @@
 
 // Main login form
 
-// Configure session for Docker environment
-if (getenv('IS_DOCKER')) {
-    ini_set('session.cookie_domain', '');
-    ini_set('session.cookie_path', '/');
-    ini_set('session.cookie_secure', false);
-    ini_set('session.cookie_httponly', true);
-    ini_set('session.use_strict_mode', true);
-}
-
 session_start();
 
 $pdo = $GLOBALS['pdo'];
