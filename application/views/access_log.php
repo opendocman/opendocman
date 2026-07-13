@@ -1,7 +1,7 @@
 <?php use Aura\Html\Escaper as e; ?>
 <div id="filetable_wrapper">
 <form name="table" method="post" action="access_log">
-    {$csrf_token_field}
+    <?php getTokenField(); ?>
     <table id="filetable" class="display" border="0" cellpadding="1" cellspacing="1">
     <thead>
         <tr>
