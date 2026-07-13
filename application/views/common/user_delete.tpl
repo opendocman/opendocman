@@ -10,7 +10,7 @@
                 <div class="buttons"><button class="positive" type="Submit" name="submit" value="Delete User">{$g_lang_userpage_button_delete}</button></div>
             </td>
             <td align="center">
-                <div class="buttons"><button class="negative" type="Submit" name="cancel" value="Cancel">{$g_lang_userpage_button_cancel}</button></div>
+                <div class="buttons"><button class="negative" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button></div>
             </td>
         </tr>
     </form>

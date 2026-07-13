@@ -30,3 +30,9 @@
     }
 
     label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+
+    .required-indicator {
+        color: #c00;
+        font-weight: bold;
+        margin-left: 3px;
+    }

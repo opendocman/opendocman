@@ -59,7 +59,7 @@ $(document).ready(function() {
 
     if ($adminUser.length > 0) {
         $adminUser.change(function() {
-            if ($(this).attr("checked")) {
+            if ($(this).is(':checked')) {
                 // checked
                 $('#userReviewDepartmentRow').fadeOut(200);
                 return;
@@ -69,38 +69,17 @@ $(document).ready(function() {
 
         })
 
-        function toggleAdminReviewerBoxes() {
-            if ($adminUser.not(':checked')) {
-
-                alert('not currently checked');
-            } else {
-                alert('is currently checked');
-            }
-        }
-
     }
     // END admin/reviewer toggles
 
-//        
-//        // validate the comment form when it is submitted
-//	if($("#settingsForm").length > 0) {
-//        $("#settingsForm").validate();
-//        // validate signup form on keyup and submit
-//	$("#settingsForm").validate({
-//		rules: {
-//			dataDir: "required",
-//                        max_file_size: {
-//                            required: true,
-//                            number: true
-//                        },
-//			site_mail: {
-//				required: true,
-//				email: true
-//			}
-//		}
-//		
-//	});
-//        } 
+// Highlight required fields with a red asterisk
+$('input.required, select.required, textarea.required').each(function() {
+    var $labelCell = $(this).closest('tr').children('td').first();
+    if ($labelCell.length && !$labelCell.find('.required-indicator').length) {
+        $labelCell.append('<span class="required-indicator">*</span>');
+    }
+});
+
 });
 
 function blink() {

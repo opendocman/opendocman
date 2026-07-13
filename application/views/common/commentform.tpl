@@ -54,7 +54,7 @@
 			<br />
                          <div class="buttons">
                             <button class="positive" type="submit" name="submit" value="{$submit_value|escape:'html'}">{$submit_value|escape:'html'}</button>
-                            <button class="negative" type="submit" name="submit" value="Cancel">{$g_lang_button_cancel}</button>
+                            <button class="negative" type="button" onclick="window.location.href='out'">{$g_lang_button_cancel}</button>
                          </div><br /><br />
 
 		</form>

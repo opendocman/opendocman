@@ -31,7 +31,6 @@
                 <input name="Email" type="text" class="required email" maxlength="50">
             </td>
         </tr>
-        <tr>
 
         <tr>
             <td><b>{$g_lang_label_department}</b></td>
@@ -42,6 +41,7 @@
                     {/foreach}
                 </select>
             </td>
+        </tr>
         <tr>
             <td><b>{$g_lang_label_is_admin}?</b></td>
             <td>
@@ -51,7 +51,7 @@
         <tr id="userReviewDepartmentRow">
             <td id="userReviewDepartmentLabelTd"><b>{$g_lang_label_reviewer_for}</b></td>
             <td id="userReviewDepartmentListTd">
-                <select class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" />
+                <select class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList">
                 {foreach from=$department_list item=item name=department_list}
                     <option value={$item.id|escape}>{$item.name|escape:'html'}</option>
                 {/foreach}
@@ -78,7 +78,7 @@
             </td>
             <td>
                 <div class="buttons">
-                    <button id="cancelButton" class="negative cancel" type="Submit" name="cancel" value="Cancel">{$g_lang_userpage_button_cancel}</button>
+                    <button id="cancelButton" class="negative cancel" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
                 </div>
             </td>
         </tr>

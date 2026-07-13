@@ -55,7 +55,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
             </td>
             <td>
                 <div class="buttons">
-                    <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
              </td>
             </tr>
@@ -141,7 +141,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                     <button class="positive" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button>
                 </div>
                 <div class="buttons">
-                    <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
             </td>
     </form>
@@ -210,7 +210,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 <td colspan="2" align="center">
                     <div class="buttons">
                         <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
-                        <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -289,7 +289,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 <td colspan="3" align="center">
                     <div class="buttons">
                         <button class="positive" type="Submit" name="submit" value="Show Category"><?php echo msg('area_view_category')?></button>
-                        <button class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -332,7 +332,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
             </td>
             <td align="center">
                 <div class="buttons">
-                    <button class="negative cancel" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
             </td>
         </tr>
@@ -376,7 +376,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 </td>
                 <td align="center">
                     <div class="buttons">
-                        <button class="negative cancel" type="submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>

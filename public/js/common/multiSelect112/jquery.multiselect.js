@@ -547,14 +547,15 @@ $.widget("ech.multiselect", {
 				.show()
 				.position( o.position )
 				.hide()
-				.show( effect, speed );
+				.css('display', 'block');
 		
 		// if position utility is not available...
 		} else {
-			menu.css({ 
-				top: pos.top + button.outerHeight(),
-				left: pos.left
-			}).show( effect, speed );
+			menu.css({
+				top: pos.top + button[0].offsetHeight,
+				left: pos.left,
+				display: 'block'
+			});
 		}
 		
 		// select the first option
@@ -581,7 +582,7 @@ $.widget("ech.multiselect", {
 			speed = o.hide[1] || this.speed;
 		}
 	
-		this.menu.hide(effect, speed);
+		this.menu.css('display', 'none');
 		this.button.removeClass('ui-state-active').trigger('blur').trigger('mouseleave');
 		this._isOpen = false;
 		this._trigger('close');
