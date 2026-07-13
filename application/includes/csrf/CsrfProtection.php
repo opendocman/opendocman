@@ -115,11 +115,12 @@ class CsrfProtection
      */
     public function validateToken($data = null, $action = '')
     {
-        // Use $_POST by default if no data provided
         if ($data === null) {
             $data = $_POST;
         }
-        
+        if (empty($action)) {
+            $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        }
         try {
             return $this->csrf->validateRequest($action);
         } catch (Exception $e) {
@@ -255,6 +256,9 @@ class CsrfProtection
      */
     public function getTokenForTemplate($action = '')
     {
+        if (empty($action)) {
+            $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        }
         return [
             'field' => $this->getTokenField($action),
             'token' => $this->getToken($action),

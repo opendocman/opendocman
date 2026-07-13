@@ -125,9 +125,7 @@ if (empty($path)) {
 }
 
 // Validate session user still exists in database
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Session is already started by CsrfProtection::__construct() in odm-init.php
 if (isset($_SESSION['uid']) && !User::exists($_SESSION['uid'], $pdo)) {
     session_destroy();
     header('Location: index');
