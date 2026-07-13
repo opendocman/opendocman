@@ -13,7 +13,7 @@
             <td align="center">
                 <div class="buttons">
                     <button class="positive" type="Submit" name="deleteudf" value="Yes">{$g_lang_button_yes}</button>
-                    <button class="negative" type="Submit" name="cancel" value="Cancel">{$g_lang_button_cancel}</button>
+                    <button class="negative" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
                 </div>
             </td>
         </tr>

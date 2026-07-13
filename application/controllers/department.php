@@ -70,10 +70,10 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                 </td>
                 <td align="center">
                     <div class="buttons">
-                        <button class="negative cancel" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
+                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+                </div>
+            </td>
+        </tr>
     </table>
            </form>
    <script>
@@ -359,7 +359,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                 </td>
                 <td>
                     <div class="buttons">
-                        <button class="negative cancel" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                     </div>
                 </td>
             </tr>
@@ -458,7 +458,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                                         </td>
                                         <td align="center">
                                             <div class="buttons">
-                                                <button class="negative cancel" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                                <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                                             </div>
                                         </td>
                                     </tr>

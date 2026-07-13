@@ -32,8 +32,8 @@
         <tr>
             <td colspan="4" align="center">
                 <div class="buttons">
-                    <button class="regular" type="Submit" name=""
-                            value="Back">{$g_lang_userpage_back}</button>
+                    <button class="regular" type="button"
+                            onclick="window.location.href='admin'">{$g_lang_userpage_back}</button>
                 </div>
             </td>
         </tr>

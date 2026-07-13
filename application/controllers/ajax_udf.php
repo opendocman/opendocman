@@ -132,7 +132,7 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
         echo '<div class="buttons">
                             <button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
         ?>
-                            <button class="negative" type="Submit" name="cancel" value="Cancel"><?php echo msg('button_cancel')?></button>
+                            <button class="negative" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                           </div>
                         </td>
                         </tr>

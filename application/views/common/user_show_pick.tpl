@@ -18,7 +18,7 @@
             </td>
             <td>
                 <div class="buttons">
-                    <button class="negative" type="Submit" name="cancel" value="Cancel">{$g_lang_userpage_button_cancel}</button>
+                    <button class="negative" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
                 </div>
             </td>
         </tr>

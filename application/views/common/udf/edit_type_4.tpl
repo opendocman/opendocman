@@ -50,7 +50,7 @@
             <td colspan="2">
                 <div class="buttons">
                     <button class="positive" type="submit" value="Update">{$g_lang_button_update}</button>
-                    <button class="negative" type="Submit" name="cancel" value="Cancel">{$g_lang_button_cancel}</button>
+                    <button class="negative" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
                 </div>
 
             </td>
