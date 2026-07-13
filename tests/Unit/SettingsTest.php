@@ -9,7 +9,6 @@ class SettingsTest extends TestCase
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     private $tmpBase;
-    private $fsReady = false;
 
     protected function setUp(): void
     {
@@ -44,15 +43,6 @@ class SettingsTest extends TestCase
         $this->touch($langPath . '/fr.php');
         $this->mkdirp($langPath . '/common');        // should be excluded by getFolders
         $this->mkdirp($langPath . '/DataTables');    // should be excluded by getFolders
-
-        // Try to define ABSPATH for getThemes/getLanguages
-        if (!defined('ABSPATH')) {
-            define('ABSPATH', rtrim($this->tmpBase, '/') . '/');
-            $this->fsReady = true;
-        } else {
-            // ABSPATH already defined by the environment; we won't run getThemes/getLanguages tests
-            $this->fsReady = false;
-        }
     }
 
     protected function tearDown(): void
@@ -181,14 +171,10 @@ class SettingsTest extends TestCase
 
     public function testGetThemesUsesViewsDirectoryWhenAvailable(): void
     {
-        if (!$this->fsReady) {
-            $this->markTestSkipped('ABSPATH is predefined; skipping getThemes test to avoid side effects.');
-        }
-
         $pdo = \Mockery::mock(PDO::class);
         $settings = new Settings($pdo);
 
-        $themes = $settings->getThemes();
+        $themes = $settings->getFolders($this->tmpBase . '/views');
 
         $this->assertContains('theme1', $themes);
         $this->assertContains('theme2', $themes);
@@ -200,14 +186,10 @@ class SettingsTest extends TestCase
 
     public function testGetLanguagesUsesLanguageDirectoryWhenAvailable(): void
     {
-        if (!$this->fsReady) {
-            $this->markTestSkipped('ABSPATH is predefined; skipping getLanguages test to avoid side effects.');
-        }
-
         $pdo = \Mockery::mock(PDO::class);
         $settings = new Settings($pdo);
 
-        $languages = $settings->getLanguages();
+        $languages = str_replace('.php', '', $settings->getFolders($this->tmpBase . '/includes/language'));
 
         // Files en.php and fr.php should be returned without the .php extension
         $this->assertContains('en', $languages);

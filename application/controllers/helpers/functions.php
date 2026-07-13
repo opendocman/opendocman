@@ -502,7 +502,7 @@ function makeRandomPassword(): string
 {
     $pass = '';
     $salt = 'abchefghjkmnpqrstuvw3456789';
-    srand((double)microtime() * 1000000);
+    srand((float)microtime() * 1000000);
     $i = 0;
     while ($i <= 7) {
         $num = rand() % 33;

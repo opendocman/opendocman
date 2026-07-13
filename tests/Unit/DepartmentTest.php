@@ -388,7 +388,6 @@ class DepartmentTest extends TestCase
         // Use reflection to access protected property
         $reflection = new ReflectionClass($this->department);
         $connectionProperty = $reflection->getProperty('connection');
-        $connectionProperty->setAccessible(true);
         
         $this->assertSame($this->mockConnection, $connectionProperty->getValue($this->department));
     }
