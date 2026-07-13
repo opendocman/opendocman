@@ -1,6 +1,6 @@
 
 
-<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="{$g_base_url}js/functions.js"></script>
 
 <!-- file upload formu using ENCTYPE -->
 <form id="addeditform" name="main" action="add" method="POST" enctype="multipart/form-data" onsubmit="return checksec();">

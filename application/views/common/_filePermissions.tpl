@@ -103,12 +103,13 @@
     $department_permissions_table = $('#department_permissions_table');
     
     if ($department_permissions_table && $department_permissions_table.length > 0) {
-       var oTable = $department_permissions_table.dataTable({
+        var oTable = $department_permissions_table.dataTable({
             "sScrollY": "300px",
             "bPaginate": false,
             "bAutoWidth": false,
+            "bSort": false,
             "oLanguage": {
-                "sUrl": "language/DataTables/datatables." + langLanguage + ".txt"
+                "sUrl": "{$g_base_url}language/DataTables/datatables." + langLanguage + ".txt"
             }
         });
     }
@@ -119,8 +120,9 @@
             "sScrollY": "300px",
             "bPaginate": false,
             "bAutoWidth": false,
+            "bSort": false,
             "oLanguage": {
-                "sUrl": "language/DataTables/datatables." + langLanguage + ".txt"
+                "sUrl": "{$g_base_url}language/DataTables/datatables." + langLanguage + ".txt"
             }
         });
 
