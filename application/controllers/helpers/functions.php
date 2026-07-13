@@ -70,7 +70,7 @@ function draw_header($pageTitle, $lastmessage = '')
 
     // Set up the breadcrumbs
     $crumb = new crumb();
-    $crumb->addCrumb(e::h($_REQUEST['state']), e::h($pageTitle), e::h($_SERVER['SCRIPT_NAME']) . (isset($_SERVER['QUERY_STRING']) ? '?' . e::h($_SERVER['QUERY_STRING']) : ''));
+    $crumb->addCrumb(e::h($_REQUEST['state']), e::h($pageTitle), e::h($_SERVER['REQUEST_URI']));
     $breadCrumb = $crumb->printTrail(e::h($_REQUEST['state']));
 
     $GLOBALS['smarty']->assign('breadCrumb', $breadCrumb);
