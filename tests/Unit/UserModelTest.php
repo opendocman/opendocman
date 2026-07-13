@@ -1377,6 +1377,52 @@ class UserModelTest extends TestCase
     }
 
     /**
+     * Test exists static method returns true for existing user
+     */
+    public function testExistsReturnsTrueForExistingUser(): void
+    {
+        $mockStatement = \Mockery::mock(\PDOStatement::class);
+        $mockStatement->shouldReceive('execute')
+            ->once()
+            ->andReturn(true);
+        $mockStatement->shouldReceive('fetchColumn')
+            ->once()
+            ->andReturn(1);
+
+        $mockPdo = \Mockery::mock(PDO::class);
+        $mockPdo->shouldReceive('prepare')
+            ->once()
+            ->with(\Mockery::pattern('/SELECT COUNT\(\*\) FROM.*user WHERE id = :id/'))
+            ->andReturn($mockStatement);
+
+        $result = User::exists(1, $mockPdo);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test exists static method returns false for non-existing user
+     */
+    public function testExistsReturnsFalseForNonExistingUser(): void
+    {
+        $mockStatement = \Mockery::mock(\PDOStatement::class);
+        $mockStatement->shouldReceive('execute')
+            ->once()
+            ->andReturn(true);
+        $mockStatement->shouldReceive('fetchColumn')
+            ->once()
+            ->andReturn(0);
+
+        $mockPdo = \Mockery::mock(PDO::class);
+        $mockPdo->shouldReceive('prepare')
+            ->once()
+            ->with(\Mockery::pattern('/SELECT COUNT\(\*\) FROM.*user WHERE id = :id/'))
+            ->andReturn($mockStatement);
+
+        $result = User::exists(999, $mockPdo);
+        $this->assertFalse($result);
+    }
+
+    /**
      * Clean up after each test
      */
     protected function tearDown(): void

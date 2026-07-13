@@ -80,18 +80,15 @@ $csrf = CsrfProtection::getInstance();
 // Make CSRF protection available globally
 $GLOBALS['csrf'] = $csrf;
 
-// Assign CSRF token to Smarty for forms (avoid generating new token on POST)
-$__req_method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-if (strtoupper($__req_method) !== 'POST') {
-    $csrf_data = $csrf->getTokenForTemplate();
-    $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
-    $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
-    $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
-    $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
-
-} else {
-    // Do not generate a new token on POST to avoid invalidating submitted tokens
-}
+// Assign CSRF token to Smarty for all requests
+// Always generate a new token so confirmation pages rendered in POST responses
+// (e.g. user delete confirmation) have a valid CSRF token for the next submission.
+// AntiCSRF stores tokens keyed by index, so old tokens remain valid until consumed.
+$csrf_data = $csrf->getTokenForTemplate();
+$GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+$GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+$GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+$GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {

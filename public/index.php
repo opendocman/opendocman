@@ -124,6 +124,14 @@ if (empty($path)) {
     $path = 'index';
 }
 
+// Validate session user still exists in database
+// Session is already started by CsrfProtection::__construct() in odm-init.php
+if (isset($_SESSION['uid']) && !User::exists($_SESSION['uid'], $pdo)) {
+    session_destroy();
+    header('Location: index');
+    exit;
+}
+
 // Simple controller mapping
 $controllerFile = "../application/controllers/{$path}.php";
 if (file_exists($controllerFile)) {

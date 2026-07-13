@@ -624,6 +624,20 @@ if (!defined('User_class')) {
         }
 
         /**
+         * exists - Check if a user with the given ID exists in the database
+         * @param int $id
+         * @param PDO $connection
+         * @return bool
+         */
+        public static function exists($id, PDO $connection)
+        {
+            $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id";
+            $stmt = $connection->prepare($query);
+            $stmt->execute(array(':id' => $id));
+            return $stmt->fetchColumn() > 0;
+        }
+
+        /**
          * getAllUsers - Returns an array of all the active users
          * @param $pdo
          * @return array
