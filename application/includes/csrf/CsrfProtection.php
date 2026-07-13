@@ -81,6 +81,9 @@ class CsrfProtection
      */
     public function getTokenField($action = '')
     {
+        if (empty($action)) {
+            $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        }
         try {
             return $this->csrf->insertToken($action, false);
         } catch (Exception $e) {
@@ -97,6 +100,9 @@ class CsrfProtection
      */
     public function getToken($action = '')
     {
+        if (empty($action)) {
+            $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        }
         try {
             $tokenArray = $this->csrf->getTokenArray($action);
             return $tokenArray[$this->csrf->getFormToken()];
