@@ -54,7 +54,7 @@ These are not unused, but the referenced target is missing or wrong.
 
 | Problem | Location | Detail |
 |---------|----------|--------|
-| Dead link — underscore vs dash | `admin.php:121` links to `/check_exp` | The file is `check-exp.php` (with a dash). This link produces a 404. |
+| Dead link — underscore vs dash | `admin.php:121` links to `check-exp` | The file was `check_exp.php` (with an underscore). This link produced a 404 until it was renamed. |
 | Missing template file | `AccessLog.class.php:72` tries `display('accesslog.tpl')` | File `templates/accesslog.tpl` does not exist anywhere in the project. |
 | Dead code in upgrade script | `upgrade_10.php:40` uses `$$query` instead of `$query` | This ALTER TABLE statement is silently skipped due to a typo (variable variable). |
 | Undefined variable in upgrade | `upgrade_1256.php:62` uses undefined `$table_name` | The UDF table rename query will produce invalid SQL. |
