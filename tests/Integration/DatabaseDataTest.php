@@ -65,7 +65,6 @@ class DatabaseDataTest extends TestCase
     {
         $reflection = new ReflectionClass($this->databaseData);
         $connectionProperty = $reflection->getProperty('connection');
-        $connectionProperty->setAccessible(true);
         
         $this->assertSame($this->mockConnection, $connectionProperty->getValue($this->databaseData));
     }

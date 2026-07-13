@@ -232,7 +232,6 @@ class UserModelTest extends TestCase
         // Set connection via reflection
         $reflection = new ReflectionClass($this->user);
         $connectionProperty = $reflection->getProperty('connection');
-        $connectionProperty->setAccessible(true);
         $connectionProperty->setValue($this->user, $mockConnection);
         
         $result = $this->user->canAdd();
@@ -274,7 +273,6 @@ class UserModelTest extends TestCase
         // Set connection via reflection
         $reflection = new ReflectionClass($this->user);
         $connectionProperty = $reflection->getProperty('connection');
-        $connectionProperty->setAccessible(true);
         $connectionProperty->setValue($this->user, $mockConnection);
         
         $result = $this->user->canCheckIn();
@@ -477,10 +475,8 @@ class UserModelTest extends TestCase
      */
     public function testConstructorSetsConnectionProperty(): void
     {
-        // Use reflection to access protected property
         $reflection = new ReflectionClass($this->user);
         $connectionProperty = $reflection->getProperty('connection');
-        $connectionProperty->setAccessible(true);
         
         $this->assertSame($this->mockConnection, $connectionProperty->getValue($this->user));
     }
