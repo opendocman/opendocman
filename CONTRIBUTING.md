@@ -25,19 +25,53 @@ have a chance of keeping ontop of things.
 * Check for unnecessary whitespace with `git diff --check` before committing.
 * Make sure your commit messages are in the proper format.
 
-````
-    (issuexxx) Make the example in CONTRIBUTING imperative and concrete
+### Conventional Commits
 
-    Without this patch applied the example commit message in the CONTRIBUTING
-    document is not a concrete example.  This is a problem because the
-    contributor is left to imagine what the commit message should look like
-    based on a description rather than an example.  This patch fixes the
-    problem by making the example concrete and imperative.
+This repository uses [Release Please](https://github.com/googleapis/release-please-action)
+to auto-generate releases from commits pushed to `master`. It parses
+[Conventional Commits](https://www.conventionalcommits.org/) to determine the
+next version number and generate changelog entries.
 
-    The first line is a real life imperative statement with a ticket number
-    from our issue tracker.  The body describes the behavior without the patch,
-    why this is a problem, and how the patch fixes the problem when applied.
-````
+Format:
+
+```
+type(scope): description
+
+body
+```
+
+The `type` determines the version bump:
+
+| Type | Bump | Example |
+|------|------|---------|
+| `fix` | patch (2.0.2 → 2.0.3) | `fix: redirect deleted users to login page` |
+| `feat` | minor (2.0.2 → 2.1.0) | `feat: add batch upload` |
+| `feat!` or body with `BREAKING CHANGE:` | major (2.0.2 → 3.0.0) | `feat!: drop PHP 7 support` |
+| `chore`, `docs`, `refactor`, `test`, `style`, `build`, `ci`, `perf` | none | `test: fix deprecation warnings` |
+
+Link issues in the body with `fixes #123` or `closes #456`.
+
+Examples:
+
+```
+fix: redirect deleted users to login page
+
+If a user is deleted while logged in, their session uid still exists
+but the database record is gone. Validate the session user against the
+database on each request and redirect to login if not found.
+
+Fixes #14
+```
+
+```
+test: fix deprecation warnings and skipped tests
+
+Replace deprecated (double) cast with (float), remove no-op
+setAccessible(true) calls, and rewrite skipped SettingsTest methods
+to not depend on the ABSPATH constant.
+
+Closes #365
+```
 
 * Make sure you have added the necessary tests for your changes.
 * Run _all_ the tests to assure nothing else was accidentally broken.
