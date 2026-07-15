@@ -17,8 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+
+const ODM_APP_VERSION = '2.1.0';
+const ODM_DB_VERSION = '1.4.1';
+
 // version information
-$GLOBALS['CONFIG']['current_version'] = '2.0.2';
+$GLOBALS['CONFIG']['current_version'] = ODM_APP_VERSION;
 
 // Database schema version required by this application version. May differ from current version.
-$GLOBALS['CONFIG']['required_db_version'] = '1.4.1';
+$GLOBALS['CONFIG']['required_db_version'] = ODM_DB_VERSION;
