@@ -53,7 +53,7 @@ if ($datafile->getError() != null) {
 
     $owner_full_name = $datafile->getOwnerFullName();
     $owner = $owner_full_name[1].', '.$owner_full_name[0];
-    $real_name = $datafile->getRealName();
+    $realname = $datafile->getRealName();
     $category = $datafile->getCategoryName();
     $created = $datafile->getCreatedDate();
     $description = $datafile->getDescription();
@@ -69,12 +69,12 @@ if ($description == '') {
         $comments = msg('message_no_author_comments_available');
     }
     if ($datafile->isArchived()) {
-        $filename = getFilePath($id, $real_name, 'archive');
+        $filename = getFilePath($id, $realname, 'archive');
     } else {
-        $filename = getFilePath($id, $real_name, 'data');
+        $filename = getFilePath($id, $realname, 'data');
     }
 
-    echo '<!-- DEBUG: id=' . e::h($id) . ' real_name="' . e::h($real_name) . '" filename="' . e::h($filename) . '" -->';
+    echo '<!-- DEBUG: id=' . e::h($id) . ' real_name="' . e::h($realname) . '" filename="' . e::h($filename) . '" -->';
     ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
 
@@ -88,7 +88,7 @@ if ($status == 0) {
     echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
 }
     echo '</td>';
-    echo '<td align="left"><font size="+1">'. e::h($real_name) .'</font></td>';
+    echo '<td align="left"><font size="+1">'. e::h($realname) .'</font></td>';
     ?>
 </tr>
 
@@ -246,13 +246,13 @@ if (isset($revision_id)) {
 
         $extra_message = '';
         if ($revision === 'current') {
-            if (is_file(getFilePath($id, $real_name, 'data'))) {
+            if (is_file(getFilePath($id, $realname, 'data'))) {
                 echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(msg('historypage_latest')) . '</div></a>' . e::h($extra_message);
             } else {
                 echo '<td><font size="-1">' . e::h(msg('historypage_latest')) . e::h($extra_message);
             }
         } else {
-            if (is_file(getFilePath($id, $real_name, 'revision', (int) $revision))) {
+            if (is_file(getFilePath($id, $realname, 'revision', (int) $revision))) {
                 echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(((int) $revision + 1)) . '</div></a>' . e::h($extra_message);
             } else {
                 echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
