@@ -22,6 +22,7 @@ require_once __DIR__ . '/../../installer/migrations/Version001280.php';
 require_once __DIR__ . '/../../installer/migrations/Version001290.php';
 require_once __DIR__ . '/../../installer/migrations/Version001300.php';
 require_once __DIR__ . '/../../installer/migrations/Version001400.php';
+require_once __DIR__ . '/../../installer/migrations/Version001401.php';
 
 $configManager = new ConfigManager();
 if ($configManager->configExists()) {

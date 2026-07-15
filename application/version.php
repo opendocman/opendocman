@@ -21,4 +21,4 @@
 $GLOBALS['CONFIG']['current_version'] = '2.0.2';
 
 // Database schema version required by this application version. May differ from current version.
-$GLOBALS['CONFIG']['required_db_version'] = '1.4.0';
+$GLOBALS['CONFIG']['required_db_version'] = '1.4.1';
