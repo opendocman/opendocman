@@ -39,6 +39,9 @@ if (!isset($_GET['id']) || $_GET['id'] == "") {
 }
 
 $full_requestId = $_GET['id'];
+$request_id = (int) $_GET['id']; //save an original copy of id
+$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
+$file_data_obj = new FileData($request_id, $pdo);
 
 if (strchr($_GET['id'], '_')) {
     list($_GET['id'], $revision_id) = explode('_', $_GET['id']);
@@ -49,11 +52,6 @@ if (strchr($_GET['id'], '_')) {
 }
 
 draw_header(msg('area_file_details'), $last_message);
-
-$request_id = (int) $_GET['id']; //save an original copy of id
-$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
-
-$file_data_obj = new FileData($request_id, $pdo);
 checkUserPermission($request_id, $file_data_obj->VIEW_RIGHT, $file_data_obj);
 $user_perms_obj = new User_Perms($_SESSION['uid'], $pdo);
 
