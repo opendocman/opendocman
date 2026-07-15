@@ -355,6 +355,12 @@ class InstallerController
                 new Version001401(),
             ]);
 
+            // Seed tracking table with migrations already covered by current DB version
+            $currentVersion = $this->dbManager->getDbVersion($prefix);
+            if ($currentVersion !== null) {
+                $runner->seedAppliedUpTo($currentVersion);
+            }
+
             $results = $runner->run();
             $hasError = false;
             foreach ($results as $r) {

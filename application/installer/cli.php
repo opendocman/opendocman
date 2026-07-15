@@ -119,6 +119,11 @@ class CliCommand
             new Version001401(),
         ]);
 
+        $currentVersion = $dbManager->getDbVersion($prefix);
+        if ($currentVersion !== null) {
+            $runner->seedAppliedUpTo($currentVersion);
+        }
+
         $results = $runner->run();
         if (empty($results)) {
             echo "No pending migrations.\n";

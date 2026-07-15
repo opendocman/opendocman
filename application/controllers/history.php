@@ -73,6 +73,8 @@ if ($description == '') {
     } else {
         $filename = getFilePath($id, $real_name, 'data');
     }
+
+    echo '<!-- DEBUG: id=' . e::h($id) . ' real_name="' . e::h($real_name) . '" filename="' . e::h($filename) . '" -->';
     ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
 
@@ -224,6 +226,9 @@ if (isset($revision_id)) {
 
     $current_revision = $stmt->rowCount();
     // iterate through resultset
+    if (count($result) === 0) {
+        echo '<tr><td colspan="4">No history entries found (query returned 0 rows for id=' . e::h($id) . ')</td></tr>';
+    }
     foreach ($result as $row) {
         $last_name = $row['last_name'];
         $first_name = $row['first_name'];
@@ -240,10 +245,18 @@ if (isset($revision_id)) {
         echo '<tr bgcolor=' . $bgcolor . '>';
 
         $extra_message = '';
-        if (is_file(getFilePath($id, $real_name, 'revision', $revision))) {
-            echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
+        if ($revision === 'current') {
+            if (is_file(getFilePath($id, $real_name, 'data'))) {
+                echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(msg('historypage_latest')) . '</div></a>' . e::h($extra_message);
+            } else {
+                echo '<td><font size="-1">' . e::h(msg('historypage_latest')) . e::h($extra_message);
+            }
         } else {
-            echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
+            if (is_file(getFilePath($id, $real_name, 'revision', (int) $revision))) {
+                echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(((int) $revision + 1)) . '</div></a>' . e::h($extra_message);
+            } else {
+                echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
+            }
         }
         ?>
                     </font></td>

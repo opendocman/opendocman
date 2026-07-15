@@ -211,7 +211,8 @@ else {
             }
         }
         // Save the current version as a revision
-        $revisionFileName = getFilePath($id, $filename, 'data');
+        $currentRealname = $file_data_obj->getRealName();
+        $revisionFileName = getFilePath($id, $currentRealname, 'data');
         $revisionDir = dirname(getFilePath($id, $filename, 'revision', ($revision_number - 1)));
         if (!is_dir($revisionDir)) {
             mkdir($revisionDir, 0775, true);

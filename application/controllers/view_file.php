@@ -31,15 +31,16 @@ $pdo = $GLOBALS['pdo'];
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$request_id = $_REQUEST['id']; //save an original copy of id
+$full_request_id = $_REQUEST['id']; //save an original copy of id (may include revision suffix)
 if (strchr($_REQUEST['id'], '_')) {
     list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
-
+    $revision_id = is_numeric($revision_id) ? (int) $revision_id : null;
 }
+$request_id = (int) $_REQUEST['id'];
 
 if (!isset($_GET['submit'])) {
     draw_header(msg('view') . ' ' . msg('file'), $last_message);
-    $file_obj = new FileData($_REQUEST['id'], $pdo);
+    $file_obj = new FileData($request_id, $pdo);
     $file_name = $file_obj->getName();
     $file_id = $file_obj->getId();
     $realname = $file_obj->getName();
@@ -55,7 +56,7 @@ if (!isset($_GET['submit'])) {
     // If we have a revision ID lets use the original
     // request id that included the file id and revision number (ex. 1_0)
     if (isset($revision_id)) {
-        $file_id = $request_id;
+        $file_id = $full_request_id;
     }
 
     $mimetype = File::mime_by_ext($suffix);
@@ -67,17 +68,17 @@ if (!isset($_GET['submit'])) {
     display_smarty_template('view_file.tpl');
     draw_footer();
 } elseif ($_GET['submit'] == 'view') {
-    $file_obj = new FileData($_REQUEST['id'], $pdo);
+    $file_obj = new FileData($request_id, $pdo);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
+    checkUserPermission($request_id, $file_obj->READ_RIGHT, $file_obj);
     $realname = $file_obj->getName();
 
     if (isset($revision_id)) {
         $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
-        $filename = getFilePath($_REQUEST['id'], $realname, 'archive');
+        $filename = getFilePath($request_id, $realname, 'archive');
     } else {
-        $filename = getFilePath($_REQUEST['id'], $realname, 'data');
+        $filename = getFilePath($request_id, $realname, 'data');
     }
 
     if (file_exists($filename)) {
@@ -91,24 +92,24 @@ if (!isset($_GET['submit'])) {
         $modified=filemtime($filename);
         header('Last-Modified: '. date('D, j M Y G:i:s T', $modified));   // something like Thu, 03 Oct 2002 18:01:08 GMT
         readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'], 'V', $pdo);
+        AccessLog::addLogEntry($request_id, 'V', $pdo);
     } else {
         echo msg('message_file_does_not_exist');
     }
 } elseif ($_GET['submit'] == 'Download') {
-    $file_obj = new FileData($_REQUEST['id'], $pdo);
+    $file_obj = new FileData($request_id, $pdo);
 
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
-    checkUserPermission($_REQUEST['id'], $file_obj->READ_RIGHT, $file_obj);
+    checkUserPermission($request_id, $file_obj->READ_RIGHT, $file_obj);
 
     $realname = $file_obj->getName();
 
     if (isset($revision_id)) {
         $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
-        $filename = getFilePath($_REQUEST['id'], $realname, 'archive');
+        $filename = getFilePath($request_id, $realname, 'archive');
     } else {
-        $filename = getFilePath($_REQUEST['id'], $realname, 'data');
+        $filename = getFilePath($request_id, $realname, 'data');
     }
 
     if (file_exists($filename)) {
@@ -119,7 +120,7 @@ if (!isset($_GET['submit'])) {
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');
         readfile($filename);
-        AccessLog::addLogEntry($_REQUEST['id'], 'D', $pdo);
+        AccessLog::addLogEntry($request_id, 'D', $pdo);
     } else {
         echo msg('message_file_does_not_exist');
     }

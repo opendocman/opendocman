@@ -45,8 +45,17 @@ $file_data_obj = new FileData($request_id, $pdo);
 
 if (strchr($_GET['id'], '_')) {
     list($_GET['id'], $revision_id) = explode('_', $_GET['id']);
-    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . $revision_id;
-    $file_size = display_filesize(getFilePath($_GET['id'], $file_data_obj->getName(), 'revision', $revision_id));
+    if (!is_numeric($revision_id)) {
+        $revision_id = null;
+    } else {
+        $revision_id = (int) $revision_id;
+    }
+    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . ($revision_id ?? '?');
+    if ($revision_id !== null) {
+        $file_size = display_filesize(getFilePath($_GET['id'], $file_data_obj->getName(), 'revision', $revision_id));
+    } else {
+        $file_size = display_filesize(getFilePath($_GET['id'], $file_data_obj->getName(), 'data'));
+    }
 } else {
     $pageTitle = msg('area_file_details');
 }
