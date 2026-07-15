@@ -359,12 +359,14 @@ if (!isset($_POST['submit'])) {
             $user_perms_stmt->execute();
         }
 
-        // use id to generate a file name
-        // save uploaded file with new name
-        $newFileName = $fileId . '.dat';
-
-        move_uploaded_file($tmp_name[$count], $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
-        //copy($GLOBALS['CONFIG']['dataDir'] . '/' . ($fileId-1) . '.dat', $GLOBALS['CONFIG']['dataDir'] . '/' . $newFileName);
+        // Save uploaded file with original filename in ID subfolder
+        $realname = $_FILES['file']['name'][$count];
+        $newFilePath = getFilePath($fileId, $realname, 'data');
+        $newFileDir = dirname($newFilePath);
+        if (!is_dir($newFileDir)) {
+            mkdir($newFileDir, 0775, true);
+        }
+        move_uploaded_file($tmp_name[$count], $newFilePath);
 
         AccessLog::addLogEntry($fileId, 'A', $pdo);
 

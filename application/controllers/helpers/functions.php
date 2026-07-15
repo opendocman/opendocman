@@ -23,6 +23,89 @@ use Aura\Html\Escaper as e;
 
 // Various utility functions
 
+/**
+ * Sanitize a filename for safe filesystem use
+ * @param string $name
+ * @return string
+ */
+function sanitizeFilename(string $name): string
+{
+    // Strip path traversal sequences
+    $name = str_replace(['../', '..\\'], '', $name);
+    // Strip all slashes
+    $name = str_replace(['/', '\\'], '', $name);
+    // Strip null bytes
+    $name = str_replace("\0", '', $name);
+    // Strip leading dots, spaces, hyphens
+    $name = ltrim($name, '. -');
+    // Fallback if emptied by sanitization
+    if ($name === '') {
+        $name = 'untitled';
+    }
+    return $name;
+}
+
+/**
+ * Construct the filesystem path for a file
+ * @param int $fileId
+ * @param string $realname Original uploaded filename
+ * @param string $type 'data', 'archive', or 'revision'
+ * @param int|null $revision Revision number (required for type='revision')
+ * @return string
+ */
+function getFilePath(int $fileId, string $realname, string $type = 'data', ?int $revision = null): string
+{
+    $realname = sanitizeFilename($realname);
+
+    switch ($type) {
+        case 'data':
+            $base = $GLOBALS['CONFIG']['dataDir'];
+            $path = $base . $fileId . '/' . $realname;
+            // Fallback to old flat path if new path doesn't exist
+            if (!file_exists($path)) {
+                $oldPath = $base . $fileId . '.dat';
+                if (file_exists($oldPath)) {
+                    return $oldPath;
+                }
+            }
+            return $path;
+
+        case 'archive':
+            $base = $GLOBALS['CONFIG']['archiveDir'];
+            $path = $base . $fileId . '/' . $realname;
+            if (!file_exists($path)) {
+                $oldPath = $base . $fileId . '.dat';
+                if (file_exists($oldPath)) {
+                    return $oldPath;
+                }
+            }
+            return $path;
+
+        case 'revision':
+            $base = $GLOBALS['CONFIG']['revisionDir'];
+            if ($revision === null) {
+                throw new InvalidArgumentException('Revision number required for type=revision');
+            }
+            $ext = '';
+            $dotPos = strrpos($realname, '.');
+            if ($dotPos !== false) {
+                $ext = substr($realname, $dotPos);
+            }
+            $basename = ($dotPos !== false) ? substr($realname, 0, $dotPos) : $realname;
+            $path = $base . $fileId . '/' . $basename . '-rev' . $revision . $ext;
+            if (!file_exists($path)) {
+                $oldPath = $base . $fileId . '/' . $fileId . '_' . $revision . '.dat';
+                if (file_exists($oldPath)) {
+                    return $oldPath;
+                }
+            }
+            return $path;
+
+        default:
+            throw new InvalidArgumentException("Unknown file path type: $type");
+    }
+}
+
 // function to format mySQL DATETIME values
 function fix_date($val)
 {
@@ -222,7 +305,7 @@ function list_files(array $fileid_array, object $userperms_obj, string $dataDir,
         $realname = $file_obj->getRealname();
 
         //Get the file size in bytes.
-        $filesize = display_filesize($dataDir . $fileid . '.dat');
+        $filesize = display_filesize(getFilePath($fileid, $realname, 'data'));
 
         if ($userAccessLevel >= $userperms_obj->READ_RIGHT) {
             $suffix = strtolower((substr($realname, ((strrpos($realname, ".") + 1)))));

@@ -22,6 +22,7 @@ require_once __DIR__ . '/migrations/Version001280.php';
 require_once __DIR__ . '/migrations/Version001290.php';
 require_once __DIR__ . '/migrations/Version001300.php';
 require_once __DIR__ . '/migrations/Version001400.php';
+require_once __DIR__ . '/migrations/Version001401.php';
 
 class CliCommand
 {
@@ -115,7 +116,13 @@ class CliCommand
             new Version001290(),
             new Version001300(),
             new Version001400(),
+            new Version001401(),
         ]);
+
+        $currentVersion = $dbManager->getDbVersion($prefix);
+        if ($currentVersion !== null) {
+            $runner->seedAppliedUpTo($currentVersion);
+        }
 
         $results = $runner->run();
         if (empty($results)) {
@@ -175,6 +182,7 @@ class CliCommand
             new Version001290(),
             new Version001300(),
             new Version001400(),
+            new Version001401(),
         ]);
 
         $rows = $runner->status();

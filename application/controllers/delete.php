@@ -62,7 +62,14 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             if ($userperm_obj->canAdmin($id)) {
                 $file_obj = new FileData($id, $pdo);
                 $file_obj->temp_delete();
-                fmove($GLOBALS['CONFIG']['dataDir'] . $id . '.dat', $GLOBALS['CONFIG']['archiveDir'] . $id . '.dat');
+                $realname = $file_obj->getName();
+                $srcPath = getFilePath($id, $realname, 'data');
+                $dstPath = getFilePath($id, $realname, 'archive');
+                $dstDir = dirname($dstPath);
+                if (!is_dir($dstDir)) {
+                    mkdir($dstDir, 0775, true);
+                }
+                fmove($srcPath, $dstPath);
             }
             AccessLog::addLogEntry($_REQUEST['id' . $i], 'X', $pdo);
         }
@@ -119,7 +126,14 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
         foreach ($_REQUEST['checkbox'] as $fileId) {
             $file_obj = new FileData($fileId, $pdo);
             $file_obj->undelete();
-            fmove($GLOBALS['CONFIG']['archiveDir'] . $fileId . '.dat', $GLOBALS['CONFIG']['dataDir'] . $fileId . '.dat');
+            $realname = $file_obj->getName();
+            $srcPath = getFilePath($fileId, $realname, 'archive');
+            $dstPath = getFilePath($fileId, $realname, 'data');
+            $dstDir = dirname($dstPath);
+            if (!is_dir($dstDir)) {
+                mkdir($dstDir, 0775, true);
+            }
+            fmove($srcPath, $dstPath);
         }
     }
     header('Location: ' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
@@ -147,6 +161,12 @@ function pmt_delete($id)
             header('Location: error?ec=20');
         }
         if ($userperm_obj->canAdmin($id)) {
+            // Get file info BEFORE deleting DB record
+            $file_obj = new FileData($id, $pdo);
+            $realname = $file_obj->getName();
+            $archivePath = getFilePath($id, $realname, 'archive');
+            $dataPath = getFilePath($id, $realname, 'data');
+
             // delete from db
             $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE id = :id";
             $stmt = $pdo->prepare($query);
@@ -165,19 +185,28 @@ function pmt_delete($id)
             $stmt = $pdo->prepare($query);
             $stmt->execute(array(':id' => $id));
 
-            $filename = $id . ".dat";
-            unlink($GLOBALS['CONFIG']['archiveDir'] . $filename);
-            if (is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/')) {
-                $dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
-                if (is_dir($GLOBALS['CONFIG']['revisionDir'] . $id . '/')) {
-                    $dir = opendir($GLOBALS['CONFIG']['revisionDir'] . $id . '/');
-                    while ($lreadfile = readdir($dir)) {
-                        if (is_file($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile")) {
-                            unlink($GLOBALS['CONFIG']['revisionDir'] . "$id/$lreadfile");
+            // Delete archive file
+            if (file_exists($archivePath)) {
+                unlink($archivePath);
+            }
+            // Delete data file if present (e.g. unarchived edge case)
+            if (file_exists($dataPath)) {
+                unlink($dataPath);
+            }
+            // Delete revision files using getFilePath for proper naming
+            $revisionDir = $GLOBALS['CONFIG']['revisionDir'] . $id . '/';
+            if (is_dir($revisionDir)) {
+                $dir = opendir($revisionDir);
+                if ($dir) {
+                    while (($file = readdir($dir)) !== false) {
+                        $fullPath = $revisionDir . $file;
+                        if (is_file($fullPath)) {
+                            unlink($fullPath);
                         }
                     }
-                    rmdir($GLOBALS['CONFIG']['revisionDir'] . $id);
+                    closedir($dir);
                 }
+                rmdir($revisionDir);
             }
             return true;
         }

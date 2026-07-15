@@ -94,7 +94,7 @@ if ($count == 0) {
         if ($description == '') {
             $description = msg('message_no_information_available');
         }
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+        $filename = getFilePath($id, $realname, 'data');
         // display list
         $highlighted_color = '#bdf9b6';
 

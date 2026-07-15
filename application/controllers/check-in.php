@@ -210,13 +210,19 @@ else {
                 exit;
             }
         }
-        $file_name = $GLOBALS['CONFIG']['dataDir'] . $id .'.dat';
-        //read and close
-        $file_handler = fopen($file_name, "r");
-        $file_content = fread($file_handler, filesize($file_name));
+        // Save the current version as a revision
+        $currentRealname = $file_data_obj->getRealName();
+        $revisionFileName = getFilePath($id, $currentRealname, 'data');
+        $revisionDir = dirname(getFilePath($id, $filename, 'revision', ($revision_number - 1)));
+        if (!is_dir($revisionDir)) {
+            mkdir($revisionDir, 0775, true);
+        }
+        // Read current file
+        $file_handler = fopen($revisionFileName, "r");
+        $file_content = fread($file_handler, filesize($revisionFileName));
         fclose($file_handler);
-        //write and close
-        $file_handler = fopen($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . '_' . ($revision_number - 1) . '.dat', "w");
+        // Write revision
+        $file_handler = fopen(getFilePath($id, $filename, 'revision', ($revision_number - 1)), "w");
         fwrite($file_handler, $file_content);
         fclose($file_handler);
         // all OK, proceed!
@@ -252,9 +258,13 @@ else {
             ':id' => $id
         ));
 
-        // rename and save file
-        $newFileName = $id . '.dat';
-        copy($_FILES['file']['tmp_name'], $GLOBALS['CONFIG']['dataDir'] . $newFileName);
+        // Save new version with original filename
+        $newFilePath = getFilePath($id, $filename, 'data');
+        $newFileDir = dirname($newFilePath);
+        if (!is_dir($newFileDir)) {
+            mkdir($newFileDir, 0775, true);
+        }
+        copy($_FILES['file']['tmp_name'], $newFilePath);
     
         AccessLog::addLogEntry($id, 'I', $pdo);
     

@@ -39,21 +39,28 @@ if (!isset($_GET['id']) || $_GET['id'] == "") {
 }
 
 $full_requestId = $_GET['id'];
+$request_id = (int) $_GET['id']; //save an original copy of id
+$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
+$file_data_obj = new FileData($request_id, $pdo);
 
 if (strchr($_GET['id'], '_')) {
     list($_GET['id'], $revision_id) = explode('_', $_GET['id']);
-    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . $revision_id;
-    $file_size = display_filesize($GLOBALS['CONFIG']['revisionDir'] . $_GET['id'] . '/' . $_GET['id'] . '_' . $revision_id . '.dat');
+    if (!is_numeric($revision_id)) {
+        $revision_id = null;
+    } else {
+        $revision_id = (int) $revision_id;
+    }
+    $pageTitle = msg('area_file_details') . ' ' . msg('revision') . ' #' . ($revision_id ?? '?');
+    if ($revision_id !== null) {
+        $file_size = display_filesize(getFilePath($_GET['id'], $file_data_obj->getName(), 'revision', $revision_id));
+    } else {
+        $file_size = display_filesize(getFilePath($_GET['id'], $file_data_obj->getName(), 'data'));
+    }
 } else {
     $pageTitle = msg('area_file_details');
 }
 
 draw_header(msg('area_file_details'), $last_message);
-
-$request_id = (int) $_GET['id']; //save an original copy of id
-$state = isset($_GET['state']) ? (int) $_GET['state'] : 0;
-
-$file_data_obj = new FileData($request_id, $pdo);
 checkUserPermission($request_id, $file_data_obj->VIEW_RIGHT, $file_data_obj);
 $user_perms_obj = new User_Perms($_SESSION['uid'], $pdo);
 
@@ -67,7 +74,7 @@ $owner_id = $file_data_obj->getOwner();
 $category = $file_data_obj->getCategoryName();
 $owner_last_first = $owner_full_name[1] . ', ' . $owner_full_name[0];
 $owner_first_last = $owner_full_name[0] . ' ' . $owner_full_name[1];
-$real_name = $file_data_obj->getName();
+
 $created = $file_data_obj->getCreatedDate();
 $description = $file_data_obj->getDescription();
 $comment = $file_data_obj->getComment();
@@ -100,11 +107,12 @@ if (isset($reviewer_comments_fields[0]) && strlen($reviewer_comments_fields[0]) 
     $reviewer_comments_fields[0] = 'To=Author(s)';
 }
 
+$realname = $file_data_obj->getName();
 if ($file_data_obj->isArchived()) {
-    $filename = $GLOBALS['CONFIG']['archiveDir'] . $request_id . '.dat';
+    $filename = getFilePath($request_id, $realname, 'archive');
     $file_size = display_filesize($filename);
 } else {
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $request_id . '.dat';
+    $filename = getFilePath($request_id, $realname, 'data');
 
     if (!isset($file_size)) {
         $file_size = display_filesize($filename);
@@ -189,7 +197,7 @@ $file_detail_array = array(
     'to_value' => $to_value,
     'subject_value' => $subject_value,
     'comments_value' => $comments_value,
-    'realname' => $real_name,
+    'realname' => $realname,
     'category' => $category,
     'filesize' => $file_size,
     'created' => fix_date($created),

@@ -144,4 +144,38 @@ class MigrationRunner
         }
         return $rows;
     }
+
+    /**
+     * Seed the tracking table with all registered migrations up to the given version.
+     * This handles the case where the database was created at a version higher than
+     * older migrations — those schema changes are already applied but not tracked.
+     */
+    public function seedAppliedUpTo(string $currentVersion): void
+    {
+        $this->ensureTrackingTable();
+        $applied = $this->getAppliedVersions();
+        $table = $this->prefix . 'migrations';
+        $stmt = $this->pdo->prepare("
+            INSERT IGNORE INTO `{$table}` (`version`, `name`, `executed_at`, `batch`)
+            VALUES (:version, :name, NOW(), 0)
+        ");
+
+        usort($this->migrations, function ($a, $b) {
+            return version_compare($a->getVersion(), $b->getVersion());
+        });
+
+        foreach ($this->migrations as $migration) {
+            $version = $migration->getVersion();
+            if (version_compare($version, $currentVersion, '>')) {
+                break;
+            }
+            if (in_array($version, $applied, true)) {
+                continue;
+            }
+            $stmt->execute([
+                ':version' => $version,
+                ':name' => $migration->getDescription(),
+            ]);
+        }
+    }
 }
