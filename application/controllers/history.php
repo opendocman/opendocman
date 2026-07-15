@@ -69,9 +69,9 @@ if ($description == '') {
         $comments = msg('message_no_author_comments_available');
     }
     if ($datafile->isArchived()) {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . e::h($id) . '.dat';
+        $filename = getFilePath($id, $real_name, 'archive');
     } else {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . e::h($id) . '.dat';
+        $filename = getFilePath($id, $real_name, 'data');
     }
     ?>
 <table border="0" width=80% cellspacing="4" cellpadding="1">
@@ -240,7 +240,7 @@ if (isset($revision_id)) {
         echo '<tr bgcolor=' . $bgcolor . '>';
 
         $extra_message = '';
-        if (is_file($GLOBALS['CONFIG']['revisionDir'] . $id . '/' . $id . "_$revision.dat")) {
+        if (is_file(getFilePath($id, $real_name, 'revision', $revision))) {
             echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(($revision + 1)) . '</div></a>' . e::h($extra_message);
         } else {
             echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);

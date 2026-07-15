@@ -305,7 +305,7 @@ function list_files(array $fileid_array, object $userperms_obj, string $dataDir,
         $realname = $file_obj->getRealname();
 
         //Get the file size in bytes.
-        $filesize = display_filesize($dataDir . $fileid . '.dat');
+        $filesize = display_filesize(getFilePath($fileid, $realname, 'data'));
 
         if ($userAccessLevel >= $userperms_obj->READ_RIGHT) {
             $suffix = strtolower((substr($realname, ((strrpos($realname, ".") + 1)))));

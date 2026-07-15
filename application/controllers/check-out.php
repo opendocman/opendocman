@@ -88,7 +88,7 @@ else {
         ));
     }
     // calculate filename
-    $filename = $GLOBALS['CONFIG']['dataDir'] . $id . '.dat';
+    $filename = getFilePath($id, $real_name, 'data');
 
     if (file_exists($filename)) {
         // send headers to browser to initiate file download

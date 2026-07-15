@@ -34,7 +34,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 $request_id = $_REQUEST['id']; //save an original copy of id
 if (strchr($_REQUEST['id'], '_')) {
     list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
-    $revision_dir = $GLOBALS['CONFIG']['revisionDir'] . '/'. $_REQUEST['id'] . '/';
+
 }
 
 if (!isset($_GET['submit'])) {
@@ -73,11 +73,11 @@ if (!isset($_GET['submit'])) {
     $realname = $file_obj->getName();
 
     if (isset($revision_id)) {
-        $filename = $revision_dir . $request_id . ".dat";
+        $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
+        $filename = getFilePath($_REQUEST['id'], $realname, 'archive');
     } else {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+        $filename = getFilePath($_REQUEST['id'], $realname, 'data');
     }
 
     if (file_exists($filename)) {
@@ -104,11 +104,11 @@ if (!isset($_GET['submit'])) {
     $realname = $file_obj->getName();
 
     if (isset($revision_id)) {
-        $filename = $revision_dir . $request_id . ".dat";
+        $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
-        $filename = $GLOBALS['CONFIG']['archiveDir'] . $_REQUEST['id'] . ".dat";
+        $filename = getFilePath($_REQUEST['id'], $realname, 'archive');
     } else {
-        $filename = $GLOBALS['CONFIG']['dataDir'] . $_REQUEST['id'] . ".dat";
+        $filename = getFilePath($_REQUEST['id'], $realname, 'data');
     }
 
     if (file_exists($filename)) {
