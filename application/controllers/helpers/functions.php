@@ -32,8 +32,8 @@ function sanitizeFilename(string $name): string
 {
     // Strip path traversal sequences
     $name = str_replace(['../', '..\\'], '', $name);
-    // Strip leading slashes
-    $name = ltrim($name, '/\\');
+    // Strip all slashes
+    $name = str_replace(['/', '\\'], '', $name);
     // Strip null bytes
     $name = str_replace("\0", '', $name);
     // Strip leading dots, spaces, hyphens

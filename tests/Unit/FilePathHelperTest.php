@@ -14,9 +14,10 @@ class FilePathHelperTest extends TestCase
         $this->assertEquals('file.txt', sanitizeFilename("file\x00.txt"));
     }
 
-    public function testSanitizeStripsLeadingSlashes()
+    public function testSanitizeStripsAllSlashes()
     {
-        $this->assertEquals('etc/passwd', sanitizeFilename('/etc/passwd'));
+        $this->assertEquals('etcpasswd', sanitizeFilename('/etc/passwd'));
+        $this->assertEquals('etcpasswd', sanitizeFilename('\\etc\\passwd'));
     }
 
     public function testSanitizeFallsBackOnEmpty()
