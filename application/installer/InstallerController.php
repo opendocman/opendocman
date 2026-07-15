@@ -282,10 +282,34 @@ class InstallerController
 
             $migrationRunner = new MigrationRunner($pdo, $prefix);
             $migrationRunner->ensureTrackingTable();
-
-            $currentVersion = $schemaBuilder->getVersion();
             $migrationTable = $prefix . 'migrations';
-            $pdo->exec("INSERT INTO `{$migrationTable}` (`version`, `name`, `executed_at`, `batch`) VALUES ('{$currentVersion}', 'Fresh Install Schema', NOW(), 1)");
+
+            // Register all migrations so fresh install marks them all complete
+            $migrationRunner->registerMigrations([
+                new Version001000(),
+                new Version0011rc2(),
+                new Version001100(),
+                new Version0012p1(),
+                new Version0012p3(),
+                new Version001240(),
+                new Version001252(),
+                new Version001256(),
+                new Version001257(),
+                new Version001261(),
+                new Version001262(),
+                new Version001263(),
+                new Version001280(),
+                new Version001290(),
+                new Version001300(),
+                new Version001400(),
+                new Version001401(),
+            ]);
+
+            // Mark all schema versions as completed (the schema includes all changes)
+            foreach ($migrationRunner->getPendingMigrations() as $migration) {
+                $version = $migration->getVersion();
+                $pdo->exec("INSERT IGNORE INTO `{$migrationTable}` (`version`, `name`, `executed_at`, `batch`) VALUES ('{$version}', 'Fresh Install Schema', NOW(), 1)");
+            }
 
             $isDocker = $this->configManager->getEnvVar('IS_DOCKER') === 'true';
             $httpPort = $this->configManager->getEnvVar('HTTP_PORT', '8080');
