@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.0-release](https://github.com/opendocman/opendocman/compare/v2.1.0-release...v2.2.0-release) (2026-07-15)
+
+
+### Features
+
+* store uploaded files as {id}/{original_filename} instead of {id}.dat ([70231af](https://github.com/opendocman/opendocman/commit/70231afc64d2c76cd9db20e124f65b78309523c6))
+
+
+### Bug Fixes
+
+* handle 'current' revision and raw id strings for PHP 8.2 type strictness ([3451d0b](https://github.com/opendocman/opendocman/commit/3451d0b3577fe4e793d8bcc7aec2c91fefbf2930))
+* mark all migrations complete on fresh install to prevent old migrations running against prefixed tables ([3ab64ea](https://github.com/opendocman/opendocman/commit/3ab64ea44087b01c4dc1df1ec53e1eabb1ddec3d))
+
 ## [2.1.0-release](https://github.com/opendocman/opendocman/compare/2.0.2-release...v2.1.0-release) (2026-07-13)
 
 
