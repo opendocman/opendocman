@@ -66,6 +66,9 @@ if (!isset($_POST['submit'])) {
 <?php
 $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
 
+if ($list_status !== -1) {
+    display_smarty_template('out.tpl');
+}
 
     ?>
         </td>
