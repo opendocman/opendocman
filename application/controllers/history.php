@@ -39,6 +39,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
 }
 
 draw_header(msg('area_view_history'), $last_message);
+ob_start();
 //revision parsing
 if (strchr($_REQUEST['id'], '_')) {
     list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
@@ -280,5 +281,8 @@ if (isset($revision_id)) {
 <?php
 // Call the plugin API
 callPluginMethod('onAfterHistory', $datafile->getId());
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 }

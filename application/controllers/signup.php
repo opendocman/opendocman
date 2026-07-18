@@ -99,10 +99,9 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
         }
     }
     ?>
-        <html>
-        <head><title>Sign Up</title></head>
-        <body>
 <?php
+    draw_header(msg('signup'), $last_message);
+    ob_start();
     if (is_readable("signup_header.html")) {
         include("signup_header.html");
     }
@@ -184,10 +183,9 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
    if (is_readable("signup_footer.html")) {
        include("signup_footer.html");
    }
-    ?>
-
-        </body>
-        </html>
-        <?php
-
-}
+$content = ob_get_clean();
+     $GLOBALS['smarty']->assign('content', $content);
+     display_smarty_template('_content.tpl');
+     draw_footer();
+ }
+?>

@@ -36,6 +36,7 @@ if (!$user_obj->isAdmin()) {
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 draw_header(msg('label_admin'), $last_message);
+ob_start();
 
 $request_state = e::h(($_REQUEST['state']+1));
 ?>
@@ -214,4 +215,7 @@ if (isset($GLOBALS['plugin']) && is_array($GLOBALS['plugin']->getPluginsList()))
 }
     ?>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
 draw_footer();

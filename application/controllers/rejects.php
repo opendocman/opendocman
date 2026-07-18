@@ -34,6 +34,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_rejected'), $last_message);
+    ob_start();
 
     try {
         $user_obj = new User($_SESSION['uid'], $pdo);
@@ -88,6 +89,9 @@ $list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['da
 </form>
 
 <?php
+           $content = ob_get_clean();
+           $GLOBALS['smarty']->assign('content', $content);
+           display_smarty_template('_content.tpl');
            draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'resubmit') {
     // Validate CSRF token for resubmit operation

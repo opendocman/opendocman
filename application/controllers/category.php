@@ -41,6 +41,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
+    ob_start();
     ?>
     <form id="categoryAddForm" action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
@@ -67,6 +68,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   });
   </script>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category') {
     // Validate CSRF token for Add Category operation
@@ -91,12 +95,17 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     // If demo mode, don't allow them to update the demo account
     if ($GLOBALS['CONFIG']['demo'] == 'True') {
         draw_header(msg('area_delete_category'), $last_message);
+        ob_start();
         echo msg('message_sorry_demo_mode');
+        $content = ob_get_clean();
+        $GLOBALS['smarty']->assign('content', $content);
+        display_smarty_template('_content.tpl');
         draw_footer();
         exit;
     }
 
     draw_header(msg('area_delete_category'), $last_message);
+    ob_start();
 
     $item = (int) $_REQUEST['item'];
 
@@ -148,6 +157,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 </tr>
 </TABLE>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['deletecategory'])) {
     // Validate CSRF token for Delete Category operation
@@ -182,6 +194,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     $deletepick='';
     draw_header(msg('area_delete_category'). ' : ' .msg('choose'), $last_message);
+    ob_start();
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="category" method="POST" enctype="multipart/form-data">
@@ -217,10 +230,14 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         </form>
     </table>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category') {
     // query to show item
     draw_header(msg('area_view_category'), $last_message);
+    ob_start();
     $category_id = (int) $_REQUEST['item'];
 
     // Select name
@@ -261,9 +278,13 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo '<a href="edit?id=' . e::h($row['id']) . '&state=3">ID: ' . e::h($row['id']) . ',' . e::h($row['realname']) . '</a><br />';
     }
 
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick') {
     draw_header(msg('area_view_category') . ' : ' . msg('choose'), $last_message);
+    ob_start();
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="category" method="POST" enctype="multipart/form-data">
@@ -298,9 +319,13 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 </body>
 </html>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header(msg('area_update_category'), $last_message);
+    ob_start();
     ?>
 <form id="updateCategoryForm" action="category" method="POST" enctype="multipart/form-data">
     <?php echo $GLOBALS['csrf']->getTokenField(); ?>
@@ -344,9 +369,13 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   });
   </script>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('area_update_category'). ': ' .msg('choose'), $last_message);
+    ob_start();
     ?>
     <form action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
@@ -384,6 +413,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 </tr>
 </table>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['updatecategory'])) {
     // Validate CSRF token for Update Category operation

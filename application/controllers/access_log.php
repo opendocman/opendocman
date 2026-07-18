@@ -37,6 +37,7 @@ if (!$user_obj->isAdmin()) {
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 draw_header(msg('accesslogpage_access_log'), $last_message);
+ob_start();
 
 $query = "SELECT 
             a.*,
@@ -94,4 +95,7 @@ if (!empty($view)) {
     echo $view->__invoke();
 }
 
+$content = ob_get_clean();
+$GLOBALS['smarty']->assign('content', $content);
+display_smarty_template('_content.tpl');
 draw_footer();

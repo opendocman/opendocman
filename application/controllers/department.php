@@ -47,6 +47,7 @@ if (!$user_obj->isAdmin() == true) {
 */
 if (isset($_GET['submit']) && $_GET['submit']=='add') {
     draw_header(msg('area_add_new_department'), $last_message);
+    ob_start();
     ?>
 
         <form id="addDepartmentForm" action="department" method="POST" enctype="multipart/form-data">
@@ -82,6 +83,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
   });
   </script>
 <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_POST['submit']) && 'Add Department' == $_POST['submit']) {
     //Add Departments
@@ -175,6 +179,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Show Department') {
     // query to show item
     draw_header(msg('area_department_information'), $last_message);
+    ob_start();
     //select name
     $query = "SELECT name,id FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
     $stmt = $pdo->prepare($query);
@@ -220,9 +225,13 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                             </table>
                         </form>
 <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick') {
     draw_header(msg('area_choose_department'), $last_message);
+    ob_start();
     $showpick='';
     ?>
                             <table border="0" cellspacing="5" cellpadding="5">
@@ -259,9 +268,13 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                             </table>
                      </form>
  <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'delete') {
     draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
+    ob_start();
 
     $delete='';
     
@@ -325,9 +338,13 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     <?php
 
     }
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
+    ob_start();
     ?>
     <table border="0" cellspacing="5" cellpadding="5">
         <form action="department" method="POST" enctype="multipart/form-data">
@@ -366,6 +383,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
         </form>
     </table>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['deletedepartment'])) {
     // Make sure they are an admin
@@ -419,6 +439,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'modify') {
     $dept_obj = new Department($_REQUEST['item'], $pdo);
     draw_header(msg('area_update_department') .': ' . $dept_obj->getName(), $last_message);
+    ob_start();
     ?>  
                         <form action="department" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
                             <table border="0" cellspacing="5" cellpadding="5">
@@ -470,9 +491,13 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
   });
   </script>
                             <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('area_choose_department'), $last_message);
+    ob_start();
     ?>
                             <form action="department" method="GET" enctype="multipart/form-data">
                                 <INPUT type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
@@ -507,6 +532,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                                 </table>
                             </form>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_POST['submit']) && 'Update Department' == $_POST['submit']) {
     // UPDATE Department

@@ -41,6 +41,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 $start_time = time();
 draw_header(msg('search'), $last_message);
+ob_start();
 
 echo '<body bgcolor="white">';
 if (!isset($_GET['submit'])) {
@@ -98,6 +99,9 @@ if (!isset($_GET['submit'])) {
 
     <?php
     //echo '<br><b>Load Time: ' . time() - $start_time;
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } else {
     function search($where, $keyword, $exact_phrase, $case_sensitivity, $search_array)
@@ -254,6 +258,9 @@ if (!isset($_GET['submit'])) {
 
     list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false, false);
     echo '<br />';
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
     //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
     //echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
