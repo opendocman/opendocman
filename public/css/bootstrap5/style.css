@@ -1,0 +1,17 @@
+/* Bootstrap 5 Modern UI Theme */
+body {
+    background-color: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.container-fluid {
+    flex: 1;
+}
+.breadcrumb {
+    background-color: #e9ecef;
+    border-radius: 0;
+}
+.card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
