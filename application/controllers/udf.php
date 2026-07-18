@@ -40,7 +40,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_udf'), $last_message);
 
     $GLOBALS['smarty']->assign('last_message', $last_message);
+    ob_start();
     display_smarty_template('udf/add.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Add User Defined Field') {
     // Validate CSRF token for Add UDF operation
@@ -78,7 +81,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $udf = $stmt->fetch();
 
     $GLOBALS['smarty']->assign('udf', $udf);
+    ob_start();
     display_smarty_template('udf/delete_form.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['deleteudf'])) {
@@ -116,7 +122,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     $GLOBALS['smarty']->assign('state', $_REQUEST['state'] + 1);
     $GLOBALS['smarty']->assign('udfs', $result);
+    ob_start();
     display_smarty_template('udf/delete_pick.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {

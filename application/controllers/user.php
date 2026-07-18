@@ -254,7 +254,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $GLOBALS['smarty']->assign('user_id', $user_obj->getId());
     $GLOBALS['smarty']->assign('full_name', $user_obj->getFullName());
 
+    ob_start();
     display_smarty_template('user_delete.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick') {
@@ -268,7 +271,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $GLOBALS['smarty']->assign('user_list', $user_list);
     $GLOBALS['smarty']->assign('state', $_REQUEST['state']);
+    ob_start();
     display_smarty_template('user_delete_pick.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
     // Validate CSRF token for Show User operation
@@ -285,7 +291,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $GLOBALS['smarty']->assign('last_name', $user_obj->last_name);
     $GLOBALS['smarty']->assign('isAdmin', $user_obj->isAdmin());
     $GLOBALS['smarty']->assign('isReviewer', $user_obj->isReviewer());
+    ob_start();
     display_smarty_template('user_show.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick') {
@@ -302,7 +311,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $GLOBALS['smarty']->assign('user_list', $user_list);
     $GLOBALS['smarty']->assign('state', $state);
+    ob_start();
     display_smarty_template('user_show_pick.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
@@ -534,7 +546,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $GLOBALS['smarty']->assign('state', (int)$_REQUEST['state'] + 1);
     $GLOBALS['smarty']->assign('users', $users);
+    ob_start();
     display_smarty_template('user/edit_pick.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
