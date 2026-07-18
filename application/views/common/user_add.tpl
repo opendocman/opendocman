@@ -1,95 +1,84 @@
-<form name="add_user" id="add_user" action="user" method="POST" enctype="multipart/form-data">
+<form name="add_user" id="add_user" action="user" method="POST" enctype="multipart/form-data" novalidate class="needs-validation container mt-3">
     {$csrf_token_field}
-    <table border="0" cellspacing="5" cellpadding="5">
-        {$onBeforeAddUser}
-        <tr><td><b>{$g_lang_label_last_name}</b></td><td><input name="last_name" type="text" class="required" minlength="2" maxlength="255"></td></tr>
-        <tr><td><b>{$g_lang_label_first_name}</b></td><td><input name="first_name" type="text" class="required" minlength="2" maxlength="255"></td></tr>
-        <tr><td><b>{$g_lang_username}</b></td><td><input name="username" type="text" class="required" minlength="2" maxlength="25"></td></tr>
-        <tr>
-            <td><b>{$g_lang_label_phone_number}</b></td>
-            <td>
-                <input name="phonenumber" type="text" maxlength="20">
-            </td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_label_example}</b></td>
-            <td><b>999 9999999</b></td>
-        </tr>
-        
-        {if $mysql_auth}
-        <tr>
-            <td><b>{$g_lang_userpage_password}</b></td>
-            <td>
-                <input name="password" type="text" value="{$rand_password}" class="required" minlength="5" maxlength="32">
-            </td>
-        </tr>
-        {/if}
-        
-        <tr>
-            <td><b>{$g_lang_label_email_address}</b></td>
-            <td>
-                <input name="Email" type="text" class="required email" maxlength="50">
-            </td>
-        </tr>
-
-        <tr>
-            <td><b>{$g_lang_label_department}</b></td>
-            <td>
-                <select name="department">
+    <div class="card">
+        <div class="card-body">
+            {$onBeforeAddUser}
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_last_name}</label>
+                <input name="last_name" type="text" class="form-control" required minlength="2" maxlength="255">
+                <div class="invalid-feedback">{$g_lang_label_last_name} is required.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_first_name}</label>
+                <input name="first_name" type="text" class="form-control" required minlength="2" maxlength="255">
+                <div class="invalid-feedback">{$g_lang_label_first_name} is required.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_username}</label>
+                <input name="username" type="text" class="form-control" required minlength="2" maxlength="25">
+                <div class="invalid-feedback">{$g_lang_username} is required.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_phone_number}</label>
+                <input name="phonenumber" type="text" class="form-control" maxlength="20">
+                <div class="form-text">{$g_lang_label_example}: 999 9999999</div>
+            </div>
+            {if $mysql_auth}
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_userpage_password}</label>
+                <input name="password" type="text" value="{$rand_password}" class="form-control" required minlength="5" maxlength="32">
+                <div class="invalid-feedback">Password must be at least 5 characters.</div>
+            </div>
+            {/if}
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_email_address}</label>
+                <input name="Email" type="email" class="form-control" required maxlength="50">
+                <div class="invalid-feedback">A valid email address is required.</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_department}</label>
+                <select name="department" class="form-select">
                     {foreach from=$department_list item=item name=department_list}
                     <option value={$item.id|escape}>{$item.name|escape:'html'}</option>
                     {/foreach}
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_label_is_admin}?</b></td>
-            <td>
-                <input name="admin" type="checkbox" value="1" id="cb_admin">
-            </td>
-        </tr>
-        <tr id="userReviewDepartmentRow">
-            <td id="userReviewDepartmentLabelTd"><b>{$g_lang_label_reviewer_for}</b></td>
-            <td id="userReviewDepartmentListTd">
-                <select class="multiView" name="department_review[]" multiple="multiple" id="userReviewDepartmentsList">
+            </div>
+            <div class="mb-3 form-check">
+                <input name="admin" type="checkbox" value="1" id="cb_admin" class="form-check-input">
+                <label class="form-check-label" for="cb_admin">{$g_lang_label_is_admin}?</label>
+            </div>
+            <div class="mb-3" id="userReviewDepartmentRow">
+                <label class="form-label" id="userReviewDepartmentLabelTd">{$g_lang_label_reviewer_for}</label>
+                <select name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" class="form-select">
                 {foreach from=$department_list item=item name=department_list}
                     <option value={$item.id|escape}>{$item.name|escape:'html'}</option>
                 {/foreach}
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_userpage_can_add}?</b></td>
-            <td>
-                <input name="can_add" type="checkbox" value="1" id="cb_can_add"  checked="checked">
-            </td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_userpage_can_checkin}?</b></td>
-            <td>
-                <input name="can_checkin" type="checkbox" value="1" id="cb_can_checkin"  checked="checked">
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                <div class="buttons">
-                    <button id="submitButton" class="positive" type="Submit" name="submit" value="Add User">{$g_lang_userpage_button_add_user}</button>
-                </div>
-            </td>
-            <td>
-                <div class="buttons">
-                    <button id="cancelButton" class="negative cancel" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
-                </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+            <div class="mb-3 form-check">
+                <input name="can_add" type="checkbox" value="1" id="cb_can_add" checked="checked" class="form-check-input">
+                <label class="form-check-label" for="cb_can_add">{$g_lang_userpage_can_add}?</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input name="can_checkin" type="checkbox" value="1" id="cb_can_checkin" checked="checked" class="form-check-input">
+                <label class="form-check-label" for="cb_can_checkin">{$g_lang_userpage_can_checkin}?</label>
+            </div>
+            <div class="d-flex gap-2">
+                <button id="submitButton" class="btn btn-primary" type="submit" name="submit" value="Add User">{$g_lang_userpage_button_add_user}</button>
+                <button id="cancelButton" class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
+            </div>
+        </div>
+    </div>
 </form>
 <script>
-    {literal}
-    $(document).ready(function(){
-        $('#submitButton').click(function(){
-            $('#add_user').validate();
-        })
-    });
-    {/literal}
+(function() {
+    var form = document.getElementById('add_user');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+})();
 </script>

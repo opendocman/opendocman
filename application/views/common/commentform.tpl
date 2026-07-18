@@ -1,76 +1,88 @@
-		{if isset($mode)}{$mode|escape:'html'}{/if}
-                {$g_lang_email_note_to_authors}
-		<form name="author_note_form"
-			{if isset($mode) && $mode eq 'root'}
-			 action="toBePublished?mode=root" method="POST">
-			{else}
-			 action="toBePublished" method="POST">
-                        {/if}
-		{$csrf_token_field}
-		<table name="author_note_table">
-		<tr>
-		<td>{$g_lang_email_to}</td>
-		<td>
-                    <input type="text" name="to" value="Author(s)" size='15' {$access_mode|escape:'html'}>
-                </td>
-		</tr>
-                <tr>
-                    <td>{$g_lang_email_subject}</td>
-                    <td>
-                        <input type="text" name="subject" size=50 value="" size='30' {$access_mode|escape:'html'}></td>
-                </tr>
-                <tr>
-                    <td>{$g_lang_email_custom_comment}</td>
-                    <td><textarea name="comments" cols=45 rows=7 size='220' {$access_mode|escape:'html'}></textarea></td>
-                </tr>
-		</table>
-		<br />&nbsp&nbsp
-                    
+{if isset($mode)}{$mode|escape:'html'}{/if}
+{$g_lang_email_note_to_authors}
+<form name="author_note_form" class="container mt-3" novalidate class="needs-validation"
+    {if isset($mode) && $mode eq 'root'}
+     action="toBePublished?mode=root" method="POST">
+    {else}
+     action="toBePublished" method="POST">
+    {/if}
+{$csrf_token_field}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">{$g_lang_email_to}</label>
+            <input type="text" name="to" value="Author(s)" class="form-control" size="15" {$access_mode|escape:'html'}>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{$g_lang_email_subject}</label>
+            <input type="text" name="subject" value="" class="form-control" size="50" {$access_mode|escape:'html'}>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{$g_lang_email_custom_comment}</label>
+            <textarea name="comments" cols="45" rows="7" class="form-control" {$access_mode|escape:'html'}></textarea>
+        </div>
+    </div>
+</div>
 
-			<tr><input type="hidden" name="checkbox" value="{foreach from=$checkbox item=id}{$id} {/foreach}" /></tr>
-			<table border="0">
-			<tr>
-                            <td>{$g_lang_email_email_all_users}</td>
-                            <td>
-                                <input type="checkbox" name="send_to_all" onchange="send_to_dept.disabled = !send_to_dept.disabled; author_note_form.elements['send_to_users[]'].disabled = !author_note_form.elements['send_to_users[]'].disabled;"></td>
-                        </tr>
-			<tr>
-                            <td>{$g_lang_email_email_whole_department}</td>
-                            <td>
-                                <input type="checkbox" name="send_to_dept" onchange="check(this.form.elements['send_to_users[]'], this, send_to_all);"></td>
-                        </tr>
-			<tr>
-                            <td valign="top">{$g_lang_email_email_these_users}:</td>
-                            <td>
-                                <select name="send_to_users[]" multiple onchange="check(this, send_to_dept, send_to_all);">
-                                    <option value="0">no one</option>
-                                    <option value="owner" selected="selected">file owners</option>
-                                    {foreach from=$user_info item=user}
-                                    <option value="{$user.id}">{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</option>
-                                    {/foreach}
+<input type="hidden" name="checkbox" value="{foreach from=$checkbox item=id}{$id} {/foreach}" />
 
-                                    
-			</select></td></tr></table>
-			<br />
-                         <div class="buttons">
-                            <button class="positive" type="submit" name="submit" value="{$submit_value|escape:'html'}">{$submit_value|escape:'html'}</button>
-                            <button class="negative" type="button" onclick="window.location.href='out'">{$g_lang_button_cancel}</button>
-                         </div><br /><br />
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="send_to_all" id="send_to_all" class="form-check-input">
+            <label class="form-check-label" for="send_to_all">{$g_lang_email_email_all_users}</label>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="send_to_dept" id="send_to_dept" class="form-check-input">
+            <label class="form-check-label" for="send_to_dept">{$g_lang_email_email_whole_department}</label>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{$g_lang_email_email_these_users}:</label>
+            <select name="send_to_users[]" id="send_to_users" multiple class="form-select">
+                <option value="0">no one</option>
+                <option value="owner" selected="selected">file owners</option>
+                {foreach from=$user_info item=user}
+                <option value="{$user.id}">{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>
 
-		</form>
-                {literal}
-                <script type="text/javascript">
-		function check(select, send_dept, send_all)
-		{
-			if(send_dept.checked || select.options[select.selectedIndex].value != "0")
-				send_all.disabled = true;
-			else
-			{
-				send_all.disabled = false;
-				for(var i = 1; i < select.options.length; i++)
-					select.options[i].selected = false;
-			}
-		}
+<div class="d-flex gap-2 mb-3">
+    <button class="btn btn-primary" type="submit" name="submit" value="{$submit_value|escape:'html'}">{$submit_value|escape:'html'}</button>
+    <button class="btn btn-secondary" type="button" onclick="window.location.href='out'">{$g_lang_button_cancel}</button>
+</div>
+</form>
 
-	</script>
-                {/literal}
+<script>
+(function() {
+    var sendToAll = document.getElementById('send_to_all');
+    var sendToDept = document.getElementById('send_to_dept');
+    var sendToUsers = document.getElementById('send_to_users');
+
+    function updateDisableState() {
+        if (sendToDept.checked || (sendToUsers.selectedIndex > -1 && sendToUsers.options[sendToUsers.selectedIndex].value !== '0')) {
+            sendToAll.disabled = true;
+        } else {
+            sendToAll.disabled = false;
+            for (var i = 1; i < sendToUsers.options.length; i++) {
+                sendToUsers.options[i].selected = false;
+            }
+        }
+    }
+
+    sendToAll.addEventListener('change', function() {
+        sendToDept.disabled = sendToAll.checked;
+        sendToUsers.disabled = sendToAll.checked;
+    });
+
+    sendToDept.addEventListener('change', function() {
+        updateDisableState();
+    });
+
+    sendToUsers.addEventListener('change', function() {
+        updateDisableState();
+    });
+})();
+</script>
