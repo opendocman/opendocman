@@ -1,13 +1,13 @@
-<form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="GET" enctype="multipart/form-data">
+<form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="GET" enctype="multipart/form-data" novalidate>
     {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
             <td><b>{$g_lang_label_name}(limit 5)</b></td>
-            <td colspan="3"><input maxlength="5" name="table_name" type="text" class="required"></td>
+            <td colspan="3"><input maxlength="5" name="table_name" type="text" class="required form-control"></td>
         </tr>
         <tr>
             <td><b>{$g_lang_label_display} {$g_lang_label_name}</b></td>
-            <td colspan="3"><input maxlength="16" name="display_name" type="text" class="required"></td>
+            <td colspan="3"><input maxlength="16" name="display_name" type="text" class="required form-control"></td>
         </tr>
         <tr>
             <td><b>{$g_lang_type}</b></td>
@@ -35,8 +35,17 @@
 </form>
 <script>
     {literal}
-    $(document).ready(function(){
-        $('#udfAddForm').validate();
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('udfAddForm');
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+        }
     });
     {/literal}
 </script>

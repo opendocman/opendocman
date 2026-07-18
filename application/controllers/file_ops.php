@@ -50,6 +50,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
     $page_url = 'file_ops?';
     $user_perm_obj = new UserPermission($_SESSION['uid'], $pdo);
     $list_status = list_files($file_id_array, $user_perm_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
+    display_smarty_template('out.tpl');
     if ($list_status != -1) {
         echo PHP_EOL . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
         echo PHP_EOL . '</form>';

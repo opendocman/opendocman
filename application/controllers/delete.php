@@ -106,6 +106,7 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     $userperms = new UserPermission($_SESSION['uid'], $pdo);
 
     $list_status = list_files($array_id, $userperms, $GLOBALS['CONFIG']['archiveDir'], true);
+    display_smarty_template('out.tpl');
 
     if ($list_status != -1) {
         $GLOBALS['smarty']->assign('lmode', '');

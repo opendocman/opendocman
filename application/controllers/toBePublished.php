@@ -60,6 +60,7 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
     }
     $list_status = list_files($id_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true);
+    display_smarty_template('out.tpl');
     if ($list_status != -1) {
         $GLOBALS['smarty']->assign('lmode', '');
         display_smarty_template('toBePublished.tpl');

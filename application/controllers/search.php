@@ -43,7 +43,6 @@ $start_time = time();
 draw_header(msg('search'), $last_message);
 ob_start();
 
-echo '<body bgcolor="white">';
 if (!isset($_GET['submit'])) {
     ?>
     <p>
@@ -257,6 +256,7 @@ if (!isset($_GET['submit'])) {
     callPluginMethod('onSearch');
 
     list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false, false);
+    display_smarty_template('out.tpl');
     echo '<br />';
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);

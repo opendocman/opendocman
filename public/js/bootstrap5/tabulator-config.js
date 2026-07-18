@@ -5,6 +5,7 @@ var tabulatorDefaults = {
     paginationSizeSelector: [10, 25, 50, 100],
     movableColumns: true,
     resizableColumns: true,
+    selectable: true,
     placeholder: 'No data available'
 };
 
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var table = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
         data: data,
         columns: [
+            { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
             { title: 'ID', field: 'id', width: 60 },
             { title: 'Filename', field: 'filename', widthGrow: 2,
               formatter: function(cell) {
@@ -25,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
               }
             },
             { title: 'Description', field: 'description', widthGrow: 3 },
+            { title: 'Status', field: 'lock', width: 80, formatter: function(cell) {
+                return cell.getValue() ? '<span class="text-danger">Locked</span>' : '<span class="text-success">Unlocked</span>';
+            }},
             { title: 'Created', field: 'created_date', width: 120 },
             { title: 'Modified', field: 'modified_date', width: 120 },
             { title: 'Author', field: 'owner_name', width: 150 },
