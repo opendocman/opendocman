@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-const ODM_APP_VERSION = '2.1.0';//x-release-please-version
+const ODM_APP_VERSION = '2.2.0';//x-release-please-version
 const ODM_DB_VERSION = '1.4.1';
 
 // version information
