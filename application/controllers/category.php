@@ -166,14 +166,14 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id=:id";
     $stmt = $pdo->prepare($query);
-    $stmt->execute(array(':id' => $_REQUEST[id]));
+    $stmt->execute(array(':id' => $_REQUEST['id']));
 
     // Set all old category_id's to the new re-assigned category
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category = :assigned_id WHERE category = :id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(
         ':assigned_id' => $_REQUEST['assigned_id'],
-        ':id' => $_REQUEST[id]
+        ':id' => $_REQUEST['id']
     ));
 
     // back to main page
