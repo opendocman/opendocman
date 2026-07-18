@@ -24,13 +24,13 @@
                             {$csrf_token_field}
                             <div class="mb-3">
                                 <label for="username" class="form-label">{$g_lang_label_username}</label>
-                                <input type="text" class="form-control" id="username" name="username" required autofocus>
+                                <input type="text" class="form-control" id="username" name="frmuser" required autofocus>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">{$g_lang_label_password}</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="frmpass" required>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">{$g_lang_label_login}</button>
+                            <button type="submit" name="login" class="btn btn-primary w-100">{$g_lang_label_login}</button>
                         </form>
                         <div class="text-center mt-3">
                             {if $g_lang_allow_password_reset eq 'True'}
