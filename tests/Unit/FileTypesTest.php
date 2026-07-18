@@ -45,7 +45,7 @@ class FileTypesTest extends TestCase
             define('ABSPATH', sys_get_temp_dir() . '/odm_filetypes_test/');
         }
         if (empty($GLOBALS['CONFIG']['theme'])) {
-            $GLOBALS['CONFIG']['theme'] = 'default';
+            $GLOBALS['CONFIG']['theme'] = 'bootstrap5';
         }
 
         // Ensure theme and common template directories and expected templates exist
