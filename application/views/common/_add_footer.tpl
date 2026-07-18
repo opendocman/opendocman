@@ -1,8 +1,7 @@
-    
-
-
-        <tr>
-            <td colspan="3" align="center"><div class="buttons"><button class="positive" tabindex=7 type="Submit" name="submit" value="Add Document">{$g_lang_submit}</button></div></td>
-        </tr>
-    </table>
+<div class="mb-3 text-center">
+            <button type="submit" name="submit" value="Add Document" class="btn btn-primary">{$g_lang_submit}</button>
+        </div>
+    </div>
+</div>
+</div>
 </form>
