@@ -16,3 +16,6 @@ test-env.php
 phpunit.xml
 build/
 php-server.log
+node_modules/
+playwright-report/
+test-results/

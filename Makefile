@@ -19,7 +19,7 @@ DOCKER_COMPOSE := $(shell \
 	fi)
 
 .PHONY: help setup env-generate env-validate build up down restart logs clean rebuild install status backup restore dump-sql
-.PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install
+.PHONY: test test-unit test-integration test-user test-department test-class test-file test-list test-quiet test-watch test-install test-e2e
 .PHONY: coverage coverage-html coverage-xml coverage-all test-coverage
 .PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
 .PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check docker-compose-version
@@ -179,6 +179,10 @@ test-watch: ## Watch files and run tests on changes (requires inotify-tools)
 test-install: ## Install test dependencies
 	@echo "📦 Installing test dependencies..."
 	@./scripts/run-tests.sh install
+
+test-e2e: ## Run Playwright E2E smoke test (requires app on port 8080)
+	@echo "🧪 Running E2E smoke test..."
+	@npm run test:e2e
 
 # =============================================================================
 # Code Coverage

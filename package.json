@@ -1,0 +1,14 @@
+{
+  "name": "opendocman",
+  "version": "2.1.0",
+  "private": true,
+  "description": "OpenDocMan - Document Management System",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
