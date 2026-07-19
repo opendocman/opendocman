@@ -1,7 +1,7 @@
-<form name="add_user" id="add_user" action="user" method="POST" enctype="multipart/form-data" novalidate class="needs-validation container mt-3">
+<form name="add_user" id="add_user" action="user" method="POST" enctype="multipart/form-data" novalidate class="needs-validation mt-3">
     {$csrf_token_field}
     <div class="card">
-        <div class="card-body">
+        <div class="card-body form-grid">
             {$onBeforeAddUser}
             <div class="mb-3">
                 <label class="form-label">{$g_lang_label_last_name}</label>
@@ -47,7 +47,7 @@
                 <input name="admin" type="checkbox" value="1" id="cb_admin" class="form-check-input">
                 <label class="form-check-label" for="cb_admin">{$g_lang_label_is_admin}?</label>
             </div>
-            <div class="mb-3" id="userReviewDepartmentRow">
+            <div class="mb-3 full-width" id="userReviewDepartmentRow">
                 <label class="form-label" id="userReviewDepartmentLabelTd">{$g_lang_label_reviewer_for}</label>
                 <select name="department_review[]" multiple="multiple" id="userReviewDepartmentsList" class="form-select">
                 {foreach from=$department_list item=item name=department_list}
@@ -70,6 +70,7 @@
         </div>
     </div>
 </form>
+{literal}
 <script>
 (function() {
     var form = document.getElementById('add_user');
@@ -82,3 +83,4 @@
     }, false);
 })();
 </script>
+{/literal}

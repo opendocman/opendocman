@@ -1,4 +1,4 @@
-<div class="container mt-3">
+<div class="mt-3">
     <div class="card">
         <div class="card-header">
             <h3 class="card-title mb-0">{$page_title}</h3>

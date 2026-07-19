@@ -1,4 +1,4 @@
-<div class="container mt-3">
+<div class="mt-3">
     <div class="card">
         <div class="card-body text-center">
             <p class="card-text">{$g_lang_message_to_view_your_file}</p>

@@ -1,4 +1,4 @@
-        <html>
+<html>
         <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -44,8 +44,8 @@
         <table border="0" cellspacing="5" cellpadding="5">
         <tr>
         <td valign="top">
-        <table border="0" cellspacing="5" cellpadding="5">
         <form action="index" method="post">
+        <table border="0" cellspacing="5" cellpadding="5">
             {if $redirection}
                 <input type="hidden" name="redirection" value="{$redirection|escape:'html'}">
             {/if}
@@ -77,8 +77,8 @@
         </tr>
         {/if}
         
-        </form>
         </table>
+        </form>
         </td>
         <td valign="top">
         {$g_lang_welcome}

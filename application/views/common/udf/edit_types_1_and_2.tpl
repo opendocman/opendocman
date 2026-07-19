@@ -1,4 +1,4 @@
-<form id="editUdfForm" method="post" class="container mt-3">
+<form id="editUdfForm" method="post" class="mt-3">
     <div class="card">
         <div class="card-body">
             {$csrf_token_field}

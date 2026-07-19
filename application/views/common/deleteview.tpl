@@ -1,4 +1,5 @@
-<form name="main" action="delete" method="post" class="container mt-3">
+<form name="main" action="delete" method="post" class="mt-3">
+    {$csrf_token_field}
     <div class="card">
         <div class="card-body">
             <div class="d-flex gap-2 mb-3">

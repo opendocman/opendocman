@@ -1,6 +1,6 @@
 {if isset($mode)}{$mode|escape:'html'}{/if}
 {$g_lang_email_note_to_authors}
-<form name="author_note_form" class="container mt-3" novalidate class="needs-validation"
+<form name="author_note_form" class="needs-validation mt-3" novalidate
     {if isset($mode) && $mode eq 'root'}
      action="toBePublished?mode=root" method="POST">
     {else}
@@ -55,6 +55,7 @@
 </div>
 </form>
 
+{literal}
 <script>
 (function() {
     var sendToAll = document.getElementById('send_to_all');
@@ -86,3 +87,4 @@
     });
 })();
 </script>
+{/literal}

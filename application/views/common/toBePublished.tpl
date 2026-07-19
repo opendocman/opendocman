@@ -1,4 +1,6 @@
-<form name="main" action="toBePublished" method="post" class="container mt-3">
+<form name="main" action="toBePublished" method="post" class="mt-3">
+    {$csrf_token_field}
+    <input type="hidden" name="checkbox" id="checkbox-selected" value="" />
     <div class="card">
         <div class="card-body">
             <div class="d-flex gap-2 mb-3">
@@ -10,3 +12,14 @@
         </div>
     </div>
 </form>
+{literal}
+<script>
+document.querySelector('form[name="main"]').addEventListener('submit', function() {
+    if (window.fileTable) {
+        var selected = window.fileTable.getSelectedData();
+        var ids = selected.map(function(row) { return row.id; }).join(' ');
+        document.getElementById('checkbox-selected').value = ids;
+    }
+});
+</script>
+{/literal}

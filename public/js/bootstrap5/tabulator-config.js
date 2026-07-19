@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!dataEl) return;
     
     var data = JSON.parse(dataEl.textContent);
-    var table = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
+    window.fileTable = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
         data: data,
         columns: [
             { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },

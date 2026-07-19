@@ -1,4 +1,4 @@
-<div class="accordion" id="permissionsAccordion">
+<div class="accordion w-50" id="permissionsAccordion">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingDept">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDept" aria-expanded="true" aria-controls="collapseDept">

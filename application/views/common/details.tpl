@@ -1,4 +1,4 @@
-<form name="data" class="container mt-3">
+<form name="data" class="mt-3">
     {$csrf_token_field}
     <input type="hidden" name="to" value="{$file_detail.to_value|escape:'html'}" />
     <input type="hidden" name="subject" value="{$file_detail.subject_value|escape:'html'}" />
@@ -73,6 +73,7 @@
     </div>
 </form>
 
+{literal}
 <script>
 (function() {
     var message_window;
@@ -81,8 +82,8 @@
     var deleteBtn = document.getElementById('deleteBtn');
     if (deleteBtn) {
         deleteBtn.addEventListener('click', function() {
-            if (window.confirm('{$g_lang_detailspage_are_sure}')) {
-                window.location = '{$my_delete_link}';
+            if (window.confirm('{/literal}{$g_lang_detailspage_are_sure}{literal}')) {
+                window.location = '{/literal}{$my_delete_link}{literal}';
             }
         });
     }
@@ -98,9 +99,10 @@
     }
 
     window.showMessage = function() {
-        message_window = window.open('{$comments_link|escape}' , 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
+        message_window = window.open('{/literal}{$comments_link|escape}{literal}' , 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
         message_window.focus();
         setTimeout(sendFields, 500);
     };
 })();
 </script>
+{/literal}

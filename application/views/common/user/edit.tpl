@@ -1,7 +1,7 @@
-<form name="update" id="modifyUserForm" action="user" method="POST" enctype="multipart/form-data" novalidate class="needs-validation container mt-3">
+<form name="update" id="modifyUserForm" action="user" method="POST" enctype="multipart/form-data" novalidate class="needs-validation mt-3">
     {$csrf_token_field}
     <div class="card">
-        <div class="card-body">
+        <div class="card-body form-grid">
             <div class="mb-3">
                 <label class="form-label">{$g_lang_userpage_id}</label>
                 <p class="form-control-plaintext">{$user->id|escape:'html'}</p>
@@ -54,7 +54,7 @@
                 <input name="admin" type="checkbox" value="1" {if $is_admin}checked{/if} {$mode|escape:'html'} id="cb_admin" class="form-check-input">
                 <label class="form-check-label" for="cb_admin">{$g_lang_userpage_admin}</label>
             </div>
-            <div class="mb-3" id="userReviewDepartmentRow" {if $display_reviewer_row}style="display: none;"{/if}>
+            <div class="mb-3 full-width" id="userReviewDepartmentRow" {if $display_reviewer_row}style="display: none;"{/if}>
                 <label class="form-label" id="userReviewDepartmentLabelTd">{$g_lang_userpage_reviewer_for}</label>
                 <select id="userReviewDepartmentsList" name="department_review[]" multiple="multiple" class="form-select" {$mode}>
                     {foreach from=$department_select_options item=item name=department_select_options}
@@ -78,6 +78,7 @@
         </div>
     </div>
 </form>
+{literal}
 <script>
 (function() {
     var form = document.getElementById('modifyUserForm');
@@ -90,3 +91,4 @@
     }, false);
 })();
 </script>
+{/literal}

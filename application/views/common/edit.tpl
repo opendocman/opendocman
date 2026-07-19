@@ -13,9 +13,9 @@
     <input type="hidden" id="id" name="id" value="{$file_id|escape:'html'}" />
     <input id="i_value" type="hidden" name="i_value" value="{$i|escape:'html'}" />
 
-    <div class="container mt-3">
+    <div class="mt-3">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body form-grid">
                 <div class="mb-3">
                     <label class="form-label">{$g_lang_label_name}</label>
                     <p class="form-control-plaintext"><b>{$realname|escape:'html'}</b></p>
@@ -52,7 +52,7 @@
                     </select>
                 </div>
 
-                <div class="mb-3" id="departmentSelect">
+                <div class="mb-3 full-width" id="departmentSelect">
                     <label class="form-label">
                         <a href="help.html#Add_File_-_Department" onClick="return popup(this, 'Help')" class="text-decoration-none">{$g_lang_addpage_permissions}</a>
                     </label>
@@ -68,7 +68,7 @@
                     <input type="text" name="description" class="form-control" value="{$description|escape:'html'}">
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 full-width">
                     <label class="form-label">
                         <a href="help.html#Add_File_-_Comment" onClick="return popup(this, 'Help')" class="text-decoration-none">{$g_lang_label_comment}</a>
                     </label>

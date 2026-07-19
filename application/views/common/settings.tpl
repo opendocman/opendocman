@@ -1,4 +1,4 @@
-<form action="settings" method="POST" enctype="multipart/form-data" id="settingsForm" class="container mt-3">
+<form action="settings" method="POST" enctype="multipart/form-data" id="settingsForm" class="mt-3">
     {$csrf_token_field}
     <div class="card">
         <div class="card-body">

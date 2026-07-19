@@ -28,6 +28,8 @@
 
     </div> <!-- /container -->   
     <script type="text/javascript" src="{$g_base_url}js/tweeter/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tabulator-tables@6.3/dist/js/tabulator.min.js"></script>
+    <script src="{$g_base_url}/js/bootstrap5/tabulator-config.js"></script>
 </body>
 </html>
 
