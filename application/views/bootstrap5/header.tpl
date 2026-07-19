@@ -40,7 +40,7 @@
     {/if}
     {if $lastmessage ne ''}
     <div class="container mt-2">
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <div id="last_message" class="alert alert-info alert-dismissible fade show" role="alert">
             {$lastmessage|escape}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>

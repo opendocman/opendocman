@@ -20,15 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
     var tableEl = document.getElementById('file-table');
     if (!tableEl) return;
 
-    window.fileTable = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
+    var table = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
         columns: [
             { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
             { title: 'ID', field: 'id', width: 60 },
             { title: 'Filename', field: 'filename', widthGrow: 2,
               formatter: function(cell) {
-                  var v = cell.getValue();
-                  var details = cell.getData().details_link;
-                  return '<a href="' + details + '">' + v + '</a>';
+                  return '<a href="' + cell.getData().details_link + '">' + cell.getValue() + '</a>';
               }
             },
             { title: 'Description', field: 'description', widthGrow: 3 },
@@ -42,4 +40,27 @@ document.addEventListener('DOMContentLoaded', function() {
             { title: 'Size', field: 'filesize', width: 80 }
         ]
     }));
+    window.fileTable = table;
+
+    var deleteBtn = document.getElementById('delete-selected');
+    if (deleteBtn) {
+        table.on('rowSelectionChanged', function() {
+            deleteBtn.disabled = table.getSelectedRows().length === 0;
+        });
+
+        deleteBtn.addEventListener('click', function() {
+            var rows = table.getSelectedRows();
+            if (rows.length === 0) return;
+
+            var ids = rows.map(function(r) { return r.getData().id; });
+            if (!confirm('Are you sure you want to archive ' + ids.length + ' file(s)?')) return;
+
+            var params = new URLSearchParams();
+            params.set('mode', 'tmpdel');
+            params.set('num_checkboxes', ids.length);
+            ids.forEach(function(id, i) { params.set('id' + i, id); });
+
+            window.location.href = 'delete?' + params.toString();
+        });
+    }
 });
