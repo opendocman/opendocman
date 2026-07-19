@@ -1,21 +1,26 @@
 var tabulatorDefaults = {
     layout: 'fitColumns',
-    pagination: 'local',
+    pagination: true,
+    paginationMode: 'remote',
     paginationSize: 25,
     paginationSizeSelector: [10, 25, 50, 100],
     movableColumns: true,
     resizableColumns: true,
     selectable: true,
-    placeholder: 'No data available'
+    placeholder: 'No data available',
+    ajaxURL: 'file_list_ajax',
+    ajaxParams: function() {
+        return { state: 1 };
+    },
+    ajaxConfig: 'GET',
+    ajaxContentType: 'form'
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    var dataEl = document.getElementById('file-table-data');
-    if (!dataEl) return;
-    
-    var data = JSON.parse(dataEl.textContent);
+    var tableEl = document.getElementById('file-table');
+    if (!tableEl) return;
+
     window.fileTable = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
-        data: data,
         columns: [
             { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
             { title: 'ID', field: 'id', width: 60 },

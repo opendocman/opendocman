@@ -68,15 +68,7 @@ if ($llen > 0) {
 
 
 
-//set values
-$user_perms = new UserPermission($_SESSION['uid'], $GLOBALS['pdo']);
-
-//$start_P = getmicrotime();
-$file_id_array = $user_perms->getViewableFileIds(true);
-//$end_P = getmicrotime();
-
-
-list_files($file_id_array, $user_perms, $GLOBALS['CONFIG']['dataDir'], false);
+$GLOBALS['smarty']->assign('file_list_json', '[]');
 display_smarty_template('out.tpl');
 
 draw_footer();
