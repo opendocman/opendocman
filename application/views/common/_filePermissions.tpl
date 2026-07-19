@@ -1,11 +1,11 @@
 <div class="accordion w-50" id="permissionsAccordion">
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingDept">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDept" aria-expanded="true" aria-controls="collapseDept">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDept" data-toggle="collapse" data-target="#collapseDept" aria-expanded="true" aria-controls="collapseDept">
                 {$g_lang_filepermissionspage_edit_department_permissions}
             </button>
         </h2>
-        <div id="collapseDept" class="accordion-collapse collapse show" aria-labelledby="headingDept" data-bs-parent="#permissionsAccordion">
+        <div id="collapseDept" class="accordion-collapse collapse show in" aria-labelledby="headingDept" data-bs-parent="#permissionsAccordion" data-parent="#permissionsAccordion">
             <div class="accordion-body p-0">
                 <div class="table-responsive" style="max-height:300px; overflow-y:auto;">
                     <table class="table table-striped table-sm mb-0" id="department_permissions_table">
@@ -41,11 +41,11 @@
 
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingUser">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUser" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
                 {$g_lang_filepermissionspage_edit_user_permissions}
             </button>
         </h2>
-        <div id="collapseUser" class="accordion-collapse collapse" aria-labelledby="headingUser" data-bs-parent="#permissionsAccordion">
+        <div id="collapseUser" class="accordion-collapse collapse" aria-labelledby="headingUser" data-bs-parent="#permissionsAccordion" data-parent="#permissionsAccordion">
             <div class="accordion-body p-0">
                 <div class="table-responsive" style="max-height:300px; overflow-y:auto;">
                     <table class="table table-striped table-sm mb-0" id="user_permissions_table">
