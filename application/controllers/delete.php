@@ -40,6 +40,11 @@ $userperm_obj = new User_Perms($_SESSION['uid'], $pdo);
 
 // User has requested a deletion from the file detail page
 if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
+    // Validate CSRF on POST requests
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     if (!isset($_REQUEST['num_checkboxes'])) {
         $_REQUEST['num_checkboxes'] =1;
     }

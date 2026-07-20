@@ -69,6 +69,8 @@ if ($llen > 0) {
 
 
 $GLOBALS['smarty']->assign('file_list_json', '[]');
+$delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
+$GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
 display_smarty_template('out.tpl');
 
 draw_footer();

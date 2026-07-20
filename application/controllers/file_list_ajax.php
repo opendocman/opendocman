@@ -36,7 +36,7 @@ $pdo = $GLOBALS['pdo'];
 $db_prefix = $GLOBALS['CONFIG']['db_prefix'];
 
 $page = isset($_REQUEST['page']) ? max(1, (int)$_REQUEST['page']) : 1;
-$size = isset($_REQUEST['size']) ? max(1, min(1000, (int)$_REQUEST['size'])) : 25;
+$size = isset($_REQUEST['size']) ? max(1, min(500, (int)$_REQUEST['size'])) : 25;
 
 $user_obj = new User($_SESSION['uid'], $pdo);
 $user_perms = new UserPermission($_SESSION['uid'], $pdo);

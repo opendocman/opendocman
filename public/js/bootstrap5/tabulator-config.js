@@ -4,7 +4,7 @@ var tabulatorDefaults = {
     pagination: true,
     paginationMode: 'remote',
     paginationSize: paginationSize,
-    paginationSizeSelector: [10, 25, 50, 100, 1000],
+    paginationSizeSelector: [10, 25, 50, 100, 500],
     movableColumns: true,
     resizableColumns: true,
     selectable: true,
@@ -60,12 +60,28 @@ document.addEventListener('DOMContentLoaded', function() {
             var ids = rows.map(function(r) { return r.getData().id; });
             if (!confirm('Are you sure you want to archive ' + ids.length + ' file(s)?')) return;
 
-            var params = new URLSearchParams();
-            params.set('mode', 'tmpdel');
-            params.set('num_checkboxes', ids.length);
-            ids.forEach(function(id, i) { params.set('id' + i, id); });
-
-            window.location.href = 'delete?' + params.toString();
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'delete';
+            form.style.display = 'none';
+            var addInput = function(n, v) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = n;
+                input.value = v;
+                form.appendChild(input);
+            };
+            addInput('mode', 'tmpdel');
+            addInput('num_checkboxes', ids.length);
+            ids.forEach(function(id, i) { addInput('id' + i, id); });
+            var csrfFields = document.getElementById('delete-csrf-fields');
+            if (csrfFields) {
+                Array.from(csrfFields.querySelectorAll('input[type="hidden"]')).forEach(function(input) {
+                    form.appendChild(input.cloneNode());
+                });
+            }
+            document.body.appendChild(form);
+            form.submit();
         });
     }
 });

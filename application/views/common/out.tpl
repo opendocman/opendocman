@@ -6,6 +6,7 @@
                 <button id="delete-selected" class="btn btn-danger btn-sm" disabled>
                     Delete Selected
                 </button>
+                <div id="delete-csrf-fields" class="d-none">{$delete_csrf_field}</div>
             </div>
         </div>
         <div class="card-body">
