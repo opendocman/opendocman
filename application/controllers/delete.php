@@ -64,12 +64,14 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
                 $file_obj->temp_delete();
                 $realname = $file_obj->getName();
                 $srcPath = getFilePath($id, $realname, 'data');
-                $dstPath = getFilePath($id, $realname, 'archive');
-                $dstDir = dirname($dstPath);
-                if (!is_dir($dstDir)) {
-                    mkdir($dstDir, 0775, true);
+                if ($srcPath && file_exists($srcPath)) {
+                    $dstPath = getFilePath($id, $realname, 'archive');
+                    $dstDir = dirname($dstPath);
+                    if (!is_dir($dstDir)) {
+                        mkdir($dstDir, 0775, true);
+                    }
+                    fmove($srcPath, $dstPath);
                 }
-                fmove($srcPath, $dstPath);
             }
             AccessLog::addLogEntry($_REQUEST['id' . $i], 'X', $pdo);
         }
