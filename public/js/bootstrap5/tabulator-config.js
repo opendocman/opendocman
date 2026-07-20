@@ -1,8 +1,9 @@
+var paginationSize = parseInt(sessionStorage.getItem('tabulatorPageSize') || '25', 10);
 var tabulatorDefaults = {
     layout: 'fitColumns',
     pagination: true,
     paginationMode: 'remote',
-    paginationSize: 25,
+    paginationSize: paginationSize,
     paginationSizeSelector: [10, 25, 50, 100],
     movableColumns: true,
     resizableColumns: true,
@@ -41,6 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     }));
     window.fileTable = table;
+
+    table.on('pageSizeChanged', function(size) {
+        sessionStorage.setItem('tabulatorPageSize', size);
+    });
 
     var deleteBtn = document.getElementById('delete-selected');
     if (deleteBtn) {
