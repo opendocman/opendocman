@@ -4,7 +4,7 @@ var tabulatorDefaults = {
     pagination: true,
     paginationMode: 'remote',
     paginationSize: paginationSize,
-    paginationSizeSelector: [10, 25, 50, 100],
+    paginationSizeSelector: [10, 25, 50, 100, 1000],
     movableColumns: true,
     resizableColumns: true,
     selectable: true,
