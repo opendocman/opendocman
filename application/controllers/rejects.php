@@ -45,12 +45,6 @@ if (!isset($_POST['submit'])) {
         header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
         exit;
     }
-    if ($user_obj->isAdmin() && @$_REQUEST['mode'] == 'root') {
-        $fileid_array = $user_obj->getAllRejectedFileIds();
-    } else {
-        $fileid_array = $user_obj->getRejectedFileIds();
-    }
-
     if (@$_REQUEST['mode']=='root') {
         echo '<form name="author_note_form" action="rejects?mode=root" method="post">';
         echo $GLOBALS['csrf']->getTokenField();
@@ -64,18 +58,12 @@ if (!isset($_POST['submit'])) {
         <td>
 
 <?php
-$list_status = list_files($fileid_array, $user_perms_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
-
-if ($list_status !== -1) {
-    display_smarty_template('out.tpl');
-}
+$GLOBALS['smarty']->assign('state', -1);
+display_smarty_template('out.tpl');
 
     ?>
         </td>
     </tr>
-<?php
-            if ($list_status != -1) {
-                ?>
     <tr>
         <td>
                 <div class="buttons">
@@ -84,9 +72,6 @@ if ($list_status !== -1) {
                     <button class="negative" type="submit" name="submit" value="delete"><?php echo msg('button_delete');
                 ?></button>
                 </div>
-<?php
-
-            }
     ?>
 </table>
 </form>

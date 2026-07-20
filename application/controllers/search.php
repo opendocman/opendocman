@@ -233,35 +233,20 @@ if (!isset($_GET['submit'])) {
     }
     try {
         $current_user = new User($_SESSION['uid'], $pdo);
-        $user_perms = new User_Perms($_SESSION['uid'], $pdo);
-        $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
     } catch (Exception $e) {
         error_log("Search.php - Error creating user objects: " . $e->getMessage());
         error_log("Search.php - Session UID: " . (isset($_SESSION['uid']) ? $_SESSION['uid'] : 'NOT SET'));
         header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
         exit;
     }
-    //$s_getFTime = getmicrotime();
-    if ($_GET['where'] == 'author_locked_files') {
-        $view_able_files_id = $current_user->getExpiredFileIds();
-    } else {
-        $view_able_files_id = $current_user_permission->getViewableFileIds(false);
-    }
-    //$e_getFTime = getmicrotime();
-    $id_array_len = sizeof($view_able_files_id);
-    $query_array = array();
-    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
 
     // Call the plugin API
     callPluginMethod('onSearch');
 
-    list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false, false);
+    $GLOBALS['smarty']->assign('state', 1);
     display_smarty_template('out.tpl');
-    echo '<br />';
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);
     display_smarty_template('_content.tpl');
     draw_footer();
-    //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
-    //echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
 }

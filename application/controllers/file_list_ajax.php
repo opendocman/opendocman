@@ -37,13 +37,138 @@ $db_prefix = $GLOBALS['CONFIG']['db_prefix'];
 
 $page = isset($_REQUEST['page']) ? max(1, (int)$_REQUEST['page']) : 1;
 $size = isset($_REQUEST['size']) ? max(1, min(500, (int)$_REQUEST['size'])) : 25;
+$state = isset($_REQUEST['state']) ? (int)$_REQUEST['state'] : 1;
 
 $user_obj = new User($_SESSION['uid'], $pdo);
 $user_perms = new UserPermission($_SESSION['uid'], $pdo);
 $is_admin = $user_obj->isAdmin();
 
 // Step 1: Get all viewable file IDs (permission check, fast integer query)
-$file_id_array = $user_perms->getViewableFileIds(false);
+
+// Search mode — overrides state when keyword is provided
+if (isset($_REQUEST['keyword']) && $_REQUEST['keyword'] !== '') {
+    $keyword_raw = $_REQUEST['keyword'];
+    $where = $_REQUEST['where'] ?? 'all';
+    $exact_phrase = $_REQUEST['exact_phrase'] ?? '';
+    $case_sensitivity = $_REQUEST['case_sensitivity'] ?? '';
+    $is_udf = false;
+
+    $equate = ($case_sensitivity === 'on') ? ' LIKE BINARY ' : ' LIKE ';
+    $search_keyword = ($exact_phrase === 'on') ? $keyword_raw : '%' . $keyword_raw . '%';
+
+    $query_pre = "SELECT d.id FROM {$db_prefix}data as d, {$db_prefix}user as u, {$db_prefix}department dept, {$db_prefix}category as c ";
+    $query = "WHERE d.owner = u.id AND d.department = dept.id AND d.category = c.id AND (";
+
+    switch ($where) {
+        case 'category':
+            $query .= "c.name $equate :keyword ";
+            break;
+        case 'author':
+            if ($exact_phrase === 'on') {
+                $space_pos = strpos($keyword_raw, ' ');
+                $author_last_name = ($space_pos !== false) ? substr($keyword_raw, 0, $space_pos) : $keyword_raw;
+                $author_first_name = ($space_pos !== false) ? substr($keyword_raw, $space_pos + 1) : '';
+                $query .= " u.first_name $equate :author_first_name AND u.last_name $equate :author_last_name ";
+            } else {
+                $query .= " u.first_name $equate :keyword OR u.last_name $equate :keyword ";
+            }
+            break;
+        case 'department':
+            $query .= "dept.name $equate :keyword ";
+            break;
+        case 'descriptions':
+            $query .= "d.description $equate :keyword ";
+            break;
+        case 'filenames':
+            $query .= "d.realname $equate :keyword ";
+            break;
+        case 'comments':
+            $query .= "d.comment $equate :keyword ";
+            break;
+        case 'file_id':
+            $query .= "d.id $equate :keyword ";
+            break;
+        case 'all':
+            $query .= "c.name $equate :keyword OR u.first_name $equate :keyword OR u.last_name $equate :keyword OR dept.name $equate :keyword OR d.description $equate :keyword OR d.realname $equate :keyword OR d.comment $equate :keyword ";
+            break;
+        default:
+            $is_udf = true;
+            list($query_pre, $query) = udf_functions_search($where, $query_pre, $query, $equate, $search_keyword);
+            break;
+    }
+
+    $query .= ") ORDER BY d.id ASC";
+    $final_query = $query_pre . $query;
+
+    $stmt = $pdo->prepare($final_query);
+    if ($where === 'author' && $exact_phrase === 'on') {
+        $stmt->bindValue(':author_first_name', $author_first_name);
+        $stmt->bindValue(':author_last_name', $author_last_name);
+    } elseif (!$is_udf) {
+        $stmt->bindValue(':keyword', $search_keyword);
+    }
+    $stmt->execute();
+    $search_results = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    // Intersect with viewable file IDs for permission filtering
+    $viewable_ids = $user_perms->getViewableFileIds(false);
+    $file_id_array = array_values(array_intersect($search_results, $viewable_ids));
+} else {
+switch ($state) {
+    case 2: // archived files (view_del_archive)
+        if (!$is_admin) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Forbidden']);
+            exit;
+        }
+        $query = "SELECT id FROM {$db_prefix}data WHERE publishable = 2";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $file_id_array = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        break;
+    case 0: // pending review (toBePublished)
+        if (!$user_obj->isReviewer()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Forbidden']);
+            exit;
+        }
+        if ($is_admin) {
+            $query = "SELECT id FROM {$db_prefix}data WHERE publishable = 0";
+        } else {
+            $query = "SELECT d.id FROM {$db_prefix}data d "
+                   . "JOIN {$db_prefix}dept_reviewer dr ON dr.dept_id = d.department AND dr.user_id = :uid "
+                   . "WHERE d.publishable = 0";
+        }
+        $stmt = $pdo->prepare($query);
+        $stmt->execute($is_admin ? [] : [':uid' => $_SESSION['uid']]);
+        $file_id_array = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        break;
+    case -1: // rejected files (rejects)
+        if ($is_admin) {
+            $query = "SELECT id FROM {$db_prefix}data WHERE publishable = -1";
+        } else {
+            $query = "SELECT id FROM {$db_prefix}data WHERE publishable = -1 AND owner = :uid";
+        }
+        $stmt = $pdo->prepare($query);
+        $stmt->execute($is_admin ? [] : [':uid' => $_SESSION['uid']]);
+        $file_id_array = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        break;
+    case 3: // checked-out files (file_ops view_checkedout)
+        if (!$user_obj->isRoot()) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Forbidden']);
+            exit;
+        }
+        $query = "SELECT id FROM {$db_prefix}data WHERE status > 0";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $file_id_array = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        break;
+    default: // state=1 (active files) and any other
+        $file_id_array = $user_perms->getViewableFileIds(false);
+        break;
+}
+}
 $total_files = count($file_id_array);
 $last_page = max(1, (int)ceil($total_files / $size));
 

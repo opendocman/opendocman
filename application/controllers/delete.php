@@ -91,34 +91,47 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     header('Location: out?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'view_del_archive') {
     
-    //publishable=2 for archive deletion
-    $query = "SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}data WHERE publishable=2";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    $array_id = array();
-    $i = 0;
-    foreach ($result as $row) {
-        $array_id[$i] = $row['id'];
-        $i++;
-    }
-
-    $luserperm_obj = new UserPermission($_SESSION['uid'], $pdo);
-    
     draw_header(msg('area_deleted_files'), $last_message);
-    $page_url = e::h($_SERVER['PHP_SELF']) . '?mode=' . $_REQUEST['mode'];
 
-    $user_obj = new User($_SESSION['uid'], $pdo);
-    $userperms = new UserPermission($_SESSION['uid'], $pdo);
-
-    $list_status = list_files($array_id, $userperms, $GLOBALS['CONFIG']['archiveDir'], true);
+    $GLOBALS['smarty']->assign('state', 2);
+    $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
+    $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
     display_smarty_template('out.tpl');
 
-    if ($list_status != -1) {
-        $GLOBALS['smarty']->assign('lmode', '');
-        display_smarty_template('deleteview.tpl');
+    $GLOBALS['smarty']->assign('lmode', '');
+    display_smarty_template('deleteview.tpl');
+} elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'undelete') {
+    if (!isset($_REQUEST['num_checkboxes'])) {
+        $_REQUEST['num_checkboxes'] = 1;
     }
+    for ($i = 0; $i < $_REQUEST['num_checkboxes']; $i++) {
+        if (isset($_REQUEST['id' . $i])) {
+            $fileId = $_REQUEST['id' . $i];
+            $file_obj = new FileData($fileId, $pdo);
+            $file_obj->undelete();
+            $realname = $file_obj->getName();
+            $srcPath = getFilePath($fileId, $realname, 'archive');
+            $dstPath = getFilePath($fileId, $realname, 'data');
+            $dstDir = dirname($dstPath);
+            if (!is_dir($dstDir)) {
+                mkdir($dstDir, 0775, true);
+            }
+            if (file_exists($srcPath)) {
+                fmove($srcPath, $dstPath);
+            }
+        }
+    }
+    header('Location: delete?mode=view_del_archive&last_message=' . urlencode(msg('undeletepage_file_undeleted')));
+} elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'delete_permanent') {
+    if (!isset($_REQUEST['num_checkboxes'])) {
+        $_REQUEST['num_checkboxes'] = 1;
+    }
+    for ($i = 0; $i < $_REQUEST['num_checkboxes']; $i++) {
+        if (isset($_REQUEST['id' . $i])) {
+            pmt_delete($_REQUEST['id' . $i]);
+        }
+    }
+    header('Location: delete?mode=view_del_archive&last_message=' . urlencode(msg('undeletepage_file_permanently_deleted')));
 } elseif (isset($_POST['submit']) && $_POST['submit']=='Delete file(s)') {
     isset($_REQUEST['checkbox']) ? $_REQUEST['checkbox'] : '';
 
@@ -141,7 +154,9 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
             if (!is_dir($dstDir)) {
                 mkdir($dstDir, 0775, true);
             }
-            fmove($srcPath, $dstPath);
+            if (file_exists($srcPath)) {
+                fmove($srcPath, $dstPath);
+            }
         }
     }
     header('Location: ' . urlencode($redirect) . '?last_message=' . urlencode(msg('undeletepage_file_undeleted')));
