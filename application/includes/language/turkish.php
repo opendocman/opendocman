@@ -44,6 +44,9 @@ global $lang;
 //Oturum aç
 $lang ['anonymous_link'] = 'Anonim dosyaları görmek için buraya tıklayınız.';
 $lang ['forgotpassword'] = 'Şifrenizi mi unuttunuz?';
+$lang ['forgot_password'] = 'Şifrenizi mi unuttunuz?';
+$lang ['label_login'] = 'Giriş Yap';
+$lang ['label_password'] = 'Şifre';
 $lang ['signup'] = 'Bir hesap için kaydolun';
 $lang ['welcome'] = "OpenDocMan'a hoşgeldiniz";
 $lang ['welcome2'] = "Güçlü depolama, yayınlama ve uyarlama kontrol özellikli sistemi kullanmak için oturum açınız.";
@@ -622,5 +625,6 @@ $lang ['footer_bugs'] = 'Hatalar';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'tarafından desteklenmektedir';
 
 ?>

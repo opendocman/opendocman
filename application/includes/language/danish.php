@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klik her for at se offentlige filer anonymt';
 $lang['forgotpassword'] = 'Glemt dit password?';
+$lang['forgot_password'] = 'Glemt din adgangskode?';
+$lang['label_login'] = 'Log ind';
+$lang['label_password'] = 'Adgangskode';
 $lang['signup'] = 'Log ind til en konto';
 $lang['welcome'] = 'Velkommen til OpenDocMan';
 $lang['welcome2'] = 'Log ind for at begynde med at bruge systemet\'s kraftige lagrings-, publiserings- og revisionskontrolegenskaber.';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Drevet af';
 

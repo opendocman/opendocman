@@ -4,3 +4,8 @@
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{$g_base_url}/css/bootstrap5/style.css">
 {$csrf_meta}
+<script type="text/javascript" src="{$g_base_url}js/csrf-helper.js"></script>
+<script>
+    window.csrf_token = '{$csrf_token_value}';
+    window.csrf_field_name = '{$csrf_field_name}';
+</script>

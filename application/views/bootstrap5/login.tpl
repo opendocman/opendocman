@@ -12,9 +12,11 @@
         <div class="row justify-content-center align-items-center" style="min-height: 100vh;">
             <div class="col-md-5 col-lg-4">
                 <div class="card shadow">
+                    <div class="text-center pt-4">
+                        <img src="{$g_base_url}/images/logo.gif" alt="{$site_title|escape}" style="max-height: 80px;">
+                    </div>
                     <div class="card-body p-4">
                         <div class="text-center mb-4">
-                            <img src="{$g_base_url}/images/logo.png" alt="{$site_title|escape}" class="mb-3" style="max-height: 60px;">
                             <h4>{$site_title|escape}</h4>
                         </div>
                         {if $lastmessage ne ''}
@@ -33,11 +35,11 @@
                             <button type="submit" name="login" class="btn btn-primary w-100">{$g_lang_label_login}</button>
                         </form>
                         <div class="text-center mt-3">
-                            {if $g_lang_allow_password_reset eq 'True'}
-                                <a href="forgot_password" class="text-decoration-none small">{$g_lang_forgot_password}</a>
+                            {if $g_allow_password_reset eq 'True'}
+                                <a href="forgot_password" class="text-decoration-none small">{$g_lang_forgotpassword}</a>
                             {/if}
-                            {if $g_lang_allow_signup eq 'True'}
-                                {if $g_lang_allow_password_reset eq 'True'}| {/if}
+                            {if $g_allow_signup eq 'True'}
+                                {if $g_allow_password_reset eq 'True'}| {/if}
                                 <a href="signup" class="text-decoration-none small">{$g_lang_signup}</a>
                             {/if}
                         </div>

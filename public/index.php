@@ -82,7 +82,7 @@ if ($configExists) {
         $path = trim($path, '/');
 
         if (strpos($path, 'install/') !== 0 && strpos($path, 'installer') !== 0) {
-            require '../application/version.php';
+            require_once '../application/version.php';
             require '../application/models/Settings.class.php';
 
             $current_db_version = Settings::get_db_version($pdo);
@@ -105,7 +105,7 @@ if ($configExists) {
 }
 
 // CSRF protector library removed - will be replaced with better implementation
-require '../application/version.php';
+require_once '../application/version.php';
 require '../application/models/classHeaders.php';
 require '../application/models/File.class.php';
 require '../application/controllers/helpers/crumb.php';
@@ -134,7 +134,9 @@ if (isset($_SESSION['uid']) && !User::exists($_SESSION['uid'], $pdo)) {
 
 // Simple controller mapping
 $controllerFile = "../application/controllers/{$path}.php";
+error_log("INDEX_ROUTE: path=$path file=$controllerFile uri=$requestUri");
 if (file_exists($controllerFile)) {
+    error_log("INDEX_INCLUDE: including $controllerFile");
     include($controllerFile);
 } else {
     // Handle special cases

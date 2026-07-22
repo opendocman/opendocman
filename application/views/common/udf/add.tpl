@@ -1,4 +1,4 @@
-<form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="GET" enctype="multipart/form-data" novalidate>
+<form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="POST" enctype="multipart/form-data" novalidate>
     {$csrf_token_field}
     <table border="0" cellspacing="5" cellpadding="5">
         <tr>
@@ -22,12 +22,12 @@
         <tr>
             <td align="center">
                 <div class="buttons">
-                    <button class="positive" type="Submit" name="submit" value="Add User Defined Field">{$g_lang_button_save}</button>
+                    <button class="btn btn-primary" type="Submit" name="submit" value="Add User Defined Field">{$g_lang_button_save}</button>
                 </div>
             </td>
             <td align="center">
                 <div class="buttons">
-                    <button class="negative cancel" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
+                    <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
                 </div>
             </td>
         </tr>

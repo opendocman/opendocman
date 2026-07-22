@@ -58,7 +58,7 @@ if (!defined('udf_functions')) {
 
             //Type is Select List
             if ($row[1] == 1) {
-                echo '<select name="'. e::h($row[0]) .'">';
+                echo '<select name="'. e::h($row[0]) .'" class="form-select">';
                 $query = "
                   SELECT
                     id,
@@ -90,13 +90,14 @@ if (!defined('udf_functions')) {
                 $sub_result = $stmt->fetchAll();
 
                 foreach ($sub_result as $sub_row) {
-                    echo '<input type=radio name="'. e::h($row[0]) .'" value="'. e::h($sub_row[0]) .'">'. e::h($sub_row[1]);
+                    $radio_id = e::h($row[0]) . '_' . e::h($sub_row[0]);
+                    echo '<div class="form-check"><input class="form-check-input" type="radio" name="' . e::h($row[0]) . '" value="' . e::h($sub_row[0]) . '" id="' . $radio_id . '"><label class="form-check-label" for="' . $radio_id . '">' . e::h($sub_row[1]) . '</label></div>';
                 }
             }
 
             // Type is Text
             if ($row[1] == 3) {
-                echo '<input tabindex="5" type="Text" name="'. e::h($row[0]) .'" size="16">';
+                echo '<input tabindex="5" type="Text" name="'. e::h($row[0]) .'" size="16" class="form-control">';
             }
             
             //CHM
@@ -110,7 +111,7 @@ if (!defined('udf_functions')) {
                 $stmt->execute();
                 $sub_result = $stmt->fetchAll();
 
-                echo '<select name="'. e::h($row[0]) .'" onchange="showdropdowns(this.value, \'add\',\'' . e::h($field_name) . '\')">';
+                echo '<select name="'. e::h($row[0]) .'" class="form-select" onchange="showdropdowns(this.value, \'add\',\'' . e::h($field_name) . '\')">';
                 echo '<option value="">Please select</option>';
                 foreach ($sub_result as $sub_row) {
                     echo '<option value="'. e::h($sub_row[0]) .'">'. e::h($sub_row[1]) .'</option>';
@@ -209,7 +210,7 @@ if (!defined('udf_functions')) {
             if ($row[1] == 1 || $row[1] == 2) {
                 echo '<tr><td>' . $row[0] . '</td><td>';
                 if ($row[1] == 1) {
-                    echo '<select name="'.$row[2].'">';
+                    echo '<select name="'.$row[2].'" class="form-select">';
                 }
 
                 $query = "
@@ -244,11 +245,12 @@ if (!defined('udf_functions')) {
                         }
                         echo '>' . e::h($sub_row[1]) . '</option>';
                     } elseif ($row[1] == 2) {
-                        echo '<input type=radio name="' . e::h($row[2]) . '" value="' . e::h($sub_row[0]) . '"';
+                        $radio_id = e::h($row[2]) . '_' . e::h($sub_row[0]);
+                        echo '<div class="form-check"><input class="form-check-input" type="radio" name="' . e::h($row[2]) . '" value="' . e::h($sub_row[0]) . '" id="' . $radio_id . '"';
                         if ($sel == $sub_row[0]) {
                             echo ' checked';
                         }
-                        echo '>' . e::h($sub_row[1]);
+                        echo '><label class="form-check-label" for="' . $radio_id . '">' . e::h($sub_row[1]) . '</label></div>';
                     }
                 }
                 if ($row[1] == 1) {
@@ -269,7 +271,7 @@ if (!defined('udf_functions')) {
                 $stmt->execute(array(':id' => $_REQUEST['id']));
                 $sub_row = $stmt->fetch();
 
-                echo '<input type="text" name="' . e::h($row[2]) . '" size="50" value="' . e::h($sub_row[0]) . '">';
+                echo '<input type="text" name="' . e::h($row[2]) . '" size="50" value="' . e::h($sub_row[0]) . '" class="form-control">';
             }
             //CHM
             elseif ($row[1] == 4) {
@@ -277,7 +279,7 @@ if (!defined('udf_functions')) {
                 $field_name = $explode_row[2];
                 
                 echo '<tr><td>' . e::h($row[0]) . '</td><td>';
-                echo '<select name="'. e::h($row[2]) .'"  onchange="showdropdowns(this.value, \'edit\',\'' . e::h($field_name) . '\')">';
+                echo '<select name="'. e::h($row[2]) .'" class="form-select" onchange="showdropdowns(this.value, \'edit\',\'' . e::h($field_name) . '\')">';
                 echo '<option value="">Please select one</option>';
 
                 $query = "
@@ -597,7 +599,7 @@ if (!defined('udf_functions')) {
                 // First we add a new column in the data table
                 $query = "ALTER TABLE {$GLOBALS['CONFIG']['db_prefix']}data ADD COLUMN $table_name int AFTER category";
                 $stmt = $pdo->prepare($query);
-                $stmt->execute(array(':table_name' => $table_name));
+                $stmt->execute();
 
                 if (!$stmt) {
                     header('Location: admin?last_message=Error+:+Problem+With+Alter');
@@ -874,7 +876,7 @@ if (!defined('udf_functions')) {
         $row = $stmt->fetch();
 
         if ($row[1] == 1 || $row[1] == 2 || $row[1] == 4) {
-            $query_pre .= ', ' . $row[0];
+            $query_pre .= ', ' . $row[0] . ' ';
             $query .= $row[0] . '.value' . $equate . '\'' . $keyword . '\'';
             $query .= ' AND d.' . $row[0] . ' = ' . $row[0] . '.id';
         } elseif ($row[1] == 3) {

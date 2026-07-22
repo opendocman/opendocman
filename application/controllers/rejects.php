@@ -67,12 +67,11 @@ display_smarty_template('out.tpl');
     <tr>
         <td>
                 <div class="buttons">
-                    <button class="positive" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review');
+                    <button class="btn btn-success" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review');
                 ?></button>
-                    <button class="negative" type="submit" name="submit" value="delete"><?php echo msg('button_delete');
+                    <button class="btn btn-danger" type="submit" name="submit" value="delete"><?php echo msg('button_delete');
                 ?></button>
                 </div>
-    ?>
 </table>
 </form>
 

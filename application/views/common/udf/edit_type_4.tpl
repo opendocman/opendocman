@@ -55,10 +55,17 @@
             <div class="d-flex gap-2">
                 <button type="submit" value="Update" class="btn btn-primary">{$g_lang_button_update}</button>
                 <button type="button" class="btn btn-secondary" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
+                <button type="submit" form="deleteUdfForm" class="btn btn-danger ms-auto">{$g_lang_button_delete}</button>
             </div>
         </div>
     </div>
 </form>
+<form id="deleteUdfForm" action="udf" method="POST">
+    {$csrf_token_field}
+    <input type="hidden" name="submit" value="delete">
+    <input type="hidden" name="item" value="{$udf|escape:'html'}">
+</form>
+<script src="{$g_base_url}js/udf.js"></script>
 {literal}
 <script>
 document.addEventListener('DOMContentLoaded', function() {

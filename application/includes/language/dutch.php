@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klik hier om de bestanden te bekijken waarvoor u niet hoeft in te loggen';
 $lang['forgotpassword'] = 'Wachtwoord vergeten?';
+$lang['forgot_password'] = 'Wachtwoord vergeten?';
+$lang['label_login'] = 'Inloggen';
+$lang['label_password'] = 'Wachtwoord';
 $lang['signup'] = 'Meld u aan voor een account';
 $lang['welcome'] = 'Welkom bij OpenDocMan';
 $lang['welcome2'] = 'Log in met uw gebruikersnaam om de krachtige opslag-, versiecontrole- en redactiemogelijkheden van OpenDocMan te benutten.';
@@ -497,4 +500,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Mogelijk gemaakt door';
 

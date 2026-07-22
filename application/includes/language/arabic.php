@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'انقر هنالعرض الملفات العامة';
 $lang['forgotpassword'] = 'تغيير كلمة المرور';
+$lang['forgot_password'] = 'نسيت كلمة المرور؟';
+$lang['label_login'] = 'تسجيل الدخول';
+$lang['label_password'] = 'كلمة المرور';
 $lang['signup'] = 'إنشاء حساب جديد';
 $lang['welcome'] = 'نظام التوثيق الآلي';
 $lang['welcome2'] = 'الدخول للنظام';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'بحث في الحقول الرئيسية';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'مدعوم من';
 

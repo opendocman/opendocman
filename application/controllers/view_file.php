@@ -38,7 +38,7 @@ if (strchr($_REQUEST['id'], '_')) {
 }
 $request_id = (int) $_REQUEST['id'];
 
-if (!isset($_GET['submit'])) {
+if (!isset($_REQUEST['submit'])) {
     draw_header(msg('view') . ' ' . msg('file'), $last_message);
     $file_obj = new FileData($request_id, $pdo);
     $file_name = $file_obj->getName();
@@ -67,7 +67,11 @@ if (!isset($_GET['submit'])) {
     // drw form
     display_smarty_template('view_file.tpl');
     draw_footer();
-} elseif ($_GET['submit'] == 'view') {
+} elseif ($_REQUEST['submit'] == 'view') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     $file_obj = new FileData($request_id, $pdo);
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
     checkUserPermission($request_id, $file_obj->READ_RIGHT, $file_obj);
@@ -86,7 +90,7 @@ if (!isset($_GET['submit'])) {
         header('Content-Length: '.filesize($filename));
         // Pass the mimetype so the browser can open it
         header('Cache-control: private');
-        header('Content-Type: ' . $_GET['mimetype']);
+        header('Content-Type: ' . $_REQUEST['mimetype']);
         header('Content-Disposition: attachment; filename="' . rawurlencode($realname) . '"');
         // Apache is sending Last Modified header, so we'll do it, too
         $modified=filemtime($filename);
@@ -96,7 +100,11 @@ if (!isset($_GET['submit'])) {
     } else {
         echo msg('message_file_does_not_exist');
     }
-} elseif ($_GET['submit'] == 'Download') {
+} elseif ($_REQUEST['submit'] == 'Download') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     $file_obj = new FileData($request_id, $pdo);
 
     // Added this check to keep unauthorized users from downloading - Thanks to Chad Bloomquist
@@ -115,7 +123,7 @@ if (!isset($_GET['submit'])) {
     if (file_exists($filename)) {
         // send headers to browser to initiate file download
         header('Cache-control: private');
-        header('Content-Type: '.$_GET['mimetype']);
+        header('Content-Type: '.$_REQUEST['mimetype']);
         header('Content-Disposition: attachment; filename="' . $realname . '"');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Pragma: public');

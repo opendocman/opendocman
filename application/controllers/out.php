@@ -29,6 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $pdo = $GLOBALS['pdo'];
 
 $GLOBALS['state'] = 1;
+$GLOBALS['smarty']->assign('state', (int)$GLOBALS['state']);
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();

@@ -32,6 +32,9 @@ if (!isset($_SESSION['uid'])) {
     exit;
 }
 
+// DEBUG
+file_put_contents('/tmp/file_list_ajax_debug.log', "Script reached at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
 $pdo = $GLOBALS['pdo'];
 $db_prefix = $GLOBALS['CONFIG']['db_prefix'];
 

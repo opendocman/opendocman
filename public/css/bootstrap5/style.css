@@ -35,3 +35,36 @@ body {
 .form-grid button[type="button"] {
     grid-column: 1 / -1;
 }
+
+/* Make checkboxes, radios, and Tabulator selection more visible */
+.form-check-input,
+input[type="checkbox"],
+input[type="radio"] {
+    outline: 1px solid rgba(0,0,0,0.25);
+    outline-offset: 1px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.6);
+}
+
+.form-check-input:checked,
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    outline-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13,110,253,0.2);
+}
+
+.form-check-input:focus,
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+    outline-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13,110,253,0.3);
+}
+
+/* Tabulator row selection checkbox */
+.tabulator .tabulator-row .tabulator-col-resize-handle {
+    border-right: 1px solid rgba(0,0,0,0.1);
+}
+
+.tabulator .tabulator-row .tabulator-cell input[type="checkbox"] {
+    outline: 1px solid rgba(0,0,0,0.3);
+    outline-offset: 2px;
+}

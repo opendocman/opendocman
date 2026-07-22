@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Kliknite ovdje kako biste anonimno gledali javne datoteke';
 $lang['forgotpassword'] = 'Zaboravili ste lozinku?';
+$lang['forgot_password'] = 'Zaboravili ste lozinku?';
+$lang['label_login'] = 'Prijava';
+$lang['label_password'] = 'Lozinka';
 $lang['signup'] = 'Registrirajte račun';
 $lang['welcome'] = 'Dobro došli u OpenDocMan.';
 $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku pohranu podataka, objavljivanje i kontrolu promjena nad datotekama.';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'Svi ne-udf meta podaci';
 $lang['footer_support'] = 'Podrška';
 $lang['footer_feedback'] = 'Povratna informacija';
 $lang['footer_bugs'] = 'Greške';
+$lang['powered_by'] = 'Pokreće';
 

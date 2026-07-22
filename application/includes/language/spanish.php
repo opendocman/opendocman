@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Click para ver Documentos Públicos';
 $lang['forgotpassword'] = 'Olvidó su Contrase&nacute;a?';
+$lang['forgot_password'] = '¿Olvidó su contraseña?';
+$lang['label_login'] = 'Iniciar sesión';
+$lang['label_password'] = 'Contraseña';
 $lang['signup'] = 'Registrarse como usuario';
 $lang['welcome'] = 'Bienvenido a OpenDocMan';
 $lang['welcome2'] = 'Debe autenticarse para comenzar a utilizar esta herramienta de almacenamiento, publicación y control de versiones';
@@ -496,4 +499,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Desarrollado por';
 

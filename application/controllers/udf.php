@@ -52,10 +52,15 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         exit;
     }
 
+    $field_type = isset($_REQUEST['field_type']) ? (int) $_REQUEST['field_type'] : 1;
     udf_functions_add_udf();
 
-    $last_message = urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
-    header('Location: admin?last_message=' . urlencode($last_message));
+    $table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . str_replace(' ', '', $_REQUEST['table_name']);
+    if ($field_type === 4) {
+        $table_name .= '_primary';
+    }
+    $redirect_url = 'udf?submit=edit&udf=' . urlencode($table_name) . '&last_message=' . urlencode(msg('message_udf_successfully_added') . ': ' . $_REQUEST['display_name']);
+    header('Location: ' . $redirect_url);
 } elseif (isset($_REQUEST['submit']) && ($_REQUEST['submit'] == 'delete') && (isset($_REQUEST['item']))) {
     // Validate CSRF token for Delete UDF selection
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
@@ -132,8 +137,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $last_message = urlencode('Action canceled');
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'edit') {
-    // Validate CSRF token for Edit UDF operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
         header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
         exit;
     }

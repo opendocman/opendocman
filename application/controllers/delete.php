@@ -97,9 +97,6 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
     $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
     display_smarty_template('out.tpl');
-
-    $GLOBALS['smarty']->assign('lmode', '');
-    display_smarty_template('deleteview.tpl');
 } elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'undelete') {
     if (!isset($_REQUEST['num_checkboxes'])) {
         $_REQUEST['num_checkboxes'] = 1;

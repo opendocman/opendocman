@@ -169,6 +169,8 @@ if (isset($_POST['login'])) {
 } elseif (!isset($_POST['login']) && $GLOBALS['CONFIG']['authen'] == 'mysql') {
     $redirection = (isset($_REQUEST['redirection']) ? $_REQUEST['redirection'] : '');
     $GLOBALS['smarty']->assign('redirection', htmlentities($redirection, ENT_QUOTES));
+    $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
+    $GLOBALS['smarty']->assign('lastmessage', isset($_REQUEST['last_message']) ? urldecode($_REQUEST['last_message']) : '');
     $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/index');
     $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
     $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);

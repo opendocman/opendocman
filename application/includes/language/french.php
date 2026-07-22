@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Cliquez ici pour accéder aux fichiers publics anonymement';
 $lang['forgotpassword'] = 'Mot de passe Oublié ?';
+$lang['forgot_password'] = 'Mot de passe oublié ?';
+$lang['label_login'] = 'Connexion';
+$lang['label_password'] = 'Mot de passe';
 $lang['signup'] = 'Ouvrir un compte';
 $lang['welcome'] = 'Bienvenue.';
 $lang['welcome2'] = 'Veuillez vous identifier pour commencer.';
@@ -497,5 +500,6 @@ $lang['searchpage_all_meta'] = 'Toutes les Méta-donnés';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Rapport';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Propulsé par';
 
 
