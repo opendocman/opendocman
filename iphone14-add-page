@@ -1,0 +1,194 @@
+- generic [active] [ref=f7e1]:
+  - navigation [ref=f7e2]:
+    - generic [ref=f7e3]:
+      - link "Document Repository" [ref=f7e4] [cursor=pointer]:
+        - /url: out
+      - button [ref=f7e5] [cursor=pointer]
+  - navigation "breadcrumb" [ref=f7e7]:
+    - list [ref=f7e9]:
+      - generic [ref=f7e10]: Add New File
+  - main [ref=f7e11]:
+    - generic [ref=f7e15]:
+      - generic [ref=f7e16]:
+        - link "File Location" [ref=f7e18] [cursor=pointer]:
+          - /url: help.html#Add_File_-_File_Location
+        - button "Choose File" [ref=f7e19] [cursor=pointer]
+      - generic [ref=f7e20]:
+        - generic [ref=f7e21]: Assign to owner
+        - combobox [ref=f7e22]:
+          - option "User, Admin" [selected]
+          - option "LastE2E1784370029282, FirstE2E1784370029282"
+          - option "LastE2E1784390446283, FirstE2E1784390446283"
+          - option "LastE2E1784499715822, FirstE2E1784499715822"
+          - option "LastE2E1784499868199, FirstE2E1784499868199"
+          - option "LastE2E1784500122921, FirstE2E1784500122921"
+          - option "LastE2E1784500152988, FirstE2E1784500152988"
+          - option "LastE2E1784500406518, FirstE2E1784500406518"
+          - option "Test, E2E"
+          - option "test, stsa"
+      - generic [ref=f7e23]:
+        - generic [ref=f7e24]: Assign to department
+        - combobox [ref=f7e25]:
+          - option "E2E Dept 1784499787474"
+          - option "E2E Dept 1784499999398"
+          - option "E2E Dept Updated 1784370044371"
+          - option "E2E Dept Updated 1784494417012"
+          - option "E2E Dept Updated 1784628282893"
+          - option "Information Systems" [selected]
+      - generic [ref=f7e26]:
+        - link "Category" [ref=f7e28] [cursor=pointer]:
+          - /url: help.html#Add_File_-_Category
+        - combobox [ref=f7e29]:
+          - option "E2E Cat 1784370956437" [selected]
+          - option "E2E Cat 1784521306799"
+          - option "E2E Cat Updated 1784370084296"
+          - option "E2E Cat Updated 1784370381457"
+          - option "E2E Cat Updated 1784370525481"
+          - option "E2E Cat Updated 1784370788100"
+          - option "E2E Cat Updated 1784371680080"
+          - option "E2E Cat Updated 1784372384059"
+          - option "E2E Test Category"
+          - option "Letter"
+          - option "Presentation"
+          - option "SOP"
+          - option "Training Manual"
+      - generic [ref=f7e30]:
+        - link "Permissions" [ref=f7e32] [cursor=pointer]:
+          - /url: help.html#Add_File_-_Department
+        - separator [ref=f7e33]
+        - generic [ref=f7e34]:
+          - generic [ref=f7e35]:
+            - heading [level=2] [ref=f7e36]:
+              - button "Edit Department Permissions" [expanded] [ref=f7e37] [cursor=pointer]
+            - generic "Edit Department Permissions" [ref=f7e38]:
+              - table [ref=f7e41]:
+                - rowgroup [ref=f7e42]:
+                  - row [ref=f7e43]:
+                    - columnheader "Department" [ref=f7e44]
+                    - columnheader "Forbidden" [ref=f7e45]
+                    - columnheader "None" [ref=f7e46]
+                    - columnheader "View" [ref=f7e47]
+                    - columnheader "Read" [ref=f7e48]
+                    - columnheader "Write" [ref=f7e49]
+                    - columnheader "Admin" [ref=f7e50]
+                - rowgroup [ref=f7e51]:
+                  - row [ref=f7e52]:
+                    - cell "E2E Dept 1784499787474" [ref=f7e53]
+                    - cell [ref=f7e54]:
+                      - radio [ref=f7e55]
+                    - cell [ref=f7e56]:
+                      - radio [checked] [ref=f7e57]
+                    - cell [ref=f7e58]:
+                      - radio [ref=f7e59]
+                    - cell [ref=f7e60]:
+                      - radio [ref=f7e61]
+                    - cell [ref=f7e62]:
+                      - radio [ref=f7e63]
+                    - cell [ref=f7e64]:
+                      - radio [ref=f7e65]
+                  - row [ref=f7e66]:
+                    - cell "E2E Dept 1784499999398" [ref=f7e67]
+                    - cell [ref=f7e68]:
+                      - radio [ref=f7e69]
+                    - cell [ref=f7e70]:
+                      - radio [checked] [ref=f7e71]
+                    - cell [ref=f7e72]:
+                      - radio [ref=f7e73]
+                    - cell [ref=f7e74]:
+                      - radio [ref=f7e75]
+                    - cell [ref=f7e76]:
+                      - radio [ref=f7e77]
+                    - cell [ref=f7e78]:
+                      - radio [ref=f7e79]
+                  - row [ref=f7e80]:
+                    - cell "E2E Dept Updated 1784370044371" [ref=f7e81]
+                    - cell [ref=f7e82]:
+                      - radio [ref=f7e83]
+                    - cell [ref=f7e84]:
+                      - radio [checked] [ref=f7e85]
+                    - cell [ref=f7e86]:
+                      - radio [ref=f7e87]
+                    - cell [ref=f7e88]:
+                      - radio [ref=f7e89]
+                    - cell [ref=f7e90]:
+                      - radio [ref=f7e91]
+                    - cell [ref=f7e92]:
+                      - radio [ref=f7e93]
+                  - row [ref=f7e94]:
+                    - cell "E2E Dept Updated 1784494417012" [ref=f7e95]
+                    - cell [ref=f7e96]:
+                      - radio [ref=f7e97]
+                    - cell [ref=f7e98]:
+                      - radio [checked] [ref=f7e99]
+                    - cell [ref=f7e100]:
+                      - radio [ref=f7e101]
+                    - cell [ref=f7e102]:
+                      - radio [ref=f7e103]
+                    - cell [ref=f7e104]:
+                      - radio [ref=f7e105]
+                    - cell [ref=f7e106]:
+                      - radio [ref=f7e107]
+                  - row [ref=f7e108]:
+                    - cell "E2E Dept Updated 1784628282893" [ref=f7e109]
+                    - cell [ref=f7e110]:
+                      - radio [ref=f7e111]
+                    - cell [ref=f7e112]:
+                      - radio [checked] [ref=f7e113]
+                    - cell [ref=f7e114]:
+                      - radio [ref=f7e115]
+                    - cell [ref=f7e116]:
+                      - radio [ref=f7e117]
+                    - cell [ref=f7e118]:
+                      - radio [ref=f7e119]
+                    - cell [ref=f7e120]:
+                      - radio [ref=f7e121]
+                  - row [ref=f7e122]:
+                    - cell "Information Systems" [ref=f7e123]
+                    - cell [ref=f7e124]:
+                      - radio [ref=f7e125]
+                    - cell [ref=f7e126]:
+                      - radio [ref=f7e127]
+                    - cell [ref=f7e128]:
+                      - radio [checked] [ref=f7e129]
+                    - cell [ref=f7e130]:
+                      - radio [ref=f7e131]
+                    - cell [ref=f7e132]:
+                      - radio [ref=f7e133]
+                    - cell [ref=f7e134]:
+                      - radio [ref=f7e135]
+          - heading [level=2] [ref=f7e137]:
+            - button "Edit User Permissions" [ref=f7e138] [cursor=pointer]
+        - separator [ref=f7e139]
+      - generic [ref=f7e140]:
+        - link "Description" [ref=f7e142] [cursor=pointer]:
+          - /url: help.html#Add_File_-_Description
+        - textbox [ref=f7e143]
+      - generic [ref=f7e144]:
+        - link "Comment" [ref=f7e146] [cursor=pointer]:
+          - /url: help.html#Add_File_-_Comment
+        - textbox [ref=f7e147]
+      - text: Color
+      - combobox [ref=f7e148]:
+        - option "Blue" [selected]
+        - option "Green"
+      - text: SubSelect Test
+      - combobox [ref=f7e149]:
+        - option "Please select" [selected]
+        - option "Primary1"
+        - option "Primary2"
+      - generic [ref=f7e150]: Secondary items will show up here.
+      - text: Radio Button
+      - generic [ref=f7e151]:
+        - radio "Yes" [ref=f7e152]
+        - generic [ref=f7e153]: "Yes"
+      - generic [ref=f7e154]:
+        - radio "No" [ref=f7e155]
+        - generic [ref=f7e156]: "No"
+      - text: Text Box
+      - textbox [ref=f7e157]
+      - button "Submit" [ref=f7e159] [cursor=pointer]
+  - contentinfo [ref=f7e160]:
+    - generic [ref=f7e161]:
+      - text: Powered by
+      - link "OpenDocMan" [ref=f7e162] [cursor=pointer]:
+        - /url: https://www.opendocman.com/
