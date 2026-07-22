@@ -1,5 +1,43 @@
 # Changelog
 
+## [2.3.0-release](https://github.com/opendocman/opendocman/compare/v2.2.0-release...v2.3.0-release) (2026-07-22)
+
+
+### Features
+
+* add _content.tpl and convert inline-PHP controllers to use it ([efa4bae](https://github.com/opendocman/opendocman/commit/efa4bae9f397cb527776621cc99681eb960d8cbc))
+* add bootstrap5 login page template ([d8d54fa](https://github.com/opendocman/opendocman/commit/d8d54fa1874e015a550371786b8f86bd356683de))
+* add Delete Selected toolbar to file table with row selection state ([e661ffa](https://github.com/opendocman/opendocman/commit/e661ffa119f63c7a52694a6fba1e5ce1fdbe9f01))
+* add Playwright E2E smoke test suite for UAT workflows ([d4eaf89](https://github.com/opendocman/opendocman/commit/d4eaf89e1d5051a19e981a9e00fb09ee47fe5340))
+* add Playwright E2E smoke test suite for UAT workflows ([1d94ad7](https://github.com/opendocman/opendocman/commit/1d94ad7734979fb01cc3e1c9e20a05b61ba49a4d))
+* Bootstrap 5 modern UI ([#381](https://github.com/opendocman/opendocman/issues/381)) ([caa73d2](https://github.com/opendocman/opendocman/commit/caa73d26a146d1019d47e86b05755a1f6d809238))
+* bootstrap5 modern UI - layout fixes, CSRF, Smarty literal, form grid, access_log conversion ([bf45993](https://github.com/opendocman/opendocman/commit/bf4599344961d17054e58a86ca29e3c7e9fa3004))
+* create bootstrap5 theme chrome files (header, footer, head_include, CSS, JS) ([a592481](https://github.com/opendocman/opendocman/commit/a592481eca25b126944bef6e22c2b8a44045aaa5))
+* persist Tabulator page size across session via sessionStorage ([54eff03](https://github.com/opendocman/opendocman/commit/54eff0322a5c5bf9b9415474ce887fe9a75a2cae))
+* raise server-side page size cap from 100 to 1000, add 1000 to selector ([454ddea](https://github.com/opendocman/opendocman/commit/454ddeadf094a9cf72719a8f7bfaffbe45a1f820))
+* replace DataTable with Tabulator in file listing (Task 4) ([ddc4a0e](https://github.com/opendocman/opendocman/commit/ddc4a0e9936df295cf189836b59bf66cee8022da))
+* replace embedded JSON file table with server-side AJAX pagination ([ba087d4](https://github.com/opendocman/opendocman/commit/ba087d43570bfd9386dda6067a815f538db97401))
+* replace server-side list_files N+1 queries with Tabulator AJAX pagination across all file views ([94c06e8](https://github.com/opendocman/opendocman/commit/94c06e86ffd129fda80713278cfcad7b44fc3468))
+* set bootstrap5 as the default theme ([aa3b18b](https://github.com/opendocman/opendocman/commit/aa3b18bc116e178a8d5a5a68d7b5cf466b5785f0))
+* update admin and settings templates for BS5 ([c517de3](https://github.com/opendocman/opendocman/commit/c517de3fa3ee3f437a0ae9fc1a056b9a69ad490f))
+* update document workflow templates for BS5 ([f0737bd](https://github.com/opendocman/opendocman/commit/f0737bde2c36ba95472ab8390fdb1be91bfe57cd))
+* update remaining templates for BS5, remove obsolete templates ([7e9f329](https://github.com/opendocman/opendocman/commit/7e9f3293d67e1a601bc48c9cda5c2c89bdb37327))
+
+
+### Bug Fixes
+
+* address code review issues — out.tpl rendering, Tabulator columns, search remnant, udf validation ([99ae429](https://github.com/opendocman/opendocman/commit/99ae42935169cd3105cb1f86855dff7f7c3178a5))
+* bootstrap5 theme fixes — CSRF, UDF styling, language keys, JS errors, admin UI ([a4b5700](https://github.com/opendocman/opendocman/commit/a4b5700e78eddca1de02887f7668ee124c30cb17))
+* handle missing source file in batch delete (archive) flow ([bc7dcbb](https://github.com/opendocman/opendocman/commit/bc7dcbb9b086915ca62c13a010504b5b44a19c8a))
+* make search and admin pages responsive ([a4f6857](https://github.com/opendocman/opendocman/commit/a4f6857c978dc6046bd5fa8cca7a9cc9f22e66de))
+* register Version001402 in migration runner lists ([2c28e07](https://github.com/opendocman/opendocman/commit/2c28e074c9f110feeb0fdf355a1347a6d8325d66))
+* remove deprecated tweeter/default themes, add migration to set bootstrap5 ([8df8242](https://github.com/opendocman/opendocman/commit/8df82429567a6bc3dfeb474431759bc9b1727202))
+* remove hardcoded DB password from seed_docs.php ([a0b53c1](https://github.com/opendocman/opendocman/commit/a0b53c17cc9e575711f04f3429ef5d23bf958b53))
+* responsive layout fixes across all pages ([e8599d3](https://github.com/opendocman/opendocman/commit/e8599d300cc95e619106732b66e14c1f719ae801))
+* restore 11 templates referenced by controllers (wrapped via _content.tpl) ([328c10c](https://github.com/opendocman/opendocman/commit/328c10cecce0b10d80553dde2e987e98c3736a47))
+* use page_title var in _content.tpl (set by draw_header) ([7beed50](https://github.com/opendocman/opendocman/commit/7beed509c26b3b80a988e09053f03681d16ffa4b))
+* use POST for batch delete with CSRF token locked to /delete ([5a11785](https://github.com/opendocman/opendocman/commit/5a117858779a1bc0a2703bf8ca9ff48faa0e47cb))
+
 ## [2.2.0-release](https://github.com/opendocman/opendocman/compare/v2.1.0-release...v2.2.0-release) (2026-07-15)
 
 
