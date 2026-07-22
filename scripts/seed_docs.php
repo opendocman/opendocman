@@ -4,10 +4,15 @@
  * Run: docker cp seed_docs.php opendocman-app-1:/tmp/ && docker exec opendocman-app-1 php /tmp/seed_docs.php
  */
 
+$dbPass = getenv('MYSQL_PASSWORD') ?: getenv('APP_DB_PASS') ?: 'opendocman';
+$dbHost = getenv('APP_DB_HOST') ?: 'db';
+$dbName = getenv('APP_DB_NAME') ?: 'opendocman';
+$dbUser = getenv('APP_DB_USER') ?: 'opendocman';
+
 $pdo = new PDO(
-    'mysql:host=db;dbname=opendocman;charset=utf8',
-    'opendocman',
-    'cWzzQzOySoBvoO84gJykRedP'
+    "mysql:host={$dbHost};dbname={$dbName};charset=utf8",
+    $dbUser,
+    $dbPass
 );
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
