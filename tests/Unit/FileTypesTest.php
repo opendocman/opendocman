@@ -45,7 +45,7 @@ class FileTypesTest extends TestCase
             define('ABSPATH', sys_get_temp_dir() . '/odm_filetypes_test/');
         }
         if (empty($GLOBALS['CONFIG']['theme'])) {
-            $GLOBALS['CONFIG']['theme'] = 'default';
+            $GLOBALS['CONFIG']['theme'] = 'bootstrap5';
         }
 
         // Ensure theme and common template directories and expected templates exist
@@ -61,6 +61,9 @@ class FileTypesTest extends TestCase
         }
         if (!file_exists($base . '/views/' . $GLOBALS['CONFIG']['theme'] . '/filetypes_deleteshow.tpl')) {
             @file_put_contents($base . '/views/' . $GLOBALS['CONFIG']['theme'] . '/filetypes_deleteshow.tpl', '');
+        }
+        if (!file_exists($base . '/views/common/_content.tpl')) {
+            @file_put_contents($base . '/views/common/_content.tpl', '');
         }
 
         // Prepare a dummy Smarty-like object and reset tracking globals
@@ -231,7 +234,7 @@ class FileTypesTest extends TestCase
 
         $this->assertArrayHasKey('filetypes_array', $GLOBALS['__smarty_assignments']);
         $this->assertSame($rows, $GLOBALS['__smarty_assignments']['filetypes_array']);
-        $this->assertSame('filetypes.tpl', $GLOBALS['__last_rendered_template']);
+        $this->assertSame('_content.tpl', $GLOBALS['__last_rendered_template']);
     }
 
     public function testDeleteSelectAssignsAndRendersDeleteTemplate(): void
@@ -262,7 +265,7 @@ class FileTypesTest extends TestCase
 
         $this->assertArrayHasKey('filetypes_array', $GLOBALS['__smarty_assignments']);
         $this->assertSame($rows, $GLOBALS['__smarty_assignments']['filetypes_array']);
-        $this->assertSame('filetypes_deleteshow.tpl', $GLOBALS['__last_rendered_template']);
+        $this->assertSame('_content.tpl', $GLOBALS['__last_rendered_template']);
     }
 
     public function testDeleteRemovesEachProvidedId(): void

@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Click here to view public files anonymously';
 $lang['forgotpassword'] = 'Forgot your password?';
+$lang['forgot_password'] = 'Forgot your password?';
+$lang['label_login'] = 'Log In';
+$lang['label_password'] = 'Password';
 $lang['signup'] = 'Sign-up for an account';
 $lang['welcome'] = 'Welcome.';
 $lang['welcome2'] = 'Log in to begin.';
@@ -497,5 +500,6 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Powered by';
 
 

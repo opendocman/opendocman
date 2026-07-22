@@ -41,63 +41,59 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 $start_time = time();
 draw_header(msg('search'), $last_message);
+ob_start();
 
-echo '<body bgcolor="white">';
 if (!isset($_GET['submit'])) {
     ?>
-    <p>
-
-    <table border="0" cellspacing="5" cellpadding="5">
-        <form action="search" method="get">
-
-            <tr>
-                <td valign="top"><b><?php echo msg('label_search_term');
-    ?></b></td>
-                <td><input type="Text" name="keyword" size="50"></td>
-            </tr>
-            <tr>
-                <td valign="top"><b><?php echo msg('search');
-    ?></b></td>
-                <td><select name="where">
-                        <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";
-    ?></option>
-                        <option value="department"><?php echo msg('department');
-    ?></option>
-                        <option value="category"><?php echo msg('category');
-    ?></option>
-                        <option value="descriptions"><?php echo msg('label_description');
-    ?></option>
-                        <option value="filenames"><?php echo msg('label_filename');
-    ?></option>
-                        <option value="comments"><?php echo msg('label_comment');
-    ?></option>
-                        <option value="file_id"><?php echo msg('file');
-    ?> #</option>
-                            <?php
-                            udf_functions_search_options();
-    ?>
-                        <option value="all" selected><?php echo msg('searchpage_all_meta');
-    ?></option>
-                    </select></td>
-            </tr>
-
-            <tr>
-                <td><?php echo msg('label_exact_phrase');
-    ?>: <input type="checkbox" name="exact_phrase"></td>
-                <td><?php echo msg('label_case_sensitive');
-    ?><input type="checkbox" name="case_sensitivity"></td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="buttons"><button class="positive" type="Submit" name="submit" value="Search"><?php echo msg('search');
-    ?></button></div>
-                </td>
-            </tr>
-        </form>
-    </table>
+    <form action="search" method="get" class="p-3">
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 col-form-label fw-bold"><?php echo msg('label_search_term'); ?></div>
+            <div class="col-12 col-md-9">
+                <input type="text" name="keyword" class="form-control" placeholder="<?php echo msg('label_search_term'); ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 col-form-label fw-bold"><?php echo msg('search'); ?></div>
+            <div class="col-12 col-md-9">
+                <select name="where" class="form-select">
+                    <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")"; ?></option>
+                    <option value="department"><?php echo msg('department'); ?></option>
+                    <option value="category"><?php echo msg('category'); ?></option>
+                    <option value="descriptions"><?php echo msg('label_description'); ?></option>
+                    <option value="filenames"><?php echo msg('label_filename'); ?></option>
+                    <option value="comments"><?php echo msg('label_comment'); ?></option>
+                    <option value="file_id"><?php echo msg('file'); ?> #</option>
+                    <?php udf_functions_search_options(); ?>
+                    <option value="all" selected><?php echo msg('searchpage_all_meta'); ?></option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="exact_phrase" class="form-check-input" id="exact_phrase">
+                    <label class="form-check-label" for="exact_phrase"><?php echo msg('label_exact_phrase'); ?></label>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="case_sensitivity" class="form-check-input" id="case_sensitivity">
+                    <label class="form-check-label" for="case_sensitivity"><?php echo msg('label_case_sensitive'); ?></label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" name="submit" value="Search" class="btn btn-primary"><?php echo msg('search'); ?></button>
+            </div>
+        </div>
+    </form>
 
     <?php
     //echo '<br><b>Load Time: ' . time() - $start_time;
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } else {
     function search($where, $keyword, $exact_phrase, $case_sensitivity, $search_array)
@@ -230,31 +226,20 @@ if (!isset($_GET['submit'])) {
     }
     try {
         $current_user = new User($_SESSION['uid'], $pdo);
-        $user_perms = new User_Perms($_SESSION['uid'], $pdo);
-        $current_user_permission = new UserPermission($_SESSION['uid'], $pdo);
     } catch (Exception $e) {
         error_log("Search.php - Error creating user objects: " . $e->getMessage());
         error_log("Search.php - Session UID: " . (isset($_SESSION['uid']) ? $_SESSION['uid'] : 'NOT SET'));
         header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
         exit;
     }
-    //$s_getFTime = getmicrotime();
-    if ($_GET['where'] == 'author_locked_files') {
-        $view_able_files_id = $current_user->getExpiredFileIds();
-    } else {
-        $view_able_files_id = $current_user_permission->getViewableFileIds(false);
-    }
-    //$e_getFTime = getmicrotime();
-    $id_array_len = sizeof($view_able_files_id);
-    $query_array = array();
-    $search_result = search(@$_GET['where'], @$_GET['keyword'], @$_GET['exact_phrase'], @$_GET['case_sensitivity'], $view_able_files_id);
 
     // Call the plugin API
     callPluginMethod('onSearch');
 
-    list_files($search_result, $current_user_permission, $GLOBALS['CONFIG']['dataDir'], false, false);
-    echo '<br />';
+    $GLOBALS['smarty']->assign('state', 1);
+    display_smarty_template('out.tpl');
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
-    //echo '<br> <b> Load Page Time: ' . (getmicrotime() - $start_time) . ' </b>';
-    //echo '<br> <b> Load Permission Time: ' . ($e_getFTime - $s_getFTime) . ' </b>';
 }

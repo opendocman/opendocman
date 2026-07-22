@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Clique aqui para ler arquivos públicos anonimamente';
 $lang['forgotpassword'] = 'Esqueceu-se da palavra-passe?';
+$lang['forgot_password'] = 'Esqueceu a senha?';
+$lang['label_login'] = 'Entrar';
+$lang['label_password'] = 'Senha';
 $lang['signup'] = 'Entre com uma conta';
 $lang['welcome'] = 'Bem vindo ao opendocman';
 $lang['welcome2'] = 'Entre para começar a usar o sistema com recursos poderosos de armazenamento, edição e controle de revisão.';
@@ -496,4 +499,5 @@ $lang['searchpage_all_meta'] = 'Todos os metadados não udf';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Desenvolvido por';
 

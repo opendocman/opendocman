@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'অজ্ঞাতপরিচয় হিসাবে সার্বজনীন ফাইল দেখতে এখানে ক্লিক করুন';
 $lang['forgotpassword'] = 'কূটশব্দ ভুলেছেন?';
+$lang['forgot_password'] = 'পাসওয়ার্ড ভুলে গেছেন?';
+$lang['label_login'] = 'লগ ইন';
+$lang['label_password'] = 'পাসওয়ার্ড';
 $lang['signup'] = 'একাউন্টের জন্য যোগ দিন';
 $lang['welcome'] = 'OpenDocMan এ সুস্বাগতম';
 $lang['welcome2'] = 'সিস্টেমের শক্তিশালী সংরক্ষণাগার, প্রকাশনা এবং রিভিসন নিয়ন্ত্রণ বৈশিষ্ট্য ব্যবহার করার জন্য প্রবেশ করুন।';
@@ -497,4 +500,5 @@ $lang['searchpage_all_meta'] = 'সকল  non-udf মেটাডাটা';
 $lang['footer_support'] = 'সাপোর্ট';
 $lang['footer_feedback'] = 'ফিডব্যাক';
 $lang['footer_bugs'] = 'বাগ';
+$lang['powered_by'] = 'চালিত';
 

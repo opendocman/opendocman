@@ -43,13 +43,6 @@ $comments = isset($_REQUEST['comments']) ? stripslashes($_REQUEST['comments']) :
 
 if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_waiting'), $last_message);
-    $userpermission = new UserPermission($_SESSION['uid'], $pdo);
-
-    if ($user_obj->isAdmin()) {
-        $id_array = $user_obj->getAllRevieweeIds();
-    } else {
-        $id_array = $user_obj->getRevieweeIds();
-    }
 
     // Ensure fresh CSRF token for the file list form
     if (isset($GLOBALS['csrf'])) {
@@ -59,11 +52,10 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
         $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
     }
-    $list_status = list_files($id_array, $userpermission, $GLOBALS['CONFIG']['dataDir'], true);
-    if ($list_status != -1) {
-        $GLOBALS['smarty']->assign('lmode', '');
-        display_smarty_template('toBePublished.tpl');
-    }
+    $GLOBALS['smarty']->assign('state', 0);
+    display_smarty_template('out.tpl');
+    $GLOBALS['smarty']->assign('lmode', '');
+    display_smarty_template('toBePublished.tpl');
 } elseif (isset($_POST['submit']) && ($_POST['submit'] =='commentAuthorize' || $_POST['submit'] == 'commentReject')) {
     // Validate CSRF token for Approve/Deny initial POST
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {

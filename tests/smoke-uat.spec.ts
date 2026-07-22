@@ -12,9 +12,7 @@ async function login(page: any) {
   await page.goto('/index');
   await page.fill('input[name="frmuser"]', ADMIN_USER);
   await page.fill('input[name="frmpass"]', ADMIN_PASS);
-  await page.evaluate(() =>
-    document.querySelector<HTMLInputElement>('input[type="submit"][name="login"]')?.click()
-  );
+  await page.locator('button[name="login"], input[type="submit"][name="login"]').click();
   await page.waitForURL('**/out', { timeout: 5000 });
 }
 

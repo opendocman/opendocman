@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Tryck här för att se publika filer anonymt';
 $lang['forgotpassword'] = '<br>Glömt ditt lösenord?';
+$lang['forgot_password'] = 'Glömt ditt lösenord?';
+$lang['label_login'] = 'Logga in';
+$lang['label_password'] = 'Lösenord';
 
 $lang['signup'] = 'Registrera dig för ett användarkonto';
 $lang['welcome'] = 'Välkommen till OpenDocMan vårt dokumenhanteringssystem';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'Alla utan-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Programbuggar';
+$lang['powered_by'] = 'Drivs av';
 

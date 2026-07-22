@@ -1,6 +1,7 @@
 {* Always include this file inside the <head></head> of your header.tpl file *}
 <meta name="csrf-token" content="{$csrf_token_value}" />
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/system.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.3/dist/css/tabulator.min.css" />
 <link type="text/css" rel="stylesheet" href="{$g_base_url}css/DataTables/demo_table.css" />
 
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/multiSelect112/jquery-ui-1.8.18.custom.css" />

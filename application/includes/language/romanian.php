@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Apasati aici pentru a vizualiza fisierele publice in mod anonim';
 $lang['forgotpassword'] = 'Ati uitat parola?';
+$lang['forgot_password'] = 'Ați uitat parola?';
+$lang['label_login'] = 'Autentificare';
+$lang['label_password'] = 'Parolă';
 $lang['signup'] = 'Creati un cont';
 $lang['welcome'] = 'Bun venit la Sistemul de Management al Documentelor OpenDocMan';
 $lang['welcome2'] = 'Conectati-va pentru a incepe utilizarea sistemului.';
@@ -497,4 +500,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Suport';
 $lang['footer_feedback'] = 'Sugestii';
 $lang['footer_bugs'] = 'Erori';
+$lang['powered_by'] = 'Realizat de';
 

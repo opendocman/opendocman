@@ -275,6 +275,7 @@ function list_files(array $fileid_array, object $userperms_obj, string $dataDir,
 
     if (sizeof($fileid_array) == 0 || !isset($fileid_array[0])) {
         echo '<img src="images/exclamation.gif"> ' . msg('message_no_files_found') . PHP_EOL;
+        $GLOBALS['smarty']->assign('file_list_json', '[]');
         return -1;
     }
 
@@ -368,13 +369,12 @@ function list_files(array $fileid_array, object $userperms_obj, string $dataDir,
     if (!empty($file_list_arr)) {
         $GLOBALS['smarty']->assign('file_list_arr', $file_list_arr);
     }
+    $GLOBALS['smarty']->assign('file_list_json', json_encode($file_list_arr ?? []));
 
     // Call the plugin API
     if (!empty($file_list_arr)) {
         callPluginMethod('onBeforeListFiles', $file_list_arr);
     }
-
-    display_smarty_template('out.tpl');
 
     callPluginMethod('onAfterListFiles');
 }

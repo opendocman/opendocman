@@ -34,7 +34,6 @@ $view_factory = new \Aura\View\ViewFactory;
 $GLOBALS['view'] = $view_factory->newInstance($helpers);
 
 $view_registry = $GLOBALS['view']->getViewRegistry();
-$view_registry->set('access_log',  __DIR__ . '/views/access_log.php');
 
 $layout_registry = $GLOBALS['view']->getLayoutRegistry();
 $layout_registry->set('default', __DIR__ . '/layouts/default.php');
@@ -89,6 +88,7 @@ $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
 $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
 $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
 $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+$GLOBALS['smarty']->assign('csrf_meta', '<meta name="csrf-token" content="' . $csrf_data['token'] . '">');
 
 // Check if dataDir is working
 if (!is_dir($GLOBALS['CONFIG']['dataDir'])) {

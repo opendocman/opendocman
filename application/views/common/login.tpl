@@ -1,4 +1,4 @@
-        <html>
+<html>
         <head>
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>{$g_title}</title>
@@ -14,13 +14,12 @@
         <table border="0" cellspacing="5" cellpadding="5">
         <tr>
         <td valign="top">
-        <table border="0" cellspacing="5" cellpadding="5">
         <form action="/" method="post">
+        <table border="0" cellspacing="5" cellpadding="5">
         {$csrf_token_field}
             {if $redirection}
                 <input type="hidden" name="redirection" value="{$redirection|escape}">
             {/if}
-            {$csrf_token_field}
 
          <tr>
         <td>{$g_lang_username}</td>
@@ -47,9 +46,9 @@
             <td colspan="2"><a href="{$g_base_url}/signup">{$g_lang_signup}</a>
         </tr>
         {/if}
-
-        </form>
+        
         </table>
+        </form>
         </td>
         <td valign="top">
         {$g_lang_welcome}

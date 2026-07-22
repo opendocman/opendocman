@@ -58,7 +58,7 @@ class SettingsTest extends TestCase
 
         $data = [
             'site_url' => 'http://example.test',
-            'theme' => 'default'
+            'theme' => 'bootstrap5'
         ];
 
         // Expect a prepare+execute per key/value

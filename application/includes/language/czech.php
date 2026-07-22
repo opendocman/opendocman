@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'Klikněte zde pro prohlížení veřejných souborů';
 $lang['forgotpassword'] = 'Zapoměli jste heslo?';
+$lang['forgot_password'] = 'Zapomněli jste heslo?';
+$lang['label_login'] = 'Přihlásit se';
+$lang['label_password'] = 'Heslo';
 $lang['signup'] = 'Vytvořit účet';
 $lang['welcome'] = 'Vítejte ve správě dokumentů';
 $lang['welcome2'] = 'Přihlaste se pro použití systému.';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = 'Běží na';
 

@@ -140,7 +140,10 @@ if (!defined('FileTypes')) {
             }
 
             $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
+            ob_start();
             display_smarty_template('filetypes.tpl');
+            $GLOBALS['smarty']->assign('content', ob_get_clean());
+            display_smarty_template('_content.tpl');
         }
 
         /*
@@ -164,7 +167,10 @@ if (!defined('FileTypes')) {
             }
 
             $GLOBALS['smarty']->assign('filetypes_array', $filetypes_arr);
+            ob_start();
             display_smarty_template('filetypes_deleteshow.tpl');
+            $GLOBALS['smarty']->assign('content', ob_get_clean());
+            display_smarty_template('_content.tpl');
         }
 
         public function delete($data)

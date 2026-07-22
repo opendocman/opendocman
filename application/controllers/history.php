@@ -39,6 +39,7 @@ if (!isset($_REQUEST['id']) || $_REQUEST['id'] == '') {
 }
 
 draw_header(msg('area_view_history'), $last_message);
+ob_start();
 //revision parsing
 if (strchr($_REQUEST['id'], '_')) {
     list($_REQUEST['id'], $revision_id) = explode('_', $_REQUEST['id']);
@@ -76,60 +77,58 @@ if ($description == '') {
 
     echo '<!-- DEBUG: id=' . e::h($id) . ' real_name="' . e::h($realname) . '" filename="' . e::h($filename) . '" -->';
     ?>
-<table border="0" width=80% cellspacing="4" cellpadding="1">
+<div class="container-fluid">
 
-<tr>
-<td align="right">
+<div class="row mb-3">
+    <div class="col-auto">
 <?php
 // check file status, display appropriate icon
 if ($status == 0) {
-    echo '<img src="images/file_unlocked.png" alt="" border=0 align="absmiddle">';
+    echo '<img src="images/file_unlocked.png" alt="" border=0>';
 } else {
-    echo '<img src="images/file_locked.png"  alt="" border=0 align="absmiddle">';
+    echo '<img src="images/file_locked.png"  alt="" border=0>';
 }
-    echo '</td>';
-    echo '<td align="left"><font size="+1">'. e::h($realname) .'</font></td>';
     ?>
-</tr>
+    </div>
+    <div class="col">
+        <span class="fs-4 fw-bold"><?php echo e::h($realname); ?></span>
+    </div>
+</div>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_category');
-    ?></th><td><?php echo e::h($category);
-    ?></td>
-</tr>
+<dl class="row mb-0">
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_category');
+    ?></dt>
+<dd class="col-sm-9"><?php echo e::h($category);
+    ?></dd>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_file_size');
-    ?></th><td> <?php echo display_filesize($filename);
-    ?></td>
-</tr>
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_file_size');
+    ?></dt>
+<dd class="col-sm-9"><?php echo display_filesize($filename);
+    ?></dd>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_creation_date');
-    ?></th><td> <?php echo fix_date($created);
-    ?></td>
-</tr>
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_creation_date');
+    ?></dt>
+<dd class="col-sm-9"><?php echo fix_date($created);
+    ?></dd>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_owner');
-    ?></th><td> <?php echo e::h($owner);
-    ?></td>
-</tr>
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_owner');
+    ?></dt>
+<dd class="col-sm-9"><?php echo e::h($owner);
+    ?></dd>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_description');
-    ?></th><td> <?php echo e::h($description);
-    ?></td>
-</tr>
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_description');
+    ?></dt>
+<dd class="col-sm-9"><?php echo e::h($description);
+    ?></dd>
 
-<tr>
-<th valign=top align=right><?php echo msg('historypage_comment');
-    ?></th><td> <?php echo e::h($comments);
-    ?></td>
-</tr>
-<tr>
-<th valign=top align=right><?php echo msg('historypage_revision');
-    ?></th><td>
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_comment');
+    ?></dt>
+<dd class="col-sm-9"><?php echo e::h($comments);
+    ?></dd>
+
+<dt class="col-sm-3 text-sm-end"><?php echo msg('historypage_revision');
+    ?></dt>
+<dd class="col-sm-9">
     <div id="revision_current">
 <?php
 if (isset($revision_id)) {
@@ -143,32 +142,35 @@ if (isset($revision_id)) {
 }
     ?>
     </div>
-</td>
-</tr>
+</dd>
+</dl>
 
-<!-- history table -->
-<tr>
-<td align="right">
-<img src="images/revision.png" width=40 height=40 alt="" border="0" align="absmiddle">
-</td>
-<td><?php echo msg('historypage_history');
-    ?></td>
-</td>
-</tr>
+<hr class="my-3">
 
-<tr>
-<td colspan="2" align="center">
-	<table border="0" cellspacing="5" cellpadding="5">
-	<tr bgcolor="#83a9f7">
-	<th><font size=-1><?php echo msg('historypage_version');
-    ?></font></th>
-	<th><font size=-1><?php echo msg('historypage_modification');
-    ?></font></th>
-	<th><font size=-1><?php echo msg('historypage_by');
-    ?></font></th>
-	<th><font size=-1><?php echo msg('historypage_note');
-    ?></font></th>
+<div class="row mb-3">
+    <div class="col-auto">
+        <img src="images/revision.png" width=40 height=40 alt="" border="0">
+    </div>
+    <div class="col">
+        <strong><?php echo msg('historypage_history'); ?></strong>
+    </div>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped">
+	<thead class="table-primary">
+	<tr>
+	<th><?php echo msg('historypage_version');
+    ?></th>
+	<th><?php echo msg('historypage_modification');
+    ?></th>
+	<th><?php echo msg('historypage_by');
+    ?></th>
+	<th><?php echo msg('historypage_note');
+    ?></th>
 	</tr>
+	</thead>
+	<tbody>
 <?php
     // query to obtain a list of modifications
 
@@ -242,43 +244,46 @@ if (isset($revision_id)) {
             $bgcolor = "#FCFCFC";
         }
 
-        echo '<tr bgcolor=' . $bgcolor . '>';
+        echo '<tr>';
 
         $extra_message = '';
         if ($revision === 'current') {
             if (is_file(getFilePath($id, $realname, 'data'))) {
-                echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(msg('historypage_latest')) . '</div></a>' . e::h($extra_message);
+                echo '<td class="text-center"><a href="details?id=' . e::h($id) . '&state=' . (e::h($_REQUEST['state'])) . '"><span class="revision">' . e::h(msg('historypage_latest')) . '</span></a>' . e::h($extra_message);
             } else {
-                echo '<td><font size="-1">' . e::h(msg('historypage_latest')) . e::h($extra_message);
+                echo '<td>' . e::h(msg('historypage_latest')) . e::h($extra_message);
             }
         } else {
             if (is_file(getFilePath($id, $realname, 'revision', (int) $revision))) {
-                echo '<td align=center><font size="-1"> <a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><div class="revision">' . e::h(((int) $revision + 1)) . '</div></a>' . e::h($extra_message);
+                echo '<td class="text-center"><a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><span class="revision">' . e::h(((int) $revision + 1)) . '</span></a>' . e::h($extra_message);
             } else {
-                echo '<td><font size="-1">' . e::h($revision) . e::h($extra_message);
+                echo '<td>' . e::h($revision) . e::h($extra_message);
             }
         }
         ?>
-                    </font></td>
-                    <td><font size="-1"><?php echo fix_date($modified_on);
-        ?></font></td>
-                    <td><font size="-1"><?php echo e::h($last_name) . ', ' . e::h($first_name);
-        ?></font></td>
-                    <td><font size="-1"><?php echo e::h($note);
-        ?></font></td>
+                    </td>
+                    <td><?php echo fix_date($modified_on);
+        ?></td>
+                    <td><?php echo e::h($last_name) . ', ' . e::h($first_name);
+        ?></td>
+                    <td><?php echo e::h($note);
+        ?></td>
             </tr>
 <?php
 
     }
     // clean up
 ?>
+	</tbody>
 	</table>
-</td>
-</tr>
+</div>
 
-</table>
+</div>
 <?php
 // Call the plugin API
 callPluginMethod('onAfterHistory', $datafile->getId());
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 }

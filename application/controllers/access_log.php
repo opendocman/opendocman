@@ -25,7 +25,6 @@ if (!isset($_SESSION['uid'])) {
 
 if (isset($GLOBALS)) {
     $pdo = $GLOBALS['pdo'];
-    $view = $GLOBALS['view'];
 }
 
 $user_obj = new User($_SESSION['uid'], $pdo);
@@ -82,16 +81,15 @@ foreach ($result as $row) {
     );
 }
 
-if (!empty($view)) {
-    $view->setData([
-        'accesslog_array' => $accesslog_array,
-        'showCheckBox' => false,
-        'form' => 0
-    ]);
-    $view->setView('access_log');
-    $view->setLayout('default');
+$GLOBALS['smarty']->assign('accesslog_array', $accesslog_array);
 
-    echo $view->__invoke();
+if (isset($GLOBALS['csrf'])) {
+    $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/access_log');
+    $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+    $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+    $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+    $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
 }
 
+display_smarty_template('access_log.tpl');
 draw_footer();

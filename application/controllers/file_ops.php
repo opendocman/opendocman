@@ -41,19 +41,12 @@ if (!$user_obj->isRoot()) {
 $flag = 0;
 if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
     draw_header(msg('label_checked_out_files'), $last_message);
-    echo PHP_EOL . '<form name="table" action="file_ops" method="POST">';
-    echo PHP_EOL . $GLOBALS['csrf']->getTokenField();
-    echo PHP_EOL . '<input name="submit" type="hidden" value="Clear Status">';
 
-    $file_id_array = $user_obj->getCheckedOutFiles();
+    $GLOBALS['smarty']->assign('state', 3);
+    $csrf = $GLOBALS['csrf']->getTokenForTemplate('/file_ops');
+    $GLOBALS['smarty']->assign('clear_csrf_field', $csrf['field']);
 
-    $page_url = 'file_ops?';
-    $user_perm_obj = new UserPermission($_SESSION['uid'], $pdo);
-    $list_status = list_files($file_id_array, $user_perm_obj, $GLOBALS['CONFIG']['dataDir'], true, true);
-    if ($list_status != -1) {
-        echo PHP_EOL . '<BR><div class="buttons"><button class="positive" type="submit" name="submit" value="Clear Status">' . msg('button_clear_status') . '</button></div><br />';
-        echo PHP_EOL . '</form>';
-    }
+    display_smarty_template('out.tpl');
     draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Clear Status') {
     // Validate CSRF token for Clear Status operation

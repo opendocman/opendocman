@@ -26,29 +26,19 @@ if (isset($_GET['q'])) {
 }
 
 if (isset($_GET['add_value'])) {
-    //$add_value = preg_replace('/ /', '', $_GET['add_value']);
     $add_value = $_GET['add_value'];
 }
 
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 }
-?>
-    <table border="0">
-        <tr>
-<?php
 
-        
-// Find out if the passed argument matches an actual tablename 
 $udf_table_names = "SELECT table_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf";
 $stmt = $pdo->prepare($udf_table_names);
 $stmt->execute();
 $udf_tables_names_result = $stmt->fetchAll();
 
 if ($q != "" && $add_value != "add" && $add_value != "edit") {
-    ?>
-            <td>
-<?php
     $explode_add_value = explode('_', $add_value);
     if (isset($explode_add_value[2])) {
         $field_name = $explode_add_value[2];
@@ -70,14 +60,14 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
             $result = $stmt->fetchAll();
 
             if ($result && $q != 'primary') {
-                echo '<table>';
-                echo '<tr><th style="padding-left:39px;">' . msg('label_primary_type') . ':</th><td><select name=primary_type class="required" onchange="showdivs(this.value,\'' . e::h($add_value) . '\')">';
+                echo '<div class="mb-3 row">';
+                echo '<label class="col-sm-3 col-form-label">' . msg('label_primary_type') . ':</label>';
+                echo '<div class="col-sm-4"><select name="primary_type" class="form-select required" onchange="showdivs(this.value,\'' . e::h($add_value) . '\')">';
                 echo '<option value="0">Please select one</option>';
                 foreach ($result as $row) {
-                    echo '<option value=' . e::h($row[0]) . ' ' . ($row[0] == $q ? "selected" : "") . '>' . e::h($row[1]) . '</option>'; //CHM
+                    echo '<option value="' . e::h($row[0]) . '" ' . ($row[0] == $q ? "selected" : "") . '>' . e::h($row[1]) . '</option>';
                 }
-                echo '</select></td></tr>';
-                echo '</table>';
+                echo '</select></div></div>';
             }
 
             if ($q == 'secondary') {
@@ -88,15 +78,13 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
                 $table_name = '_secondary WHERE pr_id = "' . e::h($q) . '"';
             }
 
-            echo '<table>';
-            echo '<tr bgcolor="83a9f7">
+            echo '<table class="table table-bordered mb-3">';
+            echo '<thead class="table-primary"><tr>
                   <th>' . msg('button_delete') . '?</th>
                   <th>' . msg('value') . '</th>
-                  </tr>';
+                  </tr></thead><tbody>';
 
             if ((((int) $q == $q && (int) $q > 0) || $q == 'primary')) {
-                // Find out if the passed argument matches an actual tablename 
-
                 $full_table_name = $GLOBALS['CONFIG']['db_prefix'] . 'udftbl_' . $field_name . $table_name;
                 $white_listed = false;
                 foreach ($udf_tables_names_result as $white_list) {
@@ -109,36 +97,16 @@ if ($q != "" && $add_value != "add" && $add_value != "edit") {
                     $stmt->execute();
                     $result = $stmt->fetchAll();
                     foreach ($result as $row) {
-                        if (isset($bg) && $bg == "FCFCFC") {
-                            $bg = "E3E7F9";
-                        } else {
-                            $bg = "FCFCFC";
-                        }
-                        echo '<tr bgcolor="' . $bg . '">
-                                    <td align=center><input type=checkbox name=x' . e::h($row[0]) . '></td>
-                                        <td>' . e::h($row[1]) . '</td>
+                        echo '<tr>
+                                    <td class="text-center"><input type="checkbox" name="x' . e::h($row[0]) . '" class="form-check-input"></td>
+                                    <td>' . e::h($row[1]) . '</td>
                                   </tr>';
                     }
                 }
             }
+
+            echo '</tbody></table>';
         }
-
-
-        echo '<tr>
-                            <th align=right>' . msg('new') . ':</th>
-                            <td><input type=textbox maxlength="16" name="newvalue"></td>
-                          </tr>';
-        echo '<tr><td colspan="2">';
-        echo '<div class="buttons">
-                            <button class="positive" type="submit" value="Update">' . msg('button_update') . '</button>';
-        ?>
-                            <button class="negative" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                          </div>
-                        </td>
-                        </tr>
-                        </table>
-<?php 
-    draw_footer();
     }
 }
 
@@ -156,7 +124,7 @@ if ($add_value == "add") {
         $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary">';
+        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" class="form-select">';
         foreach ($result as $subrow) {
             echo '<option value="' . e::h($subrow[0]) . '">' . e::h($subrow[1]) . '</option>';
         }
@@ -177,14 +145,10 @@ if ($add_value == "edit") {
         $stmt->execute(array(':q' => $q));
         $result = $stmt->fetchAll();
 
-        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary">';
+        echo '<select id="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" name="' . e::h($GLOBALS['CONFIG']['db_prefix']) . 'udftbl_' . e::h($table_name) . '_secondary" class="form-select">';
         foreach ($result as $subrow) {
             echo '<option value="' . e::h($subrow[0]) . '">' . e::h($subrow[1]) . '</option>';
         }
         echo '</select>';
     }
 }
-        ?>
-                    
-    </tr>
-</table>

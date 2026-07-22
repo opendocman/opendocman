@@ -41,25 +41,24 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
+    ob_start();
     ?>
     <form id="categoryAddForm" action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-        <table border="0" cellspacing="5" cellpadding="5">
-            <tr>
-                <td><b><?php echo msg('category')?></b></td>
-                <td colspan="3"><input name="category" type="text" class="required" maxlength="40"></td>
-            <td>
-                <div class="buttons">
-                    <button class="positive" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
-                </div>
-            </td>
-            <td>
-                <div class="buttons">
-                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                </div>
-             </td>
-            </tr>
-        </table>
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold"><?php echo msg('category')?></label>
+            </div>
+            <div class="col-auto">
+                <input name="category" type="text" class="form-control required" maxlength="40">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
     </form>
      <script>
   $(document).ready(function(){
@@ -67,6 +66,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   });
   </script>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit']=='Add Category') {
     // Validate CSRF token for Add Category operation
@@ -91,36 +93,41 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     // If demo mode, don't allow them to update the demo account
     if ($GLOBALS['CONFIG']['demo'] == 'True') {
         draw_header(msg('area_delete_category'), $last_message);
+        ob_start();
         echo msg('message_sorry_demo_mode');
+        $content = ob_get_clean();
+        $GLOBALS['smarty']->assign('content', $content);
+        display_smarty_template('_content.tpl');
         draw_footer();
         exit;
     }
 
     draw_header(msg('area_delete_category'), $last_message);
+    ob_start();
 
     $item = (int) $_REQUEST['item'];
 
     // query to show item
-    echo '<table border=0>';
-    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id = :item";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(array(':item' => $_REQUEST['item']));
-    $result = $stmt->fetch();
-
-    echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . e::h($result['id']) . '</td></tr>';
-    echo '<tr><td>'.msg('label_name').' :</td><td>' . e::h($result['name']) . '</td></tr>';
+    echo '<div class="row g-3 mb-2">';
+    echo '<div class="col-sm-1"><strong>' .msg('label_id'). ' # :</strong></div>';
+    echo '<div class="col-sm-11">' . e::h($result['id']) . '</div>';
+    echo '</div>';
+    echo '<div class="row g-3 mb-2">';
+    echo '<div class="col-sm-1"><strong>'.msg('label_name').' :</strong></div>';
+    echo '<div class="col-sm-11">' . e::h($result['name']) . '</div>';
+    echo '</div>';
     ?>
     <form action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="id" value="<?php echo e::h($item);
     ?>">
-        <tr>
-            <td>
-                <?php echo msg('label_reassign_to');
-    ?>:
-            </td>
-            <td>
-                  <select name="assigned_id">
+        <div class="row g-3 align-items-center mb-3">
+            <div class="col-auto">
+                <label class="col-form-label"><?php echo msg('label_reassign_to');
+    ?>:</label>
+            </div>
+            <div class="col-auto">
+                  <select name="assigned_id" class="form-select">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id != :item  ORDER BY name";
     $stmt = $pdo->prepare($query);
@@ -132,22 +139,20 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     }
     ?>
                     </select>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
-            <td align="center">
-                <div class="buttons">
-                    <button class="positive" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button>
-                </div>
-                <div class="buttons">
-                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                </div>
-            </td>
+            </div>
+        </div>
+        <div class="row g-3 align-items-center">
+            <div class="col-auto"><?php echo msg('message_are_you_sure_remove')?></div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit" name="deletecategory" value="Yes"><?php echo msg('button_yes')?></button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
     </form>
-</tr>
-</TABLE>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['deletecategory'])) {
     // Validate CSRF token for Delete Category operation
@@ -182,15 +187,18 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'deletepick') {
     $deletepick='';
     draw_header(msg('area_delete_category'). ' : ' .msg('choose'), $last_message);
+    ob_start();
     ?>
-    <table border="0" cellspacing="5" cellpadding="5">
-        <form action="category" method="POST" enctype="multipart/form-data">
-            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-            <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
+    <form action="category" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
+        <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
-            <tr>
-                <td><b><?php echo msg('category')?></b></td>
-                <td colspan=3><select name="item">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold"><?php echo msg('category')?></label>
+            </div>
+            <div class="col-auto">
+                <select name="item" class="form-select">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
     $stmt = $pdo->prepare($query);
@@ -204,23 +212,23 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     }
     $deletepick='';
     ?>
-                    </select></td>
-
-                <td></td>
-                <td colspan="2" align="center">
-                    <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
-                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
-        </form>
-    </table>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
+    </form>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Show Category') {
     // query to show item
     draw_header(msg('area_view_category'), $last_message);
+    ob_start();
     $category_id = (int) $_REQUEST['item'];
 
     // Select name
@@ -231,22 +239,23 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     ));
     $result = $stmt->fetchAll();
 
-    echo('<table name="main" cellspacing="15" border="0">');
     foreach ($result as $row) {
-        echo '<th>' . msg('label_name') . '</th><th>' . msg('label_id') . '</th>';
-        echo '<tr>';
-        echo '<td>' . e::h($row['name']) . '</td>';
-        echo '<td>' . e::h($category_id) . '</td>';
-        echo '</tr>';
+        echo '<div class="row g-3 border-bottom pb-2 fw-bold">';
+        echo '<div class="col-sm-6">' . msg('label_name') . '</div>';
+        echo '<div class="col-sm-6">' . msg('label_id') . '</div>';
+        echo '</div>';
+        echo '<div class="row g-3 mb-2">';
+        echo '<div class="col-sm-6">' . e::h($row['name']) . '</div>';
+        echo '<div class="col-sm-6">' . e::h($category_id) . '</div>';
+        echo '</div>';
     }
     ?>
 <form action="admin" method="POST" enctype="multipart/form-data">
     <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-    <tr>
-        <td colspan="4" align="center"><div class="buttons"><button class="regular" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div></td>
-    </tr>
+    <div class="row g-3">
+        <div class="col-12"><button class="btn btn-secondary" type="submit" name="submit" value="Back"><?php echo msg('button_back')?></button></div>
+    </div>
 </form>
-</table>
 <!-- ADD THE LIST OF FILES HERE -->
 <?php
     echo msg('categoryviewpage_list_of_files_title') . '<br />';
@@ -261,18 +270,24 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo '<a href="edit?id=' . e::h($row['id']) . '&state=3">ID: ' . e::h($row['id']) . ',' . e::h($row['realname']) . '</a><br />';
     }
 
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'showpick') {
     draw_header(msg('area_view_category') . ' : ' . msg('choose'), $last_message);
+    ob_start();
     ?>
-    <table border="0" cellspacing="5" cellpadding="5">
-        <form action="category" method="POST" enctype="multipart/form-data">
-            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-            <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
+    <form action="category" method="POST" enctype="multipart/form-data">
+        <?php echo $GLOBALS['csrf']->getTokenField(); ?>
+        <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
-            <tr>
-                <td><b><?php echo msg('category')?></b></td>
-                <td colspan="3"><select name="item">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold"><?php echo msg('category')?></label>
+            </div>
+            <div class="col-auto">
+                <select name="item" class="form-select">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
     $stmt = $pdo->prepare($query);
@@ -283,29 +298,27 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
-                    </select></td>
-
-                <td></td>
-                <td colspan="3" align="center">
-                    <div class="buttons">
-                        <button class="positive" type="Submit" name="submit" value="Show Category"><?php echo msg('area_view_category')?></button>
-                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
-        </form>
-    </table>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="Submit" name="submit" value="Show Category"><?php echo msg('area_view_category')?></button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
+    </form>
 </body>
 </html>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header(msg('area_update_category'), $last_message);
+    ob_start();
     ?>
 <form id="updateCategoryForm" action="category" method="POST" enctype="multipart/form-data">
     <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-    <table border="0" cellspacing="5" cellpadding="5">
-        <tr>
 <?php
     $item = (int)$_REQUEST['item'];
     // query to get a list of users
@@ -317,26 +330,23 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<tr>';
-        echo '<td colspan="2">' . msg('category') . ': <input type="textbox" name="name" value="' . e::h($row['name']) . '" class="required" maxlength="40"></td>';
+        echo '<div class="row g-3 align-items-center mb-3">';
+        echo '<div class="col-auto"><label class="col-form-label fw-bold">' . msg('category') . ':</label></div>';
+        echo '<div class="col-auto"><input type="text" name="name" value="' . e::h($row['name']) . '" class="form-control required" maxlength="40"></div>';
         echo '<input type="hidden" name="id" value="' . e::h($row['id']) . '">';
+        echo '</div>';
     }
     ?>
 
 
-            <td align="center">
-
-                <div class="buttons">
-                    <button class="positive" type="Submit" name="updatecategory" value="Modify Category"><?php echo msg('area_update_category')?></button>
+            <div class="row g-3">
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="Submit" name="updatecategory" value="Modify Category"><?php echo msg('area_update_category')?></button>
                 </div>
-            </td>
-            <td align="center">
-                <div class="buttons">
-                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+                <div class="col-auto">
+                    <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
  </form>
  <script>
   $(document).ready(function(){
@@ -344,18 +354,24 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   });
   </script>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'updatepick') {
     draw_header(msg('area_update_category'). ': ' .msg('choose'), $last_message);
+    ob_start();
     ?>
     <form action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
-        <table border="0">
-            <tr>
-                <td><b><?php echo msg('choose')?> <?php echo msg('category')?>:</b></td>
-                <td colspan="3"><select name="item">
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold"><?php echo msg('choose')?> <?php echo msg('category')?>:</label>
+            </div>
+            <div class="col-auto">
+                <select name="item" class="form-select">
                             <?php
                             // query to get a list of users
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
@@ -367,23 +383,18 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
-                </td>
-
-                <td align="center">
-                    <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="Update"><?php echo msg('choose')?></button>
-                    </div>
-                </td>
-                <td align="center">
-                    <div class="buttons">
-                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
-    </form></TD>
-</tr>
-</table>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit" name="submit" value="Update"><?php echo msg('choose')?></button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
+    </form>
     <?php
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['updatecategory'])) {
     // Validate CSRF token for Update Category operation

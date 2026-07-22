@@ -177,7 +177,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool')",
-            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'theme', 'tweeter', 'Which theme to use?', '')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'theme', 'bootstrap5', 'Which theme to use?', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num')",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'image/gif', 1)",

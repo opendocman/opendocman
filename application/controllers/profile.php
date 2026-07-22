@@ -29,13 +29,15 @@ if (!isset($_SESSION['uid'])) {
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 draw_header(msg('area_personal_profile'), $last_message);
+ob_start();
 ?>
 
-<html>
-    <br><br>
-    <INPUT type="hidden" name="callee" value="profile">
-    <table name="list" align="center" border="0">
-           <tr><td><a href="user?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>"><?php echo msg('profilepage_update_profile')?></a></td></tr>
-                        </table>
+    <input type="hidden" name="callee" value="profile">
+    <div class="d-grid gap-2 col-12 col-md-6 mx-auto">
+        <a href="user?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>" class="btn btn-primary"><?php echo msg('profilepage_update_profile')?></a>
+    </div>
 <?php
+$content = ob_get_clean();
+$GLOBALS['smarty']->assign('content', $content);
+display_smarty_template('_content.tpl');
 draw_footer();

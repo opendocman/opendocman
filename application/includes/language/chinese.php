@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = '匿名查看公共文件点这里';
 $lang['forgotpassword'] = '忘记密码？';
+$lang['forgot_password'] = '忘记密码？';
+$lang['label_login'] = '登录';
+$lang['label_password'] = '密码';
 $lang['signup'] = '申请账号';
 $lang['welcome'] = '欢迎进入OpenDocMan';
 $lang['welcome2'] = '登录进来开始使用本系统强大的文档存储，发布和版本控制功能';
@@ -498,4 +501,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
+$lang['powered_by'] = '提供技术支持';
 

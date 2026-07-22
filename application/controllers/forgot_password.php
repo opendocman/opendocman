@@ -125,6 +125,7 @@ if (
          */
 	$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
         draw_header(msg('forgot_password'), $last_message);
+        ob_start();
         ?>
 
             <p><?php echo msg('message_set_your_new_password')?></p>
@@ -138,19 +139,17 @@ if (
         ?>">
             <input type="hidden" name="code" value="<?php echo e::h($code);
         ?>">
-            <table>
-            <tr>
-            <th><?php echo msg('label_new_password')?>:</th>
-            <td><input type="password" name="password" size="12" maxlength="50"></td>
-            </tr>
-            <tr>
-            <td>&nbsp;</td>
-            <td><input type="submit" value="Reset Password"></td>
-            </tr>
-            </table>
+            <div class="mb-3">
+                <label for="password" class="form-label"><?php echo msg('label_new_password')?>:</label>
+                <input type="password" class="form-control" id="password" name="password" size="12" maxlength="50">
+            </div>
+            <button type="submit" class="btn btn-primary">Reset Password</button>
             </form>
 
             <?php
+        $content = ob_get_clean();
+        $GLOBALS['smarty']->assign('content', $content);
+        display_smarty_template('_content.tpl');
 	draw_footer();
             // build the footer
             /*
@@ -250,26 +249,24 @@ if (
 else {
 	$last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
         draw_header(msg('forgot_password'), $last_message);
+        ob_start();
     ?>
 
         <p><?php echo msg('message_this_site_has_high_security')?></p>
 
-
         <form action="forgot_password" method="post">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-        <table border="0">
-        <tr>
-        <th><?php echo msg('username')?>    :</th>
-        <td><input type="text" name="username" size="25" maxlength="25"></td>
-        </tr>
-        <tr>
-        <td>&nbsp;</td>
-        <td><input type="submit" value="Reset Password"></td>
-        </tr>
-        </table>
+        <div class="mb-3">
+            <label for="username" class="form-label"><?php echo msg('username')?>:</label>
+            <input type="text" class="form-control" id="username" name="username" size="25" maxlength="25">
+        </div>
+        <button type="submit" class="btn btn-primary">Reset Password</button>
         </form>
 
         <?php
+        $content = ob_get_clean();
+        $GLOBALS['smarty']->assign('content', $content);
+        display_smarty_template('_content.tpl');
 	draw_footer();
 
 }

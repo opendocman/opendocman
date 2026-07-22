@@ -26,6 +26,9 @@ global $lang;
 //Login
 $lang['anonymous_link'] = 'அநாமதேயமாக பொது கோப்புகளை பார்வையிட இங்கே கிளிக் செய்யவும்';
 $lang['forgotpassword'] = 'உங்கள் கடவுச்சொல்லை மறந்து விட்டீர்களா?';
+$lang['forgot_password'] = 'கடவுச்சொல் மறந்துவிட்டதா?';
+$lang['label_login'] = 'உள்நுழைக';
+$lang['label_password'] = 'கடவுச்சொல்';
 $lang['signup'] = 'சேவை பெற்றிடுங்கள்';
 $lang['welcome'] = 'வரவேற்கிறோம்.';
 $lang['welcome2'] = 'தொடங்கும் உள்நுழைய.';
@@ -497,4 +500,5 @@ $lang['searchpage_all_meta'] = 'All non-udf metadata';
 $lang['footer_support'] = 'ஆதரவு';
 $lang['footer_feedback'] = 'கருத்து';
 $lang['footer_bugs'] = 'பிழைகள்';
+$lang['powered_by'] = 'இயக்குவது';
 

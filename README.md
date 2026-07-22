@@ -296,6 +296,16 @@ to be created current files modified:
    only in a mysqldump format for users that need to manually install the
    program for some reason.
 
+### CLI Migration Tool
+
+There is a CLI entry point at `application/installer/cli.php` for managing database migrations without the web installer:
+
+- **`php application/installer/cli.php dump-sql`** — Generate `database.sql` from the schema builder
+- **`php application/installer/cli.php migrate`** — Run pending migrations
+- **`php application/installer/cli.php status`** — Show which migrations have been applied
+
+In Docker, prefix with `docker exec opendocman-app-1` (or your container name).
+
 These files MUST be kept syncronized for each release!
 
 ## Contributing
