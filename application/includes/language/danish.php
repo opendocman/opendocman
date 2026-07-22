@@ -73,7 +73,6 @@ $lang['updated'] = 'Opdateret';
 $lang['username'] = 'Brugernavn';
 $lang['users'] = 'Brugere';
 $lang['value'] = 'Værdi';
-$lang['view'] = 'Vis';
 
 // Areas
 $lang['area_add_new_category'] = 'Tilføj ny kategori';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Drevet af';
+
+$lang['change_password'] = 'Skift adgangskode';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Du skal ændre din adgangskode, før du fortsætter.';
+$lang['change_password_current_password'] = 'Nuværende adgangskode';
+$lang['change_password_new_password'] = 'Ny adgangskode';
+$lang['change_password_confirm_password'] = 'Bekræft ny adgangskode';
+$lang['change_password_button'] = 'Skift adgangskode';
+$lang['change_password_success'] = 'Din adgangskode er blevet ændret.';
+$lang['change_password_error_mismatch'] = 'De nye adgangskoder, du indtastede, matcher ikke.';
+$lang['change_password_error_current'] = 'Din nuværende adgangskode er forkert.';
+$lang['change_password_error_empty'] = 'Udfyld venligst alle adgangskodefelter.';
+$lang['change_password_error_same'] = 'Den nye adgangskode skal være forskellig fra den nuværende.';
 

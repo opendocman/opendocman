@@ -132,6 +132,12 @@ if (isset($_SESSION['uid']) && !User::exists($_SESSION['uid'], $pdo)) {
     exit;
 }
 
+// Enforce password change requirement
+if (isset($_SESSION['pw_change_required']) && $_SESSION['pw_change_required'] === true && $path !== 'change_password') {
+    header('Location: change_password');
+    exit;
+}
+
 // Simple controller mapping
 $controllerFile = "../application/controllers/{$path}.php";
 error_log("INDEX_ROUTE: path=$path file=$controllerFile uri=$requestUri");

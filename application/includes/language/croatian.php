@@ -73,7 +73,6 @@ $lang['updated'] = 'Obnovljeno';
 $lang['username'] = 'Korisničko ime';
 $lang['users'] = 'Korisnici';
 $lang['value'] = 'Vrijednost';
-$lang['view'] = 'Prikaži';
 
 // Areas
 $lang['area_add_new_category'] = 'Dodaj novu kategoriju';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Podrška';
 $lang['footer_feedback'] = 'Povratna informacija';
 $lang['footer_bugs'] = 'Greške';
 $lang['powered_by'] = 'Pokreće';
+
+$lang['change_password'] = 'Promijeni lozinku';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Morate promijeniti lozinku prije nastavka.';
+$lang['change_password_current_password'] = 'Trenutna lozinka';
+$lang['change_password_new_password'] = 'Nova lozinka';
+$lang['change_password_confirm_password'] = 'Potvrdi novu lozinku';
+$lang['change_password_button'] = 'Promijeni lozinku';
+$lang['change_password_success'] = 'Vaša lozinka je uspješno promijenjena.';
+$lang['change_password_error_mismatch'] = 'Nove lozinke koje ste unijeli se ne podudaraju.';
+$lang['change_password_error_current'] = 'Vaša trenutna lozinka nije ispravna.';
+$lang['change_password_error_empty'] = 'Molimo ispunite sva polja lozinke.';
+$lang['change_password_error_same'] = 'Nova lozinka mora biti različita od trenutne lozinke.';
 

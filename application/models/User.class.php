@@ -36,6 +36,7 @@ if (!defined('User_class')) {
         public $pw_reset_code;
         public $can_add;
         public $can_checkin;
+        public $pw_change_required;
 
         /**
          * @param int $id
@@ -72,6 +73,7 @@ if (!defined('User_class')) {
                         last_name, 
                         first_name, 
                         pw_reset_code,
+                        pw_change_required,
                         can_add,
                         can_checkin
                     FROM 
@@ -98,6 +100,7 @@ if (!defined('User_class')) {
                     $this->last_name,
                     $this->first_name,
                     $this->pw_reset_code,
+                    $this->pw_change_required,
                     $this->can_add,
                     $this->can_checkin
             ) = $result;
@@ -248,7 +251,7 @@ if (!defined('User_class')) {
               SELECT
                 password
               FROM
-                $this->tablename
+                {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               WHERE
                 id = :id
             ";
@@ -265,6 +268,33 @@ if (!defined('User_class')) {
         }
 
         /**
+         * Check if user is required to change password on next login
+         * @return bool
+         */
+        public function isPasswordChangeRequired()
+        {
+            return (bool) $this->pw_change_required;
+        }
+
+        /**
+         * Clear the password change required flag
+         */
+        public function clearPasswordChangeRequired()
+        {
+            $query = "
+                UPDATE
+                    {$GLOBALS['CONFIG']['db_prefix']}user
+                SET
+                    pw_change_required = 0
+                WHERE
+                    id = :id
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute(array(':id' => $this->id));
+            $this->pw_change_required = 0;
+        }
+
+        /**
          * @param string $non_encrypted_password
          * @return bool
          */
@@ -272,9 +302,10 @@ if (!defined('User_class')) {
         {
             $query = "
               UPDATE
-                $this->tablename
+                {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               SET
-                password = md5(:non_encrypted_password)
+                password = md5(:non_encrypted_password),
+                pw_change_required = 0
               WHERE
                 id = :id
             ";
@@ -283,6 +314,7 @@ if (!defined('User_class')) {
                 ':non_encrypted_password' => $non_encrypted_password,
                 ':id' => $this->id
             ));
+            $this->pw_change_required = 0;
             return true;
         }
 
@@ -296,7 +328,7 @@ if (!defined('User_class')) {
               SELECT
                 username
               FROM
-                $this->tablename
+                {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               WHERE
                 id = :id
               AND
@@ -315,7 +347,7 @@ if (!defined('User_class')) {
                   SELECT
                     username
                   FROM
-                    $this->tablename
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
                   WHERE
                     id = :id
                   AND
@@ -341,7 +373,7 @@ if (!defined('User_class')) {
         {
             $query = "
               UPDATE
-                $this->tablename
+                {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               SET
                 username = :new_name
               WHERE

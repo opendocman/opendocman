@@ -73,7 +73,6 @@ $lang['updated'] = 'تم التحديث';
 $lang['username'] = 'إسم المستخدم';
 $lang['users'] = 'المستخدمين';
 $lang['value'] = 'القيمة';
-$lang['view'] = 'عرض';
 
 // Areas
 $lang['area_add_new_category'] = 'إضافة تصنيف جديد';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'مدعوم من';
+
+$lang['change_password'] = 'تغيير كلمة المرور';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'يجب عليك تغيير كلمة المرور الخاصة بك قبل المتابعة.';
+$lang['change_password_current_password'] = 'كلمة المرور الحالية';
+$lang['change_password_new_password'] = 'كلمة المرور الجديدة';
+$lang['change_password_confirm_password'] = 'تأكيد كلمة المرور الجديدة';
+$lang['change_password_button'] = 'تغيير كلمة المرور';
+$lang['change_password_success'] = 'تم تغيير كلمة المرور الخاصة بك بنجاح.';
+$lang['change_password_error_mismatch'] = 'كلمات المرور الجديدة التي أدخلتها غير متطابقة.';
+$lang['change_password_error_current'] = 'كلمة المرور الحالية غير صحيحة.';
+$lang['change_password_error_empty'] = 'يرجى ملء جميع حقول كلمة المرور.';
+$lang['change_password_error_same'] = 'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.';
 

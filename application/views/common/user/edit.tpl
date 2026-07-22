@@ -70,6 +70,12 @@
                 <input name="can_checkin" type="checkbox" value="1" {$can_checkin|escape:'html'} {$mode|escape:'html'} id="cb_can_checkin" class="form-check-input">
                 <label class="form-check-label" for="cb_can_checkin">{$g_lang_userpage_can_checkin}?</label>
             </div>
+            {if $mode eq 'enabled'}
+            <div class="mb-3 form-check">
+                <input name="pw_change_required" type="checkbox" value="1" {$pw_change_required_checked} id="cb_pw_change_required" class="form-check-input">
+                <label class="form-check-label" for="cb_pw_change_required">Require password change on next login</label>
+            </div>
+            {/if}
             <div class="d-flex gap-2">
                 <input type="hidden" name="set_password" value="0">
                 <button class="btn btn-primary" type="submit" name="submit" value="Update User">{$g_lang_userpage_button_update}</button>

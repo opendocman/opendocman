@@ -73,7 +73,6 @@ $lang['updated'] = 'Updated';
 $lang['username'] = 'Username';
 $lang['users'] = 'Users';
 $lang['value'] = 'Value';
-$lang['view'] = 'View';
 
 // Areas
 $lang['area_add_new_category'] = 'Add New Category';
@@ -501,5 +500,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Powered by';
+
+// Change Password Page
+$lang['change_password'] = 'Change Password';
+$lang['change_password_required_message'] = 'You are required to change your password before continuing.';
+$lang['change_password_current_password'] = 'Current Password';
+$lang['change_password_new_password'] = 'New Password';
+$lang['change_password_confirm_password'] = 'Confirm New Password';
+$lang['change_password_button'] = 'Change Password';
+$lang['change_password_success'] = 'Your password has been changed successfully.';
+$lang['change_password_error_mismatch'] = 'The new passwords you entered do not match.';
+$lang['change_password_error_current'] = 'Your current password is incorrect.';
+$lang['change_password_error_empty'] = 'Please fill in all password fields.';
+$lang['change_password_error_same'] = 'The new password must be different from the current password.';
 
 

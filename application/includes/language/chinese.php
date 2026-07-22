@@ -73,7 +73,6 @@ $lang['updated'] = '更新';
 $lang['username'] = '用户名';
 $lang['users'] = '用户';
 $lang['value'] = '值';
-$lang['view'] = '查看';
 
 // Areas
 $lang['area_add_new_category'] = '增加新类别';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = '提供技术支持';
+
+$lang['change_password'] = '更改密码';
+
+// Change Password Page
+$lang['change_password_required_message'] = '在继续之前，您需要更改密码。';
+$lang['change_password_current_password'] = '当前密码';
+$lang['change_password_new_password'] = '新密码';
+$lang['change_password_confirm_password'] = '确认新密码';
+$lang['change_password_button'] = '更改密码';
+$lang['change_password_success'] = '您的密码已成功更改。';
+$lang['change_password_error_mismatch'] = '您输入的新密码不匹配。';
+$lang['change_password_error_current'] = '您当前的密码不正确。';
+$lang['change_password_error_empty'] = '请填写所有密码字段。';
+$lang['change_password_error_same'] = '新密码必须与当前密码不同。';
 

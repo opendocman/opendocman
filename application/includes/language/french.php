@@ -73,7 +73,6 @@ $lang['updated'] = 'Mis à jour';
 $lang['username'] = 'Nom d\'utilisateur';
 $lang['users'] = 'Utilisateurs';
 $lang['value'] = 'Valeur';
-$lang['view'] = 'Consulter';
 
 // Areas
 $lang['area_add_new_category'] = 'Ajouter une Nouvelle Catégorie';
@@ -501,5 +500,19 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Rapport';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Propulsé par';
+
+$lang['change_password'] = 'Modifier le mot de passe';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Vous devez changer votre mot de passe avant de continuer.';
+$lang['change_password_current_password'] = 'Mot de passe actuel';
+$lang['change_password_new_password'] = 'Nouveau mot de passe';
+$lang['change_password_confirm_password'] = 'Confirmer le nouveau mot de passe';
+$lang['change_password_button'] = 'Modifier le mot de passe';
+$lang['change_password_success'] = 'Votre mot de passe a été changé avec succès.';
+$lang['change_password_error_mismatch'] = 'Les nouveaux mots de passe que vous avez saisis ne correspondent pas.';
+$lang['change_password_error_current'] = 'Votre mot de passe actuel est incorrect.';
+$lang['change_password_error_empty'] = 'Veuillez remplir tous les champs de mot de passe.';
+$lang['change_password_error_same'] = 'Le nouveau mot de passe doit être différent du mot de passe actuel.';
 
 

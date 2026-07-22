@@ -73,7 +73,6 @@ $lang['updated'] = 'Atualizado';
 $lang['username'] = 'Nome de Usuário';
 $lang['users'] = 'Usuários';
 $lang['value'] = 'Valor';
-$lang['view'] = 'Ver';
 
 // Areas
 $lang['area_add_new_category'] = 'Adicionar nova categoria';
@@ -500,4 +499,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Desenvolvido por';
+
+$lang['change_password'] = 'Alterar senha';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Você deve alterar sua senha antes de continuar.';
+$lang['change_password_current_password'] = 'Senha atual';
+$lang['change_password_new_password'] = 'Nova senha';
+$lang['change_password_confirm_password'] = 'Confirmar nova senha';
+$lang['change_password_button'] = 'Alterar senha';
+$lang['change_password_success'] = 'Sua senha foi alterada com sucesso.';
+$lang['change_password_error_mismatch'] = 'As novas senhas que você inseriu não correspondem.';
+$lang['change_password_error_current'] = 'Sua senha atual está incorreta.';
+$lang['change_password_error_empty'] = 'Preencha todos os campos de senha.';
+$lang['change_password_error_same'] = 'A nova senha deve ser diferente da senha atual.';
 

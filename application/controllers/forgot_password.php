@@ -57,7 +57,8 @@ if (
         {$GLOBALS['CONFIG']['db_prefix']}user
       SET
         password = md5(:new_pass),
-        pw_reset_code = NULL
+        pw_reset_code = NULL,
+        pw_change_required = 0
       WHERE
         id = :user_id
       AND

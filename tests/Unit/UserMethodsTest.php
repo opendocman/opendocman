@@ -703,6 +703,129 @@ class UserMethodsTest extends TestCase
     }
 
     /**
+     * Regression: changePassword() SQL must use the DB prefix in table name.
+     * Avoids the bug where $this->tablename ('user') was used without {$GLOBALS['CONFIG']['db_prefix']}.
+     */
+    public function testChangePasswordQueryContainsDbPrefix(): void
+    {
+        $newPassword = 'regression_test_pass';
+        $lastQuery = '';
+
+        $this->mockConnection->shouldReceive('prepare')
+            ->andReturnUsing(function ($sql) use (&$lastQuery) {
+                $lastQuery = $sql;
+                return $this->mockStatement;
+            });
+
+        $this->mockStatement->shouldReceive('execute')
+            ->with([':non_encrypted_password' => $newPassword, ':id' => $this->user->id])
+            ->andReturn(true);
+
+        $this->user->changePassword($newPassword);
+
+        $this->assertStringContainsString(
+            $GLOBALS['CONFIG']['db_prefix'] . 'user',
+            $lastQuery,
+            'changePassword() SQL must contain the prefixed table name'
+        );
+    }
+
+    /**
+     * Regression: validatePassword() SQL must use the DB prefix in table name.
+     */
+    public function testValidatePasswordQueryContainsDbPrefix(): void
+    {
+        $password = 'regression_test_pass';
+        $queries = [];
+
+        $this->mockConnection->shouldReceive('prepare')
+            ->andReturnUsing(function ($sql) use (&$queries) {
+                $queries[] = $sql;
+                return $this->mockStatement;
+            });
+
+        $this->mockStatement->shouldReceive('execute')
+            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
+            ->andReturn(true);
+
+        $this->mockStatement->shouldReceive('rowCount')
+            ->andReturn(1);
+
+        $this->user->validatePassword($password);
+
+        foreach ($queries as $query) {
+            if (stripos($query, 'FROM') !== false) {
+                $this->assertStringContainsString(
+                    $GLOBALS['CONFIG']['db_prefix'] . 'user',
+                    $query,
+                    'validatePassword() SQL must contain the prefixed table name'
+                );
+            }
+        }
+    }
+
+    /**
+     * Regression: changeName() SQL must use the DB prefix in table name.
+     */
+    public function testChangeNameQueryContainsDbPrefix(): void
+    {
+        $newName = 'regression_test_user';
+        $lastQuery = '';
+
+        $this->mockConnection->shouldReceive('prepare')
+            ->andReturnUsing(function ($sql) use (&$lastQuery) {
+                $lastQuery = $sql;
+                return $this->mockStatement;
+            });
+
+        $this->mockStatement->shouldReceive('execute')
+            ->with([':new_name' => $newName, ':id' => $this->user->id])
+            ->andReturn(true);
+
+        $this->user->changeName($newName);
+
+        $this->assertStringContainsString(
+            $GLOBALS['CONFIG']['db_prefix'] . 'user',
+            $lastQuery,
+            'changeName() SQL must contain the prefixed table name'
+        );
+    }
+
+    /**
+     * Test isPasswordChangeRequired returns false by default (constructor data not loaded from DB)
+     */
+    public function testIsPasswordChangeRequiredDefaultsToFalse(): void
+    {
+        $this->assertFalse($this->user->isPasswordChangeRequired());
+    }
+
+    /**
+     * Regression: clearPasswordChangeRequired() SQL must use the DB prefix in table name.
+     */
+    public function testClearPasswordChangeRequiredQueryContainsDbPrefix(): void
+    {
+        $lastQuery = '';
+
+        $this->mockConnection->shouldReceive('prepare')
+            ->andReturnUsing(function ($sql) use (&$lastQuery) {
+                $lastQuery = $sql;
+                return $this->mockStatement;
+            });
+
+        $this->mockStatement->shouldReceive('execute')
+            ->with([':id' => $this->user->id])
+            ->andReturn(true);
+
+        $this->user->clearPasswordChangeRequired();
+
+        $this->assertStringContainsString(
+            $GLOBALS['CONFIG']['db_prefix'] . 'user',
+            $lastQuery,
+            'clearPasswordChangeRequired() SQL must contain the prefixed table name'
+        );
+    }
+
+    /**
      * Clean up after each test
      */
     protected function tearDown(): void

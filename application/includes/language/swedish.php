@@ -74,7 +74,6 @@ $lang['updated'] = 'Uppdaterad';
 $lang['username'] = 'Användarnamn';
 $lang['users'] = 'Användare';
 $lang['value'] = 'Värde';
-$lang['view'] = 'Visa';
 
 // Areas
 $lang['area_add_new_category'] = 'Skapa Ny Kategori';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Programbuggar';
 $lang['powered_by'] = 'Drivs av';
+
+$lang['change_password'] = 'Ändra lösenord';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Du måste ändra ditt lösenord innan du fortsätter.';
+$lang['change_password_current_password'] = 'Nuvarande lösenord';
+$lang['change_password_new_password'] = 'Nytt lösenord';
+$lang['change_password_confirm_password'] = 'Bekräfta nytt lösenord';
+$lang['change_password_button'] = 'Ändra lösenord';
+$lang['change_password_success'] = 'Ditt lösenord har ändrats.';
+$lang['change_password_error_mismatch'] = 'De nya lösenorden du angav matchar inte.';
+$lang['change_password_error_current'] = 'Ditt nuvarande lösenord är felaktigt.';
+$lang['change_password_error_empty'] = 'Fyll i alla lösenordsfält.';
+$lang['change_password_error_same'] = 'Det nya lösenordet måste skilja sig från det nuvarande lösenordet.';
 

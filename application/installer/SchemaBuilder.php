@@ -95,6 +95,7 @@ class SchemaBuilder
                 last_name varchar(255) default NULL,
                 first_name varchar(255) default NULL,
                 pw_reset_code char(32) default NULL,
+                pw_change_required tinyint(1) NOT NULL DEFAULT 0,
                 can_add tinyint(1) NULL DEFAULT 1,
                 can_checkin tinyint(1) NULL DEFAULT 1,
                 PRIMARY KEY  (id)
