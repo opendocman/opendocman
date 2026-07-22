@@ -45,56 +45,49 @@ ob_start();
 
 if (!isset($_GET['submit'])) {
     ?>
-    <p>
-
-    <table border="0" cellspacing="5" cellpadding="5">
-        <form action="search" method="get">
-
-            <tr>
-                <td valign="top"><b><?php echo msg('label_search_term');
-    ?></b></td>
-                <td><input type="Text" name="keyword" size="50"></td>
-            </tr>
-            <tr>
-                <td valign="top"><b><?php echo msg('search');
-    ?></b></td>
-                <td><select name="where">
-                        <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")";
-    ?></option>
-                        <option value="department"><?php echo msg('department');
-    ?></option>
-                        <option value="category"><?php echo msg('category');
-    ?></option>
-                        <option value="descriptions"><?php echo msg('label_description');
-    ?></option>
-                        <option value="filenames"><?php echo msg('label_filename');
-    ?></option>
-                        <option value="comments"><?php echo msg('label_comment');
-    ?></option>
-                        <option value="file_id"><?php echo msg('file');
-    ?> #</option>
-                            <?php
-                            udf_functions_search_options();
-    ?>
-                        <option value="all" selected><?php echo msg('searchpage_all_meta');
-    ?></option>
-                    </select></td>
-            </tr>
-
-            <tr>
-                <td><?php echo msg('label_exact_phrase');
-    ?>: <input type="checkbox" name="exact_phrase"></td>
-                <td><?php echo msg('label_case_sensitive');
-    ?><input type="checkbox" name="case_sensitivity"></td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="buttons"><button class="positive" type="Submit" name="submit" value="Search"><?php echo msg('search');
-    ?></button></div>
-                </td>
-            </tr>
-        </form>
-    </table>
+    <form action="search" method="get" class="p-3">
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 col-form-label fw-bold"><?php echo msg('label_search_term'); ?></div>
+            <div class="col-12 col-md-9">
+                <input type="text" name="keyword" class="form-control" placeholder="<?php echo msg('label_search_term'); ?>">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 col-form-label fw-bold"><?php echo msg('search'); ?></div>
+            <div class="col-12 col-md-9">
+                <select name="where" class="form-select">
+                    <option value="author"><?php echo msg('author'). "(".msg('label_last_name')." ".msg('label_first_name').")"; ?></option>
+                    <option value="department"><?php echo msg('department'); ?></option>
+                    <option value="category"><?php echo msg('category'); ?></option>
+                    <option value="descriptions"><?php echo msg('label_description'); ?></option>
+                    <option value="filenames"><?php echo msg('label_filename'); ?></option>
+                    <option value="comments"><?php echo msg('label_comment'); ?></option>
+                    <option value="file_id"><?php echo msg('file'); ?> #</option>
+                    <?php udf_functions_search_options(); ?>
+                    <option value="all" selected><?php echo msg('searchpage_all_meta'); ?></option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12 col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="exact_phrase" class="form-check-input" id="exact_phrase">
+                    <label class="form-check-label" for="exact_phrase"><?php echo msg('label_exact_phrase'); ?></label>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="case_sensitivity" class="form-check-input" id="case_sensitivity">
+                    <label class="form-check-label" for="case_sensitivity"><?php echo msg('label_case_sensitive'); ?></label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" name="submit" value="Search" class="btn btn-primary"><?php echo msg('search'); ?></button>
+            </div>
+        </div>
+    </form>
 
     <?php
     //echo '<br><b>Load Time: ' . time() - $start_time;

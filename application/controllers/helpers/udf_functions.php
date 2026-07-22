@@ -97,7 +97,7 @@ if (!defined('udf_functions')) {
 
             // Type is Text
             if ($row[1] == 3) {
-                echo '<input tabindex="5" type="Text" name="'. e::h($row[0]) .'" size="16" class="form-control">';
+                echo '<input tabindex="5" type="text" name="'. e::h($row[0]) .'" class="form-control">';
             }
             
             //CHM
@@ -271,7 +271,7 @@ if (!defined('udf_functions')) {
                 $stmt->execute(array(':id' => $_REQUEST['id']));
                 $sub_row = $stmt->fetch();
 
-                echo '<input type="text" name="' . e::h($row[2]) . '" size="50" value="' . e::h($sub_row[0]) . '" class="form-control">';
+                echo '<input type="text" name="' . e::h($row[2]) . '" value="' . e::h($sub_row[0]) . '" class="form-control">';
             }
             //CHM
             elseif ($row[1] == 4) {

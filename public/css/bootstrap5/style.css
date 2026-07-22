@@ -36,6 +36,13 @@ body {
     grid-column: 1 / -1;
 }
 
+/* Collapse 2-column form grid to single column on mobile */
+@media (max-width: 767.98px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Make checkboxes, radios, and Tabulator selection more visible */
 .form-check-input,
 input[type="checkbox"],
