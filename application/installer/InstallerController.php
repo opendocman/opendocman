@@ -304,6 +304,7 @@ class InstallerController
                 new Version001300(),
                 new Version001400(),
                 new Version001401(),
+                new Version001402(),
             ]);
 
             // Mark all schema versions as completed (the schema includes all changes)
@@ -354,6 +355,7 @@ class InstallerController
                 new Version001300(),
                 new Version001400(),
                 new Version001401(),
+                new Version001402(),
             ]);
 
             // Seed tracking table with migrations already covered by current DB version

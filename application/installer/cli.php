@@ -118,6 +118,7 @@ class CliCommand
             new Version001300(),
             new Version001400(),
             new Version001401(),
+            new Version001402(),
         ]);
 
         $currentVersion = $dbManager->getDbVersion($prefix);
@@ -184,6 +185,7 @@ class CliCommand
             new Version001300(),
             new Version001400(),
             new Version001401(),
+            new Version001402(),
         ]);
 
         $rows = $runner->status();
