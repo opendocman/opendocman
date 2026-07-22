@@ -73,7 +73,6 @@ $lang['updated'] = 'Actualizat';
 $lang['username'] = 'Nume Utilizator';
 $lang['users'] = 'Utilizatori';
 $lang['value'] = 'Valoare';
-$lang['view'] = 'Vizualizare';
 
 // Areas
 $lang['area_add_new_category'] = 'Adugare Categorie';
@@ -501,4 +500,18 @@ $lang['footer_support'] = 'Suport';
 $lang['footer_feedback'] = 'Sugestii';
 $lang['footer_bugs'] = 'Erori';
 $lang['powered_by'] = 'Realizat de';
+
+$lang['change_password'] = 'Schimbă parola';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Trebuie să vă schimbați parola înainte de a continua.';
+$lang['change_password_current_password'] = 'Parola curentă';
+$lang['change_password_new_password'] = 'Parola nouă';
+$lang['change_password_confirm_password'] = 'Confirmă parola nouă';
+$lang['change_password_button'] = 'Schimbă parola';
+$lang['change_password_success'] = 'Parola dvs. a fost schimbată cu succes.';
+$lang['change_password_error_mismatch'] = 'Parolele noi pe care le-ați introdus nu se potrivesc.';
+$lang['change_password_error_current'] = 'Parola dvs. curentă este incorectă.';
+$lang['change_password_error_empty'] = 'Vă rugăm să completați toate câmpurile parolei.';
+$lang['change_password_error_same'] = 'Parola nouă trebuie să fie diferită de parola curentă.';
 

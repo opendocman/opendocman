@@ -144,6 +144,14 @@ if (isset($_POST['login'])) {
         // initiate a session
         $_SESSION['uid'] = $id;
 
+        // Check if password change is required
+        $user_obj = new User($id, $pdo);
+        if ($user_obj->isPasswordChangeRequired()) {
+            $_SESSION['pw_change_required'] = true;
+            redirect_visitor('change_password');
+            exit;
+        }
+
         // Run the plugin API (only if function exists)
         if (function_exists('callPluginMethod')) {
             callPluginMethod('onAfterLogin');

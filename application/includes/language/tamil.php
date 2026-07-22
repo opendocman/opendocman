@@ -73,7 +73,6 @@ $lang['updated'] = 'Updated';
 $lang['username'] = 'பயனர் பெயர்';
 $lang['users'] = 'Users';
 $lang['value'] = 'Value';
-$lang['view'] = 'View';
 
 // Areas
 $lang['area_add_new_category'] = 'Add New Category';
@@ -501,4 +500,18 @@ $lang['footer_support'] = 'ஆதரவு';
 $lang['footer_feedback'] = 'கருத்து';
 $lang['footer_bugs'] = 'பிழைகள்';
 $lang['powered_by'] = 'இயக்குவது';
+
+$lang['change_password'] = 'கடவுச்சொல்லை மாற்றவும்';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'தொடர்வதற்கு முன் உங்கள் கடவுச்சொல்லை மாற்ற வேண்டும்.';
+$lang['change_password_current_password'] = 'தற்போதைய கடவுச்சொல்';
+$lang['change_password_new_password'] = 'புதிய கடவுச்சொல்';
+$lang['change_password_confirm_password'] = 'புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்';
+$lang['change_password_button'] = 'கடவுச்சொல்லை மாற்றவும்';
+$lang['change_password_success'] = 'உங்கள் கடவுச்சொல் வெற்றிகரமாக மாற்றப்பட்டது.';
+$lang['change_password_error_mismatch'] = 'நீங்கள் உள்ளிட்ட புதிய கடவுச்சொற்கள் பொருந்தவில்லை.';
+$lang['change_password_error_current'] = 'உங்கள் தற்போதைய கடவுச்சொல் தவறானது.';
+$lang['change_password_error_empty'] = 'அனைத்து கடவுச்சொல் புலங்களையும் நிரப்பவும்.';
+$lang['change_password_error_same'] = 'புதிய கடவுச்சொல் தற்போதைய கடவுச்சொல்லில் இருந்து வேறுபட்டதாக இருக்க வேண்டும்.';
 

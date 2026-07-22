@@ -113,7 +113,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
         // INSERT into user
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user
-                    (username, password, department, phone, Email,last_name, first_name, can_add, can_checkin)
+                    (username, password, department, phone, Email,last_name, first_name, can_add, can_checkin, pw_change_required)
                     VALUES(
                         :username,
                         md5(:password),
@@ -123,7 +123,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
                         :lastname,
                         :firstname,
                         :can_add,
-                        :can_checkin
+                        :can_checkin,
+                        1
                 )";
 
         $stmt = $pdo->prepare($query);
@@ -318,8 +319,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
-    // Validate CSRF token for Modify User operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+    // Validate CSRF token for Modify User operation — POST only
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
         header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
         exit;
     }
@@ -404,6 +405,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         $GLOBALS['smarty']->assign('department_select_options', $department_select_options);
         $GLOBALS['smarty']->assign('can_add', $can_add);
         $GLOBALS['smarty']->assign('can_checkin', $can_checkin);
+        $GLOBALS['smarty']->assign('pw_change_required_checked', $user_obj->isPasswordChangeRequired() ? 'checked' : '');
         display_smarty_template('user/edit.tpl');
     }
 
@@ -473,6 +475,9 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     if (isset($_POST['first_name'])) {
         $query .= " first_name = :first_name ";
     }
+    if ($user_obj->isAdmin()) {
+        $query .= " , pw_change_required = :pw_change_required ";
+    }
     $query .= " WHERE id = :id ";
 
     $stmt = $pdo->prepare($query);
@@ -498,6 +503,10 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     }
     if (isset($_POST['first_name'])) {
         $stmt->bindParam(':first_name', $_POST['first_name']);
+    }
+    if ($user_obj->isAdmin()) {
+        $pw_change_required = isset($_POST['pw_change_required']) ? 1 : 0;
+        $stmt->bindParam(':pw_change_required', $pw_change_required, PDO::PARAM_INT);
     }
     $stmt->bindParam(':id', $_POST['id']);
     $stmt->execute();

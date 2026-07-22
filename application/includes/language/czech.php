@@ -73,7 +73,6 @@ $lang['updated'] = 'Aktualizováno';
 $lang['username'] = 'Uživatelské jméno';
 $lang['users'] = 'Uživatelé';
 $lang['value'] = 'Hodnota';
-$lang['view'] = 'Zobrazit';
 
 // Areas
 $lang['area_add_new_category'] = 'Přidat kategorii';
@@ -502,4 +501,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Běží na';
+
+$lang['change_password'] = 'Změnit heslo';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'Před pokračováním musíte změnit své heslo.';
+$lang['change_password_current_password'] = 'Současné heslo';
+$lang['change_password_new_password'] = 'Nové heslo';
+$lang['change_password_confirm_password'] = 'Potvrdit nové heslo';
+$lang['change_password_button'] = 'Změnit heslo';
+$lang['change_password_success'] = 'Vaše heslo bylo úspěšně změněno.';
+$lang['change_password_error_mismatch'] = 'Zadaná nová hesla se neshodují.';
+$lang['change_password_error_current'] = 'Vaše současné heslo není správné.';
+$lang['change_password_error_empty'] = 'Vyplňte prosím všechna pole pro heslo.';
+$lang['change_password_error_same'] = 'Nové heslo se musí lišit od současného hesla.';
 

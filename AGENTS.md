@@ -1,3 +1,8 @@
+# Translation strings
+
+New `$lang[...]` entries must be added to **all 17 language files** under
+`application/includes/language/`, not just `english.php`.
+
 # Testing
 
 ## E2E smoke test (Playwright)
@@ -16,5 +21,23 @@ so the project's existing `.env` is picked up automatically.
 ## PHPUnit tests
 
 ```bash
-composer test
+# Via Makefile (recommended — runs all tests with proper setup)
+make test
+make test-unit        # unit tests only
+make test-integration # integration tests only
+make test-user        # user-related tests
+
+# Direct phpunit (vendor is in application/vendor)
+php application/vendor/bin/phpunit -c phpunit.xml.dist
+php application/vendor/bin/phpunit -c phpunit.xml.dist --filter User 2>&1 | tail -20
+```
+
+## Makefile targets
+
+```bash
+make test              # Run all tests via scripts/run-tests.sh
+make test-quiet        # Minimal output mode
+make test-e2e          # Playwright E2E smoke test (requires app on :8080)
+make test-coverage     # HTML coverage report
+make dump-sql          # Regenerate database.sql from SchemaBuilder
 ```

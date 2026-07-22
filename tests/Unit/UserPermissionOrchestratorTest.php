@@ -116,7 +116,7 @@ class UserPermissionOrchestratorTest extends TestCase
         $stmtUserRow = \Mockery::mock(\PDOStatement::class);
         $stmtUserRow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
         // id, username, department, phone, email, last_name, first_name, pw_reset_code, can_add, can_checkin
-        $stmtUserRow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtUserRow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Add comprehensive PDO mocking for User_Perms and Dept_Perms constructors
         $stmtGenericStub = \Mockery::mock(\PDOStatement::class);
@@ -174,7 +174,7 @@ class UserPermissionOrchestratorTest extends TestCase
 
         $stmtUserRow = \Mockery::mock(\PDOStatement::class);
         $stmtUserRow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
-        $stmtUserRow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtUserRow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Statement for the query in getViewableFileIds that filters out low rights
         $stmtViewableFilter = \Mockery::mock(\PDOStatement::class);
@@ -227,7 +227,7 @@ class UserPermissionOrchestratorTest extends TestCase
 
         $stmtURow = \Mockery::mock(\PDOStatement::class);
         $stmtURow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
-        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Admin check -> isAdmin() => true
         $stmtAdmin = \Mockery::mock(\PDOStatement::class);
@@ -282,7 +282,7 @@ class UserPermissionOrchestratorTest extends TestCase
 
         $stmtURow = \Mockery::mock(\PDOStatement::class);
         $stmtURow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
-        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Admin check -> isAdmin() => false
         $stmtAdmin = \Mockery::mock(\PDOStatement::class);
@@ -344,7 +344,7 @@ class UserPermissionOrchestratorTest extends TestCase
 
         $stmtURow = \Mockery::mock(\PDOStatement::class);
         $stmtURow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
-        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Prepare PDO for FileData constructor (findName + loadData),
         // with owner matching UID and status -1 to simulate locked.
@@ -404,7 +404,7 @@ class UserPermissionOrchestratorTest extends TestCase
 
         $stmtURow = \Mockery::mock(\PDOStatement::class);
         $stmtURow->shouldReceive('execute')->once()->with([':id' => 10])->andReturn(true);
-        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 1, 1]);
+        $stmtURow->shouldReceive('fetch')->once()->andReturn([10, 'u10', 3, '555', 'u10@example.com', 'Last', 'First', null, 0, 1, 1]);
 
         // Admin check -> isAdmin() => false
         $stmtAdmin = \Mockery::mock(\PDOStatement::class);

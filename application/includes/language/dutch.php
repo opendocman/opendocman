@@ -73,7 +73,6 @@ $lang['updated'] = 'Bijgewerkt';
 $lang['username'] = 'Gebruikersnaam';
 $lang['users'] = 'Gebruikers';
 $lang['value'] = 'Waarde';
-$lang['view'] = 'Bekijk';
 
 // Areas
 $lang['area_add_new_category'] = 'Voeg een nieuwe categorie toe';
@@ -501,4 +500,18 @@ $lang['footer_support'] = 'Support';
 $lang['footer_feedback'] = 'Feedback';
 $lang['footer_bugs'] = 'Bugs';
 $lang['powered_by'] = 'Mogelijk gemaakt door';
+
+$lang['change_password'] = 'Wachtwoord wijzigen';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'U moet uw wachtwoord wijzigen voordat u doorgaat.';
+$lang['change_password_current_password'] = 'Huidig wachtwoord';
+$lang['change_password_new_password'] = 'Nieuw wachtwoord';
+$lang['change_password_confirm_password'] = 'Bevestig nieuw wachtwoord';
+$lang['change_password_button'] = 'Wachtwoord wijzigen';
+$lang['change_password_success'] = 'Uw wachtwoord is succesvol gewijzigd.';
+$lang['change_password_error_mismatch'] = 'De nieuwe wachtwoorden die u hebt ingevoerd, komen niet overeen.';
+$lang['change_password_error_current'] = 'Uw huidige wachtwoord is onjuist.';
+$lang['change_password_error_empty'] = 'Vul alle wachtwoordvelden in.';
+$lang['change_password_error_same'] = 'Het nieuwe wachtwoord moet anders zijn dan het huidige wachtwoord.';
 

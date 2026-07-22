@@ -73,7 +73,6 @@ $lang['updated'] = 'পরিবর্ধিত';
 $lang['username'] = 'ব্যবহারকারি নাম';
 $lang['users'] = 'ব্যবহারকারি';
 $lang['value'] = 'মান';
-$lang['view'] = 'দর্শন';
 
 // Areas
 $lang['area_add_new_category'] = 'নতুন ক্যাটেগরি যোগ ';
@@ -501,4 +500,18 @@ $lang['footer_support'] = 'সাপোর্ট';
 $lang['footer_feedback'] = 'ফিডব্যাক';
 $lang['footer_bugs'] = 'বাগ';
 $lang['powered_by'] = 'চালিত';
+
+$lang['change_password'] = 'পাসওয়ার্ড পরিবর্তন করুন';
+
+// Change Password Page
+$lang['change_password_required_message'] = 'চালিয়ে যাওয়ার আগে আপনাকে আপনার পাসওয়ার্ড পরিবর্তন করতে হবে।';
+$lang['change_password_current_password'] = 'বর্তমান পাসওয়ার্ড';
+$lang['change_password_new_password'] = 'নতুন পাসওয়ার্ড';
+$lang['change_password_confirm_password'] = 'নতুন পাসওয়ার্ড নিশ্চিত করুন';
+$lang['change_password_button'] = 'পাসওয়ার্ড পরিবর্তন করুন';
+$lang['change_password_success'] = 'আপনার পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে।';
+$lang['change_password_error_mismatch'] = 'আপনার প্রবেশ করানো নতুন পাসওয়ার্ড দুটি মেলে না।';
+$lang['change_password_error_current'] = 'আপনার বর্তমান পাসওয়ার্ড ভুল।';
+$lang['change_password_error_empty'] = 'অনুগ্রহ করে সমস্ত পাসওয়ার্ড ক্ষেত্র পূরণ করুন।';
+$lang['change_password_error_same'] = 'নতুন পাসওয়ার্ডটি বর্তমান পাসওয়ার্ড থেকে ভিন্ন হতে হবে।';
 
