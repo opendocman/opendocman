@@ -27,55 +27,34 @@ $_SESSION = array();
 session_destroy();
 if ($GLOBALS["CONFIG"]["authen"] == 'kerbauth') {
     ?>
-    <html>
-    <body bgcolor="#FFFFFF" link="#000000" vlink="#000000" background="images/background_blue.gif">
-    <table width="633" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td width="4">&nbsp;&nbsp;&nbsp;</td>
-            <td>
-                <table border="0" cellpadding="0" cellspacing="0" width="620">
-                    <tr>
-                        <td width="100%" align="LEFT" bgcolor="#31639C"><img src="images/blue_left.gif" width="5"
-                                                                             height="16" align="top"><b>&nbsp;Thank you
-                                for using OpenDocMan</b></td>
-
-                    </tr>
-                    <tr>
-                        <td width="100%" align="left" bgcolor="#FFCE31">
-                            <img src="images/logout_logo.gif" align="left">
-                            <h2>Logging off...</h2>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left">
-                            <img src="/images/white_dot.gif" height="8"><br>
-                            OpenDocMan, and other campus web systems, use a cookie to store your credentials for access.
-                            This cookie is kept only in your computers memory and not saved to disk for security
-                            purposes. In order to remove this cookie from memory you must completely exit your browser.
-                            The LOGOUT button below will close the current browser window, but this may not exit your
-                            browser software completely.
-                            <p>
-                                <b>Macintosh Users:</b> Choose 'Quit' from the 'File' menu to be sure the browser is
-                                completely exited.
-                            <p>
-                                <b>PC/Windows Users:</b> Close off all browser windows by clicking the 'X' icon in the
-                                upper right of the window. Be sure all browser windows are closed.
-                            <p>
-                            <p>
-                            <form name="CM">
-                                <input type="button" value="LOGOUT" Onclick="top.close();">
-                                &nbsp;
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Thank you for using OpenDocMan</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Logging off...</h5>
+                <p class="card-text">
+                    OpenDocMan, and other campus web systems, use a cookie to store your credentials for access.
+                    This cookie is kept only in your computers memory and not saved to disk for security
+                    purposes. In order to remove this cookie from memory you must completely exit your browser.
+                    The LOGOUT button below will close the current browser window, but this may not exit your
+                    browser software completely.
+                </p>
+                <p class="card-text">
+                    <b>Macintosh Users:</b> Choose 'Quit' from the 'File' menu to be sure the browser is
+                    completely exited.
+                </p>
+                <p class="card-text">
+                    <b>PC/Windows Users:</b> Close off all browser windows by clicking the 'X' icon in the
+                    upper right of the window. Be sure all browser windows are closed.
+                </p>
+                <form name="CM">
+                    <input type="button" class="btn btn-primary" value="LOGOUT" onclick="top.close();">
+                </form>
+            </div>
+        </div>
+    </div>
     <?php
 
     draw_footer();

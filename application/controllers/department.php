@@ -51,31 +51,25 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ?>
 
         <form id="addDepartmentForm" action="department" method="POST" enctype="multipart/form-data">
-    <table border="0" cellspacing="5" cellpadding="5">
-            <tr>
-                <td>
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div>
                     <b><?php echo msg('department')?></b>
-                </td>
-                <td colspan="3">
-                    <input name="department" type="text" class="required" minlength="2">
+                </div>
+                <div>
+                    <input name="department" type="text" class="form-control required" minlength="2">
 <?php
                  // Call the plugin API
                  callPluginMethod('onDepartmentAddForm');
     ?>
-                </td>
-                <td align="center">
-                    <input type="hidden" name="submit" value="Add Department">
-                    <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="Add Department"><?php echo msg('button_add_department')?></button>
-                    </div>
-                </td>
-                <td align="center">
-                    <div class="buttons">
-                    <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
-            </td>
-        </tr>
-    </table>
+                <div>
+                    <input type="hidden" name="submit" value="Add Department">
+                    <button class="btn btn-primary" type="submit" name="submit" value="Add Department"><?php echo msg('button_add_department')?></button>
+                </div>
+                <div>
+                    <button class="btn btn-secondary cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+                </div>
+            </div>
            </form>
    <script>
   $(document).ready(function(){
@@ -187,14 +181,12 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $stmt->execute(array(':item' => $_POST['item']));
     $result = $stmt->fetch();
 
-    echo '<table name="main" cellspacing="15" border="0">';
-    echo '<th>ID</th><th>' . msg('department') . '</th>';
-    echo '<tr><td>' . e::h($result['id']) . '</td>';
-    echo '<td>' . e::h($result['name']) . '</td></tr>';
+    echo '<dl class="row mb-0">';
+    echo '<dt class="col-sm-3">ID</dt><dd class="col-sm-9">' . e::h($result['id']) . '</dd>';
+    echo '<dt class="col-sm-3">' . msg('department') . '</dt><dd class="col-sm-9">' . e::h($result['name']) . '</dd>';
+    echo '</dl>';
     ?>
-                        <tr>
-                            <td align="center" colspan="2"><b><?php echo msg('label_users_in_department')?></b></td>
-                        </tr>
+                        <div class="mt-3"><b><?php echo msg('label_users_in_department')?></b></div>
 <?php
     // Display all users assigned to this department
     $query = "
@@ -214,15 +206,16 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     $stmt->execute(array(':item' => $_POST['item']));
     $result = $stmt->fetchAll();
 
+    echo '<ul class="list-unstyled ms-3 mb-0">';
     foreach ($result as $row) {
-        echo '<tr><td colspan="2">' . e::h($row['first_name']) . ' ' . e::h($row['last_name']) . '</td></tr>';
+        echo '<li>' . e::h($row['first_name']) . ' ' . e::h($row['last_name']) . '</li>';
     }
+    echo '</ul>';
     ?>
                         <form action="admin" method="POST" enctype="multipart/form-data">
-                            <tr>
-                                <td colspan="4" align="center"><div class="buttons"><button class="regular" type="Submit" name="" value="Back"><?php echo msg('button_back')?></button></div></td>
-                            </tr>
-                            </table>
+                            <div class="mt-3">
+                                <button class="btn btn-secondary" type="Submit" name="" value="Back"><?php echo msg('button_back')?></button>
+                            </div>
                         </form>
 <?php
     $content = ob_get_clean();
@@ -234,13 +227,12 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ob_start();
     $showpick='';
     ?>
-                            <table border="0" cellspacing="5" cellpadding="5">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
                                 <form action="department" method="POST" enctype="multipart/form-data">
-                                    <tr>
                                     <input type="hidden" name="state" value="<?php echo(e::h($_GET['state']+1));
     ?>">
-                                    <td><b><?php echo msg('department')?></b></td>
-                                    <td colspan=3><select name="item">
+                                    <div><b><?php echo msg('department')?></b></div>
+                                    <div><select name="item" class="form-select">
     <?php
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
     $stmt = $pdo->prepare($query);
@@ -251,22 +243,15 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
         echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
-                                        </select></td>
-                                    <td colspan="" align="center">
-                                        <div class="buttons">
-                                            <button class="positive" type="submit" name="submit" value="Show Department"><?php echo msg('button_view_department')?></button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="buttons">
-                                            <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
-                                        </div>
-                                    </td>
-
-                                </td>
-                                </tr>
-                            </table>
-                     </form>
+                                        </select></div>
+                                    <div>
+                                        <button class="btn btn-primary" type="submit" name="submit" value="Show Department"><?php echo msg('button_view_department')?></button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-secondary" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                    </div>
+                                </form>
+                            </div>
  <?php
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);
@@ -292,52 +277,47 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 
 
     // query to show item
-    echo '    <form action="department" method="POST" enctype="multipart/form-data">';
-    echo '<table border=0>';
+    echo '<form action="department" method="POST" enctype="multipart/form-data">';
+    echo '<div class="d-flex flex-column gap-2">';
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':item' => $_REQUEST['item']));
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
-        echo '<tr><td>' .msg('label_id'). ' # :</td><td>' . e::h($row['id']) . '</td></tr>';
-        echo '<tr><td>'.msg('label_name').' :</td><td>' . e::h($row['name']) . '</td></tr>';
+        echo '<div><strong>' .msg('label_id'). ' # :</strong> ' . e::h($row['id']) . '</div>';
+        echo '<div><strong>'.msg('label_name').' :</strong> ' . e::h($row['name']) . '</div>';
 
 
         ?>
         <input type="hidden" name="id" value="<?php echo (int) $_REQUEST['item'];
         ?>">
-        <tr>
-            <td>
+        <div class="d-flex align-items-center gap-2">
+            <div>
                 <?php echo msg('label_reassign_to');
         ?>:
-            </td>
-            <td>
-                  <select name="assigned_id">
+            </div>
+            <div>
+                  <select name="assigned_id" class="form-select">
                       <?php
                             foreach ($reassign_list_query_result as $row) {
                                 echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
                             }
         ?>
                     </select>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><?php echo msg('message_are_you_sure_remove')?></td>
-            <td align="center">
-                <div class="buttons">
-                    <button class="positive" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button>
-                </div>
-                <div class="buttons">
-                    <button class="negative" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
-                </div>
-            </td>
-</tr>
-</table>
-    </form>
-    <?php
-
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div><?php echo msg('message_are_you_sure_remove')?></div>
+            <div>
+                <button class="btn btn-primary" type="submit" name="deletedepartment" value="Yes"><?php echo msg('button_yes')?></button>
+                <button class="btn btn-secondary" type="submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+            </div>
+        </div>
+<?php
     }
+    echo '</div>';
+    echo '</form>';
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);
     display_smarty_template('_content.tpl');
@@ -346,13 +326,12 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     draw_header(msg('department') . ': ' . msg('label_delete'), $last_message);
     ob_start();
     ?>
-    <table border="0" cellspacing="5" cellpadding="5">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
         <form action="department" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
-            <tr>
-                <td><b><?php echo msg('department')?></b></td>
-                <td colspan=3><select name="item">
+            <div><b><?php echo msg('department')?></b></div>
+            <div><select name="item" class="form-select">
                             <?php
                             $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
     $stmt = $pdo->prepare($query);
@@ -366,22 +345,15 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     }
     $deletepick='';
     ?>
-                    </select></td>
-
-                <td></td>
-                <td align="center">
-                    <div class="buttons">
-                        <button class="positive" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>                        
-                    </div>
-                </td>
-                <td>
-                    <div class="buttons">
-                        <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                    </div>
-                </td>
-            </tr>
+                    </select></div>
+            <div>
+                <button class="btn btn-primary" type="submit" name="submit" value="delete"><?php echo msg('button_delete')?></button>                        
+            </div>
+            <div>
+                <button class="btn btn-secondary cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+            </div>
         </form>
-    </table>
+    </div>
     <?php
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);
@@ -442,48 +414,39 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ob_start();
     ?>  
                         <form action="department" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
-                            <table border="0" cellspacing="5" cellpadding="5">
-                                
-                                    <tr>
-                                            <?php
-                                            $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <?php
+                                    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':item' => $_REQUEST['item']));
     $result = $stmt->fetchAll();
 
     foreach ($result as $row) {
         ?>
-                                        <td>
+                                        <div>
                                             <b><?php echo msg('department')?></b>
-                                        </td>
-                                        <td colspan="3">
+                                        </div>
+                                        <div>
                                             <input type="textbox" name="name" value="<?php echo e::h($row['name']);
-        ?>" class="required" maxlength="40">
+        ?>" class="form-control required" maxlength="40">
                                             <input type="hidden" name="id" value="<?php echo e::h($row['id']);
         ?>">
                                             <?php
                                             // Call the plugin API
                                             callPluginMethod('onDepartmentEditForm', $row['id']);
         ?>
-                                        </td>
+                                        </div>
                                              <?php
 
     }
     ?>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">
-                                            <div class="buttons">
-                                                <button class="positive" type="Submit" name="submit" value="Update Department"><?php echo msg('button_save')?></button>
-                                            </div>
-                                        </td>
-                                        <td align="center">
-                                            <div class="buttons">
-                                                <button class="negative cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                            </table>
+                                        <div>
+                                            <button class="btn btn-primary" type="Submit" name="submit" value="Update Department"><?php echo msg('button_save')?></button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-secondary cancel" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
+                                        </div>
+                            </div>
                         </form>
    <script>
   $(document).ready(function(){
@@ -502,10 +465,9 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
                             <form action="department" method="GET" enctype="multipart/form-data">
                                 <INPUT type="hidden" name="state" value="<?php echo(e::h($_REQUEST['state']+1));
     ?>">
-                                <table border="0" cellspacing="5" cellpadding="5">
-                                    <tr>
-                                        <td><b><?php echo msg('label_department_to_modify')?>:</b></td>
-                                        <td colspan="3"><select name="item">
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <div><b><?php echo msg('label_department_to_modify')?>:</b></div>
+                                    <div><select name="item" class="form-select">
                                                     <?php
                                                     // query to get a list of departments
                                                     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
@@ -517,19 +479,14 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
         echo '<option value="' . e::h($row['id']) . '">' . e::h($row['name']) . '</option>';
     }
     ?>
-                                        </td>
-                                        <td>
-                                            <div class="buttons">
-                                                <button class="positive" type="submit" name="submit" value="modify"><?php echo msg('button_modify_department')?></button>
-                                            </div>
-                                        </td>
-                                        <td >
-                                            <div class="buttons">
-                                                <button class="negative" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
-                                            </div>
-                                    </td>
-                                    </tr>
-                                </table>
+                                    </select></div>
+                                    <div>
+                                        <button class="btn btn-primary" type="submit" name="submit" value="modify"><?php echo msg('button_modify_department')?></button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-secondary" type="Submit" name="submit" value="Cancel"><?php echo msg('button_cancel')?></button>
+                                    </div>
+                                </div>
                             </form>
     <?php
     $content = ob_get_clean();

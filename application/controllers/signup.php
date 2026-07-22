@@ -111,32 +111,48 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
         <br><script type="text/javascript" src="FormCheck.js"></script>
 
 
-        <table border="0" cellspacing="5" cellpadding="5">
+        <div class="container">
         <form name="add_user" action="signup" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
-        <tr><td><b><?php echo msg('label_last_name');
-    ?></b></td><td><input name="last_name" type="text"></td></tr>
-        <tr><td><b><?php echo msg('label_first_name');
-    ?></b></td><td><input name="first_name" type="text"></td></tr>
-        <tr><td><b><?php echo msg('username');
-    ?></b></td><td><input name="username" type="text"></td></tr>
-        <tr>
-        <td><b>Phone Number</b></td>
-        <td>
-        <input name="phonenumber" type="text">
-        </td>
-        </tr>
-        <tr>
-        <td><b>Example</b></td>
-        <td><b>999 9999999</b></td>
-        </tr>
-        <tr>
-        <td><b>E-mail Address</b></td>
-        <td>
-        <input name="Email" type="text">
-        </td>
-        </tr>
-        <tr>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('label_last_name');
+    ?></label>
+            <div class="col-sm-9">
+                <input name="last_name" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('label_first_name');
+    ?></label>
+            <div class="col-sm-9">
+                <input name="first_name" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('username');
+    ?></label>
+            <div class="col-sm-9">
+                <input name="username" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold">Phone Number</label>
+            <div class="col-sm-9">
+                <input name="phonenumber" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">Example</label>
+            <div class="col-sm-9">
+                <p class="form-control-plaintext fw-bold">999 9999999</p>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold">E-mail Address</label>
+            <div class="col-sm-9">
+                <input name="Email" type="text" class="form-control">
+            </div>
+        </div>
         <?php
         // If mysqlauthentication, then ask for password
         if ($GLOBALS['CONFIG']['authen'] =='mysql') {
@@ -144,11 +160,10 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             echo '<INPUT type="hidden" name="password" value="' . $rand_password . '">';
         }
     ?>
-
-        <tr>
-        <td><b>Department</b></td>
-        <td>
-        <select name="department">
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold">Department</label>
+            <div class="col-sm-9">
+                <select name="department" class="form-select">
         <?php	
         // query to get a list of departments
         $query = "
@@ -169,16 +184,17 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
     }
 
     ?>
-        </select>
-        </td>
-        <tr>
-        <td></td>
-        <td columnspan=3 align="center"><input type="Submit" name="adduser" onClick="return validatemod(add_user);" value="<?php echo msg('submit');
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9 offset-sm-3">
+                <input type="Submit" name="adduser" class="btn btn-primary" onClick="return validatemod(add_user);" value="<?php echo msg('submit');
     ?>">
+            </div>
+        </div>
         </form>
-        </td>
-        </tr>
-        </table>
+        </div>
 <?php
    if (is_readable("signup_footer.html")) {
        include("signup_footer.html");

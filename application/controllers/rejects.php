@@ -53,26 +53,14 @@ if (!isset($_POST['submit'])) {
         echo $GLOBALS['csrf']->getTokenField();
     }
     ?>
-<table border="0">
-    <tr>
-        <td>
-
 <?php
 $GLOBALS['smarty']->assign('state', -1);
 display_smarty_template('out.tpl');
-
-    ?>
-        </td>
-    </tr>
-    <tr>
-        <td>
-                <div class="buttons">
-                    <button class="btn btn-success" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review');
-                ?></button>
-                    <button class="btn btn-danger" type="submit" name="submit" value="delete"><?php echo msg('button_delete');
-                ?></button>
-                </div>
-</table>
+?>
+    <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-success" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review'); ?></button>
+        <button class="btn btn-danger" type="submit" name="submit" value="delete"><?php echo msg('button_delete'); ?></button>
+    </div>
 </form>
 
 <?php

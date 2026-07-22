@@ -1,37 +1,30 @@
 <form id="udfAddForm" action="udf?last_message={$last_message|escape:'html'}" method="POST" enctype="multipart/form-data" novalidate>
     {$csrf_token_field}
-    <table border="0" cellspacing="5" cellpadding="5">
-        <tr>
-            <td><b>{$g_lang_label_name}(limit 5)</b></td>
-            <td colspan="3"><input maxlength="5" name="table_name" type="text" class="required form-control"></td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_label_display} {$g_lang_label_name}</b></td>
-            <td colspan="3"><input maxlength="16" name="display_name" type="text" class="required form-control"></td>
-        </tr>
-        <tr>
-            <td><b>{$g_lang_type}</b></td>
-            <td colspan="3"><select name="field_type">
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_name}(limit 5)</label>
+                <input maxlength="5" name="table_name" type="text" class="required form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_label_display} {$g_lang_label_name}</label>
+                <input maxlength="16" name="display_name" type="text" class="required form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_type}</label>
+                <select name="field_type" class="form-select">
                     <option value=1>{$g_lang_select} {$g_lang_list}</option>
                     <option value=4>{$g_lang_label_sub_select_list}</option>
                     <option value=2>{$g_lang_label_radio_button}</option>
                     <option value=3>{$g_lang_label_text}</option>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td align="center">
-                <div class="buttons">
-                    <button class="btn btn-primary" type="Submit" name="submit" value="Add User Defined Field">{$g_lang_button_save}</button>
-                </div>
-            </td>
-            <td align="center">
-                <div class="buttons">
-                    <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
-                </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="Submit" name="submit" value="Add User Defined Field">{$g_lang_button_save}</button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
+            </div>
+        </div>
+    </div>
 </form>
 <script>
     {literal}

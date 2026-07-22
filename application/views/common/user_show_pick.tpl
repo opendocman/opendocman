@@ -1,26 +1,20 @@
-<table border="0" cellspacing="5" cellpadding="5">
-    <form action="user" method="POST" enctype="multipart/form-data">
-        {$csrf_token_field}
-        <INPUT type="hidden" name="state" value="{$state|escape:'html'}" />
-        <tr>
-            <td><b>{$g_lang_userpage_user}</b></td>
-            <td colspan=3>
-                <select name="item">
+<form action="user" method="POST" enctype="multipart/form-data">
+    {$csrf_token_field}
+    <input type="hidden" name="state" value="{$state|escape:'html'}" />
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">{$g_lang_userpage_user}</label>
+                <select name="item" class="form-select">
                     {foreach from=$user_list item=item name=user_list}
                         <option value="{$item.id|escape}">{$item.last_name|escape:'html'}, {$item.first_name|escape:'html'} - {$item.username|escape:'html'}</option>
                     {/foreach}
                 </select>
-            </td>
-            <td  align="center">
-                <div class="buttons">
-                    <button class="positive" type="Submit" name="submit" value="Show User">{$g_lang_userpage_button_show}</button>
-                </div>
-            </td>
-            <td>
-                <div class="buttons">
-                    <button class="negative" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
-                </div>
-            </td>
-        </tr>
-    </form>
-</table>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" type="Submit" name="submit" value="Show User">{$g_lang_userpage_button_show}</button>
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_userpage_button_cancel}</button>
+            </div>
+        </div>
+    </div>
+</form>

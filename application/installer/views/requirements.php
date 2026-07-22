@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OpenDocMan Installer - Requirements Check</title>
     <link rel="stylesheet" href="../css/install.css" type="text/css"/>
 </head>

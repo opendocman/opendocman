@@ -74,43 +74,52 @@ if (!isset($_POST['submit'])) {
 
         // start displaying form
         ?>
-<table border="0" cellspacing="5" cellpadding="5">
+<div class="container">
     <form action="check-in" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
         <input type="hidden" name="id" value="<?php echo e::h($_GET['id']);
         ?>">
-        <tr>
-            <td><b><?php echo msg('label_filename');
-        ?></b></td>
-            <td><b><?php echo e::h($real_name);
-        ?></b></td>
-        </tr>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('label_filename');
+        ?></label>
+            <div class="col-sm-9">
+                <p class="form-control-plaintext fw-bold"><?php echo e::h($real_name);
+        ?></p>
+            </div>
+        </div>
 
-        <tr>
-            <td><b><?php echo msg('label_description');
-        ?></b></td>
-            <td><?php echo e::h($description);
-        ?></td>
-        </tr>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('label_description');
+        ?></label>
+            <div class="col-sm-9">
+                <p class="form-control-plaintext"><?php echo e::h($description);
+        ?></p>
+            </div>
+        </div>
 
-        <tr>
-            <td><b><?php echo msg('label_file_location');
-        ?></b></td>
-            <td><input name="file" type="file"></td>
-        </tr>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label fw-bold"><?php echo msg('label_file_location');
+        ?></label>
+            <div class="col-sm-9">
+                <input name="file" type="file" class="form-control">
+            </div>
+        </div>
 
-        <tr>
-            <td><?php echo msg('label_note_for_revision_log');
-        ?></td>
-            <td><textarea name="note"></textarea></td>
-        </tr>
+        <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label"><?php echo msg('label_note_for_revision_log');
+        ?></label>
+            <div class="col-sm-9">
+                <textarea name="note" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
 
-
-        <tr>
-            <td colspan="4" align="center"><div class="buttons"><button class="positive" type="submit" name="submit" value="Check  Document In"><?php echo msg('button_check_in')?></button></div></td>
-        </tr>
+        <div class="row">
+            <div class="col-sm-9 offset-sm-3">
+                <button class="btn btn-primary" type="submit" name="submit" value="Check  Document In"><?php echo msg('button_check_in')?></button>
+            </div>
+        </div>
     </form>
-</table>
+</div>
         <?php
         draw_footer();
         ?>

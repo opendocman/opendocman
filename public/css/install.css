@@ -25,7 +25,8 @@ body {
 	color: #333;
 	font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
 	margin: 2em auto;
-	width: 700px;
+	max-width: 700px;
+	width: 90%;
 	padding: 1em 2em;
 	-moz-border-radius: 11px;
 	-khtml-border-radius: 11px;
