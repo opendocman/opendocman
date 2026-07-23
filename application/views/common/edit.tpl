@@ -86,6 +86,7 @@
                     <textarea name="comment" rows="4" class="form-control" onchange="this.value=enforceLength(this.value, 255);">{$comment|escape:'html'}</textarea>
                 </div>
 
+{literal}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var showBtn = document.getElementById('showAddCategory');
@@ -154,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+{/literal}
 
 (End of file - total 154 lines)
 </content>

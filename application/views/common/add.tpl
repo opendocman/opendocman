@@ -87,6 +87,7 @@
                     <textarea name="comment" rows="4" class="form-control" onchange="this.value=enforceLength(this.value, 255);"></textarea>
                 </div>
 
+{literal}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var showBtn = document.getElementById('showAddCategory');
@@ -155,3 +156,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+{/literal}
