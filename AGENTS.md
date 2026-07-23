@@ -38,6 +38,18 @@ php application/vendor/bin/phpunit -c phpunit.xml.dist
 php application/vendor/bin/phpunit -c phpunit.xml.dist --filter User 2>&1 | tail -20
 ```
 
+# Git & GitHub
+
+Before committing, verify `git config user.name` and `user.email` are set to
+the bot account (`gh-org-bot-odm`). Before pushing or creating PRs, ensure
+the bot is the active `gh` account with:
+
+```bash
+gh auth switch --user gh-org-bot-odm
+```
+
+This applies to all git operations unless told otherwise.
+
 ## Makefile targets
 
 ```bash
