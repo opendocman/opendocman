@@ -240,7 +240,7 @@ serve-local: env-check ## Run local PHP server on /public with Docker DB service
 	@echo "  Password: $$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2 || echo '[check .env file]')"
 	@echo ""
 	@echo "🌐 Starting PHP development server..."
-	@echo "   URL: http://localhost:8000"
+	@echo "   URL: http://localhost:8080"
 	@echo ""
 	@echo "Press Ctrl+C to stop the server"
 	@echo ""
@@ -248,7 +248,7 @@ serve-local: env-check ## Run local PHP server on /public with Docker DB service
 	export APP_DB_NAME="$$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
 	export APP_DB_USER="$$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
 	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
-	cd public && php -S localhost:8000
+	cd public && php -S localhost:8080
 
 serve-local-quiet: env-check ## Run local PHP server with minimal logging (access logs hidden)
 	@echo "🚀 Starting local development environment (quiet mode)..."
@@ -269,7 +269,7 @@ serve-local-quiet: env-check ## Run local PHP server with minimal logging (acces
 	@echo "  Password: $$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2 || echo '[check .env file]')"
 	@echo ""
 	@echo "🌐 Starting PHP development server (logs redirected to php-server.log)..."
-	@echo "   URL: http://localhost:8000"
+	@echo "   URL: http://localhost:8080"
 	@echo ""
 	@echo "💡 Tip: Run 'tail -f php-server.log' in another terminal to view logs"
 	@echo ""
@@ -280,7 +280,7 @@ serve-local-quiet: env-check ## Run local PHP server with minimal logging (acces
 	export APP_DB_USER="$$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
 	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
 	export DISABLE_CSRF="true" && \
-	cd public && php -d display_errors=Off -d error_reporting=0 -S localhost:8000 >> ../php-server.log 2>&1
+	cd public && php -d display_errors=Off -d error_reporting=0 -S localhost:8080 >> ../php-server.log 2>&1
 
 serve-local-stop: ## Stop local PHP server and database service
 	@echo "🛑 Stopping local development environment..."

@@ -204,3 +204,57 @@ test.describe('Category management', () => {
     await expect(page.locator('#last_message')).toContainText('Category successfully deleted');
   });
 });
+
+// ────────────────────────────────────────────────────────────
+// Inline Add Category on Add/Edit File pages
+// ────────────────────────────────────────────────────────────
+test.describe('Inline Add Category', () => {
+  const inlineCat = `E2E Inline ${UNIQUE}`;
+
+  test.beforeEach(async ({ page }) => { await login(page); });
+
+  test('inline add category on Add File page', async ({ page }) => {
+    await page.goto('/add');
+    await page.waitForSelector('#showAddCategory');
+
+    // Form should be hidden initially
+    await expect(page.locator('#addCategoryForm')).toHaveClass(/d-none/);
+
+    // Click to show the form
+    await page.click('#showAddCategory');
+    await expect(page.locator('#addCategoryForm')).not.toHaveClass(/d-none/);
+
+    // Fill and save
+    await page.fill('#newCategoryName', inlineCat);
+    await page.click('#saveCategory');
+
+    // Wait for the select to contain the new option (value != empty means populated)
+    await expect(page.locator('select[name="category"]')).toContainText(inlineCat, { timeout: 5000 });
+
+    // Form should hide again
+    await expect(page.locator('#addCategoryForm')).toHaveClass(/d-none/);
+
+    // Verify the new category is selected
+    const selected = await page.locator('select[name="category"]').inputValue();
+    expect(selected).not.toBe('');
+  });
+
+  test('frontend rejects duplicate category name on Add page', async ({ page }) => {
+    await page.goto('/add');
+    await page.waitForSelector('#showAddCategory');
+
+    // Verify the category from the previous test exists in the select
+    await expect(page.locator('select[name="category"]')).toContainText(inlineCat, { timeout: 5000 });
+
+    await page.click('#showAddCategory');
+    await page.fill('#newCategoryName', inlineCat);
+    await page.click('#saveCategory');
+
+    // Should show duplicate message without making a network request
+    await expect(page.locator('#categoryStatus')).toContainText('Category already exists', { timeout: 5000 });
+
+    // Form should remain visible with the error
+    await expect(page.locator('#addCategoryForm')).not.toHaveClass(/d-none/);
+  });
+});
+

@@ -1,3 +1,9 @@
+# Database schema changes
+
+When modifying the database schema in `SchemaBuilder.php`:
+1. Run `make dump-sql` to regenerate `database.sql`
+2. Bump `ODM_DB_VERSION` in `application/version.php` to trigger the installer
+
 # Translation strings
 
 New `$lang[...]` entries must be added to **all 17 language files** under
@@ -31,6 +37,18 @@ make test-user        # user-related tests
 php application/vendor/bin/phpunit -c phpunit.xml.dist
 php application/vendor/bin/phpunit -c phpunit.xml.dist --filter User 2>&1 | tail -20
 ```
+
+# Git & GitHub
+
+Before committing, verify `git config user.name` and `user.email` are set to
+the bot account (`gh-org-bot-odm`). Before pushing or creating PRs, ensure
+the bot is the active `gh` account with:
+
+```bash
+gh auth switch --user gh-org-bot-odm
+```
+
+This applies to all git operations unless told otherwise.
 
 ## Makefile targets
 

@@ -422,4 +422,53 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
     $last_message = msg('message_action_cancelled');
     header('Location: admin?last_message=' . urlencode($last_message));
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'list_json') {
+    if (!$user_obj->isAdmin()) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 403 Forbidden');
+        echo json_encode(['error' => 'Forbidden']);
+        exit;
+    }
+    header('Content-Type: application/json');
+    $categories = Category::getAllCategories($pdo);
+    $categories = array_map(function ($cat) {
+        return ['id' => (int)$cat['id'], 'name' => $cat['name']];
+    }, $categories);
+    echo json_encode($categories);
+    exit;
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add_json') {
+    if (!$user_obj->isAdmin()) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 403 Forbidden');
+        echo json_encode(['error' => 'Forbidden']);
+        exit;
+    }
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 403 Forbidden');
+        echo json_encode(['error' => 'CSRF validation failed']);
+        exit;
+    }
+    $name = trim($_REQUEST['category'] ?? '');
+    if ($name === '') {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 400 Bad Request');
+        echo json_encode(['error' => 'Category name is required']);
+        exit;
+    }
+    $check = $pdo->prepare("SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE name = :name");
+    $check->execute([':name' => $name]);
+    if ($check->fetch()) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 409 Conflict');
+        echo json_encode(['error' => 'Category already exists']);
+        exit;
+    }
+    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES (:name)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([':name' => $name]);
+    $newId = (int)$pdo->lastInsertId();
+    header('Content-Type: application/json');
+    echo json_encode(['success' => true, 'id' => $newId, 'name' => $name]);
+    exit;
 }

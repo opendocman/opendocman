@@ -112,6 +112,7 @@ final class CsrfProtectionTest extends TestCase
             'token' => (string) $bundle['token'],
             'field_name' => (string) $bundle['field_name'],
             'index_name' => (string) $bundle['index_name'],
+            'index' => (string) $bundle['index'],
             'fields' => $fieldsAssoc,
         ];
     }
@@ -230,6 +231,23 @@ final class CsrfProtectionTest extends TestCase
         $_POST[$comment['field_name']] = $comment['fields'][$comment['field_name']];
 
         $this->assertTrue($csrf->validateToken($_POST, '/toBePublished'), 'Second step token should validate');
+    }
+
+    public function testGetTokenForTemplateFieldAndKeysAreConsistent(): void
+    {
+        $this->resetEnv('/category');
+        $bundle = $this->makeTokenFor('/category');
+
+        $this->assertSame(
+            $bundle['fields'][$bundle['field_name']],
+            $bundle['token'],
+            'Token value in rendered HTML must match the raw token key (same generation)'
+        );
+        $this->assertSame(
+            $bundle['fields'][$bundle['index_name']],
+            $bundle['index'],
+            'Index value in rendered HTML must match the raw index key (same generation)'
+        );
     }
 
     /**

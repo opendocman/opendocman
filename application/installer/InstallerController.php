@@ -28,6 +28,7 @@ require_once __DIR__ . '/migrations/Version001400.php';
 require_once __DIR__ . '/migrations/Version001401.php';
 require_once __DIR__ . '/migrations/Version001402.php';
 require_once __DIR__ . '/migrations/Version001500.php';
+require_once __DIR__ . '/migrations/Version001501.php';
 
 class InstallerController
 {
@@ -307,6 +308,7 @@ class InstallerController
                 new Version001401(),
                 new Version001402(),
                 new Version001500(),
+                new Version001501(),
             ]);
 
             // Mark all schema versions as completed (the schema includes all changes)
@@ -359,6 +361,7 @@ class InstallerController
                 new Version001401(),
                 new Version001402(),
                 new Version001500(),
+                new Version001501(),
             ]);
 
             // Seed tracking table with migrations already covered by current DB version
