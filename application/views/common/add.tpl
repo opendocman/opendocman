@@ -53,7 +53,7 @@
                     </select>
                     {if $is_admin}
                     <button type="button" id="showAddCategory" class="btn btn-sm btn-outline-primary mt-1">+ {$g_lang_button_add_category}</button>
-                    <form id="addCategoryForm" class="mt-1 p-2 border rounded" style="display:none">
+                    <form id="addCategoryForm" class="mt-1 p-2 border rounded d-none">
                         {$category_csrf_field}
                         <div class="input-group input-group-sm mb-1">
                             <input type="text" name="category" id="newCategoryName" class="form-control" maxlength="40" placeholder="{$g_lang_label_name}" required>
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!showBtn) return;
 
     function toggleForm(show) {
-        formDiv.style.display = show ? 'block' : 'none';
+        formDiv.classList.toggle('d-none', !show);
         statusEl.textContent = '';
         if (show) nameInput.focus();
     }
