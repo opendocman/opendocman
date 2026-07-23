@@ -127,18 +127,21 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(function (data) {
                 if (!data.success) throw new Error('Save failed');
-                return fetch('category?submit=list_json');
+                var newId = data.id;
+                return fetch('category?submit=list_json').then(function(r) { return r.json(); })
+                    .then(function(cats) { return {cats: cats, newId: newId}; });
             })
-            .then(function (r) { return r.json(); })
-            .then(function (cats) {
+            .then(function (result) {
                 catSelect.innerHTML = '';
-                cats.forEach(function (c) {
+                result.cats.forEach(function (c) {
                     var opt = document.createElement('option');
                     opt.value = c.id;
                     opt.textContent = c.name;
                     catSelect.appendChild(opt);
                 });
-                catSelect.value = cats.length ? cats[cats.length - 1].id : '';
+                if (result.cats.some(function(c) { return c.id === result.newId; })) {
+                    catSelect.value = result.newId;
+                }
                 nameInput.value = '';
                 toggleForm(false);
                 statusEl.textContent = '';

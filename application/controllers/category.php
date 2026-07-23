@@ -424,6 +424,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'list_json') {
     if (!$user_obj->isAdmin()) {
+        header('Content-Type: application/json');
         header('HTTP/1.0 403 Forbidden');
         echo json_encode(['error' => 'Forbidden']);
         exit;
@@ -437,17 +438,20 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     exit;
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'add_json') {
     if (!$user_obj->isAdmin()) {
+        header('Content-Type: application/json');
         header('HTTP/1.0 403 Forbidden');
         echo json_encode(['error' => 'Forbidden']);
         exit;
     }
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Content-Type: application/json');
         header('HTTP/1.0 403 Forbidden');
         echo json_encode(['error' => 'CSRF validation failed']);
         exit;
     }
     $name = trim($_REQUEST['category'] ?? '');
     if ($name === '') {
+        header('Content-Type: application/json');
         header('HTTP/1.0 400 Bad Request');
         echo json_encode(['error' => 'Category name is required']);
         exit;
