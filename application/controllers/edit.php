@@ -153,6 +153,10 @@ if (!isset($_REQUEST['submit'])) {
         if (isset($GLOBALS['csrf'])) {
             $category_csrf = $GLOBALS['csrf']->getTokenForTemplate('/category');
             $GLOBALS['smarty']->assign('category_csrf_field', $category_csrf['field']);
+            $GLOBALS['smarty']->assign('category_csrf_token', $category_csrf['token']);
+            $GLOBALS['smarty']->assign('category_csrf_index', $category_csrf['index']);
+            $GLOBALS['smarty']->assign('csrf_field_name', $category_csrf['field_name']);
+            $GLOBALS['smarty']->assign('csrf_index_name', $category_csrf['index_name']);
         }
 
         display_smarty_template('edit.tpl');

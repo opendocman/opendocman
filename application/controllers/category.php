@@ -456,6 +456,14 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo json_encode(['error' => 'Category name is required']);
         exit;
     }
+    $check = $pdo->prepare("SELECT id FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE name = :name");
+    $check->execute([':name' => $name]);
+    if ($check->fetch()) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 409 Conflict');
+        echo json_encode(['error' => 'Category already exists']);
+        exit;
+    }
     $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES (:name)";
     $stmt = $pdo->prepare($query);
     $stmt->execute([':name' => $name]);

@@ -1,3 +1,9 @@
+# Database schema changes
+
+When modifying the database schema in `SchemaBuilder.php`:
+1. Run `make dump-sql` to regenerate `database.sql`
+2. Bump `ODM_DB_VERSION` in `application/version.php` to trigger the installer
+
 # Translation strings
 
 New `$lang[...]` entries must be added to **all 17 language files** under

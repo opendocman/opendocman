@@ -25,7 +25,8 @@ class SchemaBuilder
             "CREATE TABLE `{$prefix}category` (
                 id int(11) unsigned NOT NULL auto_increment,
                 name varchar(255) NOT NULL default '',
-                PRIMARY KEY  (id)
+                PRIMARY KEY  (id),
+                UNIQUE (name(200))
             ) ENGINE = MYISAM",
 
             "CREATE TABLE `{$prefix}data` (

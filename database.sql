@@ -17,7 +17,8 @@ CREATE TABLE `odm_admin` (
 CREATE TABLE `odm_category` (
                 id int(11) unsigned NOT NULL auto_increment,
                 name varchar(255) NOT NULL default '',
-                PRIMARY KEY  (id)
+                PRIMARY KEY  (id),
+                UNIQUE (name(200))
             ) ENGINE = MYISAM;
 
 CREATE TABLE `odm_data` (
@@ -86,12 +87,12 @@ CREATE TABLE `odm_user` (
                 Email varchar(50) default NULL,
                 last_name varchar(255) default NULL,
                 first_name varchar(255) default NULL,
-    pw_reset_code char(32) default NULL,
-    pw_change_required tinyint(1) NOT NULL DEFAULT 0,
-    can_add tinyint(1) NULL DEFAULT 1,
-    can_checkin tinyint(1) NULL DEFAULT 1,
-    PRIMARY KEY  (id)
-) ENGINE = MYISAM;
+                pw_reset_code char(32) default NULL,
+                pw_change_required tinyint(1) NOT NULL DEFAULT 0,
+                can_add tinyint(1) NULL DEFAULT 1,
+                can_checkin tinyint(1) NULL DEFAULT 1,
+                PRIMARY KEY  (id)
+            ) ENGINE = MYISAM;
 
 CREATE TABLE `odm_user_perms` (
                 fid int(11) unsigned default NULL,

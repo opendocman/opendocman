@@ -1,6 +1,6 @@
 <script src="{$g_base_url}js/functions.js"></script>
 
-<form id="addeditform" name="main" action="edit" method="POST" enctype="multipart/form-data" onsubmit="return checksec();" novalidate class="needs-validation">
+<form id="addeditform" name="main" action="edit" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
     {$csrf_token_field}
     <input type="hidden" id="db_prefix" value="{$db_prefix}" />
 
@@ -52,15 +52,14 @@
                     </select>
                     {if $is_admin}
                     <button type="button" id="showAddCategory" class="btn btn-sm btn-outline-primary mt-1">+ {$g_lang_button_add_category}</button>
-                    <form id="addCategoryForm" class="mt-1 p-2 border rounded d-none">
-                        {$category_csrf_field}
+                    <div id="addCategoryForm" class="mt-1 p-2 border rounded d-none">
                         <div class="input-group input-group-sm mb-1">
-                            <input type="text" name="category" id="newCategoryName" class="form-control" maxlength="40" placeholder="{$g_lang_label_name}" required>
+                            <input type="text" id="newCategoryName" class="form-control" maxlength="40" placeholder="{$g_lang_label_name}" required>
                             <button type="button" id="saveCategory" class="btn btn-primary">{$g_lang_button_add_category}</button>
                             <button type="button" id="cancelCategory" class="btn btn-secondary">{$g_lang_button_cancel}</button>
                         </div>
                         <span id="categoryStatus" class="small"></span>
-                    </form>
+                    </div>
                     {/if}
                 </div>
 
@@ -87,6 +86,12 @@
                     <textarea name="comment" rows="4" class="form-control" onchange="this.value=enforceLength(this.value, 255);">{$comment|escape:'html'}</textarea>
                 </div>
 
+<script>
+    var CSRF_FIELD_NAME = '{$csrf_field_name}';
+    var CSRF_INDEX_NAME = '{$csrf_index_name}';
+    var CSRF_FIELD_VALUE = '{$category_csrf_token}';
+    var CSRF_INDEX_VALUE = '{$category_csrf_index}';
+</script>
 {literal}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -112,9 +117,21 @@ document.addEventListener('DOMContentLoaded', function() {
     saveBtn.addEventListener('click', function () {
         var name = nameInput.value.trim();
         if (!name) { statusEl.textContent = 'Name required'; nameInput.focus(); return; }
-
         nameInput.value = name;
-        var fd = new FormData(formDiv);
+
+        var opts = catSelect.options;
+        for (var i = 0; i < opts.length; i++) {
+            if (opts[i].textContent.toLowerCase() === name.toLowerCase()) {
+                statusEl.textContent = 'Category already exists';
+                nameInput.focus();
+                return;
+            }
+        }
+
+        var fd = new FormData();
+        fd.append('category', name);
+        fd.append(CSRF_FIELD_NAME, CSRF_FIELD_VALUE);
+        fd.append(CSRF_INDEX_NAME, CSRF_INDEX_VALUE);
         fd.append('submit', 'add_json');
 
         statusEl.textContent = 'Saving...';

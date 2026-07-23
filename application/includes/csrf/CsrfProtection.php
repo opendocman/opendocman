@@ -265,11 +265,17 @@ class CsrfProtection
         if (empty($action)) {
             $action = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         }
+        $tokenArray = $this->csrf->getTokenArray($action);
+        $fieldName = $this->csrf->getFormToken();
+        $indexName = $this->csrf->getFormIndex();
+        $field = '<input type="hidden" name="' . $fieldName . '" value="' . $tokenArray[$fieldName] . '" />'
+               . '<input type="hidden" name="' . $indexName . '" value="' . $tokenArray[$indexName] . '" />';
         return [
-            'field' => $this->getTokenField($action),
-            'token' => $this->getToken($action),
-            'field_name' => $this->csrf->getFormToken(),
-            'index_name' => $this->csrf->getFormIndex()
+            'field' => $field,
+            'token' => $tokenArray[$fieldName],
+            'field_name' => $fieldName,
+            'index_name' => $indexName,
+            'index' => $tokenArray[$indexName]
         ];
     }
     
