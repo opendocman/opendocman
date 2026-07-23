@@ -514,4 +514,5 @@ $lang['change_password_error_mismatch'] = 'Parolele noi pe care le-ați introdus
 $lang['change_password_error_current'] = 'Parola dvs. curentă este incorectă.';
 $lang['change_password_error_empty'] = 'Vă rugăm să completați toate câmpurile parolei.';
 $lang['change_password_error_same'] = 'Parola nouă trebuie să fie diferită de parola curentă.';
+$lang['label_search_file_contents'] = 'Search file contents';
 

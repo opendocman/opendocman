@@ -513,4 +513,5 @@ $lang['change_password_error_mismatch'] = 'Las nuevas contraseñas que ingresó 
 $lang['change_password_error_current'] = 'Su contraseña actual es incorrecta.';
 $lang['change_password_error_empty'] = 'Por favor complete todos los campos de contraseña.';
 $lang['change_password_error_same'] = 'La nueva contraseña debe ser diferente de la contraseña actual.';
+$lang['label_search_file_contents'] = 'Search file contents';
 

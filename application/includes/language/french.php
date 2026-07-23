@@ -514,5 +514,6 @@ $lang['change_password_error_mismatch'] = 'Les nouveaux mots de passe que vous a
 $lang['change_password_error_current'] = 'Votre mot de passe actuel est incorrect.';
 $lang['change_password_error_empty'] = 'Veuillez remplir tous les champs de mot de passe.';
 $lang['change_password_error_same'] = 'Le nouveau mot de passe doit être différent du mot de passe actuel.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
 

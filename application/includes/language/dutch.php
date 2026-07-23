@@ -514,4 +514,5 @@ $lang['change_password_error_mismatch'] = 'De nieuwe wachtwoorden die u hebt ing
 $lang['change_password_error_current'] = 'Uw huidige wachtwoord is onjuist.';
 $lang['change_password_error_empty'] = 'Vul alle wachtwoordvelden in.';
 $lang['change_password_error_same'] = 'Het nieuwe wachtwoord moet anders zijn dan het huidige wachtwoord.';
+$lang['label_search_file_contents'] = 'Search file contents';
 

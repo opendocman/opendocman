@@ -515,4 +515,5 @@ $lang['change_password_error_mismatch'] = '您输入的新密码不匹配。';
 $lang['change_password_error_current'] = '您当前的密码不正确。';
 $lang['change_password_error_empty'] = '请填写所有密码字段。';
 $lang['change_password_error_same'] = '新密码必须与当前密码不同。';
+$lang['label_search_file_contents'] = 'Search file contents';
 

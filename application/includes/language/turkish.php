@@ -541,5 +541,6 @@ $lang['change_password_error_mismatch'] = 'Girdiğiniz yeni şifreler eşleşmiy
 $lang['change_password_error_current'] = 'Mevcut şifreniz yanlış.';
 $lang['change_password_error_empty'] = 'Lütfen tüm şifre alanlarını doldurun.';
 $lang['change_password_error_same'] = 'Yeni şifre, mevcut şifreden farklı olmalıdır.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
 ?>

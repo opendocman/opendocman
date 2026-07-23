@@ -514,4 +514,5 @@ $lang['change_password_error_mismatch'] = 'আপনার প্রবেশ �
 $lang['change_password_error_current'] = 'আপনার বর্তমান পাসওয়ার্ড ভুল।';
 $lang['change_password_error_empty'] = 'অনুগ্রহ করে সমস্ত পাসওয়ার্ড ক্ষেত্র পূরণ করুন।';
 $lang['change_password_error_same'] = 'নতুন পাসওয়ার্ডটি বর্তমান পাসওয়ার্ড থেকে ভিন্ন হতে হবে।';
+$lang['label_search_file_contents'] = 'Search file contents';
 

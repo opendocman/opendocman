@@ -515,4 +515,5 @@ $lang['change_password_error_mismatch'] = 'Nove lozinke koje ste unijeli se ne p
 $lang['change_password_error_current'] = 'Vaša trenutna lozinka nije ispravna.';
 $lang['change_password_error_empty'] = 'Molimo ispunite sva polja lozinke.';
 $lang['change_password_error_same'] = 'Nova lozinka mora biti različita od trenutne lozinke.';
+$lang['label_search_file_contents'] = 'Search file contents';
 

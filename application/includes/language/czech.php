@@ -515,4 +515,5 @@ $lang['change_password_error_mismatch'] = 'Zadaná nová hesla se neshodují.';
 $lang['change_password_error_current'] = 'Vaše současné heslo není správné.';
 $lang['change_password_error_empty'] = 'Vyplňte prosím všechna pole pro heslo.';
 $lang['change_password_error_same'] = 'Nové heslo se musí lišit od současného hesla.';
+$lang['label_search_file_contents'] = 'Search file contents';
 

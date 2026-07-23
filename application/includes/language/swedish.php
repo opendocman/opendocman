@@ -515,4 +515,5 @@ $lang['change_password_error_mismatch'] = 'De nya lösenorden du angav matchar i
 $lang['change_password_error_current'] = 'Ditt nuvarande lösenord är felaktigt.';
 $lang['change_password_error_empty'] = 'Fyll i alla lösenordsfält.';
 $lang['change_password_error_same'] = 'Det nya lösenordet måste skilja sig från det nuvarande lösenordet.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
