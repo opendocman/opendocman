@@ -51,6 +51,17 @@
                         <option value="{$cat.id}">{$cat.name|escape:'html'}</option>
                     {/foreach}
                     </select>
+                    {if $is_admin}
+                    <button type="button" id="showAddCategory" class="btn btn-sm btn-outline-primary mt-1">+ {$g_lang_button_add_category}</button>
+                    <div id="addCategoryForm" class="mt-1 p-2 border rounded" style="display:none">
+                        <div class="input-group input-group-sm mb-1">
+                            <input type="text" id="newCategoryName" class="form-control" maxlength="40" placeholder="{$g_lang_label_name}" required>
+                            <button type="button" id="saveCategory" class="btn btn-primary">{$g_lang_button_add_category}</button>
+                            <button type="button" id="cancelCategory" class="btn btn-secondary">{$g_lang_button_cancel}</button>
+                        </div>
+                        <span id="categoryStatus" class="small"></span>
+                    </div>
+                    {/if}
                 </div>
 
                 <div class="mb-3 full-width" id="departmentSelect">
@@ -75,3 +86,69 @@
                     </label>
                     <textarea name="comment" rows="4" class="form-control" onchange="this.value=enforceLength(this.value, 255);"></textarea>
                 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var showBtn = document.getElementById('showAddCategory');
+    var formDiv = document.getElementById('addCategoryForm');
+    var cancelBtn = document.getElementById('cancelCategory');
+    var saveBtn = document.getElementById('saveCategory');
+    var nameInput = document.getElementById('newCategoryName');
+    var statusEl = document.getElementById('categoryStatus');
+    var catSelect = document.querySelector('select[name="category"]');
+
+    if (!showBtn) return;
+
+    function toggleForm(show) {
+        formDiv.style.display = show ? 'block' : 'none';
+        statusEl.textContent = '';
+        if (show) nameInput.focus();
+    }
+
+    showBtn.addEventListener('click', function () { toggleForm(true); });
+    cancelBtn.addEventListener('click', function () { toggleForm(false); });
+
+    saveBtn.addEventListener('click', function () {
+        var name = nameInput.value.trim();
+        if (!name) { statusEl.textContent = 'Name required'; nameInput.focus(); return; }
+
+        var fd = new FormData();
+        fd.append('submit', 'add_json');
+        fd.append('category', name);
+        fd.append(window.csrf_field_name, window.csrf_token);
+
+        statusEl.textContent = 'Saving...';
+        saveBtn.disabled = true;
+
+        fetch('category', { method: 'POST', body: fd })
+            .then(function (r) {
+                if (!r.ok) return r.json().then(function (e) { throw new Error(e.error || 'Save failed'); });
+                return r.json();
+            })
+            .then(function (data) {
+                if (!data.success) throw new Error('Save failed');
+                return fetch('category?submit=list_json');
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (cats) {
+                catSelect.innerHTML = '';
+                cats.forEach(function (c) {
+                    var opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    catSelect.appendChild(opt);
+                });
+                catSelect.value = cats.length ? cats[cats.length - 1].id : '';
+                nameInput.value = '';
+                toggleForm(false);
+                statusEl.textContent = '';
+            })
+            .catch(function (err) {
+                statusEl.textContent = 'Error: ' + err.message;
+            })
+            .finally(function () {
+                saveBtn.disabled = false;
+            });
+    });
+});
+</script>
