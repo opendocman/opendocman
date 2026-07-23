@@ -54,6 +54,7 @@
                     {if $is_admin}
                     <button type="button" id="showAddCategory" class="btn btn-sm btn-outline-primary mt-1">+ {$g_lang_button_add_category}</button>
                     <div id="addCategoryForm" class="mt-1 p-2 border rounded" style="display:none">
+                        {$category_csrf_field}
                         <div class="input-group input-group-sm mb-1">
                             <input type="text" id="newCategoryName" class="form-control" maxlength="40" placeholder="{$g_lang_label_name}" required>
                             <button type="button" id="saveCategory" class="btn btn-primary">{$g_lang_button_add_category}</button>
@@ -116,7 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var fd = new FormData();
         fd.append('submit', 'add_json');
         fd.append('category', name);
-        fd.append(window.csrf_field_name, window.csrf_token);
+        // Include the CSRF fields rendered in the inline form for /category action
+        var csrfInputs = formDiv.querySelectorAll('input[type="hidden"]');
+        csrfInputs.forEach(function(input) { fd.append(input.name, input.value); });
 
         statusEl.textContent = 'Saving...';
         saveBtn.disabled = true;

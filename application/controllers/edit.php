@@ -148,7 +148,13 @@ if (!isset($_REQUEST['submit'])) {
         $GLOBALS['smarty']->assign('description', $description);
         $GLOBALS['smarty']->assign('comment', $comment);
         $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
-       
+
+        // Generate CSRF token for the category AJAX endpoint (different action from the page)
+        if (isset($GLOBALS['csrf'])) {
+            $category_csrf = $GLOBALS['csrf']->getTokenForTemplate('/category');
+            $GLOBALS['smarty']->assign('category_csrf_field', $category_csrf['field']);
+        }
+
         display_smarty_template('edit.tpl');
         udf_edit_file_form();
 
