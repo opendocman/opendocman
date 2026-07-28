@@ -517,3 +517,10 @@ $lang['change_password_error_empty'] = 'Vyplňte prosím všechna pole pro heslo
 $lang['change_password_error_same'] = 'Nové heslo se musí lišit od současného hesla.';
 $lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

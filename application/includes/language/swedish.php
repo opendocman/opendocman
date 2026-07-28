@@ -517,3 +517,10 @@ $lang['change_password_error_empty'] = 'Fyll i alla lösenordsfält.';
 $lang['change_password_error_same'] = 'Det nya lösenordet måste skilja sig från det nuvarande lösenordet.';
 $lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

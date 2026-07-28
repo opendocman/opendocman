@@ -32,8 +32,7 @@ if (!isset($_SESSION['uid'])) {
     exit;
 }
 
-// DEBUG
-file_put_contents('/tmp/file_list_ajax_debug.log', "Script reached at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
 
 $pdo = $GLOBALS['pdo'];
 $db_prefix = $GLOBALS['CONFIG']['db_prefix'];
@@ -47,6 +46,9 @@ $user_perms = new UserPermission($_SESSION['uid'], $pdo);
 $is_admin = $user_obj->isAdmin();
 
 // Step 1: Get all viewable file IDs (permission check, fast integer query)
+
+$search_content = '';
+$keyword_raw = '';
 
 // Search mode — overrides state when keyword is provided
 if (isset($_REQUEST['keyword']) && $_REQUEST['keyword'] !== '') {
@@ -356,6 +358,12 @@ foreach ($page_ids as $fileid) {
             if ($start + 150 < mb_strlen($fullText)) {
                 $snippet .= '...';
             }
+            $snippet = htmlspecialchars($snippet, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $snippet = preg_replace(
+                '/' . preg_quote($keyword_raw, '/') . '/i',
+                '<strong>$0</strong>',
+                $snippet
+            );
         }
     }
 

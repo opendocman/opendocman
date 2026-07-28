@@ -517,3 +517,10 @@ $lang['change_password_error_empty'] = 'يرجى ملء جميع حقول كلم
 $lang['change_password_error_same'] = 'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.';
 $lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

@@ -515,3 +515,10 @@ $lang['change_password_error_empty'] = 'Por favor complete todos los campos de c
 $lang['change_password_error_same'] = 'La nueva contraseña debe ser diferente de la contraseña actual.';
 $lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

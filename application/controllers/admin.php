@@ -114,6 +114,7 @@ $request_state = e::h(($_REQUEST['state']+1));
             <div class="list-group list-group-flush">
                 <a href="<?php echo 'settings?submit=update&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('adminpage_edit_settings')?></a>
                 <a href="<?php echo 'filetypes?submit=update&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('adminpage_edit_filetypes')?></a>
+                <a href="content_index" class="list-group-item list-group-item-action"><?php echo msg('label_content_search_index')?></a>
             </div>
         </div>
     </div>
