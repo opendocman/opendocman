@@ -148,7 +148,7 @@ class SchemaBuilder
     {
         $adminPassword = $options['admin_password'] ?? md5('admin');
         $dataDir = $options['datadir'] ?? '/var/www/document_repository/';
-        $snapshotDir = $options['snapshotdir'] ?? $dataDir . 'snapshots/';
+        $snapshotDir = $options['snapshotdir'] ?? '/var/www/snapshots/';
 
         return [
             "INSERT INTO `{$prefix}admin` VALUES (1,1)",

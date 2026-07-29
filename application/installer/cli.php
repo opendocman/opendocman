@@ -77,7 +77,7 @@ class CliCommand
         $prefix = 'odm_';
         $adminPassword = 'admin';
         $dataDir = '/var/www/document_repository/';
-        $snapshotDir = $dataDir . 'snapshots/';
+        $snapshotDir = '/var/www/snapshots/';
 
         for ($i = 2; $i < count($argv); $i++) {
             if (strpos($argv[$i], '--prefix=') === 0) {
