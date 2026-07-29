@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.4.0-release](https://github.com/opendocman/opendocman/compare/v2.3.0-release...v2.4.0-release) (2026-07-29)
+
+
+### Features
+
+* add file content search with full-text indexing ([#1](https://github.com/opendocman/opendocman/issues/1)) ([#396](https://github.com/opendocman/opendocman/issues/396)) ([72424bc](https://github.com/opendocman/opendocman/commit/72424bcdaa1cd5c177260d16f48c7e80934e5ce6))
+* inline "add category" AJAX form on Add/Edit File pages ([#395](https://github.com/opendocman/opendocman/issues/395)) ([20049c3](https://github.com/opendocman/opendocman/commit/20049c386d6f3b3f738f6a3f9808d88f99abb778))
+* require password change on first login after account creation ([#394](https://github.com/opendocman/opendocman/issues/394)) ([4f0994c](https://github.com/opendocman/opendocman/commit/4f0994c18ab372b5a6891458ea4661a05a611978))
+
 ## [2.3.0-release](https://github.com/opendocman/opendocman/compare/v2.2.0-release...v2.3.0-release) (2026-07-22)
 
 
