@@ -263,9 +263,7 @@ class CliCommand
         $snapshotDir = $settings['snapshotDir'] ?? null;
 
         if ($snapshotDir === null) {
-            $snapshotDir = defined('ABSPATH')
-                ? dirname(ABSPATH) . '/snapshots/'
-                : '/var/www/snapshots/';
+            $snapshotDir = sys_get_temp_dir() . '/odm_snapshots/';
         }
 
         return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
