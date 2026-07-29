@@ -42,7 +42,7 @@ if (!defined('SnapshotManager_class')) {
             $snapshots = [];
             $items = scandir($this->snapshotDir);
             foreach ($items as $item) {
-                if ($item === '.' || $item === '..') continue;
+                if ($item === '.' || $item === '..' || $item === 'latest') continue;
                 $metaPath = $this->snapshotDir . $item . '/metadata.json';
                 if (!is_file($metaPath)) continue;
                 $data = json_decode(file_get_contents($metaPath), true);
