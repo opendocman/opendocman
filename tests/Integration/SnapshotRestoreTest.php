@@ -56,23 +56,22 @@ class SnapshotRestoreTest extends TestCase
         // SHOW TABLES (query, no execute)
         $tableStmt = \Mockery::mock(\PDOStatement::class);
         $tableStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(['odm_settings']);
+        $pdo->shouldReceive('quote')->with('odm_%')->once()->andReturn("'odm_%'");
         $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
 
         // SHOW CREATE TABLE
         $createStmt = \Mockery::mock(\PDOStatement::class);
-        $createStmt->shouldReceive('execute')->once()->andReturn(true);
         $createStmt->shouldReceive('fetch')->with(\PDO::FETCH_ASSOC)->once()->andReturn(
             ['Table' => 'odm_settings', 'Create Table' => "CREATE TABLE `odm_settings` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) NOT NULL,\n  `value` text,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB"]
         );
-        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW CREATE TABLE/'))->once()->andReturn($createStmt);
+        $pdo->shouldReceive('query')->with("SHOW CREATE TABLE `odm_settings`")->once()->andReturn($createStmt);
 
         // SHOW COLUMNS
         $colStmt = \Mockery::mock(\PDOStatement::class);
-        $colStmt->shouldReceive('execute')->once()->andReturn(true);
         $colStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(
             ['id', 'name', 'value']
         );
-        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW COLUMNS/'))->once()->andReturn($colStmt);
+        $pdo->shouldReceive('query')->with("SHOW COLUMNS FROM `odm_settings`")->once()->andReturn($colStmt);
 
         // SELECT * (query, no execute)
         $dataStmt = \Mockery::mock(\PDOStatement::class);
@@ -97,11 +96,14 @@ class SnapshotRestoreTest extends TestCase
 
         // Restore path mocks
         $tableStmt2 = \Mockery::mock(\PDOStatement::class);
-        $tableStmt2->shouldReceive('execute')->once()->andReturn(true);
         $tableStmt2->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(
             ['odm_settings']
         );
-        $pdo->shouldReceive('prepare')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt2);
+        $pdo->shouldReceive('quote')->with('odm_%')->once()->andReturn("'odm_%'");
+        $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt2);
+
+        $pdo->shouldReceive('beginTransaction')->once()->andReturn(true);
+        $pdo->shouldReceive('commit')->once()->andReturn(true);
 
         $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 0')->once()->andReturn(0);
         $pdo->shouldReceive('exec')->with("DROP TABLE IF EXISTS `odm_settings`")->once()->andReturn(0);

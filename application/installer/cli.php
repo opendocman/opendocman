@@ -277,6 +277,8 @@ class CliCommand
         $manager = $this->getSnapshotManager();
         $manager->restore($name);
         echo "Snapshot restored: {$name}\n";
+
+        $this->migrate();
     }
 
     private function snapshotList(): void
@@ -328,6 +330,8 @@ class CliCommand
         $stmt = $pdo->prepare("UPDATE `{$prefix}settings` SET value = 'True' WHERE name = 'demo'");
         $stmt->execute();
         echo "Demo mode enabled.\n";
+
+        $this->migrate();
     }
 
     private function getArg(array $argv, string $prefix): ?string

@@ -47,6 +47,15 @@ if (!defined('SnapshotManager_class')) {
                 throw new \InvalidArgumentException("Snapshot not found: {$name}");
             }
             $this->rrmdir($path);
+
+            $latestPath = $this->snapshotDir . 'latest';
+            if (is_link($latestPath) && readlink($latestPath) === $name) {
+                unlink($latestPath);
+                $snapshots = $this->list();
+                if (!empty($snapshots)) {
+                    symlink($snapshots[0]->name, $latestPath);
+                }
+            }
         }
 
         protected function validateName(string $name): void
@@ -92,6 +101,9 @@ if (!defined('SnapshotManager_class')) {
                     json_encode($snapshot->toJsonArray(), JSON_PRETTY_PRINT)
                 );
                 chmod($snapshotPath . '/metadata.json', 0600);
+                chmod($dbPath, 0600);
+                chmod($filesPath, 0600);
+                chmod($snapshotPath, 0700);
 
                 // Update latest symlink
                 $latest = $this->snapshotDir . 'latest';
@@ -110,28 +122,29 @@ if (!defined('SnapshotManager_class')) {
         private function exportDatabase(string $outputPath): int
         {
             $gz = gzopen($outputPath, 'w9');
+            if ($gz === false) {
+                throw new \RuntimeException("Failed to open gzip output: {$outputPath}");
+            }
 
-            $stmt = $this->pdo->query("SHOW TABLES LIKE '{$this->dbPrefix}%'");
+            $stmt = $this->pdo->query("SHOW TABLES LIKE " . $this->pdo->quote($this->dbPrefix . '%'));
             $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
             foreach ($tables as $table) {
-                $createStmt = $this->pdo->prepare("SHOW CREATE TABLE `{$table}`");
-                $createStmt->execute();
+                $createStmt = $this->pdo->query("SHOW CREATE TABLE " . $this->quoteTable($table));
                 $row = $createStmt->fetch(\PDO::FETCH_ASSOC);
                 gzwrite($gz, $row['Create Table'] . ";\n\n");
 
-                $colStmt = $this->pdo->prepare("SHOW COLUMNS FROM `{$table}`");
-                $colStmt->execute();
+                $colStmt = $this->pdo->query("SHOW COLUMNS FROM " . $this->quoteTable($table));
                 $columns = $colStmt->fetchAll(\PDO::FETCH_COLUMN);
 
-                $dataStmt = $this->pdo->query("SELECT * FROM `{$table}`");
+                $dataStmt = $this->pdo->query("SELECT * FROM " . $this->quoteTable($table));
                 $rows = $dataStmt->fetchAll(\PDO::FETCH_NUM);
 
                 if (count($rows) > 0) {
                     $colList = '`' . implode('`, `', $columns) . '`';
                     foreach ($rows as $row) {
                         $escaped = array_map([$this->pdo, 'quote'], $row);
-                        gzwrite($gz, "INSERT INTO `{$table}` ({$colList}) VALUES (" . implode(', ', $escaped) . ");\n");
+                        gzwrite($gz, "INSERT INTO " . $this->quoteTable($table) . " ({$colList}) VALUES (" . implode(', ', $escaped) . ");\n");
                     }
                     gzwrite($gz, "\n");
                 }
@@ -167,20 +180,22 @@ if (!defined('SnapshotManager_class')) {
                 throw new \RuntimeException("Snapshot missing files.tar.gz: {$name}");
             }
 
-            // Drop all existing odm_ tables
-            $this->dropAllTables();
+            $this->pdo->beginTransaction();
+            try {
+                $this->dropAllTables();
+                $this->importDatabase($dbPath);
+                $this->pdo->commit();
+            } catch (\Exception $e) {
+                $this->pdo->rollBack();
+                throw $e;
+            }
 
-            // Import database
-            $this->importDatabase($dbPath);
-
-            // Wipe and restore files
             $this->restoreFiles($filesPath);
         }
 
         private function dropAllTables(): void
         {
-            $stmt = $this->pdo->prepare("SHOW TABLES LIKE '{$this->dbPrefix}%'");
-            $stmt->execute();
+            $stmt = $this->pdo->query("SHOW TABLES LIKE " . $this->pdo->quote($this->dbPrefix . '%'));
             $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
             if (count($tables) === 0) {
@@ -189,7 +204,7 @@ if (!defined('SnapshotManager_class')) {
 
             $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
             foreach ($tables as $table) {
-                $this->pdo->exec("DROP TABLE IF EXISTS `{$table}`");
+                $this->pdo->exec("DROP TABLE IF EXISTS " . $this->quoteTable($table));
             }
             $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
         }
@@ -197,20 +212,28 @@ if (!defined('SnapshotManager_class')) {
         private function importDatabase(string $dbPath): void
         {
             $gz = gzopen($dbPath, 'r');
+            if ($gz === false) {
+                throw new \RuntimeException("Failed to open gzip input: {$dbPath}");
+            }
+
             $sql = '';
             while (!gzeof($gz)) {
                 $sql .= gzread($gz, 65536);
             }
             gzclose($gz);
 
-            // Execute each statement separately
-            $statements = explode(";\n", $sql);
+            $statements = preg_split('/;\s*\n/', $sql);
             foreach ($statements as $statement) {
                 $statement = trim($statement);
                 if ($statement !== '') {
                     $this->pdo->exec($statement);
                 }
             }
+        }
+
+        private function quoteTable(string $name): string
+        {
+            return '`' . str_replace('`', '``', $name) . '`';
         }
 
         private function restoreFiles(string $filesPath): void

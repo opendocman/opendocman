@@ -166,13 +166,17 @@ class SnapshotManagerTest extends TestCase
 
         // Mock PDO for dropping tables
         $tableStmt = \Mockery::mock(\PDOStatement::class);
-        $tableStmt->shouldReceive('execute')->once()->andReturn(true);
         $tableStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn([
             'odm_user', 'odm_settings'
         ]);
 
         $pdo = \Mockery::mock(\PDO::class);
-        $pdo->shouldReceive('prepare')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
+        $pdo->shouldReceive('quote')->with('odm_%')->once()->andReturn("'odm_%'");
+        $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
+
+        // Expect transaction wrapping
+        $pdo->shouldReceive('beginTransaction')->once()->andReturn(true);
+        $pdo->shouldReceive('commit')->once()->andReturn(true);
 
         // Expect DROP TABLE statements (disable FK checks first)
         $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 0')->once()->andReturn(0);
@@ -201,21 +205,20 @@ class SnapshotManagerTest extends TestCase
         $tableStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(['odm_settings']);
 
         $pdo = \Mockery::mock(\PDO::class);
+        $pdo->shouldReceive('quote')->with('odm_%')->once()->andReturn("'odm_%'");
         $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
 
         // SHOW CREATE TABLE
         $createStmt = \Mockery::mock(\PDOStatement::class);
-        $createStmt->shouldReceive('execute')->once()->andReturn(true);
         $createStmt->shouldReceive('fetch')->with(\PDO::FETCH_ASSOC)->once()->andReturn(
             ['Table' => 'odm_settings', 'Create Table' => "CREATE TABLE `odm_settings` (\n  `id` int(11) NOT NULL\n) ENGINE=InnoDB"]
         );
-        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW CREATE TABLE/'))->once()->andReturn($createStmt);
+        $pdo->shouldReceive('query')->with("SHOW CREATE TABLE `odm_settings`")->once()->andReturn($createStmt);
 
         // SHOW COLUMNS
         $colStmt = \Mockery::mock(\PDOStatement::class);
-        $colStmt->shouldReceive('execute')->once()->andReturn(true);
         $colStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(['id', 'name', 'value']);
-        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW COLUMNS/'))->once()->andReturn($colStmt);
+        $pdo->shouldReceive('query')->with("SHOW COLUMNS FROM `odm_settings`")->once()->andReturn($colStmt);
 
         // SELECT *
         $dataStmt = \Mockery::mock(\PDOStatement::class);
