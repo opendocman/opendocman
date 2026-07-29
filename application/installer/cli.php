@@ -25,6 +25,8 @@ require_once __DIR__ . '/migrations/Version001400.php';
 require_once __DIR__ . '/migrations/Version001401.php';
 require_once __DIR__ . '/migrations/Version001402.php';
 require_once __DIR__ . '/migrations/Version001500.php';
+require_once __DIR__ . '/migrations/Version001501.php';
+require_once __DIR__ . '/migrations/Version001600.php';
 require_once __DIR__ . '/../models/Snapshot.class.php';
 require_once __DIR__ . '/../models/SnapshotManager.class.php';
 
@@ -75,6 +77,7 @@ class CliCommand
         $prefix = 'odm_';
         $adminPassword = 'admin';
         $dataDir = '/var/www/document_repository/';
+        $snapshotDir = $dataDir . 'snapshots/';
 
         for ($i = 2; $i < count($argv); $i++) {
             if (strpos($argv[$i], '--prefix=') === 0) {
@@ -83,6 +86,8 @@ class CliCommand
                 $adminPassword = substr($argv[$i], 17);
             } elseif (strpos($argv[$i], '--datadir=') === 0) {
                 $dataDir = substr($argv[$i], 10);
+            } elseif (strpos($argv[$i], '--snapshotdir=') === 0) {
+                $snapshotDir = substr($argv[$i], 14);
             }
         }
 
@@ -90,6 +95,7 @@ class CliCommand
         echo $builder->buildFullDump($prefix, [
             'admin_password' => $adminPassword,
             'datadir' => $dataDir,
+            'snapshotdir' => $snapshotDir,
         ]);
     }
 
@@ -138,6 +144,8 @@ class CliCommand
             new Version001401(),
             new Version001402(),
             new Version001500(),
+            new Version001501(),
+            new Version001600(),
         ]);
 
         $currentVersion = $dbManager->getDbVersion($prefix);
@@ -206,6 +214,8 @@ class CliCommand
             new Version001401(),
             new Version001402(),
             new Version001500(),
+            new Version001501(),
+            new Version001600(),
         ]);
 
         $rows = $runner->status();
