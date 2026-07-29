@@ -25,6 +25,8 @@ require_once __DIR__ . '/migrations/Version001400.php';
 require_once __DIR__ . '/migrations/Version001401.php';
 require_once __DIR__ . '/migrations/Version001402.php';
 require_once __DIR__ . '/migrations/Version001500.php';
+require_once __DIR__ . '/../models/Snapshot.class.php';
+require_once __DIR__ . '/../models/SnapshotManager.class.php';
 
 class CliCommand
 {
@@ -46,6 +48,21 @@ class CliCommand
                 break;
             case 'status':
                 $this->status();
+                break;
+            case 'snapshot:create':
+                $this->snapshotCreate($argv);
+                break;
+            case 'snapshot:restore':
+                $this->snapshotRestore($argv);
+                break;
+            case 'snapshot:list':
+                $this->snapshotList();
+                break;
+            case 'snapshot:delete':
+                $this->snapshotDelete($argv);
+                break;
+            case 'demo:refresh':
+                $this->demoRefresh();
                 break;
             default:
                 $this->printUsage();
@@ -201,6 +218,125 @@ class CliCommand
         }
     }
 
+    private function getSnapshotManager(): SnapshotManager
+    {
+        $configManager = new \ConfigManager();
+        $config = $configManager->loadConfig();
+        $dbManager = new \DatabaseManager(
+            $config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass']
+        );
+        $pdo = $dbManager->connect();
+        $prefix = $config['db_prefix'];
+
+        $stmt = $pdo->query("SELECT `name`, `value` FROM `{$prefix}settings` WHERE `name` IN ('dataDir', 'snapshotDir')");
+        $settings = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $settings[$row['name']] = $row['value'];
+        }
+
+        $dataDir = $settings['dataDir'] ?? '/var/www/document_repository/';
+        $snapshotDir = $settings['snapshotDir'] ?? '/var/www/snapshots/';
+
+        if (!is_dir($snapshotDir)) {
+            @mkdir($snapshotDir, 0700, true);
+        }
+
+        return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
+    }
+
+    private function snapshotCreate(array $argv): void
+    {
+        $name = $this->getArg($argv, '--name=');
+        if (!$name) {
+            echo "Error: --name= is required\n";
+            exit(1);
+        }
+        $description = $this->getArg($argv, '--description=');
+
+        $manager = $this->getSnapshotManager();
+        $snapshot = $manager->create($name, $description);
+        echo "Snapshot created: {$snapshot->name}\n";
+        echo "  DB size: {$snapshot->dbSize} bytes\n";
+        echo "  Files size: {$snapshot->filesSize} bytes\n";
+    }
+
+    private function snapshotRestore(array $argv): void
+    {
+        $name = $this->getArg($argv, '--name=') ?: 'latest';
+
+        $manager = $this->getSnapshotManager();
+        $manager->restore($name);
+        echo "Snapshot restored: {$name}\n";
+    }
+
+    private function snapshotList(): void
+    {
+        $manager = $this->getSnapshotManager();
+        $snapshots = $manager->list();
+
+        if (empty($snapshots)) {
+            echo "No snapshots found.\n";
+            return;
+        }
+
+        echo str_pad('Name', 30) . str_pad('Created', 30) . str_pad('DB Size', 15) . "Files Size\n";
+        echo str_repeat('-', 90) . "\n";
+        foreach ($snapshots as $snap) {
+            echo str_pad($snap->name, 30)
+                . str_pad($snap->createdAt->format('Y-m-d H:i:s'), 30)
+                . str_pad($this->formatBytes($snap->dbSize), 15)
+                . $this->formatBytes($snap->filesSize) . "\n";
+        }
+    }
+
+    private function snapshotDelete(array $argv): void
+    {
+        $name = $this->getArg($argv, '--name=');
+        if (!$name) {
+            echo "Error: --name= is required\n";
+            exit(1);
+        }
+
+        $manager = $this->getSnapshotManager();
+        $manager->delete($name);
+        echo "Snapshot deleted: {$name}\n";
+    }
+
+    private function demoRefresh(): void
+    {
+        $manager = $this->getSnapshotManager();
+        $manager->restore('demo-baseline');
+        echo "Demo baseline restored.\n";
+
+        $configManager = new \ConfigManager();
+        $config = $configManager->loadConfig();
+        $dbManager = new \DatabaseManager(
+            $config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass']
+        );
+        $pdo = $dbManager->connect();
+        $prefix = $config['db_prefix'];
+        $stmt = $pdo->prepare("UPDATE `{$prefix}settings` SET value = 'True' WHERE name = 'demo'");
+        $stmt->execute();
+        echo "Demo mode enabled.\n";
+    }
+
+    private function getArg(array $argv, string $prefix): ?string
+    {
+        foreach ($argv as $arg) {
+            if (strpos($arg, $prefix) === 0) {
+                return substr($arg, strlen($prefix));
+            }
+        }
+        return null;
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        if ($bytes < 1024) return $bytes . ' B';
+        if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
+        return round($bytes / 1048576, 1) . ' MB';
+    }
+
     private function printUsage(): void
     {
         echo "OpenDocMan Installer CLI\n";
@@ -210,8 +346,14 @@ class CliCommand
         echo "    --prefix=PREFIX     Table prefix (default: odm_)\n";
         echo "    --admin-password=MD5 Admin password hash (default: md5('admin'))\n";
         echo "    --datadir=PATH      Data directory path\n";
+        echo "    --snapshotdir=PATH  Snapshot directory path\n";
         echo "  migrate               Run pending migrations\n";
         echo "  status                Show migration status\n";
+        echo "  snapshot:create --name=NAME [--description=...]  Create a snapshot\n";
+        echo "  snapshot:restore [--name=NAME]                    Restore a snapshot (default: latest)\n";
+        echo "  snapshot:list                                     List all snapshots\n";
+        echo "  snapshot:delete --name=NAME                       Delete a snapshot\n";
+        echo "  demo:refresh                                      Restore demo-baseline + enable demo mode\n";
     }
 }
 
