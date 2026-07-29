@@ -61,11 +61,12 @@ class SnapshotManagerTest extends TestCase
         return $dir;
     }
 
-    public function testConstructorThrowsOnInvalidSnapshotDir(): void
+    public function testConstructorFallsBackToTempDirWhenConfiguredDirNotWritable(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
         $pdo = \Mockery::mock(\PDO::class);
-        new SnapshotManager($pdo, '/nonexistent/path', '/tmp', 'odm_');
+        $manager = new SnapshotManager($pdo, '/nonexistent/path', '/tmp', 'odm_');
+        $snapshots = $manager->list();
+        $this->assertIsArray($snapshots);
     }
 
     public function testListReturnsEmptyArrayWhenNoSnapshots(): void

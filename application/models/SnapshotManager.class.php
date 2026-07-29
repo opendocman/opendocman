@@ -15,10 +15,20 @@ if (!defined('SnapshotManager_class')) {
             $snapshotDir = rtrim($snapshotDir, '/') . '/';
             if (!is_dir($snapshotDir)) {
                 if (!@mkdir($snapshotDir, 0700, true)) {
-                    throw new \InvalidArgumentException(
-                        "Snapshot directory does not exist and could not be created: {$snapshotDir}. "
-                        . "Set 'snapshotDir' in Admin → Settings to an existing writable path."
-                    );
+                    // Fall back to system temp directory
+                    $fallback = sys_get_temp_dir() . '/odm_snapshots/';
+                    if (!is_dir($fallback)) {
+                        @mkdir($fallback, 0700, true);
+                    }
+                    if (is_dir($fallback)) {
+                        $snapshotDir = $fallback;
+                        error_log("SnapshotManager: configured dir not writable ({$snapshotDir}), using fallback: {$fallback}");
+                    } else {
+                        throw new \InvalidArgumentException(
+                            "Snapshot directory does not exist and could not be created: {$snapshotDir}. "
+                            . "Set 'snapshotDir' in Admin → Settings to an existing writable path."
+                        );
+                    }
                 }
             }
             $this->pdo = $pdo;
