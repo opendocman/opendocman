@@ -34,7 +34,11 @@ class SnapshotManagerTest extends TestCase
         $items = array_diff(scandir($dir), ['.', '..']);
         foreach ($items as $item) {
             $path = $dir . '/' . $item;
-            is_dir($path) ? $this->rrmdir($path) : unlink($path);
+            if (is_link($path)) {
+                unlink($path);
+            } else {
+                is_dir($path) ? $this->rrmdir($path) : unlink($path);
+            }
         }
         rmdir($dir);
     }
@@ -103,5 +107,80 @@ class SnapshotManagerTest extends TestCase
         $pdo = \Mockery::mock(\PDO::class);
         $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', '/tmp', 'odm_');
         $manager->delete('nonexistent');
+    }
+
+    public function testCreateThrowsOnInvalidName(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $pdo = \Mockery::mock(\PDO::class);
+        $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', '/tmp', 'odm_');
+        $manager->create('../../etc/passwd');
+    }
+
+    public function testCreateThrowsOnDuplicateName(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->createSnapshotDir('existing');
+
+        $pdo = \Mockery::mock(\PDO::class);
+        $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', '/tmp', 'odm_');
+        $manager->create('existing');
+    }
+
+    public function testCreateCreatesSnapshotFiles(): void
+    {
+        $dataDir = $this->tmpDir . '/data';
+        mkdir($dataDir, 0700, true);
+        file_put_contents($dataDir . '/1.dat', 'test file content');
+
+        // Mock PDO to return one table with SHOW TABLES
+        $tableStmt = \Mockery::mock(\PDOStatement::class);
+        $tableStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(['odm_settings']);
+
+        $pdo = \Mockery::mock(\PDO::class);
+        $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
+
+        // SHOW CREATE TABLE
+        $createStmt = \Mockery::mock(\PDOStatement::class);
+        $createStmt->shouldReceive('execute')->once()->andReturn(true);
+        $createStmt->shouldReceive('fetch')->with(\PDO::FETCH_ASSOC)->once()->andReturn(
+            ['Table' => 'odm_settings', 'Create Table' => "CREATE TABLE `odm_settings` (\n  `id` int(11) NOT NULL\n) ENGINE=InnoDB"]
+        );
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW CREATE TABLE/'))->once()->andReturn($createStmt);
+
+        // SHOW COLUMNS
+        $colStmt = \Mockery::mock(\PDOStatement::class);
+        $colStmt->shouldReceive('execute')->once()->andReturn(true);
+        $colStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_COLUMN)->once()->andReturn(['id', 'name', 'value']);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SHOW COLUMNS/'))->once()->andReturn($colStmt);
+
+        // SELECT *
+        $dataStmt = \Mockery::mock(\PDOStatement::class);
+        $dataStmt->shouldReceive('fetchAll')->with(\PDO::FETCH_NUM)->once()->andReturn([[1, 'demo', 'True']]);
+        $pdo->shouldReceive('query')->with("SELECT * FROM `odm_settings`")->once()->andReturn($dataStmt);
+
+        // quote() calls for each column value
+        $pdo->shouldReceive('quote')->with(1)->once()->andReturn("'1'");
+        $pdo->shouldReceive('quote')->with('demo')->once()->andReturn("'demo'");
+        $pdo->shouldReceive('quote')->with('True')->once()->andReturn("'True'");
+
+        $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', $dataDir, 'odm_');
+        $snapshot = $manager->create('test-snap', 'A test snapshot');
+
+        $this->assertSame('test-snap', $snapshot->name);
+        $this->assertSame('A test snapshot', $snapshot->description);
+
+        $snapPath = $this->tmpDir . '/snapshots/test-snap';
+        $this->assertFileExists($snapPath . '/db.sql.gz');
+        $this->assertFileExists($snapPath . '/files.tar.gz');
+        $this->assertFileExists($snapPath . '/metadata.json');
+
+        $meta = json_decode(file_get_contents($snapPath . '/metadata.json'), true);
+        $this->assertSame('test-snap', $meta['name']);
+        $this->assertSame('A test snapshot', $meta['description']);
+        $this->assertArrayHasKey('created_at', $meta);
+        $this->assertArrayHasKey('app_version', $meta);
+        $this->assertArrayHasKey('db_size', $meta);
+        $this->assertArrayHasKey('files_size', $meta);
     }
 }

@@ -58,6 +58,96 @@ if (!defined('SnapshotManager_class')) {
             }
         }
 
+        public function create(string $name, ?string $description = null): Snapshot
+        {
+            $this->validateName($name);
+            $snapshotPath = $this->snapshotDir . $name;
+
+            if (is_dir($snapshotPath)) {
+                throw new \InvalidArgumentException("Snapshot already exists: {$name}");
+            }
+
+            mkdir($snapshotPath, 0700, true);
+
+            try {
+                // Export database
+                $dbPath = $snapshotPath . '/db.sql.gz';
+                $dbSize = $this->exportDatabase($dbPath);
+
+                // Archive files
+                $filesPath = $snapshotPath . '/files.tar.gz';
+                $filesSize = $this->archiveFiles($filesPath);
+
+                // Write metadata
+                $snapshot = new Snapshot(
+                    name: $name,
+                    createdAt: new \DateTimeImmutable(),
+                    appVersion: ODM_APP_VERSION,
+                    description: $description,
+                    dbSize: $dbSize,
+                    filesSize: $filesSize
+                );
+                file_put_contents(
+                    $snapshotPath . '/metadata.json',
+                    json_encode($snapshot->toJsonArray(), JSON_PRETTY_PRINT)
+                );
+                chmod($snapshotPath . '/metadata.json', 0600);
+
+                // Update latest symlink
+                $latest = $this->snapshotDir . 'latest';
+                if (is_link($latest)) {
+                    unlink($latest);
+                }
+                symlink($name, $latest);
+
+                return $snapshot;
+            } catch (\Exception $e) {
+                $this->rrmdir($snapshotPath);
+                throw $e;
+            }
+        }
+
+        private function exportDatabase(string $outputPath): int
+        {
+            $gz = gzopen($outputPath, 'w9');
+
+            $stmt = $this->pdo->query("SHOW TABLES LIKE '{$this->dbPrefix}%'");
+            $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+            foreach ($tables as $table) {
+                $createStmt = $this->pdo->prepare("SHOW CREATE TABLE `{$table}`");
+                $createStmt->execute();
+                $row = $createStmt->fetch(\PDO::FETCH_ASSOC);
+                gzwrite($gz, $row['Create Table'] . ";\n\n");
+
+                $colStmt = $this->pdo->prepare("SHOW COLUMNS FROM `{$table}`");
+                $colStmt->execute();
+                $columns = $colStmt->fetchAll(\PDO::FETCH_COLUMN);
+
+                $dataStmt = $this->pdo->query("SELECT * FROM `{$table}`");
+                $rows = $dataStmt->fetchAll(\PDO::FETCH_NUM);
+
+                if (count($rows) > 0) {
+                    $colList = '`' . implode('`, `', $columns) . '`';
+                    foreach ($rows as $row) {
+                        $escaped = array_map([$this->pdo, 'quote'], $row);
+                        gzwrite($gz, "INSERT INTO `{$table}` ({$colList}) VALUES (" . implode(', ', $escaped) . ");\n");
+                    }
+                    gzwrite($gz, "\n");
+                }
+            }
+
+            gzclose($gz);
+            return filesize($outputPath);
+        }
+
+        private function archiveFiles(string $outputPath): int
+        {
+            $tar = new \PharData($outputPath);
+            $tar->buildFromDirectory($this->dataDir);
+            return filesize($outputPath);
+        }
+
         protected function rrmdir(string $dir): void
         {
             $items = array_diff(scandir($dir), ['.', '..']);
