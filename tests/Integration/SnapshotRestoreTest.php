@@ -102,9 +102,6 @@ class SnapshotRestoreTest extends TestCase
         $pdo->shouldReceive('quote')->with('odm_%')->once()->andReturn("'odm_%'");
         $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt2);
 
-        $pdo->shouldReceive('beginTransaction')->once()->andReturn(true);
-        $pdo->shouldReceive('commit')->once()->andReturn(true);
-
         $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 0')->once()->andReturn(0);
         $pdo->shouldReceive('exec')->with("DROP TABLE IF EXISTS `odm_settings`")->once()->andReturn(0);
         $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 1')->once()->andReturn(0);
