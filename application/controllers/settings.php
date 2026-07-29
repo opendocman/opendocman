@@ -61,6 +61,18 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
         }
     }
 
+    // Clean up the snapshotDir a bit to make sure it ends with slash
+    if (!empty($_POST['snapshotDir'])) {
+        if (substr($_POST['snapshotDir'], -1) != '/') {
+            $_POST['snapshotDir'] .= '/';
+        }
+        if (!is_dir($_POST['snapshotDir'])) {
+            $_POST['last_message'] = "Snapshot directory does not exist: {$_POST['snapshotDir']}";
+        } elseif (!is_writable($_POST['snapshotDir'])) {
+            $_POST['last_message'] = "Snapshot directory is not writable: {$_POST['snapshotDir']}";
+        }
+    }
+
     // Perform Input Validation
     if (!is_dir($_POST['dataDir'])) {
         $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_exists'];
