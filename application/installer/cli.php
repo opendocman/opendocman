@@ -280,10 +280,16 @@ class CliCommand
         $description = $this->getArg($argv, '--description=');
 
         $manager = $this->getSnapshotManager();
-        $snapshot = $manager->create($name, $description);
-        echo "Snapshot created: {$snapshot->name}\n";
-        echo "  DB size: {$snapshot->dbSize} bytes\n";
-        echo "  Files size: {$snapshot->filesSize} bytes\n";
+
+        try {
+            $snapshot = $manager->create($name, $description);
+            echo "Snapshot created: {$snapshot->name}\n";
+            echo "  DB size: {$snapshot->dbSize} bytes\n";
+            echo "  Files size: {$snapshot->filesSize} bytes\n";
+        } catch (\InvalidArgumentException $e) {
+            echo "Error: {$e->getMessage()}\n";
+            exit(1);
+        }
     }
 
     private function snapshotRestore(array $argv): void
@@ -291,10 +297,14 @@ class CliCommand
         $name = $this->getArg($argv, '--name=') ?: 'latest';
 
         $manager = $this->getSnapshotManager();
-        $manager->restore($name);
-        echo "Snapshot restored: {$name}\n";
-
-        $this->migrate();
+        try {
+            $manager->restore($name);
+            echo "Snapshot restored: {$name}\n";
+            $this->migrate();
+        } catch (\InvalidArgumentException $e) {
+            echo "Error: {$e->getMessage()}\n";
+            exit(1);
+        }
     }
 
     private function snapshotList(): void
@@ -326,8 +336,13 @@ class CliCommand
         }
 
         $manager = $this->getSnapshotManager();
-        $manager->delete($name);
-        echo "Snapshot deleted: {$name}\n";
+        try {
+            $manager->delete($name);
+            echo "Snapshot deleted: {$name}\n";
+        } catch (\InvalidArgumentException $e) {
+            echo "Error: {$e->getMessage()}\n";
+            exit(1);
+        }
     }
 
     private function demoRefresh(): void
