@@ -260,7 +260,13 @@ class CliCommand
         }
 
         $dataDir = $settings['dataDir'] ?? '/var/www/document_repository/';
-        $snapshotDir = $settings['snapshotDir'] ?? '/var/www/snapshots/';
+        $snapshotDir = $settings['snapshotDir'] ?? null;
+
+        if ($snapshotDir === null) {
+            $snapshotDir = defined('ABSPATH')
+                ? dirname(ABSPATH) . '/snapshots/'
+                : '/var/www/snapshots/';
+        }
 
         return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
     }
