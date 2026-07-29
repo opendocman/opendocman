@@ -186,9 +186,8 @@ class SnapshotManagerTest extends TestCase
         $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', $dataDir, 'odm_');
         $manager->restore('test-snap');
 
-        // Verify dataDir was wiped (we can't easily check the extraction since we used dummy tar)
-        // But we can verify the wipe happened
-        // $this->assertFileDoesNotExist($dataDir . '/old-file.dat');
+        $this->assertFileDoesNotExist($dataDir . '/old-file.dat');
+        $this->assertFileExists($dataDir . '/.empty');
     }
 
     public function testCreateCreatesSnapshotFiles(): void
