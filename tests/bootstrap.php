@@ -30,6 +30,7 @@ require_once APPLICATION_PATH . '/models/Department.class.php';
 require_once APPLICATION_PATH . '/models/File.class.php';
 require_once APPLICATION_PATH . '/models/Plugin.class.php';
 require_once APPLICATION_PATH . '/models/Snapshot.class.php';
+require_once APPLICATION_PATH . '/models/SnapshotManager.class.php';
 require_once APPLICATION_PATH . '/controllers/helpers/functions.php';
 
 // Set up test database configuration (you may want to customize this)
