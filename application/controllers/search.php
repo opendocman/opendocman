@@ -81,6 +81,12 @@ if (!isset($_GET['submit'])) {
                     <label class="form-check-label" for="case_sensitivity"><?php echo msg('label_case_sensitive'); ?></label>
                 </div>
             </div>
+            <div class="col-12 col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" name="search_content" class="form-check-input" id="search_content">
+                    <label class="form-check-label" for="search_content"><?php echo msg('label_search_file_contents'); ?></label>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">

@@ -378,6 +378,21 @@ if (!isset($_POST['submit'])) {
         }
         move_uploaded_file($tmp_name[$count], $newFilePath);
 
+        // Extract text content for search indexing
+        $file_mime = File::mime($newFilePath, $_FILES['file']['name'][$count]);
+        if (TextExtractorFactory::isExtractable($file_mime)) {
+            $extractor = TextExtractorFactory::create($file_mime);
+            if ($extractor !== null) {
+                $contentText = $extractor->extract($newFilePath);
+                $indexQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}content_index (file_id, content_text, indexed_at) VALUES (:file_id, :content_text, NOW())";
+                $indexStmt = $pdo->prepare($indexQuery);
+                $indexStmt->execute([
+                    ':file_id' => $fileId,
+                    ':content_text' => $contentText,
+                ]);
+            }
+        }
+
         AccessLog::addLogEntry($fileId, 'A', $pdo);
 
         // back to main page

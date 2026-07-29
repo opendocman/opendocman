@@ -514,4 +514,12 @@ $lang['change_password_error_mismatch'] = 'நீங்கள் உள்ளி
 $lang['change_password_error_current'] = 'உங்கள் தற்போதைய கடவுச்சொல் தவறானது.';
 $lang['change_password_error_empty'] = 'அனைத்து கடவுச்சொல் புலங்களையும் நிரப்பவும்.';
 $lang['change_password_error_same'] = 'புதிய கடவுச்சொல் தற்போதைய கடவுச்சொல்லில் இருந்து வேறுபட்டதாக இருக்க வேண்டும்.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

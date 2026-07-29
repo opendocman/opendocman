@@ -141,6 +141,14 @@ class SchemaBuilder
                 active TINYINT(4) NOT NULL,
                 PRIMARY KEY (id)
             ) ENGINE = MYISAM",
+
+            "CREATE TABLE `{$prefix}content_index` (
+                `file_id` int(11) unsigned NOT NULL,
+                `content_text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                `indexed_at` datetime DEFAULT NULL,
+                PRIMARY KEY (`file_id`),
+                FULLTEXT INDEX `ft_content` (`content_text`)
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
         ];
     }
 

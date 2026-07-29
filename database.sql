@@ -133,6 +133,14 @@ CREATE TABLE `odm_filetypes` (
                 active TINYINT(4) NOT NULL,
                 PRIMARY KEY (id)
             ) ENGINE = MYISAM;
+
+CREATE TABLE `odm_content_index` (
+                `file_id` int(11) unsigned NOT NULL,
+                `content_text` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+                `indexed_at` datetime DEFAULT NULL,
+                PRIMARY KEY (`file_id`),
+                FULLTEXT INDEX `ft_content` (`content_text`)
+            ) ENGINE = MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 INSERT INTO `odm_admin` VALUES (1,1);
 INSERT INTO `odm_category` VALUES (NULL,'SOP');
 INSERT INTO `odm_category` VALUES (NULL,'Training Manual');
