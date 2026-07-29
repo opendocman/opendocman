@@ -19,9 +19,7 @@ class Version001600 implements MigrationInterface
         $stmt = $pdo->prepare("SELECT COUNT(*) FROM `{$prefix}settings` WHERE name = 'snapshotDir'");
         $stmt->execute();
         if ((int)$stmt->fetchColumn() === 0) {
-            $dataDirStmt = $pdo->query("SELECT `value` FROM `{$prefix}settings` WHERE `name` = 'dataDir'");
-            $dataDir = $dataDirStmt->fetchColumn();
-            $defaultSnapshotDir = $dataDir . 'snapshots/';
+            $defaultSnapshotDir = '/var/www/snapshots/';
 
             $pdo->exec(
                 "INSERT INTO `{$prefix}settings` (`name`, `value`, `description`, `validation`) VALUES "
