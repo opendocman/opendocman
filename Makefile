@@ -24,6 +24,7 @@ DOCKER_COMPOSE := $(shell \
 .PHONY: dev shell shell-db clean-volumes ps top stats security-scan version config serve-local serve-local-stop
 .PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check docker-compose-version
 .PHONY: copyright-update copyright-dynamic copyright-check
+.PHONY: snapshot-create snapshot-restore snapshot-list snapshot-delete demo-refresh
 
 # Default target
 help: ## Show this help message
@@ -364,6 +365,35 @@ restore-files: ## Restore files from backup (specify BACKUP_FILE=filename)
 # =============================================================================
 # Utility Commands
 # =============================================================================
+
+# =============================================================================
+# Snapshots
+# =============================================================================
+
+CLI_PHP = php application/installer/cli.php
+
+snapshot-create: ## Create a snapshot (usage: SNAPSHOT_NAME=name [DESCRIPTION=text])
+	@if [ -z "$(SNAPSHOT_NAME)" ]; then \
+		echo "❌ Please specify SNAPSHOT_NAME=name"; \
+		exit 1; \
+	fi
+	$(CLI_PHP) snapshot:create --name=$(SNAPSHOT_NAME) $(if $(DESCRIPTION),--description="$(DESCRIPTION)")
+
+snapshot-restore: ## Restore a snapshot (usage: [SNAPSHOT_NAME=name], defaults to latest)
+	$(CLI_PHP) snapshot:restore $(if $(SNAPSHOT_NAME),--name=$(SNAPSHOT_NAME))
+
+snapshot-list: ## List all snapshots
+	$(CLI_PHP) snapshot:list
+
+snapshot-delete: ## Delete a snapshot (usage: SNAPSHOT_NAME=name)
+	@if [ -z "$(SNAPSHOT_NAME)" ]; then \
+		echo "❌ Please specify SNAPSHOT_NAME=name"; \
+		exit 1; \
+	fi
+	$(CLI_PHP) snapshot:delete --name=$(SNAPSHOT_NAME)
+
+demo-refresh: ## Restore 'demo-baseline' snapshot and enable demo mode
+	$(CLI_PHP) demo:refresh
 
 clean-volumes: ## Remove all Docker volumes (DATA LOSS WARNING!)
 	@echo "⚠️  WARNING: This will delete all data!"

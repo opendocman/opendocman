@@ -298,11 +298,21 @@ to be created current files modified:
 
 ### CLI Migration Tool
 
-There is a CLI entry point at `application/installer/cli.php` for managing database migrations without the web installer:
+There is a CLI entry point at `application/installer/cli.php` for managing database migrations and snapshots without the web installer:
 
 - **`php application/installer/cli.php dump-sql`** — Generate `database.sql` from the schema builder
 - **`php application/installer/cli.php migrate`** — Run pending migrations
 - **`php application/installer/cli.php status`** — Show which migrations have been applied
+- **`php application/installer/cli.php snapshot:create --name=NAME [--description=...]`** — Create a snapshot of the database and files
+- **`php application/installer/cli.php snapshot:restore [--name=NAME]`** — Restore from a snapshot (defaults to `latest`)
+- **`php application/installer/cli.php snapshot:list`** — List all available snapshots
+- **`php application/installer/cli.php snapshot:delete --name=NAME`** — Delete a snapshot
+- **`php application/installer/cli.php demo:refresh`** — Restore the `demo-baseline` snapshot and enable demo mode
+
+A typical demo-site cron entry looks like:
+```
+0 * * * * cd /path/to/site && git pull origin master 2>&1 && php odm.php migrate 2>&1 && php odm.php demo:refresh 2>&1
+```
 
 In Docker, prefix with `docker exec opendocman-app-1` (or your container name).
 
