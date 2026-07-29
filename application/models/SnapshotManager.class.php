@@ -12,14 +12,17 @@ if (!defined('SnapshotManager_class')) {
 
         public function __construct(\PDO $pdo, string $snapshotDir, string $dataDir, string $dbPrefix)
         {
+            $snapshotDir = rtrim($snapshotDir, '/') . '/';
             if (!is_dir($snapshotDir)) {
-                throw new \InvalidArgumentException(
-                    "Snapshot directory does not exist: {$snapshotDir}. "
-                    . "Create it or set 'snapshotDir' in Admin → Settings."
-                );
+                if (!@mkdir($snapshotDir, 0700, true)) {
+                    throw new \InvalidArgumentException(
+                        "Snapshot directory does not exist and could not be created: {$snapshotDir}. "
+                        . "Set 'snapshotDir' in Admin → Settings to an existing writable path."
+                    );
+                }
             }
             $this->pdo = $pdo;
-            $this->snapshotDir = rtrim($snapshotDir, '/') . '/';
+            $this->snapshotDir = $snapshotDir;
             $this->dataDir = rtrim($dataDir, '/') . '/';
             $this->dbPrefix = $dbPrefix;
         }
