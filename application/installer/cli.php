@@ -231,12 +231,27 @@ class CliCommand
     private function getSnapshotManager(): SnapshotManager
     {
         $configManager = new \ConfigManager();
-        $config = $configManager->loadConfig();
+        if (!$configManager->configExists()) {
+            fwrite(STDERR, "Error: No config file found. Run setup-config first.\n");
+            exit(1);
+        }
+        $configManager->loadConfig();
+
         $dbManager = new \DatabaseManager(
-            $config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass']
+            APP_DB_HOST,
+            APP_DB_NAME,
+            APP_DB_USER,
+            APP_DB_PASS
         );
-        $pdo = $dbManager->connect();
-        $prefix = $config['db_prefix'];
+
+        try {
+            $pdo = $dbManager->connect();
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+
+        $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
 
         $stmt = $pdo->query("SELECT `name`, `value` FROM `{$prefix}settings` WHERE `name` IN ('dataDir', 'snapshotDir')");
         $settings = [];
@@ -321,12 +336,27 @@ class CliCommand
         echo "Demo baseline restored.\n";
 
         $configManager = new \ConfigManager();
-        $config = $configManager->loadConfig();
+        if (!$configManager->configExists()) {
+            fwrite(STDERR, "Error: No config file found. Run setup-config first.\n");
+            exit(1);
+        }
+        $configManager->loadConfig();
+
         $dbManager = new \DatabaseManager(
-            $config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass']
+            APP_DB_HOST,
+            APP_DB_NAME,
+            APP_DB_USER,
+            APP_DB_PASS
         );
-        $pdo = $dbManager->connect();
-        $prefix = $config['db_prefix'];
+
+        try {
+            $pdo = $dbManager->connect();
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+
+        $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
         $stmt = $pdo->prepare("UPDATE `{$prefix}settings` SET value = 'True' WHERE name = 'demo'");
         $stmt->execute();
         echo "Demo mode enabled.\n";
