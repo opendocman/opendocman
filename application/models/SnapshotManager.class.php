@@ -148,14 +148,99 @@ if (!defined('SnapshotManager_class')) {
             return filesize($outputPath);
         }
 
-        protected function rrmdir(string $dir): void
-        {
-            $items = array_diff(scandir($dir), ['.', '..']);
-            foreach ($items as $item) {
-                $path = $dir . '/' . $item;
-                is_dir($path) ? $this->rrmdir($path) : unlink($path);
-            }
-            rmdir($dir);
+        public function restore(string $name): void
+    {
+        $this->validateName($name);
+        $snapshotPath = $this->snapshotDir . $name;
+
+        if (!is_dir($snapshotPath)) {
+            throw new \InvalidArgumentException("Snapshot not found: {$name}");
         }
+
+        $dbPath = $snapshotPath . '/db.sql.gz';
+        $filesPath = $snapshotPath . '/files.tar.gz';
+
+        if (!is_file($dbPath)) {
+            throw new \RuntimeException("Snapshot missing db.sql.gz: {$name}");
+        }
+        if (!is_file($filesPath)) {
+            throw new \RuntimeException("Snapshot missing files.tar.gz: {$name}");
+        }
+
+        // Drop all existing odm_ tables
+        $this->dropAllTables();
+
+        // Import database
+        $this->importDatabase($dbPath);
+
+        // Wipe and restore files
+        $this->restoreFiles($filesPath);
+    }
+
+    private function dropAllTables(): void
+    {
+        $stmt = $this->pdo->prepare("SHOW TABLES LIKE '{$this->dbPrefix}%'");
+        $stmt->execute();
+        $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (count($tables) === 0) {
+            return;
+        }
+
+        $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+        foreach ($tables as $table) {
+            $this->pdo->exec("DROP TABLE IF EXISTS `{$table}`");
+        }
+        $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
+    }
+
+    private function importDatabase(string $dbPath): void
+    {
+        $gz = gzopen($dbPath, 'r');
+        $sql = '';
+        while (!gzeof($gz)) {
+            $sql .= gzread($gz, 65536);
+        }
+        gzclose($gz);
+
+        // Execute each statement separately
+        $statements = explode(";\n", $sql);
+        foreach ($statements as $statement) {
+            $statement = trim($statement);
+            if ($statement !== '') {
+                $this->pdo->exec($statement);
+            }
+        }
+    }
+
+    private function restoreFiles(string $filesPath): void
+    {
+        // Wipe dataDir contents
+        $items = array_diff(scandir($this->dataDir), ['.', '..']);
+        foreach ($items as $item) {
+            $path = $this->dataDir . $item;
+            is_dir($path) ? $this->rrmdir($path) : unlink($path);
+        }
+
+        // Extract tarball
+        $tar = new \PharData($filesPath);
+        $tar->extractTo($this->dataDir);
+    }
+
+protected function rrmdir(string $dir): void
+    {
+        $items = array_diff(scandir($dir), ['.', '..']);
+        foreach ($items as $item) {
+            $path = $dir . '/' . $item;
+            if (is_link($path)) {
+                unlink($path);
+            } elseif (is_dir($path)) {
+                $this->rrmdir($path);
+            } else {
+                unlink($path);
+            }
+        }
+        rmdir($dir);
+    }
     }
 }
