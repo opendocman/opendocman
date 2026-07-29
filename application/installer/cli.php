@@ -236,6 +236,7 @@ class CliCommand
             exit(1);
         }
         $configManager->loadConfig();
+        require_once __DIR__ . '/../version.php';
 
         $dbManager = new \DatabaseManager(
             APP_DB_HOST,
