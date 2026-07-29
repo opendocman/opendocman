@@ -13,7 +13,10 @@ if (!defined('SnapshotManager_class')) {
         public function __construct(\PDO $pdo, string $snapshotDir, string $dataDir, string $dbPrefix)
         {
             if (!is_dir($snapshotDir)) {
-                throw new \InvalidArgumentException("Snapshot directory does not exist: {$snapshotDir}");
+                throw new \InvalidArgumentException(
+                    "Snapshot directory does not exist: {$snapshotDir}. "
+                    . "Create it or set 'snapshotDir' in Admin → Settings."
+                );
             }
             $this->pdo = $pdo;
             $this->snapshotDir = rtrim($snapshotDir, '/') . '/';

@@ -263,7 +263,9 @@ class CliCommand
         $snapshotDir = $settings['snapshotDir'] ?? '/var/www/snapshots/';
 
         if (!is_dir($snapshotDir)) {
-            @mkdir($snapshotDir, 0700, true);
+            if (!@mkdir($snapshotDir, 0700, true)) {
+                fwrite(STDERR, "Warning: Could not create snapshot directory: {$snapshotDir}\n");
+            }
         }
 
         return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
