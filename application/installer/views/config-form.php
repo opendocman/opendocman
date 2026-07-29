@@ -46,6 +46,11 @@
                 <td><label for="data_dir">Data Directory:</label></td>
                 <td><input type="text" name="data_dir" id="data_dir" value="<?php echo htmlentities($defaults['data_dir']); ?>" size="50"></td>
             </tr>
+            <tr>
+                <td><label for="snapshot_dir">Snapshot Directory:</label></td>
+                <td><input type="text" name="snapshot_dir" id="snapshot_dir" value="<?php echo htmlentities($defaults['snapshot_dir']); ?>" size="50">
+                    <br><small>Stores database dumps and file archives for snapshot/restore. Should be outside web root.</small></td>
+            </tr>
         </table>
         <hr>
         <input type="submit" value="Write Config &amp; Continue" class="button">

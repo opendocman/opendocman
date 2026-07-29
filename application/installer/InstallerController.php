@@ -149,6 +149,7 @@ class InstallerController
             'db_prefix' => $existing['db_prefix'] ?? $configManager->getEnvVar('DB_PREFIX', 'odm_'),
             'admin_password' => $configManager->getEnvVar('ADMIN_PASSWORD', 'admin'),
             'data_dir' => $configManager->getEnvVar('ODM_DATADIR', '/var/www/document_repository/'),
+            'snapshot_dir' => $configManager->getEnvVar('ODM_SNAPSHOTDIR', '/var/www/snapshots/'),
         ];
         $isDocker = $configManager->getEnvVar('IS_DOCKER') === 'true';
         require __DIR__ . '/views/config-form.php';
@@ -165,6 +166,7 @@ class InstallerController
         $dbPrefix = $_POST['db_prefix'] ?? 'odm_';
         $adminPassword = $_POST['admin_password'] ?? 'admin';
         $dataDir = $_POST['data_dir'] ?? '/var/www/document_repository/';
+        $snapshotDir = $_POST['snapshot_dir'] ?? '/var/www/snapshots/';
 
         if (empty($dbName)) {
             $errors[] = 'Database name is required';
@@ -196,6 +198,7 @@ class InstallerController
 
             $_SESSION['adminpass'] = $adminPassword;
             $_SESSION['datadir'] = $dataDir;
+            $_SESSION['snapshotdir'] = $snapshotDir;
             $_SESSION['db_prefix'] = $dbPrefix;
             $_SESSION['baseurl'] = $this->detectBaseUrl();
 
@@ -262,6 +265,7 @@ class InstallerController
         try {
             $adminPassword = $_SESSION['adminpass'] ?? 'admin';
             $dataDir = $_SESSION['datadir'] ?? '/var/www/document_repository/';
+            $snapshotDir = $_SESSION['snapshotdir'] ?? '/var/www/snapshots/';
 
             if ($forceFresh) {
                 $this->dbManager->dropAllTables($prefix);
@@ -280,6 +284,7 @@ class InstallerController
             foreach ($schemaBuilder->getDefaultDataStatements($prefix, [
                 'admin_password' => $adminPassword,
                 'datadir' => $dataDir,
+                'snapshotdir' => $snapshotDir,
             ]) as $stmt) {
                 $pdo->exec($stmt);
             }
@@ -324,6 +329,7 @@ class InstallerController
             $hostname = $this->configManager->getEnvVar('ODM_HOSTNAME', 'localhost');
             $adminPassword = $adminPassword;
             unset($_SESSION['datadir']);
+            unset($_SESSION['snapshotdir']);
             require __DIR__ . '/views/complete.php';
         } catch (Exception $e) {
             $this->renderError('Installation failed: ' . $e->getMessage());
