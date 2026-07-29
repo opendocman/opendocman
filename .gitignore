@@ -21,3 +21,5 @@ playwright-report/
 test-results/
 .playwright-mcp/
 backups/
+docs/superpowers/plans/2026-07-23-*
+docs/superpowers/specs/2026-07-23-*

@@ -196,16 +196,8 @@ if (!defined('SnapshotManager_class')) {
                 throw new \RuntimeException("Snapshot missing files.tar.gz: {$name}");
             }
 
-            $this->pdo->beginTransaction();
-            try {
-                $this->dropAllTables();
-                $this->importDatabase($dbPath);
-                $this->pdo->commit();
-            } catch (\Exception $e) {
-                $this->pdo->rollBack();
-                throw $e;
-            }
-
+            $this->dropAllTables();
+            $this->importDatabase($dbPath);
             $this->restoreFiles($filesPath);
         }
 
