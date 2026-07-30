@@ -54,6 +54,7 @@ if (!defined('config')) {
 
     /** Absolute path to the OpenDocMan application directory. */
     if (!defined('ABSPATH')) {
-        define('ABSPATH', dirname(__DIR__) . '/');
+        $configDir = basename(__DIR__) === 'docker-configs' ? dirname(__DIR__) : __DIR__;
+        define('ABSPATH', dirname($configDir) . '/');
     }
 }
