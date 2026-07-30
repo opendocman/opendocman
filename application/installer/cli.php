@@ -293,6 +293,8 @@ class CliCommand
             }
         }
 
+        fwrite(STDERR, "Snapshot directory: {$snapshotDir}\n");
+
         return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
     }
 
