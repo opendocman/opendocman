@@ -514,4 +514,12 @@ $lang['change_password_error_mismatch'] = 'Parolele noi pe care le-ați introdus
 $lang['change_password_error_current'] = 'Parola dvs. curentă este incorectă.';
 $lang['change_password_error_empty'] = 'Vă rugăm să completați toate câmpurile parolei.';
 $lang['change_password_error_same'] = 'Parola nouă trebuie să fie diferită de parola curentă.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

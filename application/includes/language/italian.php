@@ -514,4 +514,12 @@ $lang['change_password_error_mismatch'] = 'Le nuove password inserite non corris
 $lang['change_password_error_current'] = 'La password attuale non è corretta.';
 $lang['change_password_error_empty'] = 'Compila tutti i campi della password.';
 $lang['change_password_error_same'] = 'La nuova password deve essere diversa dalla password attuale.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

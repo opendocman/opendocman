@@ -514,4 +514,13 @@ $lang['change_password_error_current'] = 'Your current password is incorrect.';
 $lang['change_password_error_empty'] = 'Please fill in all password fields.';
 $lang['change_password_error_same'] = 'The new password must be different from the current password.';
 
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

@@ -515,4 +515,12 @@ $lang['change_password_error_mismatch'] = '您输入的新密码不匹配。';
 $lang['change_password_error_current'] = '您当前的密码不正确。';
 $lang['change_password_error_empty'] = '请填写所有密码字段。';
 $lang['change_password_error_same'] = '新密码必须与当前密码不同。';
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

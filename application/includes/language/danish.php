@@ -515,4 +515,12 @@ $lang['change_password_error_mismatch'] = 'De nye adgangskoder, du indtastede, m
 $lang['change_password_error_current'] = 'Din nuværende adgangskode er forkert.';
 $lang['change_password_error_empty'] = 'Udfyld venligst alle adgangskodefelter.';
 $lang['change_password_error_same'] = 'Den nye adgangskode skal være forskellig fra den nuværende.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

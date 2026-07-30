@@ -205,6 +205,11 @@ function pmt_delete($id)
             $stmt = $pdo->prepare($query);
             $stmt->execute(array(':id' => $id));
 
+            // Delete content index entry
+            $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}content_index WHERE file_id = :id";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(array(':id' => $id));
+
             // Delete archive file
             if (file_exists($archivePath)) {
                 unlink($archivePath);

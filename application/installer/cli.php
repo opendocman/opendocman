@@ -26,6 +26,7 @@ require_once __DIR__ . '/migrations/Version001401.php';
 require_once __DIR__ . '/migrations/Version001402.php';
 require_once __DIR__ . '/migrations/Version001500.php';
 require_once __DIR__ . '/migrations/Version001501.php';
+require_once __DIR__ . '/migrations/Version001502.php';
 require_once __DIR__ . '/migrations/Version001600.php';
 require_once __DIR__ . '/../models/Snapshot.class.php';
 require_once __DIR__ . '/../models/SnapshotManager.class.php';
@@ -145,6 +146,7 @@ class CliCommand
             new Version001402(),
             new Version001500(),
             new Version001501(),
+            new Version001502(),
             new Version001600(),
         ]);
 
@@ -215,6 +217,7 @@ class CliCommand
             new Version001402(),
             new Version001500(),
             new Version001501(),
+            new Version001502(),
             new Version001600(),
         ]);
 

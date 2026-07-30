@@ -18,6 +18,7 @@ var tabulatorDefaults = {
             params.where = urlParams.get('where') || 'all';
             params.exact_phrase = urlParams.get('exact_phrase') || '';
             params.case_sensitivity = urlParams.get('case_sensitivity') || '';
+            params.search_content = urlParams.get('search_content') || '';
         }
         return params;
     },
@@ -71,6 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
               }
             },
             { title: 'Description', field: 'description', widthGrow: 3 },
+            { title: 'Matched Text', field: 'content_snippet', widthGrow: 2, tooltip: true, formatter: 'html',
+              visible: function() { return new URLSearchParams(window.location.search).get('search_content') === 'on'; }
+            },
             { title: 'Status', field: 'lock', width: 80, formatter: function(cell) {
                 return cell.getValue() ? '<span class="text-danger">Locked</span>' : '<span class="text-success">Unlocked</span>';
             }},

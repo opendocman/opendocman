@@ -274,6 +274,22 @@ else {
             mkdir($newFileDir, 0775, true);
         }
         copy($_FILES['file']['tmp_name'], $newFilePath);
+
+        // Re-extract text content for search indexing
+        $file_mime = File::mime($newFilePath, $filename);
+        if (TextExtractorFactory::isExtractable($file_mime)) {
+            $extractor = TextExtractorFactory::create($file_mime);
+            if ($extractor !== null) {
+                $contentText = $extractor->extract($newFilePath);
+                $indexQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}content_index (file_id, content_text, indexed_at) VALUES (:file_id, :content_text, NOW()) ON DUPLICATE KEY UPDATE content_text = :content_text2, indexed_at = NOW()";
+                $indexStmt = $pdo->prepare($indexQuery);
+                $indexStmt->execute([
+                    ':file_id' => $id,
+                    ':content_text' => $contentText,
+                    ':content_text2' => $contentText,
+                ]);
+            }
+        }
     
         AccessLog::addLogEntry($id, 'I', $pdo);
     

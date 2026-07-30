@@ -541,5 +541,13 @@ $lang['change_password_error_mismatch'] = 'Girdiğiniz yeni şifreler eşleşmiy
 $lang['change_password_error_current'] = 'Mevcut şifreniz yanlış.';
 $lang['change_password_error_empty'] = 'Lütfen tüm şifre alanlarını doldurun.';
 $lang['change_password_error_same'] = 'Yeni şifre, mevcut şifreden farklı olmalıdır.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
 ?>
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

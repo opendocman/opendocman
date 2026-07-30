@@ -514,5 +514,13 @@ $lang['change_password_error_mismatch'] = 'Les nouveaux mots de passe que vous a
 $lang['change_password_error_current'] = 'Votre mot de passe actuel est incorrect.';
 $lang['change_password_error_empty'] = 'Veuillez remplir tous les champs de mot de passe.';
 $lang['change_password_error_same'] = 'Le nouveau mot de passe doit être différent du mot de passe actuel.';
+$lang['label_search_file_contents'] = 'Search file contents';
 
 
+
+$lang['label_content_search_index'] = 'Content Search Index';
+$lang['label_indexed_files'] = 'Indexed files';
+$lang['label_rebuild_index'] = 'Rebuild Index';
+$lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
+
+$lang['label_supported_formats'] = 'Supported formats';

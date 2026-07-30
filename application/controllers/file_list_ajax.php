@@ -32,8 +32,7 @@ if (!isset($_SESSION['uid'])) {
     exit;
 }
 
-// DEBUG
-file_put_contents('/tmp/file_list_ajax_debug.log', "Script reached at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
 
 $pdo = $GLOBALS['pdo'];
 $db_prefix = $GLOBALS['CONFIG']['db_prefix'];
@@ -48,18 +47,25 @@ $is_admin = $user_obj->isAdmin();
 
 // Step 1: Get all viewable file IDs (permission check, fast integer query)
 
+$search_content = '';
+$keyword_raw = '';
+
 // Search mode — overrides state when keyword is provided
 if (isset($_REQUEST['keyword']) && $_REQUEST['keyword'] !== '') {
     $keyword_raw = $_REQUEST['keyword'];
     $where = $_REQUEST['where'] ?? 'all';
     $exact_phrase = $_REQUEST['exact_phrase'] ?? '';
     $case_sensitivity = $_REQUEST['case_sensitivity'] ?? '';
+    $search_content = $_REQUEST['search_content'] ?? '';
     $is_udf = false;
 
     $equate = ($case_sensitivity === 'on') ? ' LIKE BINARY ' : ' LIKE ';
     $search_keyword = ($exact_phrase === 'on') ? $keyword_raw : '%' . $keyword_raw . '%';
 
     $query_pre = "SELECT d.id FROM {$db_prefix}data as d, {$db_prefix}user as u, {$db_prefix}department dept, {$db_prefix}category as c ";
+    if ($search_content === 'on') {
+        $query_pre = "SELECT d.id FROM {$db_prefix}data as d LEFT JOIN {$db_prefix}content_index ci ON ci.file_id = d.id, {$db_prefix}user as u, {$db_prefix}department dept, {$db_prefix}category as c ";
+    }
     $query = "WHERE d.owner = u.id AND d.department = dept.id AND d.category = c.id AND (";
 
     switch ($where) {
@@ -92,7 +98,11 @@ if (isset($_REQUEST['keyword']) && $_REQUEST['keyword'] !== '') {
             $query .= "d.id $equate :keyword ";
             break;
         case 'all':
-            $query .= "c.name $equate :keyword OR u.first_name $equate :keyword OR u.last_name $equate :keyword OR dept.name $equate :keyword OR d.description $equate :keyword OR d.realname $equate :keyword OR d.comment $equate :keyword ";
+            if ($search_content === 'on') {
+                $query .= "c.name $equate :keyword OR u.first_name $equate :keyword OR u.last_name $equate :keyword OR dept.name $equate :keyword OR d.description $equate :keyword OR d.realname $equate :keyword OR d.comment $equate :keyword OR MATCH(ci.content_text) AGAINST(:keyword_ft IN BOOLEAN MODE) ";
+            } else {
+                $query .= "c.name $equate :keyword OR u.first_name $equate :keyword OR u.last_name $equate :keyword OR dept.name $equate :keyword OR d.description $equate :keyword OR d.realname $equate :keyword OR d.comment $equate :keyword ";
+            }
             break;
         default:
             $is_udf = true;
@@ -109,6 +119,9 @@ if (isset($_REQUEST['keyword']) && $_REQUEST['keyword'] !== '') {
         $stmt->bindValue(':author_last_name', $author_last_name);
     } elseif (!$is_udf) {
         $stmt->bindValue(':keyword', $search_keyword);
+    }
+    if ($search_content === 'on' && $where === 'all') {
+        $stmt->bindValue(':keyword_ft', $keyword_raw);
     }
     $stmt->execute();
     $search_results = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -206,6 +219,21 @@ $stmt->execute($page_params);
 $file_rows = array();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $file_rows[$row['id']] = $row;
+}
+
+// Load content snippets if content search is active
+$content_snippets = [];
+if ($search_content === 'on') {
+    $query = "
+        SELECT file_id, content_text
+        FROM {$db_prefix}content_index
+        WHERE file_id IN ($in_placeholders)
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($page_params);
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $content_snippets[$row['file_id']] = $row['content_text'];
+    }
 }
 
 // Step 4: Batch load modified dates (replaces N*getModifiedDate)
@@ -316,12 +344,36 @@ foreach ($page_ids as $fileid) {
     $filesize = display_filesize(getFilePath($fileid, $realname, 'data'));
     $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h($_GET['state'] ?? 1);
 
+    // Generate content snippet for search results
+    $snippet = '';
+    if (isset($content_snippets[$fileid]) && $content_snippets[$fileid] !== '') {
+        $fullText = $content_snippets[$fileid];
+        $pos = mb_stripos($fullText, $keyword_raw);
+        if ($pos !== false) {
+            $start = max(0, $pos - 60);
+            $snippet = mb_substr($fullText, $start, 150);
+            if ($start > 0) {
+                $snippet = '...' . $snippet;
+            }
+            if ($start + 150 < mb_strlen($fullText)) {
+                $snippet .= '...';
+            }
+            $snippet = htmlspecialchars($snippet, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $snippet = preg_replace(
+                '/' . preg_quote($keyword_raw, '/') . '/i',
+                '<strong>$0</strong>',
+                $snippet
+            );
+        }
+    }
+
     $data[] = array(
         'id' => $fileid,
         'view_link' => $view_link,
         'details_link' => $details_link,
         'filename' => $realname,
         'description' => $description,
+        'content_snippet' => $snippet,
         'created_date' => $created_date,
         'modified_date' => $modified_date,
         'owner_name' => $owner_name,
