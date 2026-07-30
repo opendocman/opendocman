@@ -251,20 +251,39 @@ class CliCommand
         try {
             $pdo = $dbManager->connect();
         } catch (Exception $e) {
-            fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
-            exit(1);
+            // Database might not exist — try to create it
+            $noDbManager = new \DatabaseManager(
+                APP_DB_HOST,
+                'mysql',
+                APP_DB_USER,
+                APP_DB_PASS
+            );
+            try {
+                $noDbPdo = $noDbManager->connect();
+                $noDbPdo->exec("CREATE DATABASE IF NOT EXISTS `" . APP_DB_NAME . "`");
+                $pdo = $dbManager->connect();
+            } catch (Exception $e2) {
+                fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
+                exit(1);
+            }
         }
 
         $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
 
-        $stmt = $pdo->query("SELECT `name`, `value` FROM `{$prefix}settings` WHERE `name` IN ('dataDir', 'snapshotDir')");
-        $settings = [];
-        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $settings[$row['name']] = $row['value'];
-        }
+        $dataDir = '/var/www/document_repository/';
+        $snapshotDir = null;
 
-        $dataDir = $settings['dataDir'] ?? '/var/www/document_repository/';
-        $snapshotDir = $settings['snapshotDir'] ?? null;
+        try {
+            $stmt = $pdo->query("SELECT `name`, `value` FROM `{$prefix}settings` WHERE `name` IN ('dataDir', 'snapshotDir')");
+            $settings = [];
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $settings[$row['name']] = $row['value'];
+            }
+            $dataDir = $settings['dataDir'] ?? $dataDir;
+            $snapshotDir = $settings['snapshotDir'] ?? null;
+        } catch (\Exception $e) {
+            // odm_settings table doesn't exist yet — use defaults
+        }
 
         if ($snapshotDir === null) {
             $snapshotDir = sys_get_temp_dir() . '/odm_snapshots/';
