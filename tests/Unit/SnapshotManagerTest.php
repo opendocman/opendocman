@@ -176,12 +176,13 @@ class SnapshotManagerTest extends TestCase
         $pdo->shouldReceive('query')->with("SHOW TABLES LIKE 'odm_%'")->once()->andReturn($tableStmt);
 
         // Expect DROP TABLE statements (disable FK checks first)
-        $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 0')->once()->andReturn(0);
+        $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 0')->twice()->andReturn(0);
         $pdo->shouldReceive('exec')->with("DROP TABLE IF EXISTS `odm_user`")->once()->andReturn(0);
         $pdo->shouldReceive('exec')->with("DROP TABLE IF EXISTS `odm_settings`")->once()->andReturn(0);
-        $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 1')->once()->andReturn(0);
+        $pdo->shouldReceive('exec')->with('SET FOREIGN_KEY_CHECKS = 1')->twice()->andReturn(0);
 
         // Expect the import SQL to be executed
+        $pdo->shouldReceive('exec')->with("SET sql_mode = ''")->once()->andReturn(0);
         $pdo->shouldReceive('exec')->with(\Mockery::pattern('/INSERT INTO/'))->once()->andReturn(1);
 
         $manager = new SnapshotManager($pdo, $this->tmpDir . '/snapshots', $dataDir, 'odm_');
