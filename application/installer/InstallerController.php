@@ -326,6 +326,9 @@ class InstallerController
                 $pdo->exec("INSERT IGNORE INTO `{$migrationTable}` (`version`, `name`, `executed_at`, `batch`) VALUES ('{$version}', 'Fresh Install Schema', NOW(), 1)");
             }
 
+            // Update odmsys version to the latest so the app doesn't redirect back to installer
+            $pdo->exec("UPDATE `{$prefix}odmsys` SET sys_value = '" . ODM_DB_VERSION . "' WHERE sys_name = 'version'");
+
             $isDocker = $this->configManager->getEnvVar('IS_DOCKER') === 'true';
             $httpPort = $this->configManager->getEnvVar('HTTP_PORT', '8080');
             $hostname = $this->configManager->getEnvVar('ODM_HOSTNAME', 'localhost');
