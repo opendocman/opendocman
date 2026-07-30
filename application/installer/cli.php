@@ -286,7 +286,11 @@ class CliCommand
         }
 
         if ($snapshotDir === null) {
-            $snapshotDir = sys_get_temp_dir() . '/odm_snapshots/';
+            // Check SchemaBuilder default first, then fall back to temp dir
+            $snapshotDir = '/var/www/snapshots/';
+            if (!is_dir($snapshotDir)) {
+                $snapshotDir = sys_get_temp_dir() . '/odm_snapshots/';
+            }
         }
 
         return new SnapshotManager($pdo, $snapshotDir, $dataDir, $prefix);
