@@ -25,6 +25,7 @@ DOCKER_COMPOSE := $(shell \
 .PHONY: start stop reset scripts-help logs-app logs-db update restore-db restore-files env-check docker-compose-version
 .PHONY: copyright-update copyright-dynamic copyright-check
 .PHONY: snapshot-create snapshot-restore snapshot-list snapshot-delete demo-refresh
+.PHONY: reset-db
 
 # Default target
 help: ## Show this help message
@@ -394,6 +395,14 @@ snapshot-delete: ## Delete a snapshot (usage: SNAPSHOT_NAME=name)
 
 demo-refresh: ## Restore 'demo-baseline' snapshot and enable demo mode
 	$(CLI_PHP) demo:refresh
+
+reset-db: ## Drop and recreate the database (keeps dataDir files)
+	@echo "⚠️  This will drop the database and recreate it!"
+	@read -p "Are you sure? Type 'yes' to continue: " confirm && [ "$$confirm" = "yes" ] || exit 1
+	DB=$$(grep MYSQL_DATABASE .env | cut -d= -f2) && \
+	USER=$$(grep MYSQL_USER .env | cut -d= -f2) && \
+	PASS=$$(grep MYSQL_PASSWORD .env | cut -d= -f2) && \
+	docker exec -i $$($(DOCKER_COMPOSE) ps -q db) mysql -u"$$USER" -p"$$PASS" -e "DROP DATABASE $$DB; CREATE DATABASE $$DB;"
 
 clean-volumes: ## Remove all Docker volumes (DATA LOSS WARNING!)
 	@echo "⚠️  WARNING: This will delete all data!"
