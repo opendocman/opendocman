@@ -230,6 +230,10 @@ if (!defined('SnapshotManager_class')) {
             }
             gzclose($gz);
 
+            // Disable strict mode to handle empty-string-to-int conversions from PDO::quote()
+            $this->pdo->exec("SET sql_mode = ''");
+            $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+
             $statements = preg_split('/;\s*\n/', $sql);
             foreach ($statements as $statement) {
                 $statement = trim($statement);
@@ -237,6 +241,8 @@ if (!defined('SnapshotManager_class')) {
                     $this->pdo->exec($statement);
                 }
             }
+
+            $this->pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
         }
 
         private function quoteTable(string $name): string
