@@ -1,6 +1,7 @@
 # OpenDocMan Performance Optimization
 # Increase PHP upload and execution limits for better file upload performance
 
+<IfModule mod_php.c>
 # Enable PHP configuration overrides
 php_flag file_uploads On
 
@@ -51,6 +52,7 @@ php_flag log_errors On
 php_flag session.cookie_httponly On
 php_flag session.cookie_secure On
 php_value session.cookie_samesite "Strict"
+</IfModule>
 
 # File upload security: Restrict upload directory access
 <Files ~ "\.dat$">
