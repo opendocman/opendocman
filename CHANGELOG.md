@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.0-release](https://github.com/opendocman/opendocman/compare/v2.4.0-release...v2.5.0-release) (2026-07-31)
+
+
+### Features
+
+* add snapshot system for demo site refresh ([#400](https://github.com/opendocman/opendocman/issues/400)) ([#404](https://github.com/opendocman/opendocman/issues/404)) ([9b5edc4](https://github.com/opendocman/opendocman/commit/9b5edc41ccda001fdd03b9aa1e60a6f3e8a0a571))
+
+
+### Bug Fixes
+
+* add packages section to release-please-config.json for v4 compatibility ([717bb00](https://github.com/opendocman/opendocman/commit/717bb00e5ad176f4ab526ed575d65a0ac34c8a6b))
+* use empty-string key in .release-please-manifest.json for root component ([0b4cc74](https://github.com/opendocman/opendocman/commit/0b4cc740d4fe91f7b016a7725d53b7ba911f8250))
+
 ## [2.4.0-release](https://github.com/opendocman/opendocman/compare/v2.3.0-release...v2.4.0-release) (2026-07-29)
 
 
