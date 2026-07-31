@@ -196,6 +196,7 @@ INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officed
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'application/rtf', 1);
+INSERT INTO `odm_filetypes` VALUES(NULL, 'text/rtf', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/plain', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/html', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'text/csv', 1);

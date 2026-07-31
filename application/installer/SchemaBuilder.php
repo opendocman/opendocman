@@ -214,6 +214,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'application/rtf', 1)",
+            "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'text/rtf', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'text/plain', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'text/html', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'text/csv', 1)",

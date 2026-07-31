@@ -377,6 +377,7 @@ $sql_operations=array(
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'application/rtf', 1);",
+"INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'text/rtf', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'text/plain', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'text/html', 1);",
 "INSERT INTO `{$dbprefix}filetypes` VALUES(NULL, 'text/csv', 1);",
