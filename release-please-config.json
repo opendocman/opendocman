@@ -2,5 +2,10 @@
   "release-type": "simple",
   "extra-files": [
     "application/version.php"
-  ]
+  ],
+  "packages": {
+    ".": {
+      "release-type": "simple"
+    }
+  }
 }
