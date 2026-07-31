@@ -47,3 +47,4 @@
     </div>
     {/if}
     <main class="container py-3">
+{include file="custom_code.tpl"}
