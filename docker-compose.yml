@@ -29,6 +29,7 @@ services:
       - APP_DB_USER=${APP_DB_USER}
       - APP_DB_PASS=${APP_DB_PASS}
       - ODM_DATA_DIR=${ODM_DATA_DIR}
+      - ODM_SNAPSHOTDIR=${ODM_SNAPSHOTDIR:-/var/www/snapshots}
       - IS_DOCKER=${IS_DOCKER}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - SESSION_SECRET=${SESSION_SECRET}
@@ -56,8 +57,10 @@ services:
     volumes:
       - ${HOST_DATA_PATH:-odm-files-data}:/var/www/document_repository
       - ${HOST_CONFIG_PATH:-odm-docker-configs}:/var/www/html/application/configs/docker-configs
+      - ${HOST_SNAPSHOT_PATH:-odm-snapshots-data}:/var/www/snapshots
 
 volumes:
   odm-files-data:
   odm-db-data:
   odm-docker-configs:
+  odm-snapshots-data:

@@ -30,6 +30,7 @@ require_once __DIR__ . '/migrations/Version001402.php';
 require_once __DIR__ . '/migrations/Version001500.php';
 require_once __DIR__ . '/migrations/Version001501.php';
 require_once __DIR__ . '/migrations/Version001502.php';
+require_once __DIR__ . '/migrations/Version001600.php';
 
 class InstallerController
 {
@@ -149,6 +150,7 @@ class InstallerController
             'db_prefix' => $existing['db_prefix'] ?? $configManager->getEnvVar('DB_PREFIX', 'odm_'),
             'admin_password' => $configManager->getEnvVar('ADMIN_PASSWORD', 'admin'),
             'data_dir' => $configManager->getEnvVar('ODM_DATADIR', '/var/www/document_repository/'),
+            'snapshot_dir' => $configManager->getEnvVar('ODM_SNAPSHOTDIR', '/var/www/snapshots/'),
         ];
         $isDocker = $configManager->getEnvVar('IS_DOCKER') === 'true';
         require __DIR__ . '/views/config-form.php';
@@ -165,6 +167,7 @@ class InstallerController
         $dbPrefix = $_POST['db_prefix'] ?? 'odm_';
         $adminPassword = $_POST['admin_password'] ?? 'admin';
         $dataDir = $_POST['data_dir'] ?? '/var/www/document_repository/';
+        $snapshotDir = $_POST['snapshot_dir'] ?? '/var/www/snapshots/';
 
         if (empty($dbName)) {
             $errors[] = 'Database name is required';
@@ -196,6 +199,7 @@ class InstallerController
 
             $_SESSION['adminpass'] = $adminPassword;
             $_SESSION['datadir'] = $dataDir;
+            $_SESSION['snapshotdir'] = $snapshotDir;
             $_SESSION['db_prefix'] = $dbPrefix;
             $_SESSION['baseurl'] = $this->detectBaseUrl();
 
@@ -262,6 +266,7 @@ class InstallerController
         try {
             $adminPassword = $_SESSION['adminpass'] ?? 'admin';
             $dataDir = $_SESSION['datadir'] ?? '/var/www/document_repository/';
+            $snapshotDir = $_SESSION['snapshotdir'] ?? '/var/www/snapshots/';
 
             if ($forceFresh) {
                 $this->dbManager->dropAllTables($prefix);
@@ -280,6 +285,7 @@ class InstallerController
             foreach ($schemaBuilder->getDefaultDataStatements($prefix, [
                 'admin_password' => $adminPassword,
                 'datadir' => $dataDir,
+                'snapshotdir' => $snapshotDir,
             ]) as $stmt) {
                 $pdo->exec($stmt);
             }
@@ -311,6 +317,7 @@ class InstallerController
                 new Version001500(),
                 new Version001501(),
                 new Version001502(),
+                new Version001600(),
             ]);
 
             // Mark all schema versions as completed (the schema includes all changes)
@@ -319,11 +326,15 @@ class InstallerController
                 $pdo->exec("INSERT IGNORE INTO `{$migrationTable}` (`version`, `name`, `executed_at`, `batch`) VALUES ('{$version}', 'Fresh Install Schema', NOW(), 1)");
             }
 
+            // Update odmsys version to the latest so the app doesn't redirect back to installer
+            $pdo->exec("UPDATE `{$prefix}odmsys` SET sys_value = '" . ODM_DB_VERSION . "' WHERE sys_name = 'version'");
+
             $isDocker = $this->configManager->getEnvVar('IS_DOCKER') === 'true';
             $httpPort = $this->configManager->getEnvVar('HTTP_PORT', '8080');
             $hostname = $this->configManager->getEnvVar('ODM_HOSTNAME', 'localhost');
             $adminPassword = $adminPassword;
             unset($_SESSION['datadir']);
+            unset($_SESSION['snapshotdir']);
             require __DIR__ . '/views/complete.php';
         } catch (Exception $e) {
             $this->renderError('Installation failed: ' . $e->getMessage());
@@ -365,6 +376,7 @@ class InstallerController
                 new Version001500(),
                 new Version001501(),
                 new Version001502(),
+                new Version001600(),
             ]);
 
             // Seed tracking table with migrations already covered by current DB version

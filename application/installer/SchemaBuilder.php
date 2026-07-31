@@ -156,6 +156,7 @@ class SchemaBuilder
     {
         $adminPassword = $options['admin_password'] ?? md5('admin');
         $dataDir = $options['datadir'] ?? '/var/www/document_repository/';
+        $snapshotDir = $options['snapshotdir'] ?? '/var/www/snapshots/';
 
         return [
             "INSERT INTO `{$prefix}admin` VALUES (1,1)",
@@ -171,7 +172,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}rights` VALUES (2,'read')",
             "INSERT INTO `{$prefix}rights` VALUES (3,'write')",
             "INSERT INTO `{$prefix}rights` VALUES (4,'admin')",
-            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin',md5('{$adminPassword}'),'1','5555551212','admin@example.com','User','Admin','',1,1)",
+            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin',md5('{$adminPassword}'),'1','5555551212','admin@example.com','User','Admin','',0,1,1)",
             "INSERT INTO `{$prefix}odmsys` VALUES (NULL,'version','{$this->getVersion()}')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like \"demo/demo\". This will keep users from removing files, users, etc.', 'bool')",
@@ -180,6 +181,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'site_mail', 'root@localhost', 'The email address of the administrator of this site', 'email|maxsize=255|req')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'root_id', '1', 'This variable sets the root user id.  The root user will be able to access all files and have authority for everything.', 'num|req')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'dataDir', '{$dataDir}', 'location of file repository. This should ideally be outside the Web server root. Make sure the server has permissions to read/write files to this folder!. (Examples: Linux - /var/www/document_repository/ : Windows - c:/document_repository/', 'maxsize=255')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'snapshotDir', '{$snapshotDir}', 'Location to store database and file snapshots. Should be outside web root.', 'maxsize=255')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'max_filesize', '5000000', 'Set the maximum file upload size', 'num|maxsize=255')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num')",
