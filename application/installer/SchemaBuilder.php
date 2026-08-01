@@ -4,7 +4,7 @@ class SchemaBuilder
 {
     public function getVersion(): string
     {
-        return '1.4.0';
+        return ODM_DB_VERSION;
     }
 
     public function getCreateTableStatements(string $prefix): array
