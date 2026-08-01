@@ -8,29 +8,7 @@ require_once __DIR__ . '/DatabaseManager.php';
 require_once __DIR__ . '/RequirementChecker.php';
 require_once __DIR__ . '/MigrationRunner.php';
 require_once __DIR__ . '/SchemaBuilder.php';
-require_once __DIR__ . '/migrations/MigrationInterface.php';
-require_once __DIR__ . '/migrations/Version001000.php';
-require_once __DIR__ . '/migrations/Version0011rc2.php';
-require_once __DIR__ . '/migrations/Version001100.php';
-require_once __DIR__ . '/migrations/Version0012p1.php';
-require_once __DIR__ . '/migrations/Version0012p3.php';
-require_once __DIR__ . '/migrations/Version001240.php';
-require_once __DIR__ . '/migrations/Version001252.php';
-require_once __DIR__ . '/migrations/Version001256.php';
-require_once __DIR__ . '/migrations/Version001257.php';
-require_once __DIR__ . '/migrations/Version001261.php';
-require_once __DIR__ . '/migrations/Version001262.php';
-require_once __DIR__ . '/migrations/Version001263.php';
-require_once __DIR__ . '/migrations/Version001280.php';
-require_once __DIR__ . '/migrations/Version001290.php';
-require_once __DIR__ . '/migrations/Version001300.php';
-require_once __DIR__ . '/migrations/Version001400.php';
-require_once __DIR__ . '/migrations/Version001401.php';
-require_once __DIR__ . '/migrations/Version001402.php';
-require_once __DIR__ . '/migrations/Version001500.php';
-require_once __DIR__ . '/migrations/Version001501.php';
-require_once __DIR__ . '/migrations/Version001502.php';
-require_once __DIR__ . '/migrations/Version001600.php';
+require_once __DIR__ . '/MigrationLoader.php';
 
 class InstallerController
 {
@@ -295,30 +273,7 @@ class InstallerController
             $migrationTable = $prefix . 'migrations';
 
             // Register all migrations so fresh install marks them all complete
-            $migrationRunner->registerMigrations([
-                new Version001000(),
-                new Version0011rc2(),
-                new Version001100(),
-                new Version0012p1(),
-                new Version0012p3(),
-                new Version001240(),
-                new Version001252(),
-                new Version001256(),
-                new Version001257(),
-                new Version001261(),
-                new Version001262(),
-                new Version001263(),
-                new Version001280(),
-                new Version001290(),
-                new Version001300(),
-                new Version001400(),
-                new Version001401(),
-                new Version001402(),
-                new Version001500(),
-                new Version001501(),
-                new Version001502(),
-                new Version001600(),
-            ]);
+            $migrationRunner->registerMigrations(MigrationLoader::getAll());
 
             // Mark all schema versions as completed (the schema includes all changes)
             foreach ($migrationRunner->getPendingMigrations() as $migration) {
@@ -354,30 +309,7 @@ class InstallerController
             $pdo = $this->dbManager->connect();
             $runner = new MigrationRunner($pdo, $prefix);
 
-            $runner->registerMigrations([
-                new Version001000(),
-                new Version0011rc2(),
-                new Version001100(),
-                new Version0012p1(),
-                new Version0012p3(),
-                new Version001240(),
-                new Version001252(),
-                new Version001256(),
-                new Version001257(),
-                new Version001261(),
-                new Version001262(),
-                new Version001263(),
-                new Version001280(),
-                new Version001290(),
-                new Version001300(),
-                new Version001400(),
-                new Version001401(),
-                new Version001402(),
-                new Version001500(),
-                new Version001501(),
-                new Version001502(),
-                new Version001600(),
-            ]);
+            $runner->registerMigrations(MigrationLoader::getAll());
 
             // Seed tracking table with migrations already covered by current DB version
             $currentVersion = $this->dbManager->getDbVersion($prefix);

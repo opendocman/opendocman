@@ -5,29 +5,7 @@ require_once __DIR__ . '/ConfigManager.php';
 require_once __DIR__ . '/DatabaseManager.php';
 require_once __DIR__ . '/MigrationRunner.php';
 require_once __DIR__ . '/SchemaBuilder.php';
-require_once __DIR__ . '/migrations/MigrationInterface.php';
-require_once __DIR__ . '/migrations/Version001000.php';
-require_once __DIR__ . '/migrations/Version0011rc2.php';
-require_once __DIR__ . '/migrations/Version001100.php';
-require_once __DIR__ . '/migrations/Version0012p1.php';
-require_once __DIR__ . '/migrations/Version0012p3.php';
-require_once __DIR__ . '/migrations/Version001240.php';
-require_once __DIR__ . '/migrations/Version001252.php';
-require_once __DIR__ . '/migrations/Version001256.php';
-require_once __DIR__ . '/migrations/Version001257.php';
-require_once __DIR__ . '/migrations/Version001261.php';
-require_once __DIR__ . '/migrations/Version001262.php';
-require_once __DIR__ . '/migrations/Version001263.php';
-require_once __DIR__ . '/migrations/Version001280.php';
-require_once __DIR__ . '/migrations/Version001290.php';
-require_once __DIR__ . '/migrations/Version001300.php';
-require_once __DIR__ . '/migrations/Version001400.php';
-require_once __DIR__ . '/migrations/Version001401.php';
-require_once __DIR__ . '/migrations/Version001402.php';
-require_once __DIR__ . '/migrations/Version001500.php';
-require_once __DIR__ . '/migrations/Version001501.php';
-require_once __DIR__ . '/migrations/Version001502.php';
-require_once __DIR__ . '/migrations/Version001600.php';
+require_once __DIR__ . '/MigrationLoader.php';
 require_once __DIR__ . '/../models/Snapshot.class.php';
 require_once __DIR__ . '/../models/SnapshotManager.class.php';
 
@@ -47,7 +25,7 @@ class CliCommand
                 $this->dumpSql($argv);
                 break;
             case 'migrate':
-                $this->migrate();
+                $this->migrate($argv);
                 break;
             case 'status':
                 $this->status();
@@ -100,8 +78,15 @@ class CliCommand
         ]);
     }
 
-    private function migrate(): void
+    private function migrate(array $argv): void
     {
+        $targetVersion = null;
+        for ($i = 2; $i < count($argv); $i++) {
+            if (strpos($argv[$i], '--target=') === 0) {
+                $targetVersion = substr($argv[$i], 9);
+            }
+        }
+
         $configManager = new ConfigManager();
         if (!$configManager->configExists()) {
             fwrite(STDERR, "Error: No config file found. Run setup-config first.\n");
@@ -125,49 +110,51 @@ class CliCommand
 
         $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
         $runner = new MigrationRunner($pdo, $prefix);
-        $runner->registerMigrations([
-            new Version001000(),
-            new Version0011rc2(),
-            new Version001100(),
-            new Version0012p1(),
-            new Version0012p3(),
-            new Version001240(),
-            new Version001252(),
-            new Version001256(),
-            new Version001257(),
-            new Version001261(),
-            new Version001262(),
-            new Version001263(),
-            new Version001280(),
-            new Version001290(),
-            new Version001300(),
-            new Version001400(),
-            new Version001401(),
-            new Version001402(),
-            new Version001500(),
-            new Version001501(),
-            new Version001502(),
-            new Version001600(),
-        ]);
+        $runner->registerMigrations(MigrationLoader::getAll());
 
         $currentVersion = $dbManager->getDbVersion($prefix);
         if ($currentVersion !== null) {
             $runner->seedAppliedUpTo($currentVersion);
         }
 
-        $results = $runner->run();
+        $action = 'UP';
+        $destinationVersion = null;
+        if ($targetVersion !== null && $currentVersion !== null) {
+            $cmp = version_compare($currentVersion, $targetVersion);
+            if ($cmp < 0) {
+                $results = $runner->migrateTo($targetVersion);
+                $destinationVersion = $targetVersion;
+            } elseif ($cmp > 0) {
+                $action = 'DOWN';
+                $results = $runner->rollbackTo($targetVersion);
+                $destinationVersion = $targetVersion;
+            } else {
+                echo "Already at version {$targetVersion}.\n";
+                return;
+            }
+        } else {
+            $results = $runner->run();
+            if (!empty($results)) {
+                $destinationVersion = end($results)['version'];
+            }
+        }
+
         if (empty($results)) {
             echo "No pending migrations.\n";
             return;
         }
 
-        foreach ($results as $result) {
-            $status = $result['status'] === 'success' ? 'OK' : 'ERROR';
-            echo "[{$status}] v{$result['version']}";
-            if ($result['message']) {
-                echo " - {$result['message']}";
+        if ($destinationVersion !== null) {
+            echo "[{$action}] v{$destinationVersion}\n";
+        } else {
+            foreach ($results as $result) {
+                $status = $result['status'] === 'success' ? 'OK' : 'ERROR';
+                echo "[{$status}] v{$result['version']}";
+                if ($result['message']) {
+                    echo " - {$result['message']}";
+                }
+                echo "\n";
             }
-            echo "\n";
         }
     }
 
@@ -196,30 +183,7 @@ class CliCommand
 
         $prefix = $GLOBALS['CONFIG']['db_prefix'] ?? 'odm_';
         $runner = new MigrationRunner($pdo, $prefix);
-        $runner->registerMigrations([
-            new Version001000(),
-            new Version0011rc2(),
-            new Version001100(),
-            new Version0012p1(),
-            new Version0012p3(),
-            new Version001240(),
-            new Version001252(),
-            new Version001256(),
-            new Version001257(),
-            new Version001261(),
-            new Version001262(),
-            new Version001263(),
-            new Version001280(),
-            new Version001290(),
-            new Version001300(),
-            new Version001400(),
-            new Version001401(),
-            new Version001402(),
-            new Version001500(),
-            new Version001501(),
-            new Version001502(),
-            new Version001600(),
-        ]);
+        $runner->registerMigrations(MigrationLoader::getAll());
 
         $rows = $runner->status();
         echo str_pad('Version', 16) . str_pad('Applied', 8) . "Name\n";
@@ -436,6 +400,7 @@ class CliCommand
         echo "    --datadir=PATH      Data directory path\n";
         echo "    --snapshotdir=PATH  Snapshot directory path\n";
         echo "  migrate               Run pending migrations\n";
+        echo "    --target=VERSION  Migrate up to or rollback down to a specific version\n";
         echo "  status                Show migration status\n";
         echo "  snapshot:create --name=NAME [--description=...]  Create a snapshot\n";
         echo "  snapshot:restore [--name=NAME]                    Restore a snapshot (default: latest)\n";

@@ -4,6 +4,13 @@ When modifying the database schema in `SchemaBuilder.php`:
 1. Run `make dump-sql` to regenerate `database.sql`
 2. Bump `ODM_DB_VERSION` in `application/version.php` to trigger the installer
 
+## Adding a new migration
+
+Create a new `Version*.php` file in `application/installer/migrations/`
+implementing `MigrationInterface`. That's it — `MigrationLoader::getAll()`
+auto-discovers it via `glob()` so no manual registration in entry points
+is needed. Bump `ODM_DB_VERSION` in `application/version.php`.
+
 # Translation strings
 
 New `$lang[...]` entries must be added to **all 17 language files** under
