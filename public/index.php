@@ -96,6 +96,12 @@ if ($configExists) {
         require '../application/controllers/helpers/functions.php';
         require '../application/odm-init.php';
     } else {
+        // Database exists but tables are missing - redirect non-installer pages to setup
+        if (false === strpos($_SERVER['REQUEST_URI'], 'setup-config')
+            && false === strpos($_SERVER['REQUEST_URI'], 'installer')) {
+            header('Location: /installer');
+            exit;
+        }
         if (!function_exists('callPluginMethod')) {
             function callPluginMethod($method, $args = '') {
                 return;
