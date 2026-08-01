@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.6.0-release](https://github.com/opendocman/opendocman/compare/v2.5.0-release...v2.6.0-release) (2026-08-01)
+
+
+### Features
+
+* add custom_code.tpl include to bootstrap5 header for deploy-time snippets ([b639542](https://github.com/opendocman/opendocman/commit/b6395422ae7181b2fa5b15cae2d9eefd647f668e))
+* add text/rtf as default filetype ([#407](https://github.com/opendocman/opendocman/issues/407)) ([53a9c23](https://github.com/opendocman/opendocman/commit/53a9c23f4ed15040f97d5953abf805847264399b))
+* auto-discover migrations via glob() and add rollback support ([#408](https://github.com/opendocman/opendocman/issues/408)) ([22103b5](https://github.com/opendocman/opendocman/commit/22103b59ed5c66d6027a1472055e45182bfe6f02))
+
 ## [2.5.0-release](https://github.com/opendocman/opendocman/compare/v2.4.0-release...v2.5.0-release) (2026-07-31)
 
 
