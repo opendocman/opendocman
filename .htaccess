@@ -1,6 +1,9 @@
 # OpenDocMan Performance Optimization
 # Increase PHP upload and execution limits for better file upload performance
 
+# cPanel PHP-FPM handler — forces PHP 8.3 for the demo site
+AddHandler application/x-httpd-ea-php83 .php
+
 <IfModule mod_php.c>
 # Enable PHP configuration overrides
 php_flag file_uploads On
