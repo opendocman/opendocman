@@ -64,7 +64,7 @@ $stmt = $pdo->query("SELECT COUNT(DISTINCT file_id) FROM {$db_prefix}content_ind
 $indexedFiles = (int)$stmt->fetchColumn();
 $percent = $totalFiles > 0 ? round($indexedFiles / $totalFiles * 100) : 0;
 
-$csrf_data = $GLOBALS['csrf']->getToken();
+$csrf_data = $GLOBALS['csrf']->getTokenForTemplate();
 
 draw_header(msg('label_admin'), '');
 ob_start();
