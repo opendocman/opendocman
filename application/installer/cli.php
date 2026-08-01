@@ -369,7 +369,7 @@ class CliCommand
         $stmt->execute();
         echo "Demo mode enabled.\n";
 
-        $this->migrate();
+        $this->migrate([]);
     }
 
     private function getArg(array $argv, string $prefix): ?string
