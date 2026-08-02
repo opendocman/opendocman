@@ -63,7 +63,6 @@ class CliCommand
         $adminPassword = 'admin';
         $dataDir = '/var/www/document_repository/';
         $snapshotDir = '/var/www/snapshots/';
-        $incomingDir = rtrim($dataDir, '/') . '/incoming/';
 
         for ($i = 2; $i < count($argv); $i++) {
             if (strpos($argv[$i], '--prefix=') === 0) {
@@ -74,8 +73,6 @@ class CliCommand
                 $dataDir = substr($argv[$i], 10);
             } elseif (strpos($argv[$i], '--snapshotdir=') === 0) {
                 $snapshotDir = substr($argv[$i], 14);
-            } elseif (strpos($argv[$i], '--incomingdir=') === 0) {
-                $incomingDir = substr($argv[$i], 14);
             }
         }
 
@@ -84,7 +81,6 @@ class CliCommand
             'admin_password' => $adminPassword,
             'datadir' => $dataDir,
             'snapshotdir' => $snapshotDir,
-            'incomingdir' => $incomingDir,
         ]);
     }
 
@@ -409,7 +405,6 @@ class CliCommand
         echo "    --admin-password=MD5 Admin password hash (default: md5('admin'))\n";
         echo "    --datadir=PATH      Data directory path\n";
         echo "    --snapshotdir=PATH  Snapshot directory path\n";
-        echo "    --incomingdir=PATH  Incoming directory path\n";
         echo "  migrate               Run pending migrations\n";
         echo "    --target=VERSION  Migrate up to or rollback down to a specific version\n";
         echo "  status                Show migration status\n";

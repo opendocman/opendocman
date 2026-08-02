@@ -102,7 +102,7 @@ function getFilePath(int $fileId, string $realname, string $type = 'data', ?int 
             return $path;
 
         case 'incoming':
-            $base = $GLOBALS['CONFIG']['incomingDir'];
+            $base = rtrim($GLOBALS['CONFIG']['dataDir'], '/') . '/incoming/';
             $path = $base . $fileId . '/' . $realname;
             return $path;
 
