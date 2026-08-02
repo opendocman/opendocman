@@ -79,6 +79,15 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
                 }
             }
             AccessLog::addLogEntry($_REQUEST['id' . $i], 'X', $pdo);
+            // Clean up incoming file if one exists
+            $incomingPath = getFilePath($id, $realname, 'incoming');
+            if (file_exists($incomingPath)) {
+                unlink($incomingPath);
+                $incomingDir = dirname($incomingPath);
+                if (is_dir($incomingDir) && count(scandir($incomingDir)) <= 2) {
+                    rmdir($incomingDir);
+                }
+            }
         }
     }
     // delete from directory
