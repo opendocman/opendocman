@@ -58,7 +58,6 @@ $GLOBALS['smarty']->assign('state', -1);
 display_smarty_template('out.tpl');
 ?>
     <div class="d-flex gap-2 mt-3">
-        <button class="btn btn-success" type="submit" name="submit" value="resubmit"><?php echo msg('button_resubmit_for_review'); ?></button>
         <button class="btn btn-danger" type="submit" name="submit" value="delete"><?php echo msg('button_delete'); ?></button>
     </div>
 </form>
@@ -68,26 +67,6 @@ display_smarty_template('out.tpl');
            $GLOBALS['smarty']->assign('content', $content);
            display_smarty_template('_content.tpl');
            draw_footer();
-} elseif (isset($_POST['submit']) && $_POST['submit'] == 'resubmit') {
-    // Validate CSRF token for resubmit operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
-        exit;
-    }
-    
-    if (!isset($_REQUEST['checkbox'])) {
-        header('Location:rejects?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
-        exit;
-    }
-    
-    if (isset($_POST["checkbox"])) {
-        foreach ($_POST['checkbox'] as $cbox) {
-            $fileid = $cbox;
-            $file_obj = new FileData($fileid, $pdo);
-            $file_obj->Publishable(0);
-        }
-    }
-    header('Location:rejects?mode=' . urlencode(@$_REQUEST['mode']) . '&last_message='. urlencode(msg('message_file_authorized')));
 } elseif ($_POST['submit'] == 'delete') {
     // Validate CSRF token for delete operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
