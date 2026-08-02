@@ -26,6 +26,7 @@ DOCKER_COMPOSE := $(shell \
 .PHONY: copyright-update copyright-dynamic copyright-check
 .PHONY: snapshot-create snapshot-restore snapshot-list snapshot-delete demo-refresh
 .PHONY: reset-db
+.PHONY: migrate migrate-status migrate-to migrate-rollback
 
 # Default target
 help: ## Show this help message
@@ -392,6 +393,33 @@ snapshot-delete: ## Delete a snapshot (usage: SNAPSHOT_NAME=name)
 		exit 1; \
 	fi
 	$(CLI_PHP) snapshot:delete --name=$(SNAPSHOT_NAME)
+
+# =============================================================================
+# Migration Commands
+# =============================================================================
+
+migrate: ## Run all pending migrations
+	$(CLI_PHP) migrate
+
+migrate-status: ## Show migration status table
+	$(CLI_PHP) status
+
+migrate-to: ## Migrate up/down to a specific version (usage: VERSION=X)
+	@if [ -z "$(VERSION)" ]; then \
+		echo "❌ Please specify VERSION. Example: make migrate-to VERSION=001401"; \
+		exit 1; \
+	fi
+	$(CLI_PHP) migrate --target=$(VERSION)
+
+migrate-rollback: ## Roll back one migration step
+	@CURRENT=$$($(CLI_PHP) status | awk '/YES/ {v=$$1} END {print v}') && \
+	PREV=$$($(CLI_PHP) status | awk '/YES/ {p=v; v=$$1} END {print p}') && \
+	if [ -z "$$PREV" ]; then \
+		echo "❌ No previous migration found to roll back to."; \
+		exit 1; \
+	fi; \
+	echo "⏪ Rolling back from $$CURRENT to $$PREV"; \
+	$(CLI_PHP) migrate --target=$$PREV
 
 demo-refresh: ## Restore 'demo-baseline' snapshot and enable demo mode
 	$(CLI_PHP) demo:refresh

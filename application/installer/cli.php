@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+if (PHP_SAPI !== 'cli') {
+    die('This script must be run from the command line.');
+}
+
 require_once __DIR__ . '/ConfigManager.php';
 require_once __DIR__ . '/DatabaseManager.php';
 require_once __DIR__ . '/MigrationRunner.php';
