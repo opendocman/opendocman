@@ -21,7 +21,7 @@
  * Provide a spreadsheet report of all the files
  */
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $pdo = $GLOBALS['pdo'];
 

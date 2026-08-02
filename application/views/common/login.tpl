@@ -29,7 +29,7 @@
         <td>{$g_lang_password}</td>
         <td><input type="password" name="frmpass" size="15">
             {if $g_allow_password_reset eq 'True'}
-                <a href="{$g_base_url}/forgot_password">{$g_lang_forgotpassword}</a>
+                <a href="{$g_base_url}forgot_password">{$g_lang_forgotpassword}</a>
              {/if}
                      </td>
         </tr>
@@ -43,7 +43,7 @@
         {/if}
         {if $g_allow_signup eq 'True'}
                 <tr>
-            <td colspan="2"><a href="{$g_base_url}/signup">{$g_lang_signup}</a>
+            <td colspan="2"><a href="{$g_base_url}signup">{$g_lang_signup}</a>
         </tr>
         {/if}
         

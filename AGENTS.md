@@ -27,6 +27,10 @@ npm run test:e2e
 This runs `tests/smoke-uat.spec.ts` against `http://localhost:8080` — logs in,
 changes a setting, verifies persistence, and cleans up.
 
+The `retryGoto` helper is used for all page navigations to handle the
+PHP built-in server's intermittent empty-response race condition.
+Use `retryGoto(page, url)` instead of `page.goto(url)` in new E2E tests.
+
 Credentials are read from environment variables `ADMIN_USER` (default: `admin`)
 and `ADMIN_PASSWORD` (default: `password`). Playwright auto-loads `.env` files,
 so the project's existing `.env` is picked up automatically.

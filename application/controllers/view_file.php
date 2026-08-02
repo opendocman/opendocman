@@ -21,7 +21,7 @@
 // Draws screen which allows users to view files inline
 
 session_cache_limiter('private');
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();

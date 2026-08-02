@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$g_lang_label_login} - {$site_title|escape}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{$g_base_url}/css/bootstrap5/style.css">
+    <link rel="stylesheet" type="text/css" href="{$g_base_url}css/bootstrap5/style.css">
 </head>
 <body class="bg-light">
     <div class="container">
@@ -13,7 +13,7 @@
             <div class="col-md-5 col-lg-4">
                 <div class="card shadow">
                     <div class="text-center pt-4">
-                        <img src="{$g_base_url}/images/logo.gif" alt="{$site_title|escape}" style="max-height: 80px;">
+                        <img src="{$g_base_url}images/logo.gif" alt="{$site_title|escape}" style="max-height: 80px;">
                     </div>
                     <div class="card-body p-4">
                         <div class="text-center mb-4">

@@ -22,7 +22,7 @@
 use Aura\Html\Escaper as e;
 use Aura\Html\Escaper\AttrEscaper as a;
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $pdo = $GLOBALS['pdo'];
 

@@ -21,7 +21,7 @@ use Aura\Html\Escaper as e;
 
 // uploads a new version of a file
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $pdo = $GLOBALS['pdo'];
 

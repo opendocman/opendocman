@@ -22,7 +22,7 @@
 use Aura\Html\Escaper as e;
 
 // check for valid session 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $pdo = $GLOBALS['pdo'];
 
@@ -51,6 +51,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ?>
 
         <form id="addDepartmentForm" action="department" method="POST" enctype="multipart/form-data">
+            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
             <div class="d-flex align-items-center gap-3 flex-wrap">
                 <div>
                     <b><?php echo msg('department')?></b>
@@ -82,6 +83,11 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_POST['submit']) && 'Add Department' == $_POST['submit']) {
+    // Validate CSRF token for Add Department operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     //Add Departments
     //
     // Make sure they are an admin
@@ -278,6 +284,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 
     // query to show item
     echo '<form action="department" method="POST" enctype="multipart/form-data">';
+    echo $GLOBALS['csrf']->getTokenField();
     echo '<div class="d-flex flex-column gap-2">';
     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
     $stmt = $pdo->prepare($query);
@@ -360,6 +367,11 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     display_smarty_template('_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['deletedepartment'])) {
+    // Validate CSRF token for Delete Department operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');
@@ -414,6 +426,7 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
     ob_start();
     ?>  
                         <form action="department" id="modifyDeptForm" method="POST" enctype="multipart/form-data">
+                            <?php echo $GLOBALS['csrf']->getTokenField(); ?>
                             <div class="d-flex align-items-center gap-3 flex-wrap">
                                     <?php
                                     $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department where id = :item";
@@ -496,7 +509,12 @@ if (isset($_GET['submit']) && $_GET['submit']=='add') {
 } elseif (isset($_POST['submit']) && 'Update Department' == $_POST['submit']) {
     // UPDATE Department
     // 
-    // 
+    // Validate CSRF token for Update Department operation
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    
     // Make sure they are an admin
     if (!$user_obj->isAdmin()) {
         header('Location: error?ec=4');

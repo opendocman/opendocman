@@ -37,7 +37,7 @@ Therefore, javascript spTo_(string) (space to underscore) will go through and su
 all the spaces with the underscore character.
 */
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();

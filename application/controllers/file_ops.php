@@ -22,7 +22,7 @@ use Aura\Html\Escaper as e;
 // (C) 2002-2004 Stephen Lawrence Jr, Khoa Nguyen
 // Admin file operations
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $pdo = $GLOBALS['pdo'];
 

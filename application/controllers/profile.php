@@ -20,7 +20,7 @@
 // (C) 2002, 2003, 2004 Stephen Lawrence Jr., Khoa Nguyen
 // Page for changing personal info
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 if (!isset($_SESSION['uid'])) {
     redirect_visitor();

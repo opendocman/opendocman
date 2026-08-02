@@ -24,7 +24,7 @@ use Aura\Html\Escaper as e;
 
 
 // check session
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if (!isset($_SESSION['uid'])) {
     header('Location: error?ec=1');
     exit;

@@ -25,7 +25,7 @@ use Aura\Html\Escaper as e;
 $pdo = $GLOBALS['pdo'];
 
 $start_time = time();
-session_start();
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
