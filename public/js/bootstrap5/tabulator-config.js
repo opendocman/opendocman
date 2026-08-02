@@ -82,7 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
             { title: 'Modified', field: 'modified_date', width: 120 },
             { title: 'Author', field: 'owner_name', width: 150 },
             { title: 'Department', field: 'dept_name', width: 120 },
-            { title: 'Size', field: 'filesize', width: 80 }
+            { title: 'Size', field: 'filesize', width: 80 },
+            { title: '', field: 'checkout_link', width: 100, headerSort: false,
+              visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
+              formatter: function(cell) {
+                var link = cell.getValue();
+                return link ? '<a href="' + link + '" class="btn btn-sm btn-primary">Check-Out</a>' : '';
+              }
+            },
         ]
     }));
     window.fileTable = table;

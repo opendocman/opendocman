@@ -341,7 +341,11 @@ foreach ($page_ids as $fileid) {
         $view_link = 'none';
     }
 
-    $filesize = display_filesize(getFilePath($fileid, $realname, 'data'));
+    $filePath = getFilePath($fileid, $realname, 'data');
+    if (!file_exists($filePath) && $state === -1) {
+        $filePath = getFilePath($fileid, $realname, 'incoming');
+    }
+    $filesize = display_filesize($filePath);
     $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h($_GET['state'] ?? 1);
 
     // Generate content snippet for search results
@@ -379,6 +383,9 @@ foreach ($page_ids as $fileid) {
         'owner_name' => $owner_name,
         'dept_name' => $row['dept_name'] ?? '',
         'filesize' => $filesize,
+        'checkout_link' => ($state === -1 && $lock === false && $userAccessLevel >= 3)
+            ? 'check-out?id=' . $fileid . '&state=0&access_right=modify'
+            : null,
         'lock' => $lock,
     );
 }
