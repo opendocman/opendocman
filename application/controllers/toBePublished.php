@@ -265,6 +265,71 @@ if (!isset($_POST['submit'])) {
                 }
             }
 
+            // Save current data file as revision and move incoming file to data
+            $currentRealname = $file_obj->getName();
+            $incomingPath = getFilePath($fileid, $currentRealname, 'incoming');
+            if (file_exists($incomingPath)) {
+                // Get reviewer username for the log entry
+                $usernameQuery = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
+                $usernameStmt = $pdo->prepare($usernameQuery);
+                $usernameStmt->execute([':uid' => $_SESSION['uid']]);
+                $username = $usernameStmt->fetchColumn();
+
+                // Count existing revisions
+                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([':id' => $fileid]);
+                $revisionCount = (int) $stmt->fetchColumn();
+
+                // Save current data file as revision
+                $dataPath = getFilePath($fileid, $currentRealname, 'data');
+                if (file_exists($dataPath)) {
+                    $revisionDir = dirname(getFilePath($fileid, $currentRealname, 'revision', $revisionCount));
+                    if (!is_dir($revisionDir)) {
+                        mkdir($revisionDir, 0775, true);
+                    }
+                    $revisionPath = getFilePath($fileid, $currentRealname, 'revision', $revisionCount);
+                    copy($dataPath, $revisionPath);
+
+                    // Update log: mark old 'current' with revision number
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current'";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
+
+                    // Insert new 'current' log entry
+                    $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([
+                        ':id' => $fileid,
+                        ':username' => $username,
+                        ':note' => 'Approved revision ' . $revisionCount,
+                    ]);
+                }
+
+                // Move incoming file to data directory
+                $dataDir = dirname($dataPath);
+                if (!is_dir($dataDir)) {
+                    mkdir($dataDir, 0775, true);
+                }
+                rename($incomingPath, $dataPath);
+
+                // Re-index text content from the new data file
+                $file_mime = File::mime($dataPath, $currentRealname);
+                if (TextExtractorFactory::isExtractable($file_mime)) {
+                    $extractor = TextExtractorFactory::create($file_mime);
+                    if ($extractor !== null) {
+                        $contentText = $extractor->extract($dataPath);
+                        $indexQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}content_index (file_id, content_text, indexed_at) VALUES (:file_id, :content_text, NOW()) ON DUPLICATE KEY UPDATE content_text = :content_text2, indexed_at = NOW()";
+                        $indexStmt = $pdo->prepare($indexQuery);
+                        $indexStmt->execute([
+                            ':file_id' => $fileid,
+                            ':content_text' => $contentText,
+                            ':content_text2' => $contentText,
+                        ]);
+                    }
+                }
+            }
+
             $file_obj->Publishable(1);
             $file_obj->setReviewerComments($reviewer_comments);
             AccessLog::addLogEntry($fileid, 'Y', $pdo);
