@@ -101,6 +101,11 @@ function getFilePath(int $fileId, string $realname, string $type = 'data', ?int 
             }
             return $path;
 
+        case 'incoming':
+            $base = $GLOBALS['CONFIG']['incomingDir'];
+            $path = $base . $fileId . '/' . $realname;
+            return $path;
+
         default:
             throw new InvalidArgumentException("Unknown file path type: $type");
     }
