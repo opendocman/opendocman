@@ -128,30 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    var rejectsForm = document.forms['author_note_form'];
-    if (rejectsForm) {
-        table.on('rowSelectionChanged', function() {
-            var rows = table.getSelectedRows();
-            var btns = rejectsForm.querySelectorAll('button[type="submit"]');
-            btns.forEach(function(b) { b.disabled = rows.length === 0; });
-        });
-
-        rejectsForm.addEventListener('submit', function(e) {
-            var rows = table.getSelectedRows();
-            if (rows.length === 0) {
-                e.preventDefault();
-                return;
-            }
-            rows.forEach(function(r) {
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'checkbox[]';
-                input.value = r.getData().id;
-                rejectsForm.appendChild(input);
-            });
-        });
-    }
-
     var clearStatusBtn = document.getElementById('clear-status-selected');
     if (clearStatusBtn) {
         table.on('rowSelectionChanged', function() {

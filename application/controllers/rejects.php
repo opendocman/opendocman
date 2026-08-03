@@ -45,88 +45,18 @@ if (!isset($_POST['submit'])) {
         header('Location: error?ec=1&last_message=' . urlencode('User initialization failed'));
         exit;
     }
-    if (@$_REQUEST['mode']=='root') {
-        echo '<form name="author_note_form" action="rejects?mode=root" method="post">';
-        echo $GLOBALS['csrf']->getTokenField();
-    } else {
-        echo '<form name="author_note_form" action="rejects" method="post">';
-        echo $GLOBALS['csrf']->getTokenField();
-    }
-    ?>
-<?php
-$GLOBALS['smarty']->assign('state', -1);
-display_smarty_template('out.tpl');
-?>
-    <div class="d-flex gap-2 mt-3">
-        <button class="btn btn-danger" type="submit" name="submit" value="delete"><?php echo msg('button_delete'); ?></button>
-    </div>
-</form>
 
-<?php
-           $content = ob_get_clean();
-           $GLOBALS['smarty']->assign('content', $content);
-           display_smarty_template('_content.tpl');
-           draw_footer();
-} elseif ($_POST['submit'] == 'delete') {
-    // Validate CSRF token for delete operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
-        exit;
+    // Provide CSRF token for the out.tpl delete button
+    if (isset($GLOBALS['csrf'])) {
+        $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/delete');
+        $GLOBALS['smarty']->assign('delete_csrf_field', $csrf_data['field']);
     }
-    
-    if (!isset($_REQUEST['checkbox'])) {
-        header('Location: rejects?last_message=' . urlencode(msg('message_you_did_not_enter_value')));
-        exit;
-    }
-    
-    $url = 'delete?mode=tmpdel&';
-    $id = 0;
-    if (isset($_POST["checkbox"])) {
-        $loop = 0;
-        foreach ($_POST['checkbox'] as $num=>$cbox) {
-            $fileid = $cbox;
-            $url .= 'id'.  $num . '='.$fileid.'&';
-            $id ++;
-            $loop++;
-        }
-        $url = substr($url, 0, strlen($url)-1);
-    }
-    header('Location:'. urlencode($url) .'&num_checkboxes=' . urlencode($loop));
+
+    $GLOBALS['smarty']->assign('state', -1);
+    display_smarty_template('out.tpl');
+    $content = ob_get_clean();
+    $GLOBALS['smarty']->assign('content', $content);
+    display_smarty_template('_content.tpl');
+    draw_footer();
 }
-
 ?>
-<script type="text/javascript">
-    function closeWindow(close_window_in_ms)
-    {
-    setTimeout(window.close, close_window_in_ms);
-    }
-
-
-function checkedBoxesNumber()
-{
-    counter=0;
-    record="";
-    for(j=0; j<document.forms[0].elements.length; j++)
-    {
-            if(document.forms[0].elements[j].type == "checkbox")
-            {
-                    counter++;
-            }
-    }
-    for(i=1; i<counter; i++)
-    {
-            if(eval('document.forms[0].checkbox' + i + '.checked') == true)
-            {
-                    id=(eval('document.forms[0].checkbox' + i + '.value'));
-                    document.table.fileid.value +="" + id +" ";
-                    record +="" + i +" ";
-            }
-    }
-
-    document.table.checkedboxes.value = record;
-    document.table.checkednumber.value = counter;
-    alert("boxes " + document.table.checkedboxes.value  + " are selected");
-
-}
-
-</script>
