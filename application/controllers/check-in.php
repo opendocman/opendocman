@@ -220,9 +220,9 @@ else {
         $username = $result['username'];
 
         // Mark previous 'current' entry as 'incoming' (pending approval)
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'incoming' WHERE id = :id AND revision = 'current'";
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'incoming', note = :note WHERE id = :id AND revision = 'current'";
         $stmt = $pdo->prepare($query);
-        $stmt->execute(array(':id' => $id));
+        $stmt->execute(array(':id' => $id, ':note' => $_POST['note']));
 
         // update file status
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable, realname = :filename WHERE id = :id";

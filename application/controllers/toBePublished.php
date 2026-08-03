@@ -306,7 +306,7 @@ if (!isset($_POST['submit'])) {
                     $stmt->execute([
                         ':id' => $fileid,
                         ':username' => $username,
-                        ':note' => 'Approved revision ' . $revisionCount,
+                        ':note' => $comments ?: 'Approved revision ' . $revisionCount,
                     ]);
                 }
 
