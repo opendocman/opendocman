@@ -86,15 +86,11 @@ document.addEventListener('DOMContentLoaded', function() {
             { title: '', field: 'checkout_link', width: 100, headerSort: false,
               visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
               formatter: function(cell) {
-                var link = cell.getValue();
-                return link ? '<a href="' + link + '" class="btn btn-sm btn-primary">Check-Out</a>' : '';
-              }
-            },
-            { title: '', field: 'checkin_link', width: 100, headerSort: false,
-              visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
-              formatter: function(cell) {
-                var link = cell.getValue();
-                return link ? '<a href="' + link + '" class="btn btn-sm btn-success">Check-In</a>' : '';
+                var checkout = cell.getValue();
+                var checkin = cell.getData().checkin_link;
+                if (checkout) return '<a href="' + checkout + '" class="btn btn-sm btn-primary">Check-Out</a>';
+                if (checkin) return '<a href="' + checkin + '" class="btn btn-sm btn-success">Check-In</a>';
+                return '';
               }
             },
         ]
