@@ -390,6 +390,9 @@ foreach ($page_ids as $fileid) {
         'checkout_link' => ($state === -1 && $lock === false && $userAccessLevel >= 3)
             ? 'check-out?id=' . $fileid . '&state=0&access_right=modify'
             : null,
+        'checkin_link' => ($state === -1 && $lock === true && (int)$row['status'] === (int)$_SESSION['uid'])
+            ? 'check-in?id=' . $fileid
+            : null,
         'lock' => $lock,
     );
 }

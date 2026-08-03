@@ -90,6 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 return link ? '<a href="' + link + '" class="btn btn-sm btn-primary">Check-Out</a>' : '';
               }
             },
+            { title: '', field: 'checkin_link', width: 100, headerSort: false,
+              visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
+              formatter: function(cell) {
+                var link = cell.getValue();
+                return link ? '<a href="' + link + '" class="btn btn-sm btn-success">Check-In</a>' : '';
+              }
+            },
         ]
     }));
     window.fileTable = table;
