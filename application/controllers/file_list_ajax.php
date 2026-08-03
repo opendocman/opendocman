@@ -343,7 +343,7 @@ foreach ($page_ids as $fileid) {
 
     $filePath = getFilePath($fileid, $realname, 'data');
     if (!file_exists($filePath)) {
-        if ($state === -1) {
+        if ($state === -1 || $state === 0) {
             $filePath = getFilePath($fileid, $realname, 'incoming');
         } elseif ($state === 2) {
             $filePath = getFilePath($fileid, $realname, 'archive');
