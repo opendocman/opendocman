@@ -84,7 +84,7 @@ class IncomingRevisionWorkflowTest extends TestCase
         $this->mockPdo->shouldReceive('prepare')
             ->once()
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming'/"
+                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
             ))
             ->andReturn($countStatement);
 
@@ -109,7 +109,7 @@ class IncomingRevisionWorkflowTest extends TestCase
         $this->mockPdo->shouldReceive('prepare')
             ->once()
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming'/"
+                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
             ))
             ->andReturn($countStatement);
 
@@ -166,7 +166,7 @@ class IncomingRevisionWorkflowTest extends TestCase
 
         $this->mockPdo->shouldReceive('prepare')
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming'/"
+                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
             ))
             ->once()
             ->ordered()
@@ -373,7 +373,7 @@ class IncomingRevisionWorkflowTest extends TestCase
 
     private function simulateCountRevisions(int $fileId): int
     {
-        $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming'";
+        $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
         $stmt = $this->mockPdo->prepare($query);
         $stmt->execute([':id' => $fileId]);
         return (int) $stmt->fetchColumn();
@@ -386,7 +386,7 @@ class IncomingRevisionWorkflowTest extends TestCase
         $usernameStmt->execute([':uid' => $_SESSION['uid']]);
         $username = $usernameStmt->fetchColumn();
 
-        $countQuery = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming'";
+        $countQuery = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute([':id' => $fileId]);
         $revisionCount = (int) $countStmt->fetchColumn();

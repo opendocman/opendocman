@@ -275,8 +275,8 @@ if (!isset($_POST['submit'])) {
                 $usernameStmt->execute([':uid' => $_SESSION['uid']]);
                 $username = $usernameStmt->fetchColumn();
 
-                // Count existing revisions (exclude 'current' and 'incoming')
-                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming'";
+                // Count existing revisions (exclude 'current', 'pending', and 'incoming')
+                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':id' => $fileid]);
                 $revisionCount = (int) $stmt->fetchColumn();
@@ -291,8 +291,8 @@ if (!isset($_POST['submit'])) {
                     $revisionPath = getFilePath($fileid, $currentRealname, 'revision', $revisionCount);
                     copy($dataPath, $revisionPath);
 
-                    // Update log: mark 'incoming' entry with revision number
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'incoming'";
+                    // Update log: mark 'pending' and 'incoming' entries with revision number
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND (revision = 'pending' OR revision = 'incoming')";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
 

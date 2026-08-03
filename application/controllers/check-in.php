@@ -219,6 +219,11 @@ else {
 
         $username = $result['username'];
 
+        // Mark previous 'current' entry as pending archival
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'pending' WHERE id = :id AND revision = 'current'";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':id' => $id));
+
         // Insert log entry for the check-in (marked as 'incoming' until approved)
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')";
         $stmt = $pdo->prepare($query);
