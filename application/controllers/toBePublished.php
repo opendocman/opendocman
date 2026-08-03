@@ -51,6 +51,10 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
         $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
         $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+
+        // CSRF token for the delete button rendered by out.tpl
+        $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
+        $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
     }
     $GLOBALS['smarty']->assign('state', 0);
     display_smarty_template('out.tpl');
