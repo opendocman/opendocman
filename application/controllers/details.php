@@ -253,11 +253,9 @@ if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))
 // ability to view revision history is always available 
 // put it outside the block
 $history_link = "history?id=$request_id&state=" . ($state + 1);
-$comments_link = 'toBePublished?submit=comments&id=' . $request_id;
 $my_delete_link = 'delete?mode=tmpdel&id0=' . $request_id;
 
 $GLOBALS['smarty']->assign('history_link', $history_link);
-$GLOBALS['smarty']->assign('comments_link', $comments_link);
 $GLOBALS['smarty']->assign('my_delete_link', $my_delete_link);
 
 // Call the plugin API
