@@ -227,6 +227,11 @@ function pmt_delete($id)
             if (file_exists($dataPath)) {
                 unlink($dataPath);
             }
+            // Delete incoming file if present
+            $incomingPath = getFilePath($id, $realname, 'incoming');
+            if (file_exists($incomingPath)) {
+                unlink($incomingPath);
+            }
             // Delete revision files using getFilePath for proper naming
             $revisionDir = $GLOBALS['CONFIG']['revisionDir'] . $id . '/';
             if (is_dir($revisionDir)) {
@@ -241,6 +246,20 @@ function pmt_delete($id)
                     closedir($dir);
                 }
                 rmdir($revisionDir);
+            }
+
+            // Clean up empty parent directories
+            $dataDir = dirname($dataPath);
+            if (is_dir($dataDir) && count(scandir($dataDir)) <= 2) {
+                rmdir($dataDir);
+            }
+            $archiveDir = dirname($archivePath);
+            if (is_dir($archiveDir) && count(scandir($archiveDir)) <= 2) {
+                rmdir($archiveDir);
+            }
+            $incomingDir = dirname($incomingPath);
+            if (is_dir($incomingDir) && count(scandir($incomingDir)) <= 2) {
+                rmdir($incomingDir);
             }
             return true;
         }
