@@ -423,7 +423,7 @@ $lang['historypage_version'] = 'Version';
 $lang['historypage_modification'] = 'Modification date';
 $lang['historypage_by'] = 'By';
 $lang['historypage_note'] = 'Note';
-$lang['historypage_pending'] = 'Pending';
+$lang['historypage_pending'] = '待处理';
 
 // Profile Page
 $lang['profilepage_update_profile'] = 'Update personal profile';

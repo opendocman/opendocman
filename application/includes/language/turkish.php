@@ -447,7 +447,7 @@ $lang['historypage_version'] = 'Sürüm';
 $lang['historypage_modification'] = 'Değiştirme tarihi';
 $lang['historypage_by'] = 'Yazar';
 $lang['historypage_note'] = 'Not';
-$lang['historypage_pending'] = 'Pending';
+$lang['historypage_pending'] = 'Beklemede';
 
 // Profil sayfası
 $lang['profilepage_update_profile'] = 'Kişisel profili güncelle';
