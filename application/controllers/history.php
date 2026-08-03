@@ -244,6 +244,11 @@ if (isset($revision_id)) {
             $bgcolor = "#FCFCFC";
         }
 
+        // Skip internal 'pending' markers (they become revision numbers on approval)
+        if ($revision === 'pending') {
+            continue;
+        }
+
         echo '<tr>';
 
         $extra_message = '';
