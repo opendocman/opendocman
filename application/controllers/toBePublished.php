@@ -275,8 +275,8 @@ if (!isset($_POST['submit'])) {
                 $usernameStmt->execute([':uid' => $_SESSION['uid']]);
                 $username = $usernameStmt->fetchColumn();
 
-                // Count existing revisions (exclude 'current' entries)
-                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current'";
+                // Count existing revisions (exclude 'current' and 'incoming')
+                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming'";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':id' => $fileid]);
                 $revisionCount = (int) $stmt->fetchColumn();
@@ -291,8 +291,8 @@ if (!isset($_POST['submit'])) {
                     $revisionPath = getFilePath($fileid, $currentRealname, 'revision', $revisionCount);
                     copy($dataPath, $revisionPath);
 
-                    // Update log: mark oldest 'current' with revision number
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current' ORDER BY modified_on ASC LIMIT 1";
+                    // Update log: mark 'incoming' entry with revision number
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'incoming'";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
 
@@ -310,6 +310,15 @@ if (!isset($_POST['submit'])) {
                 $dataDir = dirname($dataPath);
                 if (!is_dir($dataDir)) {
                     mkdir($dataDir, 0775, true);
+                }
+                // Remove any existing file in data dir (filename may have changed)
+                if (is_dir($dataDir)) {
+                    $existing = scandir($dataDir);
+                    foreach ($existing as $entry) {
+                        if ($entry !== '.' && $entry !== '..') {
+                            unlink($dataDir . '/' . $entry);
+                        }
+                    }
                 }
                 rename($incomingPath, $dataPath);
 

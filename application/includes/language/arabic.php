@@ -423,6 +423,7 @@ $lang['historypage_version'] = 'النسخة';
 $lang['historypage_modification'] = 'تاريخ التعديل';
 $lang['historypage_by'] = 'بواسطة';
 $lang['historypage_note'] = 'ملاحظة';
+$lang['historypage_pending'] = 'Pending';
 
 // Profile Page
 $lang['profilepage_update_profile'] = 'تعديل البيانات الشخصية';

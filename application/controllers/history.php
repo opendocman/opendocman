@@ -253,7 +253,8 @@ if (isset($revision_id)) {
             } else {
                 echo '<td>' . e::h(msg('historypage_latest')) . e::h($extra_message);
             }
-        } else {
+        } elseif ($revision === 'incoming') {
+            echo '<td>' . e::h(msg('historypage_pending')) . e::h($extra_message);
             if (is_file(getFilePath($id, $realname, 'revision', (int) $revision))) {
                 echo '<td class="text-center"><a href="details?id=' . e::h($id) . '_' . e::h($revision) . '&state=' . (e::h($_REQUEST['state'])) . '"><span class="revision">' . e::h(((int) $revision + 1)) . '</span></a>' . e::h($extra_message);
             } else {

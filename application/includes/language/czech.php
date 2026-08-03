@@ -423,6 +423,7 @@ $lang['historypage_version'] = 'Verze';
 $lang['historypage_modification'] = 'Datum změny';
 $lang['historypage_by'] = 'Podle';
 $lang['historypage_note'] = 'Poznámka';
+$lang['historypage_pending'] = 'Pending';
 
 // Profile Page
 $lang['profilepage_update_profile'] = 'Upravit osobní profil';

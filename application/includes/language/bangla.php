@@ -422,6 +422,7 @@ $lang['historypage_version'] = 'ভার্সন';
 $lang['historypage_modification'] = 'পরিবর্তনের তারিখ';
 $lang['historypage_by'] = 'কর্তৃক';
 $lang['historypage_note'] = 'দ্রষ্টব্য';
+$lang['historypage_pending'] = 'Pending';
 
 // Profile Page
 $lang['profilepage_update_profile'] = 'ব্যক্তিগত বৃত্তান্ত পরিবর্ধন কর';

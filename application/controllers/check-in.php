@@ -195,15 +195,6 @@ else {
     $file_data_obj = new FileData($id, $pdo);
 
     if ($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid']) {
-        //look to see how many revision are there
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
-            ':id' => $id
-        ));
-        $result = $stmt->fetchAll();
-
-        $revision_number = $stmt->rowCount();
         // if dir not available, create it
         if (!is_dir($GLOBALS['CONFIG']['revisionDir'])) {
             if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775)) {
@@ -228,14 +219,8 @@ else {
 
         $username = $result['username'];
 
-        // update revision log
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($revision_number) - 1)) . "' WHERE id = :id and revision = 'current'";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
-            ':id' => $id
-        ));
-
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
+        // Insert log entry for the check-in (marked as 'incoming' until approved)
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
             ':id' => $id,
