@@ -275,8 +275,8 @@ if (!isset($_POST['submit'])) {
                 $usernameStmt->execute([':uid' => $_SESSION['uid']]);
                 $username = $usernameStmt->fetchColumn();
 
-                // Count existing revisions (exclude 'current', 'pending', and 'incoming')
-                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
+                // Count existing revisions to determine next revision number
+                $query = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':id' => $fileid]);
                 $revisionCount = (int) $stmt->fetchColumn();

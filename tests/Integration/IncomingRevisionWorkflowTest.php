@@ -84,7 +84,7 @@ class IncomingRevisionWorkflowTest extends TestCase
         $this->mockPdo->shouldReceive('prepare')
             ->once()
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
+                "/SELECT COALESCE\(MAX\(CAST\(revision AS UNSIGNED\)\) \+ 1, 0\) FROM odm_log WHERE id = :id AND revision NOT IN \('current', 'incoming', 'pending'\)/"
             ))
             ->andReturn($countStatement);
 
@@ -109,7 +109,7 @@ class IncomingRevisionWorkflowTest extends TestCase
         $this->mockPdo->shouldReceive('prepare')
             ->once()
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
+                "/SELECT COALESCE\(MAX\(CAST\(revision AS UNSIGNED\)\) \+ 1, 0\) FROM odm_log WHERE id = :id AND revision NOT IN \('current', 'incoming', 'pending'\)/"
             ))
             ->andReturn($countStatement);
 
@@ -166,7 +166,7 @@ class IncomingRevisionWorkflowTest extends TestCase
 
         $this->mockPdo->shouldReceive('prepare')
             ->with(\Mockery::pattern(
-                "/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'/"
+                "/SELECT COALESCE\(MAX\(CAST\(revision AS UNSIGNED\)\) \+ 1, 0\) FROM odm_log WHERE id = :id AND revision NOT IN \('current', 'incoming', 'pending'\)/"
             ))
             ->once()
             ->ordered()
@@ -174,7 +174,7 @@ class IncomingRevisionWorkflowTest extends TestCase
 
         $this->mockPdo->shouldReceive('prepare')
             ->with(\Mockery::pattern(
-                "/UPDATE odm_log SET revision = :rev WHERE id = :id AND revision = 'incoming'/"
+                "/UPDATE odm_log SET revision = :rev WHERE id = :id AND \(revision = 'pending' OR revision = 'incoming'\)/"
             ))
             ->once()
             ->ordered()
@@ -373,7 +373,7 @@ class IncomingRevisionWorkflowTest extends TestCase
 
     private function simulateCountRevisions(int $fileId): int
     {
-        $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
+        $query = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
         $stmt = $this->mockPdo->prepare($query);
         $stmt->execute([':id' => $fileId]);
         return (int) $stmt->fetchColumn();
@@ -386,12 +386,12 @@ class IncomingRevisionWorkflowTest extends TestCase
         $usernameStmt->execute([':uid' => $_SESSION['uid']]);
         $username = $usernameStmt->fetchColumn();
 
-        $countQuery = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current' AND revision != 'incoming' AND revision != 'pending'";
+        $countQuery = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute([':id' => $fileId]);
         $revisionCount = (int) $countStmt->fetchColumn();
 
-        $updateQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'incoming'";
+        $updateQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND (revision = 'pending' OR revision = 'incoming')";
         $updateStmt = $this->mockPdo->prepare($updateQuery);
         $updateStmt->execute([':rev' => $revisionCount, ':id' => $fileId]);
 
@@ -468,6 +468,93 @@ class IncomingRevisionWorkflowTest extends TestCase
             'data' => getFilePath($fileId, $realname, 'data'),
             'incoming' => getFilePath($fileId, $realname, 'incoming'),
         ];
+    }
+
+    public function testFullWorkflowSequence(): void
+    {
+        $fileId = 100;
+
+        // Simulate the complete workflow: upload → check-in → approve → check-in → approve
+        // Track log entries at each step
+
+        // Step 1: Upload - log has one 'current' entry
+        $log = [
+            ['revision' => 'current', 'note' => 'Initial import'],
+        ];
+
+        // Step 2: First check-in - previous 'current' → 'pending', new 'incoming'
+        foreach ($log as &$entry) {
+            if ($entry['revision'] === 'current') {
+                $entry['revision'] = 'pending';
+            }
+        }
+        unset($entry);
+        $log[] = ['revision' => 'incoming', 'note' => 'First revision'];
+
+        // Step 3: First approve
+        $revisionCount = $this->countRevisionsInLog($log);
+        // Save data file as rev N
+        foreach ($log as &$entry) {
+            if ($entry['revision'] === 'pending' || $entry['revision'] === 'incoming') {
+                $entry['revision'] = (string) $revisionCount;
+            }
+        }
+        unset($entry);
+        $log[] = ['revision' => 'current', 'note' => 'Approved revision ' . $revisionCount];
+
+        // Verify after first cycle
+        $this->assertCount(3, $log);
+        $this->assertSame(1, $this->countCurrent($log), 'One current entry');
+        $this->assertSame(0, $this->countMarker($log), 'No pending/incoming entries');
+        // Both old entries should be revision 0 (first revision)
+        $this->assertSame('0', $log[0]['revision']);
+        $this->assertSame('0', $log[1]['revision']);
+
+        // Step 4: Second check-in
+        foreach ($log as &$entry) {
+            if ($entry['revision'] === 'current') {
+                $entry['revision'] = 'pending';
+            }
+        }
+        unset($entry);
+        $log[] = ['revision' => 'incoming', 'note' => 'Second revision'];
+
+        // Step 5: Second approve
+        $revisionCount = $this->countRevisionsInLog($log);
+        foreach ($log as &$entry) {
+            if ($entry['revision'] === 'pending' || $entry['revision'] === 'incoming') {
+                $entry['revision'] = (string) $revisionCount;
+            }
+        }
+        unset($entry);
+        $log[] = ['revision' => 'current', 'note' => 'Approved revision ' . $revisionCount];
+
+        // Verify after second cycle
+        $this->assertCount(5, $log);
+        $this->assertSame(1, $this->countCurrent($log), 'Exactly one current entry');
+        $this->assertSame(0, $this->countMarker($log), 'No pending/incoming entries remain');
+        // Revision numbers: the two from cycle 1 are 0, the two from cycle 2 are 1
+        $revisions = array_map('intval', array_filter(array_column($log, 'revision'), fn($r) => is_numeric($r)));
+        sort($revisions);
+        $this->assertSame([0, 0, 1, 1], $revisions, 'Revisions should be 0,0,1,1');
+        $this->assertSame([0, 0, 1, 1], $revisions, 'Revisions should be 0,0,1,1');
+    }
+
+    private function countCurrent(array $log): int
+    {
+        return count(array_filter($log, fn($e) => $e['revision'] === 'current'));
+    }
+
+    private function countMarker(array $log): int
+    {
+        return count(array_filter($log, fn($e) => $e['revision'] === 'pending' || $e['revision'] === 'incoming'));
+    }
+
+    private function countRevisionsInLog(array $log): int
+    {
+        $revisionValues = array_column($log, 'revision');
+        $nums = array_map('intval', array_filter($revisionValues, fn($r) => is_numeric($r)));
+        return empty($nums) ? 0 : max($nums) + 1;
     }
 
     protected function tearDown(): void
