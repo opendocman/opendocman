@@ -219,10 +219,19 @@ else {
 
         $username = $result['username'];
 
-        // Mark previous 'current' entry as 'incoming' (pending approval)
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'incoming', note = :note WHERE id = :id AND revision = 'current'";
+        // Mark previous 'current' entry as pending archival (preserves original note)
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'pending' WHERE id = :id AND revision = 'current'";
         $stmt = $pdo->prepare($query);
-        $stmt->execute(array(':id' => $id, ':note' => $_POST['note']));
+        $stmt->execute(array(':id' => $id));
+
+        // Insert log entry for the check-in (marked as 'incoming' until approved)
+        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(
+            ':id' => $id,
+            ':username' => $username,
+            ':note' => $_POST['note']
+        ));
 
         // update file status
         $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable, realname = :filename WHERE id = :id";

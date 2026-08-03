@@ -280,7 +280,7 @@ if (!isset($_POST['submit'])) {
                 $username = $usernameStmt->fetchColumn();
 
                 // Count existing revisions to determine next revision number
-                $query = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming')";
+                $query = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':id' => $fileid]);
                 $revisionCount = (int) $stmt->fetchColumn();
@@ -296,7 +296,7 @@ if (!isset($_POST['submit'])) {
                     copy($dataPath, $revisionPath);
 
                     // Update log: mark 'incoming' entry with revision number
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'incoming'";
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision IN ('pending', 'incoming')";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
 
