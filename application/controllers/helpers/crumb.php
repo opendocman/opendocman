@@ -62,7 +62,7 @@ class crumb
     public function printTrail($cur_level)
     {
         $trail = "<span class=\"crumb\">";
-        for ($i=1; $i != $cur_level+1; $i++) {
+        for ($i=1; $i <= $cur_level; $i++) {
             if (isset($_SESSION['crumbs'][$i])) {
                 if ($i != $cur_level) {
                     $trail .= "<a class=\"statusbar\" href=\"". $_SESSION['crumbs'][$i]['url'] . '">';
