@@ -275,8 +275,8 @@ if (!isset($_POST['submit'])) {
                 $usernameStmt->execute([':uid' => $_SESSION['uid']]);
                 $username = $usernameStmt->fetchColumn();
 
-                // Count existing revisions
-                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
+                // Count existing revisions (exclude 'current' entries)
+                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision != 'current'";
                 $stmt = $pdo->prepare($query);
                 $stmt->execute([':id' => $fileid]);
                 $revisionCount = (int) $stmt->fetchColumn();
@@ -291,8 +291,8 @@ if (!isset($_POST['submit'])) {
                     $revisionPath = getFilePath($fileid, $currentRealname, 'revision', $revisionCount);
                     copy($dataPath, $revisionPath);
 
-                    // Update log: mark old 'current' with revision number
-                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current'";
+                    // Update log: mark oldest 'current' with revision number
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current' ORDER BY modified_on ASC LIMIT 1";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
 
