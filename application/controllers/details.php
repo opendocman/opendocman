@@ -126,7 +126,7 @@ if ($status == 0 && $user_perms_obj->canView($request_id)) {
     $file_unlocked = false;
 }
 //chm sahar
-if (!empty($revision_id)) {
+if (isset($revision_id)) {
     $query = "
         SELECT
           u.last_name,
@@ -176,14 +176,13 @@ if (!empty($revision_id)) {
     $revisionData = $stmt->fetchAll();
 }
 
-$rows = $stmt->rowCount();
-
-if ($rows == 1 && !(isset($revision_id))) {
-    $revision = "1";
-} elseif (isset($revision_id)) {
+if (isset($revision_id)) {
     $revision = $revision_id + 1;
 } else {
-    $revision = "$rows";
+    $approvedRows = array_filter($revisionData, function (array $row): bool {
+        return $row['revision'] === 'current' || is_numeric($row['revision']);
+    });
+    $revision = (string) count($approvedRows);
 }
 
 $file_under_review = (($file_data_obj->isPublishable() == -1) ? true : false);

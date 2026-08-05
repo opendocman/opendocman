@@ -118,20 +118,10 @@ class IncomingRevisionWorkflowTest extends TestCase
         $this->assertSame(0, $revisionCount);
     }
 
-    public function testApprovalFlowUpdatesIncomingLogAndInsertsCurrent(): void
+    public function testApprovalArchivesCurrentAndPromotesIncoming(): void
     {
         $fileId = 10;
         $revisionCount = 2;
-        $username = 'reviewer1';
-
-        $usernameStatement = \Mockery::mock(\PDOStatement::class);
-        $usernameStatement->shouldReceive('execute')
-            ->once()
-            ->with([':uid' => 1])
-            ->andReturn(true);
-        $usernameStatement->shouldReceive('fetchColumn')
-            ->once()
-            ->andReturn($username);
 
         $countStatement = \Mockery::mock(\PDOStatement::class);
         $countStatement->shouldReceive('execute')
@@ -142,27 +132,20 @@ class IncomingRevisionWorkflowTest extends TestCase
             ->once()
             ->andReturn((string) $revisionCount);
 
-        $updateStatement = \Mockery::mock(\PDOStatement::class);
-        $updateStatement->shouldReceive('execute')
-            ->once()
-            ->with([':rev' => $revisionCount, ':id' => $fileId])
-            ->andReturn(true);
+        $archiveStatement = \Mockery::mock(\PDOStatement::class);
+        $archiveStatement->shouldReceive('execute')->once()->with([
+            ':rev' => $revisionCount,
+            ':id' => $fileId,
+        ])->andReturn(true);
 
-        $insertStatement = \Mockery::mock(\PDOStatement::class);
-        $insertStatement->shouldReceive('execute')
-            ->once()
-            ->with(\Mockery::on(function (array $params) use ($fileId, $username, $revisionCount) {
-                return $params[':id'] === $fileId
-                    && $params[':username'] === $username
-                    && strpos($params[':note'], 'Approved revision ' . $revisionCount) !== false;
-            }))
-            ->andReturn(true);
+        $promoteStatement = \Mockery::mock(\PDOStatement::class);
+        $promoteStatement->shouldReceive('execute')->once()->with([
+            ':id' => $fileId,
+        ])->andReturn(true);
 
-        $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern('/SELECT username FROM odm_user WHERE id = :uid/'))
-            ->once()
-            ->ordered()
-            ->andReturn($usernameStatement);
+        $accessStatement = \Mockery::mock(\PDOStatement::class);
+        $accessStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+        $accessStatement->shouldReceive('fetchColumn')->once()->andReturn('1');
 
         $this->mockPdo->shouldReceive('prepare')
             ->with(\Mockery::pattern(
@@ -173,68 +156,203 @@ class IncomingRevisionWorkflowTest extends TestCase
             ->andReturn($countStatement);
 
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern(
-                "/UPDATE odm_log SET revision = :rev WHERE id = :id AND \(revision = 'pending' OR revision = 'incoming'\)/"
-            ))
-            ->once()
-            ->ordered()
-            ->andReturn($updateStatement);
+            ->with(\Mockery::pattern("/SELECT COUNT\(\*\) FROM odm_access_log WHERE file_id = :id AND action = 'Y'/"))
+            ->once()->ordered()->andReturn($accessStatement);
 
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern(
-                "/INSERT INTO odm_log \(id, modified_on, modified_by, note, revision\) VALUES/i"
-            ))
-            ->once()
-            ->ordered()
-            ->andReturn($insertStatement);
+            ->with(\Mockery::pattern("/UPDATE odm_log SET revision = :rev WHERE id = :id AND revision = 'current'/"))
+            ->once()->ordered()->andReturn($archiveStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/UPDATE odm_log SET revision = 'current' WHERE id = :id AND revision = 'incoming'/"))
+            ->once()->ordered()->andReturn($promoteStatement);
 
         $result = $this->simulateApprovalFlow($fileId);
 
         $this->assertTrue($result);
     }
 
-    public function testCheckInInsertsIncomingLogEntry(): void
+    public function testApprovalWithoutPriorApprovalReplacesCurrentInsteadOfArchiving(): void
+    {
+        $fileId = 11;
+        $revisionCount = 0;
+
+        $countStatement = \Mockery::mock(\PDOStatement::class);
+        $countStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+        $countStatement->shouldReceive('fetchColumn')->once()->andReturn((string) $revisionCount);
+
+        $accessStatement = \Mockery::mock(\PDOStatement::class);
+        $accessStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+        $accessStatement->shouldReceive('fetchColumn')->once()->andReturn('0');
+
+        $deleteStatement = \Mockery::mock(\PDOStatement::class);
+        $deleteStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+
+        $promoteStatement = \Mockery::mock(\PDOStatement::class);
+        $promoteStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern(
+                "/SELECT COALESCE\(MAX\(CAST\(revision AS UNSIGNED\)\) \+ 1, 0\) FROM odm_log WHERE id = :id AND revision NOT IN \('current', 'incoming', 'pending'\)/"
+            ))
+            ->once()->ordered()->andReturn($countStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/SELECT COUNT\(\*\) FROM odm_access_log WHERE file_id = :id AND action = 'Y'/"))
+            ->once()->ordered()->andReturn($accessStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/DELETE FROM odm_log WHERE id = :id AND revision = 'current'/"))
+            ->once()->ordered()->andReturn($deleteStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/UPDATE odm_log SET revision = 'current' WHERE id = :id AND revision = 'incoming'/"))
+            ->once()->ordered()->andReturn($promoteStatement);
+
+        $this->assertTrue($this->simulateApprovalFlow($fileId));
+    }
+
+    public function testApprovalControllerArchivesCurrentAndPromotesIncoming(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/toBePublished.php'
+        );
+
+        $this->assertStringContainsString(
+            "revision = :rev WHERE id = :id AND revision = 'current'",
+            $source
+        );
+        $this->assertStringContainsString(
+            "revision = 'current' WHERE id = :id AND revision = 'incoming'",
+            $source
+        );
+        $this->assertStringNotContainsString(
+            "revision IN ('pending', 'incoming')",
+            $source
+        );
+        $this->assertStringNotContainsString(
+            "VALUES(:id, NOW(), :username, :note, 'current')",
+            $source
+        );
+    }
+
+    public function testApprovalControllerGuardsArchiveAndPromotionFailures(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/toBePublished.php'
+        );
+
+        $this->assertStringContainsString(
+            "if (!file_exists(\$dataPath)) {\n                        header(\"Location:toBePublished?last_message=\" . urlencode(msg('message_error_performing_action')));\n                        exit;\n                    }",
+            $source
+        );
+        $this->assertStringContainsString(
+            "if (!copy(\$dataPath, \$revisionPath)) {\n                        header(\"Location:toBePublished?last_message=\" . urlencode(msg('message_error_performing_action')));\n                        exit;\n                    }",
+            $source
+        );
+        $this->assertStringContainsString(
+            "if (!rename(\$incomingPath, \$newDataPath)) {\n                    if (\$hasPriorApproval || \$revisionCount > 0) {\n                        copy(\$revisionPath, \$newDataPath);\n                    }\n                    header(\"Location:toBePublished?last_message=\" . urlencode(msg('message_error_performing_action')));\n                    exit;\n                }",
+            $source
+        );
+    }
+
+    public function testApprovalControllerTransitionsLogsOnlyAfterSuccessfulPromotion(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/toBePublished.php'
+        );
+
+        $rename = strpos($source, 'rename($incomingPath, $newDataPath)');
+        $archive = strpos($source, "revision = :rev WHERE id = :id AND revision = 'current'");
+        $promote = strpos($source, "revision = 'current' WHERE id = :id AND revision = 'incoming'");
+        $publish = strpos($source, '$file_obj->Publishable(1);');
+
+        $this->assertNotFalse($rename);
+        $this->assertNotFalse($archive);
+        $this->assertNotFalse($promote);
+        $this->assertNotFalse($publish);
+        $this->assertLessThan($archive, $rename);
+        $this->assertLessThan($promote, $archive);
+        $this->assertLessThan($publish, $promote);
+    }
+
+    public function testCheckInCreatesIncomingWithoutChangingCurrent(): void
     {
         $fileId = 15;
         $username = 'testuser';
         $note = 'Updated contract terms';
 
         $userStatement = \Mockery::mock(\PDOStatement::class);
-        $userStatement->shouldReceive('execute')
-            ->once()
-            ->with([':uid' => 1])
-            ->andReturn(true);
-        $userStatement->shouldReceive('fetch')
-            ->once()
-            ->andReturn(['username' => $username]);
+        $userStatement->shouldReceive('execute')->once()->with([':uid' => 1])->andReturn(true);
+        $userStatement->shouldReceive('fetch')->once()->andReturn(['username' => $username]);
+
+        $existsStatement = \Mockery::mock(\PDOStatement::class);
+        $existsStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+        $existsStatement->shouldReceive('fetchColumn')->once()->andReturn(0);
 
         $insertStatement = \Mockery::mock(\PDOStatement::class);
-        $insertStatement->shouldReceive('execute')
-            ->once()
-            ->with(\Mockery::on(function (array $params) use ($fileId, $username, $note) {
-                return $params[':id'] === $fileId
-                    && $params[':username'] === $username
-                    && $params[':note'] === $note;
-            }))
-            ->andReturn(true);
+        $insertStatement->shouldReceive('execute')->once()->with([
+            ':id' => $fileId,
+            ':username' => $username,
+            ':note' => $note,
+        ])->andReturn(true);
 
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern('/SELECT username FROM odm_user WHERE id = :uid/'))
-            ->once()
-            ->ordered()
-            ->andReturn($userStatement);
+            ->with(\Mockery::pattern("/SELECT username FROM odm_user WHERE id = :uid/"))
+            ->once()->ordered()->andReturn($userStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision = 'incoming'/"))
+            ->once()->ordered()->andReturn($existsStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/INSERT INTO odm_log .*'incoming'/i"))
+            ->once()->ordered()->andReturn($insertStatement);
+
+        $this->assertTrue($this->simulateCheckInLogUpsert($fileId, $note));
+    }
+
+    public function testReCheckInUpdatesExistingIncomingRow(): void
+    {
+        $fileId = 15;
+        $username = 'testuser';
+        $note = 'Corrected rejected revision';
+
+        $userStatement = \Mockery::mock(\PDOStatement::class);
+        $userStatement->shouldReceive('execute')->once()->with([':uid' => 1])->andReturn(true);
+        $userStatement->shouldReceive('fetch')->once()->andReturn(['username' => $username]);
+
+        $existsStatement = \Mockery::mock(\PDOStatement::class);
+        $existsStatement->shouldReceive('execute')->once()->with([':id' => $fileId])->andReturn(true);
+        $existsStatement->shouldReceive('fetchColumn')->once()->andReturn(1);
+
+        $updateStatement = \Mockery::mock(\PDOStatement::class);
+        $updateStatement->shouldReceive('execute')->once()->with([
+            ':id' => $fileId,
+            ':username' => $username,
+            ':note' => $note,
+        ])->andReturn(true);
 
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern(
-                "/INSERT INTO odm_log \(id, modified_on, modified_by, note, revision\) VALUES.*'incoming'/i"
-            ))
-            ->once()
-            ->ordered()
-            ->andReturn($insertStatement);
+            ->with(\Mockery::pattern("/SELECT username FROM odm_user WHERE id = :uid/"))
+            ->once()->ordered()->andReturn($userStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/SELECT COUNT\(\*\) FROM odm_log WHERE id = :id AND revision = 'incoming'/"))
+            ->once()->ordered()->andReturn($existsStatement);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern("/UPDATE odm_log SET modified_on = NOW\(\), modified_by = :username, note = :note WHERE id = :id AND revision = 'incoming'/"))
+            ->once()->ordered()->andReturn($updateStatement);
 
-        $result = $this->simulateCheckInLogInsert($fileId, $username, $note);
+        $this->assertTrue($this->simulateCheckInLogUpsert($fileId, $note));
+    }
 
-        $this->assertTrue($result);
+    public function testCheckInControllerPreservesCurrentAndUpsertsIncoming(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/check-in.php'
+        );
+
+        $this->assertStringNotContainsString("SET revision = 'pending'", $source);
+        $this->assertStringContainsString(
+            "SELECT COUNT(*) FROM {\$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision = 'incoming'",
+            $source
+        );
+        $this->assertStringContainsString('if ($incomingExists)', $source);
+        $this->assertStringNotContainsString('if ($stmt->rowCount() === 0)', $source);
     }
 
     public function testCheckInUsesIncomingFileType(): void
@@ -253,6 +371,14 @@ class IncomingRevisionWorkflowTest extends TestCase
         $result = $this->simulateHistoryDisplayForRevision('incoming');
 
         $this->assertStringContainsString('Pending', $result);
+        $this->assertStringNotContainsString('<a href', $result);
+    }
+
+    public function testHistoryPageDisplaysIncomingAsRejectedWithoutLink(): void
+    {
+        $result = $this->simulateHistoryDisplayForRevision('incoming', -1);
+
+        $this->assertStringContainsString('Rejected', $result);
         $this->assertStringNotContainsString('<a href', $result);
     }
 
@@ -381,58 +507,74 @@ class IncomingRevisionWorkflowTest extends TestCase
 
     private function simulateApprovalFlow(int $fileId): bool
     {
-        $usernameQuery = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
-        $usernameStmt = $this->mockPdo->prepare($usernameQuery);
-        $usernameStmt->execute([':uid' => $_SESSION['uid']]);
-        $username = $usernameStmt->fetchColumn();
-
         $countQuery = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute([':id' => $fileId]);
         $revisionCount = (int) $countStmt->fetchColumn();
 
-        $updateQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND (revision = 'pending' OR revision = 'incoming')";
-        $updateStmt = $this->mockPdo->prepare($updateQuery);
-        $updateStmt->execute([':rev' => $revisionCount, ':id' => $fileId]);
+        $accessQuery = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}access_log WHERE file_id = :id AND action = 'Y'";
+        $accessStmt = $this->mockPdo->prepare($accessQuery);
+        $accessStmt->execute([':id' => $fileId]);
+        $hasPriorApproval = (int) $accessStmt->fetchColumn() > 0;
 
-        $insertQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
-        $insertStmt = $this->mockPdo->prepare($insertQuery);
-        $insertStmt->execute([
-            ':id' => $fileId,
-            ':username' => $username,
-            ':note' => 'Approved revision ' . $revisionCount,
-        ]);
+        if ($hasPriorApproval || $revisionCount > 0) {
+            $archiveQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current'";
+            $archiveStmt = $this->mockPdo->prepare($archiveQuery);
+            $archiveStmt->execute([':rev' => $revisionCount, ':id' => $fileId]);
+
+            $promoteQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'current' WHERE id = :id AND revision = 'incoming'";
+            $promoteStmt = $this->mockPdo->prepare($promoteQuery);
+            $promoteStmt->execute([':id' => $fileId]);
+        } else {
+            $deleteQuery = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision = 'current'";
+            $deleteStmt = $this->mockPdo->prepare($deleteQuery);
+            $deleteStmt->execute([':id' => $fileId]);
+
+            $promoteQuery = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'current' WHERE id = :id AND revision = 'incoming'";
+            $promoteStmt = $this->mockPdo->prepare($promoteQuery);
+            $promoteStmt->execute([':id' => $fileId]);
+        }
 
         return true;
     }
 
-    private function simulateCheckInLogInsert(int $fileId, string $username, string $note): bool
+    private function simulateCheckInLogUpsert(int $fileId, string $note): bool
     {
-        $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
-        $stmt = $this->mockPdo->prepare($query);
+        $stmt = $this->mockPdo->prepare(
+            "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid"
+        );
         $stmt->execute([':uid' => $_SESSION['uid']]);
-        $result = $stmt->fetch();
-        $username = $result['username'];
+        $username = $stmt->fetch()['username'];
 
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')";
-        $stmt = $this->mockPdo->prepare($query);
-        $stmt->execute([
-            ':id' => $fileId,
-            ':username' => $username,
-            ':note' => $note,
-        ]);
+        $stmt = $this->mockPdo->prepare(
+            "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision = 'incoming'"
+        );
+        $stmt->execute([':id' => $fileId]);
+        $incomingExists = (int) $stmt->fetchColumn() > 0;
+
+        $params = [':id' => $fileId, ':username' => $username, ':note' => $note];
+        if ($incomingExists) {
+            $stmt = $this->mockPdo->prepare(
+                "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET modified_on = NOW(), modified_by = :username, note = :note WHERE id = :id AND revision = 'incoming'"
+            );
+        } else {
+            $stmt = $this->mockPdo->prepare(
+                "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')"
+            );
+        }
+        $stmt->execute($params);
 
         return true;
     }
 
-    private function simulateHistoryDisplayForRevision(string $revision): string
+    private function simulateHistoryDisplayForRevision(string $revision, int $publishable = 1): string
     {
         ob_start();
         $extra_message = '';
         if ($revision === 'current') {
             echo '<td class="text-center"><a href="details?id=1&state=1"><span class="revision">Latest</span></a>' . $extra_message;
         } elseif ($revision === 'incoming') {
-            echo '<td>Pending' . $extra_message;
+            echo '<td>' . ($publishable === -1 ? 'Rejected' : 'Pending');
         }
         return ob_get_clean();
     }
@@ -470,74 +612,95 @@ class IncomingRevisionWorkflowTest extends TestCase
         ];
     }
 
+    private function countApprovedVersions(array $rows): int
+    {
+        return count(array_filter($rows, function (array $row): bool {
+            return $row['revision'] === 'current' || is_numeric($row['revision']);
+        }));
+    }
+
+    public function testDetailsCountExcludesPendingOrRejectedIncomingRevision(): void
+    {
+        $rows = [
+            ['revision' => '0'],
+            ['revision' => 'current'],
+            ['revision' => 'incoming'],
+        ];
+
+        $this->assertSame(2, $this->countApprovedVersions($rows));
+    }
+
+    public function testDetailsCountIncludesEachApprovedVersionOnce(): void
+    {
+        $rows = [
+            ['revision' => '0'],
+            ['revision' => '1'],
+            ['revision' => 'current'],
+        ];
+
+        $this->assertSame(3, $this->countApprovedVersions($rows));
+    }
+
+    public function testHistoryControllerDerivesRejectedLabelFromPublishable(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/history.php'
+        );
+
+        $this->assertStringContainsString('$publishable = $datafile->isPublishable()', $source);
+        $this->assertStringContainsString("msg('message_rejected')", $source);
+    }
+
+    public function testDetailsControllerCountsApprovedRowsInsteadOfAllLogRows(): void
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/application/controllers/details.php'
+        );
+
+        $this->assertStringContainsString('if (isset($revision_id))', $source);
+        $this->assertStringContainsString('array_filter($revisionData', $source);
+        $this->assertStringNotContainsString('$rows = $stmt->rowCount()', $source);
+    }
+
     public function testFullWorkflowSequence(): void
     {
-        $fileId = 100;
-
-        // Simulate the complete workflow: upload → check-in → approve → check-in → approve
-        // Track log entries at each step
-
-        // Step 1: Upload - log has one 'current' entry
         $log = [
             ['revision' => 'current', 'note' => 'Initial import'],
         ];
 
-        // Step 2: First check-in - previous 'current' → 'pending', new 'incoming'
-        foreach ($log as &$entry) {
-            if ($entry['revision'] === 'current') {
-                $entry['revision'] = 'pending';
-            }
-        }
-        unset($entry);
         $log[] = ['revision' => 'incoming', 'note' => 'First revision'];
+        $this->assertCount(2, $log);
+        $this->assertSame(1, $this->countCurrent($log));
+        $this->assertSame(1, $this->countIncoming($log));
 
-        // Step 3: First approve
         $revisionCount = $this->countRevisionsInLog($log);
-        // Save data file as rev N
-        foreach ($log as &$entry) {
-            if ($entry['revision'] === 'pending' || $entry['revision'] === 'incoming') {
-                $entry['revision'] = (string) $revisionCount;
-            }
-        }
-        unset($entry);
-        $log[] = ['revision' => 'current', 'note' => 'Approved revision ' . $revisionCount];
-
-        // Verify after first cycle
-        $this->assertCount(3, $log);
-        $this->assertSame(1, $this->countCurrent($log), 'One current entry');
-        $this->assertSame(0, $this->countMarker($log), 'No pending/incoming entries');
-        // Both old entries should be revision 0 (first revision)
-        $this->assertSame('0', $log[0]['revision']);
-        $this->assertSame('0', $log[1]['revision']);
-
-        // Step 4: Second check-in
         foreach ($log as &$entry) {
             if ($entry['revision'] === 'current') {
-                $entry['revision'] = 'pending';
+                $entry['revision'] = (string) $revisionCount;
+            } elseif ($entry['revision'] === 'incoming') {
+                $entry['revision'] = 'current';
             }
         }
         unset($entry);
-        $log[] = ['revision' => 'incoming', 'note' => 'Second revision'];
 
-        // Step 5: Second approve
+        $this->assertCount(2, $log);
+        $this->assertSame(['0', 'current'], array_column($log, 'revision'));
+        $this->assertSame(['Initial import', 'First revision'], array_column($log, 'note'));
+
+        $log[] = ['revision' => 'incoming', 'note' => 'Second revision'];
         $revisionCount = $this->countRevisionsInLog($log);
         foreach ($log as &$entry) {
-            if ($entry['revision'] === 'pending' || $entry['revision'] === 'incoming') {
+            if ($entry['revision'] === 'current') {
                 $entry['revision'] = (string) $revisionCount;
+            } elseif ($entry['revision'] === 'incoming') {
+                $entry['revision'] = 'current';
             }
         }
         unset($entry);
-        $log[] = ['revision' => 'current', 'note' => 'Approved revision ' . $revisionCount];
 
-        // Verify after second cycle
-        $this->assertCount(5, $log);
-        $this->assertSame(1, $this->countCurrent($log), 'Exactly one current entry');
-        $this->assertSame(0, $this->countMarker($log), 'No pending/incoming entries remain');
-        // Revision numbers: the two from cycle 1 are 0, the two from cycle 2 are 1
-        $revisions = array_map('intval', array_filter(array_column($log, 'revision'), fn($r) => is_numeric($r)));
-        sort($revisions);
-        $this->assertSame([0, 0, 1, 1], $revisions, 'Revisions should be 0,0,1,1');
-        $this->assertSame([0, 0, 1, 1], $revisions, 'Revisions should be 0,0,1,1');
+        $this->assertCount(3, $log);
+        $this->assertSame(['0', '1', 'current'], array_column($log, 'revision'));
+        $this->assertSame(['Initial import', 'First revision', 'Second revision'], array_column($log, 'note'));
     }
 
     private function countCurrent(array $log): int
@@ -545,9 +708,9 @@ class IncomingRevisionWorkflowTest extends TestCase
         return count(array_filter($log, fn($e) => $e['revision'] === 'current'));
     }
 
-    private function countMarker(array $log): int
+    private function countIncoming(array $log): int
     {
-        return count(array_filter($log, fn($e) => $e['revision'] === 'pending' || $e['revision'] === 'incoming'));
+        return count(array_filter($log, fn($entry) => $entry['revision'] === 'incoming'));
     }
 
     private function countRevisionsInLog(array $log): int

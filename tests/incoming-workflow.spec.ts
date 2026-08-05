@@ -61,20 +61,20 @@ test.describe('Incoming revision staging workflow', () => {
   test('1. Upload a new file and verify it appears', async ({ page }) => {
     await login(page);
     await retryGoto(page, '/add');
-    await page.waitForSelector('input[name="file"]');
+    await page.locator('input[name="file[]"]').waitFor({ state: 'attached', timeout: 5000 });
 
     // Fill in the upload form
     await page.fill('input[name="description"]', 'E2E test doc ' + UNIQUE);
-    await page.setInputFiles('input[name="file"]', path.join(TEST_DIR, 'test_doc.txt'));
+    await page.setInputFiles('input[name="file[]"]', path.join(TEST_DIR, 'test_doc.txt'));
 
     // Select category (first available)
     await page.selectOption('select[name="category"]', { index: 1 });
     // Select department (first available)
-    await page.selectOption('select[name="department"]', { index: 1 });
+    await page.selectOption('select[name="file_department"]', { index: 0 });
 
-    await clickButton(page, { name: 'submit', value: 'Add' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
-    await waitForMessage(page, 'success');
+    await clickButton(page, { name: 'submit', value: 'Add Document' });
+    await page.waitForURL(/details\?id=/, { timeout: 5000 });
+    await waitForMessage(page, 'successfully added');
   });
 
   test('2. Approve the file as reviewer', async ({ page }) => {
@@ -86,10 +86,10 @@ test.describe('Incoming revision staging workflow', () => {
     const table = page.locator('#file-table');
     await table.waitFor({ state: 'visible', timeout: 5000 });
 
-    // Click the first row to select it
+    // Click the checkbox in the first row to select it
     const firstRow = page.locator('#file-table .tabulator-row').first();
     if (await firstRow.isVisible()) {
-      await firstRow.click();
+      await firstRow.locator('input[type="checkbox"]').click();
     }
 
     // Click Authorize button
@@ -100,7 +100,7 @@ test.describe('Incoming revision staging workflow', () => {
     await page.fill('textarea[name="comments"]', 'Approved via E2E test');
     await clickButton(page, { name: 'submit', value: 'Authorize' });
     await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
-    await waitForMessage(page, 'authorized');
+    await waitForMessage(page, 'authorization');
   });
 
   test('3. Check out and check in a new version, then approve', async ({ page }) => {
@@ -154,6 +154,16 @@ test.describe('Incoming revision staging workflow', () => {
     await clickButton(page, { name: 'submit', value: 'Check  Document In' });
     await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
     await waitForMessage(page, 'checked in');
+
+    // === Task 4 Step 1: Pending-state assertions after check-in ===
+    await retryGoto(page, '/history?id=' + fileId);
+    const pendingRows = page.locator('table.table-striped tbody tr');
+    await expect(pendingRows).toHaveCount(2);
+    await expect(pendingRows.filter({ hasText: 'Latest' })).toContainText('Initial import');
+    await expect(pendingRows.filter({ hasText: 'Pending' })).toContainText('Updated via E2E test');
+
+    await retryGoto(page, '/details?id=' + fileId);
+    await expect(page.locator('#details_revision')).toHaveText('1');
   });
 
   test('4. Approve the new revision and verify history', async ({ page }) => {
@@ -164,7 +174,7 @@ test.describe('Incoming revision staging workflow', () => {
     // Select and approve the pending revision
     const firstRow = page.locator('#file-table .tabulator-row').first();
     if (await firstRow.isVisible()) {
-      await firstRow.click();
+      await firstRow.locator('input[type="checkbox"]').click();
     }
     await clickButton(page, { name: 'submit', value: 'commentAuthorize' });
     await page.waitForTimeout(1000);
@@ -177,10 +187,17 @@ test.describe('Incoming revision staging workflow', () => {
     await retryGoto(page, '/history?id=' + fileId);
     await page.waitForTimeout(1000);
 
-    // Should see at least one revision entry plus the current
+    // === Task 4 Step 2: Post-approval assertions ===
     const revisionRows = page.locator('table.table-striped tbody tr');
-    const count = await revisionRows.count();
-    expect(count).toBeGreaterThanOrEqual(2); // at least 1 revision + current
+    await expect(revisionRows).toHaveCount(2);
+    await expect(revisionRows.nth(0)).toContainText('Latest');
+    await expect(revisionRows.nth(0)).toContainText('Updated via E2E test');
+    await expect(revisionRows.nth(1)).toContainText('Initial import');
+    await expect(revisionRows.nth(0)).not.toContainText('Approved revision via E2E');
+    await expect(revisionRows.nth(1)).not.toContainText('Approved revision via E2E');
+
+    await retryGoto(page, '/details?id=' + fileId);
+    await expect(page.locator('#details_revision')).toHaveText('2');
   });
 
   test('5. Check out, check in, and reject a revision', async ({ page }) => {
@@ -212,7 +229,7 @@ test.describe('Incoming revision staging workflow', () => {
 
     const rejectRow = page.locator('#file-table .tabulator-row').first();
     if (await rejectRow.isVisible()) {
-      await rejectRow.click();
+      await rejectRow.locator('input[type="checkbox"]').click();
     }
     await clickButton(page, { name: 'submit', value: 'commentReject' });
     await page.waitForTimeout(1000);
@@ -220,7 +237,17 @@ test.describe('Incoming revision staging workflow', () => {
     await page.fill('textarea[name="comments"]', 'Rejected via E2E test - needs fixes');
     await clickButton(page, { name: 'submit', value: 'Reject' });
     await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
-    await waitForMessage(page, 'rejected');
+    await waitForMessage(page, 'rejection');
+
+    // === Task 4 Step 3: Rejected-state assertions ===
+    await retryGoto(page, '/history?id=' + fileId);
+    const rejectedRows = page.locator('table.table-striped tbody tr');
+    await expect(rejectedRows).toHaveCount(3);
+    await expect(rejectedRows.filter({ hasText: 'Latest' })).toContainText('Updated via E2E test');
+    await expect(rejectedRows.filter({ hasText: 'Rejected' })).toContainText('Attempted fix via E2E');
+
+    await retryGoto(page, '/details?id=' + fileId);
+    await expect(page.locator('#details_revision')).toHaveText('2');
   });
 
   test('6. Verify rejects page shows checkout button, checkout and verify checkin appears', async ({ page }) => {
@@ -266,7 +293,7 @@ test.describe('Incoming revision staging workflow', () => {
     // Select the file and permanently delete
     const deleteRow = page.locator('#file-table .tabulator-row').first();
     if (await deleteRow.isVisible()) {
-      await deleteRow.click();
+      await deleteRow.locator('input[type="checkbox"]').click();
     }
 
     // Click delete permanently button

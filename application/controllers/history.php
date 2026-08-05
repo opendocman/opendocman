@@ -50,6 +50,9 @@ if ($datafile->getError() != null) {
     header('Location:error?ec=2');
     exit;
 } else {
+    // Verify the user has view permission for this file
+    checkUserPermission($datafile->getId(), $datafile->VIEW_RIGHT, $datafile);
+
     // obtain data from resultset
 
     $owner_full_name = $datafile->getOwnerFullName();
@@ -60,6 +63,7 @@ if ($datafile->getError() != null) {
     $description = $datafile->getDescription();
     $comments = $datafile->getComment();
     $status = $datafile->getStatus();
+    $publishable = $datafile->isPublishable();
     $id = $_REQUEST['id'];
 
 // corrections
@@ -135,7 +139,7 @@ if (isset($revision_id)) {
     if ($revision_id == 0) {
         echo msg('historypage_original_revision');
     } else {
-        echo $revision_id;
+        echo e::h($revision_id);
     }
 } else {
     echo msg('historypage_latest');
@@ -244,11 +248,6 @@ if (isset($revision_id)) {
             $bgcolor = "#FCFCFC";
         }
 
-        // Skip internal 'pending' markers (they become revision numbers on approval)
-        if ($revision === 'pending') {
-            continue;
-        }
-
         echo '<tr>';
 
         $extra_message = '';
@@ -258,7 +257,10 @@ if (isset($revision_id)) {
             } else {
                 echo '<td>' . e::h(msg('historypage_latest')) . e::h($extra_message);
             }
-        } elseif ($revision === 'incoming' || $revision === 'pending') {
+        } elseif ($revision === 'incoming') {
+            $label = $publishable == -1 ? msg('message_rejected') : msg('historypage_pending');
+            echo '<td>' . e::h($label) . e::h($extra_message);
+        } elseif ($revision === 'pending') {
             echo '<td>' . e::h(msg('historypage_pending')) . e::h($extra_message);
         } else {
             if (is_file(getFilePath($id, $realname, 'revision', (int) $revision))) {
