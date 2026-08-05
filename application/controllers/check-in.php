@@ -195,15 +195,6 @@ else {
     $file_data_obj = new FileData($id, $pdo);
 
     if ($file_data_obj->getError() == '' && $file_data_obj->getStatus() == $_SESSION['uid']) {
-        //look to see how many revision are there
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
-            ':id' => $id
-        ));
-        $result = $stmt->fetchAll();
-
-        $revision_number = $stmt->rowCount();
         // if dir not available, create it
         if (!is_dir($GLOBALS['CONFIG']['revisionDir'])) {
             if (!mkdir($GLOBALS['CONFIG']['revisionDir'], 0775)) {
@@ -219,21 +210,6 @@ else {
                 exit;
             }
         }
-        // Save the current version as a revision
-        $currentRealname = $file_data_obj->getRealName();
-        $revisionFileName = getFilePath($id, $currentRealname, 'data');
-        $revisionDir = dirname(getFilePath($id, $filename, 'revision', ($revision_number - 1)));
-        if (!is_dir($revisionDir)) {
-            mkdir($revisionDir, 0775, true);
-        }
-        // Read current file
-        $file_handler = fopen($revisionFileName, "r");
-        $file_content = fread($file_handler, filesize($revisionFileName));
-        fclose($file_handler);
-        // Write revision
-        $file_handler = fopen(getFilePath($id, $filename, 'revision', ($revision_number - 1)), "w");
-        fwrite($file_handler, $file_content);
-        fclose($file_handler);
         // all OK, proceed!
         
         $query = "SELECT username FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :uid";
@@ -243,32 +219,35 @@ else {
 
         $username = $result['username'];
 
-        // update revision log
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log set revision='" . intval((intval($revision_number) - 1)) . "' WHERE id = :id and revision = 'current'";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
-            ':id' => $id
-        ));
-
-        $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'current')";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
+        $params = array(
             ':id' => $id,
             ':username' => $username,
             ':note' => $_POST['note']
-        ));
+        );
 
-        // update file status
-        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable, realname = :filename WHERE id = :id";
+        $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision = 'incoming'";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(array(':id' => $id));
+        $incomingExists = (int) $stmt->fetchColumn() > 0;
+
+        if ($incomingExists) {
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET modified_on = NOW(), modified_by = :username, note = :note WHERE id = :id AND revision = 'incoming'";
+        } else {
+            $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log (id, modified_on, modified_by, note, revision) VALUES(:id, NOW(), :username, :note, 'incoming')";
+        }
+        $stmt = $pdo->prepare($query);
+        $stmt->execute($params);
+
+        // update file status (keep original realname; authorize handler will update it)
+        $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET status = '0', publishable = :publishable WHERE id = :id";
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
             ':publishable' => $publishable,
-            ':filename' => $filename,
             ':id' => $id
         ));
 
         // Save new version with original filename
-        $newFilePath = getFilePath($id, $filename, 'data');
+        $newFilePath = getFilePath($id, $filename, 'incoming');
         $newFileDir = dirname($newFilePath);
         if (!is_dir($newFileDir)) {
             mkdir($newFileDir, 0775, true);

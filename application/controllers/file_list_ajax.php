@@ -341,8 +341,16 @@ foreach ($page_ids as $fileid) {
         $view_link = 'none';
     }
 
-    $filesize = display_filesize(getFilePath($fileid, $realname, 'data'));
-    $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h($_GET['state'] ?? 1);
+    $filePath = getFilePath($fileid, $realname, 'data');
+    if (!file_exists($filePath)) {
+        if ($state === -1 || $state === 0) {
+            $filePath = getFilePath($fileid, $realname, 'incoming');
+        } elseif ($state === 2) {
+            $filePath = getFilePath($fileid, $realname, 'archive');
+        }
+    }
+    $filesize = display_filesize($filePath);
+    $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h(($_GET['state'] ?? 1) + 1);
 
     // Generate content snippet for search results
     $snippet = '';
@@ -379,6 +387,12 @@ foreach ($page_ids as $fileid) {
         'owner_name' => $owner_name,
         'dept_name' => $row['dept_name'] ?? '',
         'filesize' => $filesize,
+        'checkout_link' => ($state === -1 && $lock === false && $userAccessLevel >= 3)
+            ? 'check-out?id=' . $fileid . '&state=0&access_right=modify'
+            : null,
+        'checkin_link' => ($state === -1 && $lock === true && (int)$row['status'] === (int)$_SESSION['uid'])
+            ? 'check-in?id=' . $fileid
+            : null,
         'lock' => $lock,
     );
 }

@@ -126,7 +126,7 @@ if ($status == 0 && $user_perms_obj->canView($request_id)) {
     $file_unlocked = false;
 }
 //chm sahar
-if (!empty($revision_id)) {
+if (isset($revision_id)) {
     $query = "
         SELECT
           u.last_name,
@@ -176,14 +176,13 @@ if (!empty($revision_id)) {
     $revisionData = $stmt->fetchAll();
 }
 
-$rows = $stmt->rowCount();
-
-if ($rows == 1 && !(isset($revision_id))) {
-    $revision = "1";
-} elseif (isset($revision_id)) {
+if (isset($revision_id)) {
     $revision = $revision_id + 1;
 } else {
-    $revision = "$rows";
+    $approvedRows = array_filter($revisionData, function (array $row): bool {
+        return $row['revision'] === 'current' || is_numeric($row['revision']);
+    });
+    $revision = (string) count($approvedRows);
 }
 
 $file_under_review = (($file_data_obj->isPublishable() == -1) ? true : false);
@@ -253,11 +252,9 @@ if ($status == 0 || ($status == -1 && $file_data_obj->isOwner($_SESSION['uid']))
 // ability to view revision history is always available 
 // put it outside the block
 $history_link = "history?id=$request_id&state=" . ($state + 1);
-$comments_link = 'toBePublished?submit=comments&id=' . $request_id;
 $my_delete_link = 'delete?mode=tmpdel&id0=' . $request_id;
 
 $GLOBALS['smarty']->assign('history_link', $history_link);
-$GLOBALS['smarty']->assign('comments_link', $comments_link);
 $GLOBALS['smarty']->assign('my_delete_link', $my_delete_link);
 
 // Call the plugin API

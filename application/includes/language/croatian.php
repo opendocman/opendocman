@@ -423,6 +423,7 @@ $lang['historypage_version'] = 'Inačica';
 $lang['historypage_modification'] = 'Datum promjene';
 $lang['historypage_by'] = 'Od';
 $lang['historypage_note'] = 'Bilješka';
+$lang['historypage_pending'] = 'Na čekanju';
 
 // Profile Page
 $lang['profilepage_update_profile'] = 'Izmjeni osobni profil';

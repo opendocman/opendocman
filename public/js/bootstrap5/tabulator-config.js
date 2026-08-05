@@ -82,7 +82,17 @@ document.addEventListener('DOMContentLoaded', function() {
             { title: 'Modified', field: 'modified_date', width: 120 },
             { title: 'Author', field: 'owner_name', width: 150 },
             { title: 'Department', field: 'dept_name', width: 120 },
-            { title: 'Size', field: 'filesize', width: 80 }
+            { title: 'Size', field: 'filesize', width: 80 },
+            { title: '', field: 'checkout_link', width: 100, headerSort: false,
+              visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
+              formatter: function(cell) {
+                var checkout = cell.getValue();
+                var checkin = cell.getData().checkin_link;
+                if (checkout) return '<a href="' + checkout + '" class="btn btn-sm btn-primary">Check-Out</a>';
+                if (checkin) return '<a href="' + checkin + '" class="btn btn-sm btn-success">Check-In</a>';
+                return '';
+              }
+            },
         ]
     }));
     window.fileTable = table;
@@ -118,30 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (deletePermanentBtn) {
         deletePermanentBtn.addEventListener('click', function() {
             submitDeleteAction('delete_permanent', 'PERMANENTLY delete {n} file(s)? This cannot be undone!');
-        });
-    }
-
-    var rejectsForm = document.forms['author_note_form'];
-    if (rejectsForm) {
-        table.on('rowSelectionChanged', function() {
-            var rows = table.getSelectedRows();
-            var btns = rejectsForm.querySelectorAll('button[type="submit"]');
-            btns.forEach(function(b) { b.disabled = rows.length === 0; });
-        });
-
-        rejectsForm.addEventListener('submit', function(e) {
-            var rows = table.getSelectedRows();
-            if (rows.length === 0) {
-                e.preventDefault();
-                return;
-            }
-            rows.forEach(function(r) {
-                var input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'checkbox[]';
-                input.value = r.getData().id;
-                rejectsForm.appendChild(input);
-            });
         });
     }
 

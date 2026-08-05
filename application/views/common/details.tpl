@@ -43,7 +43,10 @@
                 {if $file_detail.file_under_review}
                 <dt class="col-sm-3">{$g_lang_label_reviewer}</dt>
                 <dd class="col-sm-9">
-                    {$file_detail.reviewer|escape:'html'} (<a href="javascript:showMessage()">{$g_lang_message_reviewers_comments_re_rejection}</a>)
+                    {$file_detail.reviewer|escape:'html'}
+                    {if $file_detail.comments_value|trim}
+                        <span class="badge bg-info" data-bs-toggle="tooltip" data-bs-placement="top" title="{$file_detail.comments_value|escape:'html'}">{$g_lang_message_reviewers_comments_re_rejection}</span>
+                    {/if}
                 </dd>
                 {/if}
 
@@ -88,21 +91,9 @@
         });
     }
 
-    function sendFields() {
-        mesg_window_frm = message_window.document.author_note_form;
-        if (mesg_window_frm) {
-            var dataForm = document.forms['data'];
-            mesg_window_frm.to.value = dataForm.to.value;
-            mesg_window_frm.subject.value = dataForm.subject.value;
-            mesg_window_frm.comments.value = dataForm.comments.value;
-        }
-    }
-
-    window.showMessage = function() {
-        message_window = window.open('{/literal}{$comments_link|escape}{literal}' , 'comment_wins', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=450,height=200');
-        message_window.focus();
-        setTimeout(sendFields, 500);
-    };
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
 })();
 </script>
 {/literal}

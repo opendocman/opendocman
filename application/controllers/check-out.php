@@ -87,8 +87,17 @@ else {
             ':id' => $id
         ));
     }
-    // calculate filename
-    $filename = getFilePath($id, $real_name, 'data');
+    // calculate filename — use incoming file for rejected files if available
+    if ($file_data_obj->isPublishable() === -1) {
+        $incomingPath = getFilePath($id, $real_name, 'incoming');
+        if (file_exists($incomingPath)) {
+            $filename = $incomingPath;
+        } else {
+            $filename = getFilePath($id, $real_name, 'data');
+        }
+    } else {
+        $filename = getFilePath($id, $real_name, 'data');
+    }
 
     if (file_exists($filename)) {
         // send headers to browser to initiate file download

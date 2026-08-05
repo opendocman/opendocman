@@ -57,6 +57,8 @@ class CliCommand
 
     private function dumpSql(array $argv): void
     {
+        require_once __DIR__ . '/../version.php';
+
         $prefix = 'odm_';
         $adminPassword = 'admin';
         $dataDir = '/var/www/document_repository/';

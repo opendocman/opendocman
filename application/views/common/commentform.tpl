@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<input type="hidden" name="checkbox" value="{foreach from=$checkbox item=id}{$id} {/foreach}" />
+<input type="hidden" name="checkbox" value="{$checkbox|escape:'html'}" />
 
 <div class="card mb-3">
     <div class="card-body">

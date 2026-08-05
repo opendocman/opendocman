@@ -81,6 +81,20 @@ if (!isset($_REQUEST['submit'])) {
         $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
         $filename = getFilePath($request_id, $realname, 'archive');
+    } elseif ($file_obj->isPublishable() === 0 || $file_obj->isPublishable() === -1) {
+        $user_obj = new User($_SESSION['uid'], $pdo);
+        $isOwner = ($file_obj->getOwner() == $_SESSION['uid']);
+        $isReviewer = $user_obj->isReviewer();
+        if ($isOwner || $isReviewer) {
+            $incomingPath = getFilePath($request_id, $realname, 'incoming');
+            if (file_exists($incomingPath)) {
+                $filename = $incomingPath;
+            } else {
+                $filename = getFilePath($request_id, $realname, 'data');
+            }
+        } else {
+            $filename = getFilePath($request_id, $realname, 'data');
+        }
     } else {
         $filename = getFilePath($request_id, $realname, 'data');
     }
@@ -116,6 +130,20 @@ if (!isset($_REQUEST['submit'])) {
         $filename = getFilePath($request_id, $realname, 'revision', $revision_id);
     } elseif ($file_obj->isArchived()) {
         $filename = getFilePath($request_id, $realname, 'archive');
+    } elseif ($file_obj->isPublishable() === 0 || $file_obj->isPublishable() === -1) {
+        $user_obj = new User($_SESSION['uid'], $pdo);
+        $isOwner = ($file_obj->getOwner() == $_SESSION['uid']);
+        $isReviewer = $user_obj->isReviewer();
+        if ($isOwner || $isReviewer) {
+            $incomingPath = getFilePath($request_id, $realname, 'incoming');
+            if (file_exists($incomingPath)) {
+                $filename = $incomingPath;
+            } else {
+                $filename = getFilePath($request_id, $realname, 'data');
+            }
+        } else {
+            $filename = getFilePath($request_id, $realname, 'data');
+        }
     } else {
         $filename = getFilePath($request_id, $realname, 'data');
     }

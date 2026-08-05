@@ -51,6 +51,10 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
         $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
         $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+
+        // CSRF token for the delete button rendered by out.tpl
+        $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
+        $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
     }
     $GLOBALS['smarty']->assign('state', 0);
     display_smarty_template('out.tpl');
@@ -262,6 +266,127 @@ if (!isset($_POST['submit'])) {
                 if ($GLOBALS['CONFIG']['demo'] == 'False')
                 {
                     mail($mail_to, $mail_subject . ' ' . $file_obj->getName(), $mail_greeting . $file_obj->getName() . ' ' . $mail_body1 . $mail_salute, $mail_headers);
+                }
+            }
+
+            // Save current data file as revision and move incoming file to data
+            $currentRealname = $file_obj->getName();
+
+            // Find the incoming file (realname may differ from current)
+            $incomingBase = rtrim($GLOBALS['CONFIG']['dataDir'], '/') . '/incoming/' . $fileid . '/';
+            $incomingRealname = null;
+            $incomingPath = null;
+            if (is_dir($incomingBase)) {
+                $entries = array_diff(scandir($incomingBase), ['.', '..']);
+                if (!empty($entries)) {
+                    $incomingRealname = reset($entries);
+                    $incomingPath = $incomingBase . $incomingRealname;
+                }
+            }
+
+            if ($incomingPath !== null && file_exists($incomingPath)) {
+                // Count existing revisions to determine next revision number
+                $query = "SELECT COALESCE(MAX(CAST(revision AS UNSIGNED)) + 1, 0) FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision NOT IN ('current', 'incoming', 'pending')";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([':id' => $fileid]);
+                $revisionCount = (int) $stmt->fetchColumn();
+
+                // Check if the current file was ever approved (access log has a 'Y' entry)
+                $query = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}access_log WHERE file_id = :id AND action = 'Y'";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([':id' => $fileid]);
+                $hasPriorApproval = (int) $stmt->fetchColumn() > 0;
+
+                $dataPath = getFilePath($fileid, $currentRealname, 'data');
+
+                // Save current data file as revision only if it was ever approved
+                if ($hasPriorApproval || $revisionCount > 0) {
+                    if (!file_exists($dataPath)) {
+                        header("Location:toBePublished?last_message=" . urlencode(msg('message_error_performing_action')));
+                        exit;
+                    }
+                    $revisionDir = dirname(getFilePath($fileid, $currentRealname, 'revision', $revisionCount));
+                    if (!is_dir($revisionDir)) {
+                        mkdir($revisionDir, 0775, true);
+                    }
+                    $revisionPath = getFilePath($fileid, $currentRealname, 'revision', $revisionCount);
+                    if (!copy($dataPath, $revisionPath)) {
+                        header("Location:toBePublished?last_message=" . urlencode(msg('message_error_performing_action')));
+                        exit;
+                    }
+                }
+
+                // Move incoming file to data directory
+                $newDataPath = getFilePath($fileid, $incomingRealname, 'data');
+                $dataDir = dirname($newDataPath);
+                if (!is_dir($dataDir)) {
+                    mkdir($dataDir, 0775, true);
+                }
+                // Remove any existing file in data dir (filename may have changed)
+                if (is_dir($dataDir)) {
+                    $existing = scandir($dataDir);
+                    foreach ($existing as $entry) {
+                        if ($entry !== '.' && $entry !== '..') {
+                            unlink($dataDir . '/' . $entry);
+                        }
+                    }
+                }
+                if (!rename($incomingPath, $newDataPath)) {
+                    if ($hasPriorApproval || $revisionCount > 0) {
+                        copy($revisionPath, $newDataPath);
+                    }
+                    header("Location:toBePublished?last_message=" . urlencode(msg('message_error_performing_action')));
+                    exit;
+                }
+                // Remove empty incoming directory after successful promotion
+                $incomingDir = dirname($incomingPath);
+                if (is_dir($incomingDir)) {
+                    $remaining = array_diff(scandir($incomingDir), ['.', '..']);
+                    if (empty($remaining)) {
+                        rmdir($incomingDir);
+                    }
+                }
+
+                // Update realname to match the incoming file's name
+                $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET realname = :realname WHERE id = :id";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([':realname' => $incomingRealname, ':id' => $fileid]);
+
+                // Log transitions
+                if ($hasPriorApproval || $revisionCount > 0) {
+                    // Archive old current as numeric revision, promote incoming to current
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = :rev WHERE id = :id AND revision = 'current'";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([':rev' => $revisionCount, ':id' => $fileid]);
+
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'current' WHERE id = :id AND revision = 'incoming'";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([':id' => $fileid]);
+                } else {
+                    // No prior approval — replace old current row with incoming data
+                    $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}log WHERE id = :id AND revision = 'current'";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([':id' => $fileid]);
+
+                    $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}log SET revision = 'current' WHERE id = :id AND revision = 'incoming'";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute([':id' => $fileid]);
+                }
+
+                // Re-index text content from the new data file
+                $file_mime = File::mime($newDataPath, $incomingRealname);
+                if (TextExtractorFactory::isExtractable($file_mime)) {
+                    $extractor = TextExtractorFactory::create($file_mime);
+                    if ($extractor !== null) {
+                        $contentText = $extractor->extract($newDataPath);
+                        $indexQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}content_index (file_id, content_text, indexed_at) VALUES (:file_id, :content_text, NOW()) ON DUPLICATE KEY UPDATE content_text = :content_text2, indexed_at = NOW()";
+                        $indexStmt = $pdo->prepare($indexQuery);
+                        $indexStmt->execute([
+                            ':file_id' => $fileid,
+                            ':content_text' => $contentText,
+                            ':content_text2' => $contentText,
+                        ]);
+                    }
                 }
             }
 
