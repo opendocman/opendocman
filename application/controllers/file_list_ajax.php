@@ -350,7 +350,7 @@ foreach ($page_ids as $fileid) {
         }
     }
     $filesize = display_filesize($filePath);
-    $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h($_GET['state'] ?? 1);
+    $details_link = 'details?id=' . e::h($fileid) . '&state=' . e::h(($_GET['state'] ?? 1) + 1);
 
     // Generate content snippet for search results
     $snippet = '';
