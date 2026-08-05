@@ -33,7 +33,7 @@
     {/if}
     {if $breadCrumb ne ''}
     <nav aria-label="breadcrumb" class="bg-light">
-        <div class="container">
+        <div class="container-fluid">
             <ol class="breadcrumb mb-0 py-2">{$breadCrumb}</ol>
         </div>
     </nav>
@@ -46,5 +46,5 @@
         </div>
     </div>
     {/if}
-    <main class="container py-3">
+    <main class="container-fluid py-3">
 {include file="custom_code.tpl"}
