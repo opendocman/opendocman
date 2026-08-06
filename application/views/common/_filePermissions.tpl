@@ -21,7 +21,17 @@ $(document).ready(function () {ldelim}
     $('#permissionsEditor').permissionsEditor('loadTemplate', {ldelim}
         dept_perms: {if isset($dept_perms)}{$dept_perms|@json_encode}{else}[]{/if},
         user_perms: {if isset($user_perms)}{$user_perms|@json_encode}{else}[]{/if}
-    {rdelim});
-    {/if}
+{rdelim});
+{/if}
+
+    $('#permissionsEditor').closest('form').on('submit', function () {
+        var data = $('#permissionsEditor').permissionsEditor('getData');
+        $.each(data.department_permission, function (deptId, rights) {
+            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(this);
+        });
+        $.each(data.user_permission, function (userId, rights) {
+            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(this);
+        });
+    });
 {rdelim});
 </script>
