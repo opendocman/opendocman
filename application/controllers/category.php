@@ -42,6 +42,16 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_category'), $last_message);
     ob_start();
+
+    $avail_depts_query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+    $avail_depts_stmt = $pdo->prepare($avail_depts_query);
+    $avail_depts_stmt->execute();
+    $avail_depts = $avail_depts_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $avail_users_query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name, first_name";
+    $avail_users_stmt = $pdo->prepare($avail_users_query);
+    $avail_users_stmt->execute();
+    $avail_users = $avail_users_stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
     <form id="categoryAddForm" action="category" method="POST" enctype="multipart/form-data">
         <?php echo $GLOBALS['csrf']->getTokenField(); ?>
@@ -59,10 +69,17 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
             </div>
         </div>
+        <hr>
+        <h6>Default permissions for documents in this category (optional)</h6>
+        <div id="categoryPermsEditor"></div>
     </form>
+     <script src="js/permissions-editor.js"></script>
      <script>
   $(document).ready(function(){
     $('#categoryAddForm').validate();
+    var departments = <?php echo json_encode($avail_depts ?? []); ?>;
+    var users = <?php echo json_encode($avail_users ?? []); ?>;
+    $('#categoryPermsEditor').permissionsEditor({ departments: departments, users: users });
   });
   </script>
     <?php
@@ -85,6 +102,23 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES (:category)";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':category' => $_REQUEST['category']));
+
+    // Save category permission template if provided
+    if (isset($_POST['department_permission']) || isset($_POST['user_permission'])) {
+        $catPerms = new CategoryPerms($pdo);
+        $perms = [];
+        if (isset($_POST['department_permission'])) {
+            foreach ($_POST['department_permission'] as $deptId => $rights) {
+                $perms[] = ['dept_id' => (int)$deptId, 'user_id' => null, 'rights' => (int)$rights];
+            }
+        }
+        if (isset($_POST['user_permission'])) {
+            foreach ($_POST['user_permission'] as $userId => $rights) {
+                $perms[] = ['dept_id' => null, 'user_id' => (int)$userId, 'rights' => (int)$rights];
+            }
+        }
+        $catPerms->saveTemplate((int)$pdo->lastInsertId(), $perms);
+    }
 
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_added'));
@@ -172,6 +206,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $query = "DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}category where id=:id";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(':id' => $_REQUEST['id']));
+
+    // Remove category permission template
+    $catPerms = new CategoryPerms($pdo);
+    $catPerms->deleteTemplate((int)$_REQUEST['id']);
 
     // Set all old category_id's to the new re-assigned category
     $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}data SET category = :assigned_id WHERE category = :id";
@@ -316,6 +354,16 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Update') {
     draw_header(msg('area_update_category'), $last_message);
     ob_start();
+
+    $avail_depts_query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+    $avail_depts_stmt = $pdo->prepare($avail_depts_query);
+    $avail_depts_stmt->execute();
+    $avail_depts = $avail_depts_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $avail_users_query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name, first_name";
+    $avail_users_stmt = $pdo->prepare($avail_users_query);
+    $avail_users_stmt->execute();
+    $avail_users = $avail_users_stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 <form id="updateCategoryForm" action="category" method="POST" enctype="multipart/form-data">
     <?php echo $GLOBALS['csrf']->getTokenField(); ?>
@@ -347,10 +395,21 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                     <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'"><?php echo msg('button_cancel')?></button>
                 </div>
             </div>
+            <hr>
+            <h6>Default permissions for documents in this category (optional)</h6>
+            <div id="categoryPermsEditor"></div>
  </form>
+ <script src="js/permissions-editor.js"></script>
  <script>
   $(document).ready(function(){
     $('#updateCategoryForm').validate();
+    var departments = <?php echo json_encode($avail_depts ?? []); ?>;
+    var users = <?php echo json_encode($avail_users ?? []); ?>;
+    $('#categoryPermsEditor').permissionsEditor({ departments: departments, users: users });
+    // Load existing template
+    $.getJSON('category?submit=get_perms_json&cat_id=<?php echo (int)$_REQUEST['item']; ?>', function (data) {
+        $('#categoryPermsEditor').permissionsEditor('loadTemplate', data);
+    });
   });
   </script>
     <?php
@@ -416,9 +475,47 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         ':id' => $id
     ));
 
+    // Save category permission template
+    $catPerms = new CategoryPerms($pdo);
+    $perms = [];
+    if (isset($_POST['department_permission'])) {
+        foreach ($_POST['department_permission'] as $deptId => $rights) {
+            $perms[] = ['dept_id' => (int)$deptId, 'user_id' => null, 'rights' => (int)$rights];
+        }
+    }
+    if (isset($_POST['user_permission'])) {
+        foreach ($_POST['user_permission'] as $userId => $rights) {
+            $perms[] = ['dept_id' => null, 'user_id' => (int)$userId, 'rights' => (int)$rights];
+        }
+    }
+    $catPerms->saveTemplate($id, $perms);
+
     // back to main page
     $last_message = msg('message_category_successfully_updated') .' : ' . $_REQUEST['name'];
     header('Location: admin?last_message=' . urlencode($last_message));
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'get_perms_json') {
+    if (!$user_obj->isAdmin()) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 403 Forbidden');
+        echo json_encode(['error' => 'Forbidden']);
+        exit;
+    }
+    $catId = (int)$_REQUEST['cat_id'];
+    $catPerms = new CategoryPerms($pdo);
+    $rows = $catPerms->getTemplate($catId);
+    $deptPerms = [];
+    $userPerms = [];
+    foreach ($rows as $row) {
+        $rights = (int)$row['rights'];
+        if ($row['dept_id'] !== null) {
+            $deptPerms[(int)$row['dept_id']] = $rights;
+        } elseif ($row['user_id'] !== null) {
+            $userPerms[(int)$row['user_id']] = $rights;
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode(['dept_perms' => $deptPerms, 'user_perms' => $userPerms]);
+    exit;
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
     $last_message = msg('message_action_cancelled');
     header('Location: admin?last_message=' . urlencode($last_message));
