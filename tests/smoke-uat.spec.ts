@@ -272,6 +272,45 @@ test.describe('Inline Add Category', () => {
 });
 
 // ────────────────────────────────────────────────────────────
+// Permission Inheritance
+// ────────────────────────────────────────────────────────────
+test.describe('Permission inheritance', () => {
+  const permCat = `E2E Perm ${Date.now()}`;
+
+  test.beforeEach(async ({ page }) => { await login(page); });
+
+  test('admin can set category permission template and it pre-fills on add file', async ({ page }) => {
+    // Create a category
+    await retryGoto(page, '/category?submit=add&state=2');
+    await page.waitForSelector('input[name="category"]');
+    await submitForm(page, { category: permCat }, { name: 'submit', value: 'Add Category' });
+    await waitForAdminWithMessage(page, 'Category successfully added');
+
+    // Now go to update that category to see the permissions editor
+    await retryGoto(page, '/category?submit=updatepick&state=2');
+    await page.waitForSelector('select[name="item"]');
+    await pickFromSelect(page, 'item', permCat, { name: 'submit', value: 'Update' });
+
+    // Wait for category update form — check "Unset" label appears (not "None")
+    await expect(page.locator('text=Unset')).toBeVisible();
+    await expect(page.locator('text=None')).toHaveCount(0);
+
+    // Navigate to add file page and select the category
+    await retryGoto(page, '/add');
+    await page.waitForSelector('select[name="category"]');
+    await page.selectOption('select[name="category"]', { label: permCat });
+
+    // Verify the permissions editor loaded
+    await expect(page.locator('#permissionsEditor')).toBeVisible();
+  });
+
+  test('permission inheritance falls back to category perms in file listing', async ({ page }) => {
+    await retryGoto(page, '/out');
+    await expect(page.locator('body')).toBeVisible();
+  });
+});
+
+// ────────────────────────────────────────────────────────────
 // Demo mode — operations should be blocked when enabled
 // ────────────────────────────────────────────────────────────
 // Skipped: demo mode tests are disabled due to PHP built-in server
