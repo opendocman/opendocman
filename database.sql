@@ -21,6 +21,17 @@ CREATE TABLE `odm_category` (
                 UNIQUE (name(200))
             ) ENGINE = MYISAM;
 
+CREATE TABLE `odm_category_perms` (
+                cat_id int(11) unsigned NOT NULL,
+                dept_id int(11) unsigned default NULL,
+                user_id int(11) unsigned default NULL,
+                rights tinyint(4) NOT NULL default '0',
+                KEY cat_perms_idx (cat_id, dept_id, user_id),
+                KEY cat_id (cat_id),
+                KEY dept_id (dept_id),
+                KEY user_id (user_id)
+            ) ENGINE = MYISAM;
+
 CREATE TABLE `odm_data` (
                 id int(11) unsigned NOT NULL auto_increment,
                 category int(11) unsigned NOT NULL default '0',
@@ -155,7 +166,7 @@ INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
 INSERT INTO `odm_user` VALUES (NULL,'admin',md5('admin'),'1','5555551212','admin@example.com','User','Admin','',0,1,1);
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.6.0');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.0');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');
