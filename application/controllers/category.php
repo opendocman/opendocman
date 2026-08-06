@@ -80,6 +80,16 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     var departments = <?php echo json_encode($avail_depts ?? []); ?>;
     var users = <?php echo json_encode($avail_users ?? []); ?>;
     $('#categoryPermsEditor').permissionsEditor({ departments: departments, users: users });
+    $('#categoryAddForm').on('submit', function () {
+        var form = $(this);
+        var data = $('#categoryPermsEditor').permissionsEditor('getData');
+        $.each(data.department_permission, function (deptId, rights) {
+            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(form);
+        });
+        $.each(data.user_permission, function (userId, rights) {
+            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(form);
+        });
+    });
   });
   </script>
     <?php
@@ -409,6 +419,16 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     // Load existing template
     $.getJSON('category?submit=get_perms_json&cat_id=<?php echo (int)$_REQUEST['item']; ?>', function (data) {
         $('#categoryPermsEditor').permissionsEditor('loadTemplate', data);
+    });
+    $('#updateCategoryForm').on('submit', function () {
+        var form = $(this);
+        var data = $('#categoryPermsEditor').permissionsEditor('getData');
+        $.each(data.department_permission, function (deptId, rights) {
+            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(form);
+        });
+        $.each(data.user_permission, function (userId, rights) {
+            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(form);
+        });
     });
   });
   </script>

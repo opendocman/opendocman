@@ -25,12 +25,13 @@ $(document).ready(function () {ldelim}
 {/if}
 
     $('#permissionsEditor').closest('form').on('submit', function () {
+        var form = $(this);
         var data = $('#permissionsEditor').permissionsEditor('getData');
         $.each(data.department_permission, function (deptId, rights) {
-            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(this);
+            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(form);
         });
         $.each(data.user_permission, function (userId, rights) {
-            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(this);
+            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(form);
         });
     });
 {rdelim});
