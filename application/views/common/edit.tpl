@@ -94,5 +94,17 @@
 </script>
 <script src="{$g_base_url}js/inline-add-category.js"></script>
 
+<script>
+$(document).ready(function () {ldelim}
+    $('select[name="category"]').on('change', function () {ldelim}
+        var catId = $(this).val();
+        if (!catId) return;
+        $.getJSON('category?submit=get_perms_json&cat_id=' + catId, function (data) {ldelim}
+            $('#permissionsEditor').permissionsEditor('loadTemplate', data);
+        {rdelim});
+    {rdelim});
+{rdelim});
+</script>
+
 (End of file - total 154 lines)
 </content>
