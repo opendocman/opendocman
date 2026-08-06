@@ -500,6 +500,12 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         echo json_encode(['error' => 'Forbidden']);
         exit;
     }
+    if (empty($_REQUEST['cat_id']) || !ctype_digit((string)$_REQUEST['cat_id'])) {
+        header('Content-Type: application/json');
+        header('HTTP/1.0 400 Bad Request');
+        echo json_encode(['error' => 'Missing or invalid cat_id']);
+        exit;
+    }
     $catId = (int)$_REQUEST['cat_id'];
     $catPerms = new CategoryPerms($pdo);
     $rows = $catPerms->getTemplate($catId);
