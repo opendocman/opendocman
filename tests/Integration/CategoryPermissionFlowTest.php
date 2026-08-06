@@ -2,6 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
+require_once APPLICATION_PATH . '/models/CategoryPerms.class.php';
+
 class CategoryPermissionFlowTest extends TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;

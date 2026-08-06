@@ -494,7 +494,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $last_message = msg('message_category_successfully_updated') .' : ' . $_REQUEST['name'];
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'get_perms_json') {
-    if (!$user_obj->isAdmin()) {
+    if (!isset($_SESSION['uid'])) {
         header('Content-Type: application/json');
         header('HTTP/1.0 403 Forbidden');
         echo json_encode(['error' => 'Forbidden']);
