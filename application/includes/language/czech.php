@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Forbidden';
-$lang['addpage_none'] = 'Nic';
+$lang['addpage_none'] = 'Nenastaveno';
 $lang['addpage_view'] = 'View';
 $lang['addpage_read'] = 'Read';
 $lang['addpage_write'] = 'Write';
@@ -371,7 +371,7 @@ $lang['editpage_assign_department'] = 'Přiřadit k oddělení';
 $lang['editpage_filter'] = 'Hledat:';
 $lang['editpage_keyword'] = 'Upravit klíčová slova';
 $lang['editpage_forbidden'] = 'Forbidden';
-$lang['editpage_none'] = 'Nic';
+$lang['editpage_none'] = 'Nenastaveno';
 $lang['editpage_view'] = 'View';
 $lang['editpage_read'] = 'Read';
 $lang['editpage_write'] = 'Write';

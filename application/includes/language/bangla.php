@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'নিষিদ্ধ';
-$lang['addpage_none'] = 'কোনটিই নয়';
+$lang['addpage_none'] = 'নির্ধারিত নয়';
 $lang['addpage_view'] = 'দর্শন';
 $lang['addpage_read'] = 'পঠন';
 $lang['addpage_write'] = 'লিখন';
@@ -370,7 +370,7 @@ $lang['editpage_assign_department'] = 'বিভাগে অ্যসাইন 
 $lang['editpage_filter'] = 'ছাঁকনীঃ ';
 $lang['editpage_keyword'] = 'কী-ওয়ার্ডগুলো লিখুন';
 $lang['editpage_forbidden'] = 'নিষিদ্ধ';
-$lang['editpage_none'] = 'কোন টিউ নয়';
+$lang['editpage_none'] = 'নির্ধারিত নয়';
 $lang['editpage_view'] = 'দর্শন';
 $lang['editpage_read'] = 'পঠন';
 $lang['editpage_write'] = 'লিখন';

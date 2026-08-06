@@ -349,7 +349,7 @@ $lang['view'] = $lang['label_view'];
 	
 // Add File Page
 $lang['addpage_forbidden'] = 'Otillåten';
-$lang['addpage_none'] = 'Ingen';
+$lang['addpage_none'] = 'Ej inställd';
 $lang['addpage_view'] = 'Visa';
 $lang['addpage_read'] = 'Läsa';
 $lang['addpage_write'] = 'Skriva';
@@ -371,7 +371,7 @@ $lang['editpage_assign_department'] = 'Koppla till avdelning';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Skriv sökord';
 $lang['editpage_forbidden'] = 'Otillåten';
-$lang['editpage_none'] = 'Ingen';
+$lang['editpage_none'] = 'Ej inställd';
 $lang['editpage_view'] = 'Visa';
 $lang['editpage_read'] = 'Läsa';
 $lang['editpage_write'] = 'Skriva';

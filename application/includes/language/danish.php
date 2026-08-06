@@ -349,7 +349,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Forbidden';
-$lang['addpage_none'] = 'Ingen';
+$lang['addpage_none'] = 'Ikke indstillet';
 $lang['addpage_view'] = 'View';
 $lang['addpage_read'] = 'Read';
 $lang['addpage_write'] = 'Write';
@@ -371,7 +371,7 @@ $lang['editpage_assign_department'] = 'Tilordnes til afdeling';
 $lang['editpage_filter'] = 'Filtrer:';
 $lang['editpage_keyword'] = 'Indtast nøgleord';
 $lang['editpage_forbidden'] = 'Forbidden';
-$lang['editpage_none'] = 'Ingen';
+$lang['editpage_none'] = 'Ikke indstillet';
 $lang['editpage_view'] = 'View';
 $lang['editpage_read'] = 'Read';
 $lang['editpage_write'] = 'Write';

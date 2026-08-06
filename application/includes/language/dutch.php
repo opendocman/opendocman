@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Forbidden';
-$lang['addpage_none'] = 'None';
+$lang['addpage_none'] = 'Niet ingesteld';
 $lang['addpage_view'] = 'View';
 $lang['addpage_read'] = 'Read';
 $lang['addpage_write'] = 'Write';
@@ -370,7 +370,7 @@ $lang['editpage_assign_department'] = 'Assign to department';
 $lang['editpage_filter'] = 'Filter:';
 $lang['editpage_keyword'] = 'Enter keywords';
 $lang['editpage_forbidden'] = 'Forbidden';
-$lang['editpage_none'] = 'None';
+$lang['editpage_none'] = 'Niet ingesteld';
 $lang['editpage_view'] = 'View';
 $lang['editpage_read'] = 'Read';
 $lang['editpage_write'] = 'Write';

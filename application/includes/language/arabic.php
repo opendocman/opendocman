@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'محظور';
-$lang['addpage_none'] = 'بدون';
+$lang['addpage_none'] = 'غير محدد';
 $lang['addpage_view'] = 'عرض';
 $lang['addpage_read'] = 'قراءة';
 $lang['addpage_write'] = 'كتابة';
@@ -371,7 +371,7 @@ $lang['editpage_assign_department'] = 'تعيين للإدارة';
 $lang['editpage_filter'] = 'ترشيح:';
 $lang['editpage_keyword'] = 'أدخل الكلمة المفتاحية';
 $lang['editpage_forbidden'] = 'حظر';
-$lang['editpage_none'] = 'لاشئ';
+$lang['editpage_none'] = 'غير محدد';
 $lang['editpage_view'] = 'عرض';
 $lang['editpage_read'] = 'قراءة';
 $lang['editpage_write'] = 'كتابة';

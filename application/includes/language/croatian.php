@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Zabranjeno';
-$lang['addpage_none'] = 'Nikakva';
+$lang['addpage_none'] = 'Nepostavljeno';
 $lang['addpage_view'] = 'Prikaži';
 $lang['addpage_read'] = 'Čitaj';
 $lang['addpage_write'] = 'Piši';
@@ -371,7 +371,7 @@ $lang['editpage_assign_department'] = 'Dodjeli vlasništvo odjelu';
 $lang['editpage_filter'] = 'Traži:';
 $lang['editpage_keyword'] = 'Unesite tekst';
 $lang['editpage_forbidden'] = 'Zabranjeno';
-$lang['editpage_none'] = 'Nikakva';
+$lang['editpage_none'] = 'Nepostavljeno';
 $lang['editpage_view'] = 'Prikaži';
 $lang['editpage_read'] = 'Čitaj';
 $lang['editpage_write'] = 'Piši';

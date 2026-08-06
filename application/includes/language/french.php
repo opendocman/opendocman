@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Interdit';
-$lang['addpage_none'] = 'Aucun';
+$lang['addpage_none'] = 'Non défini';
 $lang['addpage_view'] = 'Visible';
 $lang['addpage_read'] = 'Lecture';
 $lang['addpage_write'] = 'Ecriture';
@@ -370,7 +370,7 @@ $lang['editpage_assign_department'] = 'Département';
 $lang['editpage_filter'] = 'Filtre:';
 $lang['editpage_keyword'] = 'Saisissez les Mots Clés';
 $lang['editpage_forbidden'] = 'Interdit';
-$lang['editpage_none'] = 'Aucun';
+$lang['editpage_none'] = 'Non défini';
 $lang['editpage_view'] = 'Visible';
 $lang['editpage_read'] = 'Lecture';
 $lang['editpage_write'] = 'Ecriture';

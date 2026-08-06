@@ -373,7 +373,7 @@ $lang['email_your_file_has_been_authorized'] = 'Dosyanız yayınlanmak üzere ye
 
 // Dosya Sayfası Ekle
 $lang['addpage_forbidden'] = 'Yasak';
-$lang['addpage_none'] = 'Hiçbiri';
+$lang['addpage_none'] = 'Ayarlanmamış';
 $lang['addpage_view'] = 'Görüntüle';
 $lang['addpage_read'] = 'Oku';
 $lang['addpage_write'] = 'Yaz';
@@ -395,7 +395,7 @@ $lang['editpage_assign_department'] = 'Bölüme ata';
 $lang['editpage_filter'] = 'Filtre:';
 $lang['editpage_keyword'] = 'Anahtar kelimeleri girin';
 $lang['editpage_forbidden'] = 'Yasak';
-$lang['editpage_none'] = 'Hiçbiri';
+$lang['editpage_none'] = 'Ayarlanmamış';
 $lang['editpage_view'] = 'Görüntüle';
 $lang['editpage_read'] = 'Oku';
 $lang['editpage_write'] = 'Yaz';

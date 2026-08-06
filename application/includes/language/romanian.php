@@ -348,7 +348,7 @@ $lang['view'] = $lang['label_view'];
 
 // Add File Page
 $lang['addpage_forbidden'] = 'Interzis';
-$lang['addpage_none'] = 'Niciunul';
+$lang['addpage_none'] = 'Nesetat';
 $lang['addpage_view'] = 'Vizualizare';
 $lang['addpage_read'] = 'Citire';
 $lang['addpage_write'] = 'Scriere';
@@ -370,7 +370,7 @@ $lang['editpage_assign_department'] = 'Departamentul atribuit';
 $lang['editpage_filter'] = 'Filtrare:';
 $lang['editpage_keyword'] = 'Introduceti cuvinte cheie';
 $lang['editpage_forbidden'] = 'Interzis';
-$lang['editpage_none'] = 'Niciunul';
+$lang['editpage_none'] = 'Nesetat';
 $lang['editpage_view'] = 'Vizualizare';
 $lang['editpage_read'] = 'Citire';
 $lang['editpage_write'] = 'Scriere';
