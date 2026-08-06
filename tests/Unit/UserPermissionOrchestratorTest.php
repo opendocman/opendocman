@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 require_once APPLICATION_PATH . '/models/UserPermission.class.php';
+require_once APPLICATION_PATH . '/models/CategoryPerms.class.php';
 
 class UserPermissionOrchestratorTest extends TestCase
 {
@@ -150,6 +151,9 @@ class UserPermissionOrchestratorTest extends TestCase
         $up = new UserPermission(10, $pdo);
         $up->user_obj = $mockUser;
         $up->dept_perms_obj = $mockDP;
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
         $up->user_perms_obj = $mockUP;
 
         // READ = published [100,200] + user [300] + dept [201,300] -> unique [100,200,300,201]
@@ -209,6 +213,9 @@ class UserPermissionOrchestratorTest extends TestCase
         $up = new UserPermission(10, $pdo);
         $up->user_obj = $mockUser;
         $up->dept_perms_obj = $mockDP;
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
         $up->user_perms_obj = $mockUP;
 
         // Expected: user [10,11,12] + (dept [12,13,14] - [13] - userOverlap[10,11,12]) => [10,11,12,14]
@@ -265,6 +272,9 @@ class UserPermissionOrchestratorTest extends TestCase
         $this->setupOverloadedDeptPerms();
 
         $up = new UserPermission(10, $pdo);
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
 
         // From base rights (copied from user perms): ADMIN_RIGHT=4
         $this->assertSame(4, $up->getAuthority(999));
@@ -328,6 +338,9 @@ class UserPermissionOrchestratorTest extends TestCase
         $this->setupOverloadedDeptPerms();
 
         $up = new UserPermission(10, $pdo);
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
 
         $this->assertSame(4, $up->getAuthority(12345));
     }
@@ -387,6 +400,9 @@ class UserPermissionOrchestratorTest extends TestCase
         $up->user_obj = $mockUser;
         $up->user_perms_obj = $upOver;
         $up->dept_perms_obj = $dpOver;
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
 
         // WRITE_RIGHT=3 from base rights
         $this->assertSame(3, $up->getAuthority(42));
@@ -458,6 +474,9 @@ class UserPermissionOrchestratorTest extends TestCase
         // Inject mocks to avoid DB getPermission query
         $up->user_perms_obj = $upOver;
         $up->dept_perms_obj = $dpOver;
+        $mockCP = \Mockery::mock(CategoryPerms::class);
+        $mockCP->shouldReceive('getPermission')->andReturn(null)->byDefault();
+        $up->category_perms_obj = $mockCP;
 
         $this->assertSame(2, $up->getAuthority(777));
     }
