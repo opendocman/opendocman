@@ -46,7 +46,7 @@
         RIGHT_ORDER.forEach(function (level, i) {
             var label = RIGHT_LABELS[RIGHT_VALUES[level]];
             html += '    <li class="nav-item" role="presentation">';
-            html += '      <button class="nav-link' + (i === 0 ? ' active' : '') + '" data-bs-toggle="tab" data-target="#perm-tab-' + level + '" type="button" role="tab">' + label + '</button>';
+            html += '      <button class="nav-link' + (i === 0 ? ' active' : '') + '" data-bs-toggle="tab" data-bs-target="#perm-tab-' + level + '" type="button" role="tab">' + label + '</button>';
             html += '    </li>';
         });
         html += '  </ul>';
@@ -144,7 +144,7 @@
             if (!level) return;
             var editBtn = self.el.querySelector('.perm-mode-btn[data-mode="edit"]');
             if (editBtn) editBtn.click();
-            var tabBtn = self.el.querySelector('[data-target="#perm-tab-' + level + '"]');
+            var tabBtn = self.el.querySelector('[data-bs-target="#perm-tab-' + level + '"]');
             if (tabBtn) tabBtn.click();
         });
     };
