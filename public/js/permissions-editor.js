@@ -245,6 +245,11 @@
             allItems.push({ id: u.id, name: u.last_name + ', ' + u.first_name, type: 'user' });
         });
 
+        allItems.sort(function (a, b) {
+            if (a.type !== b.type) return a.type === 'dept' ? -1 : 1;
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        });
+
         allItems.forEach(function (item) {
             html += '<tr>';
             html += '<td>' + item.name + '</td>';
