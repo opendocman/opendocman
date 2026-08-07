@@ -45,6 +45,19 @@ $GLOBALS['CONFIG'] = [
     'db_prefix' => 'odm_',
 ];
 
+// Include installer classes
+require_once APPLICATION_PATH . '/installer/CheckResult.php';
+require_once APPLICATION_PATH . '/installer/CheckerInterface.php';
+require_once APPLICATION_PATH . '/installer/RequirementChecker.php';
+
+// Auto-discover installer checkers via glob
+$checkerFiles = glob(APPLICATION_PATH . '/installer/checkers/*Checker.php');
+if ($checkerFiles !== false) {
+    foreach ($checkerFiles as $file) {
+        require_once $file;
+    }
+}
+
 // Include common test utilities
 require_once __DIR__ . '/TestCase.php';
 

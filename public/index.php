@@ -39,7 +39,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR .'../application/models');
 set_include_path(get_include_path() . PATH_SEPARATOR .'../application/includes/smarty/');
 
 spl_autoload_register(function ($class) {
-    include $class . '.class.php';
+    @include $class . '.class.php';
 });
 
 // Load installer classes

@@ -11,7 +11,7 @@ if (!defined('PdfExtractor_class')) {
                 $parser = new \Smalot\PdfParser\Parser();
                 $pdf = $parser->parseFile($filePath);
                 return trim($pdf->getText());
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 error_log('PdfExtractor: ' . $e->getMessage());
                 return '';
             }
