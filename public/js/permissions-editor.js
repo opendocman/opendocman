@@ -38,12 +38,12 @@
 
         html += '<div class="mb-2">';
         html += '  <div class="btn-group btn-group-sm" role="group">';
-        html += '    <button type="button" class="btn btn-primary perm-mode-btn" data-mode="edit">Edit</button>';
-        html += '    <button type="button" class="btn btn-outline-secondary perm-mode-btn" data-mode="overview">Overview</button>';
+        html += '    <button type="button" class="btn btn-outline-secondary perm-mode-btn" data-mode="edit">Edit</button>';
+        html += '    <button type="button" class="btn btn-primary perm-mode-btn" data-mode="overview">Overview</button>';
         html += '  </div>';
         html += '</div>';
 
-        html += '<div class="perm-edit-mode">';
+        html += '<div class="perm-edit-mode" style="display:none;">';
         html += '  <ul class="nav nav-tabs small" role="tablist">';
         RIGHT_ORDER.forEach(function (level, i) {
             var label = RIGHT_LABELS[RIGHT_VALUES[level]];
@@ -63,7 +63,7 @@
         html += '  </div>';
         html += '</div>';
 
-        html += '<div class="perm-overview-mode" style="display:none;">';
+        html += '<div class="perm-overview-mode">';
         html += '  <div class="table-responsive" style="max-height:300px; overflow-y:auto;">';
         html += '    <table class="table table-sm table-striped mb-0">';
         html += '      <thead class="table-light"><tr><th>Name</th><th>Type</th>';
@@ -77,6 +77,7 @@
         self.el.innerHTML = html;
         self.bindEvents();
         self.refreshAll();
+        self.renderOverview();
     };
 
     PermissionsEditor.prototype.bindEvents = function () {
