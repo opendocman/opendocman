@@ -208,15 +208,21 @@
 
         var selectEl = self.el.querySelector('.perm-add-select[data-level="' + level + '"]');
         var currentOptions = '<option value="">+ Add...</option>';
+        var optionList = [];
         self.departments.forEach(function (dept) {
             if (self.state.dept_perms[dept.id] !== rightVal) {
-                currentOptions += '<option value="dept:' + dept.id + '">[Dept] ' + dept.name + '</option>';
+                optionList.push({ label: '[Dept] ' + dept.name, value: 'dept:' + dept.id, sortKey: 'A' + dept.name.toLowerCase() });
             }
         });
         self.users.forEach(function (user) {
             if (self.state.user_perms[user.id] !== rightVal) {
-                currentOptions += '<option value="user:' + user.id + '">[User] ' + user.last_name + ', ' + user.first_name + '</option>';
+                var name = user.last_name + ', ' + user.first_name;
+                optionList.push({ label: '[User] ' + name, value: 'user:' + user.id, sortKey: 'B' + name.toLowerCase() });
             }
+        });
+        optionList.sort(function (a, b) { return a.sortKey < b.sortKey ? -1 : 1; });
+        optionList.forEach(function (opt) {
+            currentOptions += '<option value="' + opt.value + '">' + opt.label + '</option>';
         });
         selectEl.innerHTML = currentOptions;
     };
