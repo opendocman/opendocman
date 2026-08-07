@@ -42,7 +42,6 @@ class SettingsTest extends TestCase
         $this->touch($langPath . '/en.php');
         $this->touch($langPath . '/fr.php');
         $this->mkdirp($langPath . '/common');        // should be excluded by getFolders
-        $this->mkdirp($langPath . '/DataTables');    // should be excluded by getFolders
     }
 
     protected function tearDown(): void
@@ -197,7 +196,6 @@ class SettingsTest extends TestCase
 
         // Excluded directories should not appear
         $this->assertNotContains('common', $languages);
-        $this->assertNotContains('DataTables', $languages);
     }
 
     public function testGetReturnsNullByDefault(): void

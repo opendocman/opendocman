@@ -2,12 +2,10 @@
 <meta name="csrf-token" content="{$csrf_token_value}" />
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/system.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/tabulator-tables@6.3/dist/css/tabulator.min.css" />
-<link type="text/css" rel="stylesheet" href="{$g_base_url}css/DataTables/demo_table.css" />
 
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/multiSelect112/jquery-ui-1.8.18.custom.css" />
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/multiSelect112/smoothness/jquery-ui-1.8.18.custom.css" />
 
-<script type="text/javascript" src="{$g_base_url}js/DataTables/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="{$g_base_url}js/common/multiSelect112/jquery-ui-1.8.18.custom.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{$g_base_url}css/common/multiSelect112/jquery.multiselect.css" />
