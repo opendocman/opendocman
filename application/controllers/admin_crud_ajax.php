@@ -43,18 +43,7 @@ if (!$user_obj->isAdmin()) {
 $action = $_REQUEST['action'] ?? 'list';
 $entity = $_REQUEST['entity'] ?? '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        http_response_code(403);
-        echo json_encode(['error' => 'CSRF validation failed']);
-        exit;
-    }
-    handleMutation($pdo, $db_prefix, $action, $entity, $_POST);
-    exit;
-}
-
-handleList($pdo, $db_prefix, $entity);
-
+if (!function_exists('handleList')) {
 function handleList(PDO $pdo, string $db_prefix, string $entity): void
 {
     $page = max(1, (int)($_REQUEST['page'] ?? 1));
@@ -107,7 +96,9 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
         'last_row' => $total,
     ]);
 }
+}
 
+if (!function_exists('handleMutation')) {
 function handleMutation(PDO $pdo, string $db_prefix, string $action, string $entity, array $data): void
 {
     header('Content-Type: application/json');
@@ -126,7 +117,9 @@ function handleMutation(PDO $pdo, string $db_prefix, string $action, string $ent
             echo json_encode(['error' => 'Invalid action']);
     }
 }
+}
 
+if (!function_exists('handleAdd')) {
 function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): void
 {
     switch ($entity) {
@@ -214,7 +207,9 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
             echo json_encode(['error' => 'Invalid entity']);
     }
 }
+}
 
+if (!function_exists('handleEdit')) {
 function handleEdit(PDO $pdo, string $db_prefix, string $entity, array $data): void
 {
     $id = (int)($data['id'] ?? 0);
@@ -297,7 +292,9 @@ function handleEdit(PDO $pdo, string $db_prefix, string $entity, array $data): v
             echo json_encode(['error' => 'Invalid entity']);
     }
 }
+}
 
+if (!function_exists('handleDelete')) {
 function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data): void
 {
     $id = (int)($data['id'] ?? 0);
@@ -350,3 +347,16 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
             echo json_encode(['error' => 'Invalid entity']);
     }
 }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
+        http_response_code(403);
+        echo json_encode(['error' => 'CSRF validation failed']);
+        exit;
+    }
+    handleMutation($pdo, $db_prefix, $action, $entity, $_POST);
+    exit;
+}
+
+handleList($pdo, $db_prefix, $entity);
