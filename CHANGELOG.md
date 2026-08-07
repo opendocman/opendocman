@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.7.0-release](https://github.com/opendocman/opendocman/compare/v2.6.0-release...v2.7.0-release) (2026-08-07)
+
+
+### Features
+
+* installer pre-flight checks and fix PDF parsing error ([#415](https://github.com/opendocman/opendocman/issues/415)) ([#418](https://github.com/opendocman/opendocman/issues/418)) ([622b328](https://github.com/opendocman/opendocman/commit/622b32814302da8110f9bee325250a447a13cc7e))
+* permission inheritance design doc, implementation plan, and rename 'None' to 'Unset' across all language files ([69670af](https://github.com/opendocman/opendocman/commit/69670afac663ca82df26a217c0c287bc345ad85d))
+* widen main content container to match navbar width ([#414](https://github.com/opendocman/opendocman/issues/414)) ([e9a9109](https://github.com/opendocman/opendocman/commit/e9a9109c897aaf57d60f8bcc7857b94853b007d9))
+
+
+### Bug Fixes
+
+* add cPanel PHP 8.3 handler to .htaccess for demo site compatibility ([5f7b38b](https://github.com/opendocman/opendocman/commit/5f7b38b91279dc033ce0b5993c96dc6fff3afa8a))
+* correct revision history lifecycle for incoming staging ([#413](https://github.com/opendocman/opendocman/issues/413)) ([0c82042](https://github.com/opendocman/opendocman/commit/0c82042afa4dfb76bc72347ff7f6e3c56cb5762f))
+* pass empty argv to migrate() in demoRefresh ([ce95837](https://github.com/opendocman/opendocman/commit/ce958376701cbf3b18c35063fc1c8c7bb9a8a2a7))
+* redirect non-index pages to installer when DB has no tables ([#410](https://github.com/opendocman/opendocman/issues/410)) ([c22fa86](https://github.com/opendocman/opendocman/commit/c22fa86aa16725b75e730bdfc2d1b39424b18e44))
+* restore missing popup() function for help links ([#417](https://github.com/opendocman/opendocman/issues/417)) ([2efe56e](https://github.com/opendocman/opendocman/commit/2efe56e01b735a4c8b17909b3a8ede264c69a78a))
+* session_start guards, base_url trailing slash, CSRF validation, and E2E retry ([006cd22](https://github.com/opendocman/opendocman/commit/006cd22780cf8a72bd94df8b36a0e83142d70777))
+* use getTokenForTemplate() instead of getToken() in content_index ([#411](https://github.com/opendocman/opendocman/issues/411)) ([d141137](https://github.com/opendocman/opendocman/commit/d141137c0c847aa7588c4984e4232e2fd861a7da))
+
 ## [2.6.0-release](https://github.com/opendocman/opendocman/compare/v2.5.0-release...v2.6.0-release) (2026-08-01)
 
 
