@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {ldelim}
         user_perms: {if isset($user_perms)}{$user_perms|@json_encode}{else}[]{/if}
 {rdelim});
 {/if}
-
+{literal}
     document.getElementById('permissionsEditor').closest('form').addEventListener('submit', function () {
         var form = this;
         var editor = initPermissionsEditor('#permissionsEditor');
@@ -44,5 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {ldelim}
             form.appendChild(input);
         });
     });
+{/literal}
 {rdelim});
 </script>
