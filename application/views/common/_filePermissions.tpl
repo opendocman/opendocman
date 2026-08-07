@@ -1,4 +1,4 @@
-<div id="permissionsEditor" class="w-50">
+<div id="permissionsEditor">
     <p class="text-muted small mb-2">{$g_lang_filepermissionspage_edit_department_permissions}</p>
 </div>
 
