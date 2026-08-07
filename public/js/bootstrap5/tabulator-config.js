@@ -1,4 +1,15 @@
 var paginationSize = parseInt(sessionStorage.getItem('tabulatorPageSize') || '25', 10);
+var columnWidthsKey = 'tabulatorColWidths_' + window.location.pathname.replace(/[^a-zA-Z0-9]/g, '_');
+var savedWidths = JSON.parse(sessionStorage.getItem(columnWidthsKey) || '{}');
+
+function applySavedWidth(col) {
+    if (col.field && savedWidths[col.field]) {
+        col.width = savedWidths[col.field];
+        delete col.widthGrow;
+    }
+    return col;
+}
+
 var tabulatorDefaults = {
     layout: 'fitColumns',
     pagination: true,
@@ -64,26 +75,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var table = new Tabulator('#file-table', Object.assign({}, tabulatorDefaults, {
         columns: [
-            { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
-            { title: 'ID', field: 'id', width: 60 },
-            { title: 'Filename', field: 'filename', widthGrow: 2,
+            applySavedWidth({ title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false }),
+            applySavedWidth({ title: 'ID', field: 'id', width: 60 }),
+            applySavedWidth({ title: 'Filename', field: 'filename', widthGrow: 2,
               formatter: function(cell) {
                   return '<a href="' + cell.getData().details_link + '">' + cell.getValue() + '</a>';
               }
-            },
-            { title: 'Description', field: 'description', widthGrow: 3 },
-            { title: 'Matched Text', field: 'content_snippet', widthGrow: 2, tooltip: true, formatter: 'html',
+            }),
+            applySavedWidth({ title: 'Description', field: 'description', widthGrow: 3 }),
+            applySavedWidth({ title: 'Matched Text', field: 'content_snippet', widthGrow: 2, tooltip: true, formatter: 'html',
               visible: function() { return new URLSearchParams(window.location.search).get('search_content') === 'on'; }
-            },
-            { title: 'Status', field: 'lock', width: 80, formatter: function(cell) {
+            }),
+            applySavedWidth({ title: 'Status', field: 'lock', width: 80, formatter: function(cell) {
                 return cell.getValue() ? '<span class="text-danger">Locked</span>' : '<span class="text-success">Unlocked</span>';
-            }},
-            { title: 'Created', field: 'created_date', width: 120 },
-            { title: 'Modified', field: 'modified_date', width: 120 },
-            { title: 'Author', field: 'owner_name', width: 150 },
-            { title: 'Department', field: 'dept_name', width: 120 },
-            { title: 'Size', field: 'filesize', width: 80 },
-            { title: '', field: 'checkout_link', width: 100, headerSort: false,
+            }}),
+            applySavedWidth({ title: 'Created', field: 'created_date', width: 120 }),
+            applySavedWidth({ title: 'Modified', field: 'modified_date', width: 120 }),
+            applySavedWidth({ title: 'Author', field: 'owner_name', width: 150 }),
+            applySavedWidth({ title: 'Department', field: 'dept_name', width: 120 }),
+            applySavedWidth({ title: 'Size', field: 'filesize', width: 80 }),
+            applySavedWidth({ title: '', field: 'checkout_link', width: 100, headerSort: false,
               visible: function() { return parseInt(document.getElementById('file-table')?.dataset.state || 1) === -1; },
               formatter: function(cell) {
                 var checkout = cell.getValue();
@@ -92,13 +103,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (checkin) return '<a href="' + checkin + '" class="btn btn-sm btn-success">Check-In</a>';
                 return '';
               }
-            },
+            }),
         ]
     }));
     window.fileTable = table;
 
     table.on('pageSizeChanged', function(size) {
         sessionStorage.setItem('tabulatorPageSize', size);
+    });
+
+    table.on('columnResized', function(column) {
+        var field = column.getField();
+        if (!field) return;
+        var widths = JSON.parse(sessionStorage.getItem(columnWidthsKey) || '{}');
+        widths[field] = column.getWidth();
+        sessionStorage.setItem(columnWidthsKey, JSON.stringify(widths));
     });
 
     var deleteBtn = document.getElementById('delete-selected');

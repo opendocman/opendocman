@@ -177,6 +177,8 @@ function draw_error($message)
 function draw_footer()
 {
     $GLOBALS['smarty']->assign('site_title', $GLOBALS['CONFIG']['title']);
+    $GLOBALS['smarty']->assign('tabulator_config_version', (string) filemtime(dirname(__FILE__) . '/../../../public/js/bootstrap5/tabulator-config.js'));
+    $GLOBALS['smarty']->assign('app_version', (string) filemtime(dirname(__FILE__) . '/../../../public/js/bootstrap5/app.js'));
     display_smarty_template('footer.tpl');
 }
 
