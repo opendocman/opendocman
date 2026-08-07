@@ -74,6 +74,15 @@ $request_state = e::h(($_REQUEST['state']+1));
             </div>
         </div>
     </div>
+    <div class="col-12 col-sm-6 col-lg-4">
+        <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white"><h5 class="card-title mb-0"><?php echo msg('label_admin_crud')?></h5></div>
+            <div class="card-body">
+                <p class="card-text"><?php echo msg('label_admin_crud_desc')?></p>
+                <a href="admin_crud" class="btn btn-primary"><?php echo msg('label_open')?></a>
+            </div>
+        </div>
+    </div>
 
 <?php if ($user_obj->isRoot()) { ?>
     <div class="col-12 col-sm-6 col-lg-4">
