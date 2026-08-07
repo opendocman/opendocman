@@ -31,7 +31,7 @@ class AdminCrudAjaxTest extends TestCase
     {
         $countStmt = \Mockery::mock(\PDOStatement::class);
         $countStmt->shouldReceive('execute')->once()->andReturn(true);
-        $countStmt->shouldReceive('rowCount')->once()->andReturn(1);
+        $countStmt->shouldReceive('fetchColumn')->once()->andReturn(1);
 
         $dataStmt = \Mockery::mock(\PDOStatement::class);
         $dataStmt->shouldReceive('execute')->once()->andReturn(true);
@@ -40,11 +40,11 @@ class AdminCrudAjaxTest extends TestCase
         ]);
 
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern('/SELECT COUNT/'))
+            ->with(\Mockery::pattern('/^SELECT COUNT/'))
             ->once()
             ->andReturn($countStmt);
         $this->mockPdo->shouldReceive('prepare')
-            ->with(\Mockery::pattern('/SELECT.*FROM.*user.*LEFT JOIN.*department.*LEFT JOIN.*admin/'))
+            ->with(\Mockery::pattern('/SELECT u\.id,.*FROM.*odm_user.*LEFT JOIN.*odm_department.*LEFT JOIN.*odm_admin/'))
             ->once()
             ->andReturn($dataStmt);
 
@@ -60,7 +60,7 @@ class AdminCrudAjaxTest extends TestCase
     {
         $countStmt = \Mockery::mock(\PDOStatement::class);
         $countStmt->shouldReceive('execute')->once()->andReturn(true);
-        $countStmt->shouldReceive('rowCount')->once()->andReturn(1);
+        $countStmt->shouldReceive('fetchColumn')->once()->andReturn(1);
 
         $dataStmt = \Mockery::mock(\PDOStatement::class);
         $dataStmt->shouldReceive('execute')->once()->andReturn(true);
@@ -87,7 +87,7 @@ class AdminCrudAjaxTest extends TestCase
     {
         $countStmt = \Mockery::mock(\PDOStatement::class);
         $countStmt->shouldReceive('execute')->once()->andReturn(true);
-        $countStmt->shouldReceive('rowCount')->once()->andReturn(1);
+        $countStmt->shouldReceive('fetchColumn')->once()->andReturn(1);
 
         $dataStmt = \Mockery::mock(\PDOStatement::class);
         $dataStmt->shouldReceive('execute')->once()->andReturn(true);
@@ -192,7 +192,7 @@ class AdminCrudAjaxTest extends TestCase
     {
         switch ($entity) {
             case 'users':
-                $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin FROM {$GLOBALS['CONFIG']['db_prefix']}user u LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}department d ON u.department = d.id LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}admin a ON u.id = a.id";
+                $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer FROM {$GLOBALS['CONFIG']['db_prefix']}user u LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}department d ON u.department = d.id LEFT JOIN {$GLOBALS['CONFIG']['db_prefix']}admin a ON u.id = a.id";
                 $countQuery = "SELECT COUNT(*) FROM {$GLOBALS['CONFIG']['db_prefix']}user";
                 return [$query, $countQuery, []];
             case 'departments':
@@ -216,7 +216,7 @@ class AdminCrudAjaxTest extends TestCase
 
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute();
-        $total = $countStmt->rowCount();
+        $total = (int)$countStmt->fetchColumn();
 
         $offset = ($page - 1) * $size;
         $query .= " LIMIT $size OFFSET $offset";
@@ -239,7 +239,7 @@ class AdminCrudAjaxTest extends TestCase
 
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute();
-        $total = $countStmt->rowCount();
+        $total = (int)$countStmt->fetchColumn();
 
         $offset = ($page - 1) * $size;
         $query .= " LIMIT $size OFFSET $offset";
@@ -262,7 +262,7 @@ class AdminCrudAjaxTest extends TestCase
 
         $countStmt = $this->mockPdo->prepare($countQuery);
         $countStmt->execute();
-        $total = $countStmt->rowCount();
+        $total = (int)$countStmt->fetchColumn();
 
         $offset = ($page - 1) * $size;
         $query .= " LIMIT $size OFFSET $offset";
