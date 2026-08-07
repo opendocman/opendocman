@@ -113,6 +113,7 @@
             var parts = val.split(':');
             var type = parts[0], id = parseInt(parts[1]);
             var rightVal = RIGHT_VALUES[level];
+            console.log('ADD: type=' + type + ' id=' + id + ' level=' + level + ' rightVal=' + rightVal + ' previous=' + (type === 'dept' ? self.state.dept_perms[id] : self.state.user_perms[id]));
             if (type === 'dept') {
                 self.state.dept_perms[id] = rightVal;
             } else {
@@ -206,6 +207,7 @@
 
     PermissionsEditor.prototype.renderOverview = function () {
         var self = this;
+        console.log('renderOverview state:', JSON.stringify(self.state));
         var html = '';
         var allItems = [];
 
@@ -247,6 +249,7 @@
     };
 
     PermissionsEditor.prototype.loadTemplate = function (data) {
+        console.log('loadTemplate received:', JSON.stringify(data));
         var deptPerms = {};
         forEachObj(data.dept_perms || {}, function (k, v) { deptPerms[parseInt(k)] = v; });
         this.state.dept_perms = deptPerms;
