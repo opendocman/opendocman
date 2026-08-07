@@ -225,6 +225,11 @@
         RIGHT_ORDER.forEach(function (level) {
             self.refreshTab(level);
         });
+        // Re-render overview if it's currently visible
+        var overviewMode = self.el.querySelector('.perm-overview-mode');
+        if (overviewMode && overviewMode.style.display !== 'none') {
+            self.renderOverview();
+        }
     };
 
     PermissionsEditor.prototype.renderOverview = function () {
@@ -290,7 +295,6 @@
     };
 
     PermissionsEditor.prototype.loadCategoryTemplate = function (data, catName) {
-        console.log('loadCategoryTemplate', JSON.stringify(data), catName);
         var deptPerms = {};
         forEachObj(data.dept_perms || {}, function (k, v) { deptPerms[parseInt(k)] = v; });
         this.inherited.dept_perms = deptPerms;
