@@ -264,6 +264,7 @@
         forEachObj(this.state.dept_perms, function (id, rights) { deptPerm[id] = rights; });
         var userPerm = {};
         forEachObj(this.state.user_perms, function (id, rights) { userPerm[id] = rights; });
+        console.log('getData returning:', JSON.stringify({ department_permission: deptPerm, user_permission: userPerm }));
         return { department_permission: deptPerm, user_permission: userPerm };
     };
 
