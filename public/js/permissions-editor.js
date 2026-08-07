@@ -191,8 +191,8 @@
             assigned.forEach(function (item) {
                 if (item.inherited) {
                     var catName = self.inherited.catName || 'category';
-                    html += '<span class="badge bg-light text-secondary me-1 mb-1" title="Inherited from ' + catName + '">';
-                    html += item.name + ' <span class="text-muted small">(inherited)</span>';
+                    html += '<span class="badge bg-secondary me-1 mb-1" style="opacity:0.7;" title="Inherited from ' + catName + '">';
+                    html += item.name + ' <span class="text-white-50 small">(inherited)</span>';
                     html += '</span> ';
                 } else {
                     var badge = item.type === 'dept' ? 'secondary' : 'info';
