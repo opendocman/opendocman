@@ -45,6 +45,11 @@ $GLOBALS['CONFIG'] = [
     'db_prefix' => 'odm_',
 ];
 
+// Include installer classes
+require_once APPLICATION_PATH . '/installer/CheckResult.php';
+require_once APPLICATION_PATH . '/installer/CheckerInterface.php';
+require_once APPLICATION_PATH . '/installer/RequirementChecker.php';
+
 // Include common test utilities
 require_once __DIR__ . '/TestCase.php';
 
