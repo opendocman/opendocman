@@ -558,8 +558,15 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
             $userPerms[(int)$row['user_id']] = $rights;
         }
     }
+    $catName = '';
+    $catStmt = $pdo->prepare("SELECT name FROM {$GLOBALS['CONFIG']['db_prefix']}category WHERE id = :id");
+    $catStmt->execute([':id' => $catId]);
+    $catRow = $catStmt->fetch(PDO::FETCH_ASSOC);
+    if ($catRow) {
+        $catName = $catRow['name'];
+    }
     header('Content-Type: application/json');
-    echo json_encode(['dept_perms' => $deptPerms, 'user_perms' => $userPerms]);
+    echo json_encode(['dept_perms' => $deptPerms, 'user_perms' => $userPerms, 'cat_name' => $catName]);
     exit;
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
     $last_message = msg('message_action_cancelled');

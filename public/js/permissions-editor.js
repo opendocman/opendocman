@@ -1,13 +1,14 @@
 /**
  * Permissions Editor — dual mode component
  *
- * Edit mode: tab-per-level additive selection
- * Overview mode: full matrix with checkmark/X indicators
+ * Supports two permission layers:
+ *   - state (explicit): document-level perms, editable
+ *   - inherited (from category): read-only, shown as dimmed
  *
  * Usage:
  *   initPermissionsEditor('#perms', { departments: [...], users: [...] });
- *   var editor = initPermissionsEditor('#perms');
- *   editor.loadTemplate({ dept_perms: {...}, user_perms: {...} });
+ *   editor.loadTemplate({ dept_perms: {...}, user_perms: {...} });  // explicit
+ *   editor.loadCategoryTemplate({ dept_perms: {...}, user_perms: {...} }, 'CategoryName');  // inherited
  *   var data = editor.getData();
  */
 (function () {
@@ -27,6 +28,7 @@
         this.departments = options.departments || [];
         this.users = options.users || [];
         this.state = { dept_perms: {}, user_perms: {} };
+        this.inherited = { dept_perms: {}, user_perms: {}, catName: '' };
         this.render();
     }
 
@@ -153,16 +155,31 @@
         var rightVal = RIGHT_VALUES[level];
         var assigned = [];
 
+        // Explicit perms first
         forEachObj(self.state.dept_perms, function (id, rights) {
             if (rights === rightVal) {
                 var dept = self.findDept(parseInt(id));
-                if (dept) assigned.push({ type: 'dept', id: id, name: dept.name });
+                if (dept) assigned.push({ type: 'dept', id: id, name: dept.name, inherited: false });
             }
         });
         forEachObj(self.state.user_perms, function (id, rights) {
             if (rights === rightVal) {
                 var user = self.findUser(parseInt(id));
-                if (user) assigned.push({ type: 'user', id: id, name: user.last_name + ', ' + user.first_name });
+                if (user) assigned.push({ type: 'user', id: id, name: user.last_name + ', ' + user.first_name, inherited: false });
+            }
+        });
+
+        // Inherited perms (only if not overridden by explicit)
+        forEachObj(self.inherited.dept_perms, function (id, rights) {
+            if (rights === rightVal && !(id in self.state.dept_perms)) {
+                var dept = self.findDept(parseInt(id));
+                if (dept) assigned.push({ type: 'dept', id: id, name: dept.name, inherited: true });
+            }
+        });
+        forEachObj(self.inherited.user_perms, function (id, rights) {
+            if (rights === rightVal && !(id in self.state.user_perms)) {
+                var user = self.findUser(parseInt(id));
+                if (user) assigned.push({ type: 'user', id: id, name: user.last_name + ', ' + user.first_name, inherited: true });
             }
         });
 
@@ -172,11 +189,18 @@
         } else {
             var html = '';
             assigned.forEach(function (item) {
-                var badge = item.type === 'dept' ? 'secondary' : 'info';
-                html += '<span class="badge bg-' + badge + ' me-1 mb-1">';
-                html += item.name;
-                html += ' <a href="#" class="text-white text-decoration-none perm-remove-btn" data-type="' + item.type + '" data-id="' + item.id + '" data-level="' + level + '">&times;</a>';
-                html += '</span> ';
+                if (item.inherited) {
+                    var catName = self.inherited.catName || 'category';
+                    html += '<span class="badge border border-secondary text-secondary me-1 mb-1" style="background:transparent;font-weight:normal;" title="Inherited from ' + catName + '">';
+                    html += item.name + ' <span class="text-muted small">(inherited)</span>';
+                    html += '</span> ';
+                } else {
+                    var badge = item.type === 'dept' ? 'secondary' : 'info';
+                    html += '<span class="badge bg-' + badge + ' me-1 mb-1">';
+                    html += item.name;
+                    html += ' <a href="#" class="text-white text-decoration-none perm-remove-btn" data-type="' + item.type + '" data-id="' + item.id + '">&times;</a>';
+                    html += '</span> ';
+                }
             });
             listEl.innerHTML = html;
         }
@@ -218,9 +242,19 @@
             RIGHT_ORDER.forEach(function (level) {
                 var rightVal = RIGHT_VALUES[level];
                 var perms = item.type === 'dept' ? self.state.dept_perms : self.state.user_perms;
+                var inheritedPerms = item.type === 'dept' ? self.inherited.dept_perms : self.inherited.user_perms;
                 var set = perms[item.id] === rightVal;
-                html += '<td class="text-center" data-level="' + level + '" style="cursor:pointer;">';
-                html += set ? '<span class="text-success fw-bold">&#10003;</span>' : '<span class="text-muted">&#9679;</span>';
+                var inherited = !set && inheritedPerms[item.id] === rightVal;
+                var catName = self.inherited.catName;
+                var title = inherited ? 'Inherited from ' + catName : '';
+                html += '<td class="text-center" data-level="' + level + '" style="cursor:pointer;"' + (title ? ' title="' + title + '"' : '') + '>';
+                if (set) {
+                    html += '<span class="text-success fw-bold">&#10003;</span>';
+                } else if (inherited) {
+                    html += '<span class="text-success" style="opacity:0.5;">&#10003;</span>';
+                } else {
+                    html += '<span class="text-muted">&#9679;</span>';
+                }
                 html += '</td>';
             });
             html += '</tr>';
@@ -248,6 +282,17 @@
         var userPerms = {};
         forEachObj(data.user_perms || {}, function (k, v) { userPerms[parseInt(k)] = v; });
         this.state.user_perms = userPerms;
+        this.refreshAll();
+    };
+
+    PermissionsEditor.prototype.loadCategoryTemplate = function (data, catName) {
+        var deptPerms = {};
+        forEachObj(data.dept_perms || {}, function (k, v) { deptPerms[parseInt(k)] = v; });
+        this.inherited.dept_perms = deptPerms;
+        var userPerms = {};
+        forEachObj(data.user_perms || {}, function (k, v) { userPerms[parseInt(k)] = v; });
+        this.inherited.user_perms = userPerms;
+        this.inherited.catName = catName || '';
         this.refreshAll();
     };
 
