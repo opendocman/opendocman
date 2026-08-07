@@ -113,12 +113,13 @@
             var parts = val.split(':');
             var type = parts[0], id = parseInt(parts[1]);
             var rightVal = RIGHT_VALUES[level];
+            console.log('ADD: type=' + type + ' id=' + id + ' level=' + level + ' rightVal=' + rightVal + ' state now:', JSON.stringify(self.state));
             if (type === 'dept') {
                 self.state.dept_perms[id] = rightVal;
             } else {
                 self.state.user_perms[id] = rightVal;
             }
-            self.refreshTab(level);
+            self.refreshAll();
             select.value = '';
         });
 
@@ -128,13 +129,12 @@
             e.preventDefault();
             var type = link.getAttribute('data-type');
             var id = parseInt(link.getAttribute('data-id'));
-            var level = link.getAttribute('data-level');
             if (type === 'dept') {
                 delete self.state.dept_perms[id];
             } else {
                 delete self.state.user_perms[id];
             }
-            self.refreshTab(level);
+            self.refreshAll();
         });
 
         self.el.addEventListener('click', function (e) {
@@ -206,6 +206,7 @@
 
     PermissionsEditor.prototype.renderOverview = function () {
         var self = this;
+        console.log('OVERVIEW state:', JSON.stringify(self.state), 'RIGHT_VALUES:', JSON.stringify(RIGHT_VALUES), 'RIGHT_ORDER:', JSON.stringify(RIGHT_ORDER));
         var html = '';
         var allItems = [];
 
@@ -224,6 +225,7 @@
                 var rightVal = RIGHT_VALUES[level];
                 var perms = item.type === 'dept' ? self.state.dept_perms : self.state.user_perms;
                 var set = perms[item.id] === rightVal;
+                if (item.id == 62) console.log('OV item=' + item.id + ' type=' + item.type + ' perms[item.id]=' + perms[item.id] + ' rightVal=' + rightVal + ' set=' + set);
                 html += '<td class="text-center" data-level="' + level + '" style="cursor:pointer;">';
                 html += set ? '<span class="text-success fw-bold">&#10003;</span>' : '<span class="text-muted">&#9679;</span>';
                 html += '</td>';
