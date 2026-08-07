@@ -113,7 +113,6 @@
             var parts = val.split(':');
             var type = parts[0], id = parseInt(parts[1]);
             var rightVal = RIGHT_VALUES[level];
-            console.log('ADD: type=' + type + ' id=' + id + ' level=' + level + ' rightVal=' + rightVal + ' previous=' + (type === 'dept' ? self.state.dept_perms[id] : self.state.user_perms[id]));
             if (type === 'dept') {
                 self.state.dept_perms[id] = rightVal;
             } else {
@@ -186,12 +185,12 @@
         var selectEl = self.el.querySelector('.perm-add-select[data-level="' + level + '"]');
         var currentOptions = '<option value="">+ Add...</option>';
         self.departments.forEach(function (dept) {
-            if (!self.state.dept_perms[dept.id] || self.state.dept_perms[dept.id] !== rightVal) {
+            if (!(dept.id in self.state.dept_perms)) {
                 currentOptions += '<option value="dept:' + dept.id + '">[Dept] ' + dept.name + '</option>';
             }
         });
         self.users.forEach(function (user) {
-            if (!self.state.user_perms[user.id] || self.state.user_perms[user.id] !== rightVal) {
+            if (!(user.id in self.state.user_perms)) {
                 currentOptions += '<option value="user:' + user.id + '">[User] ' + user.last_name + ', ' + user.first_name + '</option>';
             }
         });
@@ -207,7 +206,6 @@
 
     PermissionsEditor.prototype.renderOverview = function () {
         var self = this;
-        console.log('renderOverview state:', JSON.stringify(self.state));
         var html = '';
         var allItems = [];
 
@@ -249,7 +247,6 @@
     };
 
     PermissionsEditor.prototype.loadTemplate = function (data) {
-        console.log('loadTemplate received:', JSON.stringify(data));
         var deptPerms = {};
         forEachObj(data.dept_perms || {}, function (k, v) { deptPerms[parseInt(k)] = v; });
         this.state.dept_perms = deptPerms;
@@ -264,7 +261,6 @@
         forEachObj(this.state.dept_perms, function (id, rights) { deptPerm[id] = rights; });
         var userPerm = {};
         forEachObj(this.state.user_perms, function (id, rights) { userPerm[id] = rights; });
-        console.log('getData returning:', JSON.stringify({ department_permission: deptPerm, user_permission: userPerm }));
         return { department_permission: deptPerm, user_permission: userPerm };
     };
 
