@@ -96,13 +96,16 @@
 <script src="{$g_base_url}js/inline-add-category.js"></script>
 
 <script>
-$(document).ready(function () {ldelim}
-    $('select[name="category"]').on('change', function () {ldelim}
-        var catId = $(this).val();
+document.addEventListener('DOMContentLoaded', function () {ldelim}
+    document.querySelector('select[name="category"]').addEventListener('change', function () {ldelim}
+        var catId = this.value;
         if (!catId) return;
-        $.getJSON('category?submit=get_perms_json&cat_id=' + catId, function (data) {ldelim}
-            $('#permissionsEditor').permissionsEditor('loadTemplate', data);
-        {rdelim});
+        fetch('category?submit=get_perms_json&cat_id=' + catId)
+            .then(function (r) { return r.json(); })
+            .then(function (data) {ldelim}
+                var editor = initPermissionsEditor('#permissionsEditor');
+                if (editor) editor.loadTemplate(data);
+            {rdelim});
     {rdelim});
 {rdelim});
 </script>

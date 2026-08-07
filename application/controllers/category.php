@@ -60,7 +60,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 <label class="col-form-label fw-bold"><?php echo msg('category')?></label>
             </div>
             <div class="col-auto">
-                <input name="category" type="text" class="form-control required" maxlength="40">
+                <input name="category" type="text" class="form-control" required maxlength="40">
             </div>
             <div class="col-auto">
                 <button class="btn btn-primary" type="Submit" name="submit" value="Add Category"><?php echo msg('button_add_category')?></button>
@@ -73,21 +73,29 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         <h6>Default permissions for documents in this category (optional)</h6>
         <div id="categoryPermsEditor"></div>
     </form>
-     <script src="js/permissions-editor.js"></script>
-     <script>
-  $(document).ready(function(){
-    $('#categoryAddForm').validate();
+<script src="js/permissions-editor.js"></script>
+      <script>
+  document.addEventListener('DOMContentLoaded', function(){
     var departments = <?php echo json_encode($avail_depts ?? []); ?>;
     var users = <?php echo json_encode($avail_users ?? []); ?>;
-    $('#categoryPermsEditor').permissionsEditor({ departments: departments, users: users });
-    $('#categoryAddForm').on('submit', function () {
-        var form = $(this);
-        var data = $('#categoryPermsEditor').permissionsEditor('getData');
-        $.each(data.department_permission, function (deptId, rights) {
-            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(form);
+    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users });
+    document.getElementById('categoryAddForm').addEventListener('submit', function () {
+        var form = this;
+        var editor = initPermissionsEditor('#categoryPermsEditor');
+        var data = editor.getData();
+        Object.keys(data.department_permission).forEach(function (deptId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'department_permission[' + deptId + ']';
+            input.value = data.department_permission[deptId];
+            form.appendChild(input);
         });
-        $.each(data.user_permission, function (userId, rights) {
-            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(form);
+        Object.keys(data.user_permission).forEach(function (userId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'user_permission[' + userId + ']';
+            input.value = data.user_permission[userId];
+            form.appendChild(input);
         });
     });
   });
@@ -390,7 +398,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     foreach ($result as $row) {
         echo '<div class="row g-3 align-items-center mb-3">';
         echo '<div class="col-auto"><label class="col-form-label fw-bold">' . msg('category') . ':</label></div>';
-        echo '<div class="col-auto"><input type="text" name="name" value="' . e::h($row['name']) . '" class="form-control required" maxlength="40"></div>';
+        echo '<div class="col-auto"><input type="text" name="name" value="' . e::h($row['name']) . '" class="form-control" required maxlength="40"></div>';
         echo '<input type="hidden" name="id" value="' . e::h($row['id']) . '">';
         echo '</div>';
     }
@@ -409,25 +417,36 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
             <h6>Default permissions for documents in this category (optional)</h6>
             <div id="categoryPermsEditor"></div>
  </form>
- <script src="js/permissions-editor.js"></script>
- <script>
-  $(document).ready(function(){
-    $('#updateCategoryForm').validate();
+<script src="js/permissions-editor.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
     var departments = <?php echo json_encode($avail_depts ?? []); ?>;
     var users = <?php echo json_encode($avail_users ?? []); ?>;
-    $('#categoryPermsEditor').permissionsEditor({ departments: departments, users: users });
+    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users });
     // Load existing template
-    $.getJSON('category?submit=get_perms_json&cat_id=<?php echo (int)$_REQUEST['item']; ?>', function (data) {
-        $('#categoryPermsEditor').permissionsEditor('loadTemplate', data);
-    });
-    $('#updateCategoryForm').on('submit', function () {
-        var form = $(this);
-        var data = $('#categoryPermsEditor').permissionsEditor('getData');
-        $.each(data.department_permission, function (deptId, rights) {
-            $('<input>', { type: 'hidden', name: 'department_permission[' + deptId + ']', value: rights }).appendTo(form);
+    fetch('category?submit=get_perms_json&cat_id=<?php echo (int)$_REQUEST['item']; ?>')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            var editor = initPermissionsEditor('#categoryPermsEditor');
+            if (editor) editor.loadTemplate(data);
         });
-        $.each(data.user_permission, function (userId, rights) {
-            $('<input>', { type: 'hidden', name: 'user_permission[' + userId + ']', value: rights }).appendTo(form);
+    document.getElementById('updateCategoryForm').addEventListener('submit', function () {
+        var form = this;
+        var editor = initPermissionsEditor('#categoryPermsEditor');
+        var data = editor.getData();
+        Object.keys(data.department_permission).forEach(function (deptId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'department_permission[' + deptId + ']';
+            input.value = data.department_permission[deptId];
+            form.appendChild(input);
+        });
+        Object.keys(data.user_permission).forEach(function (userId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'user_permission[' + userId + ']';
+            input.value = data.user_permission[userId];
+            form.appendChild(input);
         });
     });
   });
