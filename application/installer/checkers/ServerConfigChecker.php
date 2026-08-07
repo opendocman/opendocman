@@ -79,11 +79,11 @@ class ServerConfigChecker implements CheckerInterface
         $value = trim($value);
         $unit = strtolower(substr($value, -1));
         $num = (int) $value;
-        return match ($unit) {
-            'g' => $num * 1073741824,
-            'm' => $num * 1048576,
-            'k' => $num * 1024,
-            default => $num,
-        };
+        switch ($unit) {
+            case 'g': return $num * 1073741824;
+            case 'm': return $num * 1048576;
+            case 'k': return $num * 1024;
+            default:  return $num;
+        }
     }
 }
