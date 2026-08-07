@@ -208,10 +208,14 @@
         var selectEl = self.el.querySelector('.perm-add-select[data-level="' + level + '"]');
         var currentOptions = '<option value="">+ Add...</option>';
         self.departments.forEach(function (dept) {
-            currentOptions += '<option value="dept:' + dept.id + '">[Dept] ' + dept.name + '</option>';
+            if (self.state.dept_perms[dept.id] !== rightVal) {
+                currentOptions += '<option value="dept:' + dept.id + '">[Dept] ' + dept.name + '</option>';
+            }
         });
         self.users.forEach(function (user) {
-            currentOptions += '<option value="user:' + user.id + '">[User] ' + user.last_name + ', ' + user.first_name + '</option>';
+            if (self.state.user_perms[user.id] !== rightVal) {
+                currentOptions += '<option value="user:' + user.id + '">[User] ' + user.last_name + ', ' + user.first_name + '</option>';
+            }
         });
         selectEl.innerHTML = currentOptions;
     };
