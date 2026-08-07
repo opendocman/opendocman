@@ -24,3 +24,9 @@ function enforceLength(data_str, max_len)
 	}
 	return data_str;
 }
+
+function popup(element, windowName)
+{
+    window.open(element.href, windowName, 'width=600,height=400,scrollbars=yes,resizable=yes');
+    return false;
+}
