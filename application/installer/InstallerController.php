@@ -231,10 +231,18 @@ class InstallerController
 
     private function handleFreshInstall(string $prefix): void
     {
-        $checker = new RequirementChecker();
-        if (!$checker->allPassed()) {
-            $results = $checker->checkAll();
-            $errorMessage = 'Please fix the requirements first';
+        $reqChecker = new RequirementChecker();
+        $results = $reqChecker->checkAll();
+
+        $hasRequiredFailures = false;
+        foreach ($results as $result) {
+            if ($result->severity === 'required' && !$result->passed) {
+                $hasRequiredFailures = true;
+                break;
+            }
+        }
+        if ($hasRequiredFailures) {
+            $allPassed = false;
             require __DIR__ . '/views/requirements.php';
             return;
         }
@@ -307,6 +315,26 @@ class InstallerController
     {
         try {
             $pdo = $this->dbManager->connect();
+
+            $reqChecker = new RequirementChecker();
+            $results = $reqChecker->checkAll();
+            require_once __DIR__ . '/checkers/DatabaseChecker.php';
+            $dbChecker = new DatabaseChecker($pdo);
+            $results = array_merge($results, $dbChecker->check());
+
+            $hasRequiredFailures = false;
+            foreach ($results as $result) {
+                if ($result->severity === 'required' && !$result->passed) {
+                    $hasRequiredFailures = true;
+                    break;
+                }
+            }
+            if ($hasRequiredFailures) {
+                $allPassed = false;
+                require __DIR__ . '/views/requirements.php';
+                return;
+            }
+
             $runner = new MigrationRunner($pdo, $prefix);
 
             $runner->registerMigrations(MigrationLoader::getAll());

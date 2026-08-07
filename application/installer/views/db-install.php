@@ -15,7 +15,7 @@
     <p style="color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; border-radius: 5px;">
         <strong>Warning:</strong> If tables already exist with your prefix, they will be skipped. Use the "Force Fresh" option below to replace existing data.
     </p>
-    <a href="?op=requirements" class="button">Begin Fresh Installation</a>
+    <a href="?op=requirements" class="button">Check Requirements</a>
     <br><br>
     <hr>
     <h4 style="color: #cc0000;">Danger Zone</h4>

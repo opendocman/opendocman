@@ -23,6 +23,7 @@
     <br>
     <p>Your database needs to be upgraded. Please backup your data first.</p>
     <a href="?op=backup-reminder" class="button">Begin Upgrade</a>
+    <a href="?op=requirements" class="button">Check Requirements</a>
     <br><br>
     <hr>
     <h4 style="color: #cc0000;">Danger Zone</h4>
