@@ -52,11 +52,11 @@
             html += '    </li>';
         });
         html += '  </ul>';
-        html += '  <div class="tab-content border border-top-0 p-2" style="max-height:300px; overflow-y:auto;">';
+        html += '  <div class="tab-content border border-top-0 p-2">';
         RIGHT_ORDER.forEach(function (level, ti) {
             var label = RIGHT_LABELS[RIGHT_VALUES[level]];
             html += '    <div class="tab-pane' + (ti === 0 ? ' show active' : '') + '" id="perm-tab-' + level + '" role="tabpanel">';
-            html += '      <div class="perm-assigned-list" data-level="' + level + '"></div>';
+            html += '      <div class="perm-assigned-list" data-level="' + level + '" style="max-height:200px; overflow-y:auto;"></div>';
             html += '      <div class="mt-1"><select class="form-select form-select-sm perm-add-select" data-level="' + level + '" style="width:auto;display:inline-block;"><option value="">+ Add...</option></select></div>';
             html += '    </div>';
         });
