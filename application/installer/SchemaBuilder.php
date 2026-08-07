@@ -29,6 +29,17 @@ class SchemaBuilder
                 UNIQUE (name(200))
             ) ENGINE = MYISAM",
 
+            "CREATE TABLE `{$prefix}category_perms` (
+                cat_id int(11) unsigned NOT NULL,
+                dept_id int(11) unsigned default NULL,
+                user_id int(11) unsigned default NULL,
+                rights tinyint(4) NOT NULL default '0',
+                PRIMARY KEY (cat_id, dept_id, user_id),
+                KEY cat_id (cat_id),
+                KEY dept_id (dept_id),
+                KEY user_id (user_id)
+            ) ENGINE = MYISAM",
+
             "CREATE TABLE `{$prefix}data` (
                 id int(11) unsigned NOT NULL auto_increment,
                 category int(11) unsigned NOT NULL default '0',
@@ -166,7 +177,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}category` VALUES (NULL,'Presentation')",
             "INSERT INTO `{$prefix}department` VALUES (NULL,'Information Systems')",
             "INSERT INTO `{$prefix}dept_reviewer` VALUES (1,1)",
-            "INSERT INTO `{$prefix}rights` VALUES (0,'none')",
+            "INSERT INTO `{$prefix}rights` VALUES (0,'Unset')",
             "INSERT INTO `{$prefix}rights` VALUES (1,'view')",
             "INSERT INTO `{$prefix}rights` VALUES (-1,'forbidden')",
             "INSERT INTO `{$prefix}rights` VALUES (2,'read')",

@@ -29,6 +29,7 @@ if (!defined('UserPermission_class')) {
         public $user_obj;
         public $user_perms_obj;
         public $dept_perms_obj;
+        public $category_perms_obj;
         public $FORBIDDEN_RIGHT;
         public $NONE_RIGHT;
         public $VIEW_RIGHT;
@@ -86,6 +87,13 @@ if (!defined('UserPermission_class')) {
             
             if ($this->dept_perms_obj === null) {
                 throw new Exception("Dept_Perms object is null");
+            }
+
+            // Create CategoryPerms object
+            $this->category_perms_obj = new CategoryPerms($this->connection);
+
+            if ($this->category_perms_obj === null) {
+                throw new Exception("CategoryPerms object is null");
             }
             $this->FORBIDDEN_RIGHT = $this->user_perms_obj->FORBIDDEN_RIGHT;
             $this->NONE_RIGHT = $this->user_perms_obj->NONE_RIGHT;
@@ -283,11 +291,28 @@ if (!defined('UserPermission_class')) {
             $user_permissions = $this->user_perms_obj->getPermission($data_id);
             $department_permissions = $this->dept_perms_obj->getPermission($data_id);
 
-            if ($user_permissions >= $this->user_perms_obj->NONE_RIGHT and $user_permissions <= $this->user_perms_obj->ADMIN_RIGHT) {
+            if ($user_permissions >= $this->user_perms_obj->NONE_RIGHT && $user_permissions <= $this->user_perms_obj->ADMIN_RIGHT) {
                 return $user_permissions;
-            } else {
+            }
+
+            if ($department_permissions >= 0 && $department_permissions <= 4) {
                 return $department_permissions;
             }
+
+            // Category fallback
+            $catId = $fileData->getCategory();
+            if ($catId > 0) {
+                $catUserPerm = $this->category_perms_obj->getPermission($catId, $this->uid, null);
+                if ($catUserPerm !== null) {
+                    return $catUserPerm;
+                }
+                $catDeptPerm = $this->category_perms_obj->getPermission($catId, null, $this->user_obj->getDeptId());
+                if ($catDeptPerm !== null) {
+                    return $catDeptPerm;
+                }
+            }
+
+            return 0;
         }
     }
 }

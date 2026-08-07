@@ -276,6 +276,29 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $dept_perms_map[$row['fid']] = (int)$row['rights'];
 }
 
+// Step 6.5: Batch load category permissions for fallback
+$query = "
+    SELECT d.id AS fid, cp.dept_id, cp.user_id, cp.rights
+    FROM {$db_prefix}data d
+    JOIN {$db_prefix}category_perms cp ON cp.cat_id = d.category
+    WHERE d.id IN ($in_placeholders)
+      AND (cp.user_id = ? OR (cp.user_id IS NULL AND cp.dept_id = ?))
+";
+$stmt = $pdo->prepare($query);
+$stmt->execute(array_merge($page_params, [$_SESSION['uid'], $user_obj->getDeptId()]));
+$category_perms_map = array();
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $fid = (int)$row['fid'];
+    if (!isset($category_perms_map[$fid])) {
+        $category_perms_map[$fid] = [];
+    }
+    if ($row['user_id'] !== null) {
+        $category_perms_map[$fid]['user'] = (int)$row['rights'];
+    } else {
+        $category_perms_map[$fid]['dept'] = (int)$row['rights'];
+    }
+}
+
 // Step 7: Batch load reviewer assignments (replaces N*isReviewerForFile)
 $reviewer_file_ids = array();
 if (!$is_admin) {
@@ -309,7 +332,19 @@ foreach ($page_ids as $fileid) {
         if ($access >= 0 && $access <= 4) {
             $userAccessLevel = $access;
         } else {
-            $userAccessLevel = isset($dept_perms_map[$fileid]) ? $dept_perms_map[$fileid] : 0;
+            $deptAccess = isset($dept_perms_map[$fileid]) ? $dept_perms_map[$fileid] : -999;
+            if ($deptAccess >= 0 && $deptAccess <= 4) {
+                $userAccessLevel = $deptAccess;
+            } else {
+                // Category fallback
+                if (isset($category_perms_map[$fileid]['user'])) {
+                    $userAccessLevel = $category_perms_map[$fileid]['user'];
+                } elseif (isset($category_perms_map[$fileid]['dept'])) {
+                    $userAccessLevel = $category_perms_map[$fileid]['dept'];
+                } else {
+                    $userAccessLevel = 0;
+                }
+            }
         }
     }
 

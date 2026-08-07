@@ -1,79 +1,49 @@
-<div class="accordion w-50" id="permissionsAccordion">
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingDept">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDept" data-toggle="collapse" data-target="#collapseDept" aria-expanded="true" aria-controls="collapseDept">
-                {$g_lang_filepermissionspage_edit_department_permissions}
-            </button>
-        </h2>
-        <div id="collapseDept" class="accordion-collapse collapse show in" aria-labelledby="headingDept" data-bs-parent="#permissionsAccordion" data-parent="#permissionsAccordion">
-            <div class="accordion-body p-0">
-                <div class="table-responsive" style="max-height:300px; overflow-y:auto;">
-                    <table class="table table-striped table-sm mb-0" id="department_permissions_table">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Department</th>
-                                <th>Forbidden</th>
-                                <th>None</th>
-                                <th>View</th>
-                                <th>Read</th>
-                                <th>Write</th>
-                                <th>Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {foreach from=$avail_depts item=dept}
-                            <tr>
-                                <td>{$dept.name|escape:'html'}</td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="-1" {if isset($dept.rights) && $dept.rights eq '-1'}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="0" {if isset($dept.rights) && $dept.rights eq '0'}checked{elseif !isset($dept.rights) || $dept.rights eq ''}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="1" {if isset($dept.rights) && $dept.rights eq 1}checked{elseif isset($dept.selected) && $dept.selected eq 'selected' && (!isset($dept.rights) || $dept.rights eq '')}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="2" {if isset($dept.rights) && $dept.rights eq 2}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="3" {if isset($dept.rights) && $dept.rights eq 3}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="department_permission[{$dept.id}]" value="4" {if isset($dept.rights) && $dept.rights eq 4}checked{/if} class="form-check-input" /></td>
-                            </tr>
-                            {/foreach}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingUser">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUser" data-toggle="collapse" data-target="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
-                {$g_lang_filepermissionspage_edit_user_permissions}
-            </button>
-        </h2>
-        <div id="collapseUser" class="accordion-collapse collapse" aria-labelledby="headingUser" data-bs-parent="#permissionsAccordion" data-parent="#permissionsAccordion">
-            <div class="accordion-body p-0">
-                <div class="table-responsive" style="max-height:300px; overflow-y:auto;">
-                    <table class="table table-striped table-sm mb-0" id="user_permissions_table">
-                        <thead class="table-light">
-                            <tr>
-                                <th>User</th>
-                                <th>Forbidden</th>
-                                <th>View</th>
-                                <th>Read</th>
-                                <th>Write</th>
-                                <th>Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {foreach from=$avail_users item=user}
-                            <tr>
-                                <td>{$user.last_name|escape:'html'}, {$user.first_name|escape:'html'}</td>
-                                <td><input type="radio" name="user_permission[{$user.id}]" value="-1" {if isset($user.rights) && $user.rights eq '-1'}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="user_permission[{$user.id}]" value="1" {if isset($user.rights) && $user.rights eq 1}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="user_permission[{$user.id}]" value="2" {if isset($user.rights) && $user.rights eq 2}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="user_permission[{$user.id}]" value="3" {if isset($user.rights) && $user.rights eq 3}checked{/if} class="form-check-input" /></td>
-                                <td><input type="radio" name="user_permission[{$user.id}]" value="4" {if (isset($user.rights) && $user.rights eq 4) || ($user.id eq $user_id && (!isset($user.rights) || $user.rights eq ''))}checked{/if} class="form-check-input" /></td>
-                            </tr>
-                            {/foreach}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="permissionsEditor" style="width:100%;">
+    <p class="text-muted small mb-2">{$g_lang_filepermissionspage_edit_department_permissions}</p>
 </div>
+
+<script src="{$g_base_url}js/permissions-editor.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {ldelim}
+    var departments = [
+        {foreach from=$avail_depts item=dept}
+        {ldelim}id: {$dept.id}, name: '{$dept.name|escape:'javascript'}'{rdelim},
+        {/foreach}
+    ];
+    var users = [
+        {foreach from=$avail_users item=user}
+        {ldelim}id: {$user.id}, last_name: '{$user.last_name|escape:'javascript'}', first_name: '{$user.first_name|escape:'javascript'}'{rdelim},
+        {/foreach}
+    ];
+    initPermissionsEditor('#permissionsEditor', {ldelim} departments: departments, users: users {rdelim});
+
+    {if isset($dept_perms) || isset($user_perms)}
+    var editor = initPermissionsEditor('#permissionsEditor');
+    editor.loadTemplate({ldelim}
+        dept_perms: {if isset($dept_perms)}{$dept_perms|@json_encode}{else}[]{/if},
+        user_perms: {if isset($user_perms)}{$user_perms|@json_encode}{else}[]{/if}
+{rdelim});
+{/if}
+{literal}
+    document.getElementById('permissionsEditor').closest('form').addEventListener('submit', function () {
+        var form = this;
+        var editor = initPermissionsEditor('#permissionsEditor');
+        var data = editor.getData();
+        Object.keys(data.department_permission).forEach(function (deptId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'department_permission[' + deptId + ']';
+            input.value = data.department_permission[deptId];
+            form.appendChild(input);
+        });
+        Object.keys(data.user_permission).forEach(function (userId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'user_permission[' + userId + ']';
+            input.value = data.user_permission[userId];
+            form.appendChild(input);
+        });
+    });
+{/literal}
+{rdelim});
+</script>

@@ -149,6 +149,26 @@ if (!isset($_REQUEST['submit'])) {
         $GLOBALS['smarty']->assign('comment', $comment);
         $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
 
+        // Load existing document-level permissions for pre-population
+        $deptPermQuery = "SELECT dept_id, rights FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = :fid";
+        $deptPermStmt = $pdo->prepare($deptPermQuery);
+        $deptPermStmt->execute([':fid' => $data_id]);
+        $deptPerms = [];
+        while ($row = $deptPermStmt->fetch(PDO::FETCH_ASSOC)) {
+            $deptPerms[(int)$row['dept_id']] = (int)$row['rights'];
+        }
+
+        $userPermQuery = "SELECT uid, rights FROM {$GLOBALS['CONFIG']['db_prefix']}user_perms WHERE fid = :fid";
+        $userPermStmt = $pdo->prepare($userPermQuery);
+        $userPermStmt->execute([':fid' => $data_id]);
+        $userPerms = [];
+        while ($row = $userPermStmt->fetch(PDO::FETCH_ASSOC)) {
+            $userPerms[(int)$row['uid']] = (int)$row['rights'];
+        }
+
+        $GLOBALS['smarty']->assign('dept_perms', $deptPerms);
+        $GLOBALS['smarty']->assign('user_perms', $userPerms);
+
         // Generate CSRF token for the category AJAX endpoint (different action from the page)
         if (isset($GLOBALS['csrf'])) {
             $category_csrf = $GLOBALS['csrf']->getTokenForTemplate('/category');
@@ -185,9 +205,11 @@ if (!isset($_REQUEST['submit'])) {
     $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
-    foreach ($_REQUEST['user_permission'] as $permission) {
-        if ($permission > 2) {
-            $perms_error = true;
+    if (isset($_REQUEST['user_permission']) && is_array($_REQUEST['user_permission'])) {
+        foreach ($_REQUEST['user_permission'] as $permission) {
+            if ($permission > 2) {
+                $perms_error = true;
+            }
         }
     }
      

@@ -94,3 +94,32 @@
     var CSRF_INDEX_VALUE = '{$category_csrf_index}';
 </script>
 <script src="{$g_base_url}js/inline-add-category.js"></script>
+
+{literal}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var catSelect = document.querySelector('select[name="category"]');
+
+    // Load initial category template as inherited
+    if (catSelect.value) {
+        fetch('category?submit=get_perms_json&cat_id=' + catSelect.value)
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                var editor = initPermissionsEditor('#permissionsEditor');
+                if (editor) editor.loadCategoryTemplate(data, data.cat_name);
+            });
+    }
+
+    catSelect.addEventListener('change', function () {
+        var catId = this.value;
+        if (!catId) return;
+        fetch('category?submit=get_perms_json&cat_id=' + catId)
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                var editor = initPermissionsEditor('#permissionsEditor');
+                if (editor) editor.loadCategoryTemplate(data, data.cat_name);
+            });
+    });
+});
+</script>
+{/literal}
