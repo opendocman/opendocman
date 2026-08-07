@@ -70,8 +70,46 @@ class AdminCrudControllerTest extends TestCase
     public function testNonAdminGetsForbidden(): void
     {
         $_SESSION['uid'] = 2;
-        $user = new User(2, $this->mockPdo);
-        $this->assertFalse($user->isAdmin());
+        $_GET = ['entity' => 'users', 'action' => 'list', 'page' => 1, 'size' => 25];
+        $_REQUEST = $_GET;
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        $findStmt = \Mockery::mock(\PDOStatement::class);
+        $findStmt->shouldReceive('execute')->once()->andReturn(true);
+        $findStmt->shouldReceive('fetchAll')->once()->andReturn([['nonadmin']]);
+        $findStmt->shouldReceive('rowCount')->once()->andReturn(1);
+
+        $userStmt = \Mockery::mock(\PDOStatement::class);
+        $userStmt->shouldReceive('execute')->once()->andReturn(true);
+        $userStmt->shouldReceive('fetch')->once()->andReturn(['2', 'nonadmin', '1', '', 'e@m.com', 'Doe', 'John', null, '0', '0', '0']);
+
+        $adminStmt = \Mockery::mock(\PDOStatement::class);
+        $adminStmt->shouldReceive('execute')->once()->andReturn(true);
+        $adminStmt->shouldReceive('fetchColumn')->once()->andReturn(false);
+        $adminStmt->shouldReceive('rowCount')->once()->andReturn(0);
+
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern('/SELECT\s+username\s+FROM/si'))
+            ->once()
+            ->andReturn($findStmt);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern('/SELECT\s+id\s*,\s*username/si'))
+            ->once()
+            ->andReturn($userStmt);
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern('/SELECT\s+admin\s+FROM/si'))
+            ->once()
+            ->andReturn($adminStmt);
+
+        ob_start();
+        require dirname(__DIR__, 2) . '/application/controllers/admin_crud_ajax.php';
+        $output = ob_get_clean();
+        $result = json_decode($output, true);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('error', $result);
+        $this->assertEquals('Forbidden', $result['error']);
+        $this->assertEquals(403, http_response_code());
     }
 
     protected function tearDown(): void

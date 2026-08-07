@@ -27,7 +27,7 @@ if (session_status() === PHP_SESSION_NONE) {
 if (!isset($_SESSION['uid'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Unauthorized']);
-    exit;
+    return;
 }
 
 $pdo = $GLOBALS['pdo'];
@@ -37,7 +37,7 @@ $user_obj = new User($_SESSION['uid'], $pdo);
 if (!$user_obj->isAdmin()) {
     http_response_code(403);
     echo json_encode(['error' => 'Forbidden']);
-    exit;
+    return;
 }
 
 $action = $_REQUEST['action'] ?? 'list';
@@ -83,11 +83,6 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($rows as &$row) {
-        $row = array_map('htmlspecialchars', $row);
-    }
-    unset($row);
 
     header('Content-Type: application/json');
     echo json_encode([
@@ -353,10 +348,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
         http_response_code(403);
         echo json_encode(['error' => 'CSRF validation failed']);
-        exit;
+        return;
     }
     handleMutation($pdo, $db_prefix, $action, $entity, $_POST);
-    exit;
+    return;
 }
 
 handleList($pdo, $db_prefix, $entity);

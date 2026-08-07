@@ -529,4 +529,6 @@ $lang['label_indexed_files'] = 'Indexed files';
 $lang['label_rebuild_index'] = 'Rebuild Index';
 $lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
 
+$lang['label_admin_crud_desc'] = 'Manage Users, Departments, and Categories in a single table view.';
+$lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
