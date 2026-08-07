@@ -95,17 +95,19 @@
 </script>
 <script src="{$g_base_url}js/inline-add-category.js"></script>
 
+{literal}
 <script>
-document.addEventListener('DOMContentLoaded', function () {ldelim}
-    document.querySelector('select[name="category"]').addEventListener('change', function () {ldelim}
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('select[name="category"]').addEventListener('change', function () {
         var catId = this.value;
         if (!catId) return;
         fetch('category?submit=get_perms_json&cat_id=' + catId)
             .then(function (r) { return r.json(); })
-            .then(function (data) {ldelim}
+            .then(function (data) {
                 var editor = initPermissionsEditor('#permissionsEditor');
                 if (editor) editor.loadTemplate(data);
-            {rdelim});
-    {rdelim});
-{rdelim});
+            });
+    });
+});
 </script>
+{/literal}
