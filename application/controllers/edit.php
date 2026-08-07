@@ -205,9 +205,11 @@ if (!isset($_REQUEST['submit'])) {
     $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
-    foreach ($_REQUEST['user_permission'] as $permission) {
-        if ($permission > 2) {
-            $perms_error = true;
+    if (isset($_REQUEST['user_permission']) && is_array($_REQUEST['user_permission'])) {
+        foreach ($_REQUEST['user_permission'] as $permission) {
+            if ($permission > 2) {
+                $perms_error = true;
+            }
         }
     }
      

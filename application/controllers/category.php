@@ -119,7 +119,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}category (name) VALUES (:category)";
     $stmt = $pdo->prepare($query);
+    $pdo->beginTransaction();
     $stmt->execute(array(':category' => $_REQUEST['category']));
+    $newCategoryId = (int)$pdo->lastInsertId();
 
     // Save category permission template if provided
     if (isset($_POST['department_permission']) || isset($_POST['user_permission'])) {
@@ -135,8 +137,9 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
                 $perms[] = ['dept_id' => null, 'user_id' => (int)$userId, 'rights' => (int)$rights];
             }
         }
-        $catPerms->saveTemplate((int)$pdo->lastInsertId(), $perms);
+        $catPerms->saveTemplate($newCategoryId, $perms);
     }
+    $pdo->commit();
 
     // back to main page
     $last_message = urlencode(msg('message_category_successfully_added'));
@@ -533,6 +536,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $last_message = msg('message_category_successfully_updated') .' : ' . $_REQUEST['name'];
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'get_perms_json') {
+    // NOTE: intentionally available to any authenticated user, not just admins.
+    // The document add/edit pages fetch the selected category's template to
+    // pre-fill the permission editor, and regular users legitimately need it.
+    // It only exposes the category's permission template, never document data.
     if (!isset($_SESSION['uid'])) {
         header('Content-Type: application/json');
         header('HTTP/1.0 403 Forbidden');

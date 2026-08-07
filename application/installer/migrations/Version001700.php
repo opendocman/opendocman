@@ -22,7 +22,7 @@ class Version001700 implements MigrationInterface
                 dept_id int(11) unsigned default NULL,
                 user_id int(11) unsigned default NULL,
                 rights tinyint(4) NOT NULL default '0',
-                KEY cat_perms_idx (cat_id, dept_id, user_id),
+                PRIMARY KEY (cat_id, dept_id, user_id),
                 KEY cat_id (cat_id),
                 KEY dept_id (dept_id),
                 KEY user_id (user_id)

@@ -186,7 +186,7 @@
 
         var listEl = self.el.querySelector('.perm-assigned-list[data-level="' + level + '"]');
         if (assigned.length === 0) {
-            listEl.innerHTML = '<div class="text-muted small p-1">None assigned</div>';
+            listEl.innerHTML = '<div class="text-muted small p-1">Unset</div>';
         } else {
             var html = '';
             assigned.forEach(function (item) {
