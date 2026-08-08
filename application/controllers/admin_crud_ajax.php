@@ -55,7 +55,7 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
 
     switch ($entity) {
         case 'users':
-            $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email, u.phone, u.department, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$db_prefix}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer FROM {$db_prefix}user u LEFT JOIN {$db_prefix}department d ON u.department = d.id LEFT JOIN {$db_prefix}admin a ON u.id = a.id";
+            $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email AS email, u.phone, u.department, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$db_prefix}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer FROM {$db_prefix}user u LEFT JOIN {$db_prefix}department d ON u.department = d.id LEFT JOIN {$db_prefix}admin a ON u.id = a.id";
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}user";
             break;
         case 'departments':
