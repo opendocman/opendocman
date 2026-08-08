@@ -1,4 +1,7 @@
-<script>window.crudEntity = 'departments';</script>
+<script>
+window.crudEntity = 'departments';
+window.departmentList = {$department_list|@json_encode};
+</script>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">

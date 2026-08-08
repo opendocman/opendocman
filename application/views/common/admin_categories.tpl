@@ -1,4 +1,7 @@
-<script>window.crudEntity = 'categories';</script>
+<script>
+window.crudEntity = 'categories';
+window.categoryList = {$category_list|@json_encode};
+</script>
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
