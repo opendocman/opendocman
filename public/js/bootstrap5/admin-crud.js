@@ -196,6 +196,7 @@ users: function(rowData) {
                 csrfToken = result.csrf_token;
                 csrfIndex = result.csrf_index || '';
             }
+            document.activeElement && document.activeElement.blur();
             var modal = bootstrap.Modal.getInstance(document.getElementById('crudModal'));
             if (modal) modal.hide();
             var table = window.crudTable;
@@ -237,6 +238,7 @@ users: function(rowData) {
                 csrfToken = result.csrf_token;
                 csrfIndex = result.csrf_index || '';
             }
+            document.activeElement && document.activeElement.blur();
             var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
             if (modal) modal.hide();
             var table = window.crudTable;
