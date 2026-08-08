@@ -145,7 +145,15 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                 echo json_encode(['error' => 'Username already exists']);
                 return;
             }
-            $password = $data['password'] ?? makeRandomPassword();
+            $password = $data['password'] ?? '';
+            if ($GLOBALS['CONFIG']['authen'] === 'mysql' && $password === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Password is required']);
+                return;
+            }
+            if ($password === '') {
+                $password = makeRandomPassword();
+            }
             $stmt = $pdo->prepare("INSERT INTO {$db_prefix}user (username, password, department, phone, Email, last_name, first_name, can_add, can_checkin, pw_change_required) VALUES (:username, MD5(:password), :department, :phone, :email, :last_name, :first_name, :can_add, :can_checkin, 1)");
             $stmt->execute([
                 ':username' => $username,
@@ -166,6 +174,20 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                 foreach ($data['department_review'] as $deptId) {
                     $revStmt->execute([':dept_id' => (int)$deptId, ':user_id' => $newId]);
                 }
+            }
+            // Send welcome email
+            if ($GLOBALS['CONFIG']['demo'] !== 'True' && !empty($data['email'])) {
+                $date = date('Y-m-d H:i:s T');
+                $mail_subject = msg('message_account_created_add_user');
+                $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . "\n\n";
+                $mail_body .= $GLOBALS['CONFIG']['base_url'] . "\n\n";
+                $mail_body .= msg('username') . ': ' . $username . "\n\n";
+                if ($GLOBALS['CONFIG']['authen'] === 'mysql') {
+                    $mail_body .= msg('password') . ': ' . $password . "\n\n";
+                }
+                $mail_headers = "From: " . $data['email'] . "\r\n";
+                $mail_headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+                mail($data['email'], $mail_subject, $mail_body, $mail_headers);
             }
             echo json_encode(['success' => true, 'id' => $newId]);
             return;
