@@ -97,6 +97,7 @@ if (!function_exists('handleMutation')) {
 function handleMutation(PDO $pdo, string $db_prefix, string $action, string $entity, array $data): void
 {
     header('Content-Type: application/json');
+    ob_start();
     switch ($action) {
         case 'add':
             handleAdd($pdo, $db_prefix, $entity, $data);
@@ -110,6 +111,18 @@ function handleMutation(PDO $pdo, string $db_prefix, string $action, string $ent
         default:
             http_response_code(400);
             echo json_encode(['error' => 'Invalid action']);
+    }
+    $output = ob_get_clean();
+    $response = json_decode($output, true);
+    if (isset($response['success']) && $response['success']) {
+        $tokenData = $GLOBALS['csrf']->getTokenForTemplate(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        $response['csrf_token'] = $tokenData['token'];
+        $response['csrf_field_name'] = $tokenData['field_name'];
+        $response['csrf_index'] = $tokenData['index'];
+        $response['csrf_index_name'] = $tokenData['index_name'];
+        echo json_encode($response);
+    } else {
+        echo $output;
     }
 }
 }

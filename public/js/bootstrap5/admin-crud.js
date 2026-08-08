@@ -185,6 +185,10 @@
                 alert(result.error);
                 return;
             }
+            if (result.csrf_token) {
+                csrfToken = result.csrf_token;
+                csrfIndex = result.csrf_index || '';
+            }
             var modal = bootstrap.Modal.getInstance(document.getElementById('crudModal'));
             if (modal) modal.hide();
             var table = window.crudTable;
@@ -221,6 +225,10 @@
             if (result.error) {
                 alert(result.error);
                 return;
+            }
+            if (result.csrf_token) {
+                csrfToken = result.csrf_token;
+                csrfIndex = result.csrf_index || '';
             }
             var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
             if (modal) modal.hide();
