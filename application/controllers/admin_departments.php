@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-// Admin CRUD page — unified table CRUD for Users, Departments, Categories
+// Admin Departments CRUD — Tabulator-based department management
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -36,19 +36,16 @@ if (!$user_obj->isAdmin()) {
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
-draw_header(msg('label_admin_crud'), $last_message);
+draw_header(msg('label_department'), $last_message);
 
 $GLOBALS['smarty']->assign('department_list', Department::getAllDepartments($pdo));
 $GLOBALS['smarty']->assign('category_list', Category::getAllCategories($pdo));
-$GLOBALS['smarty']->assign('user_list', []); // Populated by AJAX
 
 ob_start();
-display_smarty_template('admin_crud.tpl');
+display_smarty_template('admin_departments.tpl');
 $GLOBALS['smarty']->assign('content', ob_get_clean());
 display_smarty_template('_content.tpl');
 
-// Load the JS for admin CRUD
-$GLOBALS['smarty']->assign('admin_crud_js', true);
 echo '<script src="' . $GLOBALS['CONFIG']['base_url'] . 'js/bootstrap5/admin-crud.js?v=' . filemtime(dirname(__FILE__) . '/../../public/js/bootstrap5/admin-crud.js') . '"></script>';
 
 draw_footer();

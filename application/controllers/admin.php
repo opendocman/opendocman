@@ -46,7 +46,11 @@ $request_state = e::h(($_REQUEST['state']+1));
             <div class="card-header bg-primary text-white"><h5 class="card-title mb-0"><?php echo msg('label_admin_crud')?></h5></div>
             <div class="card-body">
                 <p class="card-text"><?php echo msg('label_admin_crud_desc')?></p>
-                <a href="admin_crud" class="btn btn-primary"><?php echo msg('label_open')?></a>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="admin_users" class="btn btn-primary"><?php echo msg('users')?></a>
+                    <a href="admin_departments" class="btn btn-primary"><?php echo msg('label_department')?></a>
+                    <a href="admin_categories" class="btn btn-primary"><?php echo msg('category')?></a>
+                </div>
             </div>
         </div>
     </div>
