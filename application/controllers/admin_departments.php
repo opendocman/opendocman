@@ -37,7 +37,7 @@ if (!$user_obj->isAdmin()) {
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
-$csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/admin_departments');
+$csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/admin_crud_ajax');
 $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
 $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
 $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
