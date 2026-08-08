@@ -200,15 +200,16 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                 if ($GLOBALS['CONFIG']['authen'] === 'mysql') {
                     $mail_body .= msg('password') . ': ' . $password . "\r\n\r\n";
                 }
-                $raw = "From: " . $data['email'] . "\r\n"
-                     . "To: " . $data['email'] . "\r\n"
-                     . "Subject: " . $mail_subject . "\r\n"
-                     . "Content-Type: text/plain; charset=UTF-8\r\n"
-                     . "\r\n"
-                     . $mail_body;
                 $sock = @fsockopen('localhost', 1025, $errno, $errstr, 3);
                 if ($sock) {
-                    fwrite($sock, $raw);
+                    fread($sock, 1024);
+                    fwrite($sock, "EHLO localhost\r\n"); fread($sock, 1024);
+                    fwrite($sock, "MAIL FROM:<" . $data['email'] . ">\r\n"); fread($sock, 1024);
+                    fwrite($sock, "RCPT TO:<" . $data['email'] . ">\r\n"); fread($sock, 1024);
+                    fwrite($sock, "DATA\r\n"); fread($sock, 1024);
+                    fwrite($sock, "From: " . $data['email'] . "\r\nTo: " . $data['email'] . "\r\nSubject: " . $mail_subject . "\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n" . $mail_body . "\r\n.\r\n");
+                    fread($sock, 1024);
+                    fwrite($sock, "QUIT\r\n");
                     fclose($sock);
                 }
             }
