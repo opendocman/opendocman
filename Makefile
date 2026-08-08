@@ -251,7 +251,7 @@ serve-local: env-check ## Run local PHP server on /public with Docker DB service
 	export APP_DB_NAME="$$(grep MYSQL_DATABASE .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
 	export APP_DB_USER="$$(grep MYSQL_USER .env 2>/dev/null | cut -d'=' -f2 || echo 'opendocman')" && \
 	export APP_DB_PASS="$$(grep MYSQL_PASSWORD .env 2>/dev/null | cut -d'=' -f2)" && \
-	cd public && php -d opcache.enable=0 -d sendmail_path="php ../scripts/sendmail-wrapper.php" -S localhost:8080
+	cd public && php -d opcache.enable=0 -S localhost:8080
 
 serve-local-quiet: env-check ## Run local PHP server with minimal logging (access logs hidden)
 	@echo "🚀 Starting local development environment (quiet mode)..."

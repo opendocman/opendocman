@@ -190,19 +190,27 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                     $revStmt->execute([':dept_id' => (int)$deptId, ':user_id' => $newId]);
                 }
             }
-            // Send welcome email
+            // Send welcome email via local SMTP (mailcatcher)
             if ($GLOBALS['CONFIG']['demo'] !== 'True' && !empty($data['email'])) {
                 $date = date('Y-m-d H:i:s T');
                 $mail_subject = msg('message_account_created_add_user');
-                $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . "\n\n";
-                $mail_body .= $GLOBALS['CONFIG']['base_url'] . "\n\n";
-                $mail_body .= msg('username') . ': ' . $username . "\n\n";
+                $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . "\r\n\r\n";
+                $mail_body .= $GLOBALS['CONFIG']['base_url'] . "\r\n\r\n";
+                $mail_body .= msg('username') . ': ' . $username . "\r\n\r\n";
                 if ($GLOBALS['CONFIG']['authen'] === 'mysql') {
-                    $mail_body .= msg('password') . ': ' . $password . "\n\n";
+                    $mail_body .= msg('password') . ': ' . $password . "\r\n\r\n";
                 }
-                $mail_headers = "From: " . $data['email'] . "\r\n";
-                $mail_headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-                mail($data['email'], $mail_subject, $mail_body, $mail_headers);
+                $raw = "From: " . $data['email'] . "\r\n"
+                     . "To: " . $data['email'] . "\r\n"
+                     . "Subject: " . $mail_subject . "\r\n"
+                     . "Content-Type: text/plain; charset=UTF-8\r\n"
+                     . "\r\n"
+                     . $mail_body;
+                $sock = @fsockopen('localhost', 1025, $errno, $errstr, 3);
+                if ($sock) {
+                    fwrite($sock, $raw);
+                    fclose($sock);
+                }
             }
             echo json_encode(['success' => true, 'id' => $newId]);
             return;
