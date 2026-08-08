@@ -95,7 +95,8 @@ test.describe('User management', () => {
   test('update a user', async ({ page }) => {
     await waitForTable(page, '/admin_users?state=2');
 
-    // Click Edit button on the row with our username
+    // Wait for the table to have rows
+    await page.locator('#crud-table .tabulator-row').first().waitFor({ timeout: 5000 });
     const editBtn = page.locator('#crud-table .tabulator-row .edit-row').first();
     await editBtn.click();
     await page.waitForSelector('#crudModal.show', { timeout: 3000 });
@@ -161,7 +162,6 @@ test.describe('Department management', () => {
     await page.waitForSelector('#deleteModal.show', { timeout: 3000 });
 
     // Select reassign target
-    await page.waitForSelector('#reassignSelect option');
     const firstVal = await page.locator('#reassignSelect option').first().getAttribute('value');
     if (firstVal) {
       await page.selectOption('#reassignSelect', firstVal);
@@ -214,7 +214,6 @@ test.describe('Category management', () => {
     await page.waitForSelector('#deleteModal.show', { timeout: 3000 });
 
     // Select reassign target
-    await page.waitForSelector('#reassignSelect option');
     const firstVal = await page.locator('#reassignSelect option').first().getAttribute('value');
     if (firstVal) {
       await page.selectOption('#reassignSelect', firstVal);
