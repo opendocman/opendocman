@@ -195,13 +195,13 @@ users: function(rowData) {
         })
         .then(function(r) { return r.json(); })
         .then(function(result) {
-            if (result.error) {
-                alert(result.error);
-                return;
-            }
             if (result.csrf_token) {
                 csrfToken = result.csrf_token;
                 csrfIndex = result.csrf_index || '';
+            }
+            if (result.error) {
+                alert(result.error);
+                return;
             }
             document.activeElement && document.activeElement.blur();
             var modal = bootstrap.Modal.getInstance(document.getElementById('crudModal'));
@@ -243,13 +243,13 @@ users: function(rowData) {
         })
         .then(function(r) { return r.json(); })
         .then(function(result) {
-            if (result.error) {
-                alert(result.error);
-                return;
-            }
             if (result.csrf_token) {
                 csrfToken = result.csrf_token;
                 csrfIndex = result.csrf_index || '';
+            }
+            if (result.error) {
+                alert(result.error);
+                return;
             }
             document.activeElement && document.activeElement.blur();
             var modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));

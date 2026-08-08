@@ -114,8 +114,8 @@ function handleMutation(PDO $pdo, string $db_prefix, string $action, string $ent
     }
     $output = ob_get_clean();
     $response = json_decode($output, true);
-    if (isset($response['success']) && $response['success']) {
-        $tokenData = $GLOBALS['csrf']->getTokenForTemplate(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $tokenData = $GLOBALS['csrf']->getTokenForTemplate(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    if (is_array($response)) {
         $response['csrf_token'] = $tokenData['token'];
         $response['csrf_field_name'] = $tokenData['field_name'];
         $response['csrf_index'] = $tokenData['index'];
