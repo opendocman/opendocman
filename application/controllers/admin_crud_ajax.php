@@ -151,6 +151,21 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                 echo json_encode(['error' => 'Password is required']);
                 return;
             }
+            if (trim($data['last_name'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Last name is required']);
+                return;
+            }
+            if (trim($data['first_name'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'First name is required']);
+                return;
+            }
+            if (trim($data['email'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Email is required']);
+                return;
+            }
             if ($password === '') {
                 $password = makeRandomPassword();
             }

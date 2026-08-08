@@ -172,6 +172,10 @@ users: function(rowData) {
     function saveEntity() {
         var form = document.getElementById('crudEntityForm');
         if (!form) return;
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
 
         var action = document.getElementById('crudModalSave').dataset.action;
         var formData = new FormData(form);
