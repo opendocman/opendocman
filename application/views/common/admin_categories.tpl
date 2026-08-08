@@ -1,6 +1,8 @@
 <script>
 window.crudEntity = 'categories';
 window.categoryList = {$category_list|@json_encode};
+window.csrfIndexName = '{$csrf_index_name}';
+window.csrfIndex = '{$csrf_index_value}';
 </script>
 
 <div class="card">

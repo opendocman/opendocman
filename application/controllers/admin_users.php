@@ -36,6 +36,13 @@ if (!$user_obj->isAdmin()) {
 }
 
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
+
+$csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/admin_users');
+$GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+$GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+$GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+$GLOBALS['smarty']->assign('csrf_index_value', $csrf_data['index']);
+
 draw_header(msg('users'), $last_message);
 
 $GLOBALS['smarty']->assign('department_list', Department::getAllDepartments($pdo));

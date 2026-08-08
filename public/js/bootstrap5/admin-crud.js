@@ -3,6 +3,8 @@
 
     var csrfToken = window.csrf_token || '';
     var csrfFieldName = window.csrf_field_name || 'csrf_token';
+    var csrfIndexName = window.csrfIndexName || '';
+    var csrfIndex = window.csrfIndex || '';
     var entity = window.crudEntity || '';
 
     if (!entity) return;
@@ -169,6 +171,9 @@
         formData.append('entity', entity);
         formData.append('action', action);
         formData.append(csrfFieldName, csrfToken);
+        if (csrfIndexName) {
+            formData.append(csrfIndexName, csrfIndex);
+        }
 
         fetch('admin_crud_ajax', {
             method: 'POST',
@@ -198,6 +203,9 @@
         formData.append('action', 'delete');
         formData.append('id', id);
         formData.append(csrfFieldName, csrfToken);
+        if (csrfIndexName) {
+            formData.append(csrfIndexName, csrfIndex);
+        }
 
         var reassignSelect = document.getElementById('reassignSelect');
         if (reassignSelect.style.display !== 'none' && reassignSelect.value) {
