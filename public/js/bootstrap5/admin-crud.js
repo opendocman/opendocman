@@ -56,13 +56,18 @@
     };
 
     var formBuilders = {
-        users: function(rowData) {
+users: function(rowData) {
             var d = rowData || {};
+            var isEdit = !!d.id;
             var depts = window.departmentList || [];
             var deptOpts = depts.map(function(dept) {
                 var sel = parseInt(dept.id) === parseInt(d.department) ? ' selected' : '';
                 return '<option value="' + dept.id + '"' + sel + '>' + dept.name + '</option>';
             }).join('');
+
+            var pwField = isEdit
+                ? '<div class="mb-3"><label class="form-label">Password (leave blank to keep current)</label><input type="password" name="password" class="form-control" maxlength="32"></div>'
+                : '<div class="mb-3"><label class="form-label">Password</label><input type="password" name="password" class="form-control" required minlength="5" maxlength="32"></div>';
 
             return '<form id="crudEntityForm">' +
                 '<input type="hidden" name="id" value="' + (d.id || '') + '">' +
@@ -72,7 +77,7 @@
                 '<div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required value="' + (d.email || '') + '"></div>' +
                 '<div class="mb-3"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control" value="' + (d.phone || '') + '"></div>' +
                 '<div class="mb-3"><label class="form-label">Department</label><select name="department" class="form-select">' + deptOpts + '</select></div>' +
-                '<div class="mb-3"><label class="form-label">Password (leave blank to keep current)</label><input type="password" name="password" class="form-control" maxlength="32"></div>' +
+                pwField +
                 '<div class="mb-3 form-check"><input type="checkbox" name="admin" value="1" class="form-check-input" id="f_admin" ' + (d.is_admin == 1 ? 'checked' : '') + '><label class="form-check-label" for="f_admin">Admin?</label></div>' +
                 '<div class="mb-3 form-check"><input type="checkbox" name="can_add" value="1" class="form-check-input" id="f_can_add" ' + (d.can_add == 1 ? 'checked' : '') + '><label class="form-check-label" for="f_can_add">Can Add?</label></div>' +
                 '<div class="mb-3 form-check"><input type="checkbox" name="can_checkin" value="1" class="form-check-input" id="f_can_checkin" ' + (d.can_checkin == 1 ? 'checked' : '') + '><label class="form-check-label" for="f_can_checkin">Can Check-In?</label></div>' +
