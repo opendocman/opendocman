@@ -148,18 +148,20 @@ users: function(rowData) {
         var reassignSelect = document.getElementById('reassignSelect');
 
         if (entity === 'departments' || entity === 'categories') {
-            reassignField.style.display = 'block';
-            reassignSelect.innerHTML = '';
-            var list = entity === 'departments' ? (window.departmentList || []) : (window.categoryList || []);
-            list.forEach(function(item) {
-                if (parseInt(item.id) !== parseInt(rowData.id)) {
-                    var opt = document.createElement('option');
-                    opt.value = item.id;
-                    opt.textContent = item.name;
-                    reassignSelect.appendChild(opt);
-                }
-            });
-        } else {
+            if (reassignField) reassignField.style.display = 'block';
+            if (reassignSelect) {
+                reassignSelect.innerHTML = '';
+                var list = entity === 'departments' ? (window.departmentList || []) : (window.categoryList || []);
+                list.forEach(function(item) {
+                    if (parseInt(item.id) !== parseInt(rowData.id)) {
+                        var opt = document.createElement('option');
+                        opt.value = item.id;
+                        opt.textContent = item.name;
+                        reassignSelect.appendChild(opt);
+                    }
+                });
+            }
+        } else if (reassignField) {
             reassignField.style.display = 'none';
         }
 
@@ -217,7 +219,7 @@ users: function(rowData) {
         }
 
         var reassignSelect = document.getElementById('reassignSelect');
-        if (reassignSelect.style.display !== 'none' && reassignSelect.value) {
+        if (reassignSelect && reassignSelect.style.display !== 'none' && reassignSelect.value) {
             formData.append('assigned_id', reassignSelect.value);
         }
 
