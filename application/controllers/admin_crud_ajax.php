@@ -351,8 +351,13 @@ function handleEdit(PDO $pdo, string $db_prefix, string $entity, array $data): v
 if (!function_exists('handleDelete')) {
 function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data): void
 {
-    $id = (int)($data['id'] ?? 0);
-    if ($id <= 0) {
+    $ids = [];
+    if (!empty($data['ids']) && is_array($data['ids'])) {
+        $ids = array_map('intval', $data['ids']);
+    } elseif (!empty($data['id'])) {
+        $ids = [(int)$data['id']];
+    }
+    if (empty($ids)) {
         http_response_code(400);
         echo json_encode(['error' => 'Invalid ID']);
         return;
@@ -360,11 +365,13 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
 
     switch ($entity) {
         case 'users':
-            $pdo->prepare("DELETE FROM {$db_prefix}admin WHERE id = :id")->execute([':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}user_perms WHERE uid = :id")->execute([':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}dept_reviewer WHERE user_id = :id")->execute([':id' => $id]);
-            $pdo->prepare("UPDATE {$db_prefix}data SET owner = {$GLOBALS['CONFIG']['root_id']} WHERE owner = :id")->execute([':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}user WHERE id = :id")->execute([':id' => $id]);
+            foreach ($ids as $id) {
+                $pdo->prepare("DELETE FROM {$db_prefix}admin WHERE id = :id")->execute([':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}user_perms WHERE uid = :id")->execute([':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}dept_reviewer WHERE user_id = :id")->execute([':id' => $id]);
+                $pdo->prepare("UPDATE {$db_prefix}data SET owner = {$GLOBALS['CONFIG']['root_id']} WHERE owner = :id")->execute([':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}user WHERE id = :id")->execute([':id' => $id]);
+            }
             echo json_encode(['success' => true]);
             return;
 
@@ -375,11 +382,14 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
                 echo json_encode(['error' => 'Reassign department ID is required']);
                 return;
             }
-            $pdo->prepare("UPDATE {$db_prefix}data SET department = :assigned WHERE department = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
-            $pdo->prepare("UPDATE {$db_prefix}user SET department = :assigned WHERE department = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
-            $pdo->prepare("UPDATE {$db_prefix}dept_perms SET dept_id = :assigned WHERE dept_id = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
-            $pdo->prepare("UPDATE {$db_prefix}dept_reviewer SET dept_id = :assigned WHERE dept_id = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}department WHERE id = :id")->execute([':id' => $id]);
+            foreach ($ids as $id) {
+                if ($id === $assignedId) continue;
+                $pdo->prepare("UPDATE {$db_prefix}data SET department = :assigned WHERE department = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
+                $pdo->prepare("UPDATE {$db_prefix}user SET department = :assigned WHERE department = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
+                $pdo->prepare("UPDATE {$db_prefix}dept_perms SET dept_id = :assigned WHERE dept_id = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
+                $pdo->prepare("UPDATE {$db_prefix}dept_reviewer SET dept_id = :assigned WHERE dept_id = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}department WHERE id = :id")->execute([':id' => $id]);
+            }
             echo json_encode(['success' => true]);
             return;
 
@@ -390,9 +400,12 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
                 echo json_encode(['error' => 'Reassign category ID is required']);
                 return;
             }
-            $pdo->prepare("UPDATE {$db_prefix}data SET category = :assigned WHERE category = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}category_perms WHERE cat_id = :id")->execute([':id' => $id]);
-            $pdo->prepare("DELETE FROM {$db_prefix}category WHERE id = :id")->execute([':id' => $id]);
+            foreach ($ids as $id) {
+                if ($id === $assignedId) continue;
+                $pdo->prepare("UPDATE {$db_prefix}data SET category = :assigned WHERE category = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}category_perms WHERE cat_id = :id")->execute([':id' => $id]);
+                $pdo->prepare("DELETE FROM {$db_prefix}category WHERE id = :id")->execute([':id' => $id]);
+            }
             echo json_encode(['success' => true]);
             return;
 

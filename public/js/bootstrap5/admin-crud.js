@@ -14,6 +14,7 @@
     var columnGetters = {
         users: function() {
             return [
+                { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
                 { title: 'ID', field: 'id', width: 60 },
                 { title: 'Username', field: 'username', widthGrow: 1 },
                 { title: 'Last Name', field: 'last_name', widthGrow: 1 },
@@ -31,6 +32,7 @@
         },
         departments: function() {
             return [
+                { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
                 { title: 'ID', field: 'id', width: 60 },
                 { title: 'Name', field: 'name', widthGrow: 3 },
                 { title: 'Users', field: 'user_count', width: 80 },
@@ -43,6 +45,7 @@
         },
         categories: function() {
             return [
+                { title: '', formatter: 'rowSelection', titleFormatter: 'rowSelection', width: 40, headerSort: false },
                 { title: 'ID', field: 'id', width: 60 },
                 { title: 'Name', field: 'name', widthGrow: 3 },
                 { title: 'Files', field: 'file_count', width: 80 },
@@ -213,11 +216,17 @@ users: function(rowData) {
 
     function deleteEntity() {
         var btn = document.getElementById('deleteConfirmBtn');
-        var id = btn.dataset.id;
+        var ids = (btn.dataset.ids || btn.dataset.id || '').split(',').filter(Boolean);
+        if (ids.length === 0) return;
         var formData = new FormData();
         formData.append('entity', entity);
         formData.append('action', 'delete');
-        formData.append('id', id);
+        formData.append('id', ids[0]);
+        if (ids.length > 1) {
+            for (var i = 0; i < ids.length; i++) {
+                formData.append('ids[]', ids[i]);
+            }
+        }
         formData.append(csrfFieldName, csrfToken);
         if (csrfIndexName) {
             formData.append(csrfIndexName, csrfIndex);
@@ -253,6 +262,37 @@ users: function(rowData) {
         });
     }
 
+    function deleteMulti() {
+        var table = window.crudTable;
+        if (!table) return;
+        var rows = table.getSelectedRows();
+        if (rows.length === 0) return;
+        if (!confirm('Delete ' + rows.length + ' selected ' + entity + '?')) return;
+
+        var ids = rows.map(function(r) { return r.getData().id; });
+        document.getElementById('deleteConfirmBtn').dataset.ids = ids.join(',');
+        var btn = document.getElementById('deleteConfirmBtn');
+
+        if (entity === 'departments' || entity === 'categories') {
+            document.getElementById('reassignField').style.display = 'block';
+            var sel = document.getElementById('reassignSelect');
+            sel.innerHTML = '';
+            var list = entity === 'departments' ? (window.departmentList || []) : (window.categoryList || []);
+            list.forEach(function(item) {
+                if (ids.indexOf(String(item.id)) === -1) {
+                    var opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.textContent = item.name;
+                    sel.appendChild(opt);
+                }
+            });
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        } else {
+            btn.dataset.id = ids[0];
+            deleteEntity();
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         var table = initTable();
         window.crudTable = table;
@@ -260,6 +300,14 @@ users: function(rowData) {
         document.getElementById('addBtn').addEventListener('click', openAddModal);
         document.getElementById('crudModalSave').addEventListener('click', saveEntity);
         document.getElementById('deleteConfirmBtn').addEventListener('click', deleteEntity);
+
+        var multiBtn = document.getElementById('deleteMultiBtn');
+        if (multiBtn) {
+            table.on('rowSelectionChanged', function() {
+                multiBtn.disabled = table.getSelectedRows().length === 0;
+            });
+            multiBtn.addEventListener('click', deleteMulti);
+        }
 
         document.getElementById('crud-table').addEventListener('click', function(e) {
             var editBtn = e.target.closest('.edit-row');

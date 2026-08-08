@@ -9,6 +9,7 @@ window.csrfIndex = '{$csrf_index_value}';
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">{$g_lang_users}</h5>
         <button class="btn btn-primary btn-sm" id="addBtn">+ {$g_lang_label_add}</button>
+        <button class="btn btn-danger btn-sm" id="deleteMultiBtn" disabled>{$g_lang_label_delete}</button>
     </div>
     <div class="card-body">
         <div id="crud-table"></div>
