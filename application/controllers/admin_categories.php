@@ -48,6 +48,11 @@ draw_header(msg('category'), $last_message);
 $GLOBALS['smarty']->assign('department_list', Department::getAllDepartments($pdo));
 $GLOBALS['smarty']->assign('category_list', Category::getAllCategories($pdo));
 
+$avail_users_query = "SELECT id, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name, first_name";
+$avail_users_stmt = $pdo->prepare($avail_users_query);
+$avail_users_stmt->execute();
+$GLOBALS['smarty']->assign('user_list', $avail_users_stmt->fetchAll(PDO::FETCH_ASSOC));
+
 ob_start();
 display_smarty_template('admin_categories.tpl');
 $GLOBALS['smarty']->assign('content', ob_get_clean());

@@ -253,6 +253,21 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
             $stmt = $pdo->prepare("INSERT INTO {$db_prefix}category (name) VALUES (:name)");
             $stmt->execute([':name' => $name]);
             $newId = (int)$pdo->lastInsertId();
+            if (isset($data['department_permission']) || isset($data['user_permission'])) {
+                $catPerms = new CategoryPerms($pdo);
+                $perms = [];
+                if (isset($data['department_permission'])) {
+                    foreach ($data['department_permission'] as $deptId => $rights) {
+                        $perms[] = ['dept_id' => (int)$deptId, 'user_id' => null, 'rights' => (int)$rights];
+                    }
+                }
+                if (isset($data['user_permission'])) {
+                    foreach ($data['user_permission'] as $userId => $rights) {
+                        $perms[] = ['dept_id' => null, 'user_id' => (int)$userId, 'rights' => (int)$rights];
+                    }
+                }
+                $catPerms->saveTemplate($newId, $perms);
+            }
             echo json_encode(['success' => true, 'id' => $newId]);
             return;
 
@@ -338,6 +353,21 @@ function handleEdit(PDO $pdo, string $db_prefix, string $entity, array $data): v
             }
             $stmt = $pdo->prepare("UPDATE {$db_prefix}category SET name = :name WHERE id = :id");
             $stmt->execute([':name' => $name, ':id' => $id]);
+            if (isset($data['department_permission']) || isset($data['user_permission'])) {
+                $catPerms = new CategoryPerms($pdo);
+                $perms = [];
+                if (isset($data['department_permission'])) {
+                    foreach ($data['department_permission'] as $deptId => $rights) {
+                        $perms[] = ['dept_id' => (int)$deptId, 'user_id' => null, 'rights' => (int)$rights];
+                    }
+                }
+                if (isset($data['user_permission'])) {
+                    foreach ($data['user_permission'] as $userId => $rights) {
+                        $perms[] = ['dept_id' => null, 'user_id' => (int)$userId, 'rights' => (int)$rights];
+                    }
+                }
+                $catPerms->saveTemplate($id, $perms);
+            }
             echo json_encode(['success' => true]);
             return;
 
@@ -423,6 +453,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return;
     }
     handleMutation($pdo, $db_prefix, $action, $entity, $_POST);
+    return;
+}
+
+if ($action === 'get_perms' && $entity === 'categories') {
+    header('Content-Type: application/json');
+    $catId = (int)($_REQUEST['id'] ?? 0);
+    if ($catId <= 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid category ID']);
+        return;
+    }
+    $catPerms = new CategoryPerms($pdo);
+    $rows = $catPerms->getTemplate($catId);
+    $deptPerms = [];
+    $userPerms = [];
+    foreach ($rows as $row) {
+        $rights = (int)$row['rights'];
+        if ($row['dept_id'] !== null) {
+            $deptPerms[(int)$row['dept_id']] = $rights;
+        } elseif ($row['user_id'] !== null) {
+            $userPerms[(int)$row['user_id']] = $rights;
+        }
+    }
+    echo json_encode(['dept_perms' => $deptPerms, 'user_perms' => $userPerms]);
     return;
 }
 

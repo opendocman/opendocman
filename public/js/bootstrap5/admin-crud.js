@@ -95,10 +95,12 @@ users: function(rowData) {
         },
         categories: function(rowData) {
             var d = rowData || {};
-            return '<form id="crudEntityForm">' +
+            var html = '<form id="crudEntityForm">' +
                 '<input type="hidden" name="id" value="' + (d.id || '') + '">' +
                 '<div class="mb-3"><label class="form-label">Category Name</label><input type="text" name="name" class="form-control" required value="' + (d.name || '') + '"></div>' +
+                '<hr><h6>Default permissions for documents in this category (optional)</h6><div id="categoryPermsEditor"></div>' +
                 '</form>';
+            return html;
         }
     };
 
@@ -134,6 +136,9 @@ users: function(rowData) {
         document.getElementById('crudModalTitle').textContent = labels[entity] || 'Add';
         document.getElementById('crudModalBody').innerHTML = formBuilders[entity](null);
         document.getElementById('crudModalSave').dataset.action = 'add';
+        if (entity === 'categories') {
+            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [] });
+        }
         new bootstrap.Modal(document.getElementById('crudModal')).show();
     }
 
@@ -143,6 +148,17 @@ users: function(rowData) {
         document.getElementById('crudModalTitle').textContent = (prefix[entity] || 'Edit ') + (rowData[nameField[entity]] || '');
         document.getElementById('crudModalBody').innerHTML = formBuilders[entity](rowData);
         document.getElementById('crudModalSave').dataset.action = 'edit';
+        if (entity === 'categories') {
+            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [] });
+            var editor = initPermissionsEditor('#categoryPermsEditor');
+            if (editor && rowData.id) {
+                fetch('admin_crud_ajax?entity=categories&action=get_perms&id=' + rowData.id)
+                    .then(function(r) { return r.json(); })
+                    .then(function(data) {
+                        if (editor.loadTemplate) editor.loadTemplate(data);
+                    });
+            }
+        }
         new bootstrap.Modal(document.getElementById('crudModal')).show();
     }
 
@@ -184,6 +200,20 @@ users: function(rowData) {
         var formData = new FormData(form);
         formData.append('entity', entity);
         formData.append('action', action);
+
+        if (entity === 'categories') {
+            var editor = initPermissionsEditor('#categoryPermsEditor');
+            if (editor) {
+                var permData = editor.getData();
+                Object.keys(permData.department_permission || {}).forEach(function(deptId) {
+                    formData.append('department_permission[' + deptId + ']', permData.department_permission[deptId]);
+                });
+                Object.keys(permData.user_permission || {}).forEach(function(userId) {
+                    formData.append('user_permission[' + userId + ']', permData.user_permission[userId]);
+                });
+            }
+        }
+
         formData.append(csrfFieldName, csrfToken);
         if (csrfIndexName) {
             formData.append(csrfIndexName, csrfIndex);
