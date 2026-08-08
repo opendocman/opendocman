@@ -58,6 +58,7 @@ display_smarty_template('admin_categories.tpl');
 $GLOBALS['smarty']->assign('content', ob_get_clean());
 display_smarty_template('_content.tpl');
 
+echo '<script src="' . $GLOBALS['CONFIG']['base_url'] . 'js/permissions-editor.js?v=' . filemtime(dirname(__FILE__) . '/../../public/js/permissions-editor.js') . '"></script>';
 echo '<script src="' . $GLOBALS['CONFIG']['base_url'] . 'js/bootstrap5/admin-crud.js?v=' . filemtime(dirname(__FILE__) . '/../../public/js/bootstrap5/admin-crud.js') . '"></script>';
 
 draw_footer();
