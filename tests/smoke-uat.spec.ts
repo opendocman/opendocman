@@ -52,12 +52,26 @@ async function fillModalForm(page: any, fields: Record<string, string>) {
 async function saveModal(page: any) {
   await page.click('#crudModalSave');
   // Wait for modal to close (success) or alert to appear (error)
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(3000);
+  // Handle any alert that may have popped up
+  await page.waitForTimeout(500);
 }
 
 async function confirmDelete(page: any) {
   await page.click('#deleteConfirmBtn');
   await page.waitForTimeout(1000);
+}
+
+async function clickEditRow(page: any, text: string) {
+  const row = page.locator('#crud-table .tabulator-row').filter({ hasText: text }).first();
+  await row.waitFor({ timeout: 5000 });
+  await row.locator('.edit-row').click();
+}
+
+async function clickDeleteRow(page: any, text: string) {
+  const row = page.locator('#crud-table .tabulator-row').filter({ hasText: text }).first();
+  await row.waitFor({ timeout: 5000 });
+  await row.locator('.delete-row').click();
 }
 
 // ────────────────────────────────────────────────────────────
@@ -95,10 +109,7 @@ test.describe('User management', () => {
   test('update a user', async ({ page }) => {
     await waitForTable(page, '/admin_users?state=2');
 
-    // Wait for the table to have rows
-    await page.locator('#crud-table .tabulator-row').first().waitFor({ timeout: 5000 });
-    const editBtn = page.locator('#crud-table .tabulator-row .edit-row').first();
-    await editBtn.click();
+    await clickEditRow(page, username);
     await page.waitForSelector('#crudModal.show', { timeout: 3000 });
 
     await page.fill('#crudEntityForm input[name="last_name"]', updatedLastName);
@@ -111,8 +122,7 @@ test.describe('User management', () => {
   test('delete a user', async ({ page }) => {
     await waitForTable(page, '/admin_users?state=2');
 
-    const delBtn = page.locator('#crud-table .tabulator-row .delete-row').first();
-    await delBtn.click();
+    await clickDeleteRow(page, username);
     await page.waitForSelector('#deleteModal.show', { timeout: 3000 });
 
     await confirmDelete(page);
@@ -143,8 +153,7 @@ test.describe('Department management', () => {
   test('update a department', async ({ page }) => {
     await waitForTable(page, '/admin_departments?state=2');
 
-    const editBtn = page.locator('#crud-table .tabulator-row .edit-row').first();
-    await editBtn.click();
+    await clickEditRow(page, deptName);
     await page.waitForSelector('#crudModal.show', { timeout: 3000 });
 
     await page.fill('#crudEntityForm input[name="name"]', deptUpdated);
@@ -157,8 +166,7 @@ test.describe('Department management', () => {
   test('delete a department', async ({ page }) => {
     await waitForTable(page, '/admin_departments?state=2');
 
-    const delBtn = page.locator('#crud-table .tabulator-row .delete-row').first();
-    await delBtn.click();
+    await clickDeleteRow(page, deptUpdated);
     await page.waitForSelector('#deleteModal.show', { timeout: 3000 });
 
     // Select reassign target
@@ -195,8 +203,7 @@ test.describe('Category management', () => {
   test('update a category', async ({ page }) => {
     await waitForTable(page, '/admin_categories?state=2');
 
-    const editBtn = page.locator('#crud-table .tabulator-row .edit-row').first();
-    await editBtn.click();
+    await clickEditRow(page, catName);
     await page.waitForSelector('#crudModal.show', { timeout: 3000 });
 
     await page.fill('#crudEntityForm input[name="name"]', catUpdated);
@@ -209,8 +216,7 @@ test.describe('Category management', () => {
   test('delete a category', async ({ page }) => {
     await waitForTable(page, '/admin_categories?state=2');
 
-    const delBtn = page.locator('#crud-table .tabulator-row .delete-row').first();
-    await delBtn.click();
+    await clickDeleteRow(page, catUpdated);
     await page.waitForSelector('#deleteModal.show', { timeout: 3000 });
 
     // Select reassign target
@@ -284,13 +290,16 @@ test.describe('Permission inheritance', () => {
 
     // Now go to update that category to see the permissions editor
     await waitForTable(page, '/admin_categories?state=2');
-    const editBtn = page.locator('#crud-table .tabulator-row .edit-row').first();
-    await editBtn.click();
+    await clickEditRow(page, permCat);
     await page.waitForSelector('#crudModal.show', { timeout: 3000 });
 
-    // Check "Unset" label appears (not "None")
+    // Check the permissions editor is visible in overview mode
+    await expect(page.locator('#crudModal .perm-overview-mode')).toBeVisible();
+
+    // Switch to edit mode to see "Unset" labels
+    await page.locator('#crudModal .perm-mode-btn[data-mode="edit"]').click();
     await expect(page.locator('#crudModal .perm-edit-mode')).toBeVisible();
-    await expect(page.locator('#crudModal text=Unset')).toBeVisible();
+    await expect(page.locator('#crudModal .perm-edit-mode')).toContainText('Unset');
 
     // Close the modal without saving
     await page.click('#crudModal .btn-close');

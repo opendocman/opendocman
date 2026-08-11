@@ -9,6 +9,11 @@
 
     if (!entity) return;
 
+    function escapeHtml(str) {
+        if (str == null) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
     var paginationSize = parseInt(sessionStorage.getItem('adminCrudPageSize') || '25', 10);
 
     var columnGetters = {
@@ -65,21 +70,28 @@ users: function(rowData) {
             var depts = window.departmentList || [];
             var deptOpts = depts.map(function(dept) {
                 var sel = parseInt(dept.id) === parseInt(d.department) ? ' selected' : '';
-                return '<option value="' + dept.id + '"' + sel + '>' + dept.name + '</option>';
+                return '<option value="' + escapeHtml(dept.id) + '"' + sel + '>' + escapeHtml(dept.name) + '</option>';
             }).join('');
 
             var pwField = isEdit
                 ? '<div class="mb-3"><label class="form-label">Password (leave blank to keep current)</label><input type="password" name="password" class="form-control" maxlength="32"></div>'
                 : '<div class="mb-3"><label class="form-label">Password</label><input type="password" name="password" class="form-control" required minlength="5" maxlength="32"></div>';
 
+            var reviewerDepts = (d.reviewer_depts || '').split(',').filter(Boolean);
+            var deptReviewHtml = depts.map(function(dept) {
+                var checked = reviewerDepts.indexOf(String(dept.id)) !== -1 ? ' checked' : '';
+                return '<div class="form-check form-check-inline"><input type="checkbox" name="department_review[]" value="' + escapeHtml(dept.id) + '" class="form-check-input" id="dr_' + dept.id + '"' + checked + '><label class="form-check-label" for="dr_' + dept.id + '">' + escapeHtml(dept.name) + '</label></div>';
+            }).join('');
+
             return '<form id="crudEntityForm">' +
-                '<input type="hidden" name="id" value="' + (d.id || '') + '">' +
-                '<div class="mb-3"><label class="form-label">Username</label><input type="text" name="username" class="form-control" required value="' + (d.username || '') + '"></div>' +
-                '<div class="mb-3"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" required value="' + (d.last_name || '') + '"></div>' +
-                '<div class="mb-3"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" required value="' + (d.first_name || '') + '"></div>' +
-                '<div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required value="' + (d.email || '') + '"></div>' +
-                '<div class="mb-3"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control" value="' + (d.phone || '') + '"></div>' +
+                '<input type="hidden" name="id" value="' + escapeHtml(d.id || '') + '">' +
+                '<div class="mb-3"><label class="form-label">Username</label><input type="text" name="username" class="form-control" required value="' + escapeHtml(d.username || '') + '"></div>' +
+                '<div class="mb-3"><label class="form-label">Last Name</label><input type="text" name="last_name" class="form-control" required value="' + escapeHtml(d.last_name || '') + '"></div>' +
+                '<div class="mb-3"><label class="form-label">First Name</label><input type="text" name="first_name" class="form-control" required value="' + escapeHtml(d.first_name || '') + '"></div>' +
+                '<div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required value="' + escapeHtml(d.email || '') + '"></div>' +
+                '<div class="mb-3"><label class="form-label">Phone</label><input type="text" name="phone" class="form-control" value="' + escapeHtml(d.phone || '') + '"></div>' +
                 '<div class="mb-3"><label class="form-label">Department</label><select name="department" class="form-select">' + deptOpts + '</select></div>' +
+                '<div class="mb-3"><label class="form-label">Department Reviewer</label><div>' + deptReviewHtml + '</div></div>' +
                 pwField +
                 '<div class="mb-3 form-check"><input type="checkbox" name="admin" value="1" class="form-check-input" id="f_admin" ' + (d.is_admin == 1 ? 'checked' : '') + '><label class="form-check-label" for="f_admin">Admin?</label></div>' +
                 '<div class="mb-3 form-check"><input type="checkbox" name="can_add" value="1" class="form-check-input" id="f_can_add" ' + (d.can_add == 1 ? 'checked' : '') + '><label class="form-check-label" for="f_can_add">Can Add?</label></div>' +
@@ -89,15 +101,15 @@ users: function(rowData) {
         departments: function(rowData) {
             var d = rowData || {};
             return '<form id="crudEntityForm">' +
-                '<input type="hidden" name="id" value="' + (d.id || '') + '">' +
-                '<div class="mb-3"><label class="form-label">Department Name</label><input type="text" name="name" class="form-control" required value="' + (d.name || '') + '"></div>' +
+                '<input type="hidden" name="id" value="' + escapeHtml(d.id || '') + '">' +
+                '<div class="mb-3"><label class="form-label">Department Name</label><input type="text" name="name" class="form-control" required value="' + escapeHtml(d.name || '') + '"></div>' +
                 '</form>';
         },
         categories: function(rowData) {
             var d = rowData || {};
             var html = '<form id="crudEntityForm">' +
-                '<input type="hidden" name="id" value="' + (d.id || '') + '">' +
-                '<div class="mb-3"><label class="form-label">Category Name</label><input type="text" name="name" class="form-control" required value="' + (d.name || '') + '"></div>' +
+                '<input type="hidden" name="id" value="' + escapeHtml(d.id || '') + '">' +
+                '<div class="mb-3"><label class="form-label">Category Name</label><input type="text" name="name" class="form-control" required value="' + escapeHtml(d.name || '') + '"></div>' +
                 '<hr><h6>Default permissions for documents in this category (optional)</h6><div id="categoryPermsEditor"></div>' +
                 '</form>';
             return html;

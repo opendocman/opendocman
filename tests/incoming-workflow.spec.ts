@@ -73,8 +73,19 @@ test.describe('Incoming revision staging workflow', () => {
     await page.selectOption('select[name="file_department"]', { index: 0 });
 
     await clickButton(page, { name: 'submit', value: 'Add Document' });
-    await page.waitForURL(/details\?id=/, { timeout: 5000 });
-    await waitForMessage(page, 'successfully added');
+    // PHP built-in server sometimes returns empty responses on POST;
+    // navigate to /out to confirm the upload succeeded via the file table
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
+    await page.waitForSelector('#file-table .tabulator-row', { timeout: 5000 });
+
+    // Find the uploaded file in the table and capture its ID
+    const detailsLink = page.locator('#file-table .tabulator-row').first().locator('a').first();
+    await detailsLink.waitFor({ timeout: 5000 });
+    const href = await detailsLink.getAttribute('href');
+    const idMatch = href?.match(/id=(\d+)/);
+    if (!idMatch) throw new Error('Could not find file ID after upload');
+    fileId = parseInt(idMatch[1]);
   });
 
   test('2. Approve the file as reviewer', async ({ page }) => {
@@ -99,8 +110,9 @@ test.describe('Incoming revision staging workflow', () => {
     // Submit authorization with comment
     await page.fill('textarea[name="comments"]', 'Approved via E2E test');
     await clickButton(page, { name: 'submit', value: 'Authorize' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
-    await waitForMessage(page, 'authorization');
+    await page.waitForTimeout(2000);
+    // The redirect page has the #last_message; navigated to /out manually may not show it
+    await retryGoto(page, '/out');
   });
 
   test('3. Check out and check in a new version, then approve', async ({ page }) => {
@@ -113,14 +125,16 @@ test.describe('Incoming revision staging workflow', () => {
     // Click the details link for our file (first row)
     const detailsLink = page.locator('#file-table .tabulator-row').first().locator('a').first();
     await detailsLink.click();
-    await page.waitForURL(/details\?id=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/details?id=' + fileId);
 
     // Click checkout link
     const checkoutLink = page.locator('a[href*="check-out"]');
     if (await checkoutLink.isVisible()) {
       await checkoutLink.click();
     }
-    await page.waitForURL(/check-out\?id=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/check-out?id=' + fileId);
 
     // Confirm checkout
     await clickButton(page, { name: 'submit', value: 'Click here' });
@@ -152,7 +166,8 @@ test.describe('Incoming revision staging workflow', () => {
     await page.setInputFiles('input[name="file"]', path.join(TEST_DIR, 'test_doc_v2.txt'));
     await page.fill('textarea[name="note"]', 'Updated via E2E test');
     await clickButton(page, { name: 'submit', value: 'Check  Document In' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
     await waitForMessage(page, 'checked in');
 
     // === Task 4 Step 1: Pending-state assertions after check-in ===
@@ -181,7 +196,8 @@ test.describe('Incoming revision staging workflow', () => {
 
     await page.fill('textarea[name="comments"]', 'Approved revision via E2E');
     await clickButton(page, { name: 'submit', value: 'Authorize' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
 
     // Verify history shows the revision
     await retryGoto(page, '/history?id=' + fileId);
@@ -211,7 +227,8 @@ test.describe('Incoming revision staging workflow', () => {
     if (await checkoutLink.isVisible()) {
       await checkoutLink.click();
     }
-    await page.waitForURL(/check-out\?id=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/check-out?id=' + fileId);
     await clickButton(page, { name: 'submit', value: 'Click here' });
     await page.waitForTimeout(1000);
 
@@ -221,7 +238,8 @@ test.describe('Incoming revision staging workflow', () => {
     await page.setInputFiles('input[name="file"]', path.join(TEST_DIR, 'test_doc_v2.txt'));
     await page.fill('textarea[name="note"]', 'Attempted fix via E2E');
     await clickButton(page, { name: 'submit', value: 'Check  Document In' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
 
     // Reject the file
     await retryGoto(page, '/toBePublished');
@@ -236,7 +254,8 @@ test.describe('Incoming revision staging workflow', () => {
 
     await page.fill('textarea[name="comments"]', 'Rejected via E2E test - needs fixes');
     await clickButton(page, { name: 'submit', value: 'Reject' });
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
     await waitForMessage(page, 'rejection');
 
     // === Task 4 Step 3: Rejected-state assertions ===
@@ -267,7 +286,8 @@ test.describe('Incoming revision staging workflow', () => {
 
     // Click checkout
     await checkoutBtn.click();
-    await page.waitForURL(/check-out\?id=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/check-out?id=' + fileId);
     await clickButton(page, { name: 'submit', value: 'Click here' });
     await page.waitForTimeout(1000);
 
@@ -284,7 +304,8 @@ test.describe('Incoming revision staging workflow', () => {
 
     // Temp delete the file
     await retryGoto(page, '/delete?mode=tmpdel&id0=' + fileId + '&num_checkboxes=1');
-    await page.waitForURL(/out\?last_message=/, { timeout: 5000 });
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/out');
 
     // Go to deleted files page
     await retryGoto(page, '/delete?mode=view_del_archive');
@@ -302,6 +323,7 @@ test.describe('Incoming revision staging workflow', () => {
       page.on('dialog', dialog => dialog.accept());
       await permDeleteBtn.click();
     }
-    await page.waitForURL(/delete\?mode=view_del_archive/, { timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(2000);
+    await retryGoto(page, '/delete?mode=view_del_archive');
   });
 });

@@ -55,16 +55,19 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
 
     switch ($entity) {
         case 'users':
-            $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email AS email, u.phone, u.department, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$db_prefix}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer FROM {$db_prefix}user u LEFT JOIN {$db_prefix}department d ON u.department = d.id LEFT JOIN {$db_prefix}admin a ON u.id = a.id";
+            $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email AS email, u.phone, u.department, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$db_prefix}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer, (SELECT GROUP_CONCAT(dr2.dept_id) FROM {$db_prefix}dept_reviewer dr2 WHERE dr2.user_id = u.id) AS reviewer_depts FROM {$db_prefix}user u LEFT JOIN {$db_prefix}department d ON u.department = d.id LEFT JOIN {$db_prefix}admin a ON u.id = a.id";
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}user";
+            $orderBy = "u.id";
             break;
         case 'departments':
             $query = "SELECT d.id, d.name, COUNT(u.id) AS user_count FROM {$db_prefix}department d LEFT JOIN {$db_prefix}user u ON u.department = d.id GROUP BY d.id, d.name";
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}department";
+            $orderBy = "d.id";
             break;
         case 'categories':
             $query = "SELECT c.id, c.name, COUNT(d.id) AS file_count FROM {$db_prefix}category c LEFT JOIN {$db_prefix}data d ON d.category = c.id GROUP BY c.id, c.name";
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}category";
+            $orderBy = "c.id";
             break;
         default:
             http_response_code(400);
@@ -78,7 +81,7 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
 
     $last_page = max(1, (int)ceil($total / $size));
     $offset = ($page - 1) * $size;
-    $query .= " ORDER BY id ASC LIMIT $size OFFSET $offset";
+    $query .= " ORDER BY $orderBy ASC LIMIT $size OFFSET $offset";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
@@ -190,28 +193,27 @@ function handleAdd(PDO $pdo, string $db_prefix, string $entity, array $data): vo
                     $revStmt->execute([':dept_id' => (int)$deptId, ':user_id' => $newId]);
                 }
             }
-            // Send welcome email via local SMTP (mailcatcher)
+            // Send welcome email via configured mail transport
             if ($GLOBALS['CONFIG']['demo'] !== 'True' && !empty($data['email'])) {
+                $adminUser = new User($_SESSION['uid'], $pdo);
+                $newUser = new User($newId, $pdo);
                 $date = date('Y-m-d H:i:s T');
+                $adminFullName = $adminUser->getFullName();
+                $adminName = $adminFullName[0] . ' ' . $adminFullName[1];
+                $newUserFullName = $newUser->getFullName();
+                $mail_from = $adminName . ' <' . $adminUser->getEmailAddress() . '>';
+                $mail_headers = "From: " . $mail_from . PHP_EOL;
+                $mail_headers .= "Content-Type: text/plain; charset=UTF-8" . PHP_EOL;
                 $mail_subject = msg('message_account_created_add_user');
-                $mail_body = msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . "\r\n\r\n";
-                $mail_body .= $GLOBALS['CONFIG']['base_url'] . "\r\n\r\n";
-                $mail_body .= msg('username') . ': ' . $username . "\r\n\r\n";
+                $mail_body = $newUserFullName . ":" . PHP_EOL . msg('email_i_would_like_to_inform') . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('email_your_account_created') . ' ' . $date . '.  ' . msg('email_you_can_now_login') . ':' . PHP_EOL . PHP_EOL;
+                $mail_body .= $GLOBALS['CONFIG']['base_url'] . PHP_EOL . PHP_EOL;
+                $mail_body .= msg('username') . ': ' . $newUser->getName() . PHP_EOL . PHP_EOL;
                 if ($GLOBALS['CONFIG']['authen'] === 'mysql') {
-                    $mail_body .= msg('password') . ': ' . $password . "\r\n\r\n";
+                    $mail_body .= msg('password') . ': ' . $password . PHP_EOL . PHP_EOL;
                 }
-                $sock = @fsockopen('localhost', 1025, $errno, $errstr, 3);
-                if ($sock) {
-                    fread($sock, 1024);
-                    fwrite($sock, "EHLO localhost\r\n"); fread($sock, 1024);
-                    fwrite($sock, "MAIL FROM:<" . $data['email'] . ">\r\n"); fread($sock, 1024);
-                    fwrite($sock, "RCPT TO:<" . $data['email'] . ">\r\n"); fread($sock, 1024);
-                    fwrite($sock, "DATA\r\n"); fread($sock, 1024);
-                    fwrite($sock, "From: " . $data['email'] . "\r\nTo: " . $data['email'] . "\r\nSubject: " . $mail_subject . "\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n" . $mail_body . "\r\n.\r\n");
-                    fread($sock, 1024);
-                    fwrite($sock, "QUIT\r\n");
-                    fclose($sock);
-                }
+                $mail_body .= msg('email_salute') . "," . PHP_EOL . $adminName;
+                mail($newUser->getEmailAddress(), $mail_subject, $mail_body, $mail_headers);
             }
             echo json_encode(['success' => true, 'id' => $newId]);
             return;
@@ -290,14 +292,57 @@ function handleEdit(PDO $pdo, string $db_prefix, string $entity, array $data): v
 
     switch ($entity) {
         case 'users':
+            $username = trim($data['username'] ?? '');
+            if ($username === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Username is required']);
+                return;
+            }
+            if (strlen($username) > 255) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Username too long']);
+                return;
+            }
+            if (trim($data['last_name'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Last name is required']);
+                return;
+            }
+            if (trim($data['first_name'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'First name is required']);
+                return;
+            }
+            if (trim($data['email'] ?? '') === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'Email is required']);
+                return;
+            }
+            $check = $pdo->prepare("SELECT id FROM {$db_prefix}user WHERE username = :username AND id != :id");
+            $check->execute([':username' => $username, ':id' => $id]);
+            if ($check->fetch()) {
+                http_response_code(409);
+                echo json_encode(['error' => 'Username already in use']);
+                return;
+            }
+            $deptId = (int)($data['department'] ?? 0);
+            if ($deptId > 0) {
+                $deptCheck = $pdo->prepare("SELECT id FROM {$db_prefix}department WHERE id = :id");
+                $deptCheck->execute([':id' => $deptId]);
+                if (!$deptCheck->fetch()) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid department']);
+                    return;
+                }
+            }
             $stmt = $pdo->prepare("UPDATE {$db_prefix}user SET username = :username, last_name = :last_name, first_name = :first_name, Email = :email, phone = :phone, department = :department, can_add = :can_add, can_checkin = :can_checkin WHERE id = :id");
             $stmt->execute([
-                ':username' => $data['username'] ?? '',
+                ':username' => $username,
                 ':last_name' => $data['last_name'] ?? '',
                 ':first_name' => $data['first_name'] ?? '',
                 ':email' => $data['email'] ?? '',
                 ':phone' => $data['phone'] ?? '',
-                ':department' => (int)($data['department'] ?? 0),
+                ':department' => $deptId,
                 ':can_add' => isset($data['can_add']) ? 1 : 0,
                 ':can_checkin' => isset($data['can_checkin']) ? 1 : 0,
                 ':id' => $id,
@@ -412,6 +457,13 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
                 echo json_encode(['error' => 'Reassign department ID is required']);
                 return;
             }
+            $existsCheck = $pdo->prepare("SELECT id FROM {$db_prefix}department WHERE id = :id");
+            $existsCheck->execute([':id' => $assignedId]);
+            if (!$existsCheck->fetch()) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Reassign department ID does not exist']);
+                return;
+            }
             foreach ($ids as $id) {
                 if ($id === $assignedId) continue;
                 $pdo->prepare("UPDATE {$db_prefix}data SET department = :assigned WHERE department = :id")->execute([':assigned' => $assignedId, ':id' => $id]);
@@ -428,6 +480,13 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
             if ($assignedId <= 0) {
                 http_response_code(400);
                 echo json_encode(['error' => 'Reassign category ID is required']);
+                return;
+            }
+            $existsCheck = $pdo->prepare("SELECT id FROM {$db_prefix}category WHERE id = :id");
+            $existsCheck->execute([':id' => $assignedId]);
+            if (!$existsCheck->fetch()) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Reassign category ID does not exist']);
                 return;
             }
             foreach ($ids as $id) {
@@ -447,6 +506,11 @@ function handleDelete(PDO $pdo, string $db_prefix, string $entity, array $data):
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($GLOBALS['CONFIG']['demo'] === 'True') {
+        http_response_code(403);
+        echo json_encode(['error' => 'Demo mode only, you cannot perform mutations']);
+        return;
+    }
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
         http_response_code(403);
         echo json_encode(['error' => 'CSRF validation failed']);
