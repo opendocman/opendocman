@@ -3,6 +3,8 @@
 session_start();
 
 require_once __DIR__ . '/../version.php';
+require_once __DIR__ . '/CheckResult.php';
+require_once __DIR__ . '/CheckerInterface.php';
 require_once __DIR__ . '/ConfigManager.php';
 require_once __DIR__ . '/DatabaseManager.php';
 require_once __DIR__ . '/RequirementChecker.php';
