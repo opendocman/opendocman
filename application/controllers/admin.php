@@ -42,35 +42,15 @@ $request_state = e::h(($_REQUEST['state']+1));
 ?>
 <div class="row g-3">
     <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100">
-            <div class="card-header"><h5 class="card-title mb-0"><?php echo msg('users')?></h5></div>
-            <div class="list-group list-group-flush">
-                <a href="<?php echo 'user?submit=adduser&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_add')?></a>
-                <a href="<?php echo 'user?submit=deletepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_delete')?></a>
-                <a href="<?php echo 'user?submit=updatepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_update')?></a>
-                <a href="<?php echo 'user?submit=showpick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_display')?></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100">
-            <div class="card-header"><h5 class="card-title mb-0"><?php echo msg('label_department')?></h5></div>
-            <div class="list-group list-group-flush">
-                <a href="<?php echo 'department?submit=add&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_add')?></a>
-                <a href="<?php echo 'department?submit=deletepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_delete')?></a>
-                <a href="<?php echo 'department?submit=updatepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_update')?></a>
-                <a href="<?php echo 'department?submit=showpick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_display')?></a>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card h-100">
-            <div class="card-header"><h5 class="card-title mb-0"><?php echo msg('category')?></h5></div>
-            <div class="list-group list-group-flush">
-                <a href="<?php echo 'category?submit=add&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_add')?></a>
-                <a href="<?php echo 'category?submit=deletepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_delete')?></a>
-                <a href="<?php echo 'category?submit=updatepick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_update')?></a>
-                <a href="<?php echo 'category?submit=showpick&state=' . $request_state; ?>" class="list-group-item list-group-item-action"><?php echo msg('label_display')?></a>
+        <div class="card h-100 border-primary">
+            <div class="card-header bg-primary text-white"><h5 class="card-title mb-0"><?php echo msg('label_admin_crud')?></h5></div>
+            <div class="card-body">
+                <p class="card-text"><?php echo msg('label_admin_crud_desc')?></p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="<?php echo 'admin_users?state=' . $request_state; ?>" class="btn btn-primary"><?php echo msg('users')?></a>
+                    <a href="<?php echo 'admin_departments?state=' . $request_state; ?>" class="btn btn-primary"><?php echo msg('label_department')?></a>
+                    <a href="<?php echo 'admin_categories?state=' . $request_state; ?>" class="btn btn-primary"><?php echo msg('category')?></a>
+                </div>
             </div>
         </div>
     </div>

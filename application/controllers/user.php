@@ -57,28 +57,8 @@ if ($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['u
 
 
 if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
-    draw_header(msg('area_add_new_user'), $last_message);
-    // Check to see if user is admin
-
-    $onBeforeAddUser = callPluginMethod('onBeforeAddUser');
-
-    $mysql_auth = $GLOBALS["CONFIG"]["authen"] == 'mysql';
-
-    $rand_password = makeRandomPassword();
-
-    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(array());
-    $department_list = $stmt->fetchAll();
-
-    $GLOBALS['smarty']->assign('onBeforeAddUser', $onBeforeAddUser);
-    $GLOBALS['smarty']->assign('mysql_auth', $mysql_auth);
-    $GLOBALS['smarty']->assign('rand_password', $rand_password);
-    $GLOBALS['smarty']->assign('department_list', $department_list);
-
-    display_smarty_template('user_add.tpl');
-
-    draw_footer();
+    header('Location: admin_users');
+    exit;
 } elseif (isset($_POST['submit']) && 'Add User' == $_POST['submit']) {
     // Validate CSRF token for Add User operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
@@ -234,182 +214,20 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $last_message = urlencode('#' . $_POST['id'] . ' ' . msg('message_user_successfully_deleted'));
     header('Location: admin?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
-    // Validate CSRF token for Delete operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
-        exit;
-    }
-    
-    // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'True') {
-        draw_header('Delete User ', $last_message);
-        echo 'Sorry, demo mode only, you can\'t do that';
-        draw_footer();
-        exit;
-    }
-    $delete = '';
-    $user_obj = new User($_POST['item'], $pdo);
-    draw_header(msg('userpage_status_delete') . $user_obj->getName(), $last_message);
-
-    // smarty calls
-    $GLOBALS['smarty']->assign('user_id', $user_obj->getId());
-    $GLOBALS['smarty']->assign('full_name', $user_obj->getFullName());
-
-    ob_start();
-    display_smarty_template('user_delete.tpl');
-    $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
-
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'deletepick') {
-    $deletepick = '';
-    draw_header(msg('userpage_user_delete'), $last_message);
-
-    $query = "SELECT id,username, last_name, first_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $user_list = $stmt->fetchAll();
-
-    $GLOBALS['smarty']->assign('user_list', $user_list);
-    $GLOBALS['smarty']->assign('state', $_REQUEST['state']);
-    ob_start();
-    display_smarty_template('user_delete_pick.tpl');
-    $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Show User') {
-    // Validate CSRF token for Show User operation
-    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
-        exit;
-    }
-    
-    $user_obj = new User($_POST['item'], $pdo);
-    draw_header(msg('userpage_show_user') . $user_obj->getName(), $last_message);
-
-    $GLOBALS['smarty']->assign('user', $user_obj);
-    $GLOBALS['smarty']->assign('first_name', $user_obj->first_name);
-    $GLOBALS['smarty']->assign('last_name', $user_obj->last_name);
-    $GLOBALS['smarty']->assign('isAdmin', $user_obj->isAdmin());
-    $GLOBALS['smarty']->assign('isReviewer', $user_obj->isReviewer());
-    ob_start();
-    display_smarty_template('user_show.tpl');
-    $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
-
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'showpick') {
-    draw_header(msg('userpage_choose_user'), $last_message);
-
-    $showpick = '';
-
-    $state = $_REQUEST['state'] + 1;
-
-    $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(array());
-    $user_list = $stmt->fetchAll();
-
-    $GLOBALS['smarty']->assign('user_list', $user_list);
-    $GLOBALS['smarty']->assign('state', $state);
-    ob_start();
-    display_smarty_template('user_show_pick.tpl');
-    $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
-
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
-    // Validate CSRF token for Modify User operation — POST only
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
-        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
-        exit;
-    }
-    
-    // If demo mode, don't allow them to update the demo account
-    if (@$GLOBALS['CONFIG']['demo'] == 'True') {
-        draw_header(msg('userpage_update_user'), $last_message);
-        echo msg('userpage_update_user_demo');
-        draw_footer();
-        exit;
-    } else {
-        // Begin Not Demo Mode
-        $user_obj = new User($_REQUEST['item'], $pdo);
-        draw_header(msg('userpage_update_user') . $user_obj->getName(), $last_message);
-
-        $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id ";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(':id' => $_REQUEST['item']));
-        $user = $stmt->fetch();
-
-        $display_reviewer_row = $user_obj->isAdmin() ? true : false;
-
-        $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = :user_id";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(':user_id' => $_REQUEST['item']));
-        $dept_reviewer = $stmt->fetchAll();
-
-        $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array());
-        $department_list = $stmt->fetchAll();
-
-        //for dept that this user is reviewing for
-        $i = 0;
-        foreach ($dept_reviewer as $row) {
-            $department_reviewer[$i][0] = $row[0];
-            $department_reviewer[$i][1] = $row[1];
-            $i++;
-        }
-        // for all depts
-        $i = 0;
-        foreach ($department_list as $row) {
-            $all_departments[$i][0] = $row[0];
-            $all_departments[$i][1] = $row[1];
-            $i++;
-        }
-
-        $department_select_options = array();
-
-        for ($d = 0; $d < sizeof($all_departments); $d++) {
-            $found = false;
-            if (isset($department_reviewer)) {
-                for ($r = 0; $r < sizeof($department_reviewer); $r++) {
-                    if ($all_departments[$d][0] == $department_reviewer[$r][0]) {
-                        $department_select_options[] = '<option value="' . e::h($all_departments[$d][0]) . '" selected>' . e::h($all_departments[$d][1]) . '</option>';
-                        $found = true;
-                        $r = sizeof($department_reviewer);
-                    }
-                }
-            }
-            if (!$found) {
-                $department_select_options[] = '<option value="' . e::h($all_departments[$d][0]) . '">' . e::h($all_departments[$d][1]) . '</option>';
-            }
-        }
-
-        $can_add = '';
-        $can_checkin = '';
-        if ($user_obj->can_add == 1) {
-            $can_add = "checked";
-        }
-        if ($user_obj->can_checkin == 1) {
-            $can_checkin = "checked";
-        }
-
-        $GLOBALS['smarty']->assign('user', $user_obj);
-        $GLOBALS['smarty']->assign('mysql_auth', $GLOBALS["CONFIG"]["authen"] == 'mysql');
-        $GLOBALS['smarty']->assign('mode', $mode);
-        $GLOBALS['smarty']->assign('user_department', $user_obj->getDeptID());
-        $GLOBALS['smarty']->assign('display_reviewer_row', $display_reviewer_row);
-        $GLOBALS['smarty']->assign('is_admin', $user_obj->isAdmin());
-        $GLOBALS['smarty']->assign('department_list', $department_list);
-        $GLOBALS['smarty']->assign('department_select_options', $department_select_options);
-        $GLOBALS['smarty']->assign('can_add', $can_add);
-        $GLOBALS['smarty']->assign('can_checkin', $can_checkin);
-        $GLOBALS['smarty']->assign('pw_change_required_checked', $user_obj->isPasswordChangeRequired() ? 'checked' : '');
-        display_smarty_template('user/edit.tpl');
-    }
-
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
     // Validate CSRF token for Update User operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
@@ -534,33 +352,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     $last_message = urlencode(msg('message_user_successfully_updated'));
     header('Location: out?last_message=' . urlencode($last_message));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'updatepick') {
-    draw_header(msg('userpage_modify_user'), $last_message);
-
-    // Check to see if user is admin
-    $query = "SELECT admin FROM {$GLOBALS['CONFIG']['db_prefix']}admin WHERE id = :uid and admin = '1'";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(array(
-        ':uid' => $_SESSION['uid']
-    ));
-
-    if ($stmt->rowCount() <= 0) {
-        header('Location: error?ec=4');
-        exit;
-    }
-
-    $query = "SELECT id, username, first_name, last_name FROM {$GLOBALS['CONFIG']['db_prefix']}user ORDER BY last_name";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $users = $stmt->fetchAll();
-
-    $GLOBALS['smarty']->assign('state', (int)$_REQUEST['state'] + 1);
-    $GLOBALS['smarty']->assign('users', $users);
-    ob_start();
-    display_smarty_template('user/edit_pick.tpl');
-    $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
-
-    draw_footer();
+    header('Location: admin');
+    exit;
 } elseif (isset($_REQUEST['cancel']) and $_REQUEST['cancel'] == 'Cancel') {
     $last_message = "Action Cancelled";
     header('Location: admin?last_message=' . urlencode($last_message));
