@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.8.0-release](https://github.com/opendocman/opendocman/compare/v2.7.0-release...v2.8.0-release) (2026-08-11)
+
+
+### Features
+
+* add admin CRUD tables for Users, Departments, and Categories ([#421](https://github.com/opendocman/opendocman/issues/421)) ([7fb59cc](https://github.com/opendocman/opendocman/commit/7fb59ccfef8aeb09a14b21997f442d9b2cab4ddc))
+
+
+### Bug Fixes
+
+* load CheckResult and CheckerInterface before RequirementChecker uses them ([#422](https://github.com/opendocman/opendocman/issues/422)) ([7ff7135](https://github.com/opendocman/opendocman/commit/7ff7135d95c88d5e5b74b41244f722e72cfa0dac))
+* persist Tabulator column widths and add asset cache-busting ([255342e](https://github.com/opendocman/opendocman/commit/255342e16242ec4b76e884f9de2131bfc828d6dc))
+
 ## [2.7.0-release](https://github.com/opendocman/opendocman/compare/v2.6.0-release...v2.7.0-release) (2026-08-07)
 
 
