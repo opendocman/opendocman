@@ -204,6 +204,13 @@ if (!isset($_REQUEST['submit'])) {
     callPluginMethod('onBeforeEditFileSaved');
 
     $filedata->setId($fileId);
+
+    // Ensure the file owner always has admin rights on their own file
+    $ownerId = isset($_REQUEST['file_owner']) ? (int)$_REQUEST['file_owner'] : $filedata->getOwner();
+    if (!isset($_REQUEST['user_permission'][$ownerId]) || (int)$_REQUEST['user_permission'][$ownerId] < 4) {
+        $_REQUEST['user_permission'][$ownerId] = 4;
+    }
+
     $perms_error = false;
     // check submitted data
     // at least one user must have "view" and "modify" rights
