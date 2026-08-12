@@ -78,19 +78,21 @@ class AccessLog extends Plugin
      * @param string $type The type of entry to describe what happened
      * @param PDO $pdo
      */
-    public static function addLogEntry($fileId, $type, PDO $pdo)
+    public static function addLogEntry($fileId, $type, PDO $pdo, $userId = null)
     {
         if ($fileId == 0) {
             global $id;
             $fileId = $id;
         }
 
+        $uid = ($userId !== null) ? $userId : ($_SESSION['uid'] ?? 0);
+
         $query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}access_log (file_id,user_id,timestamp,action) VALUES ( :file_id, :uid, NOW(), :type)";
         $stmt = $pdo->prepare($query);
         $stmt->execute(
             array(
                 ':file_id' => $fileId,
-                ':uid' => $_SESSION['uid'],
+                ':uid' => $uid,
                 ':type' => $type
             )
         );
