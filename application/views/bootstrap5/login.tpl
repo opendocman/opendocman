@@ -43,6 +43,12 @@
                                 <a href="signup" class="text-decoration-none small">{$g_lang_signup}</a>
                             {/if}
                         </div>
+                        {if $g_public_sharing eq 'True'}
+                        <div class="text-center mt-2">
+                            <a href="public" class="text-decoration-none small">{$g_lang_public_link}</a>
+                        </div>
+                        {/if}
+                        </div>
                     </div>
                 </div>
             </div>
