@@ -148,6 +148,8 @@ if (!isset($_REQUEST['submit'])) {
         $GLOBALS['smarty']->assign('description', $description);
         $GLOBALS['smarty']->assign('comment', $comment);
         $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
+        $GLOBALS['smarty']->assign('is_public', $filedata->getIsPublic());
+        $GLOBALS['smarty']->assign('public_sharing', $GLOBALS['CONFIG']['public_sharing'] ?? 'False');
 
         // Load existing document-level permissions for pre-population
         $deptPermQuery = "SELECT dept_id, rights FROM {$GLOBALS['CONFIG']['db_prefix']}dept_perms WHERE fid = :fid";
@@ -235,6 +237,9 @@ if (!isset($_REQUEST['submit'])) {
     if (isset($_REQUEST['file_department'])) {
         $filedata->setDepartment($_REQUEST['file_department']);
     }
+
+    // Update the public file sharing flag
+    $filedata->setIsPublic(isset($_POST['is_public']) ? 1 : 0);
 
     // Update the file with the new values
     $filedata->updateData();

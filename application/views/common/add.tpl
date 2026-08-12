@@ -73,6 +73,13 @@
                     <hr>
                 </div>
 
+                {if $public_sharing eq 'True'}
+                <div class="mb-3 form-check">
+                    <input type="checkbox" name="is_public" id="is_public" value="1" class="form-check-input">
+                    <label class="form-check-label" for="is_public">{$g_lang_label_public}</label>
+                </div>
+                {/if}
+
                 <div class="mb-3">
                     <label class="form-label">
                         <a href="help.html#Add_File_-_Description" onClick="return popup(this, 'Help')" class="text-decoration-none">{$g_lang_label_description}</a>

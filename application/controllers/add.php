@@ -137,6 +137,7 @@ if (!isset($_POST['submit'])) {
     $GLOBALS['smarty']->assign('dept_perms_array', $dept_perms_array);
     $GLOBALS['smarty']->assign('user_id', $_SESSION['uid']);
     $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
+    $GLOBALS['smarty']->assign('public_sharing', $GLOBALS['CONFIG']['public_sharing'] ?? 'False');
 
     // Generate CSRF token for the category AJAX endpoint (different action from the page)
     if (isset($GLOBALS['csrf'])) {
@@ -216,6 +217,7 @@ if (!isset($_POST['submit'])) {
         } else {
             $publishable= '1';
         }
+        $is_public = isset($_POST['is_public']) ? 1 : 0;
         $result_array = array();
 
         // If the admin has chosen to assign the department
@@ -282,7 +284,8 @@ if (!isset($_POST['submit'])) {
             department,
             comment,
             default_rights,
-            publishable
+            publishable,
+            is_public
         )
             VALUES
         (
@@ -295,7 +298,8 @@ if (!isset($_POST['submit'])) {
             :current_user_dept,
             :comment,
             0,
-            $publishable
+            $publishable,
+            $is_public
         )";
 
         $file_data_stmt = $pdo->prepare($file_data_query);
