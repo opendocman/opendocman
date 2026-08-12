@@ -205,9 +205,9 @@ if (!isset($_REQUEST['submit'])) {
 
     $filedata->setId($fileId);
 
-    // Ensure the file owner always has admin rights on their own file
+    // Ensure the file owner has admin rights if not explicitly set in the form
     $ownerId = isset($_REQUEST['file_owner']) ? (int)$_REQUEST['file_owner'] : $filedata->getOwner();
-    if (!isset($_REQUEST['user_permission'][$ownerId]) || (int)$_REQUEST['user_permission'][$ownerId] < 4) {
+    if (!isset($_REQUEST['user_permission'][$ownerId])) {
         $_REQUEST['user_permission'][$ownerId] = 4;
     }
 
