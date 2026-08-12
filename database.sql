@@ -6,7 +6,7 @@ CREATE TABLE `odm_access_log` (
                 `file_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-                `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
+                `action` enum('A','B','C','V','D','M','X','I','O','Y','R','U') NOT NULL
             ) ENGINE = MYISAM;
 
 CREATE TABLE `odm_admin` (
@@ -44,6 +44,7 @@ CREATE TABLE `odm_data` (
                 department smallint(6) unsigned default NULL,
                 default_rights tinyint(4) default NULL,
                 publishable tinyint(4) default NULL,
+                is_public tinyint(1) DEFAULT 0,
                 reviewer int(11) unsigned default NULL,
                 reviewer_comments varchar(255) default NULL,
                 PRIMARY KEY  (id),
@@ -166,7 +167,7 @@ INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
 INSERT INTO `odm_user` VALUES (NULL,'admin',md5('admin'),'1','5555551212','admin@example.com','User','Admin','',0,1,1);
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.0');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.1');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');
@@ -178,6 +179,7 @@ INSERT INTO `odm_settings` VALUES(NULL, 'snapshotDir', '/var/www/snapshots/', 'L
 INSERT INTO `odm_settings` VALUES(NULL, 'max_filesize', '5000000', 'Set the maximum file upload size', 'num|maxsize=255');
 INSERT INTO `odm_settings` VALUES(NULL, 'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255');
 INSERT INTO `odm_settings` VALUES(NULL, 'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num');
+INSERT INTO `odm_settings` VALUES(NULL, 'public_sharing', 'False', '(True/False) Enable public file sharing page. When enabled, files marked as public and approved will be visible without authentication.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');
