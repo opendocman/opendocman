@@ -53,6 +53,16 @@ $lang['welcome2'] = "Güçlü depolama, yayınlama ve uyarlama kontrol özellikl
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonim Sayfası';
 $lang['welcome_anonymous_title'] = 'OpenDocMan Anonim Sayfası: Hepsini Hepsini';
 
+// Public file sharing
+$lang['public_link'] = 'Genel dosyaları görmek için buraya tıklayınız';
+$lang['public_page_title'] = 'Genel Dosyalar: Tümünü Listele';
+$lang['public_page_h1'] = 'Genel Dosyalar';
+$lang['public'] = 'Genel';
+$lang['label_public'] = 'Genel dosya';
+$lang['message_public_view'] = 'Genel dosyaları görüntülüyorsunuz';
+$lang['public_download'] = 'İndir';
+$lang['message_public_disabled'] = 'Genel dosya paylaşımı devre dışı';
+
 // GLOBAL TERİMLER
 $lang['action'] = 'İşlem';
 $lang['all'] = 'Tümü';

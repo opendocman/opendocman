@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Přihlaste se pro použití systému.';
 $lang['welcome_anonymous_title'] = 'OpenDocMan Host: Zobrazit vše';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Host';
 
+// Public file sharing
+$lang['public_link'] = 'Klikněte zde pro prohlížení veřejných souborů';
+$lang['public_page_title'] = 'Veřejné soubory: Zobrazit vše';
+$lang['public_page_h1'] = 'Veřejné soubory';
+$lang['public'] = 'Veřejný';
+$lang['label_public'] = 'Veřejný soubor';
+$lang['message_public_view'] = 'Prohlížíte veřejné soubory';
+$lang['public_download'] = 'Stáhnout';
+$lang['message_public_disabled'] = 'Sdílení veřejných souborů je zakázáno';
+
 //GLOBAL TERMS
 $lang['action'] = 'Akce';
 $lang['all'] = 'Vše';

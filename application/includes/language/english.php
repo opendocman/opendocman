@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Log in to begin.';
 $lang['welcome_anonymous_title'] = 'Anonymous Page: List All';
 $lang['welcome_anonymous_h1'] = 'Anonymous Page';
 
+// Public file sharing
+$lang['public_link'] = 'Click here to view public files';
+$lang['public_page_title'] = 'Public Files: List All';
+$lang['public_page_h1'] = 'Public Files';
+$lang['public'] = 'Public';
+$lang['label_public'] = 'Public file';
+$lang['message_public_view'] = 'You are viewing public files';
+$lang['public_download'] = 'Download';
+$lang['message_public_disabled'] = 'Public file sharing is disabled';
+
 //GLOBAL TERMS
 $lang['action'] = 'Action';
 $lang['all'] = 'All';

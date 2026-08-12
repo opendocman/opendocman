@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Log ind for at begynde med at bruge systemet\'s kraftige la
 $lang['welcome_anonymous_title'] = 'OpenDocMan anonym side: Vis alle';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan anonym side';
 
+// Public file sharing
+$lang['public_link'] = 'Klik her for at se offentlige filer';
+$lang['public_page_title'] = 'Offentlige filer: Vis alle';
+$lang['public_page_h1'] = 'Offentlige filer';
+$lang['public'] = 'Offentlig';
+$lang['label_public'] = 'Offentlig fil';
+$lang['message_public_view'] = 'Du ser offentlige filer';
+$lang['public_download'] = 'Download';
+$lang['message_public_disabled'] = 'Offentlig fildeling er deaktiveret';
+
 //GLOBAL TERMS
 $lang['action'] = 'Aktion';
 $lang['all'] = 'Alle';

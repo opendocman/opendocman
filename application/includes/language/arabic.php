@@ -35,6 +35,16 @@ $lang['welcome2'] = 'الدخول للنظام';
 $lang['welcome_anonymous_title'] = 'صفحات مجهولة : استعراض الكل';
 $lang['welcome_anonymous_h1'] = 'صفحة مجهولة';
 
+// Public file sharing
+$lang['public_link'] = 'انقر هنالعرض الملفات العامة';
+$lang['public_page_title'] = 'الملفات العامة: عرض الكل';
+$lang['public_page_h1'] = 'الملفات العامة';
+$lang['public'] = 'عام';
+$lang['label_public'] = 'ملف عام';
+$lang['message_public_view'] = 'أنت الآن تشاهد الملفات العامة';
+$lang['public_download'] = 'تحميل';
+$lang['message_public_disabled'] = 'المشاركة العامة للملفات معطلة';
+
 //GLOBAL TERMS
 $lang['action'] = 'العملية';
 $lang['all'] = 'الكل';

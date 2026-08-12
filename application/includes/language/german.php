@@ -35,6 +35,16 @@ $lang['welcome2'] = '';
 $lang['welcome_anonymous_title'] = 'OpenDocMan: Unbenannte Seite: Alle Anzeigen';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan: Unbenannte Seite';
 
+// Public file sharing
+$lang['public_link'] = 'Klicken Sie hier, um öffentliche Dateien anzuzeigen';
+$lang['public_page_title'] = 'Öffentliche Dateien: Alle anzeigen';
+$lang['public_page_h1'] = 'Öffentliche Dateien';
+$lang['public'] = 'Öffentlich';
+$lang['label_public'] = 'Öffentliche Datei';
+$lang['message_public_view'] = 'Sie betrachten öffentliche Dateien';
+$lang['public_download'] = 'Herunterladen';
+$lang['message_public_disabled'] = 'Öffentliche Dateifreigabe ist deaktiviert';
+
 //GLOBAL TERMS
 $lang['action'] = 'Aktion';
 $lang['all'] = 'Alle';

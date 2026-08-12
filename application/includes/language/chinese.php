@@ -35,6 +35,16 @@ $lang['welcome2'] = '登录进来开始使用本系统强大的文档存储，�
 $lang['welcome_anonymous_title'] = '匿名页：所有列表 ';
 $lang['welcome_anonymous_h1'] = '匿名页 ';
 
+// Public file sharing
+$lang['public_link'] = '点击此处查看公共文件';
+$lang['public_page_title'] = '公共文件：所有列表';
+$lang['public_page_h1'] = '公共文件';
+$lang['public'] = '公共';
+$lang['label_public'] = '公共文件';
+$lang['message_public_view'] = '您正在查看公共文件';
+$lang['public_download'] = '下载';
+$lang['message_public_disabled'] = '公共文件共享已禁用';
+
 //GLOBAL TERMS
 $lang['action'] = '行动';
 $lang['all'] = '所有';

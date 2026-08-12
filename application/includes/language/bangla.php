@@ -35,6 +35,16 @@ $lang['welcome2'] = 'সিস্টেমের শক্তিশালী স
 $lang['welcome_anonymous_title'] = 'OpenDocMan অজ্ঞাতপরিচয় পাতাঃ  সবগুলো তালিকাবদ্দ কর';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan অজ্ঞাতপরিচয় পাতা';
 
+// Public file sharing
+$lang['public_link'] = 'সার্বজনীন ফাইল দেখতে এখানে ক্লিক করুন';
+$lang['public_page_title'] = 'সার্বজনীন ফাইল: সবগুলো তালিকাবদ্ধ কর';
+$lang['public_page_h1'] = 'সার্বজনীন ফাইল';
+$lang['public'] = 'সার্বজনীন';
+$lang['label_public'] = 'সার্বজনীন ফাইল';
+$lang['message_public_view'] = 'আপনি সার্বজনীন ফাইল দেখছেন';
+$lang['public_download'] = 'ডাউনলোড';
+$lang['message_public_disabled'] = 'সার্বজনীন ফাইল ভাগাভাগি অক্ষম';
+
 //GLOBAL TERMS
 $lang['action'] = 'পদক্ষেপ';
 $lang['all'] = 'সকল';

@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Prijavite se kako biste počeli koristiti moćnu sistemsku 
 $lang['welcome_anonymous_title'] = 'OpenDocMan Anonimna Stranica: Prikaži sve';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonimna Stranica';
 
+// Public file sharing
+$lang['public_link'] = 'Kliknite ovdje za pregled javnih datoteka';
+$lang['public_page_title'] = 'Javne datoteke: Popis svih';
+$lang['public_page_h1'] = 'Javne datoteke';
+$lang['public'] = 'Javno';
+$lang['label_public'] = 'Javna datoteka';
+$lang['message_public_view'] = 'Pregledavate javne datoteke';
+$lang['public_download'] = 'Preuzmi';
+$lang['message_public_disabled'] = 'Javno dijeljenje datoteka je onemogućeno';
+
 //GLOBAL TERMS
 $lang['action'] = 'Radnja';
 $lang['all'] = 'Sve';

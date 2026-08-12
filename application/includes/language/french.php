@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Veuillez vous identifier pour commencer.';
 $lang['welcome_anonymous_title'] = 'Consultation anonyme: Tout aficher';
 $lang['welcome_anonymous_h1'] = 'Page anonyme';
 
+// Public file sharing
+$lang['public_link'] = 'Cliquez ici pour accéder aux fichiers publics';
+$lang['public_page_title'] = 'Fichiers publics: Tout afficher';
+$lang['public_page_h1'] = 'Fichiers publics';
+$lang['public'] = 'Public';
+$lang['label_public'] = 'Fichier public';
+$lang['message_public_view'] = 'Vous consultez les fichiers publics';
+$lang['public_download'] = 'Télécharger';
+$lang['message_public_disabled'] = 'Le partage de fichiers publics est désactivé';
+
 //GLOBAL TERMS
 $lang['action'] = 'Action';
 $lang['all'] = 'Tout';

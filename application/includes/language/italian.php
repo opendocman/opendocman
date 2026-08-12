@@ -35,6 +35,16 @@ $lang['welcome2'] = 'Accedi per iniziare ad usare i potenti strumenti di archivi
 $lang['welcome_anonymous_title'] = 'Accesso anonimo: Visualizza tutto';
 $lang['welcome_anonymous_h1'] = 'Accesso anonimo';
 
+// Public file sharing
+$lang['public_link'] = 'Clicca qui per visualizzare i file pubblici';
+$lang['public_page_title'] = 'File pubblici: Elenca tutto';
+$lang['public_page_h1'] = 'File pubblici';
+$lang['public'] = 'Pubblico';
+$lang['label_public'] = 'File pubblico';
+$lang['message_public_view'] = 'Stai visualizzando i file pubblici';
+$lang['public_download'] = 'Scarica';
+$lang['message_public_disabled'] = 'La condivisione pubblica dei file è disabilitata';
+
 //GLOBAL TERMS
 $lang['action'] = 'Azione';
 $lang['all'] = 'Tutto';
