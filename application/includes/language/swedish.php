@@ -45,6 +45,7 @@ $lang['label_public'] = 'Publik fil';
 $lang['message_public_view'] = 'Du tittar på publika filer';
 $lang['public_download'] = 'Ladda ner';
 $lang['message_public_disabled'] = 'Publik fildelning är inaktiverad';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Åtgärd';

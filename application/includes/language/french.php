@@ -44,6 +44,7 @@ $lang['label_public'] = 'Fichier public';
 $lang['message_public_view'] = 'Vous consultez les fichiers publics';
 $lang['public_download'] = 'Télécharger';
 $lang['message_public_disabled'] = 'Le partage de fichiers publics est désactivé';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Action';

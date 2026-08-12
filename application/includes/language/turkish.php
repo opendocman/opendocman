@@ -62,6 +62,7 @@ $lang['label_public'] = 'Genel dosya';
 $lang['message_public_view'] = 'Genel dosyaları görüntülüyorsunuz';
 $lang['public_download'] = 'İndir';
 $lang['message_public_disabled'] = 'Genel dosya paylaşımı devre dışı';
+$lang['public_no_files'] = 'No public files available.';
 
 // GLOBAL TERİMLER
 $lang['action'] = 'İşlem';

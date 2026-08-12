@@ -44,6 +44,7 @@ $lang['label_public'] = '公共文件';
 $lang['message_public_view'] = '您正在查看公共文件';
 $lang['public_download'] = '下载';
 $lang['message_public_disabled'] = '公共文件共享已禁用';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = '行动';

@@ -44,6 +44,7 @@ $lang['label_public'] = 'Fișier public';
 $lang['message_public_view'] = 'Vizualizați fișiere publice';
 $lang['public_download'] = 'Descărcați';
 $lang['message_public_disabled'] = 'Partajarea publică a fișierelor este dezactivată';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Actiune';

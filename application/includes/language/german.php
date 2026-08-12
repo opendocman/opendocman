@@ -44,6 +44,7 @@ $lang['label_public'] = 'Öffentliche Datei';
 $lang['message_public_view'] = 'Sie betrachten öffentliche Dateien';
 $lang['public_download'] = 'Herunterladen';
 $lang['message_public_disabled'] = 'Öffentliche Dateifreigabe ist deaktiviert';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Aktion';

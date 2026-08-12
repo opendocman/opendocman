@@ -44,6 +44,7 @@ $lang['label_public'] = 'সার্বজনীন ফাইল';
 $lang['message_public_view'] = 'আপনি সার্বজনীন ফাইল দেখছেন';
 $lang['public_download'] = 'ডাউনলোড';
 $lang['message_public_disabled'] = 'সার্বজনীন ফাইল ভাগাভাগি অক্ষম';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'পদক্ষেপ';

@@ -44,6 +44,7 @@ $lang['label_public'] = 'பொது கோப்பு';
 $lang['message_public_view'] = 'நீங்கள் பொது கோப்புகளை பார்வையிடுகிறீர்கள்';
 $lang['public_download'] = 'பதிவிறக்கம்';
 $lang['message_public_disabled'] = 'பொது கோப்பு பகிர்வு முடக்கப்பட்டுள்ளது';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Action';

@@ -44,6 +44,7 @@ $lang['label_public'] = 'Openbaar bestand';
 $lang['message_public_view'] = 'U bekijkt openbare bestanden';
 $lang['public_download'] = 'Download';
 $lang['message_public_disabled'] = 'Openbaar delen van bestanden is uitgeschakeld';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Aktie';

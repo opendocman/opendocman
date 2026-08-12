@@ -44,6 +44,7 @@ $lang['label_public'] = 'Javna datoteka';
 $lang['message_public_view'] = 'Pregledavate javne datoteke';
 $lang['public_download'] = 'Preuzmi';
 $lang['message_public_disabled'] = 'Javno dijeljenje datoteka je onemogućeno';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Radnja';

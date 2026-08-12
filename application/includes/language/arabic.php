@@ -44,6 +44,7 @@ $lang['label_public'] = 'ملف عام';
 $lang['message_public_view'] = 'أنت الآن تشاهد الملفات العامة';
 $lang['public_download'] = 'تحميل';
 $lang['message_public_disabled'] = 'المشاركة العامة للملفات معطلة';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'العملية';

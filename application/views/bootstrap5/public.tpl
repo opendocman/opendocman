@@ -49,7 +49,7 @@
                         </table>
                     </div>
                     {else}
-                    <p class="text-muted">No public files available.</p>
+                    <p class="text-muted">{$g_lang_public_no_files}</p>
                     {/if}
                 </div>
             </div>

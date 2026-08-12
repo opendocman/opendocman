@@ -44,6 +44,7 @@ $lang['label_public'] = 'Veřejný soubor';
 $lang['message_public_view'] = 'Prohlížíte veřejné soubory';
 $lang['public_download'] = 'Stáhnout';
 $lang['message_public_disabled'] = 'Sdílení veřejných souborů je zakázáno';
+$lang['public_no_files'] = 'No public files available.';
 
 //GLOBAL TERMS
 $lang['action'] = 'Akce';
