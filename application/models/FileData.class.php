@@ -185,20 +185,20 @@ if (!defined('FileData_class')) {
          * return filesize
          * @return mixed
          */
-public function getFileSize()
-    {
-        return $this->filesize;
-    }
+        public function getFileSize()
+        {
+            return $this->filesize;
+        }
 
-    public function getIsPublic()
-    {
-        return $this->is_public;
-    }
+        public function getIsPublic()
+        {
+            return $this->is_public;
+        }
 
-    public function setIsPublic($val)
-    {
-        $this->is_public = $val;
-    }
+        public function setIsPublic($val)
+        {
+            $this->is_public = $val;
+        }
 
         /**
          * return this file's category id
