@@ -25,6 +25,22 @@ export default async function globalSetup() {
   const root = path.resolve(__dirname, '..');
   loadEnvFile(path.join(root, '.env'));
 
+  // Remove leftover rows from previous E2E runs (accumulated categories,
+  // departments, and files can push fresh rows past a listing's page size and
+  // break assertions). Best-effort like the seed below.
+  try {
+    child_process.execFileSync('php', ['scripts/cleanup_e2e_data.php'], {
+      cwd: root,
+      env: process.env,
+      stdio: 'pipe',
+    });
+  } catch (err: any) {
+    console.warn(
+      '[globalSetup] cleanup_e2e_data.php skipped — run `php scripts/cleanup_e2e_data.php` manually. ' +
+        (err?.message || err)
+    );
+  }
+
   // Seed a non-admin user (idempotent) required by the Permission-inheritance
   // E2E suite. Best-effort: skip if php/db isn't reachable from the test
   // runner (e.g. the app runs in Docker); the seed can be run manually via

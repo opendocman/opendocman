@@ -37,6 +37,13 @@ project `.env` into the test process before workers start (Playwright does not
 auto-load `.env` itself), and it runs the non-admin user seed. Explicit shell
 env vars override `.env` values.
 
+Before each run, `global-setup.ts` also runs `scripts/cleanup_e2e_data.php`,
+which deletes leftover rows from previous E2E runs (categories/departments
+named `E2E %`, files named `odm-*`/`test_doc*`). Several tests intentionally
+do not delete their own artifacts, so without this cleanup the accumulated
+rows eventually push a freshly-created row past a listing's page size and
+break assertions. Run it manually if a prior run was interrupted:
+
 ## Ensuring correct credentials
 
 The seeded DB admin password may differ from `.env` `ADMIN_PASSWORD` (e.g. the
