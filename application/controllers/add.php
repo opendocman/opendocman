@@ -272,6 +272,30 @@ if (!isset($_POST['submit'])) {
             $owner_id = $_SESSION['uid'];
         }
 
+        // Ensure the file owner has admin rights if not explicitly set in the form.
+        // This prevents the owner from being locked out of a file they just created.
+        // Mirrors the guard in edit.php.
+        if (!isset($_REQUEST['user_permission'][$owner_id])) {
+            $_REQUEST['user_permission'][$owner_id] = 4;
+        }
+
+        // At least one user must have "write" or "admin" rights.
+        // Mirrors the validation in edit.php (ec=12).
+        $perms_error = true;
+        if (isset($_REQUEST['user_permission']) && is_array($_REQUEST['user_permission'])) {
+            foreach ($_REQUEST['user_permission'] as $permission) {
+                if ($permission > 2) {
+                    $perms_error = false;
+                    break;
+                }
+            }
+        }
+
+        if ($perms_error) {
+            header('Location:error?ec=12');
+            exit;
+        }
+
         // INSERT file info into data table
         $file_data_query = "INSERT INTO
         {$GLOBALS['CONFIG']['db_prefix']}data (

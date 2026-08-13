@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {ldelim}
         {ldelim}id: {$user.id}, last_name: '{$user.last_name|escape:'javascript'}', first_name: '{$user.first_name|escape:'javascript'}'{rdelim},
         {/foreach}
     ];
-    initPermissionsEditor('#permissionsEditor', {ldelim} departments: departments, users: users {rdelim});
+    initPermissionsEditor('#permissionsEditor', {ldelim} departments: departments, users: users, defaultOwnerId: {$pre_selected_owner|default:$user_id|default:'0'} {rdelim});
 
     {if isset($dept_perms) || isset($user_perms)}
     var editor = initPermissionsEditor('#permissionsEditor');
@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', function () {ldelim}
 {rdelim});
 {/if}
 {literal}
+    var ownerSelect = document.querySelector('select[name="file_owner"]');
+    if (ownerSelect) {
+        ownerSelect.addEventListener('change', function () {
+            var editor = initPermissionsEditor('#permissionsEditor');
+            if (editor) editor.setDefaultOwner(ownerSelect.value);
+        });
+    }
     document.getElementById('permissionsEditor').closest('form').addEventListener('submit', function () {
         var form = this;
         var editor = initPermissionsEditor('#permissionsEditor');
