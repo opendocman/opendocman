@@ -28,11 +28,22 @@ const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'admin';
 
 async function login(page: any) {
-  await retryGoto(page, '/');
-  await page.fill('[name="frmuser"]', ADMIN_USER);
-  await page.fill('[name="frmpass"]', ADMIN_PASS);
-  await page.click('button[name="login"]');
-  await page.waitForURL('**/out');
+  // The single-threaded PHP built-in server intermittently returns an empty
+  // response on the login POST, so retry the whole login sequence.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await page.context().clearCookies();
+    await retryGoto(page, '/');
+    await page.fill('[name="frmuser"]', ADMIN_USER);
+    await page.fill('[name="frmpass"]', ADMIN_PASS);
+    await page.click('button[name="login"]');
+    try {
+      await page.waitForURL('**/out', { timeout: 8000 });
+      return;
+    } catch {
+      // login failed (empty response or CSRF race); retry with a fresh page
+    }
+  }
+  throw new Error('Login failed after multiple attempts');
 }
 
 async function setPublicSharing(page: any, value: string) {

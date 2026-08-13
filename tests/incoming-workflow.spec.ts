@@ -22,13 +22,23 @@ async function retryGoto(page: any, url: string, opts = {}) {
 }
 
 async function login(page: any) {
-  await page.context().clearCookies();
-  await page.goto('/logout').catch(() => {});
-  await retryGoto(page, '/index');
-  await page.fill('input[name="frmuser"]', ADMIN_USER);
-  await page.fill('input[name="frmpass"]', ADMIN_PASS);
-  await page.locator('button[name="login"], input[type="submit"][name="login"]').click();
-  await page.waitForURL('**/out', { timeout: 5000 });
+  // The single-threaded PHP built-in server intermittently returns an empty
+  // response on the login POST, so retry the whole login sequence.
+  for (let attempt = 0; attempt < 5; attempt++) {
+    await page.context().clearCookies();
+    await page.goto('/logout').catch(() => {});
+    await retryGoto(page, '/index');
+    await page.fill('input[name="frmuser"]', ADMIN_USER);
+    await page.fill('input[name="frmpass"]', ADMIN_PASS);
+    await page.locator('button[name="login"], input[type="submit"][name="login"]').click();
+    try {
+      await page.waitForURL('**/out', { timeout: 8000 });
+      return;
+    } catch {
+      // login failed (empty response or CSRF race); retry with a fresh page
+    }
+  }
+  throw new Error('Login failed after multiple attempts');
 }
 
 async function clickButton(page: any, btn: SubmitBtn) {
@@ -73,19 +83,34 @@ test.describe('Incoming revision staging workflow', () => {
     await page.selectOption('select[name="file_department"]', { index: 0 });
 
     await clickButton(page, { name: 'submit', value: 'Add Document' });
-    // PHP built-in server sometimes returns empty responses on POST;
-    // navigate to /out to confirm the upload succeeded via the file table
-    await page.waitForTimeout(2000);
-    await retryGoto(page, '/out');
-    await page.waitForSelector('#file-table .tabulator-row', { timeout: 5000 });
+    // add.php redirects to /details?id=<fileId> on success. The PHP built-in
+    // server sometimes returns empty responses on POST, so poll for the
+    // redirect URL rather than relying on the /out table's first row
+    // (which is the OLDEST file because the table is ordered by id ASC).
+    let fileIdFromUrl = '';
+    for (let attempt = 0; attempt < 5; attempt++) {
+      await page.waitForTimeout(1000);
+      const match = page.url().match(/details\?id=(\d+)/);
+      if (match) { fileIdFromUrl = match[1]; break; }
+      await retryGoto(page, '/add');
+      await page.locator('input[name="file[]"]').waitFor({ state: 'attached', timeout: 5000 });
+      await page.fill('input[name="description"]', 'E2E test doc ' + UNIQUE);
+      await page.setInputFiles('input[name="file[]"]', path.join(TEST_DIR, 'test_doc.txt'));
+      await page.selectOption('select[name="category"]', { index: 1 });
+      await page.selectOption('select[name="file_department"]', { index: 0 });
+      await clickButton(page, { name: 'submit', value: 'Add Document' });
+    }
+    if (!fileIdFromUrl) {
+      throw new Error('Could not capture file ID from upload redirect');
+    }
+    fileId = parseInt(fileIdFromUrl);
 
-    // Find the uploaded file in the table and capture its ID
-    const detailsLink = page.locator('#file-table .tabulator-row').first().locator('a').first();
-    await detailsLink.waitFor({ timeout: 5000 });
-    const href = await detailsLink.getAttribute('href');
-    const idMatch = href?.match(/id=(\d+)/);
-    if (!idMatch) throw new Error('Could not find file ID after upload');
-    fileId = parseInt(idMatch[1]);
+    // A freshly-uploaded file is publishable=0 (awaiting review), so it shows
+    // under "Documents waiting to be reviewed" (/toBePublished), NOT /out.
+    // Verify it appears there for the reviewer.
+    await retryGoto(page, '/toBePublished');
+    const ourRow = page.locator(`#file-table .tabulator-row`).filter({ has: page.locator(`a[href*="details?id=${fileId}"]`) });
+    await expect(ourRow).toHaveCount(1, { timeout: 8000 });
   });
 
   test('2. Approve the file as reviewer', async ({ page }) => {
@@ -93,14 +118,15 @@ test.describe('Incoming revision staging workflow', () => {
     await retryGoto(page, '/toBePublished');
     await page.waitForTimeout(1000);
 
-    // Select the file row in Tabulator
+    // Select the row for OUR file (the table is ordered by id ASC, so the
+    // first row may be a stale leftover from a previous run).
     const table = page.locator('#file-table');
     await table.waitFor({ state: 'visible', timeout: 5000 });
 
-    // Click the checkbox in the first row to select it
-    const firstRow = page.locator('#file-table .tabulator-row').first();
-    if (await firstRow.isVisible()) {
-      await firstRow.locator('input[type="checkbox"]').click();
+    // Click the checkbox in our file's row
+    const ourRow = page.locator(`#file-table .tabulator-row`).filter({ has: page.locator(`a[href*="details?id=${fileId}"]`) }).first();
+    if (await ourRow.isVisible()) {
+      await ourRow.locator('input[type="checkbox"]').click();
     }
 
     // Click Authorize button
@@ -118,15 +144,9 @@ test.describe('Incoming revision staging workflow', () => {
   test('3. Check out and check in a new version, then approve', async ({ page }) => {
     await login(page);
 
-    // Go to out page and find our file
-    await retryGoto(page, '/out');
-    await page.waitForTimeout(1000);
-
-    // Click the details link for our file (first row)
-    const detailsLink = page.locator('#file-table .tabulator-row').first().locator('a').first();
-    await detailsLink.click();
-    await page.waitForTimeout(2000);
+    // Go to the details page for our captured file and check it out.
     await retryGoto(page, '/details?id=' + fileId);
+    await page.waitForTimeout(1000);
 
     // Click checkout link
     const checkoutLink = page.locator('a[href*="check-out"]');
@@ -134,31 +154,15 @@ test.describe('Incoming revision staging workflow', () => {
       await checkoutLink.click();
     }
     await page.waitForTimeout(2000);
-    await retryGoto(page, '/check-out?id=' + fileId);
+    // The details-page checkout link carries access_right=modify, which
+    // check-out.php requires in order to lock the file for check-in.
+    await retryGoto(page, '/check-out?id=' + fileId + '&access_right=modify');
 
-    // Confirm checkout
+    // Confirm checkout (this triggers a file download; the browser stays put)
     await clickButton(page, { name: 'submit', value: 'Click here' });
-    // File downloads, page may redirect
     await page.waitForTimeout(1000);
 
     // Now check in a new version
-    await retryGoto(page, '/check-in?id=' + (await page.evaluate(() => {
-      const m = window.location.href.match(/id=(\d+)/);
-      return m ? m[1] : '';
-    })));
-
-    // If the URL didn't have the ID, navigate to check-in with the file ID
-    // We need to find the file ID. Let's navigate to details page first.
-    await retryGoto(page, '/out');
-    await page.waitForTimeout(1000);
-
-    // Get file ID from first details link
-    const firstDetailsHref = await page.locator('#file-table .tabulator-row').first().locator('a').first().getAttribute('href');
-    const idMatch = firstDetailsHref?.match(/id=(\d+)/);
-    if (!idMatch) throw new Error('Could not find file ID');
-    fileId = parseInt(idMatch[1]);
-
-    // Go to check-in page
     await retryGoto(page, '/check-in?id=' + fileId);
     await page.waitForSelector('input[name="file"]');
 
@@ -166,8 +170,13 @@ test.describe('Incoming revision staging workflow', () => {
     await page.setInputFiles('input[name="file"]', path.join(TEST_DIR, 'test_doc_v2.txt'));
     await page.fill('textarea[name="note"]', 'Updated via E2E test');
     await clickButton(page, { name: 'submit', value: 'Check  Document In' });
-    await page.waitForTimeout(2000);
-    await retryGoto(page, '/out');
+    // The check-in POST redirects to /out?last_message=...; wait for that
+    // so the success flash message is present.
+    for (let attempt = 0; attempt < 5; attempt++) {
+      await page.waitForTimeout(1000);
+      if (/out\?last_message=/.test(page.url())) break;
+      await retryGoto(page, '/out');
+    }
     await waitForMessage(page, 'checked in');
 
     // === Task 4 Step 1: Pending-state assertions after check-in ===
@@ -186,8 +195,8 @@ test.describe('Incoming revision staging workflow', () => {
     await retryGoto(page, '/toBePublished');
     await page.waitForTimeout(1000);
 
-    // Select and approve the pending revision
-    const firstRow = page.locator('#file-table .tabulator-row').first();
+    // Select and approve the pending revision for OUR file
+    const firstRow = page.locator(`#file-table .tabulator-row`).filter({ has: page.locator(`a[href*="details?id=${fileId}"]`) }).first();
     if (await firstRow.isVisible()) {
       await firstRow.locator('input[type="checkbox"]').click();
     }
@@ -228,7 +237,7 @@ test.describe('Incoming revision staging workflow', () => {
       await checkoutLink.click();
     }
     await page.waitForTimeout(2000);
-    await retryGoto(page, '/check-out?id=' + fileId);
+    await retryGoto(page, '/check-out?id=' + fileId + '&access_right=modify');
     await clickButton(page, { name: 'submit', value: 'Click here' });
     await page.waitForTimeout(1000);
 
@@ -245,7 +254,7 @@ test.describe('Incoming revision staging workflow', () => {
     await retryGoto(page, '/toBePublished');
     await page.waitForTimeout(1000);
 
-    const rejectRow = page.locator('#file-table .tabulator-row').first();
+    const rejectRow = page.locator(`#file-table .tabulator-row`).filter({ has: page.locator(`a[href*="details?id=${fileId}"]`) }).first();
     if (await rejectRow.isVisible()) {
       await rejectRow.locator('input[type="checkbox"]').click();
     }
@@ -254,8 +263,13 @@ test.describe('Incoming revision staging workflow', () => {
 
     await page.fill('textarea[name="comments"]', 'Rejected via E2E test - needs fixes');
     await clickButton(page, { name: 'submit', value: 'Reject' });
-    await page.waitForTimeout(2000);
-    await retryGoto(page, '/out');
+    // Reject redirects to /out?last_message=...; wait for that so the flash
+    // message is present (the PHP server may return an empty POST response).
+    for (let attempt = 0; attempt < 5; attempt++) {
+      await page.waitForTimeout(1000);
+      if (/out\?last_message=/.test(page.url())) break;
+      await retryGoto(page, '/out');
+    }
     await waitForMessage(page, 'rejection');
 
     // === Task 4 Step 3: Rejected-state assertions ===
@@ -287,7 +301,7 @@ test.describe('Incoming revision staging workflow', () => {
     // Click checkout
     await checkoutBtn.click();
     await page.waitForTimeout(2000);
-    await retryGoto(page, '/check-out?id=' + fileId);
+    await retryGoto(page, '/check-out?id=' + fileId + '&access_right=modify');
     await clickButton(page, { name: 'submit', value: 'Click here' });
     await page.waitForTimeout(1000);
 
@@ -312,7 +326,7 @@ test.describe('Incoming revision staging workflow', () => {
     await page.waitForTimeout(1000);
 
     // Select the file and permanently delete
-    const deleteRow = page.locator('#file-table .tabulator-row').first();
+    const deleteRow = page.locator(`#file-table .tabulator-row`).filter({ has: page.locator(`a[href*="details?id=${fileId}"]`) }).first();
     if (await deleteRow.isVisible()) {
       await deleteRow.locator('input[type="checkbox"]').click();
     }
