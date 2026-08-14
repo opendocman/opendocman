@@ -65,7 +65,7 @@ if (isset($_GET['submit']) && $_GET['submit'] === 'download' && isset($_GET['id'
     AccessLog::addLogEntry($fileId, 'U', $pdo, 0);
 
     header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . rawurlencode($realname) . '"');
+    header("Content-Disposition: attachment; filename=\"odm_document_" . $fileId . "\"; filename*=UTF-8''" . rawurlencode($realname));
     header('Content-Length: ' . filesize($filePath));
     readfile($filePath);
     exit;

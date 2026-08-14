@@ -48,7 +48,6 @@
                             <a href="public" class="text-decoration-none small">{$g_lang_public_link}</a>
                         </div>
                         {/if}
-                        </div>
                     </div>
                 </div>
             </div>

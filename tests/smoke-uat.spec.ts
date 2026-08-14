@@ -7,7 +7,7 @@ const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'password';
 const NON_ADMIN_USER = process.env.NON_ADMIN_USER || 'e2euser';
 const NON_ADMIN_PASS = process.env.NON_ADMIN_PASSWORD || 'e2euserpass';
 // Display name "last_name, first_name" as seeded by scripts/seed_test_user.php.
-const NON_ADMIN_DISPLAY = 'User, E2E';
+const NON_ADMIN_DISPLAY = process.env.NON_ADMIN_DISPLAY || 'User, E2E';
 const UNIQUE = Date.now();
 
 async function retryGoto(page: any, url: string, opts = {}) {
