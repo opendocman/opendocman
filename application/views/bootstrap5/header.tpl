@@ -22,6 +22,9 @@
                     {if $isadmin eq 'yes'}
                     <li class="nav-item"><a class="nav-link" href="admin">{$g_lang_label_admin}</a></li>
                     {/if}
+                    {if $g_public_sharing eq 'True'}
+                    <li class="nav-item"><a class="nav-link" href="public">{$g_lang_public_page_h1}</a></li>
+                    {/if}
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="profile">{$userName|escape}</a></li>

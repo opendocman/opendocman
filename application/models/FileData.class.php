@@ -57,6 +57,7 @@ if (!defined('FileData_class')) {
         public $read_users;
         public $filesize;
         public $isLocked;
+        public $is_public;
         protected $connection;
 
         public function __construct($id, $connection)
@@ -115,7 +116,8 @@ if (!defined('FileData_class')) {
                 comment,
                 status,
                 department,
-                default_rights
+                default_rights,
+                is_public
               FROM
                 {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               WHERE
@@ -136,6 +138,7 @@ if (!defined('FileData_class')) {
                     $this->status = $row['status'];
                     $this->department = $row['department'];
                     $this->default_rights = $row['default_rights'];
+                    $this->is_public = $row['is_public'] ?? 0;
                 }
             } else {
                 $this->error = 'Non unique file id';
@@ -158,7 +161,8 @@ if (!defined('FileData_class')) {
                 comment = :comment,
                 status = :status,
                 department = :department,
-                default_rights = :default_rights
+                default_rights = :default_rights,
+                is_public = :is_public
                WHERE
                 id = :id
             ";
@@ -172,6 +176,7 @@ if (!defined('FileData_class')) {
                 ':status' => $this->status,
                 ':department' => $this->department,
                 ':default_rights' => $this->default_rights,
+                ':is_public' => $this->is_public,
                 ':id' => $this->id
             ));
         }
@@ -183,6 +188,16 @@ if (!defined('FileData_class')) {
         public function getFileSize()
         {
             return $this->filesize;
+        }
+
+        public function getIsPublic()
+        {
+            return $this->is_public;
+        }
+
+        public function setIsPublic($val)
+        {
+            $this->is_public = $val;
         }
 
         /**

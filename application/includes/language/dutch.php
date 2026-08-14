@@ -35,6 +35,17 @@ $lang['welcome2'] = 'Log in met uw gebruikersnaam om de krachtige opslag-, versi
 $lang['welcome_anonymous_title'] = 'OpenDocMan openbare pagina: Documentenlijst';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan openbare pagina';
 
+// Public file sharing
+$lang['public_link'] = 'Klik hier om openbare bestanden te bekijken';
+$lang['public_page_title'] = 'Openbare bestanden: Lijst alle';
+$lang['public_page_h1'] = 'Openbare bestanden';
+$lang['public'] = 'Openbaar';
+$lang['label_public'] = 'Openbaar bestand';
+$lang['message_public_view'] = 'U bekijkt openbare bestanden';
+$lang['public_download'] = 'Download';
+$lang['message_public_disabled'] = 'Openbaar delen van bestanden is uitgeschakeld';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Aktie';
 $lang['all'] = 'Alles';

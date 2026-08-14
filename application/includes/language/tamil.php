@@ -35,6 +35,17 @@ $lang['welcome2'] = 'தொடங்கும் உள்நுழைய.';
 $lang['welcome_anonymous_title'] = 'அநாமதேய பக்கம்: பட்டியல் அனைத்தும்';
 $lang['welcome_anonymous_h1'] = 'அநாமதேய பக்கம்';
 
+// Public file sharing
+$lang['public_link'] = 'பொது கோப்புகளை பார்வையிட இங்கே கிளிக் செய்யவும்';
+$lang['public_page_title'] = 'பொது கோப்புகள்: பட்டியல் அனைத்தும்';
+$lang['public_page_h1'] = 'பொது கோப்புகள்';
+$lang['public'] = 'பொது';
+$lang['label_public'] = 'பொது கோப்பு';
+$lang['message_public_view'] = 'நீங்கள் பொது கோப்புகளை பார்வையிடுகிறீர்கள்';
+$lang['public_download'] = 'பதிவிறக்கம்';
+$lang['message_public_disabled'] = 'பொது கோப்பு பகிர்வு முடக்கப்பட்டுள்ளது';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Action';
 $lang['all'] = 'All';

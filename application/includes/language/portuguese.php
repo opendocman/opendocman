@@ -35,6 +35,17 @@ $lang['welcome2'] = 'Entre para começar a usar o sistema com recursos poderosos
 $lang['welcome_anonymous_title'] = 'OpenDocMan página anônima: Listar todas';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan página anônima';
 
+// Public file sharing
+$lang['public_link'] = 'Clique aqui para ver arquivos públicos';
+$lang['public_page_title'] = 'Arquivos públicos: Listar todos';
+$lang['public_page_h1'] = 'Arquivos públicos';
+$lang['public'] = 'Público';
+$lang['label_public'] = 'Arquivo público';
+$lang['message_public_view'] = 'Você está vendo arquivos públicos';
+$lang['public_download'] = 'Baixar';
+$lang['message_public_disabled'] = 'Compartilhamento público de arquivos está desativado';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Ação';
 $lang['all'] = 'Todos';

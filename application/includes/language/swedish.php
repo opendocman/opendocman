@@ -36,6 +36,17 @@ $lang['welcome2'] = 'Logga in för att börja använda systemets kraftfulla möj
 $lang['welcome_anonymous_title'] = 'OpenDocMan Anonym Sida: Lista Alla';
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Anonym Sida';
 
+// Public file sharing
+$lang['public_link'] = 'Tryck här för att se publika filer';
+$lang['public_page_title'] = 'Publika filer: Lista alla';
+$lang['public_page_h1'] = 'Publika filer';
+$lang['public'] = 'Publik';
+$lang['label_public'] = 'Publik fil';
+$lang['message_public_view'] = 'Du tittar på publika filer';
+$lang['public_download'] = 'Ladda ner';
+$lang['message_public_disabled'] = 'Publik fildelning är inaktiverad';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Åtgärd';
 $lang['all'] = 'Alla';

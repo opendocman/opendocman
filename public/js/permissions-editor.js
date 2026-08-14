@@ -29,6 +29,14 @@
         this.users = options.users || [];
         this.state = { dept_perms: {}, user_perms: {} };
         this.inherited = { dept_perms: {}, user_perms: {}, catName: '' };
+        // On the add page the server grants the owner admin (see add.php).
+        // Surface that in the matrix so the user sees the permissions that will be saved.
+        // On edit, loadTemplate() overwrites this with the actual saved perms.
+        var ownerId = options.defaultOwnerId;
+        if (ownerId && this.findUser(ownerId)) {
+            this.state.user_perms[ownerId] = RIGHT_VALUES.admin;
+            this._defaultOwnerId = ownerId;
+        }
         this.render();
     }
 
@@ -304,6 +312,29 @@
         forEachObj(data.user_perms || {}, function (k, v) { userPerms[parseInt(k)] = v; });
         this.state.user_perms = userPerms;
         this.refreshAll();
+    };
+
+    /**
+     * Move the default owner admin grant when the file owner changes.
+     * The old owner's default admin is removed (unless they were explicitly
+     * given a different/other permission), and the new owner gets admin.
+     * @param {number} newOwnerId
+     */
+    PermissionsEditor.prototype.setDefaultOwner = function (newOwnerId) {
+        var self = this;
+        newOwnerId = parseInt(newOwnerId, 10);
+        if (self._defaultOwnerId && self._defaultOwnerId !== newOwnerId) {
+            if (self.state.user_perms[self._defaultOwnerId] === RIGHT_VALUES.admin) {
+                delete self.state.user_perms[self._defaultOwnerId];
+            }
+        }
+        self._defaultOwnerId = newOwnerId;
+        if (newOwnerId && self.findUser(newOwnerId)) {
+            if (self.state.user_perms[newOwnerId] === undefined) {
+                self.state.user_perms[newOwnerId] = RIGHT_VALUES.admin;
+            }
+        }
+        self.refreshAll();
     };
 
     PermissionsEditor.prototype.loadCategoryTemplate = function (data, catName) {

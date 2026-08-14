@@ -145,9 +145,10 @@ class Email
      */
     public function sendEmail()
     {
-        if ((count($this->getRecipients()) > 0)) {
+        $recipients = $this->getRecipients();
+        if (is_array($recipients) && count($recipients) > 0) {
             $this->setHeaders();
-            email_users_id($this->getRecipients(), $this->getSubject(), $this->getBody(), $this->getHeaders() ?? '');
+            email_users_id($recipients, $this->getSubject(), $this->getBody(), $this->getHeaders() ?? '');
         }
         return true;
     }

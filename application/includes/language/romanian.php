@@ -35,6 +35,17 @@ $lang['welcome2'] = 'Conectati-va pentru a incepe utilizarea sistemului.';
 $lang['welcome_anonymous_title'] = 'Pagina Anonima a Sistemului de Management al Documentelor OpenDocMan: Afisati tot';
 $lang['welcome_anonymous_h1'] = 'Pagina Anonima a Sistemului de Management al Documentelor OpenDocMan';
 
+// Public file sharing
+$lang['public_link'] = 'Apasati aici pentru a vizualiza fisierele publice';
+$lang['public_page_title'] = 'Fișiere publice: Afișați tot';
+$lang['public_page_h1'] = 'Fișiere publice';
+$lang['public'] = 'Public';
+$lang['label_public'] = 'Fișier public';
+$lang['message_public_view'] = 'Vizualizați fișiere publice';
+$lang['public_download'] = 'Descărcați';
+$lang['message_public_disabled'] = 'Partajarea publică a fișierelor este dezactivată';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Actiune';
 $lang['all'] = 'Toate';

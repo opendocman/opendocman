@@ -35,6 +35,17 @@ $lang['welcome2'] = 'Debe autenticarse para comenzar a utilizar esta herramienta
 $lang['welcome_anonymous_h1'] = 'OpenDocMan Página al público';
 $lang['welcome_anonymous_title'] = 'Página Pública: Mostrar Todo';
 
+// Public file sharing
+$lang['public_link'] = 'Click para ver archivos públicos';
+$lang['public_page_title'] = 'Archivos públicos: Listar todo';
+$lang['public_page_h1'] = 'Archivos públicos';
+$lang['public'] = 'Público';
+$lang['label_public'] = 'Archivo público';
+$lang['message_public_view'] = 'Está viendo archivos públicos';
+$lang['public_download'] = 'Descargar';
+$lang['message_public_disabled'] = 'El intercambio público de archivos está deshabilitado';
+$lang['public_no_files'] = 'No public files available.';
+
 //GLOBAL TERMS
 $lang['action'] = 'Acción';
 $lang['all'] = 'Todos';

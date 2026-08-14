@@ -14,7 +14,7 @@ class SchemaBuilder
                 `file_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
                 `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-                `action` enum('A','B','C','V','D','M','X','I','O','Y','R') NOT NULL
+                `action` enum('A','B','C','V','D','M','X','I','O','Y','R','U') NOT NULL
             ) ENGINE = MYISAM",
 
             "CREATE TABLE `{$prefix}admin` (
@@ -52,6 +52,7 @@ class SchemaBuilder
                 department smallint(6) unsigned default NULL,
                 default_rights tinyint(4) default NULL,
                 publishable tinyint(4) default NULL,
+                is_public tinyint(1) DEFAULT 0,
                 reviewer int(11) unsigned default NULL,
                 reviewer_comments varchar(255) default NULL,
                 PRIMARY KEY  (id),
@@ -196,6 +197,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'max_filesize', '5000000', 'Set the maximum file upload size', 'num|maxsize=255')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'revision_expiration', '90', 'This var sets the amount of days until each file needs to be revised,  assuming that there are 30 days in a month for all months.', 'num|maxsize=255')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'file_expired_action', '1', 'Choose an action option when a file is found to be expired The first two options also result in sending email to reviewer  (1) Remove from file list until renewed (2) Show in file list but non-checkoutable (3) Send email to reviewer only (4) Do Nothing', 'num')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'public_sharing', 'False', '(True/False) Enable public file sharing page. When enabled, files marked as public and approved will be visible without authentication.', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool')",

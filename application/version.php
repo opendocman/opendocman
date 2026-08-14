@@ -18,7 +18,7 @@
  */
 
 const ODM_APP_VERSION = '2.8.0-release'; // x-release-please-version
-const ODM_DB_VERSION = '1.7.0';
+const ODM_DB_VERSION = '1.7.1';
 
 // version information
 $GLOBALS['CONFIG']['current_version'] = ODM_APP_VERSION;

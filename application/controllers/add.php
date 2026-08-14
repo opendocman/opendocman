@@ -137,6 +137,7 @@ if (!isset($_POST['submit'])) {
     $GLOBALS['smarty']->assign('dept_perms_array', $dept_perms_array);
     $GLOBALS['smarty']->assign('user_id', $_SESSION['uid']);
     $GLOBALS['smarty']->assign('db_prefix', $GLOBALS['CONFIG']['db_prefix']);
+    $GLOBALS['smarty']->assign('public_sharing', $GLOBALS['CONFIG']['public_sharing'] ?? 'False');
 
     // Generate CSRF token for the category AJAX endpoint (different action from the page)
     if (isset($GLOBALS['csrf'])) {
@@ -216,6 +217,7 @@ if (!isset($_POST['submit'])) {
         } else {
             $publishable= '1';
         }
+        $is_public = isset($_POST['is_public']) ? 1 : 0;
         $result_array = array();
 
         // If the admin has chosen to assign the department
@@ -270,6 +272,30 @@ if (!isset($_POST['submit'])) {
             $owner_id = $_SESSION['uid'];
         }
 
+        // Ensure the file owner has admin rights if not explicitly set in the form.
+        // This prevents the owner from being locked out of a file they just created.
+        // Mirrors the guard in edit.php.
+        if (!isset($_REQUEST['user_permission'][$owner_id])) {
+            $_REQUEST['user_permission'][$owner_id] = 4;
+        }
+
+        // At least one user must have "write" or "admin" rights.
+        // Mirrors the validation in edit.php (ec=12).
+        $perms_error = true;
+        if (isset($_REQUEST['user_permission']) && is_array($_REQUEST['user_permission'])) {
+            foreach ($_REQUEST['user_permission'] as $permission) {
+                if ($permission > 2) {
+                    $perms_error = false;
+                    break;
+                }
+            }
+        }
+
+        if ($perms_error) {
+            header('Location:error?ec=12');
+            exit;
+        }
+
         // INSERT file info into data table
         $file_data_query = "INSERT INTO
         {$GLOBALS['CONFIG']['db_prefix']}data (
@@ -282,7 +308,8 @@ if (!isset($_POST['submit'])) {
             department,
             comment,
             default_rights,
-            publishable
+            publishable,
+            is_public
         )
             VALUES
         (
@@ -295,7 +322,8 @@ if (!isset($_POST['submit'])) {
             :current_user_dept,
             :comment,
             0,
-            $publishable
+            $publishable,
+            $is_public
         )";
 
         $file_data_stmt = $pdo->prepare($file_data_query);

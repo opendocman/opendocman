@@ -38,7 +38,7 @@ help: ## Show this help message
 	@echo "  make test      - Run all tests"
 	@echo "  make up        - Start services"
 	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Environment Variables:"
 	@echo "  COMPOSE_PROJECT_NAME  - Set custom project name (default: opendocman)"
