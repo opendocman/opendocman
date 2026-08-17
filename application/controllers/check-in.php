@@ -314,6 +314,11 @@ else {
         
         // clean up and back to main page
         $last_message = msg('message_document_checked_in');
+
+        if ($GLOBALS['CONFIG']['authorization'] == 'True') {
+            $last_message = msg('message_document_checked_in') . ' ' . msg('message_document_pending_review');
+        }
+
         header('Location: out?last_message=' . urlencode($last_message));
     }
 }
