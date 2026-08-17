@@ -49,14 +49,14 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
         exit;
     }
     
+    if ($filetypes->save($_POST)) {
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
+    } else {
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
+    }
+
     draw_header(msg('label_filetypes'), $last_message);
 
-    if ($filetypes->save($_POST)) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
-    } else {
-        $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
-    }
-    $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
     $filetypes->edit();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
@@ -77,11 +77,10 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     }
     
     if ($filetypes->add($_POST)) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
     } else {
-        $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
-    $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
 
     draw_header(msg('label_filetypes'), $last_message);
 
@@ -100,11 +99,10 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     }
     
     if ($filetypes->delete($_POST)) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
     } else {
-        $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
-    $GLOBALS['smarty']->assign('last_message', $_POST['last_message']);
     draw_header(msg('label_filetypes'), $last_message);
     $filetypes->edit();
     draw_footer();
