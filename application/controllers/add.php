@@ -426,6 +426,10 @@ if (!isset($_POST['submit'])) {
         // back to main page
         $message = urlencode(msg('message_document_added'));
 
+        if ($GLOBALS['CONFIG']['authorization'] == 'True') {
+            $message = urlencode(msg('message_document_added') . ' ' . msg('message_document_pending_review'));
+        }
+
         /**
          * Queue email notifications to reviewers for background processing
          */
