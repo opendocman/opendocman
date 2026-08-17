@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Bereich erfolgreich aktualis
 $lang['message_directory_creation_failed'] = 'Verzeichniserstellung fehlgeschlagen';
 $lang['message_document_added'] = 'Dokument erfolgreich hinzugefügt';
 $lang['message_document_checked_in'] = 'Dokument erfolgreich eingecheckt';
+$lang['message_document_pending_review'] = 'Dieses Dokument wird vor der Veröffentlichung von einem Administrator geprüft.';
 $lang['message_document_checked_out_to_you'] = 'Ihre ausgecheckten Dokumente';
 $lang['message_document_has_been_archived'] = 'Dokument wurde archiviert';
 $lang['message_documents_expired'] = 'Abgelaufene Dokumente';

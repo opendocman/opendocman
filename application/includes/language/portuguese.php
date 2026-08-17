@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Departamento atualizado com 
 $lang['message_directory_creation_failed'] = 'Falha na Criação do Diretório';
 $lang['message_document_added'] = 'Documento adicionado com sucesso';
 $lang['message_document_checked_in'] = 'Documento verificado com sucesso';
+$lang['message_document_pending_review'] = 'Este documento está aguardando revisão por um administrador antes de ser publicado.';
 $lang['message_document_checked_out_to_you'] = 'Documentos em check-out por você';
 $lang['message_document_has_been_archived'] = 'Documento foi arquivado';
 $lang['message_documents_expired'] = 'Documentos expirado';

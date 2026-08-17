@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Settore aggiornato con succe
 $lang['message_directory_creation_failed'] = 'Creazione della cartella fallita';
 $lang['message_document_added'] = 'Documento creato con successo';
 $lang['message_document_checked_in'] = 'Documento caricato con successo';
+$lang['message_document_pending_review'] = 'Questo documento è in attesa di revisione da parte di un amministratore prima della pubblicazione.';
 $lang['message_document_checked_out_to_you'] = 'Documenti scaricati';
 $lang['message_document_has_been_archived'] = 'Il documento &egrave; stato archiviato';
 $lang['message_documents_expired'] = 'Documenti scaduti';

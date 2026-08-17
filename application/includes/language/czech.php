@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Oddělení bylo úspěšně 
 $lang['message_directory_creation_failed'] = 'Vytvoření adresáře selhalo';
 $lang['message_document_added'] = 'Dokument byl úspěšně přidán';
 $lang['message_document_checked_in'] = 'Dokument byl úspěšně schválen';
+$lang['message_document_pending_review'] = 'Tento dokument čeká na posouzení správcem, než bude publikován.';
 $lang['message_document_checked_out_to_you'] = 'Dokumenty čekající na Vaše schválení';
 $lang['message_document_has_been_archived'] = 'Dokument byl přesunut do archivu';
 $lang['message_documents_expired'] = 'Platnost dokumentu vypršela';

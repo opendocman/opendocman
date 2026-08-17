@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'تم تحديث الادار
 $lang['message_directory_creation_failed'] = 'فشل انشاء مجلد';
 $lang['message_document_added'] = 'تم إضافة الوثيقة';
 $lang['message_document_checked_in'] = 'تم تدقسق الوئيقة بنجاح للادخال';
+$lang['message_document_pending_review'] = 'هذه الوثيقة قيد المراجعة من قبل مسؤول قبل نشرها.';
 $lang['message_document_checked_out_to_you'] = 'يتم التحقق حاليا من الوثيقة بواسطتك';
 $lang['message_document_has_been_archived'] = 'تم حذف الوثيقة';
 $lang['message_documents_expired'] = 'انتهت صلاحية الوثيقة';

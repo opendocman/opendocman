@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Département mis à jour ave
 $lang['message_directory_creation_failed'] = 'La Création du Répertoire a échoué';
 $lang['message_document_added'] = 'Document ajouté avec succès';
 $lang['message_document_checked_in'] = 'Document dé-verrouillé avec succès';
+$lang['message_document_pending_review'] = 'Ce document est en attente de révision par un administrateur avant d\'être publié.';
 $lang['message_document_checked_out_to_you'] = 'Documents que vous avez verrouillés';
 $lang['message_document_has_been_archived'] = 'Le Document a été archivé';
 $lang['message_documents_expired'] = 'Le Document a expiré';
