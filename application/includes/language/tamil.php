@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Department successfully upda
 $lang['message_directory_creation_failed'] = 'Directory Creation Failed';
 $lang['message_document_added'] = 'Document successfully added';
 $lang['message_document_checked_in'] = 'Document successfully checked in';
+$lang['message_document_pending_review'] = 'இந்த ஆவணம் வெளியிடப்படுவதற்கு முன் நிர்வாகியின் மதிப்பாய்விற்காக காத்திருக்கிறது.';
 $lang['message_document_checked_out_to_you'] = 'Documents currently checked out by you';
 $lang['message_document_has_been_archived'] = 'Document has been archived';
 $lang['message_documents_expired'] = 'Documents expired';

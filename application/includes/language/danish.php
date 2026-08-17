@@ -287,6 +287,7 @@ $lang['message_department_successfully_updated'] = 'Afdeling opdateret korrekt';
 $lang['message_directory_creation_failed'] = 'Oprettelse af afdeling mislykkedes';
 $lang['message_document_added'] = 'Dokument tilføjet korrekt';
 $lang['message_document_checked_in'] = 'Dokument tjekket ud korrekt';
+$lang['message_document_pending_review'] = 'Dette dokument afventer gennemgang af en administrator, før det offentliggøres.';
 $lang['message_document_checked_out_to_you'] = 'Dokumenter som pt. er tjekket ud af dig';
 $lang['message_document_has_been_archived'] = 'Dokument er blevet arkiveret';
 $lang['message_documents_expired'] = 'Dokumenter udløbet';

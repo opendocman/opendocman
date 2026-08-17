@@ -129,6 +129,7 @@ $lang['message_department_successfully_updated'] = 'Department successfully upda
 $lang['message_directory_creation_failed'] = 'Directory Creation Failed';
 $lang['message_document_added'] = "Dok&#252;man ba&#351;ar&#305;yla eklendi";
 $lang['message_document_checked_in'] = 'Document successfully checked in';
+$lang['message_document_pending_review'] = 'Bu belge yayınlanmadan önce bir yönetici tarafından incelenmeyi bekliyor.';
 $lang['message_document_checked_out_to_you'] = 'Documents currently checked out by you';
 $lang['message_document_has_been_archived'] = 'Document has been archived';
 $lang['message_document_successfully_deleted'] = 'Document successfully deleted';

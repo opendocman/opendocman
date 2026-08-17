@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = '部门成功更新';
 $lang['message_directory_creation_failed'] = '增加目录失败';
 $lang['message_document_added'] = '文档成功增加';
 $lang['message_document_checked_in'] = '文档成功签入';
+$lang['message_document_pending_review'] = '此文档在发布之前需要管理员审核。';
 $lang['message_document_checked_out_to_you'] = '文档当前被你签出';
 $lang['message_document_has_been_archived'] = '文档已归档';
 $lang['message_documents_expired'] = '文档作废';

@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Departamentul a fost actuali
 $lang['message_directory_creation_failed'] = 'Crearea directorului a esuat';
 $lang['message_document_added'] = 'Documentul a fost adaugat cu succes';
 $lang['message_document_checked_in'] = 'Document deblocat cu succes';
+$lang['message_document_pending_review'] = 'Acest document este în așteptarea revizuirii de către un administrator înainte de a fi publicat.';
 $lang['message_document_checked_out_to_you'] = 'Documente blocate de dvs.';
 $lang['message_document_has_been_archived'] = 'Documentul a fost arhivat';
 $lang['message_documents_expired'] = 'Documente expirate';

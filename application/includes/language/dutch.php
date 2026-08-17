@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Afdeling bijgewerkt';
 $lang['message_directory_creation_failed'] = 'Aanmaak map mislukt';
 $lang['message_document_added'] = 'Document toegevoegd';
 $lang['message_document_checked_in'] = 'Document ingescheckt';
+$lang['message_document_pending_review'] = 'Dit document wacht op beoordeling door een beheerder voordat het wordt gepubliceerd.';
 $lang['message_document_checked_out_to_you'] = 'Documents die thans door u uitgecheckt zijn';
 $lang['message_document_has_been_archived'] = 'Document geachiveerd';
 $lang['message_documents_expired'] = 'Documenten verlopen';

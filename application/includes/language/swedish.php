@@ -287,6 +287,7 @@ $lang['message_department_successfully_updated'] = 'Avdelningen uppdaterades uta
 $lang['message_directory_creation_failed'] = 'Skapande Av Mappen Lyckades Inte';
 $lang['message_document_added'] = 'Dokumentet skapades utan problem';
 $lang['message_document_checked_in'] = 'Dokumentet checkades in utan problem';
+$lang['message_document_pending_review'] = 'Detta dokument väntar på granskning av en administratör innan det publiceras.';
 $lang['message_document_checked_out_to_you'] = 'Dokument som är utcheckade av dig';
 $lang['message_document_has_been_archived'] = 'Dokumentet har arkiverats';
 $lang['message_documents_expired'] = 'Utgångna dokument';

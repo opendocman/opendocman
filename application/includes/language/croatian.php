@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'Odjel uspješno izmjenjen';
 $lang['message_directory_creation_failed'] = 'Neuspješno stvaranje direktorija';
 $lang['message_document_added'] = 'Dokument uspješno dodan';
 $lang['message_document_checked_in'] = 'Dokument uspješno prijavljen';
+$lang['message_document_pending_review'] = 'Ovaj dokument čeka pregled administratora prije nego što bude objavljen.';
 $lang['message_document_checked_out_to_you'] = 'Lista trenutno odjavljenih dokumenata za vaš korisnički račun';
 $lang['message_document_has_been_archived'] = 'Dokument je arhiviran';
 $lang['message_documents_expired'] = 'Dokumenti sa isteklim rokom';

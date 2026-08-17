@@ -286,6 +286,7 @@ $lang['message_department_successfully_updated'] = 'বিভাগ পরিব
 $lang['message_directory_creation_failed'] = 'ডিরেক্টরি তৈরি করা ব্যর্থ ';
 $lang['message_document_added'] = 'নথি সংযোজন সুসম্পন্ন হয়েছে';
 $lang['message_document_checked_in'] = 'নথি চেক-ইন সুসম্পন্ন হয়েছে ';
+$lang['message_document_pending_review'] = 'এই নথিটি প্রকাশের আগে একজন প্রশাসকের পর্যালোচনার অপেক্ষায় রয়েছে।';
 $lang['message_document_checked_out_to_you'] = 'আপনার চেক-আউট করা বর্তমান নথিসমূহ';
 $lang['message_document_has_been_archived'] = 'নথিটি সংগ্রহশালায় সংরক্ষণ করা হয়েছে';
 $lang['message_documents_expired'] = 'নথিসমূহ মেয়াদোত্তীর্ণ';

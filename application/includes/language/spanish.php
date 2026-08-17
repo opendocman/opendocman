@@ -285,6 +285,7 @@ $lang['message_department_successfully_updated'] = 'Area Correctamente Actualiza
 $lang['message_directory_creation_failed'] = 'Falló la creación del Directorio';
 $lang['message_document_added'] = 'El Documento se agregó con éxito';
 $lang['message_document_checked_in'] = 'Documento correctamente Actualizado y Desbloqueado';
+$lang['message_document_pending_review'] = 'Este documento está pendiente de revisión por un administrador antes de publicarse.';
 $lang['message_document_checked_out_to_you'] = 'El Documento actualmente esta Bloqueado y debe ser actualizado por usted';
 $lang['message_document_has_been_archived'] = 'Documento ha sido Archivado';
 $lang['message_document_successfully_deleted'] = 'Documentos correctamente borrados';
