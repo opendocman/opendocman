@@ -96,7 +96,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
                     (username, password, department, phone, Email,last_name, first_name, can_add, can_checkin, pw_change_required)
                     VALUES(
                         :username,
-                        md5(:password),
+                        :password,
                         :department,
                         :phonenumber,
                         :email,
@@ -110,7 +110,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
         $stmt = $pdo->prepare($query);
         $stmt->execute(array(
             ':username' => $_POST['username'],
-            ':password' => $_POST['password'],
+            ':password' => PasswordHasher::hash($_POST['password']),
             ':department' => $_POST['department'],
             ':phonenumber' => $phonenumber,
             ':email' => $_POST['Email'],
@@ -271,7 +271,7 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     }
 
     if (!empty($_POST['password'])) {
-        $query .= " password = md5(:password), ";
+        $query .= " password = :password, ";
     }
     if ($user_obj->isAdmin()) {
         if (isset($_POST['department'])) {
@@ -300,7 +300,8 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
 
     $stmt = $pdo->prepare($query);
     if (!empty($_POST['password'])) {
-        $stmt->bindParam(':password', $_POST['password']);
+        $passwordHash = PasswordHasher::hash($_POST['password']);
+        $stmt->bindParam(':password', $passwordHash);
     }
     if ($user_obj->isAdmin()) {
         if (isset($_POST['department'])) {

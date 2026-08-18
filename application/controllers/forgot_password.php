@@ -56,7 +56,7 @@ if (
       UPDATE
         {$GLOBALS['CONFIG']['db_prefix']}user
       SET
-        password = md5(:new_pass),
+        password = :new_pass,
         pw_reset_code = NULL,
         pw_change_required = 0
       WHERE
@@ -68,7 +68,7 @@ if (
     ";
     $stmt = $pdo->prepare($query);
     $stmt->execute(array(
-        ':new_pass' => $newPass,
+        ':new_pass' => PasswordHasher::hash($newPass),
         ':user_id' => $user_id,
         ':username' => $username,
         ':old_code' => $oldCode
