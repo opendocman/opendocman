@@ -402,7 +402,7 @@ class CliCommand
         echo "Commands:\n";
         echo "  dump-sql              Generate database.sql from SchemaBuilder\n";
         echo "    --prefix=PREFIX     Table prefix (default: odm_)\n";
-        echo "    --admin-password=MD5 Admin password hash (default: md5('admin'))\n";
+        echo "    --admin-password=Admin password in plaintext (default: admin)\n";
         echo "    --datadir=PATH      Data directory path\n";
         echo "    --snapshotdir=PATH  Snapshot directory path\n";
         echo "  migrate               Run pending migrations\n";

@@ -166,7 +166,7 @@ class SchemaBuilder
 
     public function getDefaultDataStatements(string $prefix, array $options = []): array
     {
-        $adminPassword = $options['admin_password'] ?? md5('admin');
+        $adminPassword = $options['admin_password'] ?? 'admin';
         $dataDir = $options['datadir'] ?? '/var/www/document_repository/';
         $snapshotDir = $options['snapshotdir'] ?? '/var/www/snapshots/';
 
@@ -184,7 +184,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}rights` VALUES (2,'read')",
             "INSERT INTO `{$prefix}rights` VALUES (3,'write')",
             "INSERT INTO `{$prefix}rights` VALUES (4,'admin')",
-            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin',md5('{$adminPassword}'),'1','5555551212','admin@example.com','User','Admin','',0,1,1)",
+            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin','" . password_hash($adminPassword, PASSWORD_DEFAULT) . "','1','5555551212','admin@example.com','User','Admin','',0,1,1)",
             "INSERT INTO `{$prefix}odmsys` VALUES (NULL,'version','{$this->getVersion()}')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like \"demo/demo\". This will keep users from removing files, users, etc.', 'bool')",

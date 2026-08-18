@@ -66,6 +66,8 @@ try {
     exit(1);
 }
 
+require_once __DIR__ . '/../application/models/PasswordHasher.class.php';
+
 $userTable = $dbPrefix . 'user';
 
 // Check whether the user already exists
@@ -84,7 +86,7 @@ $insert = $pdo->prepare(
 );
 $insert->execute([
     ':u' => $username,
-    ':p' => md5($password),
+    ':p' => PasswordHasher::hash($password),
     ':d' => $department,
     ':e' => $email,
     ':ln' => $lastName,
