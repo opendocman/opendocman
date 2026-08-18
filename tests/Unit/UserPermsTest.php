@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 require_once APPLICATION_PATH . '/models/User_Perms.class.php';
+require_once APPLICATION_PATH . '/models/Dept_Perms.class.php';
 
 class UserPermsTest extends TestCase
 {
@@ -64,7 +65,8 @@ class UserPermsTest extends TestCase
     public function testLoadDataUserPermReviewerReturnsIds(): void
     {
         $pdo = \Mockery::mock(PDO::class);
-        $stmt = \Mockery::mock(PDOStatement::class);
+        $reviewerStmt = \Mockery::mock(PDOStatement::class);
+        $userPermStmt = \Mockery::mock(PDOStatement::class);
 
         // User is reviewer (but not admin)
         $user = $this->makeUserMock([
@@ -74,16 +76,60 @@ class UserPermsTest extends TestCase
             'getDeptId' => 4,
         ]);
 
-        // Reviewer branch query (SELECT d.id FROM data d, dept_reviewer dr WHERE ...)
-        $pdo->shouldReceive('prepare')->once()->with(\Mockery::type('string'))->andReturn($stmt);
-        $stmt->shouldReceive('execute')->once()->with([':id' => 9])->andReturn(true);
-        $stmt->shouldReceive('fetchAll')->once()->andReturn([[5], [6]]);
-        $stmt->shouldReceive('rowCount')->once()->andReturn(2);
+        // Reviewer branch query (files in departments they review)
+        $pdo->shouldReceive('prepare')->once()->with(\Mockery::type('string'))->andReturn($reviewerStmt);
+        $reviewerStmt->shouldReceive('execute')->once()->with([':id' => 9])->andReturn(true);
+        $reviewerStmt->shouldReceive('fetchAll')->once()->andReturn([[5], [6]]);
+
+        // User-perm branch query (no direct grants in this case)
+        $pdo->shouldReceive('prepare')->once()->with(\Mockery::type('string'))->andReturn($userPermStmt);
+        $userPermStmt->shouldReceive('execute')->once()->with([
+            ':right' => 1,
+            ':id' => 9
+        ])->andReturn(true);
+        $userPermStmt->shouldReceive('fetchAll')->once()->andReturn([]);
 
         $model = new User_Perms(9, $pdo, $user);
         $result = $model->loadData_UserPerm($model->VIEW_RIGHT, true);
 
         $this->assertSame([5, 6], $result);
+    }
+
+    public function testLoadDataUserPermReviewerIncludesDirectUserPermGrants(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $reviewerStmt = \Mockery::mock(PDOStatement::class);
+        $userPermStmt = \Mockery::mock(PDOStatement::class);
+
+        // User is a reviewer for a department (but not an admin)
+        $user = $this->makeUserMock([
+            'isAdmin' => false,
+            'isReviewer' => true,
+            'getId' => 9,
+            'getDeptId' => 4,
+        ]);
+
+        // First query: reviewer branch -> files in departments they review
+        $pdo->shouldReceive('prepare')->once()->with(\Mockery::type('string'))->andReturn($reviewerStmt);
+        $reviewerStmt->shouldReceive('execute')->once()->with([':id' => 9])->andReturn(true);
+        $reviewerStmt->shouldReceive('fetchAll')->once()->andReturn([[5], [6]]);
+
+        // Second query: normal user_perms branch -> files with a direct per-file grant
+        $pdo->shouldReceive('prepare')->once()->with(\Mockery::type('string'))->andReturn($userPermStmt);
+        $userPermStmt->shouldReceive('execute')->once()->with([
+            ':right' => 2,
+            ':id' => 9
+        ])->andReturn(true);
+        $userPermStmt->shouldReceive('fetchAll')->once()->andReturn([[7]]);
+
+        $model = new User_Perms(9, $pdo, $user);
+        $result = $model->loadData_UserPerm($model->READ_RIGHT, true);
+
+        // A reviewer must see files they are directly granted, in addition to
+        // files in the departments they review (regression: ODM issue #321).
+        $this->assertContains(7, $result);
+        $this->assertContains(5, $result);
+        $this->assertContains(6, $result);
     }
 
     public function testLoadDataUserPermRegularUserReturnsIdsWithRight(): void

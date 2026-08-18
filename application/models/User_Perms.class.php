@@ -169,7 +169,7 @@ if (!defined('User_Perms_class')) {
                 $stmt->execute();
                 $result = $stmt->fetchAll();
             } elseif ($this->user_obj->isReviewer()) {
-                // If they are a reviewer, let them see files in all departments they are a reviewer for
+                // Reviewers see files in all departments they are a reviewer for...
                 $query = "SELECT d.id
                         FROM
                             {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
@@ -185,7 +185,38 @@ if (!defined('User_Perms_class')) {
                 $stmt->execute(array(
                     ':id' => $this->id
                 ));
-                $result = $stmt->fetchAll();
+                $reviewer_result = $stmt->fetchAll();
+
+                // ...PLUS files they have direct per-file rights on (user_perms).
+                // Being a reviewer for one department must not hide explicit
+                // grants in other departments they do not review. (ODM #321)
+                $query = "
+                  SELECT
+                    up.fid
+                  FROM
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA as d,
+                    {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS as up
+                  WHERE (
+                    up.uid = :id
+                    AND
+                    d.id = up.fid
+                    AND
+                    up.rights >= :right
+                    AND
+                    d.publishable = 1
+                  ) $limit_query";
+                $stmt =  $this->connection->prepare($query);
+                $stmt->execute(array(
+                    ':right' => $right,
+                    ':id' => $this->id
+                ));
+                $userperm_result = $stmt->fetchAll();
+
+                $fileid_array = array();
+                foreach (array_merge($reviewer_result, $userperm_result) as $row) {
+                    $fileid_array[] = $row[0];
+                }
+                return array_values(array_unique($fileid_array));
             } else {
                 //Select fid, owner_id, owner_name of the file that user-->$id has rights >= $right
                 $query = "
