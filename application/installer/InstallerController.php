@@ -128,7 +128,7 @@ class InstallerController
             'db_pass' => $existing['db_pass'] ?? $configManager->getEnvVar('APP_DB_PASS', ''),
             'db_host' => $existing['db_host'] ?? $configManager->getEnvVar('APP_DB_HOST', 'localhost'),
             'db_prefix' => $existing['db_prefix'] ?? $configManager->getEnvVar('DB_PREFIX', 'odm_'),
-            'admin_password' => $configManager->getEnvVar('ADMIN_PASSWORD', 'admin'),
+            'admin_password' => $configManager->getEnvVar('ADMIN_PASSWORD', ''),
             'data_dir' => $configManager->getEnvVar('ODM_DATADIR', '/var/www/document_repository/'),
             'snapshot_dir' => $configManager->getEnvVar('ODM_SNAPSHOTDIR', '/var/www/snapshots/'),
         ];
@@ -145,7 +145,7 @@ class InstallerController
         $dbPass = $_POST['db_pass'] ?? '';
         $dbHost = $_POST['db_host'] ?? '';
         $dbPrefix = $_POST['db_prefix'] ?? 'odm_';
-        $adminPassword = $_POST['admin_password'] ?? 'admin';
+        $adminPassword = $_POST['admin_password'] ?? '';
         $dataDir = $_POST['data_dir'] ?? '/var/www/document_repository/';
         $snapshotDir = $_POST['snapshot_dir'] ?? '/var/www/snapshots/';
 
@@ -251,11 +251,17 @@ class InstallerController
 
         $forceFresh = isset($_GET['force_fresh']) && $_GET['force_fresh'] === '1';
 
-        try {
-            $adminPassword = $_SESSION['adminpass'] ?? 'admin';
-            $dataDir = $_SESSION['datadir'] ?? '/var/www/document_repository/';
-            $snapshotDir = $_SESSION['snapshotdir'] ?? '/var/www/snapshots/';
+        $adminPassword = $_SESSION['adminpass'] ?? '';
+        if ($adminPassword === '') {
+            // Admin password is required; the config wizard validates it before
+            // the fresh install step can be reached.
+            header('Location: /installer/setup-config');
+            exit;
+        }
+        $dataDir = $_SESSION['datadir'] ?? '/var/www/document_repository/';
+        $snapshotDir = $_SESSION['snapshotdir'] ?? '/var/www/snapshots/';
 
+        try {
             if ($forceFresh) {
                 $this->dbManager->dropAllTables($prefix);
             }
@@ -272,6 +278,7 @@ class InstallerController
 
             foreach ($schemaBuilder->getDefaultDataStatements($prefix, [
                 'admin_password' => $adminPassword,
+                'force_password_change' => false,
                 'datadir' => $dataDir,
                 'snapshotdir' => $snapshotDir,
             ]) as $stmt) {

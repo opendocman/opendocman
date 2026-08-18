@@ -79,6 +79,7 @@ class CliCommand
         $builder = new SchemaBuilder();
         echo $builder->buildFullDump($prefix, [
             'admin_password' => $adminPassword,
+            'force_password_change' => true,
             'datadir' => $dataDir,
             'snapshotdir' => $snapshotDir,
         ]);

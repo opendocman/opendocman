@@ -101,9 +101,10 @@ if (isset($_POST['login'])) {
         // register the user's ID
         $_SESSION['uid'] = $id;
 
-        // Check if password change is required
+        // Check if password change is required (skipped in demo mode, where a
+        // shared known credential is expected)
         $user_obj = new User($id, $pdo);
-        if ($user_obj->isPasswordChangeRequired()) {
+        if ($user_obj->isPasswordChangeRequired() && $GLOBALS['CONFIG']['demo'] != 'True') {
             $_SESSION['pw_change_required'] = true;
             redirect_visitor('change_password');
             exit;
