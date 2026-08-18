@@ -339,7 +339,11 @@ if (!defined('User_class')) {
 
             if ($storedHash !== false && PasswordHasher::verify($non_encrypted_password, $storedHash)) {
                 if (PasswordHasher::needsRehash($storedHash)) {
-                    $this->changePassword($non_encrypted_password);
+                    try {
+                        $this->changePassword($non_encrypted_password);
+                    } catch (\PDOException $e) {
+                        // Rehash failure must not invalidate the verified password
+                    }
                 }
                 return true;
             }
@@ -670,12 +674,16 @@ if (!defined('User_class')) {
             }
 
             if (PasswordHasher::needsRehash($row['password'])) {
-                $update = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = :hash WHERE id = :id";
-                $stmt2 = $connection->prepare($update);
-                $stmt2->execute(array(
-                    ':hash' => PasswordHasher::hash($plainPassword),
-                    ':id' => $row['id']
-                ));
+                try {
+                    $update = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = :hash WHERE id = :id";
+                    $stmt2 = $connection->prepare($update);
+                    $stmt2->execute(array(
+                        ':hash' => PasswordHasher::hash($plainPassword),
+                        ':id' => $row['id']
+                    ));
+                } catch (\PDOException $e) {
+                    // Rehash failure must not block an otherwise-valid login
+                }
             }
 
             return (int) $row['id'];

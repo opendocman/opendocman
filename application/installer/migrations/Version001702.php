@@ -23,4 +23,5 @@ class Version001702 implements MigrationInterface
     {
         $pdo->exec("ALTER TABLE `{$prefix}user` MODIFY COLUMN `password` varchar(50) NOT NULL default ''");
     }
+
 }

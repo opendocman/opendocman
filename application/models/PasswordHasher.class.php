@@ -31,6 +31,9 @@ class PasswordHasher
      */
     public static function verify($plain, $stored)
     {
+        if (!is_string($plain) || !is_string($stored)) {
+            return false;
+        }
         if (self::isMd5Hash($stored)) {
             return hash_equals($stored, md5($plain));
         }
@@ -43,6 +46,9 @@ class PasswordHasher
      */
     public static function needsRehash($stored)
     {
+        if (!is_string($stored)) {
+            return false;
+        }
         if (self::isMd5Hash($stored)) {
             return true;
         }

@@ -678,7 +678,10 @@ class UserMethodsTest extends TestCase
             });
 
         $this->mockStatement->shouldReceive('execute')
-            ->with([':non_encrypted_password' => $newPassword, ':id' => $this->user->id])
+            ->with(\Mockery::on(function ($params) use ($newPassword) {
+                return isset($params[':password_hash'], $params[':id'])
+                    && PasswordHasher::verify($newPassword, $params[':password_hash']);
+            }))
             ->andReturn(true);
 
         $this->user->changePassword($newPassword);
@@ -705,11 +708,11 @@ class UserMethodsTest extends TestCase
             });
 
         $this->mockStatement->shouldReceive('execute')
-            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
+            ->with([':id' => $this->user->id])
             ->andReturn(true);
 
-        $this->mockStatement->shouldReceive('rowCount')
-            ->andReturn(1);
+        $this->mockStatement->shouldReceive('fetchColumn')
+            ->andReturn(PasswordHasher::hash($password));
 
         $this->user->validatePassword($password);
 
