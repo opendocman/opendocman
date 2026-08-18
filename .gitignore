@@ -20,6 +20,7 @@ node_modules/
 playwright-report/
 test-results/
 .playwright-mcp/
+application/vendor/bin/
 backups/
 docs/superpowers/plans/2026-07-23-*
 docs/superpowers/specs/2026-07-23-*

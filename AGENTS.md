@@ -97,6 +97,8 @@ gh auth switch --user gh-org-bot-odm
 
 This applies to all git operations unless told otherwise.
 
+Start feature work from a fresh `master` branch unless otherwise stated.
+
 ## Makefile targets
 
 ```bash

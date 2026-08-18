@@ -22,9 +22,12 @@ require_once APPLICATION_PATH . '/vendor/autoload.php';
 // Include the application's class headers and configuration
 require_once APPLICATION_PATH . '/models/classHeaders.php';
 
-// Manually include the model classes since they're not autoloaded
+// Manually include the model classes since they're not autoloaded.
+// Load the full model set (base classes first) so individual test files
+// run deterministically in isolation — model classes reference other models
+// (e.g. UserPermission -> FileData, User_Perms -> Dept_Perms) without
+// requiring them, so depending on load order across files is fragile.
 require_once APPLICATION_PATH . '/models/databaseData.class.php';
-require_once APPLICATION_PATH . '/models/User.class.php';
 require_once APPLICATION_PATH . '/models/PasswordHasher.class.php';
 require_once APPLICATION_PATH . '/models/Category.class.php';
 require_once APPLICATION_PATH . '/models/Department.class.php';
@@ -32,6 +35,17 @@ require_once APPLICATION_PATH . '/models/File.class.php';
 require_once APPLICATION_PATH . '/models/Plugin.class.php';
 require_once APPLICATION_PATH . '/models/Snapshot.class.php';
 require_once APPLICATION_PATH . '/models/SnapshotManager.class.php';
+require_once APPLICATION_PATH . '/models/User.class.php';
+require_once APPLICATION_PATH . '/models/Dept_Perms.class.php';
+require_once APPLICATION_PATH . '/models/CategoryPerms.class.php';
+require_once APPLICATION_PATH . '/models/FileData.class.php';
+require_once APPLICATION_PATH . '/models/User_Perms.class.php';
+require_once APPLICATION_PATH . '/models/UserPermission.class.php';
+require_once APPLICATION_PATH . '/models/AccessLog.class.php';
+require_once APPLICATION_PATH . '/models/Email.class.php';
+require_once APPLICATION_PATH . '/models/FileTypes.class.php';
+require_once APPLICATION_PATH . '/models/Reviewer.class.php';
+require_once APPLICATION_PATH . '/models/Settings.class.php';
 require_once APPLICATION_PATH . '/version.php';
 require_once APPLICATION_PATH . '/controllers/helpers/functions.php';
 
