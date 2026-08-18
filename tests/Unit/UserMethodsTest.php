@@ -201,90 +201,50 @@ class UserMethodsTest extends TestCase
     }
 
     /**
-     * Test validatePassword method with MD5 password
+     * Test validatePassword method with legacy MD5 hash (lazy rehash)
      */
-    public function testValidatePasswordWithMD5(): void
+    public function testValidatePasswordWithLegacyMd5Hash(): void
     {
         $password = 'test_password';
-        
-        // First query (MD5) succeeds
-        $this->mockStatement->shouldReceive('execute')
+
+        $this->mockStatement->shouldReceive('fetchColumn')
             ->once()
-            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
-            ->andReturn(true);
-        
-        $this->mockStatement->shouldReceive('rowCount')
-            ->once()
-            ->andReturn(1);
-        
+            ->andReturn(md5($password));
+
         $result = $this->user->validatePassword($password);
         $this->assertTrue($result);
     }
 
     /**
-     * Test validatePassword method falling back to old password() style
-     */
-    public function testValidatePasswordWithOldPasswordStyle(): void
-    {
-        $password = 'test_password';
-        
-        // First query (MD5) fails
-        $this->mockStatement->shouldReceive('execute')
-            ->once()
-            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
-            ->andReturn(true);
-        
-        $this->mockStatement->shouldReceive('rowCount')
-            ->once()
-            ->andReturn(0);
-        
-        // Second query (password()) succeeds
-        $this->mockStatement->shouldReceive('execute')
-            ->once()
-            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
-            ->andReturn(true);
-        
-        $this->mockStatement->shouldReceive('rowCount')
-            ->once()
-            ->andReturn(1);
-        
-        $result = $this->user->validatePassword($password);
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test validatePassword method with completely invalid password
+     * Test validatePassword method with invalid password
      */
     public function testValidatePasswordWithInvalidPassword(): void
     {
         $password = 'wrong_password';
-        
-        // Both queries fail
-        $this->mockStatement->shouldReceive('execute')
-            ->twice()
-            ->with([':non_encrypted_password' => $password, ':id' => $this->user->id])
-            ->andReturn(true);
-        
-        $this->mockStatement->shouldReceive('rowCount')
-            ->twice()
-            ->andReturn(0);
-        
+
+        $this->mockStatement->shouldReceive('fetchColumn')
+            ->once()
+            ->andReturn(PasswordHasher::hash('something_else'));
+
         $result = $this->user->validatePassword($password);
         $this->assertFalse($result);
     }
 
     /**
-     * Test changePassword method
+     * Test changePassword method stores a bcrypt hash
      */
     public function testChangePassword(): void
     {
         $newPassword = 'new_secure_password';
-        
+
         $this->mockStatement->shouldReceive('execute')
             ->once()
-            ->with([':non_encrypted_password' => $newPassword, ':id' => $this->user->id])
+            ->with(\Mockery::on(function ($params) use ($newPassword) {
+                return isset($params[':password_hash'])
+                    && PasswordHasher::verify($newPassword, $params[':password_hash']);
+            }))
             ->andReturn(true);
-        
+
         $result = $this->user->changePassword($newPassword);
         $this->assertTrue($result);
     }
