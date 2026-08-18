@@ -230,7 +230,7 @@ $stmt->execute();
 $query = "CREATE TABLE {$dbprefix}user (
   id int(11) unsigned NOT NULL auto_increment,
   username varchar(25) NOT NULL default '',
-  password varchar(50) NOT NULL default '',
+  password varchar(255) NOT NULL default '',
   department int(11) unsigned default NULL,
   phone varchar(20) default NULL,
   Email varchar(50) default NULL,
