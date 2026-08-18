@@ -99,6 +99,23 @@ This applies to all git operations unless told otherwise.
 
 Start feature work from a fresh `master` branch unless otherwise stated.
 
+## Recurring spurious change: `application/templates_c/.gitignore`
+
+The tracked file `application/templates_c/.gitignore` keeps the Smarty
+compiled templates (`*.tpl.php`) out of git. It is **frequently deleted** when
+the Smarty compile-cache directory (`application/templates_c/`) is wiped or
+recreated by the running app or a cleanup process, so `git status` will often
+show it as deleted.
+
+Do not commit this deletion. Restore it with:
+
+```bash
+git restore application/templates_c/.gitignore
+```
+
+(It contains `*.tpl.php` plus `!.gitignore`, and the root `.gitignore` does
+not cover it.)
+
 ## Makefile targets
 
 ```bash

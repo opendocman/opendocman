@@ -282,7 +282,7 @@ $query = "
     FROM {$db_prefix}data d
     JOIN {$db_prefix}category_perms cp ON cp.cat_id = d.category
     WHERE d.id IN ($in_placeholders)
-      AND (cp.user_id = ? OR (cp.user_id IS NULL AND cp.dept_id = ?))
+      AND (cp.user_id = ? OR cp.dept_id = ?)
 ";
 $stmt = $pdo->prepare($query);
 $stmt->execute(array_merge($page_params, [$_SESSION['uid'], $user_obj->getDeptId()]));
@@ -292,7 +292,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if (!isset($category_perms_map[$fid])) {
         $category_perms_map[$fid] = [];
     }
-    if ($row['user_id'] !== null) {
+    if ((int)$row['user_id'] === (int)$_SESSION['uid']) {
         $category_perms_map[$fid]['user'] = (int)$row['rights'];
     } else {
         $category_perms_map[$fid]['dept'] = (int)$row['rights'];
@@ -327,23 +327,25 @@ foreach ($page_ids as $fileid) {
         $userAccessLevel = 4; // ADMIN_RIGHT
     } elseif ((int)$row['owner'] === (int)$_SESSION['uid'] && (int)$row['status'] !== 0) {
         $userAccessLevel = 3; // WRITE_RIGHT for owner of locked file
+    } elseif (isset($user_perms_map[$fileid])) {
+        // A doc-level user_perms row is authoritative: 1-4 grant, 0 "Unset"
+        // and -1 "Forbidden" both mean no access via lower channels.
+        $userAccessLevel = $user_perms_map[$fileid];
     } else {
-        $access = isset($user_perms_map[$fileid]) ? $user_perms_map[$fileid] : -999;
-        if ($access >= 0 && $access <= 4) {
-            $userAccessLevel = $access;
+        $deptAccess = isset($dept_perms_map[$fileid]) ? $dept_perms_map[$fileid] : -999;
+        // A dept grant only applies when it's a real positive grant; 0 (Unset /
+        // legacy "no row for every department" files) and -1 fall through to
+        // the category template.
+        if ($deptAccess > 0) {
+            $userAccessLevel = $deptAccess;
         } else {
-            $deptAccess = isset($dept_perms_map[$fileid]) ? $dept_perms_map[$fileid] : -999;
-            if ($deptAccess >= 0 && $deptAccess <= 4) {
-                $userAccessLevel = $deptAccess;
+            // Category fallback
+            if (isset($category_perms_map[$fileid]['user'])) {
+                $userAccessLevel = $category_perms_map[$fileid]['user'];
+            } elseif (isset($category_perms_map[$fileid]['dept'])) {
+                $userAccessLevel = $category_perms_map[$fileid]['dept'];
             } else {
-                // Category fallback
-                if (isset($category_perms_map[$fileid]['user'])) {
-                    $userAccessLevel = $category_perms_map[$fileid]['user'];
-                } elseif (isset($category_perms_map[$fileid]['dept'])) {
-                    $userAccessLevel = $category_perms_map[$fileid]['dept'];
-                } else {
-                    $userAccessLevel = 0;
-                }
+                $userAccessLevel = 0;
             }
         }
     }

@@ -163,7 +163,16 @@ if (!defined('UserPermission_class')) {
 
             $dept_perms_file_array = array_diff($dept_perms_file_array, $array);
             $dept_perms_file_array = array_diff($dept_perms_file_array, $user_perms_file_array);
-            $total_listing = array_merge($user_perms_file_array, $dept_perms_file_array);
+
+            // Files inherited from the file's category permission template
+            // (category user or dept grant). The helper already excludes files
+            // with any doc-level user_perms row, mirroring getAuthority().
+            $category_file_array = $this->getCategoryFileIds($this->VIEW_RIGHT, $limit);
+            $category_file_array = array_diff($category_file_array, $array);
+            $category_file_array = array_diff($category_file_array, $user_perms_file_array);
+            $category_file_array = array_diff($category_file_array, $dept_perms_file_array);
+
+            $total_listing = array_merge($user_perms_file_array, $dept_perms_file_array, $category_file_array);
             //$total_listing = array_unique( $total_listing);
             //$result_array = array_values($total_listing);
             return $total_listing;
@@ -189,7 +198,8 @@ if (!defined('UserPermission_class')) {
             $user_perms_file_array = $this->user_perms_obj->getCurrentReadRight($limit);
             $dept_perms_file_array = $this->dept_perms_obj->getCurrentReadRight($limit);
             $published_file_array = $this->user_obj->getPublishedData(1);
-            $result_array = array_values(array_unique(array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array)));
+            $category_file_array = $this->getCategoryFileIds($this->READ_RIGHT, $limit);
+            $result_array = array_values(array_unique(array_merge($published_file_array, $user_perms_file_array, $dept_perms_file_array, $category_file_array)));
             return $result_array;
         }
 
@@ -201,6 +211,54 @@ if (!defined('UserPermission_class')) {
         public function getReadableFileOBJs($limit = true)
         {
             return $this->convertToFileDataOBJ($this->getReadableFileIds($limit));
+        }
+
+        /**
+         * Return the IDs of publishable files the user can access at or above
+         * $right through their category permission template ("live inheritance").
+         *
+         * Both the category-user and the category-dept channel are considered.
+         * A category-user row always takes priority over the category-dept row
+         * for the same file (mirroring getAuthority()). Files that have any
+         * doc-level user_perms row are excluded because such a row is
+         * authoritative and supersedes inheritance.
+         *
+         * @param int $right
+         * @param bool $limit
+         * @return array
+         */
+        protected function getCategoryFileIds($right, $limit = true)
+        {
+            $limit_query = ($limit) ? "LIMIT {$GLOBALS['CONFIG']['max_query']}" : '';
+            $deptId = $this->user_obj->getDeptId();
+            $query = "
+                SELECT d.id
+                FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_DATA d
+                JOIN {$GLOBALS['CONFIG']['db_prefix']}category_perms cp ON cp.cat_id = d.category
+                WHERE d.publishable = 1
+                  AND NOT EXISTS (
+                      SELECT 1 FROM {$GLOBALS['CONFIG']['db_prefix']}$this->TABLE_USER_PERMS up
+                      WHERE up.uid = :uid AND up.fid = d.id
+                  )
+                  AND (
+                    (cp.user_id = :uid AND cp.rights >= :right)
+                    OR
+                    (cp.dept_id = :dept AND cp.rights >= :right
+                     AND NOT EXISTS (
+                         SELECT 1 FROM {$GLOBALS['CONFIG']['db_prefix']}category_perms cp2
+                         WHERE cp2.cat_id = d.category AND cp2.user_id = :uid
+                     ))
+                  )
+                $limit_query
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute(array(
+                ':uid' => $this->uid,
+                ':dept' => $deptId,
+                ':right' => $right,
+            ));
+
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
 
         /**
@@ -291,11 +349,19 @@ if (!defined('UserPermission_class')) {
             $user_permissions = $this->user_perms_obj->getPermission($data_id);
             $department_permissions = $this->dept_perms_obj->getPermission($data_id);
 
-            if ($user_permissions >= $this->user_perms_obj->NONE_RIGHT && $user_permissions <= $this->user_perms_obj->ADMIN_RIGHT) {
+            // A doc-level user_perms row is authoritative whenever it exists:
+            // 1-4 = grant, 0 ("Unset") = explicit no access, -1 = forbidden.
+            // No row is signalled by -999 (see User_Perms::getPermission).
+            if ($user_permissions != -999) {
                 return $user_permissions;
             }
 
-            if ($department_permissions >= 0 && $department_permissions <= 4) {
+            // A department grant only applies when it is a real positive grant.
+            // Dept_Perms::getPermission() returns 0 both for "no row" and for
+            // legacy files that store a rights=0 row for every department, so a
+            // value of 0 (or -1) must fall through to the category template
+            // instead of short-circuiting inheritance.
+            if ($department_permissions > 0) {
                 return $department_permissions;
             }
 
