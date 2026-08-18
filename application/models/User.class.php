@@ -651,6 +651,37 @@ if (!defined('User_class')) {
         }
 
         /**
+         * authenticate - Verify a username/password against the stored hash,
+         * lazily upgrading legacy MD5 hashes to bcrypt on success.
+         * @param string $username
+         * @param string $plainPassword
+         * @param PDO $connection
+         * @return int|false the user id, or false on failure
+         */
+        public static function authenticate($username, $plainPassword, PDO $connection)
+        {
+            $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = :username";
+            $stmt = $connection->prepare($query);
+            $stmt->execute(array(':username' => $username));
+            $row = $stmt->fetch();
+
+            if (!$row || !PasswordHasher::verify($plainPassword, $row['password'])) {
+                return false;
+            }
+
+            if (PasswordHasher::needsRehash($row['password'])) {
+                $update = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = :hash WHERE id = :id";
+                $stmt2 = $connection->prepare($update);
+                $stmt2->execute(array(
+                    ':hash' => PasswordHasher::hash($plainPassword),
+                    ':id' => $row['id']
+                ));
+            }
+
+            return (int) $row['id'];
+        }
+
+        /**
          * getAllUsers - Returns an array of all the active users
          * @param $pdo
          * @return array

@@ -1421,6 +1421,72 @@ class UserModelTest extends TestCase
     }
 
     /**
+     * Test authenticate with a valid bcrypt password
+     */
+    public function testAuthenticateWithValidBcryptPassword(): void
+    {
+        $this->mockStatement->shouldReceive('fetch')
+            ->once()
+            ->andReturn([
+                'id' => 1,
+                'username' => 'testuser',
+                'password' => PasswordHasher::hash('correct_password'),
+            ]);
+
+        $result = User::authenticate('testuser', 'correct_password', $this->mockConnection);
+        $this->assertSame(1, $result);
+    }
+
+    /**
+     * Test authenticate with a legacy MD5 hash (lazy rehash happens)
+     */
+    public function testAuthenticateWithLegacyMd5Password(): void
+    {
+        $this->mockStatement->shouldReceive('fetch')
+            ->once()
+            ->andReturn([
+                'id' => 1,
+                'username' => 'testuser',
+                'password' => md5('correct_password'),
+            ]);
+
+        // needsRehash is true -> an UPDATE runs; prepare/execute return the
+        // mock statement by default, so no extra setup is needed
+        $result = User::authenticate('testuser', 'correct_password', $this->mockConnection);
+        $this->assertSame(1, $result);
+    }
+
+    /**
+     * Test authenticate with a wrong password
+     */
+    public function testAuthenticateWithWrongPassword(): void
+    {
+        $this->mockStatement->shouldReceive('fetch')
+            ->once()
+            ->andReturn([
+                'id' => 1,
+                'username' => 'testuser',
+                'password' => PasswordHasher::hash('correct_password'),
+            ]);
+
+        $result = User::authenticate('testuser', 'wrong_password', $this->mockConnection);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test authenticate with an unknown user
+     */
+    public function testAuthenticateUnknownUser(): void
+    {
+        $this->mockStatement->shouldReceive('fetch')
+            ->once()
+            ->andReturn(false);
+
+        $result = User::authenticate('nobody', 'password', $this->mockConnection);
+        $this->assertFalse($result);
+    }
+
+    /**
      * Clean up after each test
      */
     protected function tearDown(): void
