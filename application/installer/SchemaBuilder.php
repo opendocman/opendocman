@@ -31,8 +31,8 @@ class SchemaBuilder
 
             "CREATE TABLE `{$prefix}category_perms` (
                 cat_id int(11) unsigned NOT NULL,
-                dept_id int(11) unsigned default NULL,
-                user_id int(11) unsigned default NULL,
+                dept_id int(11) unsigned NOT NULL default '0',
+                user_id int(11) unsigned NOT NULL default '0',
                 rights tinyint(4) NOT NULL default '0',
                 PRIMARY KEY (cat_id, dept_id, user_id),
                 KEY cat_id (cat_id),

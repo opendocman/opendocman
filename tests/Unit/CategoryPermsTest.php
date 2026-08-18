@@ -92,13 +92,47 @@ class CategoryPermsTest extends TestCase
         $stmtDelete->shouldReceive('execute')->once()->with([':cat_id' => 5])->andReturn(true);
         $stmtInsert = \Mockery::mock(\PDOStatement::class);
         $stmtInsert->shouldReceive('execute')->once()->with([
-            ':cat_id' => 5, ':dept_id' => 3, ':user_id' => null, ':rights' => 2
+            ':cat_id' => 5, ':dept_id' => 3, ':user_id' => 0, ':rights' => 2
         ])->andReturn(true);
         $pdo->shouldReceive('prepare')->twice()->andReturn($stmtDelete, $stmtInsert);
         $model = new CategoryPerms($pdo);
         $model->saveTemplate(5, [
             ['dept_id' => 3, 'user_id' => null, 'rights' => 2],
         ]);
+    }
+
+    public function testSaveTemplateWritesZeroSentinelForUnsetDimension(): void
+    {
+        // The dept_id/user_id columns are NOT NULL (part of the primary key and
+        // forced NOT NULL by default MariaDB), so the unused dimension is stored
+        // as 0, never NULL. Callers (category.php / admin_crud_ajax.php) pass
+        // null for the unused dimension; saveTemplate must coerce it to 0.
+        $stmtDelete = \Mockery::mock(\PDOStatement::class);
+        $stmtDelete->shouldReceive('execute')->once()->with([':cat_id' => 5])->andReturn(true);
+
+        $inserts = [];
+        $stmtInsert = \Mockery::mock(\PDOStatement::class);
+        $stmtInsert->shouldReceive('execute')
+            ->twice()
+            ->andReturnUsing(function ($params) use (&$inserts) {
+                $inserts[] = $params;
+                return true;
+            });
+
+        $pdo = \Mockery::mock(PDO::class);
+        $pdo->shouldReceive('prepare')->andReturn($stmtDelete, $stmtInsert);
+
+        $model = new CategoryPerms($pdo);
+        $model->saveTemplate(5, [
+            ['dept_id' => 1, 'user_id' => null, 'rights' => 2], // dept row: user_id = 0
+            ['dept_id' => null, 'user_id' => 10, 'rights' => 4], // user row: dept_id = 0
+        ]);
+
+        $this->assertSame(
+            [[':cat_id' => 5, ':dept_id' => 1, ':user_id' => 0, ':rights' => 2],
+             [':cat_id' => 5, ':dept_id' => 0, ':user_id' => 10, ':rights' => 4]],
+            array_map(static fn($p) => array_map('intval', $p), $inserts)
+        );
     }
 
     public function testDeleteTemplateExecutesDelete(): void

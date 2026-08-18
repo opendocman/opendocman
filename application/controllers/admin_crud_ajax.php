@@ -534,9 +534,9 @@ if ($action === 'get_perms' && $entity === 'categories') {
     $userPerms = [];
     foreach ($rows as $row) {
         $rights = (int)$row['rights'];
-        if ($row['dept_id'] !== null) {
+        if ((int)$row['dept_id'] > 0) {
             $deptPerms[(int)$row['dept_id']] = $rights;
-        } elseif ($row['user_id'] !== null) {
+        } elseif ((int)$row['user_id'] > 0) {
             $userPerms[(int)$row['user_id']] = $rights;
         }
     }

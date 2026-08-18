@@ -23,8 +23,8 @@ CREATE TABLE `odm_category` (
 
 CREATE TABLE `odm_category_perms` (
                 cat_id int(11) unsigned NOT NULL,
-                dept_id int(11) unsigned default NULL,
-                user_id int(11) unsigned default NULL,
+                dept_id int(11) unsigned NOT NULL default '0',
+                user_id int(11) unsigned NOT NULL default '0',
                 rights tinyint(4) NOT NULL default '0',
                 PRIMARY KEY (cat_id, dept_id, user_id),
                 KEY cat_id (cat_id),
@@ -167,7 +167,7 @@ INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
 INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$m2n1ArOFH.4kbfp0VnADfuR1heUwxbfIAZsCuulFlBRI1x9Q67chC','1','5555551212','admin@example.com','User','Admin','',1,1,1);
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.2');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.3');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');
