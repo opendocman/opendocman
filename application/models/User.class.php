@@ -300,18 +300,19 @@ if (!defined('User_class')) {
          */
         public function changePassword($non_encrypted_password)
         {
+            $passwordHash = PasswordHasher::hash($non_encrypted_password);
             $query = "
               UPDATE
                 {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               SET
-                password = md5(:non_encrypted_password),
+                password = :password_hash,
                 pw_change_required = 0
               WHERE
                 id = :id
             ";
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(
-                ':non_encrypted_password' => $non_encrypted_password,
+                ':password_hash' => $passwordHash,
                 ':id' => $this->id
             ));
             $this->pw_change_required = 0;
@@ -326,41 +327,21 @@ if (!defined('User_class')) {
         {
             $query = "
               SELECT
-                username
+                password
               FROM
                 {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               WHERE
                 id = :id
-              AND
-                password = md5(:non_encrypted_password)
             ";
             $stmt = $this->connection->prepare($query);
-            $stmt->execute(array(
-                ':non_encrypted_password' => $non_encrypted_password,
-                ':id' => $this->id
-            ));
-            if ($stmt->rowCount() == 1) {
-                return true;
-            } else {
-                // Check the old password() style user password
-                $query = "
-                  SELECT
-                    username
-                  FROM
-                    {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
-                  WHERE
-                    id = :id
-                  AND
-                    password = password(:non_encrypted_password)
-                ";
-                $stmt = $this->connection->prepare($query);
-                $stmt->execute(array(
-                    ':non_encrypted_password' => $non_encrypted_password,
-                    ':id' => $this->id
-                ));
-                if ($stmt->rowCount() == 1) {
-                    return true;
+            $stmt->execute(array(':id' => $this->id));
+            $storedHash = $stmt->fetchColumn();
+
+            if ($storedHash !== false && PasswordHasher::verify($non_encrypted_password, $storedHash)) {
+                if (PasswordHasher::needsRehash($storedHash)) {
+                    $this->changePassword($non_encrypted_password);
                 }
+                return true;
             }
             return false;
         }

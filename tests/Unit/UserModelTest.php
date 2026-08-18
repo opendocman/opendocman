@@ -658,53 +658,52 @@ class UserModelTest extends TestCase
     }
 
     /**
-     * Test changePassword method
+     * Test changePassword method stores a bcrypt hash
      */
     public function testChangePassword(): void
     {
         $newPassword = 'new_password_123';
-        
+
         $this->mockStatement->shouldReceive('execute')
             ->once()
-            ->with(\Mockery::type('array'))
+            ->with(\Mockery::on(function ($params) use ($newPassword) {
+                return isset($params[':password_hash'])
+                    && PasswordHasher::verify($newPassword, $params[':password_hash']);
+            }))
             ->andReturn(true);
-        
+
         $result = $this->user->changePassword($newPassword);
         $this->assertTrue($result);
     }
 
     /**
-     * Test validatePassword method with valid password
+     * Test validatePassword method with valid bcrypt password
      */
     public function testValidatePasswordWithValidPassword(): void
     {
         $password = 'correct_password';
-        
-        $this->mockStatement->shouldReceive('rowCount')
+
+        $this->mockStatement->shouldReceive('fetchColumn')
             ->once()
-            ->andReturn(1);
-        
+            ->andReturn(PasswordHasher::hash($password));
+
         $result = $this->user->validatePassword($password);
         $this->assertTrue($result);
     }
 
     /**
-     * Test validatePassword method with invalid password using old password() style
+     * Test validatePassword method with legacy MD5 hash (lazy rehash)
      */
-    public function testValidatePasswordWithOldStylePassword(): void
+    public function testValidatePasswordWithLegacyMd5Hash(): void
     {
         $password = 'old_style_password';
-        
-        // First query returns 0 rows (md5 style fails)
-        $this->mockStatement->shouldReceive('rowCount')
+
+        $this->mockStatement->shouldReceive('fetchColumn')
             ->once()
-            ->andReturn(0);
-        
-        // Second query returns 1 row (password() style succeeds)
-        $this->mockStatement->shouldReceive('rowCount')
-            ->once()
-            ->andReturn(1);
-        
+            ->andReturn(md5($password));
+
+        // verify() succeeds, needsRehash() is true -> changePassword() runs an
+        // UPDATE (execute returns true by default), then returns true
         $result = $this->user->validatePassword($password);
         $this->assertTrue($result);
     }
@@ -715,12 +714,11 @@ class UserModelTest extends TestCase
     public function testValidatePasswordWithInvalidPassword(): void
     {
         $password = 'wrong_password';
-        
-        // Both queries return 0 rows
-        $this->mockStatement->shouldReceive('rowCount')
-            ->twice()
-            ->andReturn(0);
-        
+
+        $this->mockStatement->shouldReceive('fetchColumn')
+            ->once()
+            ->andReturn(PasswordHasher::hash('something_else'));
+
         $result = $this->user->validatePassword($password);
         $this->assertFalse($result);
     }
