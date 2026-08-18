@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2']
+        php: ['8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
 
@@ -47,7 +47,7 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.5'
           tools: composer
 
       - name: Install dependencies
@@ -70,12 +70,12 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.5'
 
       - name: Lint all PHP files
         run: |
           set -e
-          for f in $(find application scripts tests -name '*.php'); do
+          for f in $(find application scripts tests -name '*.php' -not -path 'application/vendor/*'); do
             php -l "$f" >/dev/null || exit 1
           done
           echo "All PHP files lint clean"
