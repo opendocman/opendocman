@@ -300,18 +300,19 @@ if (!defined('User_class')) {
          */
         public function changePassword($non_encrypted_password)
         {
+            $passwordHash = PasswordHasher::hash($non_encrypted_password);
             $query = "
               UPDATE
                 {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               SET
-                password = md5(:non_encrypted_password),
+                password = :password_hash,
                 pw_change_required = 0
               WHERE
                 id = :id
             ";
             $stmt = $this->connection->prepare($query);
             $stmt->execute(array(
-                ':non_encrypted_password' => $non_encrypted_password,
+                ':password_hash' => $passwordHash,
                 ':id' => $this->id
             ));
             $this->pw_change_required = 0;
@@ -326,41 +327,25 @@ if (!defined('User_class')) {
         {
             $query = "
               SELECT
-                username
+                password
               FROM
                 {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
               WHERE
                 id = :id
-              AND
-                password = md5(:non_encrypted_password)
             ";
             $stmt = $this->connection->prepare($query);
-            $stmt->execute(array(
-                ':non_encrypted_password' => $non_encrypted_password,
-                ':id' => $this->id
-            ));
-            if ($stmt->rowCount() == 1) {
-                return true;
-            } else {
-                // Check the old password() style user password
-                $query = "
-                  SELECT
-                    username
-                  FROM
-                    {$GLOBALS['CONFIG']['db_prefix']}$this->tablename
-                  WHERE
-                    id = :id
-                  AND
-                    password = password(:non_encrypted_password)
-                ";
-                $stmt = $this->connection->prepare($query);
-                $stmt->execute(array(
-                    ':non_encrypted_password' => $non_encrypted_password,
-                    ':id' => $this->id
-                ));
-                if ($stmt->rowCount() == 1) {
-                    return true;
+            $stmt->execute(array(':id' => $this->id));
+            $storedHash = $stmt->fetchColumn();
+
+            if ($storedHash !== false && PasswordHasher::verify($non_encrypted_password, $storedHash)) {
+                if (PasswordHasher::needsRehash($storedHash)) {
+                    try {
+                        $this->changePassword($non_encrypted_password);
+                    } catch (\PDOException $e) {
+                        // Rehash failure must not invalidate the verified password
+                    }
                 }
+                return true;
             }
             return false;
         }
@@ -667,6 +652,41 @@ if (!defined('User_class')) {
             $stmt = $connection->prepare($query);
             $stmt->execute(array(':id' => $id));
             return $stmt->fetchColumn() > 0;
+        }
+
+        /**
+         * authenticate - Verify a username/password against the stored hash,
+         * lazily upgrading legacy MD5 hashes to bcrypt on success.
+         * @param string $username
+         * @param string $plainPassword
+         * @param PDO $connection
+         * @return int|false the user id, or false on failure
+         */
+        public static function authenticate($username, $plainPassword, PDO $connection)
+        {
+            $query = "SELECT id, username, password FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE username = :username";
+            $stmt = $connection->prepare($query);
+            $stmt->execute(array(':username' => $username));
+            $row = $stmt->fetch();
+
+            if (!$row || !PasswordHasher::verify($plainPassword, $row['password'])) {
+                return false;
+            }
+
+            if (PasswordHasher::needsRehash($row['password'])) {
+                try {
+                    $update = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET password = :hash WHERE id = :id";
+                    $stmt2 = $connection->prepare($update);
+                    $stmt2->execute(array(
+                        ':hash' => PasswordHasher::hash($plainPassword),
+                        ':id' => $row['id']
+                    ));
+                } catch (\PDOException $e) {
+                    // Rehash failure must not block an otherwise-valid login
+                }
+            }
+
+            return (int) $row['id'];
         }
 
         /**

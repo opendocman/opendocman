@@ -66,7 +66,7 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
                   first_name
                 ) VALUES (
                   :username,
-                  md5(:password),
+                  :password,
                   :department,
                   :phonenumber,
                   :email,
@@ -77,7 +77,7 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             $stmt->bindParam(':username', $_POST['username']);
             $stmt->execute(array(
                 ':username' => $_POST['username'],
-                ':password' => $_POST['password'],
+                ':password' => PasswordHasher::hash($_POST['password']),
                 ':department' => $_POST['department'],
                 ':phonenumber' => $phonenumber,
                 ':email' => $_POST['Email'],

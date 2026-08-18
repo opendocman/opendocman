@@ -589,7 +589,7 @@ class UserControllerFunctionsTest extends TestCase
         $query .= " can_checkin = :can_checkin, ";
         
         if (!empty($userData['password'])) {
-            $query .= " password = md5(:password), ";
+            $query .= " password = :password, ";
         }
         
         $query .= " department = :department, ";

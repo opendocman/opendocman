@@ -92,61 +92,19 @@ if (isset($_POST['login'])) {
     $frmuser = $_POST['frmuser'];
     $frmpass = $_POST['frmpass'];
 
-    // check login and md5()
-    // connect and execute query
-    $query = "
-      SELECT
-        id,
-        username,
-        password
-      FROM
-        {$GLOBALS['CONFIG']['db_prefix']}user
-      WHERE
-        username = :frmuser
-      AND
-        password = md5(:frmpass)
-    ";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute(array(
-        ':frmuser' => $frmuser,
-        ':frmpass' => $frmpass
-    ));
-    $result = $stmt->fetchAll();
-
-    if (count($result) != 1) {
-        // Check old password() method
-        $query = "
-          SELECT
-            id,
-            username,
-            password
-          FROM
-            {$GLOBALS['CONFIG']['db_prefix']}user
-          WHERE
-            username = :frmuser
-          AND
-            password = password(:frmpass)
-            ";
-
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array(
-            ':frmuser' => $frmuser,
-            ':frmpass' => $frmpass
-        ));
-        $result = $stmt->fetchAll();
-    }
+    // Authenticate against bcrypt hashes; legacy MD5 hashes are lazily
+    // upgraded to bcrypt on successful login
+    $id = User::authenticate($frmuser, $frmpass, $pdo);
 
     // if row exists - login/pass is correct
-    if (count($result) == 1) {
+    if ($id !== false) {
         // register the user's ID
-        $id = $result[0]['id'];
-
-        // initiate a session
         $_SESSION['uid'] = $id;
 
-        // Check if password change is required
+        // Check if password change is required (skipped in demo mode, where a
+        // shared known credential is expected)
         $user_obj = new User($id, $pdo);
-        if ($user_obj->isPasswordChangeRequired()) {
+        if ($user_obj->isPasswordChangeRequired() && $GLOBALS['CONFIG']['demo'] != 'True') {
             $_SESSION['pw_change_required'] = true;
             redirect_visitor('change_password');
             exit;

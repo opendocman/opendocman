@@ -25,6 +25,7 @@ require_once APPLICATION_PATH . '/models/classHeaders.php';
 // Manually include the model classes since they're not autoloaded
 require_once APPLICATION_PATH . '/models/databaseData.class.php';
 require_once APPLICATION_PATH . '/models/User.class.php';
+require_once APPLICATION_PATH . '/models/PasswordHasher.class.php';
 require_once APPLICATION_PATH . '/models/Category.class.php';
 require_once APPLICATION_PATH . '/models/Department.class.php';
 require_once APPLICATION_PATH . '/models/File.class.php';
