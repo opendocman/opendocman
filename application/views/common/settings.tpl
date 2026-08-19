@@ -40,6 +40,13 @@
                             <option value="{$useridnum[0]|escape}" {if $i.value eq $useridnum[0]} selected="selected"{/if}>{$useridnum[1]|escape:'html'}</option>
                         {/foreach}
                     </select>
+                {elseif $i.name eq 'default_signup_department'}
+                    <select name="default_signup_department" class="form-select">
+                        <option value="" {if $i.value eq ''}selected="selected"{/if}>-- unassigned --</option>
+                        {foreach from=$departments item=dept}
+                            <option value="{$dept[0]|escape}" {if $i.value eq $dept[0]}selected="selected"{/if}>{$dept[1]|escape:'html'}</option>
+                        {/foreach}
+                    </select>
                 {else}
                     <input name="{$i.name|escape}" type="text" value="{$i.value|escape:'html'}" class="form-control">
                 {/if}

@@ -206,6 +206,51 @@ class SettingsTest extends TestCase
         $this->assertNull($settings->get('nonexistent'));
     }
 
+    public function testEditAssignsDepartments(): void
+    {
+        // edit() calls getThemes()/getLanguages() which scan ABSPATH directories,
+        // and display_smarty_template() which reads $GLOBALS['CONFIG']['theme'].
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', $this->tmpBase . '/');
+        }
+        $this->mkdirp(ABSPATH . 'views');
+        $this->mkdirp(ABSPATH . 'includes/language');
+        if (empty($GLOBALS['CONFIG']['theme'])) {
+            $GLOBALS['CONFIG']['theme'] = 'bootstrap5';
+        }
+
+        $pdo = \Mockery::mock(PDO::class);
+        $stmt = \Mockery::mock(PDOStatement::class);
+
+        // Query for settings rows (SELECT * FROM settings)
+        $stmt->shouldReceive('execute')->andReturn(true);
+        $stmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT \* FROM.*settings/'))->andReturn($stmt);
+
+        // Query for departments
+        $deptStmt = \Mockery::mock(PDOStatement::class);
+        $deptStmt->shouldReceive('execute')->andReturn(true);
+        $deptStmt->shouldReceive('fetchAll')->andReturn([['1', 'Public'], ['2', 'HR']]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
+
+        // Query for user id numbers (getUserIdNums)
+        $userStmt = \Mockery::mock(PDOStatement::class);
+        $userStmt->shouldReceive('execute')->andReturn(true);
+        $userStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*user/s'))->andReturn($userStmt);
+
+        $smarty = \Mockery::mock('Smarty');
+        $smarty->shouldReceive('assign')->with('departments', \Mockery::on(function ($d) {
+            return count($d) === 2 && $d[0][0] === '1' && $d[0][1] === 'Public';
+        }))->once();
+        $smarty->shouldReceive('assign')->withAnyArgs()->andReturnNull();
+        $smarty->shouldReceive('display')->andReturnNull();
+        $GLOBALS['smarty'] = $smarty;
+
+        $settings = new Settings($pdo);
+        $settings->edit();
+    }
+
     private function mkdirp(string $path): void
     {
         if (!is_dir($path)) {
