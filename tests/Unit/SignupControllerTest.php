@@ -39,6 +39,22 @@ class SignupControllerTest extends TestCase
         $_SERVER['REQUEST_URI'] = '/signup';
     }
 
+    protected function tearDown(): void
+    {
+        unset($GLOBALS['smarty']);
+        unset($GLOBALS['pdo']);
+        unset($GLOBALS['CONFIG']);
+        unset($GLOBALS['csrf']);
+        $_SESSION = [];
+        $_POST = [];
+        $_REQUEST = [];
+        unset($_SERVER['REQUEST_URI']);
+        // Aura's static escaper cannot be reset to null (setStatic is typed to
+        // Escaper); setUp() always overwrites it with a fresh instance, so it is
+        // idempotent between tests and needs no explicit reset here.
+        parent::tearDown();
+    }
+
     private function buildPdoWithInsertAssert($expectedDept): PDO
     {
         $pdo = \Mockery::mock(PDO::class);

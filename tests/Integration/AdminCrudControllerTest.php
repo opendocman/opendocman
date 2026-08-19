@@ -133,7 +133,7 @@ class AdminCrudControllerTest extends TestCase
         ob_start();
         $_GET = ['entity' => 'users', 'action' => 'list', 'page' => 1, 'size' => 25, 'filter' => 'unassigned'];
         $_REQUEST = $_GET;
-        require APPLICATION_PATH . '/controllers/admin_crud_ajax.php';
+        require dirname(__DIR__, 2) . '/application/controllers/admin_crud_ajax.php';
         $output = ob_get_clean();
         $json = json_decode($output, true);
         $this->assertSame(1, $json['last_row']);
