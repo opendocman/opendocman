@@ -260,6 +260,7 @@ $lang['label_date'] = 'Fecha';
 $lang['label_type_pr_sec'] = 'Tipo'; //CHM
 $lang['label_primary_type'] = 'Primario'; //CHM
 $lang['label_sub_select_list'] = 'Lista con Sub-Seleccion'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 // Mensajes
 $lang['message_account_created'] = 'Su usuario ha sido creado. Por favor revise su e-mail por información requerida .';
 $lang['message_account_created_add_user'] = 'Su usuario ha sido creado.';

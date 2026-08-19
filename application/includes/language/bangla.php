@@ -260,6 +260,7 @@ $lang['label_date'] = 'তারিখ';
 $lang['label_type_pr_sec'] = 'ধরণ'; //CHM
 $lang['label_primary_type'] = 'প্রাথমিক'; //CHM
 $lang['label_sub_select_list'] = 'অধীনস্ত-নির্বাচন তালিকা'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'আপনার একাউন্টটি তৈরি করা হয়েছে।';

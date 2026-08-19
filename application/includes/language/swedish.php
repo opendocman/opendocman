@@ -261,6 +261,7 @@ $lang['label_date'] = 'Datum';
 $lang['label_type_pr_sec'] = 'Typ';//CHM
 $lang['label_primary_type'] = 'Primär';//CHM
 $lang['label_sub_select_list'] = 'Undervalslista';//CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Ditt konto har skapats.';

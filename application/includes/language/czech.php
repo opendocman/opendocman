@@ -260,6 +260,7 @@ $lang['label_date'] = 'Datum';
 $lang['label_type_pr_sec'] = 'Typ'; //CHM
 $lang['label_primary_type'] = 'Primární'; //CHM
 $lang['label_sub_select_list'] = 'Seznam'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Váš účet byl vyvořen.';

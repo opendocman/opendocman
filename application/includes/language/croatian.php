@@ -260,6 +260,7 @@ $lang['label_date'] = 'Datum';
 $lang['label_type_pr_sec'] = 'Tip';
 $lang['label_primary_type'] = 'Primarno';
 $lang['label_sub_select_list'] = 'Popis za pododabir';
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Vaš račun je stvoren.';

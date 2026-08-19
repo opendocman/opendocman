@@ -324,6 +324,7 @@ $lang['label_date'] = 'Tarih';
 $lang['label_type_pr_sec'] = 'Tür'; // CHM
 $lang['label_primary_type'] = 'Birincil'; // CHM
 $lang['label_sub_select_list'] = 'Alt Seçim Listesi'; // CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Düğmeler
 

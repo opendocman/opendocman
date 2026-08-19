@@ -260,6 +260,7 @@ $lang['label_date'] = 'تاريخ';
 $lang['label_type_pr_sec'] = 'النوع';
 $lang['label_primary_type'] = 'أولي';
 $lang['label_sub_select_list'] = 'قائمة جزئية';
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'حسابك تم انشائة.';
