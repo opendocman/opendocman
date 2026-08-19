@@ -707,5 +707,18 @@ if (!defined('User_class')) {
             }
             return $userListArray;
         }
+
+        /**
+         * countUnassignedUsers - Returns the number of users with no department
+         * @param PDO $pdo
+         * @return int
+         */
+        public static function countUnassignedUsers(PDO $pdo): int
+        {
+            $prefix = $GLOBALS['CONFIG']['db_prefix'];
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM {$prefix}user WHERE department IS NULL");
+            $stmt->execute();
+            return (int)$stmt->fetchColumn();
+        }
     }
 }

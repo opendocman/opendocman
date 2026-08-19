@@ -54,6 +54,13 @@ if ($reviewIdCount > 0) {
     echo '<img src="images/exclamation.gif" /> <a href="toBePublished?state=1">' .msg('message_documents_waiting'). '</a>: ' . e::h($reviewIdCount)  . '</a><br />';
 }
 
+if ($user_obj->isAdmin()) {
+    $unassignedCount = User::countUnassignedUsers($pdo);
+    if ($unassignedCount > 0) {
+        echo '<img src="images/exclamation.gif" /> <a href="admin_users?filter=unassigned">' . msg('label_unassigned_users') . '</a>: ' . e::h($unassignedCount) . '<br />';
+    }
+}
+
 $rejected_files_obj = $user_obj->getRejectedFileIds();
 
 if (isset($rejected_files_obj[0]) && $rejected_files_obj[0] != null) {
