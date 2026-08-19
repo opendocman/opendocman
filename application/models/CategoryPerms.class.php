@@ -83,8 +83,12 @@ if (!defined('CategoryPerms')) {
                 }
                 $stmt->execute([
                     ':cat_id' => $catId,
-                    ':dept_id' => $perm['dept_id'] ?? null,
-                    ':user_id' => $perm['user_id'] ?? null,
+                    // 0 is the "unset" sentinel for the unused dimension. The
+                    // columns are NOT NULL (they are part of the primary key),
+                    // so NULL cannot be stored; default MariaDB also coerces
+                    // PK columns to NOT NULL regardless of the declared schema.
+                    ':dept_id' => (int)($perm['dept_id'] ?? 0),
+                    ':user_id' => (int)($perm['user_id'] ?? 0),
                     ':rights' => $rights,
                 ]);
             }
