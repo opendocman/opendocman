@@ -75,10 +75,11 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
                   )";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':username', $_POST['username']);
+            $signup_dept = (!empty($GLOBALS['CONFIG']['default_signup_department'])) ? $GLOBALS['CONFIG']['default_signup_department'] : null;
             $stmt->execute(array(
                 ':username' => $_POST['username'],
                 ':password' => PasswordHasher::hash($_POST['password']),
-                ':department' => $_POST['department'],
+                ':department' => $signup_dept,
                 ':phonenumber' => $phonenumber,
                 ':email' => $_POST['Email'],
                 ':last_name' => $_POST['last_name'],
@@ -160,33 +161,6 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             echo '<INPUT type="hidden" name="password" value="' . $rand_password . '">';
         }
     ?>
-        <div class="mb-3 row">
-            <label class="col-sm-3 col-form-label fw-bold">Department</label>
-            <div class="col-sm-9">
-                <select name="department" class="form-select">
-        <?php	
-        // query to get a list of departments
-        $query = "
-          SELECT
-            id,
-            name
-          FROM
-            {$GLOBALS['CONFIG']['db_prefix']}department
-          ORDER BY
-            name
-        ";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    foreach ($result as $row) {
-        echo '<option value=' . e::h($row['id']) . '>' . e::h($row['name']) . '</option>';
-    }
-
-    ?>
-                </select>
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm-9 offset-sm-3">
                 <input type="Submit" name="adduser" class="btn btn-primary" onClick="return validatemod(add_user);" value="<?php echo msg('submit');
