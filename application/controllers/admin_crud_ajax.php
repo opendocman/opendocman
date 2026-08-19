@@ -58,6 +58,10 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
             $query = "SELECT u.id, u.username, u.last_name, u.first_name, u.Email AS email, u.phone, u.department, u.can_add, u.can_checkin, d.name AS department_name, a.admin AS is_admin, (SELECT COUNT(*) FROM {$db_prefix}dept_reviewer dr WHERE dr.user_id = u.id) > 0 AS is_reviewer, (SELECT GROUP_CONCAT(dr2.dept_id) FROM {$db_prefix}dept_reviewer dr2 WHERE dr2.user_id = u.id) AS reviewer_depts FROM {$db_prefix}user u LEFT JOIN {$db_prefix}department d ON u.department = d.id LEFT JOIN {$db_prefix}admin a ON u.id = a.id";
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}user";
             $orderBy = "u.id";
+            if (($_REQUEST['filter'] ?? '') === 'unassigned') {
+                $query .= " WHERE u.department IS NULL";
+                $countQuery .= " WHERE department IS NULL";
+            }
             break;
         case 'departments':
             $query = "SELECT d.id, d.name, COUNT(u.id) AS user_count FROM {$db_prefix}department d LEFT JOIN {$db_prefix}user u ON u.department = d.id GROUP BY d.id, d.name";

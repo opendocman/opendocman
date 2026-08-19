@@ -1,5 +1,6 @@
 <script>
 window.crudEntity = 'users';
+window.crudFilter = '{$crud_filter|escape:'javascript'}';
 window.departmentList = {$department_list|@json_encode};
 window.csrfIndexName = '{$csrf_index_name}';
 window.csrfIndex = '{$csrf_index_value}';
