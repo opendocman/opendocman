@@ -201,6 +201,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'public_sharing', 'False', '(True/False) Enable public file sharing page. When enabled, files marked as public and approved will be visible without authentication.', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'default_signup_department', '', 'Default department assigned to new self-registered users (blank = unassigned)', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'theme', 'bootstrap5', 'Which theme to use?', '')",
