@@ -265,7 +265,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'Váš účet byl vyvořen.';
 $lang['message_account_created_password'] = 'Vaše vygenerované heslo je';
-$lang['message_account_created'] = 'Váš účet byl vytvořen. Na Váš email byly zaslány přihlašovací informace.';
+$lang['message_account_created'] = 'Váš účet byl vytvořen.';
+$lang['label_signup_success'] = 'Registrace byla erfolgreich';
 $lang['message_action_cancelled'] = 'Akce zrušena';
 $lang['message_all_actions_successfull'] = 'Všechny akce byly úspěšně dokončeny';
 $lang['message_an_email_has_been_sent'] = 'Byl odeslám email na adresu ze souboru s odkazem na změnu hesla.';

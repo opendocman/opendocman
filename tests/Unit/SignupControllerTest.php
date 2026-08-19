@@ -19,21 +19,42 @@ class SignupControllerTest extends TestCase
         // HelperLocatorFactory, the test bootstrap does not.
         Escaper::setStatic(new Escaper(new HtmlEscaper(), new AttrEscaper(new HtmlEscaper()), new CssEscaper(), new JsEscaper()));
 
-        // Dependencies used by the post-submit form rendering in signup.php
-        // (only reached when authen != 'mysql', i.e. no early exit()).
+        // Dependencies used by the post-submit form rendering in signup.php.
         if (!defined('ABSPATH')) {
             define('ABSPATH', APPLICATION_PATH . '/');
         }
         if (!class_exists('crumb')) {
             require_once APPLICATION_PATH . '/controllers/helpers/crumb.php';
         }
+        // So msg() returns the real English copy.
+        if (!isset($GLOBALS['lang'])) {
+            include APPLICATION_PATH . '/includes/language/english.php';
+            $GLOBALS['lang'] = $lang;
+        }
+        // A "signup succeeded" flow in signup.php renders the content template
+        // and then calls exit(). The stub throws instead so execution stops
+        // before the controller's exit kills PHPUnit — the captured 'content'
+        // assignment is available for assertions.
         $GLOBALS['smarty'] = new class {
+            public $content = null;
+
             public function assign(...$args)
             {
+                if ($args[0] === 'content') {
+                    $this->content = $args[1];
+                }
             }
+
             public function display(...$args)
             {
+                if (strpos((string) ($args[0] ?? ''), '_content.tpl') !== false) {
+                    throw new RuntimeException('signup-content-displayed');
+                }
             }
+        };
+        $GLOBALS['csrf'] = new class {
+            public function getTokenField(): string { return ''; }
+            public function validateToken(array $post): bool { return true; }
         };
         $_SESSION = [];
         $_SERVER['REQUEST_URI'] = '/signup';
@@ -78,37 +99,94 @@ class SignupControllerTest extends TestCase
         return $pdo;
     }
 
-    public function testSignupUsesConfiguredDefaultDepartment(): void
+    /**
+     * Run signup.php's submit branch. signup.php calls exit() after rendering
+     * the success content template; the smarty stub raises RuntimeException
+     * during that display, which breaks out before the exit.
+     */
+    private function runSignupSubmit(array $config, array $post): void
     {
-        $GLOBALS['CONFIG'] = [
+        $GLOBALS['CONFIG'] = $config + [
             'db_prefix' => 'odm_',
             'allow_signup' => 'True',
-            'authen' => 'ldap', // non-mysql: avoids the early exit() in the submit branch
             'base_url' => 'http://localhost',
             'title' => 'OpenDocMan',
             'theme' => 'default',
             'default_signup_department' => '1',
         ];
         $GLOBALS['pdo'] = $this->buildPdoWithInsertAssert('1');
-        $GLOBALS['csrf'] = new class {
-            public function getTokenField(): string { return ''; }
-            public function validateToken(array $post): bool { return true; }
-        };
-        // Prevent draw_header / msg output side effects
-        $_POST = [
-            'adduser' => '1',
-            'username' => 'newbie',
-            'password' => 'secret',
-            'department' => '2', // must be ignored
-            'Email' => 'n@e.com',
-            'last_name' => 'New',
-            'first_name' => 'User',
-        ];
-        $_REQUEST = $_POST;
-        $last_message = ''; // signup.php renders draw_header(msg('signup'), $last_message) after submit
+        $_POST = $post;
+        $_REQUEST = $post;
+        // signup.php's success render calls draw_header(..., $last_message);
+        // the controller relies on this being set in the calling scope.
+        $last_message = '';
         ob_start();
-        require APPLICATION_PATH . '/controllers/signup.php';
+        try {
+            require APPLICATION_PATH . '/controllers/signup.php';
+        } catch (RuntimeException $e) {
+            if ($e->getMessage() !== 'signup-content-displayed') {
+                throw $e;
+            }
+        }
         ob_end_clean();
+    }
+
+    public function testSignupUsesConfiguredDefaultDepartment(): void
+    {
+        $this->runSignupSubmit(
+            ['authen' => 'ldap'],
+            [
+                'adduser' => '1',
+                'username' => 'newbie',
+                'password' => 'secret',
+                'department' => '2', // must be ignored
+                'Email' => 'n@e.com',
+                'last_name' => 'New',
+                'first_name' => 'User',
+            ]
+        );
         $this->assertTrue(true);
+    }
+
+    public function testSignupSuccessRendersStyledMessageWithoutEmailNotice(): void
+    {
+        $this->runSignupSubmit(
+            ['authen' => 'ldap'],
+            [
+                'adduser' => '1',
+                'username' => 'newbie',
+                'password' => 'secret',
+                'department' => '2',
+                'Email' => 'n@e.com',
+                'last_name' => 'New',
+                'first_name' => 'User',
+            ]
+        );
+        $this->assertIsString($GLOBALS['smarty']->content);
+        $this->assertStringContainsString('Your account has been created.', $GLOBALS['smarty']->content);
+        $this->assertStringNotContainsString('check your email', $GLOBALS['smarty']->content);
+        // Non-mysql auth must not leak a temp password.
+        $this->assertStringNotContainsString('Your randomly generated password is', $GLOBALS['smarty']->content);
+    }
+
+    public function testSignupSuccessMysqlShowsTempPassword(): void
+    {
+        $this->runSignupSubmit(
+            ['authen' => 'mysql'],
+            [
+                'adduser' => '1',
+                'username' => 'newbie',
+                'password' => 'TempPass123',
+                'department' => '2',
+                'Email' => 'n@e.com',
+                'last_name' => 'New',
+                'first_name' => 'User',
+            ]
+        );
+        $this->assertIsString($GLOBALS['smarty']->content);
+        $this->assertStringContainsString('Your account has been created.', $GLOBALS['smarty']->content);
+        $this->assertStringContainsString('Your randomly generated password is', $GLOBALS['smarty']->content);
+        $this->assertStringContainsString('TempPass123', $GLOBALS['smarty']->content);
+        $this->assertStringNotContainsString('check your email', $GLOBALS['smarty']->content);
     }
 }

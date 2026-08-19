@@ -265,7 +265,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'Vaš račun je stvoren.';
 $lang['message_account_created_password'] = 'Vaša sustavom generirana lozinka je';
-$lang['message_account_created'] = 'Vaš račun je stvoren. Provjerite svoju e-poštu za informacije o prijavi u sustav.';
+$lang['message_account_created'] = 'Vaš račun je stvoren.';
+$lang['label_signup_success'] = 'Registracija uspješna';
 $lang['message_action_cancelled'] = 'Radnja poništena';
 $lang['message_all_actions_successfull'] = 'Sve radnje su završene uspješno';
 $lang['message_an_email_has_been_sent'] = 'Poruka je poslana na vašu adresu e-pošte sa poveznicom koju morate posjetiti kako bi resetirali lozinku.';

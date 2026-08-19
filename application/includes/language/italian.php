@@ -265,7 +265,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'Il tuo account &egrave; stato creato.';
 $lang['message_account_created_password'] = 'La tua password generata &egrave;';
-$lang['message_account_created'] = 'Il tuo account &egrave; stato creato. Controlla la tua email per le informazioni di accesso';
+$lang['message_account_created'] = 'Il tuo account &egrave; stato creato.';
+$lang['label_signup_success'] = 'Registrazione riuscita';
 $lang['message_action_cancelled'] = 'Azione annullata';
 $lang['message_all_actions_successfull'] = 'Tutte le azioni sono state completate con successo';
 $lang['message_an_email_has_been_sent'] = 'Una email &egrave; stata inviata al tuo indirizzo con un collegamento per il ripristino della password.';

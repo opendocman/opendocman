@@ -265,7 +265,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'আপনার একাউন্টটি তৈরি করা হয়েছে।';
 $lang['message_account_created_password'] = 'আপনার জন্য দৈবচয়িত কূটশব্দটি হলো';
-$lang['message_account_created'] = 'আপনার একাউন্টটি তৈরি করা হয়েছে। প্রবেশের তথ্য জানার জন্য দয়া করে আপনার ই-মেইলে খোঁজ নিন।';
+$lang['message_account_created'] = 'আপনার একাউন্টটি তৈরি করা হয়েছে।';
+$lang['label_signup_success'] = 'একাউন্ট সফলভাবে তৈরি হয়েছে';
 $lang['message_action_cancelled'] = 'পদক্ষেপ বাতিল করা হয়েছে';
 $lang['message_all_actions_successfull'] = 'সকল পদক্ষেপ গ্রহণ সুসম্পন্ন হয়েছে';
 $lang['message_an_email_has_been_sent'] = 'কূটশব্দ পূনঃনির্ধারণের নির্দেশাবলী সংক্রান্ত লিংক আপনার ই-মেইল ঠিকানায় পাঠানো হয়েছে । দয়া করে সে টি অনুসরণ করে কূটশব্দ পূনঃনির্ধারণ করতে পারবেন।';

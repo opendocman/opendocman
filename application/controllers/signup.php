@@ -89,14 +89,28 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             // INSERT into admin
             $userid = $pdo->lastInsertId();
 
-            // mail user telling him/her that his/her account has been created.
-            echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
-            if($GLOBALS['CONFIG']['authen'] == 'mysql')
-            {
-                echo msg('message_account_created_password') . ': '. e::h($_REQUEST['password']) . PHP_EOL . PHP_EOL;
-                echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">' . msg('login'). '</a>';
-                exit;
-            }
+            // Account created successfully — show a styled confirmation.
+            draw_header(msg('label_signup_success'), $last_message);
+            ob_start();
+            ?>
+            <div class="d-flex justify-content-center">
+                <div class="card w-100" style="max-width: 28rem;">
+                    <div class="card-header bg-success text-white"><h5 class="card-title mb-0"><?php echo msg('message_account_created'); ?></h5></div>
+                    <div class="card-body">
+                        <p><?php echo msg('username') . ': ' . e::h($_POST['username']); ?></p>
+                        <?php if ($GLOBALS['CONFIG']['authen'] == 'mysql') { ?>
+                            <p><?php echo msg('message_account_created_password'); ?>: <code><?php echo e::h($_REQUEST['password']); ?></code></p>
+                        <?php } ?>
+                        <a class="btn btn-primary" href="<?php echo e::h($GLOBALS['CONFIG']['base_url']); ?>"><?php echo msg('login'); ?></a>
+                    </div>
+                </div>
+            </div>
+            <?php
+            $content = ob_get_clean();
+            $GLOBALS['smarty']->assign('content', $content);
+            display_smarty_template('_content.tpl');
+            draw_footer();
+            exit;
         }
     }
     ?>

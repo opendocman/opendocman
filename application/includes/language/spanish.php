@@ -262,7 +262,8 @@ $lang['label_primary_type'] = 'Primario'; //CHM
 $lang['label_sub_select_list'] = 'Lista con Sub-Seleccion'; //CHM
 $lang['label_unassigned_users'] = 'Unassigned users';
 // Mensajes
-$lang['message_account_created'] = 'Su usuario ha sido creado. Por favor revise su e-mail por información requerida .';
+$lang['message_account_created'] = 'Su usuario ha sido creado.';
+$lang['label_signup_success'] = 'Registro exitoso';
 $lang['message_account_created_add_user'] = 'Su usuario ha sido creado.';
 $lang['message_account_created_password'] = 'su contraseña aleatória es ';
 $lang['message_action_cancelled'] = 'Acción cancelada';

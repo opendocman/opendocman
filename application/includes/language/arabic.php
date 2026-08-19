@@ -265,7 +265,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'حسابك تم انشائة.';
 $lang['message_account_created_password'] = 'كلمة السر التي تم انشائها عشوائيا هي';
-$lang['message_account_created'] = 'لقد تم إنشاء حسابك. يرجى التحقق من بريدك الالكتروني للحصول على معلومات تسجيل الدخول.';
+$lang['message_account_created'] = 'لقد تم إنشاء حسابك.';
+$lang['label_signup_success'] = 'تم إنشاء الحساب بنجاح';
 $lang['message_action_cancelled'] = 'تم الغاء العملية';
 $lang['message_all_actions_successfull'] = 'كل العمليات تمت بنجاح';
 $lang['message_an_email_has_been_sent'] = 'تم ارسال رسالة بالبريد الالكتروني إلى عنوان البريد الإلكتروني الموجود في الملف تحتوي على رابط يجب اتباعة من أجل إعادة تعيين كلمة المرور.';

@@ -266,7 +266,8 @@ $lang['label_unassigned_users'] = 'Unassigned users';
 // Messages
 $lang['message_account_created_add_user'] = 'Din konto er blevet oprettet.';
 $lang['message_account_created_password'] = 'Dit tilfældigt dannede password er';
-$lang['message_account_created'] = 'Din konto er oprettet. Kontroller din email for login information.';
+$lang['message_account_created'] = 'Din konto er oprettet.';
+$lang['label_signup_success'] = 'Tilmelding vellykket';
 $lang['message_action_cancelled'] = 'Aktion annulleret';
 $lang['message_all_actions_successfull'] = 'Alle handlinger afsluttet korrekt';
 $lang['message_an_email_has_been_sent'] = 'En email er sendt til den gemte email-adresse med et link, som du skal følge for at nulstille dit password.';

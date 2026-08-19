@@ -105,7 +105,8 @@ $lang['value'] = 'Değer';
 $lang['view'] = $lang['label_view'];
 
 // Messages
-$lang['message_account_created'] = 'Your account has been created. Please check your email for login information.';
+$lang['message_account_created'] = 'Your account has been created.';
+$lang['label_signup_success'] = 'Sign-up successful';
 $lang['message_account_created_add_user'] = 'Your account has been created.';
 $lang['message_account_created_password'] = 'Your randomly generated password is';
 $lang['message_action_cancelled'] = 'Action Cancelled';
