@@ -112,6 +112,33 @@ class AdminCrudControllerTest extends TestCase
         $this->assertEquals(403, http_response_code());
     }
 
+    public function testListUsersWithUnassignedFilterAddsWhereClause(): void
+    {
+        $dataStmt = \Mockery::mock(\PDOStatement::class);
+        $dataStmt->shouldReceive('execute')->once()->andReturn(true);
+        $dataStmt->shouldReceive('fetchAll')->once()->andReturn([
+            ['id' => '5', 'username' => 'newbie', 'last_name' => 'New', 'first_name' => 'User', 'Email' => 'n@e.com', 'phone' => '', 'department' => null, 'can_add' => '0', 'can_checkin' => '0', 'department_name' => null, 'is_admin' => '0'],
+        ]);
+        $countStmt = \Mockery::mock(\PDOStatement::class);
+        $countStmt->shouldReceive('execute')->once()->andReturn(true);
+        $countStmt->shouldReceive('fetchColumn')->once()->andReturn(1);
+
+        $this->mockPdo->shouldReceive('prepare')
+            ->with(\Mockery::pattern('/department IS NULL/'))
+            ->twice()
+            ->andReturnUsing(function ($sql) use ($dataStmt, $countStmt) {
+                return strpos($sql, 'SELECT COUNT(*)') === 0 ? $countStmt : $dataStmt;
+            });
+
+        ob_start();
+        $_GET = ['entity' => 'users', 'action' => 'list', 'page' => 1, 'size' => 25, 'filter' => 'unassigned'];
+        $_REQUEST = $_GET;
+        require dirname(__DIR__, 2) . '/application/controllers/admin_crud_ajax.php';
+        $output = ob_get_clean();
+        $json = json_decode($output, true);
+        $this->assertSame(1, $json['last_row']);
+    }
+
     protected function tearDown(): void
     {
         $this->mockPdo = null;

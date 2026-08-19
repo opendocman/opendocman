@@ -101,6 +101,12 @@ if (!defined('Settings_class')) {
             $GLOBALS['smarty']->assign('languages', $this->getLanguages());
             $GLOBALS['smarty']->assign('useridnums', $this->getUserIdNums());
             $GLOBALS['smarty']->assign('settings_array', $result);
+
+            $deptQuery = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+            $deptStmt = $this->connection->prepare($deptQuery);
+            $deptStmt->execute();
+            $GLOBALS['smarty']->assign('departments', $deptStmt->fetchAll());
+
             display_smarty_template('settings.tpl');
         }
 

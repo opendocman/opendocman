@@ -130,7 +130,7 @@ users: function(rowData) {
             resizableColumns: true,
             placeholder: 'No data available',
             ajaxURL: 'admin_crud_ajax',
-            ajaxParams: function() { return { entity: entity, action: 'list' }; },
+            ajaxParams: function() { return { entity: entity, action: 'list', filter: window.crudFilter || '' }; },
             ajaxConfig: 'GET',
             ajaxContentType: 'form',
             columns: columnGetters[entity]()

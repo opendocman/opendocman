@@ -260,11 +260,13 @@ $lang['label_date'] = 'Data';
 $lang['label_type_pr_sec'] = 'Tipo'; //CHM
 $lang['label_primary_type'] = 'Primária'; //CHM
 $lang['label_sub_select_list'] = 'Lista Sub-Seleção'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Sua conta foi criada.';
 $lang['message_account_created_password'] = 'Sua senha gerada aleatoriamente é';
-$lang['message_account_created'] = 'Sua conta foi criada. Por favor, verifique seu e-mail para informações de login.';
+$lang['message_account_created'] = 'Sua conta foi criada.';
+$lang['label_signup_success'] = 'Registro bem-sucedido';
 $lang['message_action_cancelled'] = 'Ação Cancelada';
 $lang['message_all_actions_successfull'] = 'Todas as ações concluídas com êxito';
 $lang['message_an_email_has_been_sent'] = 'Um email foi enviado para o endereço de e-mail em arquivo com um link que deve ser seguido a fim de redefinir a senha.';

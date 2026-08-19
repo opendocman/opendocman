@@ -261,11 +261,13 @@ $lang['label_date'] = 'Datum';
 $lang['label_type_pr_sec'] = 'Typ';//CHM
 $lang['label_primary_type'] = 'Primär';//CHM
 $lang['label_sub_select_list'] = 'Undervalslista';//CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Ditt konto har skapats.';
 $lang['message_account_created_password'] = 'Ditt slumpgenererade lösenord är';
-$lang['message_account_created'] = 'Ditt konto har skapats. Vänligen kontrollera din email för inloggningsuppgifter';
+$lang['message_account_created'] = 'Ditt konto har skapats.';
+$lang['label_signup_success'] = 'Registrering framgångsrik';
 $lang['message_action_cancelled'] = 'Handling Avbruten';
 $lang['message_all_actions_successfull'] = 'Alla handlingar utfördes utan problem';
 $lang['message_an_email_has_been_sent'] = 'Ett e-postmeddelande har skickats till den adress som du angivit i systemet med en länk som du måste följa för att återställa ditt lösenord.';

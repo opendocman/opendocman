@@ -75,10 +75,11 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
                   )";
             $stmt = $pdo->prepare($query);
             $stmt->bindParam(':username', $_POST['username']);
+            $signup_dept = (!empty($GLOBALS['CONFIG']['default_signup_department'])) ? $GLOBALS['CONFIG']['default_signup_department'] : null;
             $stmt->execute(array(
                 ':username' => $_POST['username'],
                 ':password' => PasswordHasher::hash($_POST['password']),
-                ':department' => $_POST['department'],
+                ':department' => $signup_dept,
                 ':phonenumber' => $phonenumber,
                 ':email' => $_POST['Email'],
                 ':last_name' => $_POST['last_name'],
@@ -88,14 +89,28 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             // INSERT into admin
             $userid = $pdo->lastInsertId();
 
-            // mail user telling him/her that his/her account has been created.
-            echo msg ('message_account_created') . ' ' . $_POST['username'].'<br />';
-            if($GLOBALS['CONFIG']['authen'] == 'mysql')
-            {
-                echo msg('message_account_created_password') . ': '. e::h($_REQUEST['password']) . PHP_EOL . PHP_EOL;
-                echo '<br><a href="' . $GLOBALS['CONFIG']['base_url'] . '">' . msg('login'). '</a>';
-                exit;
-            }
+            // Account created successfully — show a styled confirmation.
+            draw_header(msg('label_signup_success'), $last_message);
+            ob_start();
+            ?>
+            <div class="d-flex justify-content-center">
+                <div class="card w-100" style="max-width: 28rem;">
+                    <div class="card-header bg-success text-white"><h5 class="card-title mb-0"><?php echo msg('message_account_created'); ?></h5></div>
+                    <div class="card-body">
+                        <p><?php echo msg('username') . ': ' . e::h($_POST['username']); ?></p>
+                        <?php if ($GLOBALS['CONFIG']['authen'] == 'mysql') { ?>
+                            <p><?php echo msg('message_account_created_password'); ?>: <code><?php echo e::h($_REQUEST['password']); ?></code></p>
+                        <?php } ?>
+                        <a class="btn btn-primary" href="<?php echo e::h($GLOBALS['CONFIG']['base_url']); ?>"><?php echo msg('login'); ?></a>
+                    </div>
+                </div>
+            </div>
+            <?php
+            $content = ob_get_clean();
+            $GLOBALS['smarty']->assign('content', $content);
+            display_smarty_template('_content.tpl');
+            draw_footer();
+            exit;
         }
     }
     ?>
@@ -160,33 +175,6 @@ if ($GLOBALS['CONFIG']['allow_signup'] == 'True') {
             echo '<INPUT type="hidden" name="password" value="' . $rand_password . '">';
         }
     ?>
-        <div class="mb-3 row">
-            <label class="col-sm-3 col-form-label fw-bold">Department</label>
-            <div class="col-sm-9">
-                <select name="department" class="form-select">
-        <?php	
-        // query to get a list of departments
-        $query = "
-          SELECT
-            id,
-            name
-          FROM
-            {$GLOBALS['CONFIG']['db_prefix']}department
-          ORDER BY
-            name
-        ";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-
-    foreach ($result as $row) {
-        echo '<option value=' . e::h($row['id']) . '>' . e::h($row['name']) . '</option>';
-    }
-
-    ?>
-                </select>
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm-9 offset-sm-3">
                 <input type="Submit" name="adduser" class="btn btn-primary" onClick="return validatemod(add_user);" value="<?php echo msg('submit');

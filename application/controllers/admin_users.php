@@ -47,6 +47,7 @@ draw_header(msg('users'), $last_message);
 
 $GLOBALS['smarty']->assign('department_list', Department::getAllDepartments($pdo));
 $GLOBALS['smarty']->assign('category_list', Category::getAllCategories($pdo));
+$GLOBALS['smarty']->assign('crud_filter', $_REQUEST['filter'] ?? '');
 
 ob_start();
 display_smarty_template('admin_users.tpl');

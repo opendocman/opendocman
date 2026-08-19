@@ -260,11 +260,13 @@ $lang['label_date'] = 'Datum';
 $lang['label_type_pr_sec'] = 'Typ'; //CHM
 $lang['label_primary_type'] = 'Primär'; //CHM
 $lang['label_sub_select_list'] = 'Auswahlliste'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Ihr Konto wurde erstellt';
 $lang['message_account_created_password'] = 'Ihr automatisch generiertes Kennwort lautet';
-$lang['message_account_created'] = 'Ihr Konto wurde erstellt. Ihre Logindaten werden Ihnen per eMail zugestellt.';
+$lang['message_account_created'] = 'Ihr Konto wurde erstellt.';
+$lang['label_signup_success'] = 'Registrierung erfolgreich';
 $lang['message_action_cancelled'] = 'Aktion abgebrochen';
 $lang['message_all_actions_successfull'] = 'Alle Aktionen erfolgreich abgeschlossen';
 $lang['message_an_email_has_been_sent'] = 'Um das Kennwort zurückzusetzen, folgen Sie dem Ihnen per eMail zugestellten Link.';

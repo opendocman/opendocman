@@ -260,11 +260,13 @@ $lang['label_date'] = 'Date';
 $lang['label_type_pr_sec'] = 'Type'; //CHM
 $lang['label_primary_type'] = 'Primary'; //CHM
 $lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Uw account is aangemaakt.';
 $lang['message_account_created_password'] = 'Uw willekeurige wachtwoord is';
-$lang['message_account_created'] = 'Uw account is aangemaakt. U ontvangt de login-gegevens in uw email.';
+$lang['message_account_created'] = 'Uw account is aangemaakt.';
+$lang['label_signup_success'] = 'Aanmelding gesucces';
 $lang['message_action_cancelled'] = 'Afgebroken';
 $lang['message_all_actions_successfull'] = 'Succesvol voltooid';
 $lang['message_an_email_has_been_sent'] = 'Wij hebben een email toegestuurd aan het adres dat wij van u kennen. In die email staat een link die u moet aanklikken om uw wachtwoord opnieuw in te stellen.';

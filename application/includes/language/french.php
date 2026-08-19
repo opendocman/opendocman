@@ -260,11 +260,13 @@ $lang['label_date'] = 'Date';
 $lang['label_type_pr_sec'] = 'Type'; //CHM
 $lang['label_primary_type'] = 'Primary'; //CHM
 $lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Votre compte vient d\'être créé.';
 $lang['message_account_created_password'] = 'Votre mot de passe généré aléatoirement est';
-$lang['message_account_created'] = 'Votre compte a été créé. Merci de bien vouloir vérifier votre compte mail pour obtenir les informations de login/pass.';
+$lang['message_account_created'] = 'Votre compte a été créé.';
+$lang['label_signup_success'] = 'Inscription réussie';
 $lang['message_action_cancelled'] = 'Action Annulée';
 $lang['message_all_actions_successfull'] = 'Toutes les actions ont été effectuées avec succès';
 $lang['message_an_email_has_been_sent'] = 'Un email vient d\'être envoyé à l\'adresse email enregistrée, et contient un lien à cliquer afin de ré-initialiser le mot de passe.';

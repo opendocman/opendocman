@@ -260,11 +260,13 @@ $lang['label_date'] = 'Data';
 $lang['label_type_pr_sec'] = 'Tip'; //CHM
 $lang['label_primary_type'] = 'Primar'; //CHM
 $lang['label_sub_select_list'] = 'Lista Selectare'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = 'Contul dvs a fost creat.';
 $lang['message_account_created_password'] = 'Parola generata automat de sistem este urmatoarea';
-$lang['message_account_created'] = 'Contul dvs a fost creat. Va rugam verificati mailul cu privire la informatiile necesare autentificarii.';
+$lang['message_account_created'] = 'Contul dvs a fost creat.';
+$lang['label_signup_success'] = 'Registrazione reussiada';
 $lang['message_action_cancelled'] = 'Actiune anulata';
 $lang['message_all_actions_successfull'] = 'Toate actiunile s-au finalizat cu succes';
 $lang['message_an_email_has_been_sent'] = 'A fost transmis un mail care contine un link de resetare a parolei, pe care va rugam sa il accesati.';

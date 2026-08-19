@@ -220,4 +220,42 @@ class UserPermsTest extends TestCase
         $model = new User_Perms(15, $pdo, $user);
         $this->assertSame(-999, $model->getPermission(777));
     }
+
+    public function testConstructDoesNotThrowWhenDepartmentIsEmpty(): void
+    {
+        $user = \Mockery::mock('User');
+        $user->shouldReceive('getDeptId')->andReturn(null);
+        $user->shouldReceive('getId')->andReturn(1);
+        $user->shouldReceive('isAdmin')->andReturn(false);
+        $user->shouldReceive('isReviewer')->andReturn(false);
+
+        $pdo = \Mockery::mock(PDO::class);
+
+        // The test passes if construction does NOT throw.
+        try {
+            new \User_Perms(1, $pdo, $user);
+            $this->assertTrue(true);
+        } catch (\Exception $e) {
+            $this->fail('User_Perms constructor threw for empty department: ' . $e->getMessage());
+        }
+    }
+
+    public function testLoadDataUserPermReturnsEmptyForNullDepartment(): void
+    {
+        $user = \Mockery::mock('User');
+        $user->shouldReceive('getDeptId')->andReturn(null);
+        $user->shouldReceive('getId')->andReturn(1);
+        $user->shouldReceive('isAdmin')->andReturn(false);
+        $user->shouldReceive('isReviewer')->andReturn(false);
+
+        $pdo = \Mockery::mock(PDO::class);
+        $stmt = \Mockery::mock(\PDOStatement::class);
+        $stmt->shouldReceive('execute')->andReturn(true);
+        $stmt->shouldReceive('fetchAll')->andReturn([]);
+        $stmt->shouldReceive('rowCount')->andReturn(0);
+        $pdo->shouldReceive('prepare')->andReturn($stmt);
+
+        $perm = new \User_Perms(1, $pdo, $user);
+        $this->assertSame([], $perm->getCurrentViewOnly(false));
+    }
 }

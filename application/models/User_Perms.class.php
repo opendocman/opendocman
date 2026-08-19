@@ -73,10 +73,6 @@ if (!defined('User_Perms_class')) {
                 
                 // Create Dept_Perms object
                 $deptId = $this->user_obj->getDeptId();
-                if (empty($deptId)) {
-                    throw new Exception("User has no valid department ID");
-                }
-                
                 $this->dept_perms_obj = new Dept_Perms($deptId, $connection);
                 if ($this->dept_perms_obj === null) {
                     throw new Exception("Failed to create Dept_Perms object");

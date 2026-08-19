@@ -167,7 +167,7 @@ INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
 INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$m2n1ArOFH.4kbfp0VnADfuR1heUwxbfIAZsCuulFlBRI1x9Q67chC','1','5555551212','admin@example.com','User','Admin','',1,1,1);
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.3');
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.4');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');
@@ -182,6 +182,7 @@ INSERT INTO `odm_settings` VALUES(NULL, 'file_expired_action', '1', 'Choose an a
 INSERT INTO `odm_settings` VALUES(NULL, 'public_sharing', 'False', '(True/False) Enable public file sharing page. When enabled, files marked as public and approved will be visible without authentication.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authorization', 'True', 'True or False. If set True, every document must be reviewed by an admin before it can go public. To disable set to False. If False, all newly added/checked-in documents will immediately be listed', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'allow_signup', 'False', 'Should we display the sign-up link?', 'bool');
+INSERT INTO `odm_settings` VALUES(NULL, 'default_signup_department', '', 'Default department assigned to new self-registered users (blank = unassigned)', '');
 INSERT INTO `odm_settings` VALUES(NULL, 'allow_password_reset', 'False', 'Should we allow users to reset their forgotten password?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS password lookups from YP server?', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'theme', 'bootstrap5', 'Which theme to use?', '');

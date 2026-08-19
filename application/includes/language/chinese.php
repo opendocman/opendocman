@@ -260,11 +260,13 @@ $lang['label_date'] = 'Date';
 $lang['label_type_pr_sec'] = 'Type'; //CHM
 $lang['label_primary_type'] = 'Primary'; //CHM
 $lang['label_sub_select_list'] = 'Sub-Select List'; //CHM
+$lang['label_unassigned_users'] = 'Unassigned users';
 
 // Messages
 $lang['message_account_created_add_user'] = '你的账号已经产生';
 $lang['message_account_created_password'] = '你的随机密码是';
-$lang['message_account_created'] = '你的账号已经产生，请检查邮件获得登录信息';
+$lang['message_account_created'] = '你的账号已经创建成功。';
+$lang['label_signup_success'] = '注册成功';
 $lang['message_action_cancelled'] = '行动取消';
 $lang['message_all_actions_successfull'] = '所有活动成功完成';
 $lang['message_an_email_has_been_sent'] = '为了重置密码，请接收邮件并点击链接激活';
