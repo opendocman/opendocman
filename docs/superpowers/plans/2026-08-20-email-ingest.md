@@ -6,7 +6,7 @@
 
 **Architecture:** A `mail:poll` CLI command (in the existing `installer/cli.php`) connects to a mailbox via a Composer IMAP/POP3 client, wraps it in a thin `EmailInbox` adapter producing `EmailMessage` DTOs, and passes each to a pure-business `EmailIngest` model. `EmailIngest` resolves the subject token to a user, validates attachment MIME types, and creates one document per valid attachment via a newly-extracted `Document::create()` (shared with the web add flow). Every outcome is written to a new `email_audit` table. Tokens are managed (shown/rotated) in the user profile and admin user table.
 
-**Tech Stack:** PHP 8+, webklex/php-imap (pure-PHP IMAP+POP3 client, no native `imap` extension), Smarty templates, Mockery for tests, PHPUnit, PDO.
+**Tech Stack:** PHP 8+, webklex/php-imap (IMAP is pure-PHP; POP3 requires PHP's native `imap` extension — both supported), Smarty templates, Mockery for tests, PHPUnit, PDO.
 
 ## Global Constraints
 
@@ -524,7 +524,7 @@ In `composer.json` `require` block add:
 ```json
 "webklex/php-imap": "^6.0"
 ```
-Run `composer require webklex/php-imap` (or `composer update`) to install. (The library is pure-PHP — IMAP and POP3 via streams, no `php-imap` extension needed.)
+Run `composer require webklex/php-imap` (or `composer update`) to install. (IMAP is pure-PHP with no `php-imap` extension needed; **POP3 requires PHP's native `imap` extension** — the library uses LegacyProtocol for non-IMAP protocols. Both are supported; document the POP3 requirement.)
 
 - [ ] **Step 2: Write `EmailMessage.class.php`**
 

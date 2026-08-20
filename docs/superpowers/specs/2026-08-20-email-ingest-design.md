@@ -14,8 +14,7 @@ honoring the existing authorization/review workflow.
 ## Decisions
 
 - **Ingest trigger:** CLI/cron polling command (`mail:poll` in `installer/cli.php`).
-- **Mailbox access:** a Composer IMAP/POP3 library (works without the PHP `imap`
-  extension compiled in).
+- **Mailbox access:** a Composer IMAP/POP3 library. IMAP is pure-PHP; **POP3 requires PHP's native `imap` extension** (the library uses LegacyProtocol for non-IMAP). Both protocols supported.
 - **Sender authentication:** per-user secret **ingest token** delivered as a
   **subject-line prefix** — e.g. subject `[odm-ab3x7] Q3 invoices`. Every user
   emails the SAME shared mailbox (no per-user aliases or catch-all required).
