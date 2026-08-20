@@ -426,13 +426,19 @@ class CliCommand
             $messages = $inbox->fetchMessages();
             $totals = ['created' => 0, 'rejected' => 0, 'errors' => 0];
             foreach ($messages as $message) {
-                $stats = $ingest->process($message);
-                foreach (array_keys($totals) as $k) {
-                    $totals[$k] += $stats[$k];
-                }
-                $inbox->markRead($message->id);
-                if (($c['mail_delete'] ?? 'False') === 'True') {
-                    $inbox->delete($message->id);
+                try {
+                    $stats = $ingest->process($message);
+                    foreach (array_keys($totals) as $k) {
+                        $totals[$k] += $stats[$k];
+                    }
+                    $inbox->markRead($message->id);
+                    if (($c['mail_delete'] ?? 'False') === 'True') {
+                        $inbox->delete($message->id);
+                    }
+                } catch (Throwable $e) {
+                    fwrite(STDERR, "Error: Failed to process message " . $message->id . " - " . $e->getMessage() . "\n");
+                    $totals['errors']++;
+                    continue;
                 }
             }
             $inbox->cleanup();
