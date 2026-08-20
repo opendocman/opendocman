@@ -16,10 +16,15 @@ honoring the existing authorization/review workflow.
 - **Ingest trigger:** CLI/cron polling command (`mail:poll` in `installer/cli.php`).
 - **Mailbox access:** a Composer IMAP/POP3 library (works without the PHP `imap`
   extension compiled in).
-- **Sender authentication:** per-user secret **ingest token** — the sender
-  addresses the email to `<token>@<host>` (or places the token in the subject).
-  The poller resolves the token to a user; no matching token = reject. This
-  blocks spoofed `From` headers.
+- **Sender authentication:** per-user secret **ingest token** delivered as a
+  **subject-line prefix** — e.g. subject `[odm-ab3x7] Q3 invoices`. Every user
+  emails the SAME shared mailbox (no per-user aliases or catch-all required).
+  The poller extracts the token from the subject and resolves it to a user; no
+  matching token = reject. The `From` address is never trusted for attribution,
+  so spoofing is still blocked.
+- **Token rolling:** admins (and users with rights) can regenerate/rotate a
+  token at any time. Rotating hashes a new token and immediately voids the old
+  one (previously-captured token values no longer validate).
 - **Owner:** the user who owns the matched token.
 - **Category/department:** one global default category and department for all
   mail-in documents (admin-configured).
@@ -67,7 +72,15 @@ New command in the existing `CliCommand::run()` switch:
 
 ### `{prefix}user` — add column `mail_token`
 Per-user secret ingest token, stored hashed via the existing `PasswordHasher`.
-Shown/regenerated from the admin user table.
+
+**Token surface (show + rotate):**
+- **User profile** — a logged-in user sees their own token (with the instruction
+  to place it in the email subject) and can rotate it.
+- **Admin user table** — an admin sees/rotates any user's token (e.g. for a
+  user who lost it or was compromised).
+
+A **rotate** action generates a new token and immediately voids the previous
+one.
 
 ### New table `{prefix}email_audit`
 One row per processed message-attachment:
@@ -103,8 +116,10 @@ category, and department.
 
 1. Poller connects and fetches unread messages.
 2. Per message:
-   a. **Token auth:** extract token from recipient local-part or subject, look
-      up user by token. No match → audit `rejected (no valid token)`, skip.
+   a. **Token auth:** extract token from the **subject-line prefix** (e.g.
+      `[odm-abc123]`), look up user by token. No match → audit
+      `rejected (no valid token)`, skip. Rotating a user's token voids the old
+      value, so stale tokens are rejected.
    b. **File-type check:** each attachment MIME checked against
       `CONFIG['allowedFileTypes']`. Invalid → rejected.
    c. **Create one doc per valid attachment:**
@@ -127,8 +142,11 @@ category, and department.
 
 ## 5. Testing
 
-- **Unit:** `EmailIngestTest` — token validation, file-type filter, one-doc-per-
-  attachment, audit rows, publishable status under authorization on/off.
+- **Unit:** `EmailIngestTest` — token validation (subject prefix), file-type
+  filter, one-doc-per-attachment, audit rows, publishable status under
+  authorization on/off.
+- **Unit:** `TokenRotationTest` — rotating a token voids the old value and
+  generates a valid new one.
 - **Unit:** `Migration001705Test` — verifies settings + schema changes.
 - **Unit:** `Document::create` extraction regression tests (web flow unchanged).
 - **Integration:** email-ingest workflow test with Mockery PDO (mirrors
