@@ -103,6 +103,7 @@ CREATE TABLE `odm_user` (
                 pw_change_required tinyint(1) NOT NULL DEFAULT 0,
                 can_add tinyint(1) NULL DEFAULT 1,
                 can_checkin tinyint(1) NULL DEFAULT 1,
+                mail_token varchar(255) NULL default NULL,
                 PRIMARY KEY  (id)
             ) ENGINE = MYISAM;
 
@@ -153,6 +154,18 @@ CREATE TABLE `odm_content_index` (
                 PRIMARY KEY (`file_id`),
                 FULLTEXT INDEX `ft_content` (`content_text`)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `odm_email_audit` (
+                id int(11) unsigned NOT NULL auto_increment,
+                message_id varchar(255) default NULL,
+                from_address varchar(255) default NULL,
+                token_hash varchar(64) default NULL,
+                outcome varchar(20) NOT NULL,
+                document_id int(11) unsigned default NULL,
+                reason text default NULL,
+                created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+            ) ENGINE = MYISAM;
 INSERT INTO `odm_admin` VALUES (1,1);
 INSERT INTO `odm_category` VALUES (NULL,'SOP');
 INSERT INTO `odm_category` VALUES (NULL,'Training Manual');
@@ -166,8 +179,8 @@ INSERT INTO `odm_rights` VALUES (-1,'forbidden');
 INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
-INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$m2n1ArOFH.4kbfp0VnADfuR1heUwxbfIAZsCuulFlBRI1x9Q67chC','1','5555551212','admin@example.com','User','Admin','',1,1,1);
-INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.4');
+INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$bi4a2DdQ2ZKd1pt7eVM7BuxoOQ9ItGeDrDOQuVm1Qq42UZY4Atqwa','1','5555551212','admin@example.com','User','Admin','',1,1,1,NULL);
+INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.5');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'authen', 'mysql', '(Default = mysql) Currently only MySQL authentication is supported', '');
@@ -188,6 +201,17 @@ INSERT INTO `odm_settings` VALUES(NULL, 'try_nis', 'False', 'Attempt NIS passwor
 INSERT INTO `odm_settings` VALUES(NULL, 'theme', 'bootstrap5', 'Which theme to use?', '');
 INSERT INTO `odm_settings` VALUES(NULL, 'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req');
 INSERT INTO `odm_settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_enabled', 'False', 'Enable the email document ingest feature', 'bool');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_host', '', 'Mail server host for the ingest mailbox', 'alpha|req');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_port', '993', 'Mail server port', 'num');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_protocol', 'imap', 'Mailbox protocol: imap or pop3', 'alpha');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_encryption', 'ssl', 'Mailbox encryption: none, ssl, or tls', 'alpha');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '');
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/gif', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/jpeg', 1);
 INSERT INTO `odm_filetypes` VALUES(NULL, 'image/pjpeg', 1);

@@ -111,6 +111,7 @@ class SchemaBuilder
                 pw_change_required tinyint(1) NOT NULL DEFAULT 0,
                 can_add tinyint(1) NULL DEFAULT 1,
                 can_checkin tinyint(1) NULL DEFAULT 1,
+                mail_token varchar(255) NULL default NULL,
                 PRIMARY KEY  (id)
             ) ENGINE = MYISAM",
 
@@ -161,6 +162,18 @@ class SchemaBuilder
                 PRIMARY KEY (`file_id`),
                 FULLTEXT INDEX `ft_content` (`content_text`)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+
+            "CREATE TABLE `{$prefix}email_audit` (
+                id int(11) unsigned NOT NULL auto_increment,
+                message_id varchar(255) default NULL,
+                from_address varchar(255) default NULL,
+                token_hash varchar(64) default NULL,
+                outcome varchar(20) NOT NULL,
+                document_id int(11) unsigned default NULL,
+                reason text default NULL,
+                created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+            ) ENGINE = MYISAM",
         ];
     }
 
@@ -185,7 +198,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}rights` VALUES (2,'read')",
             "INSERT INTO `{$prefix}rights` VALUES (3,'write')",
             "INSERT INTO `{$prefix}rights` VALUES (4,'admin')",
-            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin','" . password_hash($adminPassword, PASSWORD_DEFAULT) . "','1','5555551212','admin@example.com','User','Admin',''," . ((int) $forcePasswordChange) . ",1,1)",
+            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin','" . password_hash($adminPassword, PASSWORD_DEFAULT) . "','1','5555551212','admin@example.com','User','Admin',''," . ((int) $forcePasswordChange) . ",1,1,NULL)",
             "INSERT INTO `{$prefix}odmsys` VALUES (NULL,'version','{$this->getVersion()}')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like \"demo/demo\". This will keep users from removing files, users, etc.', 'bool')",
@@ -207,6 +220,17 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'theme', 'bootstrap5', 'Which theme to use?', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'language', 'english', 'Set the default language (english, spanish, turkish, etc.). Local users may override this setting. Check include/language folder for languages available', 'alpha|req')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'max_query', '500', 'Set this to the maximum number of rows you want to be returned in a file listing. If your file list is slow decrease this value.', 'num')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_enabled', 'False', 'Enable the email document ingest feature', 'bool')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_host', '', 'Mail server host for the ingest mailbox', 'alpha|req')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_port', '993', 'Mail server port', 'num')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_protocol', 'imap', 'Mailbox protocol: imap or pop3', 'alpha')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_encryption', 'ssl', 'Mailbox encryption: none, ssl, or tls', 'alpha')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '')",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'image/gif', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'image/jpeg', 1)",
             "INSERT INTO `{$prefix}filetypes` VALUES(NULL, 'image/pjpeg', 1)",
