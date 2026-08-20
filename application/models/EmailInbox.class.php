@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/EmailMessage.class.php';
+require_once __DIR__ . '/EmailInboxException.class.php';
 
 /**
  * EmailInbox - thin adapter over webklex/php-imap (v6.x).
@@ -19,6 +20,21 @@ class EmailInbox
     /** @var \Webklex\PHPIMAP\Client */
     private $client;
     private string $folder;
+
+    /**
+     * Temp-file cleanup ownership:
+     *
+     * Each EmailInbox instance owns a private subdirectory under
+     * sys_get_temp_dir() (odm_att_<random>/) where it writes attachment bytes.
+     * Every file written there is tracked in $tempFiles. Call cleanup() after
+     * a polling cycle to remove all written attachments (and the directory if
+     * it becomes empty). __destruct() calls cleanup() as a safety net so no
+     * orphaned temp files accumulate even if the ingest layer forgets.
+     *
+     * The ingest layer (Task 6) must call $inbox->cleanup() once per batch.
+     */
+    private ?string $tempDir = null;
+    private array $tempFiles = [];
 
     /**
      * @param array $config Expected keys: host, port, protocol, encryption,
@@ -61,7 +77,7 @@ class EmailInbox
      */
     public function fetchMessages(): array
     {
-        $folderObj = $this->client->getFolder($this->folder);
+        $folderObj = $this->resolveFolder();
         $messages = $folderObj->messages()->unseen()->get();
 
         $result = [];
@@ -78,13 +94,15 @@ class EmailInbox
                     continue;
                 }
 
-                $path = tempnam(sys_get_temp_dir(), 'odm_att_');
-                if ($path === false) {
+                $path = $this->writeAttachment($att);
+                if ($path === null) {
                     continue;
                 }
-                file_put_contents($path, $att->getContent());
 
-                $mime = $att->getContentType();
+                $mime = $att->getMimeType();
+                if ($mime === null || $mime === '') {
+                    $mime = $att->getContentType();
+                }
                 if ($mime === null || $mime === '') {
                     $mime = $att->getType();
                 }
@@ -106,7 +124,7 @@ class EmailInbox
      */
     public function markRead(string $id): void
     {
-        $this->client->getFolder($this->folder)
+        $this->resolveFolder()
             ->messages()
             ->getMessageByUid((int) $id)
             ->setFlag('Seen');
@@ -117,10 +135,102 @@ class EmailInbox
      */
     public function delete(string $id): void
     {
-        $this->client->getFolder($this->folder)
+        $this->resolveFolder()
             ->messages()
             ->getMessageByUid((int) $id)
             ->delete();
+    }
+
+    /**
+     * Remove all temp files created by this instance's fetchMessages() calls.
+     *
+     * Call after a polling cycle. Also removes the instance's private temp
+     * directory if it has become empty. Idempotent and safe to call more than
+     * once.
+     */
+    public function cleanup(): void
+    {
+        foreach ($this->tempFiles as $path) {
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
+        $this->tempFiles = [];
+
+        if ($this->tempDir !== null && is_dir($this->tempDir)) {
+            @rmdir($this->tempDir);
+        }
+        $this->tempDir = null;
+    }
+
+    public function __destruct()
+    {
+        $this->cleanup();
+    }
+
+    /**
+     * Resolve the configured folder, throwing a catchable EmailInboxException
+     * if the folder cannot be resolved (getFolder() returns ?Folder).
+     *
+     * @throws EmailInboxException
+     * @return \Webklex\PHPIMAP\Folder
+     */
+    private function resolveFolder()
+    {
+        $folderObj = $this->client->getFolder($this->folder);
+        if ($folderObj === null) {
+            throw new EmailInboxException(
+                "IMAP/POP3 folder \"{$this->folder}\" could not be resolved on the configured account."
+            );
+        }
+        return $folderObj;
+    }
+
+    /**
+     * Write an attachment's bytes to this instance's private temp directory and
+     * track the created file for later cleanup().
+     *
+     * @param \Webklex\PHPIMAP\Attachment $att
+     * @return string|null the file path, or null if the write failed.
+     */
+    private function writeAttachment($att): ?string
+    {
+        $dir = $this->tempDir();
+        $path = tempnam($dir, 'odm_att_');
+        if ($path === false) {
+            return null;
+        }
+
+        $bytes = $att->getContent();
+        if ($bytes === null || $bytes === '') {
+            @unlink($path);
+            return null;
+        }
+
+        if (file_put_contents($path, $bytes) === false) {
+            @unlink($path);
+            return null;
+        }
+
+        $this->tempFiles[] = $path;
+        return $path;
+    }
+
+    /**
+     * Lazily create and return this instance's private temp subdirectory.
+     */
+    private function tempDir(): string
+    {
+        if ($this->tempDir === null) {
+            $this->tempDir = rtrim(sys_get_temp_dir(), '/\\')
+                . DIRECTORY_SEPARATOR . 'odm_att_'
+                . bin2hex(random_bytes(8))
+                . DIRECTORY_SEPARATOR;
+        }
+        if (!is_dir($this->tempDir)) {
+            @mkdir($this->tempDir, 0777, true);
+        }
+        return $this->tempDir;
     }
 
     /**
