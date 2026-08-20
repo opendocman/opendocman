@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.9.0-release](https://github.com/opendocman/opendocman/compare/v2.8.0-release...v2.9.0-release) (2026-08-20)
+
+
+### Features
+
+* admin-configurable default department for new registrants + unassigned-user visibility (fixes [#332](https://github.com/opendocman/opendocman/issues/332)) ([#434](https://github.com/opendocman/opendocman/issues/434)) ([b2e0863](https://github.com/opendocman/opendocman/commit/b2e086328c5622bd86f9e87a353c3bbad8ff6b70))
+* notify user document is pending review after add/check-in ([#52](https://github.com/opendocman/opendocman/issues/52)) ([#426](https://github.com/opendocman/opendocman/issues/426)) ([584e389](https://github.com/opendocman/opendocman/commit/584e38954dad216f94981cc2812975a6d1546261))
+* public file sharing + permission fixes and E2E suite hardening ([#423](https://github.com/opendocman/opendocman/issues/423)) ([51bc78b](https://github.com/opendocman/opendocman/commit/51bc78b2ab4e8a433da95399bc7b36222a995e7c))
+* replace MD5 password hashing with bcrypt and lazy migration ([#427](https://github.com/opendocman/opendocman/issues/427)) ([d38e56b](https://github.com/opendocman/opendocman/commit/d38e56b51df643fc83d9723de1d35a05b2bc34d0))
+
+
+### Bug Fixes
+
+* include category-inherited files in listing and search ([#430](https://github.com/opendocman/opendocman/issues/430)) ([#432](https://github.com/opendocman/opendocman/issues/432)) ([9215c5e](https://github.com/opendocman/opendocman/commit/9215c5e3974fb0dc0a9a4d65b85ab3f2ef774474))
+* include per-file user grants in reviewer file listing ([#321](https://github.com/opendocman/opendocman/issues/321)) ([#429](https://github.com/opendocman/opendocman/issues/429)) ([f01d5d9](https://github.com/opendocman/opendocman/commit/f01d5d9afbde0a26bc22c1d9ade0109dc028c804))
+* show feedback messages in filetypes editor ([#37](https://github.com/opendocman/opendocman/issues/37)) ([#425](https://github.com/opendocman/opendocman/issues/425)) ([313bf52](https://github.com/opendocman/opendocman/commit/313bf52f9c8995017bea136ec4a20fb368a579ac))
+
 ## [2.8.0-release](https://github.com/opendocman/opendocman/compare/v2.7.0-release...v2.8.0-release) (2026-08-11)
 
 
