@@ -294,6 +294,34 @@ if (!defined('User_class')) {
             $this->pw_change_required = 0;
         }
 
+        public function getMailToken(): string
+        {
+            $query = "SELECT mail_token FROM {$GLOBALS['CONFIG']['db_prefix']}user WHERE id = :id";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute([':id' => $this->id]);
+            $result = $stmt->fetchColumn();
+            return is_string($result) ? $result : '';
+        }
+
+        public function setMailToken(string $token): void
+        {
+            $query = "UPDATE {$GLOBALS['CONFIG']['db_prefix']}user SET mail_token = :token WHERE id = :id";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute([':token' => $token, ':id' => $this->id]);
+        }
+
+        public function rotateMailToken(): string
+        {
+            $token = MailToken::generate();
+            $this->setMailToken($token);
+            return $token;
+        }
+
+        public function hasMailToken(): bool
+        {
+            return $this->getMailToken() !== '';
+        }
+
         /**
          * @param string $non_encrypted_password
          * @return bool
