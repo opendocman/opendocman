@@ -399,6 +399,12 @@ $lang['editpage_admin'] = 'Administrare';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'Vista de conjunt';
+$lang['filepermissionspage_perm_add'] = 'Adăugă';
+$lang['filepermissionspage_perm_inherited_from'] = 'Heredită de %s';
+$lang['filepermissionspage_perm_inherited'] = 'herediță';
+$lang['filepermissionspage_perm_no_permissions'] = 'Nãoie permisos definitos';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Fisierul a fost sters definitiv';
 $lang['undeletepage_file_undeleted'] = 'Stergerea fisierului a fost anulata';

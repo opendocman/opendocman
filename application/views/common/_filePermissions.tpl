@@ -15,7 +15,26 @@ document.addEventListener('DOMContentLoaded', function () {ldelim}
         {ldelim}id: {$user.id}, last_name: '{$user.last_name|escape:'javascript'}', first_name: '{$user.first_name|escape:'javascript'}'{rdelim},
         {/foreach}
     ];
-    initPermissionsEditor('#permissionsEditor', {ldelim} departments: departments, users: users, defaultOwnerId: {$pre_selected_owner|default:$user_id|default:'0'} {rdelim});
+    var labels = {ldelim}
+        forbidden: '{$g_lang_addpage_forbidden|escape:'javascript'}',
+        view: '{$g_lang_addpage_view|escape:'javascript'}',
+        read: '{$g_lang_addpage_read|escape:'javascript'}',
+        write: '{$g_lang_addpage_write|escape:'javascript'}',
+        admin: '{$g_lang_addpage_admin|escape:'javascript'}',
+        unset: '{$g_lang_addpage_none|escape:'javascript'}',
+        edit: '{$g_lang_edit|escape:'javascript'}',
+        overview: '{$g_lang_filepermissionspage_perm_overview|escape:'javascript'}',
+        add: '{$g_lang_filepermissionspage_perm_add|escape:'javascript'}',
+        name: '{$g_lang_label_name|escape:'javascript'}',
+        type: '{$g_lang_type|escape:'javascript'}',
+        inheritedFrom: '{$g_lang_filepermissionspage_perm_inherited_from|escape:'javascript'}',
+        inherited: '{$g_lang_filepermissionspage_perm_inherited|escape:'javascript'}',
+        deptPrefix: '{$g_lang_department|escape:'javascript'}',
+        userPrefix: '{$g_lang_label_user|escape:'javascript'}',
+        noPermissions: '{$g_lang_filepermissionspage_perm_no_permissions|escape:'javascript'}',
+        category: '{$g_lang_category|escape:'javascript'}'
+    {rdelim};
+    initPermissionsEditor('#permissionsEditor', {ldelim} departments: departments, users: users, defaultOwnerId: {$pre_selected_owner|default:$user_id|default:'0'}, labels: labels {rdelim});
 
     {if isset($dept_perms) || isset($user_perms)}
     var editor = initPermissionsEditor('#permissionsEditor');

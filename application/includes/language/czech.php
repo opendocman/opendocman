@@ -400,6 +400,12 @@ $lang['editpage_admin'] = 'Admin';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'Přehled';
+$lang['filepermissionspage_perm_add'] = 'Přidat';
+$lang['filepermissionspage_perm_inherited_from'] = 'Dědično z %s';
+$lang['filepermissionspage_perm_inherited'] = 'dědično';
+$lang['filepermissionspage_perm_no_permissions'] = 'Nejsou stanoveny žádné pravomocení';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Soubory byly trvale odstraněny';
 $lang['undeletepage_file_undeleted'] = 'Soubor byl obnoven';

@@ -399,6 +399,12 @@ $lang['editpage_admin'] = 'Admin';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'Overview';
+$lang['filepermissionspage_perm_add'] = 'Add';
+$lang['filepermissionspage_perm_inherited_from'] = 'Inherited from %s';
+$lang['filepermissionspage_perm_inherited'] = 'inherited';
+$lang['filepermissionspage_perm_no_permissions'] = 'No permissions set';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
 $lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';

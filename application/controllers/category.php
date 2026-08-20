@@ -78,7 +78,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   document.addEventListener('DOMContentLoaded', function(){
     var departments = <?php echo json_encode($avail_depts ?? []); ?>;
     var users = <?php echo json_encode($avail_users ?? []); ?>;
-    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users });
+    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users, labels: <?php echo json_encode(perm_editor_labels()); ?> });
     document.getElementById('categoryAddForm').addEventListener('submit', function () {
         var form = this;
         var editor = initPermissionsEditor('#categoryPermsEditor');
@@ -425,7 +425,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
   document.addEventListener('DOMContentLoaded', function(){
     var departments = <?php echo json_encode($avail_depts ?? []); ?>;
     var users = <?php echo json_encode($avail_users ?? []); ?>;
-    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users });
+    initPermissionsEditor('#categoryPermsEditor', { departments: departments, users: users, labels: <?php echo json_encode(perm_editor_labels()); ?> });
     // Load existing template
     fetch('category?submit=get_perms_json&cat_id=<?php echo (int)$_REQUEST['item']; ?>')
         .then(function (r) { return r.json(); })

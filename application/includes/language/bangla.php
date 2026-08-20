@@ -399,6 +399,12 @@ $lang['editpage_admin'] = 'প্রশাসক';
 $lang['filepermissionspage_edit_department_permissions'] = 'বিভাগের অনুমতিসমূহ সম্পাদনা ';
 $lang['filepermissionspage_edit_user_permissions'] = 'ব্যবহারকারির অনুমতি সম্পাদনা';
 
+$lang['filepermissionspage_perm_overview'] = 'সংক্ষিপ্ত বিবরণ';
+$lang['filepermissionspage_perm_add'] = 'যোগ করুন';
+$lang['filepermissionspage_perm_inherited_from'] = '%s থেকে উত্তরাধিকারসূত্রে প্রাপ্ত';
+$lang['filepermissionspage_perm_inherited'] = 'উত্তরাধিকারসূত্রে প্রাপ্ত';
+$lang['filepermissionspage_perm_no_permissions'] = 'কোনো অনুমতি নির্ধারণ করা হয়নি';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'ফাইলটি চিরতরে মুছে ফেলা হয়েছে';
 $lang['undeletepage_file_undeleted'] = 'ফাইলটি মুছে ফেলা বাতিল করা হয়েছে';
