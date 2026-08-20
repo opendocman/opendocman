@@ -58,8 +58,12 @@ if ($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['u
 }
 
 
-if (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Rotate Mail Token') {
-    $uid = (int) $_REQUEST['item'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit']) && $_POST['submit'] == 'Rotate Mail Token') {
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/user')) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    $uid = (int) $_POST['item'];
     if ($uid !== $_SESSION['uid'] && !(new User($_SESSION['uid'], $GLOBALS['pdo']))->isAdmin()) {
         header('Location: error?ec=4');
         exit;

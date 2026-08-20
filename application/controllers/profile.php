@@ -39,10 +39,15 @@ ob_start();
 <?php
 $token = (new User($_SESSION['uid'], $GLOBALS['pdo']))->getMailToken();
 if ($token !== '') {
+    $rotate_csrf = $GLOBALS['csrf']->getTokenForTemplate('/user');
     echo '<div class="alert alert-info mt-3">';
     echo '<strong>' . htmlspecialchars(msg('email_token')) . ':</strong> <code>' . htmlspecialchars($token) . '</code><br>';
     echo htmlspecialchars(msg('email_token_instruction'));
-    echo '<br><a class="btn btn-warning btn-sm" href="user?submit=Rotate+Mail+Token&item=' . $_SESSION['uid'] . '">' . msg('email_token_rotate') . '</a>';
+    echo '<br><form method="post" action="user" class="d-inline">';
+    echo '<input type="hidden" name="item" value="' . (int) $_SESSION['uid'] . '">';
+    echo '<button type="submit" name="submit" value="Rotate Mail Token" class="btn btn-warning btn-sm">' . msg('email_token_rotate') . '</button>';
+    echo $rotate_csrf['field'];
+    echo '</form>';
     echo '</div>';
 }
 $content = ob_get_clean();
