@@ -49,6 +49,9 @@ class CliCommand
             case 'demo:refresh':
                 $this->demoRefresh();
                 break;
+            case 'mail:poll':
+                $this->mailPoll();
+                break;
             default:
                 $this->printUsage();
                 break;
@@ -379,6 +382,71 @@ class CliCommand
         $this->migrate([]);
     }
 
+    private function mailPoll(): void
+    {
+        require_once __DIR__ . '/../version.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../models/EmailInbox.class.php';
+        require_once __DIR__ . '/../models/EmailIngest.class.php';
+
+        $configManager = new ConfigManager();
+        if (!$configManager->configExists()) {
+            fwrite(STDERR, "Error: No config file found. Run setup-config first.\n");
+            exit(1);
+        }
+        $configManager->loadConfig();
+
+        $dbManager = new DatabaseManager(APP_DB_HOST, APP_DB_NAME, APP_DB_USER, APP_DB_PASS);
+        try {
+            $pdo = $dbManager->connect();
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+
+        $c = $GLOBALS['CONFIG'];
+        if (($c['mail_enabled'] ?? 'False') !== 'True') {
+            fwrite(STDERR, "Mail ingest is disabled (mail_enabled is not True).\n");
+            return;
+        }
+
+        try {
+            $inbox = new EmailInbox([
+                'host' => $c['mail_host'] ?? '',
+                'port' => $c['mail_port'] ?? 993,
+                'protocol' => $c['mail_protocol'] ?? 'imap',
+                'encryption' => $c['mail_encryption'] ?? 'ssl',
+                'user' => $c['mail_user'] ?? '',
+                'pass' => $c['mail_pass'] ?? '',
+                'folder' => $c['mail_folder'] ?? 'INBOX',
+            ]);
+
+            $ingest = new EmailIngest($pdo, $c);
+
+            $messages = $inbox->fetchMessages();
+            $totals = ['created' => 0, 'rejected' => 0, 'errors' => 0];
+            foreach ($messages as $message) {
+                $stats = $ingest->process($message);
+                foreach (array_keys($totals) as $k) {
+                    $totals[$k] += $stats[$k];
+                }
+                $inbox->markRead($message->id);
+                if (($c['mail_delete'] ?? 'False') === 'True') {
+                    $inbox->delete($message->id);
+                }
+            }
+            $inbox->cleanup();
+
+            echo "mail:poll complete — created {$totals['created']}, rejected {$totals['rejected']}, errors {$totals['errors']}\n";
+        } catch (EmailInboxException $e) {
+            fwrite(STDERR, "Error: Mailbox error - " . $e->getMessage() . "\n");
+            exit(1);
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Mail poll failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+    }
+
     private function getArg(array $argv, string $prefix): ?string
     {
         foreach ($argv as $arg) {
@@ -414,6 +482,7 @@ class CliCommand
         echo "  snapshot:list                                     List all snapshots\n";
         echo "  snapshot:delete --name=NAME                       Delete a snapshot\n";
         echo "  demo:refresh                                      Restore demo-baseline + enable demo mode\n";
+        echo "  mail:poll                                         Poll the inbox and ingest email documents\n";
     }
 }
 
