@@ -24,6 +24,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+require_once dirname(__FILE__) . '/../models/MailToken.class.php';
+
 if (!isset($_SESSION['uid'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Unauthorized']);
@@ -518,6 +520,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
         http_response_code(403);
         echo json_encode(['error' => 'CSRF validation failed']);
+        return;
+    }
+    if ($action === 'rotate_mail_token' && $entity === 'users') {
+        $u = new User((int) $_REQUEST['item'], $pdo);
+        $newToken = $u->rotateMailToken();
+        header('Content-Type: application/json');
+        $tokenData = $GLOBALS['csrf']->getTokenForTemplate(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+        echo json_encode(['token' => $newToken, 'csrf_token' => $tokenData['token'], 'csrf_field_name' => $tokenData['field_name'], 'csrf_index' => $tokenData['index'], 'csrf_index_name' => $tokenData['index_name']]);
         return;
     }
     handleMutation($pdo, $db_prefix, $action, $entity, $_POST);

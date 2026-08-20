@@ -28,10 +28,11 @@
                 { title: 'Department', field: 'department_name', widthGrow: 1 },
                 { title: 'Admin', field: 'is_admin', width: 70, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
                 { title: 'Reviewer', field: 'is_reviewer', width: 80, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
-                { title: '', field: 'actions', width: 120, headerSort: false, formatter: function(cell) {
+                { title: '', field: 'actions', width: 190, headerSort: false, formatter: function(cell) {
                     var id = cell.getData().id;
                     return '<button class="btn btn-sm btn-outline-primary edit-row" data-id="' + id + '">Edit</button> ' +
-                           '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>';
+                           '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>' +
+                           '<button class="btn btn-sm btn-outline-warning rotate-token" data-id="' + id + '">' + (window.rotateLabel || 'Rotate') + '</button>';
                 }}
             ];
         },
@@ -354,9 +355,10 @@ users: function(rowData) {
         document.getElementById('crud-table').addEventListener('click', function(e) {
             var editBtn = e.target.closest('.edit-row');
             var deleteBtn = e.target.closest('.delete-row');
-            if (!editBtn && !deleteBtn) return;
+            var rotateBtn = e.target.closest('.rotate-token');
+            if (!editBtn && !deleteBtn && !rotateBtn) return;
 
-            var id = (editBtn || deleteBtn).dataset.id;
+            var id = (editBtn || deleteBtn || rotateBtn).dataset.id;
             var rowData = null;
             table.getData().forEach(function(row) {
                 if (parseInt(row.id) === parseInt(id)) rowData = row;
@@ -364,6 +366,37 @@ users: function(rowData) {
 
             if (editBtn && rowData) openEditModal(rowData);
             if (deleteBtn && rowData) openDeleteModal(rowData);
+            if (rotateBtn) rotateToken(id);
         });
     });
+
+    function rotateToken(id) {
+        var formData = new FormData();
+        formData.append('entity', 'users');
+        formData.append('action', 'rotate_mail_token');
+        formData.append('item', id);
+        formData.append(csrfFieldName, csrfToken);
+        if (csrfIndexName) {
+            formData.append(csrfIndexName, csrfIndex);
+        }
+        fetch('admin_crud_ajax', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            if (result.csrf_token) {
+                csrfToken = result.csrf_token;
+                csrfIndex = result.csrf_index || '';
+            }
+            if (result.error) {
+                alert(result.error);
+                return;
+            }
+            alert(window.rotateLabel + ': ' + result.token);
+        })
+        .catch(function(err) {
+            alert('Error rotating token: ' + err.message);
+        });
+    }
 })();
