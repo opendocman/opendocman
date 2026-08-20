@@ -1,5 +1,9 @@
 # Email Ingest (mail-in documents)
 
+> **PHP requirement:** The email ingest feature (via `webklex/php-imap` 6.x,
+> which pulls `illuminate/*` and `symfony/http-foundation` 8.x) requires
+> **PHP >= 8.4**. This is reflected in `composer.json`.
+
 Configure in Admin → Settings (the `mail_*` keys). Set `mail_enabled` to `True`,
 then run:
 

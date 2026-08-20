@@ -386,8 +386,13 @@ class CliCommand
     {
         require_once __DIR__ . '/../version.php';
         require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../controllers/helpers/functions.php';
         require_once __DIR__ . '/../models/EmailInbox.class.php';
         require_once __DIR__ . '/../models/EmailIngest.class.php';
+        require_once __DIR__ . '/../models/Settings.class.php';
+        require_once __DIR__ . '/../models/FileTypes.class.php';
+        require_once __DIR__ . '/../models/Document.class.php';
+        require_once __DIR__ . '/../models/TextExtractorFactory.class.php';
 
         $configManager = new ConfigManager();
         if (!$configManager->configExists()) {
@@ -403,6 +408,9 @@ class CliCommand
             fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
             exit(1);
         }
+
+        (new Settings($pdo))->load();
+        (new FileTypes($pdo))->load();
 
         $c = $GLOBALS['CONFIG'];
         if (($c['mail_enabled'] ?? 'False') !== 'True') {

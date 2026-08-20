@@ -62,6 +62,7 @@ class Document
         } else {
             copy($params['source_path'], $newFilePath);
         }
+        @chmod($newFilePath, 0644);
 
         $mime = $params['mime'];
         if (TextExtractorFactory::isExtractable($mime)) {

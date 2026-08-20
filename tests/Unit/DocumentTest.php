@@ -70,5 +70,7 @@ class DocumentTest extends TestCase
 
         $this->assertSame(42, $id);
         $this->assertTrue(file_exists($this->dataDir . '42/report.pdf'));
+        $this->assertTrue(is_readable($this->dataDir . '42/report.pdf'));
+        $this->assertTrue(is_writable($this->dataDir . '42/report.pdf'));
     }
 }

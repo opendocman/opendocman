@@ -4,7 +4,7 @@
         "vendor-dir": "application/vendor"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.4",
         "aura/html": "^2.4",
         "foa/html-view-bundle": "2.*",
         "aura/router": "^3.1",

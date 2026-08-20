@@ -228,7 +228,7 @@ class EmailInbox
                 . DIRECTORY_SEPARATOR;
         }
         if (!is_dir($this->tempDir)) {
-            @mkdir($this->tempDir, 0777, true);
+            @mkdir($this->tempDir, 0700, true);
         }
         return $this->tempDir;
     }
