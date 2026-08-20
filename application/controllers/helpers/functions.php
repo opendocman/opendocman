@@ -699,6 +699,34 @@ function msg(string $string): string
     }
 }
 
+/**
+ * Translation labels for the JS permissions editor (permissions-editor.js).
+ * Keys map to the editor's `labels` option; values come from the current lang set.
+ * @return array
+ */
+function perm_editor_labels(): array
+{
+    return [
+        'forbidden' => msg('addpage_forbidden'),
+        'view' => msg('addpage_view'),
+        'read' => msg('addpage_read'),
+        'write' => msg('addpage_write'),
+        'admin' => msg('addpage_admin'),
+        'unset' => msg('addpage_none'),
+        'edit' => msg('edit'),
+        'overview' => msg('filepermissionspage_perm_overview'),
+        'add' => msg('filepermissionspage_perm_add'),
+        'name' => msg('label_name'),
+        'type' => msg('type'),
+        'inheritedFrom' => msg('filepermissionspage_perm_inherited_from'),
+        'inherited' => msg('filepermissionspage_perm_inherited'),
+        'deptPrefix' => msg('department'),
+        'userPrefix' => msg('label_user'),
+        'noPermissions' => msg('filepermissionspage_perm_no_permissions'),
+        'category' => msg('category'),
+    ];
+}
+
 /*
  * This function will check for the existence of a template file
  * in the current template folder and if not there will search for it

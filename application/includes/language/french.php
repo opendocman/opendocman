@@ -399,6 +399,12 @@ $lang['editpage_admin'] = 'Administrer';
 $lang['filepermissionspage_edit_department_permissions'] = 'Editer les Permissions Département';
 $lang['filepermissionspage_edit_user_permissions'] = 'Editer les Permissions Utilisateur';
 
+$lang['filepermissionspage_perm_overview'] = 'Aperçu';
+$lang['filepermissionspage_perm_add'] = 'Ajouter';
+$lang['filepermissionspage_perm_inherited_from'] = 'Hérité de %s';
+$lang['filepermissionspage_perm_inherited'] = 'hérité';
+$lang['filepermissionspage_perm_no_permissions'] = 'Aucune permission définie';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Ce fichier a été supprimé définitivement';
 $lang['undeletepage_file_undeleted'] = 'Ce fichier a été restauré après suppression';

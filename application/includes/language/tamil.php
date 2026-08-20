@@ -399,6 +399,12 @@ $lang['editpage_admin'] = 'நிர்வாகி';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'கண்ணோட்டம்';
+$lang['filepermissionspage_perm_add'] = 'சேர்';
+$lang['filepermissionspage_perm_inherited_from'] = '%s-இல் இருந்து பெறப்பட்டது';
+$lang['filepermissionspage_perm_inherited'] = 'பெறப்பட்டது';
+$lang['filepermissionspage_perm_no_permissions'] = 'அனுமதிகள் எதுவும் அமைக்கப்படவில்லை';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'The file has been permanently deleted';
 $lang['undeletepage_file_undeleted'] = 'The file has been un-deleted';

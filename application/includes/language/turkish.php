@@ -424,6 +424,12 @@ $lang['editpage_admin'] = 'Yönetici';
 $lang['filepermissionspage_edit_department_permissions'] = 'Departman İzinlerini Düzenle';
 $lang['filepermissionspage_edit_user_permissions'] = 'Kullanıcı İzinlerini Düzenle';
 
+$lang['filepermissionspage_perm_overview'] = 'Genel bakış';
+$lang['filepermissionspage_perm_add'] = 'Ekle';
+$lang['filepermissionspage_perm_inherited_from'] = '%s\'ten mirred';
+$lang['filepermissionspage_perm_inherited'] = 'mirred';
+$lang['filepermissionspage_perm_no_permissions'] = 'İzinler ayarlımamış';
+
 // Yönetici Sayfasını Sil / Geri Al
 $lang['undeletepage_file_permanently_deleted'] = 'Dosya kalıcı olarak silindi';
 $lang['undeletepage_file_undeleted'] = 'Dosya silinmiş';

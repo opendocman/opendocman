@@ -400,6 +400,12 @@ $lang['editpage_admin'] = 'Admin';
 $lang['filepermissionspage_edit_department_permissions'] = 'Ändra Avdelningsrättigheter';
 $lang['filepermissionspage_edit_user_permissions'] = 'Ändra Användarrättigheter';
 
+$lang['filepermissionspage_perm_overview'] = 'Översikt';
+$lang['filepermissionspage_perm_add'] = 'Lägg till';
+$lang['filepermissionspage_perm_inherited_from'] = 'Ärvd från %s';
+$lang['filepermissionspage_perm_inherited'] = 'ärvda';
+$lang['filepermissionspage_perm_no_permissions'] = 'Inga behörigheter är inställda';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Filen har tagits bort permanent';
 $lang['undeletepage_file_undeleted'] = 'Filen har återskapats';

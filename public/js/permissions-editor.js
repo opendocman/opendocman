@@ -13,7 +13,25 @@
  */
 (function () {
     'use strict';
-    var RIGHT_LABELS = { '-1': 'Forbidden', '1': 'View', '2': 'Read', '3': 'Write', '4': 'Admin' };
+    var DEFAULT_LABELS = {
+        forbidden: 'Forbidden',
+        view: 'View',
+        read: 'Read',
+        write: 'Write',
+        admin: 'Admin',
+        unset: 'Unset',
+        edit: 'Edit',
+        overview: 'Overview',
+        add: 'Add',
+        name: 'Name',
+        type: 'Type',
+        inheritedFrom: 'Inherited from %s',
+        inherited: 'inherited',
+        deptPrefix: 'Dept',
+        userPrefix: 'User',
+        noPermissions: 'No permissions set',
+        category: 'category'
+    };
     var RIGHT_ORDER = ['view', 'read', 'write', 'admin', 'forbidden'];
     var RIGHT_VALUES = { forbidden: -1, view: 1, read: 2, write: 3, admin: 4 };
 
@@ -27,6 +45,14 @@
         this.el = el;
         this.departments = options.departments || [];
         this.users = options.users || [];
+        this.labels = Object.assign({}, DEFAULT_LABELS, options.labels || {});
+        this.rightLabels = {
+            [-1]: this.labels.forbidden,
+            1: this.labels.view,
+            2: this.labels.read,
+            3: this.labels.write,
+            4: this.labels.admin
+        };
         this.state = { dept_perms: {}, user_perms: {} };
         this.inherited = { dept_perms: {}, user_perms: {}, catName: '' };
         // On the add page the server grants the owner admin (see add.php).
@@ -46,15 +72,15 @@
 
         html += '<div class="mb-2">';
         html += '  <div class="btn-group btn-group-sm" role="group">';
-        html += '    <button type="button" class="btn btn-outline-secondary perm-mode-btn" data-mode="edit">Edit</button>';
-        html += '    <button type="button" class="btn btn-primary perm-mode-btn" data-mode="overview">Overview</button>';
+        html += '    <button type="button" class="btn btn-outline-secondary perm-mode-btn" data-mode="edit">' + self.labels.edit + '</button>';
+        html += '    <button type="button" class="btn btn-primary perm-mode-btn" data-mode="overview">' + self.labels.overview + '</button>';
         html += '  </div>';
         html += '</div>';
 
         html += '<div class="perm-edit-mode" style="display:none;">';
         html += '  <ul class="nav nav-tabs small" role="tablist">';
         RIGHT_ORDER.forEach(function (level, i) {
-            var label = RIGHT_LABELS[RIGHT_VALUES[level]];
+            var label = self.labels[level];
             html += '    <li class="nav-item" role="presentation">';
             html += '      <button class="nav-link' + (i === 0 ? ' active' : '') + '" data-bs-toggle="tab" data-bs-target="#perm-tab-' + level + '" type="button" role="tab">' + label + '</button>';
             html += '    </li>';
@@ -62,10 +88,10 @@
         html += '  </ul>';
         html += '  <div class="tab-content border border-top-0 p-2">';
         RIGHT_ORDER.forEach(function (level, ti) {
-            var label = RIGHT_LABELS[RIGHT_VALUES[level]];
+            var label = self.labels[level];
             html += '    <div class="tab-pane' + (ti === 0 ? ' show active' : '') + '" id="perm-tab-' + level + '" role="tabpanel">';
             html += '      <div class="perm-assigned-list" data-level="' + level + '" style="max-height:200px; overflow-y:auto;"></div>';
-            html += '      <div class="mt-1"><select class="form-select form-select-sm perm-add-select" data-level="' + level + '" style="width:auto;display:inline-block;"><option value="">+ Add...</option></select></div>';
+            html += '      <div class="mt-1"><select class="form-select form-select-sm perm-add-select" data-level="' + level + '" style="width:auto;display:inline-block;"><option value="">+ ' + self.labels.add + '...</option></select></div>';
             html += '    </div>';
         });
         html += '  </div>';
@@ -74,9 +100,9 @@
         html += '<div class="perm-overview-mode">';
         html += '  <div class="table-responsive" style="max-height:300px; overflow-y:auto;">';
         html += '    <table class="table table-sm table-striped mb-0">';
-        html += '      <thead class="table-light"><tr><th>Name</th><th>Type</th>';
+        html += '      <thead class="table-light"><tr><th>' + self.labels.name + '</th><th>' + self.labels.type + '</th>';
         RIGHT_ORDER.forEach(function (level) {
-            html += '<th class="text-center">' + RIGHT_LABELS[RIGHT_VALUES[level]] + '</th>';
+            html += '<th class="text-center">' + self.labels[level] + '</th>';
         });
         html += '      </tr></thead><tbody class="perm-overview-body"></tbody></table>';
         html += '  </div>';
@@ -194,14 +220,14 @@
 
         var listEl = self.el.querySelector('.perm-assigned-list[data-level="' + level + '"]');
         if (assigned.length === 0) {
-            listEl.innerHTML = '<div class="text-muted small p-1">Unset</div>';
+            listEl.innerHTML = '<div class="text-muted small p-1">' + self.labels.unset + '</div>';
         } else {
             var html = '';
             assigned.forEach(function (item) {
                 if (item.inherited) {
-                    var catName = self.inherited.catName || 'category';
-                    html += '<span class="badge bg-secondary me-1 mb-1" style="opacity:0.7;" title="Inherited from ' + catName + '">';
-                    html += item.name + ' <span class="text-white-50 small">(inherited)</span>';
+                    var catName = self.inherited.catName || self.labels.category;
+                    html += '<span class="badge bg-secondary me-1 mb-1" style="opacity:0.7;" title="' + self.labels.inheritedFrom.replace('%s', catName) + '">';
+                    html += item.name + ' <span class="text-white-50 small">(' + self.labels.inherited + ')</span>';
                     html += '</span> ';
                 } else {
                     var badge = item.type === 'dept' ? 'secondary' : 'info';
@@ -215,17 +241,17 @@
         }
 
         var selectEl = self.el.querySelector('.perm-add-select[data-level="' + level + '"]');
-        var currentOptions = '<option value="">+ Add...</option>';
+        var currentOptions = '<option value="">+ ' + self.labels.add + '...</option>';
         var optionList = [];
         self.departments.forEach(function (dept) {
             if (self.state.dept_perms[dept.id] !== rightVal) {
-                optionList.push({ label: '[Dept] ' + dept.name, value: 'dept:' + dept.id, sortKey: 'A' + dept.name.toLowerCase() });
+                optionList.push({ label: '[' + self.labels.deptPrefix + '] ' + dept.name, value: 'dept:' + dept.id, sortKey: 'A' + dept.name.toLowerCase() });
             }
         });
         self.users.forEach(function (user) {
             if (self.state.user_perms[user.id] !== rightVal) {
                 var name = user.last_name + ', ' + user.first_name;
-                optionList.push({ label: '[User] ' + name, value: 'user:' + user.id, sortKey: 'B' + name.toLowerCase() });
+                optionList.push({ label: '[' + self.labels.userPrefix + '] ' + name, value: 'user:' + user.id, sortKey: 'B' + name.toLowerCase() });
             }
         });
         optionList.sort(function (a, b) { return a.sortKey < b.sortKey ? -1 : 1; });
@@ -275,7 +301,7 @@
                 var set = perms[item.id] === rightVal;
                 var inherited = !set && inheritedPerms[item.id] === rightVal;
                 var catName = self.inherited.catName;
-                var title = inherited ? 'Inherited from ' + catName : '';
+                var title = inherited ? self.labels.inheritedFrom.replace('%s', catName) : '';
                 html += '<td class="text-center" data-level="' + level + '" style="cursor:pointer;"' + (title ? ' title="' + title + '"' : '') + '>';
                 if (set) {
                     html += '<span class="text-success fw-bold">&#10003;</span>';
@@ -289,7 +315,7 @@
             html += '</tr>';
         });
         var body = self.el.querySelector('.perm-overview-body');
-        body.innerHTML = html || '<tr><td colspan="7" class="text-muted">No permissions set</td></tr>';
+        body.innerHTML = html || '<tr><td colspan="7" class="text-muted">' + self.labels.noPermissions + '</td></tr>';
     };
 
     PermissionsEditor.prototype.findDept = function (id) {

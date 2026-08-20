@@ -400,6 +400,12 @@ $lang['editpage_admin'] = 'Administrator';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'Pregled';
+$lang['filepermissionspage_perm_add'] = 'Dodaj';
+$lang['filepermissionspage_perm_inherited_from'] = 'Naslijedo od %s';
+$lang['filepermissionspage_perm_inherited'] = 'naslijedo';
+$lang['filepermissionspage_perm_no_permissions'] = 'Nema postavljenih dozvolja';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'Datoteka je trajno obrisana';
 $lang['undeletepage_file_undeleted'] = 'Datoteka je vraćena';

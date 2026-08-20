@@ -398,6 +398,12 @@ $lang['editpage_admin'] = 'Administrar';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'Resumen';
+$lang['filepermissionspage_perm_add'] = 'Añadir';
+$lang['filepermissionspage_perm_inherited_from'] = 'Heredado de %s';
+$lang['filepermissionspage_perm_inherited'] = 'heredado';
+$lang['filepermissionspage_perm_no_permissions'] = 'No se han establecido permisos';
+
 // Departments Page
 $lang['departmentpage_department_name_required'] = 'El Nombre del Departamento es Requerido';
 

@@ -400,6 +400,12 @@ $lang['editpage_admin'] = 'مسئول';
 $lang['filepermissionspage_edit_department_permissions'] = 'Edit Department Permissions';
 $lang['filepermissionspage_edit_user_permissions'] = 'Edit User Permissions';
 
+$lang['filepermissionspage_perm_overview'] = 'نظرة عامة';
+$lang['filepermissionspage_perm_add'] = 'إضافة';
+$lang['filepermissionspage_perm_inherited_from'] = 'موروث من %s';
+$lang['filepermissionspage_perm_inherited'] = 'موروث';
+$lang['filepermissionspage_perm_no_permissions'] = 'لم يتم تعيين أي أذونات';
+
 // Delete/Undeleta Admin Page
 $lang['undeletepage_file_permanently_deleted'] = 'تم حذف الملف بشكل نهائي';
 $lang['undeletepage_file_undeleted'] = 'تم إلغاء حذف الملف';

@@ -149,7 +149,7 @@ users: function(rowData) {
         document.getElementById('crudModalBody').innerHTML = formBuilders[entity](null);
         document.getElementById('crudModalSave').dataset.action = 'add';
         if (entity === 'categories') {
-            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [] });
+            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [], labels: window.permEditorLabels || {} });
         }
         new bootstrap.Modal(document.getElementById('crudModal')).show();
     }
@@ -161,7 +161,7 @@ users: function(rowData) {
         document.getElementById('crudModalBody').innerHTML = formBuilders[entity](rowData);
         document.getElementById('crudModalSave').dataset.action = 'edit';
         if (entity === 'categories') {
-            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [] });
+            initPermissionsEditor('#categoryPermsEditor', { departments: window.departmentList || [], users: window.userList || [], labels: window.permEditorLabels || {} });
             var editor = initPermissionsEditor('#categoryPermsEditor');
             if (editor && rowData.id) {
                 fetch('admin_crud_ajax?entity=categories&action=get_perms&id=' + rowData.id)
