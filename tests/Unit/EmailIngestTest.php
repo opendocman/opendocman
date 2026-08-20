@@ -10,11 +10,13 @@ class EmailIngestTest extends TestCase
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     private array $createdCalls = [];
+    private array $auditWrites = [];
 
     /**
      * Build a mock PDO whose prepare() routes by SQL text:
      * - queries containing "FROM ... user" return the given user row (or null)
-     * - any other query (email_audit insert) just executes
+     * - the email_audit INSERT captures its bound params into $this->auditWrites
+     * - any other query just executes
      */
     private function mockPdo(?array $userRow): PDO
     {
@@ -24,7 +26,14 @@ class EmailIngestTest extends TestCase
             if (strpos($sql, 'FROM') !== false && strpos($sql, 'user') !== false) {
                 $stmt->shouldReceive('fetch')->andReturn($userRow);
             }
-            $stmt->shouldReceive('execute')->andReturn(true);
+            if (strpos($sql, 'email_audit') !== false) {
+                $stmt->shouldReceive('execute')->andReturnUsing(function (array $params) {
+                    $this->auditWrites[] = $params;
+                    return true;
+                });
+            } else {
+                $stmt->shouldReceive('execute')->andReturn(true);
+            }
             return $stmt;
         });
         return $pdo;
@@ -39,6 +48,7 @@ class EmailIngestTest extends TestCase
     private function makeIngest(array $config, ?array $userRow): EmailIngest
     {
         $this->createdCalls = [];
+        $this->auditWrites = [];
         return new EmailIngest($this->mockPdo($userRow), $config, [$this, 'creator']);
     }
 
@@ -110,5 +120,73 @@ class EmailIngestTest extends TestCase
         $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
         $ingest->process($msg);
         $this->assertSame('1', $this->createdCalls[0]['publishable']);
+    }
+
+    public function testAuditWritesCreatedRowForValidAttachment(): void
+    {
+        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
+        $ingest = $this->makeIngest($config, ['id' => 7]);
+        $msg = new EmailMessage('m7', 'Report [odm-abc123]', 'a@b.com');
+        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $ingest->process($msg);
+
+        $this->assertCount(1, $this->auditWrites);
+        $row = $this->auditWrites[0];
+        $this->assertSame('created', $row[':outcome']);
+        $this->assertSame(101, $row[':did']);
+        $this->assertSame(hash('sha256', 'odm-abc123'), $row[':hash']);
+        $this->assertSame('', $row[':reason']);
+    }
+
+    public function testAuditWritesRejectedRowForDisallowedMime(): void
+    {
+        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
+        $ingest = $this->makeIngest($config, ['id' => 7]);
+        $msg = new EmailMessage('m7', 'Report [odm-abc123]', 'a@b.com');
+        $msg->attachments = [
+            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
+            ['name' => 'x.exe', 'path' => '/tmp/x.exe', 'mime' => 'application/x-msdownload'],
+        ];
+        $ingest->process($msg);
+
+        $this->assertCount(2, $this->auditWrites);
+        $rejected = $this->auditWrites[1];
+        $this->assertSame('rejected', $rejected[':outcome']);
+        $this->assertNull($rejected[':did']);
+        $this->assertStringContainsString('application/x-msdownload', $rejected[':reason']);
+    }
+
+    public function testAuditWritesRejectedRowForMissingToken(): void
+    {
+        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
+        $ingest = $this->makeIngest($config, null);
+        $msg = new EmailMessage('m8', 'no token here', 'a@b.com');
+        $result = $ingest->process($msg);
+
+        $this->assertSame(1, $result['rejected']);
+        $this->assertCount(1, $this->auditWrites);
+        $row = $this->auditWrites[0];
+        $this->assertSame('rejected', $row[':outcome']);
+        $this->assertNull($row[':hash']);
+        $this->assertNull($row[':did']);
+    }
+
+    public function testAuditWritesErrorRowWhenCreatorThrows(): void
+    {
+        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
+        $ingest = new EmailIngest($this->mockPdo(['id' => 7]), $config, function (array $params, string $mime): int {
+            throw new \RuntimeException('disk full while writing');
+        });
+        $msg = new EmailMessage('m9', 'Report [odm-abc123]', 'a@b.com');
+        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $result = $ingest->process($msg);
+
+        $this->assertSame(1, $result['errors']);
+        $this->assertSame(0, $result['created']);
+        $this->assertCount(1, $this->auditWrites);
+        $row = $this->auditWrites[0];
+        $this->assertSame('error', $row[':outcome']);
+        $this->assertNull($row[':did']);
+        $this->assertStringContainsString('disk full', $row[':reason']);
     }
 }
