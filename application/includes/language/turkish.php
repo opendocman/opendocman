@@ -577,5 +577,26 @@ $lang['label_rebuild_index'] = 'Rebuild Index';
 $lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
 
 $lang['label_admin_crud_desc'] = 'Manage Users, Departments, and Categories in a single table view.';
+
+// Admin Settings UI (grouped settings, admin sidebar, admin dashboard)
+$lang['settings_group_general'] = 'Genel';
+$lang['settings_group_security'] = 'Güvenlik & kimlik doğrulama';
+$lang['settings_group_storage'] = 'Dosya türleri & depolama';
+$lang['settings_group_email'] = 'E-posta & bildirimler';
+$lang['settings_group_review'] = 'İnceleme & yetkilendirme';
+$lang['settings_group_appearance'] = 'Arayüz & görünüm';
+$lang['settings_group_other'] = 'Diğer';
+$lang['settings_sidebar_group_content'] = 'İçerik yönetimi';
+$lang['settings_sidebar_group_files'] = 'Dosyalar';
+$lang['settings_sidebar_group_system'] = 'Ayarlar & sistem';
+$lang['settings_sidebar_group_reports'] = 'Raporlar';
+$lang['settings_sidebar_group_settings_groups'] = 'Ayarlar grupları';
+$lang['settings_sidebar_search'] = 'Yönetici ara…';
+$lang['settings_filter'] = 'Ayarlar ara…';
+$lang['admin_quick_actions'] = 'Hızlı eylemler';
+$lang['about_app_version'] = 'Uygulama sürümü';
+$lang['about_db_version'] = 'DB sürümü';
+$lang['label_files'] = 'Dokümanlar';
+
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
