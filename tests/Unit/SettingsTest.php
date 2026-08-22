@@ -256,6 +256,7 @@ class SettingsTest extends TestCase
         $pdo = \Mockery::mock(PDO::class);
         $settings = new Settings($pdo);
 
+        $originalLang = $GLOBALS['lang'] ?? null;
         $GLOBALS['lang'] = ['settings_group_general' => 'General'];
 
         $rows = [
@@ -272,6 +273,12 @@ class SettingsTest extends TestCase
         $this->assertSame('General', $groups['general']['label']);
         $this->assertArrayNotHasKey('other', $groups);
         $this->assertTrue(array_key_exists('general', $groups) && reset($groups)['name'] === 'general');
+
+        if ($originalLang === null) {
+            unset($GLOBALS['lang']);
+        } else {
+            $GLOBALS['lang'] = $originalLang;
+        }
     }
 
     public function testGroupSettingsUnknownFallsBackToOther(): void
