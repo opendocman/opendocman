@@ -27,6 +27,67 @@ if (!defined('Settings_class')) {
      */
     class Settings
     {
+        /** @var array<string, string> Known settings -> group slug. Unknown fall to 'other'. */
+        private const GROUP_MAP = [
+            'debug'   => 'general',
+            'demo'    => 'general',
+            'title'   => 'general',
+            'max_query' => 'general',
+            'authen'  => 'security',
+            'root_id' => 'security',
+            'allow_signup' => 'security',
+            'default_signup_department' => 'security',
+            'allow_password_reset' => 'security',
+            'try_nis' => 'security',
+            'dataDir' => 'storage',
+            'snapshotDir' => 'storage',
+            'max_filesize' => 'storage',
+            'site_mail' => 'email',
+            'authorization' => 'review',
+            'revision_expiration' => 'review',
+            'file_expired_action' => 'review',
+            'theme' => 'appearance',
+            'language' => 'appearance',
+        ];
+
+        /** @var array<int, string> Display order of group slugs; 'other' always last. */
+        private const GROUP_KEYS = ['general', 'security', 'storage', 'email', 'review', 'appearance', 'other'];
+
+        /**
+         * Group settings rows by concern. Any row whose name is not in GROUP_MAP
+         * (or does not start with a known prefix, e.g. mail_*) lands in the
+         * 'other' group so new/unknown settings always appear.
+         * @param array $rows PDO rows with keys id, name, value, description, validation
+         * @return array<string, array{label: string, name: string, settings: array}>
+         */
+        public function groupSettings(array $rows): array
+        {
+            $groups = [];
+            foreach (self::GROUP_KEYS as $key) {
+                $groups[$key] = [
+                    'label' => isset($GLOBALS['lang']['settings_group_' . $key])
+                        ? $GLOBALS['lang']['settings_group_' . $key]
+                        : ucfirst($key),
+                    'name' => $key,
+                    'settings' => [],
+                ];
+            }
+
+            foreach ($rows as $row) {
+                $name = $row['name'];
+                $group = self::GROUP_MAP[$name] ?? null;
+                if ($group === null && strncmp($name, 'mail_', 5) === 0) {
+                    $group = 'email';
+                }
+                $group = $group ?? 'other';
+                $groups[$group]['settings'][] = $row;
+            }
+
+            return array_filter($groups, function ($g) {
+                return count($g['settings']) > 0;
+            });
+        }
+
         protected $connection;
         
         public function __construct(PDO $pdo)

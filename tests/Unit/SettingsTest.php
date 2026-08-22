@@ -251,6 +251,86 @@ class SettingsTest extends TestCase
         $settings->edit();
     }
 
+    public function testGroupSettingsOrdersAndLabelsKnownGroups(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $GLOBALS['lang'] = ['settings_group_general' => 'General'];
+
+        $rows = [
+            ['id' => 1, 'name' => 'title', 'value' => 'My Repo', 'description' => 'title desc', 'validation' => 'maxsize=255'],
+            ['id' => 2, 'name' => 'authen', 'value' => 'mysql', 'description' => 'auth', 'validation' => ''],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('general', $groups);
+        $this->assertArrayHasKey('security', $groups);
+        $this->assertCount(1, $groups['general']['settings']);
+        $this->assertSame('title', $groups['general']['settings'][0]['name']);
+        $this->assertSame('General', $groups['general']['label']);
+        $this->assertArrayNotHasKey('other', $groups);
+        $this->assertTrue(array_key_exists('general', $groups) && reset($groups)['name'] === 'general');
+    }
+
+    public function testGroupSettingsUnknownFallsBackToOther(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'brand_new_setting', 'value' => 'x', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'another_unknown', 'value' => 'y', 'description' => 'e', 'validation' => 'bool'],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('other', $groups);
+        $this->assertCount(2, $groups['other']['settings']);
+        $this->assertSame('other', $groups['other']['name']);
+    }
+
+    public function testGroupSettingsMailPrefixGoesToEmail(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'mail_host', 'value' => 'imap.example.com', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'site_mail', 'value' => 'a@b.co', 'description' => 'd', 'validation' => ''],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('email', $groups);
+        $this->assertArrayNotHasKey('other', $groups);
+    }
+
+    public function testGroupSettingsOrderIsFixed(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'title', 'value' => '', 'description' => '', 'validation' => ''],
+            ['id' => 2, 'name' => 'language', 'value' => '', 'description' => '', 'validation' => ''],
+            ['id' => 3, 'name' => 'dataDir', 'value' => '', 'description' => '', 'validation' => ''],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertSame(['general', 'storage', 'appearance'], array_keys($groups));
+    }
+
+    public function testGroupSettingsEmptyRowsReturnsEmptyArray(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $this->assertSame([], $settings->groupSettings([]));
+    }
+
     private function mkdirp(string $path): void
     {
         if (!is_dir($path)) {
