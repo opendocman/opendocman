@@ -1002,6 +1002,42 @@ git commit -m "chore(admin): final polish for admin settings modernization (ODM 
 
 ---
 
+### Task 9: Frame the Files-group pages in the admin shell (follow-up)
+
+The admin sidebar's "Files" group contains 5 pages that still render without the shell: `delete?mode=view_del_archive`, `toBePublished`, `rejects`, `check-exp`, and `file_ops?submit=view_checkedout`. This task frames them all in `_admin_content.tpl` (with the sidebar) and adds sidebar active-states.
+
+**Files:**
+- Modify: `application/controllers/delete.php` (view_del_archive branch), `toBePublished.php` (list + commentform branches), `rejects.php`, `check-exp.php`, `file_ops.php` (view_checkedout branch)
+- Modify: `application/views/common/_admin_sidebar.tpl` (active-states for the 5 Files links)
+
+Current render patterns to convert:
+| Page | Current | Change |
+|---|---|---|
+| `rejects.php` (line 35-60) | already `ob_start() … assign('content') … display('_content.tpl')` | swap `_content.tpl` → `_admin_content.tpl`; set `active_admin` |
+| `delete.php` (view_del_archive, line 101-108) | `draw_header` then `display_smarty_template('out.tpl')` directly | wrap `out.tpl` in ob_start/assign content, render `_admin_content.tpl`; set `active_admin` |
+| `toBePublished.php` (list branch line 44-62) | `draw_header` then `display_smarty_template('out.tpl')` + `display_smarty_template('toBePublished.tpl')` directly | wrap both into content, render `_admin_content.tpl`; set `active_admin` |
+| `toBePublished.php` (commentform branch line 74-120) | `draw_header` then `display_smarty_template('commentform.tpl')` | wrap into content, render `_admin_content.tpl`; set `active_admin` |
+| `file_ops.php` (view_checkedout line 42-50) | `draw_header` then `display_smarty_template('out.tpl')` + `draw_footer` | wrap `out.tpl` into content, render `_admin_content.tpl`; set `active_admin` |
+| `check-exp.php` | `draw_header` (line 32) … pure echo output … `draw_footer` (line 156) | wrap the echoed region in `ob_start()`/`ob_get_clean()`, assign `content`, render `_admin_content.tpl` before `draw_footer`; set `active_admin` |
+
+Sidebar: add `{if $active_admin eq '...'}active{/if}` on the 5 Files links with distinct values: `delete`, `reviews`, `rejections`, `expiration`, `file_ops`.
+
+Do NOT change any business logic, CSRF validation, or redirects/manual `echo` behavior in these controllers beyond the rendering wrapper.
+
+Verification: php -l all modified files; unit suite green; live curl (make serve-local) `/delete?mode=view_del_archive`, `/toBePublished`, `/rejects`, `/file_ops?submit=view_checkedout` show `#adminSidebar` and `#adminSidebarNav` with the active page highlighted; no Smarty render warnings.
+
+Commit:
+```bash
+git add application/controllers/delete.php application/controllers/toBePublished.php application/controllers/rejects.php application/controllers/check-exp.php application/controllers/file_ops.php application/views/common/_admin_sidebar.tpl
+git commit -m "feat(admin): frame Files-group pages in shared shell (ODM #436)"
+```
+
+### Task 10: Final verification of the complete admin area
+
+Run the full unit suite (`make test`), the admin-settings E2E, and a manual curl pass over every page the sidebar links to.
+
+---
+
 ## Self-Review
 
 **Spec coverage:**
