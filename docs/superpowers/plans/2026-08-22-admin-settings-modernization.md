@@ -380,10 +380,10 @@ Also the dashboard's own card grid will be replaced in Task 5 — for now the sh
 CSS is already linked. Add a script tag at the bottom of `_admin_content.tpl`, after the closing `</div>` of the row:
 
 ```smarty
-<script src="{$base_url}js/bootstrap5/admin-sidebar.js"></script>
+<script src="{$g_base_url}js/bootstrap5/admin-sidebar.js"></script>
 ```
 
-(`$base_url` is assigned in `odm-init.php` — verified at line 61.)
+(`g_base_url` is assigned in `odm-init.php` via the `g_`-prefixed CONFIG loop — verified at lines 61-66; all templates use `{$g_base_url}`.)
 
 - [ ] **Step 7: Verify by linting + smoke render**
 
