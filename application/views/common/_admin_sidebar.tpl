@@ -19,11 +19,11 @@
         <li class="nav-item mt-2">
             <div class="admin-sidebar-group-label">{$g_lang_settings_sidebar_group_files|default:'Files'}</div>
         </li>
-        <li class="nav-item"><a class="nav-link" href="delete?mode=view_del_archive">{$g_lang_label_delete_undelete|default:'Delete / Undelete'}</a></li>
-        <li class="nav-item"><a class="nav-link" href="toBePublished">{$g_lang_label_reviews|default:'Reviews'}</a></li>
-        <li class="nav-item"><a class="nav-link" href="rejects">{$g_lang_label_rejections|default:'Rejections'}</a></li>
-        <li class="nav-item"><a class="nav-link" href="check-exp">{$g_lang_label_check_expiration|default:'Check Expiration'}</a></li>
-        <li class="nav-item"><a class="nav-link" href="file_ops?submit=view_checkedout">{$g_lang_label_checked_out_files|default:'Checked-out Files'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'delete'}active{/if}" href="delete?mode=view_del_archive">{$g_lang_label_delete_undelete|default:'Delete / Undelete'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'reviews'}active{/if}" href="toBePublished">{$g_lang_label_reviews|default:'Reviews'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'rejections'}active{/if}" href="rejects">{$g_lang_label_rejections|default:'Rejections'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'expiration'}active{/if}" href="check-exp">{$g_lang_label_check_expiration|default:'Check Expiration'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'file_ops'}active{/if}" href="file_ops?submit=view_checkedout">{$g_lang_label_checked_out_files|default:'Checked-out Files'}</a></li>
 
         <li class="nav-item mt-2">
             <div class="admin-sidebar-group-label">{$g_lang_settings_sidebar_group_system|default:'Settings &amp; System'}</div>
