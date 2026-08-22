@@ -63,11 +63,12 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     header('Location: admin?last_message=' . urlencode(msg('message_action_cancelled')));
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNew') {
     draw_header(msg('label_filetypes'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     ob_start();
     $GLOBALS['smarty']->assign('page_title', msg('label_filetypes'));
     display_smarty_template('filetype_add.tpl');
     $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
+    display_smarty_template('_admin_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'AddNewSave') {
     // Validate CSRF token for Add operation
