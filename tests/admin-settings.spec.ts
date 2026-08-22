@@ -48,6 +48,10 @@ test.describe('Grouped settings page', () => {
     await expect(page.locator('#settingsFilter')).toBeVisible();
     await expect(page.locator('#settingsTabs')).toBeVisible();
 
+    // Shared admin shell: the sidebar (rendered via _admin_content.tpl) must be present.
+    await expect(page.locator('#adminSidebar')).toBeVisible();
+    await expect(page.locator('#adminSidebarNav .nav-link').first()).toBeVisible();
+
     // Left rail shows a tab labeled General and it is active by default
     const generalTab = page.locator('#tab-general');
     await expect(generalTab).toBeVisible();

@@ -298,25 +298,27 @@ class SettingsTest extends TestCase
         $originalLang = $GLOBALS['lang'] ?? null;
         $GLOBALS['lang'] = ['settings_group_general' => 'General'];
 
-        $rows = [
-            ['id' => 1, 'name' => 'title', 'value' => 'My Repo', 'description' => 'title desc', 'validation' => 'maxsize=255'],
-            ['id' => 2, 'name' => 'authen', 'value' => 'mysql', 'description' => 'auth', 'validation' => ''],
-        ];
+        try {
+            $rows = [
+                ['id' => 1, 'name' => 'title', 'value' => 'My Repo', 'description' => 'title desc', 'validation' => 'maxsize=255'],
+                ['id' => 2, 'name' => 'authen', 'value' => 'mysql', 'description' => 'auth', 'validation' => ''],
+            ];
 
-        $groups = $settings->groupSettings($rows);
+            $groups = $settings->groupSettings($rows);
 
-        $this->assertArrayHasKey('general', $groups);
-        $this->assertArrayHasKey('security', $groups);
-        $this->assertCount(1, $groups['general']['settings']);
-        $this->assertSame('title', $groups['general']['settings'][0]['name']);
-        $this->assertSame('General', $groups['general']['label']);
-        $this->assertArrayNotHasKey('other', $groups);
-        $this->assertTrue(array_key_exists('general', $groups) && reset($groups)['name'] === 'general');
-
-        if ($originalLang === null) {
-            unset($GLOBALS['lang']);
-        } else {
-            $GLOBALS['lang'] = $originalLang;
+            $this->assertArrayHasKey('general', $groups);
+            $this->assertArrayHasKey('security', $groups);
+            $this->assertCount(1, $groups['general']['settings']);
+            $this->assertSame('title', $groups['general']['settings'][0]['name']);
+            $this->assertSame('General', $groups['general']['label']);
+            $this->assertArrayNotHasKey('other', $groups);
+            $this->assertTrue(array_key_exists('general', $groups) && reset($groups)['name'] === 'general');
+        } finally {
+            if ($originalLang === null) {
+                unset($GLOBALS['lang']);
+            } else {
+                $GLOBALS['lang'] = $originalLang;
+            }
         }
     }
 

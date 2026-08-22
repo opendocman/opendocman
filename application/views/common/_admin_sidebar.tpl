@@ -43,7 +43,7 @@
         </li>
         {foreach from=$settings_groups item=grp}
         <li class="nav-item">
-            <a class="nav-link setting-group-link {if $smarty.request.settings_group eq $grp.name}active{/if}"
+            <a class="nav-link setting-group-link {if isset($smarty.request.settings_group) and $smarty.request.settings_group eq $grp.name}active{/if}"
                href="#" data-group="{$grp.name}">{$grp.label|escape:'html'}</a>
         </li>
         {/foreach}
