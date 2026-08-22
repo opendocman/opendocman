@@ -234,7 +234,7 @@ class FileTypesTest extends TestCase
 
         $this->assertArrayHasKey('filetypes_array', $GLOBALS['__smarty_assignments']);
         $this->assertSame($rows, $GLOBALS['__smarty_assignments']['filetypes_array']);
-        $this->assertSame('_content.tpl', $GLOBALS['__last_rendered_template']);
+        $this->assertSame('_admin_content.tpl', $GLOBALS['__last_rendered_template']);
     }
 
     public function testDeleteSelectAssignsAndRendersDeleteTemplate(): void
@@ -265,7 +265,7 @@ class FileTypesTest extends TestCase
 
         $this->assertArrayHasKey('filetypes_array', $GLOBALS['__smarty_assignments']);
         $this->assertSame($rows, $GLOBALS['__smarty_assignments']['filetypes_array']);
-        $this->assertSame('_content.tpl', $GLOBALS['__last_rendered_template']);
+        $this->assertSame('_admin_content.tpl', $GLOBALS['__last_rendered_template']);
     }
 
     public function testDeleteRemovesEachProvidedId(): void

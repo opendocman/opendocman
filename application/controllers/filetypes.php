@@ -40,6 +40,7 @@ if (!$user_obj->isRoot() == true) {
 
 if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     draw_header(msg('label_filetypes'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     $filetypes->edit();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
@@ -57,6 +58,7 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
 
     draw_header(msg('label_filetypes'), $last_message);
 
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     $filetypes->edit();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Cancel') {
@@ -85,11 +87,13 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
 
     draw_header(msg('label_filetypes'), $last_message);
 
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     $filetypes->edit();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'DeleteSelect') {
     draw_header(msg('label_filetypes'), $last_message);
 
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     $filetypes->deleteSelect();
     draw_footer();
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Delete') {
@@ -105,6 +109,7 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
         $_REQUEST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
     draw_header(msg('label_filetypes'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'filetypes');
     $filetypes->edit();
     draw_footer();
 } else {

@@ -146,6 +146,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     }
 
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
 
     if (!empty($_REQUEST['udf']) && !preg_match('/^\w+$/', $_REQUEST['udf'])) {
         header('Location: admin?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
@@ -241,7 +242,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         $GLOBALS['smarty']->assign('udf', $_REQUEST['udf']);
         $GLOBALS['smarty']->assign('display_name', $display_name);
         $GLOBALS['smarty']->assign('rows', $rows1);
+        ob_start();
         display_smarty_template('udf/edit_types_1_and_2.tpl');
+        $GLOBALS['smarty']->assign('content', ob_get_clean());
+        display_smarty_template('_admin_content.tpl');
     }
 
     if ($field_type == 3) {
@@ -349,7 +353,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         $GLOBALS['smarty']->assign('udf', $_REQUEST['udf']);
         $GLOBALS['smarty']->assign('display_name', $display_name);
         $GLOBALS['smarty']->assign('rows', $rows2);
+        ob_start();
         display_smarty_template('udf/edit_type_4.tpl');
+        $GLOBALS['smarty']->assign('content', ob_get_clean());
+        display_smarty_template('_admin_content.tpl');
 
     }
 
