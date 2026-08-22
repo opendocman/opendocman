@@ -136,7 +136,8 @@ $request_state = e::h(($_REQUEST['state']+1));
 <?php } ?>
 
 <?php
+$GLOBALS['smarty']->assign('active_admin', 'dashboard');
 $content = ob_get_clean();
 $GLOBALS['smarty']->assign('content', $content);
-display_smarty_template('_content.tpl');
+display_smarty_template('_admin_content.tpl');
 draw_footer();
