@@ -571,6 +571,8 @@ $lang['label_search_file_contents'] = 'Search file contents';
 
 ?>
 
+<?php
+
 $lang['label_content_search_index'] = 'Content Search Index';
 $lang['label_indexed_files'] = 'Indexed files';
 $lang['label_rebuild_index'] = 'Rebuild Index';
