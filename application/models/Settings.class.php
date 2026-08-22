@@ -150,25 +150,50 @@ if (!defined('Settings_class')) {
         }
 
         /**
-         * Show the settings edit form
+         * Assign all Smarty variables the settings form needs.
          */
-        public function edit()
+        public function assignSettings(): void
         {
-            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}settings";
-            $stmt = $this->connection->prepare($query);
-            $stmt->execute();
-            $result = $stmt->fetchAll();
-
+            $result = $this->fetchSettingsRows();
             $GLOBALS['smarty']->assign('themes', $this->getThemes());
             $GLOBALS['smarty']->assign('languages', $this->getLanguages());
             $GLOBALS['smarty']->assign('useridnums', $this->getUserIdNums());
             $GLOBALS['smarty']->assign('settings_array', $result);
+            $GLOBALS['smarty']->assign('settings_groups', $this->groupSettings($result));
 
             $deptQuery = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
             $deptStmt = $this->connection->prepare($deptQuery);
             $deptStmt->execute();
             $GLOBALS['smarty']->assign('departments', $deptStmt->fetchAll());
+        }
 
+        /**
+         * @return array Rows from the settings table.
+         */
+        private function fetchSettingsRows(): array
+        {
+            $query = "SELECT * FROM {$GLOBALS['CONFIG']['db_prefix']}settings";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }
+
+        /**
+         * Render the settings form template, returning its HTML.
+         */
+        public function renderContent(): string
+        {
+            ob_start();
+            display_smarty_template('settings.tpl');
+            return ob_get_clean();
+        }
+
+        /**
+         * Show the settings edit form
+         */
+        public function edit()
+        {
+            $this->assignSettings();
             display_smarty_template('settings.tpl');
         }
 

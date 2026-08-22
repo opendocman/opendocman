@@ -42,7 +42,10 @@ if (!$user_obj->isRoot() == true) {
 if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     draw_header(msg('label_settings'), $last_message);
 
-    $settings->edit();
+    $GLOBALS['smarty']->assign('active_admin', 'settings');
+    $settings->assignSettings();
+    $GLOBALS['smarty']->assign('content', $settings->renderContent());
+    display_smarty_template('_admin_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
@@ -90,8 +93,11 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
         $_POST['last_message']='';
     }
     
-    $settings->edit();
-    
+    $GLOBALS['smarty']->assign('active_admin', 'settings');
+    $settings->assignSettings();
+    $GLOBALS['smarty']->assign('content', $settings->renderContent());
+    display_smarty_template('_admin_content.tpl');
+
     draw_footer();
     
     // Clear the tpl templates_c files after update in case they updated theme
