@@ -43,6 +43,7 @@ if (!defined('Settings_class')) {
             'snapshotDir' => 'storage',
             'max_filesize' => 'storage',
             'site_mail' => 'email',
+            'public_sharing' => 'general',
             'authorization' => 'review',
             'revision_expiration' => 'review',
             'file_expired_action' => 'review',

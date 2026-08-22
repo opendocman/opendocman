@@ -331,6 +331,22 @@ class SettingsTest extends TestCase
         $this->assertSame([], $settings->groupSettings([]));
     }
 
+    public function testGroupSettingsPublicSharingGoesToGeneral(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'public_sharing', 'value' => 'true', 'description' => 'd', 'validation' => 'bool'],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('general', $groups);
+        $this->assertSame('public_sharing', $groups['general']['settings'][0]['name']);
+        $this->assertArrayNotHasKey('other', $groups);
+    }
+
     private function mkdirp(string $path): void
     {
         if (!is_dir($path)) {
