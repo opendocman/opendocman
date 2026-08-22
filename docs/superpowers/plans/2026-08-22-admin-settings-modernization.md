@@ -633,11 +633,15 @@ Replace `application/views/common/settings.tpl`:
         </div>
     </div>
 </form>
+
+<script src="{$g_base_url}js/bootstrap5/admin-settings.js"></script>
 ```
 
 Note: the `theme`, `language`, `authen`, `root_id`, `default_signup_department`, and `file_expired_action` controls are rendered identically to the old template — this preserves existing E2E selectors (`select[name="public_sharing"]`, `select[name="theme"]`, etc.).
 
-- [ ] **Step 6: Create `public/js/bootstrap5/admin-settings.js`** (global filter across all tab panes)
+IMPORTANT — the script include at the end of the form is required: without it `admin-settings.js` never loads and the global search + sidebar tab-binding are dead. Also note this app's bundled Smarty is **2.6.28**, not Smarty 3 — use explicit `{foreach from=... item=...}` (never the shorthand `{foreach $x as $y}`) and `{$arr|@count}` (never `|count`) for array counting.
+
+- [ ] **Step 6: Create `public/js/bootstrap5/admin-settings.js`** (global filter across all tab panes + sidebar link binding)
 
 ```js
 document.addEventListener('DOMContentLoaded', function () {
@@ -671,10 +675,23 @@ document.addEventListener('DOMContentLoaded', function () {
       empty.style.display = 'none';
     }
   });
+
+  // Sidebar Settings-Groups deep-links: jump to the matching vertical tab.
+  document.querySelectorAll('#adminSidebarNav .setting-group-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var group = link.getAttribute('data-group');
+      var tab = document.querySelector('#settingsTabs .nav-link[data-group="' + group + '"]');
+      if (tab) {
+        var bootstrapTab = new bootstrap.Tab(tab);
+        bootstrapTab.show();
+      }
+    });
+  });
 });
 ```
 
-Note: the filter hides `.setting-row` elements across **all** panes (`#settingsTabContent`), showing matches from every group at once — the global-search behavior. Bootstrap pills still switch active tab; the filter overlays on top.
+Note: the filter hides `.setting-row` elements across **all** panes (`#settingsTabContent`), showing matches from every group at once — the global-search behavior. Bootstrap pills still switch active tab; the filter overlays on top. The sidebar deep-link handler activates the tab for the clicked group (both handlers live in this file, which is included once at the bottom of settings.tpl). Using `bootstrap.Tab` requires the bootstrap.bundle global (loaded in footer.tpl).
 
 - [ ] **Step 7: Wire the settings controller to the shell**
 
