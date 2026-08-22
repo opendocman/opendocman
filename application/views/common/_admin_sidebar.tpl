@@ -4,7 +4,7 @@
     </div>
     <ul class="nav nav-pills flex-column gap-1 admin-sidebar-nav" id="adminSidebarNav">
         <li class="nav-item">
-            <a class="nav-link {if $active_admin eq 'admin'}active{/if}" href="admin">
+            <a class="nav-link {if $active_admin eq 'dashboard'}active{/if}" href="admin">
                 {$g_lang_label_admin|default:'Admin'}
             </a>
         </li>
