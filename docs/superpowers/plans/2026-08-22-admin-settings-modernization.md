@@ -957,7 +957,7 @@ Given the E2E environment, add a new Playwright spec `tests/admin-settings.spec.
 
 Use the existing `npm run test:e2e` runner conventions (`retryGoto`, env creds).
 
-- [ ] **Step 1: Write `tests/admin-settings.spec.ts`** following `smoke-uat.spec.ts` patterns (login helper, retryGoto, admin creds from env).
+- [ ] **Step 1: Write `tests/admin-settings.spec.ts`** following `smoke-uat.spec.ts` patterns (login helper, retryGoto, admin creds from env). Also add `'**/admin-settings.spec.ts'` to the `smoke` project's `testMatch` in `playwright.config.ts` so the stock `npm run test:e2e` runs it.
 
 - [ ] **Step 2: Run E2E**
 
@@ -967,7 +967,7 @@ Expected: PASS.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add tests/admin-settings.spec.ts
+git add tests/admin-settings.spec.ts playwright.config.ts
 git commit -m "e2e: cover grouped settings page + global search (ODM #436)"
 ```
 
