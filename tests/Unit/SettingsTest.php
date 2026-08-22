@@ -251,6 +251,45 @@ class SettingsTest extends TestCase
         $settings->edit();
     }
 
+    public function testEditAssignsSettingsGroups(): void
+    {
+        if (!defined('ABSPATH')) { define('ABSPATH', $this->tmpBase . '/'); }
+        $this->mkdirp(ABSPATH . 'views');
+        $this->mkdirp(ABSPATH . 'includes/language');
+        if (empty($GLOBALS['CONFIG']['theme'])) { $GLOBALS['CONFIG']['theme'] = 'bootstrap5'; }
+
+        $pdo = \Mockery::mock(PDO::class);
+        $stmt = \Mockery::mock(PDOStatement::class);
+        $stmt->shouldReceive('execute')->andReturn(true);
+        $stmt->shouldReceive('fetchAll')->andReturn([
+            ['id' => 1, 'name' => 'title', 'value' => 'R', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'language', 'value' => 'english', 'description' => 'd', 'validation' => ''],
+            ['id' => 3, 'name' => 'brand_new', 'value' => '', 'description' => '', 'validation' => ''],
+        ]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT \* FROM.*settings/'))->andReturn($stmt);
+
+        $deptStmt = Mockery::mock(PDOStatement::class);
+        $deptStmt->shouldReceive('execute')->andReturn(true);
+        $deptStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
+
+        $userStmt = Mockery::mock(PDOStatement::class);
+        $userStmt->shouldReceive('execute')->andReturn(true);
+        $userStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*user/s'))->andReturn($userStmt);
+
+        $smarty = Mockery::mock('Smarty');
+        $smarty->shouldReceive('assign')->with('settings_groups', \Mockery::on(function ($groups) {
+            return isset($groups['general']) && isset($groups['appearance']) && isset($groups['other']);
+        }))->once();
+        $smarty->shouldReceive('assign')->withAnyArgs()->andReturnNull();
+        $smarty->shouldReceive('display')->andReturnNull();
+        $GLOBALS['smarty'] = $smarty;
+
+        $settings = new Settings($pdo);
+        $settings->edit();
+    }
+
     public function testGroupSettingsOrdersAndLabelsKnownGroups(): void
     {
         $pdo = \Mockery::mock(PDO::class);
