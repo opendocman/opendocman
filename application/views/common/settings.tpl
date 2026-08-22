@@ -86,3 +86,4 @@
         </div>
     </div>
 </form>
+<script src="{$g_base_url}js/bootstrap5/admin-settings.js"></script>

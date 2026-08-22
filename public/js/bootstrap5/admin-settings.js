@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
+  // Sidebar Settings-Groups deep-links: jump to the matching vertical tab.
+  document.querySelectorAll('#adminSidebarNav .setting-group-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var group = link.getAttribute('data-group');
+      var tab = document.querySelector('#settingsTabs .nav-link[data-group="' + group + '"]');
+      if (tab) {
+        var bootstrapTab = new bootstrap.Tab(tab);
+        bootstrapTab.show();
+      }
+    });
+  });
+
   var filter = document.getElementById('settingsFilter');
   if (!filter) return;
 
