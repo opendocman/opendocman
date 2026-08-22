@@ -376,16 +376,7 @@ Also the dashboard's own card grid will be replaced in Task 5 — for now the sh
 
 - [ ] **Step 6: Load sidebar JS + CSS**
 
-CSS is already linked. For the JS, add a script tag in `_admin_content.tpl` (bottom):
-
-```smarty
-</div>
-{literal}
-<script src="{/literal}{$base_url|default:''}{literal}js/bootstrap5/admin-sidebar.js"></script>
-{/literal}
-```
-
-Note: this must be placed after `{$content}`. Use Smarty `{literal}` safely; or simpler — load from `_admin_sidebar.tpl` top via `{foreach}`. Simplest robust approach: in `_admin_content.tpl`, right after the closing `</div>` add a Smarty-safe script include:
+CSS is already linked. Add a script tag at the bottom of `_admin_content.tpl`, after the closing `</div>` of the row:
 
 ```smarty
 <script src="{$base_url}js/bootstrap5/admin-sidebar.js"></script>
@@ -688,49 +679,15 @@ Note: the filter hides `.setting-row` elements across **all** panes (`#settingsT
 
 In `application/controllers/settings.php`:
 
-Both branches (submit=update at line 45 and submit=Save at line 93) currently call `$settings->edit();` and rely on `draw_header()`. Since `Settings::edit()` now displays `settings.tpl` directly, we change the flow to render into the shell. Update both branches to:
+Both branches (submit=update and submit=Save) currently call `$settings->edit();`, which both assigns vars AND displays `settings.tpl` directly. Split those responsibilities in `Settings.class.php`:
+
+- Add `assignSettings(): void` — assigns all Smarty vars (`themes`, `languages`, `useridnums`, `settings_array`, `settings_groups`, `departments`), no display.
+- Add `fetchSettingsRows(): array` (private) — `SELECT * FROM settings`.
+- Add `renderContent(): string` — renders `settings.tpl`, returns its HTML.
+- Change `edit()` to call `assignSettings()` then `display_smarty_template('settings.tpl')` (backward compatible).
 
 ```php
-draw_header(msg('label_settings'), $last_message);
-$settings->edit();
-// But edit() already calls display_smarty_template('settings.tpl'); to get it inside the shell,
-// capture it and wrap. Change edit() to assign vars + render inner content, then wrap.
-```
-
-Better approach — refactor `edit()` to *assign + return the inner templateHTML*, then controller wraps. Add a tiny public method `renderContent(): string`:
-
-In `Settings.class.php`:
-
-```php
-public function renderContent()
-{
-    ob_start();
-    display_smarty_template('settings.tpl');
-    return ob_get_clean();
-}
-```
-
-Then in the controller:
-
-```php
-$settings->edit(); // still assigns all vars & displays? No — stop edit() from displaying.
-```
-
-Decision: **Do not call `edit()` in the controller for rendering.** Replace the two `$settings->edit();` calls with:
-
-```php
-$GLOBALS['smarty']->assign('active_admin', 'settings');
-$settings->assignSettings();   // NEW: assigns all vars incl settings_groups, NO display
-$GLOBALS['smarty']->assign('content', $settings->renderContent());
-display_smarty_template('_admin_content.tpl');
-```
-
-So:
-
-- Rename the rendering part out of `edit()`: keep `edit()` for BC but change it to call `assignSettings()` + `renderContent()` + `display_smarty_template('settings.tpl')` — no; simplest, add methods:
-
-```php
-public function assignSettings() : void
+public function assignSettings(): void
 {
     $result = $this->fetchSettingsRows();
     $GLOBALS['smarty']->assign('themes', $this->getThemes());
@@ -752,11 +709,14 @@ private function fetchSettingsRows(): array
     $stmt->execute();
     return $stmt->fetchAll();
 }
-```
 
-And change `edit()` to:
+public function renderContent(): string
+{
+    ob_start();
+    display_smarty_template('settings.tpl');
+    return ob_get_clean();
+}
 
-```php
 public function edit()
 {
     $this->assignSettings();
@@ -764,7 +724,7 @@ public function edit()
 }
 ```
 
-The controller then uses:
+Then in the controller, replace both `$settings->edit();` calls (lines 45 and 93) with:
 
 ```php
 $GLOBALS['smarty']->assign('active_admin', 'settings');
@@ -773,7 +733,7 @@ $GLOBALS['smarty']->assign('content', $settings->renderContent());
 display_smarty_template('_admin_content.tpl');
 ```
 
-(No OB-start around edit() anymore; the controller composes content + shell exactly like other admin pages.)
+(The controller composes content + shell exactly like the other admin pages; no `ob_start` around `edit()`.)
 
 - [ ] **Step 8: Run the unit suite**
 
@@ -795,7 +755,7 @@ git commit -m "feat(settings): grouped vertical-tab settings page with global se
 
 **Files:**
 - Modify: `application/controllers/admin.php`
-- Modify: `application/views/common/settings.tpl` (No—) → new `application/views/common/admin_dashboard.tpl`
+- Create: `application/views/common/admin_dashboard.tpl`
 - Test: `tests/Unit/SettingsTest.php` (no) — new small test if feasible.
 
 **Interfaces:**
@@ -905,7 +865,7 @@ Run: `make test-unit && php -l application/controllers/admin.php`
 - [ ] **Step 5: Commit**
 
 ```bash
-git add application/controllers/admin.php application/views/common/admin_dashboard.php
+git add application/controllers/admin.php application/views/common/admin_dashboard.tpl
 git commit -m "feat(admin): modernize dashboard with live stats + quick actions (ODM #436)"
 ```
 
