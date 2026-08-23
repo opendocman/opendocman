@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var panels = Array.prototype.slice.call(document.querySelectorAll('#settingsAccordion .accordion-collapse'));
   var defaultState = {}; // group slug -> initially-open flag (from the template markup)
   var previousState = {}; // group slug -> open/closed as the user left it
+  var searching = false;  // true while a non-empty query is active
 
   panels.forEach(function (panel) {
     var group = panel.id.replace('group-', '');
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   filter.addEventListener('input', function () {
     var q = filter.value.trim().toLowerCase();
+    searching = q !== '';
     var anyVisible = false;
 
     panels.forEach(function (panel) {
@@ -86,10 +88,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Record manual open/closed state so clearing the search can restore it.
   panels.forEach(function (panel) {
     panel.addEventListener('shown.bs.collapse', function () {
-      previousState[panel.id.replace('group-', '')] = true;
+      if (!searching) previousState[panel.id.replace('group-', '')] = true;
     });
     panel.addEventListener('hidden.bs.collapse', function () {
-      previousState[panel.id.replace('group-', '')] = false;
+      if (!searching) previousState[panel.id.replace('group-', '')] = false;
     });
   });
 });
