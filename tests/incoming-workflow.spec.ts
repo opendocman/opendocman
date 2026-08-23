@@ -136,9 +136,13 @@ test.describe('Incoming revision staging workflow', () => {
     // Submit authorization with comment
     await page.fill('textarea[name="comments"]', 'Approved via E2E test');
     await clickButton(page, { name: 'submit', value: 'Authorize' });
-    await page.waitForTimeout(2000);
-    // The redirect page has the #last_message; navigated to /out manually may not show it
-    await retryGoto(page, '/out');
+
+    // After approving, the reviewer returns to the admin reviews page
+    // (/toBePublished) with the flash message and the admin sidebar — it must
+    // NOT land on /out (which has no admin nav).
+    await page.waitForURL(/toBePublished/, { timeout: 10000 });
+    await expect(page.locator('#last_message')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#adminSidebar')).toBeVisible({ timeout: 8000 });
   });
 
   test('3. Check out and check in a new version, then approve', async ({ page }) => {
@@ -263,13 +267,9 @@ test.describe('Incoming revision staging workflow', () => {
 
     await page.fill('textarea[name="comments"]', 'Rejected via E2E test - needs fixes');
     await clickButton(page, { name: 'submit', value: 'Reject' });
-    // Reject redirects to /out?last_message=...; wait for that so the flash
-    // message is present (the PHP server may return an empty POST response).
-    for (let attempt = 0; attempt < 5; attempt++) {
-      await page.waitForTimeout(1000);
-      if (/out\?last_message=/.test(page.url())) break;
-      await retryGoto(page, '/out');
-    }
+    // After rejecting, the reviewer returns to the admin reviews page
+    // (/toBePublished) with the flash message — NOT /out.
+    await page.waitForURL(/toBePublished/, { timeout: 10000 });
     await waitForMessage(page, 'rejection');
 
     // === Task 4 Step 3: Rejected-state assertions ===
