@@ -34,6 +34,7 @@ $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : 
 
 if (!isset($_POST['submit'])) {
     draw_header(msg('message_documents_rejected'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'rejections');
     ob_start();
 
     try {
@@ -56,7 +57,7 @@ if (!isset($_POST['submit'])) {
     display_smarty_template('out.tpl');
     $content = ob_get_clean();
     $GLOBALS['smarty']->assign('content', $content);
-    display_smarty_template('_content.tpl');
+    display_smarty_template('_admin_content.tpl');
     draw_footer();
 }
 ?>

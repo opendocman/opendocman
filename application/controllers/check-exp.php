@@ -30,6 +30,8 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 $last_message = (isset($_REQUEST['last_message']) ? $_REQUEST['last_message'] : '');
 
 draw_header(msg('area_file_expiration'), $last_message);
+$GLOBALS['smarty']->assign('active_admin', 'expiration');
+ob_start();
 
 // Look up user
 $user_query = "
@@ -153,4 +155,6 @@ if ($GLOBALS['CONFIG']['file_expired_action'] == 2) {
     }
 }
 echo msg('message_all_actions_successfull');
+$GLOBALS['smarty']->assign('content', ob_get_clean());
+display_smarty_template('_admin_content.tpl');
 draw_footer();

@@ -37,7 +37,9 @@ appear.
    active group's settings fill the right panel. Save/cancel buttons live in a
    sticky footer bar shared across all groups (edits survive tab switches).
 4. **Global settings search.** One box at the top of the settings content area
-   filters across **all** groups at once; a query shows flat merged results
+   filters across **all** groups at once; a query hides non-matching settings
+   within each group (final decision: tab-bound filter, matches remain in
+   their group's tab — see Section 4).
    (each tagged with its group); clearing the query restores tab view.
 5. **Admin search box** in the sidebar filters all admin links live; Enter jumps
    to the first match.
@@ -137,8 +139,11 @@ Layout reuses the verified mockup (vertical tabs):
   CSRF, dataDir/snapshotDir trailing-slash cleanup, numeric validation,
   `last_message`).
 - **Sticky footer bar** with Save / Cancel buttons (shared across tabs).
-- Global search box above the tab rail filters all groups; query shows merged
-  matches tagged by group; "No settings match &ldquo;X&rdquo;" empty state.
+- Global search box above the tab rail filters matching settings across **all**
+  groups (hidden groups' matching rows are shown in their own tab; user
+  switches tabs to view them — **final decision, 2026-08-22: tab-bound
+  filter**, not a flat merged result list). "No settings match &ldquo;X&rdquo;"
+  empty state when no group contains a match.
 - Per-setting control renderer (unchanged semantics):
   - `bool` → True/False select
   - `theme` → theme dropdown, `language` → language dropdown

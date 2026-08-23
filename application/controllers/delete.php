@@ -102,10 +102,14 @@ if (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'tmpdel') {
     
     draw_header(msg('area_deleted_files'), $last_message);
 
+    $GLOBALS['smarty']->assign('active_admin', 'delete');
     $GLOBALS['smarty']->assign('state', 2);
     $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
     $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
+    ob_start();
     display_smarty_template('out.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_admin_content.tpl');
 } elseif (isset($_REQUEST['mode']) && $_REQUEST['mode'] == 'undelete') {
     if (!isset($_REQUEST['num_checkboxes'])) {
         $_REQUEST['num_checkboxes'] = 1;

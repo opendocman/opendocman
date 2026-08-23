@@ -75,3 +75,34 @@ input[type="radio"]:focus {
     outline: 1px solid rgba(0,0,0,0.3);
     outline-offset: 2px;
 }
+
+/* Admin sidebar shell (ODM #436) */
+.admin-sidebar {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+.admin-sidebar .nav-link {
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.375rem;
+    color: #495057;
+    font-size: 0.9rem;
+}
+.admin-sidebar .nav-link.active {
+    font-weight: 600;
+}
+.admin-sidebar-group-label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: #6c757d;
+    font-weight: 700;
+}
+@media (max-width: 991.98px) {
+    .admin-sidebar { position: static; max-height: 16rem; }
+}
