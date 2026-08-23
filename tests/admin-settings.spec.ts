@@ -40,80 +40,83 @@ test.describe('Grouped settings page', () => {
     await loginAs(page, ADMIN_USER, ADMIN_PASS);
   });
 
-  test('renders grouped vertical tabs with General active by default', async ({ page }) => {
+  test('renders grouped accordion with General open by default', async ({ page }) => {
     await retryGoto(page, '/settings?submit=update');
     await page.waitForSelector('#settingsForm', { timeout: 8000 });
 
-    // Search box and tab rail exist
+    // Search box and accordion exist
     await expect(page.locator('#settingsFilter')).toBeVisible();
-    await expect(page.locator('#settingsTabs')).toBeVisible();
+    await expect(page.locator('#settingsAccordion')).toBeVisible();
 
-    // Shared admin shell: the sidebar (rendered via _admin_content.tpl) must be present.
+    // Shared admin shell: the sidebar must be present.
     await expect(page.locator('#adminSidebar')).toBeVisible();
     await expect(page.locator('#adminSidebarNav .nav-link').first()).toBeVisible();
 
-    // Left rail shows a tab labeled General and it is active by default
-    const generalTab = page.locator('#tab-general');
-    await expect(generalTab).toBeVisible();
-    // The label is localized; assert non-empty rather than a specific language.
-    await expect(generalTab).not.toHaveText('');
-    await expect(generalTab).toHaveClass(/active/);
+    // The General panel is open by default (show), and has a count badge
+    const generalPanel = page.locator('#group-general');
+    await expect(generalPanel).toHaveClass(/show/);
+    await expect(generalPanel).toBeVisible();
+    await expect(page.locator('#heading-general .accordion-button .badge')).toHaveText(/\d+/);
 
-    // General pane is the visible one
-    const generalPane = page.locator('#group-general');
-    await expect(generalPane).toHaveClass(/show/);
-    await expect(generalPane).toHaveClass(/active/);
-    await expect(generalPane).toBeVisible();
-
-    // The rail lists more than just the one group
-    await expect(page.locator('#settingsTabs .nav-link').first()).toBeVisible();
-    expect(await page.locator('#settingsTabs .nav-link').count()).toBeGreaterThan(1);
+    // The accordion lists more than just the one group
+    expect(await page.locator('#settingsAccordion .accordion-item').count()).toBeGreaterThan(1);
   });
 
-  test('switching tabs activates the Security & Authentication pane', async ({ page }) => {
+  test('expanding a group shows its settings and multiple panels can be open', async ({ page }) => {
     await retryGoto(page, '/settings?submit=update');
     await page.waitForSelector('#settingsForm', { timeout: 8000 });
 
-    const securityTab = page.locator('#tab-security');
-    await expect(securityTab).toBeVisible();
-    await securityTab.click();
+    // General is open by default
+    await expect(page.locator('#group-general')).toHaveClass(/show/);
 
-    await expect(securityTab).toHaveClass(/active/);
-    const securityPane = page.locator('#group-security');
-    await expect(securityPane).toHaveClass(/show/);
-    await expect(securityPane).toBeVisible();
-    await expect(page.locator('#group-general')).not.toBeVisible();
+    // Click the Security & Auth header to open its panel
+    const securityHeader = page.locator('#heading-security .accordion-button');
+    await securityHeader.click();
+    await expect(page.locator('#group-security')).toHaveClass(/show/);
+
+    // Click the Storage header too — both can be open at once (multi-open)
+    const storageHeader = page.locator('#heading-storage .accordion-button');
+    await storageHeader.click();
+    await expect(page.locator('#group-storage')).toHaveClass(/show/);
+
+    // Both panels visible simultaneously
+    await expect(page.locator('#group-general')).toBeVisible();
+    await expect(page.locator('#group-storage')).toBeVisible();
   });
 
-  test('global search filters rows across hidden tab panes', async ({ page }) => {
+  test('global search filters rows and auto-expands matching groups', async ({ page }) => {
     await retryGoto(page, '/settings?submit=update');
     await page.waitForSelector('#settingsForm', { timeout: 8000 });
 
-    // General is active; theme lives in the hidden UI & Appearance pane.
-    await expect(page.locator('#tab-general')).toHaveClass(/active/);
+    // General is open by default; theme lives in the (initially closed) UI & Appearance panel.
+    await expect(page.locator('#group-general')).toHaveClass(/show/);
+    await expect(page.locator('#group-appearance')).not.toHaveClass(/show/);
 
-    // The matching row in a different, inactive pane is shown (inline display '').
     const themeRow = page.locator('#group-appearance .setting-row[data-settings-name="theme"]');
     await expect(themeRow).toHaveCount(1);
-
-    // The active pane's title row does not match and is hidden by the filter.
     const titleRow = page.locator('#group-general .setting-row[data-settings-name="title"]');
     await expect(titleRow).toHaveCount(1);
 
+    // Type a query matching a setting in the closed Appearance group.
     await page.fill('#settingsFilter', 'theme');
+
+    // The Appearance panel auto-expands and its matching row is visible.
     await page.waitForFunction(() => {
-      const row = document.querySelector('#group-general .setting-row[data-settings-name="title"]') as HTMLElement | null;
-      return row !== null && row.style.display === 'none';
+      const p = document.querySelector('#group-appearance') as HTMLElement | null;
+      return p !== null && p.classList.contains('show');
+    }, { timeout: 5000 });
+    await expect(themeRow).toBeVisible();
+    // The General panel's non-matching title row is hidden by the filter.
+    await page.waitForFunction(() => {
+      const r = document.querySelector('#group-general .setting-row[data-settings-name="title"]') as HTMLElement | null;
+      return r !== null && r.style.display === 'none';
     }, { timeout: 5000 });
 
-    expect(await themeRow.evaluate((el: HTMLElement) => el.style.display)).toBe('');
-    expect(await titleRow.evaluate((el: HTMLElement) => el.style.display)).toBe('none');
-
-    // Clearing the filter restores every row.
+    // Clearing the filter restores every row and the panels' prior state.
     await page.fill('#settingsFilter', '');
     await page.waitForFunction(() => {
-      const row = document.querySelector('#group-general .setting-row[data-settings-name="title"]') as HTMLElement | null;
-      return row !== null && row.style.display === '';
+      const r = document.querySelector('#group-general .setting-row[data-settings-name="title"]') as HTMLElement | null;
+      return r !== null && r.style.display === '';
     }, { timeout: 5000 });
     expect(await themeRow.evaluate((el: HTMLElement) => el.style.display)).toBe('');
     expect(await titleRow.evaluate((el: HTMLElement) => el.style.display)).toBe('');
