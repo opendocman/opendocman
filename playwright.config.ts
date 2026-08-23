@@ -20,7 +20,7 @@ export default defineConfig({
   projects: [
     {
       name: 'smoke',
-      testMatch: ['**/smoke-uat.spec.ts', '**/incoming-workflow.spec.ts', '**/public-sharing.spec.ts'],
+      testMatch: ['**/smoke-uat.spec.ts', '**/incoming-workflow.spec.ts', '**/public-sharing.spec.ts', '**/admin-settings.spec.ts'],
     },
   ],
 });

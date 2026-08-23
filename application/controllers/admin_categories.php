@@ -53,10 +53,11 @@ $avail_users_stmt = $pdo->prepare($avail_users_query);
 $avail_users_stmt->execute();
 $GLOBALS['smarty']->assign('user_list', $avail_users_stmt->fetchAll(PDO::FETCH_ASSOC));
 
+$GLOBALS['smarty']->assign('active_admin', 'categories');
 ob_start();
 display_smarty_template('admin_categories.tpl');
 $GLOBALS['smarty']->assign('content', ob_get_clean());
-display_smarty_template('_content.tpl');
+display_smarty_template('_admin_content.tpl');
 
 echo '<script src="' . $GLOBALS['CONFIG']['base_url'] . 'js/permissions-editor.js?v=' . filemtime(dirname(__FILE__) . '/../../public/js/permissions-editor.js') . '"></script>';
 echo '<script>window.permEditorLabels = ' . json_encode(perm_editor_labels()) . ';</script>';

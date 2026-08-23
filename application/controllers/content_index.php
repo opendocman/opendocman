@@ -102,6 +102,7 @@ ob_start();
 </div>
 <?php
 $content = ob_get_clean();
+$GLOBALS['smarty']->assign('active_admin', 'content_index');
 $GLOBALS['smarty']->assign('content', $content);
-display_smarty_template('_content.tpl');
+display_smarty_template('_admin_content.tpl');
 draw_footer();

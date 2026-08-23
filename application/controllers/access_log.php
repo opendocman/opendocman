@@ -91,5 +91,9 @@ if (isset($GLOBALS['csrf'])) {
     $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
 }
 
+$GLOBALS['smarty']->assign('active_admin', 'access_log');
+ob_start();
 display_smarty_template('access_log.tpl');
+$GLOBALS['smarty']->assign('content', ob_get_clean());
+display_smarty_template('_admin_content.tpl');
 draw_footer();

@@ -548,5 +548,26 @@ $lang['label_rebuild_index'] = 'Rebuild Index';
 $lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
 
 $lang['label_admin_crud_desc'] = 'Manage Users, Departments, and Categories in a single table view.';
+
+// Admin Settings UI (grouped settings, admin sidebar, admin dashboard)
+$lang['settings_group_general'] = 'Geral';
+$lang['settings_group_security'] = 'Segurança & Autenticação';
+$lang['settings_group_storage'] = 'Tipos de arquivo & Armazenamento';
+$lang['settings_group_email'] = 'E-mail & Notificações';
+$lang['settings_group_review'] = 'Revisão & Autorização';
+$lang['settings_group_appearance'] = 'Interface & Aparência';
+$lang['settings_group_other'] = 'Outros';
+$lang['settings_sidebar_group_content'] = 'Gerenciamento de conteúdo';
+$lang['settings_sidebar_group_files'] = 'Arquivos';
+$lang['settings_sidebar_group_system'] = 'Configurações & Sistema';
+$lang['settings_sidebar_group_reports'] = 'Relatórios';
+$lang['settings_sidebar_group_settings_groups'] = 'Grupos de configurações';
+$lang['settings_sidebar_search'] = 'Pesquisar na administração…';
+$lang['settings_filter'] = 'Pesquisar nas configurações…';
+$lang['admin_quick_actions'] = 'Ações rápidas';
+$lang['about_app_version'] = 'Versão do aplicativo';
+$lang['about_db_version'] = 'Versão do banco de dados';
+$lang['label_files'] = 'Documentos';
+
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';

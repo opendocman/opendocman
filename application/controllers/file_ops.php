@@ -42,11 +42,14 @@ $flag = 0;
 if (isset($_GET['submit']) && $_GET['submit'] == 'view_checkedout') {
     draw_header(msg('label_checked_out_files'), $last_message);
 
+    $GLOBALS['smarty']->assign('active_admin', 'file_ops');
     $GLOBALS['smarty']->assign('state', 3);
     $csrf = $GLOBALS['csrf']->getTokenForTemplate('/file_ops');
     $GLOBALS['smarty']->assign('clear_csrf_field', $csrf['field']);
-
+    ob_start();
     display_smarty_template('out.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_admin_content.tpl');
     draw_footer();
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Clear Status') {
     // Validate CSRF token for Clear Status operation
