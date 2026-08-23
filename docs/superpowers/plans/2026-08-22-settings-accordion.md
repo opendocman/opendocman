@@ -55,7 +55,7 @@ Replace the entire contents of `application/views/common/settings.tpl` with:
                 </button>
             </h2>
             <div id="group-{$grp.name}" class="accordion-collapse collapse {if $smarty.foreach.grps.first}show{/if}"
-                 aria-labelledby="heading-{$grp.name}" data-bs-parent="#settingsAccordion">
+                 aria-labelledby="heading-{$grp.name}">
                 <div class="accordion-body">
                     {foreach from=$grp.settings item=i}
                     <div class="mb-3 row setting-row" data-settings-name="{$i.name|escape:'html'}" data-settings-desc="{$i.description|escape:'html'}">
@@ -123,7 +123,7 @@ Replace the entire contents of `application/views/common/settings.tpl` with:
 <script src="{$g_base_url}js/bootstrap5/admin-settings.js"></script>
 ```
 
-Note: `data-bs-parent="#settingsAccordion"` is present on each `.accordion-collapse` for correct Bootstrap accordion behavior, but the JS filter will expand/collapse panels independently; the "multi-open" requirement is satisfied by the filter logic (it can force multiple panels open) even though a manual click toggles single-open per Bootstrap's accordion semantics. If the user's "multi-open" intent means manual clicks too, that is a minor CSS/JS tweak handled in Task 2 (see Task 2 step 3).
+Note: **fully multi-open** — no `data-bs-parent` is present, so every panel toggles independently (clicking one header never closes another). The JS filter may also expand/collapse multiple panels at once.
 
 - [ ] **Step 2: Verify it renders**
 
@@ -263,7 +263,7 @@ Expected: OK.
 
 - [ ] **Step 3: Confirm multi-open manual behavior**
 
-The spec says "multi-open accordion." The template in Task 1 uses `data-bs-parent="#settingsAccordion"`, which makes manual clicks single-open. If the user wants manual multi-open too, remove the `data-bs-parent` attribute from each `.accordion-collapse` in `settings.tpl` (and drop the `data-bs-parent` from the markup). Decide based on the spec's "multi-open accordion" language and confirm the behavior in the E2E (Task 3) — the test will assert that at least two panels can be open simultaneously.
+The template has no `data-bs-parent`, so manual clicks already toggle each panel independently (fully multi-open). Verify in the E2E (Task 3) that at least two panels are open simultaneously after manual clicks.
 
 - [ ] **Step 4: Commit**
 
@@ -271,8 +271,6 @@ The spec says "multi-open accordion." The template in Task 1 uses `data-bs-paren
 git add public/js/bootstrap5/admin-settings.js
 git commit -m "feat(settings): accordion search filter + sidebar panel expansion (ODM #436)"
 ```
-
-(If Step 3 changed `settings.tpl`, add it to this commit too.)
 
 ---
 
