@@ -160,7 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var filter = document.getElementById('settingsFilter');
   var panels = Array.prototype.slice.call(document.querySelectorAll('#settingsAccordion .accordion-collapse'));
   var defaultState = {}; // group slug -> initially-open flag (from the template markup)
-  var previousState = {}; // group slug -> open/closed as the user left it
+  var previousState = {}; // group slug -> open/closed as the user left it (manual only)
+  var searching = false;  // true while a non-empty query is active
 
   panels.forEach(function (panel) {
     var group = panel.id.replace('group-', '');
@@ -198,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   filter.addEventListener('input', function () {
     var q = filter.value.trim().toLowerCase();
+    searching = q !== '';
     var anyVisible = false;
 
     panels.forEach(function (panel) {
@@ -216,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       // While searching: auto-expand groups with matches, collapse groups without.
-      // When the query is cleared: restore the user's previous open/closed state.
+      // When the query is cleared: restore the user's previous manual open/closed state.
       if (q !== '') {
         setPanel(panel, panelHasMatch);
       } else {
@@ -244,10 +246,12 @@ document.addEventListener('DOMContentLoaded', function () {
   // Record manual open/closed state so clearing the search can restore it.
   panels.forEach(function (panel) {
     panel.addEventListener('shown.bs.collapse', function () {
-      previousState[panel.id.replace('group-', '')] = true;
+      // Record manual open/closed state so clearing the search can restore it.
+      // Skip while a query is active so search-driven toggles don't clobber it.
+      if (!searching) previousState[panel.id.replace('group-', '')] = true;
     });
     panel.addEventListener('hidden.bs.collapse', function () {
-      previousState[panel.id.replace('group-', '')] = false;
+      if (!searching) previousState[panel.id.replace('group-', '')] = false;
     });
   });
 });
