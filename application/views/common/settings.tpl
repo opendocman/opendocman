@@ -1,28 +1,25 @@
 <form action="settings" method="POST" enctype="multipart/form-data" id="settingsForm" class="mt-3">
     {$csrf_token_field}
-    <div class="row g-3">
-        <div class="col-lg-3 col-xl-2">
-            <div class="d-grid gap-2">
-                <input type="search" id="settingsFilter" class="form-control form-control-sm" placeholder="{$g_lang_settings_filter|default:'Search settings…'}">
-            </div>
-            <ul class="nav nav-pills flex-column mt-3" id="settingsTabs" role="tablist">
-                {foreach from=$settings_groups item=grp name=grps}
-                <li class="nav-item">
-                    <a class="nav-link {if $smarty.foreach.grps.first}active{/if}" id="tab-{$grp.name}" data-bs-toggle="pill"
-                       href="#group-{$grp.name}" role="tab" data-group="{$grp.name}">
-                        {$grp.label|escape:'html'}
-                        <span class="badge bg-secondary ms-1">{$grp.settings|@count}</span>
-                    </a>
-                </li>
-                {/foreach}
-            </ul>
-        </div>
 
-        <div class="col-lg-9 col-xl-10">
-            <div class="tab-content" id="settingsTabContent">
-                {foreach from=$settings_groups item=grp name=grps2}
-                <div class="tab-pane fade {if $smarty.foreach.grps2.first}show active{/if}" id="group-{$grp.name}" role="tabpanel" data-group="{$grp.name}">
-                    <h5 class="mb-3">{$grp.label|escape:'html'}</h5>
+    <div class="mb-3">
+        <input type="search" id="settingsFilter" class="form-control form-control-sm"
+               placeholder="{$g_lang_settings_filter|default:'Search settings…'}" aria-label="{$g_lang_settings_filter|default:'Search settings…'}">
+    </div>
+
+    <div class="accordion" id="settingsAccordion">
+        {foreach from=$settings_groups item=grp name=grps}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{$grp.name}">
+                <button class="accordion-button {if !$smarty.foreach.grps.first}collapsed{/if}" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#group-{$grp.name}" aria-expanded="{if $smarty.foreach.grps.first}true{else}false{/if}"
+                        aria-controls="group-{$grp.name}">
+                    {$grp.label|escape:'html'}
+                    <span class="badge bg-secondary ms-2">{$grp.settings|@count}</span>
+                </button>
+            </h2>
+            <div id="group-{$grp.name}" class="accordion-collapse collapse {if $smarty.foreach.grps.first}show{/if}"
+                 aria-labelledby="heading-{$grp.name}">
+                <div class="accordion-body">
                     {foreach from=$grp.settings item=i}
                     <div class="mb-3 row setting-row" data-settings-name="{$i.name|escape:'html'}" data-settings-desc="{$i.description|escape:'html'}">
                         <label class="col-sm-3 col-form-label">{$i.name|escape:'html'}</label>
@@ -76,14 +73,14 @@
                     </div>
                     {/foreach}
                 </div>
-                {/foreach}
-            </div>
-
-            <div class="d-flex gap-2 mt-3 sticky-bottom bg-white py-2">
-                <button class="btn btn-primary" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
-                <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
             </div>
         </div>
+        {/foreach}
+    </div>
+
+    <div class="d-flex gap-2 mt-3 sticky-bottom bg-white py-2">
+        <button class="btn btn-primary" type="submit" name="submit" value="Save">{$g_lang_button_save}</button>
+        <button class="btn btn-secondary" type="button" onclick="window.location.href='admin'">{$g_lang_button_cancel}</button>
     </div>
 </form>
 <script src="{$g_base_url}js/bootstrap5/admin-settings.js"></script>
