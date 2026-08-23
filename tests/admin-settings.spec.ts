@@ -129,4 +129,27 @@ test.describe('Grouped settings page', () => {
       return app !== null && gen !== null && !app.classList.contains('show') && gen.classList.contains('show');
     }, { timeout: 5000 });
   });
+
+  test('saving settings shows a flash confirmation message', async ({ page }) => {
+    await retryGoto(page, '/settings?submit=update');
+    await page.waitForSelector('#settingsForm', { timeout: 8000 });
+
+    // Capture the current title so we can restore it afterward.
+    const title = page.locator('input[name="title"]');
+    const original = (await title.inputValue()) || '';
+
+    const testValue = `E2E Flash ${Date.now()}`;
+    await title.fill(testValue);
+    await page.click('button[type="submit"][name="submit"][value="Save"]');
+
+    // The flash alert (#last_message) must appear after saving, with non-empty text.
+    await expect(page.locator('#last_message')).toBeVisible({ timeout: 8000 });
+    await expect(page.locator('#last_message')).not.toHaveText('');
+
+    // Restore the original title to leave the DB as we found it.
+    const titleAfter = page.locator('input[name="title"]');
+    await titleAfter.fill(original);
+    await page.click('button[type="submit"][name="submit"][value="Save"]');
+    await expect(page.locator('#last_message')).toBeVisible({ timeout: 8000 });
+  });
 });
