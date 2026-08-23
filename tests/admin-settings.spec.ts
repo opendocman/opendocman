@@ -153,3 +153,36 @@ test.describe('Grouped settings page', () => {
     await expect(page.locator('#last_message')).toBeVisible({ timeout: 8000 });
   });
 });
+
+test.describe('Admin sidebar gating for non-admin reviewers', () => {
+  // A non-admin reviewer (e2euser) must NOT see the admin sidebar on the
+  // reviews page (toBePublished) even though it renders through
+  // _admin_content.tpl. The e2euser is seeded by global-setup.
+  const NON_ADMIN_USER = process.env.NON_ADMIN_USER || 'e2euser';
+  const NON_ADMIN_PASS = process.env.NON_ADMIN_PASSWORD || 'e2euserpass';
+
+  test('reviews page shows no admin sidebar to a non-admin reviewer', async ({ page }) => {
+    // Grant e2euser reviewer rights on department 1 via docker mysql so they can
+    // reach toBePublished, then verify they see it WITHOUT the admin sidebar.
+    // Matches the docker-exec pattern used in public-sharing.spec.ts.
+    const { execSync } = require('child_process');
+    const MYSQL = `docker exec opendocman-db-1 mysql -u opendocman -pcWzzQzOySoBvoO84gJykRedP opendocman -e`;
+    try {
+      // Delete any stale grants first, then add exactly one (avoid duplicates).
+      execSync(`${MYSQL} "DELETE FROM odm_dept_reviewer WHERE user_id=(SELECT id FROM odm_user WHERE username='${NON_ADMIN_USER}')"`, { timeout: 10000 });
+      execSync(`${MYSQL} "INSERT INTO odm_dept_reviewer (dept_id, user_id) SELECT 1, id FROM odm_user WHERE username='${NON_ADMIN_USER}'"`, { timeout: 10000 });
+
+      // Log in as the non-admin reviewer.
+      await loginAs(page, NON_ADMIN_USER, NON_ADMIN_PASS);
+      await retryGoto(page, '/toBePublished');
+
+      // The reviews page renders, but the admin sidebar must be absent.
+      await expect(page.locator('#file-table')).toBeVisible({ timeout: 8000 });
+      await expect(page.locator('#adminSidebar')).toHaveCount(0);
+      await expect(page.locator('#adminSidebarNav')).toHaveCount(0);
+    } finally {
+      // Remove the grant so the DB is left as we found it.
+      execSync(`${MYSQL} "DELETE FROM odm_dept_reviewer WHERE user_id=(SELECT id FROM odm_user WHERE username='${NON_ADMIN_USER}')"`, { timeout: 10000 });
+    }
+  });
+});
