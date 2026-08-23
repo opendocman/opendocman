@@ -120,5 +120,13 @@ test.describe('Grouped settings page', () => {
     }, { timeout: 5000 });
     expect(await themeRow.evaluate((el: HTMLElement) => el.style.display)).toBe('');
     expect(await titleRow.evaluate((el: HTMLElement) => el.style.display)).toBe('');
+
+    // The panels' prior state is also restored: Appearance (auto-expanded by
+    // the search) collapses back, and General stays open.
+    await page.waitForFunction(() => {
+      const app = document.querySelector('#group-appearance') as HTMLElement | null;
+      const gen = document.querySelector('#group-general') as HTMLElement | null;
+      return app !== null && gen !== null && !app.classList.contains('show') && gen.classList.contains('show');
+    }, { timeout: 5000 });
   });
 });

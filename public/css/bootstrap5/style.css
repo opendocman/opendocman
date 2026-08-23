@@ -106,17 +106,3 @@ input[type="radio"]:focus {
 @media (max-width: 991.98px) {
     .admin-sidebar { position: static; max-height: 16rem; }
 }
-
-/* Settings page vertical tab rail (ODM #436) */
-#settingsTabs .nav-link {
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.375rem;
-    color: #495057;
-    font-size: 0.9rem;
-}
-#settingsTabs .nav-link.active {
-    font-weight: 600;
-}
-#settingsTabs .nav-item + .nav-item {
-    margin-top: 0.25rem;
-}
