@@ -25,6 +25,7 @@ class PhpExtensionCheckerTest extends TestCase
         $this->assertContains('PHP Extension: mbstring', $names);
         $this->assertContains('PHP Extension: fileinfo', $names);
         $this->assertContains('PHP Extension: gd', $names);
+        $this->assertContains('PHP Extension: imap', $names);
     }
 
     public function testZipExtensionIsRequired(): void
@@ -57,5 +58,18 @@ class PhpExtensionCheckerTest extends TestCase
     {
         $checker = new PhpExtensionChecker();
         $this->assertEquals('PHP Extensions', $checker->getName());
+    }
+
+    public function testImapExtensionIsRecommended(): void
+    {
+        $checker = new PhpExtensionChecker();
+        $results = $checker->check();
+        foreach ($results as $result) {
+            if ($result->name === 'PHP Extension: imap') {
+                $this->assertEquals('recommended', $result->severity);
+                return;
+            }
+        }
+        $this->fail('imap extension check not found');
     }
 }
