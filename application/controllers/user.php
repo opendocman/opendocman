@@ -226,7 +226,63 @@ if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     header('Location: admin');
     exit;
 } elseif (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'Modify User') {
-    header('Location: admin');
+    // Self-edit: render the profile form for the requested user. Admins may edit
+    // any user; non-admins may only edit their own (enforced above).
+    if (@$GLOBALS['CONFIG']['demo'] == 'True') {
+        draw_header(msg('userpage_update_user'), $last_message);
+        echo msg('userpage_update_user_demo');
+        draw_footer();
+        exit;
+    }
+
+    draw_header(msg('userpage_update_user'), $last_message);
+    $target_user = new User($_REQUEST['item'], $pdo);
+    $display_reviewer_row = $target_user->isAdmin() ? true : false;
+
+    $query = "SELECT dept_id, user_id FROM {$GLOBALS['CONFIG']['db_prefix']}dept_reviewer where user_id = :user_id";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array(':user_id' => $_REQUEST['item']));
+    $dept_reviewer = $stmt->fetchAll();
+
+    $query = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}department ORDER BY name";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array());
+    $department_list = $stmt->fetchAll();
+
+    // Departments this user reviews for.
+    $department_reviewer = [];
+    foreach ($dept_reviewer as $row) {
+        $department_reviewer[$row[0]] = $row[0];
+    }
+    // Options for the reviewer multi-select (each dept marked selected if the user reviews it).
+    $department_select_options = '';
+    foreach ($department_list as $row) {
+        $selected = isset($department_reviewer[$row[0]]) ? ' selected' : '';
+        $department_select_options .= '<option value="' . e::h($row[0]) . '"' . $selected . '>' . e::h($row[1]) . '</option>';
+    }
+
+    $can_add = $target_user->can_add == 1 ? 'checked' : '';
+    $can_checkin = $target_user->can_checkin == 1 ? 'checked' : '';
+
+    $csrf_data = $GLOBALS['csrf']->getTokenForTemplate('/user');
+    $GLOBALS['smarty']->assign('csrf_token_field', $csrf_data['field']);
+    $GLOBALS['smarty']->assign('csrf_token_value', $csrf_data['token']);
+    $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
+    $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
+
+    $GLOBALS['smarty']->assign('user', $target_user);
+    $GLOBALS['smarty']->assign('mysql_auth', $GLOBALS['CONFIG']['authen'] == 'mysql');
+    $GLOBALS['smarty']->assign('mode', $mode);
+    $GLOBALS['smarty']->assign('user_department', $target_user->getDeptID());
+    $GLOBALS['smarty']->assign('display_reviewer_row', $display_reviewer_row);
+    $GLOBALS['smarty']->assign('is_admin', $target_user->isAdmin());
+    $GLOBALS['smarty']->assign('department_list', $department_list);
+    $GLOBALS['smarty']->assign('department_select_options', $department_select_options);
+    $GLOBALS['smarty']->assign('can_add', $can_add);
+    $GLOBALS['smarty']->assign('can_checkin', $can_checkin);
+    $GLOBALS['smarty']->assign('pw_change_required_checked', $target_user->isPasswordChangeRequired() ? 'checked' : '');
+    display_smarty_template('user/edit.tpl');
+    draw_footer();
     exit;
 } elseif (isset($_POST['submit']) && 'Update User' == $_POST['submit']) {
     // Validate CSRF token for Update User operation
