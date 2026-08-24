@@ -56,10 +56,14 @@ if (!isset($_POST['submit'])) {
         $delete_csrf = $GLOBALS['csrf']->getTokenForTemplate('/delete');
         $GLOBALS['smarty']->assign('delete_csrf_field', $delete_csrf['field']);
     }
+    $GLOBALS['smarty']->assign('active_admin', 'reviews');
     $GLOBALS['smarty']->assign('state', 0);
+    ob_start();
     display_smarty_template('out.tpl');
     $GLOBALS['smarty']->assign('lmode', '');
     display_smarty_template('toBePublished.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_admin_content.tpl');
 } elseif (isset($_POST['submit']) && ($_POST['submit'] =='commentAuthorize' || $_POST['submit'] == 'commentReject')) {
     // Validate CSRF token for Approve/Deny initial POST
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
@@ -72,6 +76,7 @@ if (!isset($_POST['submit'])) {
     }
 
     draw_header(msg('label_comment'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'reviews');
 
     $checkbox = isset($_POST['checkbox']) ? $_POST['checkbox'] : '';
 /*    if($mode == 'reviewer')
@@ -117,7 +122,10 @@ if (!isset($_POST['submit'])) {
         $GLOBALS['smarty']->assign('csrf_field_name', $csrf_data['field_name']);
         $GLOBALS['smarty']->assign('csrf_index_name', $csrf_data['index_name']);
     }
+    ob_start();
     display_smarty_template('commentform.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_admin_content.tpl');
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Reject') {
     // Validate CSRF token for Reject operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
@@ -210,7 +218,7 @@ if (!isset($_POST['submit'])) {
             header("Location:toBePublished?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
-    header("Location: out?last_message=" .urlencode(msg('message_file_rejected')));
+    header("Location: toBePublished?last_message=" .urlencode(msg('message_file_rejected')));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Authorize') {
     // Validate CSRF token for Authorize operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/toBePublished')) {
@@ -421,7 +429,7 @@ if (!isset($_POST['submit'])) {
             header("Location:toBePublished?last_message=" .urlencode(msg('message_error_performing_action')));
         }
     }
-    header('Location: out?last_message=' .urlencode(msg('message_file_authorized')));
+    header('Location: toBePublished?last_message=' .urlencode(msg('message_file_authorized')));
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'comments' && isset($_POST['id'])) {
     /*
      * Used to display the reviewer comments in a popup

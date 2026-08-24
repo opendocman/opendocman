@@ -14,6 +14,36 @@
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
+    // Human-readable label for the current entity (users/departments/categories).
+    function entityLabel() {
+        var labels = { users: 'User', departments: 'Department', categories: 'Category' };
+        return labels[entity] || entity;
+    }
+
+    // Show a dismissible success/error alert at the top of the CRUD card body.
+    function showFlash(message, type) {
+        var container = document.querySelector('.card-body');
+        if (!container) return;
+        var existing = document.getElementById('crudFlash');
+        if (existing) existing.remove();
+        var alert = document.createElement('div');
+        alert.id = 'crudFlash';
+        alert.className = 'alert alert-' + (type || 'success') + ' alert-dismissible fade show';
+        alert.setAttribute('role', 'alert');
+        alert.textContent = message;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-close';
+        btn.setAttribute('data-bs-dismiss', 'alert');
+        btn.setAttribute('aria-label', 'Close');
+        alert.appendChild(btn);
+        container.insertBefore(alert, container.firstChild);
+        setTimeout(function() {
+            var bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+            bsAlert.close();
+        }, 5000);
+    }
+
     var paginationSize = parseInt(sessionStorage.getItem('adminCrudPageSize') || '25', 10);
 
     var columnGetters = {
@@ -251,6 +281,7 @@ users: function(rowData) {
             if (modal) modal.hide();
             var table = window.crudTable;
             if (table) table.setPage(1);
+            showFlash(entityLabel() + ' saved successfully', 'success');
         })
         .catch(function(err) {
             alert('Error saving: ' + err.message);
@@ -299,6 +330,7 @@ users: function(rowData) {
             if (modal) modal.hide();
             var table = window.crudTable;
             if (table) table.setPage(1);
+            showFlash(entityLabel() + ' deleted successfully', 'success');
         })
         .catch(function(err) {
             alert('Error deleting: ' + err.message);

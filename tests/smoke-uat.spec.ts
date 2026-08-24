@@ -124,6 +124,8 @@ test.describe('User management', () => {
     await expect(page.locator('#crudModal')).not.toBeVisible();
     // Verify the new user appears in the table
     await expect(page.locator('#crud-table')).toContainText(username);
+    // Confirm the success flash is shown
+    await expect(page.locator('#crudFlash')).toContainText('saved successfully');
   });
 
   test('update a user', async ({ page }) => {
@@ -137,6 +139,8 @@ test.describe('User management', () => {
 
     await expect(page.locator('#crudModal')).not.toBeVisible();
     await expect(page.locator('#crud-table')).toContainText(updatedLastName);
+    // Confirm the success flash is shown
+    await expect(page.locator('#crudFlash')).toContainText('saved successfully');
   });
 
   test('delete a user', async ({ page }) => {
@@ -147,6 +151,8 @@ test.describe('User management', () => {
 
     await confirmDelete(page);
     await expect(page.locator('#deleteModal')).not.toBeVisible();
+    // Confirm the success flash is shown
+    await expect(page.locator('#crudFlash')).toContainText('deleted successfully');
   });
 });
 

@@ -40,10 +40,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     draw_header(msg('area_add_new_udf'), $last_message);
 
     $GLOBALS['smarty']->assign('last_message', $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
     ob_start();
     display_smarty_template('udf/add.tpl');
     $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
+    display_smarty_template('_admin_content.tpl');
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Add User Defined Field') {
     // Validate CSRF token for Add UDF operation
@@ -86,10 +87,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $udf = $stmt->fetch();
 
     $GLOBALS['smarty']->assign('udf', $udf);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
     ob_start();
     display_smarty_template('udf/delete_form.tpl');
     $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
+    display_smarty_template('_admin_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['deleteudf'])) {
@@ -127,10 +129,11 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
 
     $GLOBALS['smarty']->assign('state', $_REQUEST['state'] + 1);
     $GLOBALS['smarty']->assign('udfs', $result);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
     ob_start();
     display_smarty_template('udf/delete_pick.tpl');
     $GLOBALS['smarty']->assign('content', ob_get_clean());
-    display_smarty_template('_content.tpl');
+    display_smarty_template('_admin_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['cancel']) && $_REQUEST['cancel'] == 'Cancel') {
@@ -143,6 +146,7 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     }
 
     draw_header(msg('edit') . ' ' . msg('label_user_defined_field'), $last_message);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
 
     if (!empty($_REQUEST['udf']) && !preg_match('/^\w+$/', $_REQUEST['udf'])) {
         header('Location: admin?last_message=Error+:+Invalid+Name+(A-Z 0-9 Only)');
@@ -238,7 +242,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         $GLOBALS['smarty']->assign('udf', $_REQUEST['udf']);
         $GLOBALS['smarty']->assign('display_name', $display_name);
         $GLOBALS['smarty']->assign('rows', $rows1);
+        ob_start();
         display_smarty_template('udf/edit_types_1_and_2.tpl');
+        $GLOBALS['smarty']->assign('content', ob_get_clean());
+        display_smarty_template('_admin_content.tpl');
     }
 
     if ($field_type == 3) {
@@ -346,7 +353,10 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
         $GLOBALS['smarty']->assign('udf', $_REQUEST['udf']);
         $GLOBALS['smarty']->assign('display_name', $display_name);
         $GLOBALS['smarty']->assign('rows', $rows2);
+        ob_start();
         display_smarty_template('udf/edit_type_4.tpl');
+        $GLOBALS['smarty']->assign('content', ob_get_clean());
+        display_smarty_template('_admin_content.tpl');
 
     }
 

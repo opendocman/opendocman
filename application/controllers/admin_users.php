@@ -49,10 +49,11 @@ $GLOBALS['smarty']->assign('department_list', Department::getAllDepartments($pdo
 $GLOBALS['smarty']->assign('category_list', Category::getAllCategories($pdo));
 $GLOBALS['smarty']->assign('crud_filter', $_REQUEST['filter'] ?? '');
 
+$GLOBALS['smarty']->assign('active_admin', 'users');
 ob_start();
 display_smarty_template('admin_users.tpl');
 $GLOBALS['smarty']->assign('content', ob_get_clean());
-display_smarty_template('_content.tpl');
+display_smarty_template('_admin_content.tpl');
 
 echo '<script src="' . $GLOBALS['CONFIG']['base_url'] . 'js/bootstrap5/admin-crud.js?v=' . filemtime(dirname(__FILE__) . '/../../public/js/bootstrap5/admin-crud.js') . '"></script>';
 

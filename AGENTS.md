@@ -99,6 +99,36 @@ This applies to all git operations unless told otherwise.
 
 Start feature work from a fresh `master` branch unless otherwise stated.
 
+## Release Please (automated releases)
+
+Releases are automated by `.github/workflows/release-please.yml`, which runs on
+push to `master` and opens a `chore(master): release X.Y.Z-release` PR on the
+`release-please--branches--master` branch. Merging that PR publishes the GitHub
+release and tags `vX.Y.Z-release`.
+
+Release-please derives the changelog and version bump from **Conventional Commit
+titles**. Because PRs are squash-merged, the **PR title** becomes the commit
+subject release-please parses:
+
+- `feat: ...` → minor bump (e.g. `2.9.0-release` → `2.10.0-release`)
+- `fix:` / `perf:` → patch bump
+- `chore:` / `docs:` / `refactor:` / `test:` → not user-facing; do not trigger a release
+
+A PR merged with a **non-conventional title is silently skipped** — the work
+won't be released and no release PR will be opened. (Example: PR #437 was
+merged as `Modernize the admin settings area ...` with no `feat:` prefix, so
+that work had to be released manually via PR #439.) If release-please ever logs
+`No user facing commits found - skipping`, check the titles of recently merged
+PRs for a missing conventional prefix.
+
+To release accumulated work after a non-conventional merge, create the release
+PR by hand:
+1. Branch `release-please--branches--master` from `master`
+2. Bump `.release-please-manifest.json`, `ODM_APP_VERSION` in
+   `application/version.php` (keep the `// x-release-please-version` marker),
+   and add the entry to the top of `CHANGELOG.md`
+3. Commit `chore(master): release X.Y.Z-release`, push, and open the PR
+
 ## Recurring spurious change: `application/templates_c/.gitignore`
 
 The tracked file `application/templates_c/.gitignore` keeps the Smarty

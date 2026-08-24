@@ -143,7 +143,7 @@ if (!defined('FileTypes')) {
             ob_start();
             display_smarty_template('filetypes.tpl');
             $GLOBALS['smarty']->assign('content', ob_get_clean());
-            display_smarty_template('_content.tpl');
+            display_smarty_template('_admin_content.tpl');
         }
 
         /*
@@ -170,7 +170,7 @@ if (!defined('FileTypes')) {
             ob_start();
             display_smarty_template('filetypes_deleteshow.tpl');
             $GLOBALS['smarty']->assign('content', ob_get_clean());
-            display_smarty_template('_content.tpl');
+            display_smarty_template('_admin_content.tpl');
         }
 
         public function delete($data)

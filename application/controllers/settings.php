@@ -42,7 +42,10 @@ if (!$user_obj->isRoot() == true) {
 if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
     draw_header(msg('label_settings'), $last_message);
 
-    $settings->edit();
+    $GLOBALS['smarty']->assign('active_admin', 'settings');
+    $settings->assignSettings();
+    $GLOBALS['smarty']->assign('content', $settings->renderContent());
+    display_smarty_template('_admin_content.tpl');
 
     draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Save') {
@@ -52,8 +55,6 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
         exit;
     }
     
-    draw_header(msg('label_settings'), $last_message);
-
     // Clean up the datadir a bit to make sure it ends with slash
     if (!empty($_POST['dataDir'])) {
         if (substr($_POST['dataDir'], -1) != '/') {
@@ -67,31 +68,36 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']=='update') {
             $_POST['snapshotDir'] .= '/';
         }
         if (!is_dir($_POST['snapshotDir'])) {
-            $_POST['last_message'] = "Snapshot directory does not exist: {$_POST['snapshotDir']}";
+            $_REQUEST['last_message'] = "Snapshot directory does not exist: {$_POST['snapshotDir']}";
         } elseif (!is_writable($_POST['snapshotDir'])) {
-            $_POST['last_message'] = "Snapshot directory is not writable: {$_POST['snapshotDir']}";
+            $_REQUEST['last_message'] = "Snapshot directory is not writable: {$_POST['snapshotDir']}";
         }
     }
 
     // Perform Input Validation
     if (!is_dir($_POST['dataDir'])) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_exists'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_datadir_problem_exists'];
     } elseif (!is_writable($_POST['dataDir'])) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_datadir_problem_writable'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_datadir_problem_writable'];
     } elseif ((!is_numeric($_POST['max_filesize'])) || (!is_numeric($_POST['revision_expiration']) || (!is_numeric($_POST['max_query'])))) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_config_value_problem'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_config_value_problem'];
     } elseif ($settings->save($_POST)) {
-        $_POST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_all_actions_successfull'];
     } else {
-        $_POST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
+        $_REQUEST['last_message'] = $GLOBALS['lang']['message_error_performing_action'];
     }
 
-    if (!isset($_POST['last_message'])) {
-        $_POST['last_message']='';
+    if (!isset($_REQUEST['last_message'])) {
+        $_REQUEST['last_message']='';
     }
+
+    draw_header(msg('label_settings'), $last_message);
     
-    $settings->edit();
-    
+    $GLOBALS['smarty']->assign('active_admin', 'settings');
+    $settings->assignSettings();
+    $GLOBALS['smarty']->assign('content', $settings->renderContent());
+    display_smarty_template('_admin_content.tpl');
+
     draw_footer();
     
     // Clear the tpl templates_c files after update in case they updated theme

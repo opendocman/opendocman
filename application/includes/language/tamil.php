@@ -549,6 +549,27 @@ $lang['label_rebuild_index'] = 'Rebuild Index';
 $lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
 
 $lang['label_admin_crud_desc'] = 'Manage Users, Departments, and Categories in a single table view.';
+
+// Admin Settings UI (grouped settings, admin sidebar, admin dashboard)
+$lang['settings_group_general'] = 'பொது';
+$lang['settings_group_security'] = 'Security & Authentication';
+$lang['settings_group_storage'] = 'File Types & Storage';
+$lang['settings_group_email'] = 'Email & Notifications';
+$lang['settings_group_review'] = 'Review & Authorization';
+$lang['settings_group_appearance'] = 'UI & Appearance';
+$lang['settings_group_other'] = 'மற்றவை';
+$lang['settings_sidebar_group_content'] = 'Content Management';
+$lang['settings_sidebar_group_files'] = 'கோப்புகள்';
+$lang['settings_sidebar_group_system'] = 'Settings & System';
+$lang['settings_sidebar_group_reports'] = 'அறிக்கைகள்';
+$lang['settings_sidebar_group_settings_groups'] = 'Settings Groups';
+$lang['settings_sidebar_search'] = 'Search admin…';
+$lang['settings_filter'] = 'Search settings…';
+$lang['admin_quick_actions'] = 'Quick actions';
+$lang['about_app_version'] = 'பயன்பாட்டு பதிப்பு';
+$lang['about_db_version'] = 'தரவுத்தள பதிப்பு';
+$lang['label_files'] = 'ஆவணங்கள்';
+
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 

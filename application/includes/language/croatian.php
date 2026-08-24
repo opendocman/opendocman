@@ -550,6 +550,27 @@ $lang['label_rebuild_index'] = 'Rebuild Index';
 $lang['label_rebuild_confirm'] = 'This will re-index all files. Continue?';
 
 $lang['label_admin_crud_desc'] = 'Manage Users, Departments, and Categories in a single table view.';
+
+// Admin Settings UI (grouped settings, admin sidebar, admin dashboard)
+$lang['settings_group_general'] = 'Općenito';
+$lang['settings_group_security'] = 'Sigurnost i autentifikacija';
+$lang['settings_group_storage'] = 'Vrste datoteka i pohrana';
+$lang['settings_group_email'] = 'E-pošta i obavijesti';
+$lang['settings_group_review'] = 'Pregled i autorizacija';
+$lang['settings_group_appearance'] = 'Sučelje i izgled';
+$lang['settings_group_other'] = 'Ostalo';
+$lang['settings_sidebar_group_content'] = 'Upravljanje sadržajem';
+$lang['settings_sidebar_group_files'] = 'Datoteke';
+$lang['settings_sidebar_group_system'] = 'Postavke i sustav';
+$lang['settings_sidebar_group_reports'] = 'Izvješća';
+$lang['settings_sidebar_group_settings_groups'] = 'Skupine postavki';
+$lang['settings_sidebar_search'] = 'Pretraži administraciju…';
+$lang['settings_filter'] = 'Pretraži postavke…';
+$lang['admin_quick_actions'] = 'Brze akcije';
+$lang['about_app_version'] = 'Verzija aplikacije';
+$lang['about_db_version'] = 'Verzija baze podataka';
+$lang['label_files'] = 'Dokumenti';
+
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 

@@ -251,6 +251,150 @@ class SettingsTest extends TestCase
         $settings->edit();
     }
 
+    public function testEditAssignsSettingsGroups(): void
+    {
+        if (!defined('ABSPATH')) { define('ABSPATH', $this->tmpBase . '/'); }
+        $this->mkdirp(ABSPATH . 'views');
+        $this->mkdirp(ABSPATH . 'includes/language');
+        if (empty($GLOBALS['CONFIG']['theme'])) { $GLOBALS['CONFIG']['theme'] = 'bootstrap5'; }
+
+        $pdo = \Mockery::mock(PDO::class);
+        $stmt = \Mockery::mock(PDOStatement::class);
+        $stmt->shouldReceive('execute')->andReturn(true);
+        $stmt->shouldReceive('fetchAll')->andReturn([
+            ['id' => 1, 'name' => 'title', 'value' => 'R', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'language', 'value' => 'english', 'description' => 'd', 'validation' => ''],
+            ['id' => 3, 'name' => 'brand_new', 'value' => '', 'description' => '', 'validation' => ''],
+        ]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT \* FROM.*settings/'))->andReturn($stmt);
+
+        $deptStmt = Mockery::mock(PDOStatement::class);
+        $deptStmt->shouldReceive('execute')->andReturn(true);
+        $deptStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
+
+        $userStmt = Mockery::mock(PDOStatement::class);
+        $userStmt->shouldReceive('execute')->andReturn(true);
+        $userStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*user/s'))->andReturn($userStmt);
+
+        $smarty = Mockery::mock('Smarty');
+        $smarty->shouldReceive('assign')->with('settings_groups', \Mockery::on(function ($groups) {
+            return isset($groups['general']) && isset($groups['appearance']) && isset($groups['other']);
+        }))->once();
+        $smarty->shouldReceive('assign')->withAnyArgs()->andReturnNull();
+        $smarty->shouldReceive('display')->andReturnNull();
+        $GLOBALS['smarty'] = $smarty;
+
+        $settings = new Settings($pdo);
+        $settings->edit();
+    }
+
+    public function testGroupSettingsOrdersAndLabelsKnownGroups(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $originalLang = $GLOBALS['lang'] ?? null;
+        $GLOBALS['lang'] = ['settings_group_general' => 'General'];
+
+        try {
+            $rows = [
+                ['id' => 1, 'name' => 'title', 'value' => 'My Repo', 'description' => 'title desc', 'validation' => 'maxsize=255'],
+                ['id' => 2, 'name' => 'authen', 'value' => 'mysql', 'description' => 'auth', 'validation' => ''],
+            ];
+
+            $groups = $settings->groupSettings($rows);
+
+            $this->assertArrayHasKey('general', $groups);
+            $this->assertArrayHasKey('security', $groups);
+            $this->assertCount(1, $groups['general']['settings']);
+            $this->assertSame('title', $groups['general']['settings'][0]['name']);
+            $this->assertSame('General', $groups['general']['label']);
+            $this->assertArrayNotHasKey('other', $groups);
+            $this->assertTrue(array_key_exists('general', $groups) && reset($groups)['name'] === 'general');
+        } finally {
+            if ($originalLang === null) {
+                unset($GLOBALS['lang']);
+            } else {
+                $GLOBALS['lang'] = $originalLang;
+            }
+        }
+    }
+
+    public function testGroupSettingsUnknownFallsBackToOther(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'brand_new_setting', 'value' => 'x', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'another_unknown', 'value' => 'y', 'description' => 'e', 'validation' => 'bool'],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('other', $groups);
+        $this->assertCount(2, $groups['other']['settings']);
+        $this->assertSame('other', $groups['other']['name']);
+    }
+
+    public function testGroupSettingsMailPrefixGoesToEmail(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'mail_host', 'value' => 'imap.example.com', 'description' => 'd', 'validation' => ''],
+            ['id' => 2, 'name' => 'site_mail', 'value' => 'a@b.co', 'description' => 'd', 'validation' => ''],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('email', $groups);
+        $this->assertArrayNotHasKey('other', $groups);
+    }
+
+    public function testGroupSettingsOrderIsFixed(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'title', 'value' => '', 'description' => '', 'validation' => ''],
+            ['id' => 2, 'name' => 'language', 'value' => '', 'description' => '', 'validation' => ''],
+            ['id' => 3, 'name' => 'dataDir', 'value' => '', 'description' => '', 'validation' => ''],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertSame(['general', 'storage', 'appearance'], array_keys($groups));
+    }
+
+    public function testGroupSettingsEmptyRowsReturnsEmptyArray(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $this->assertSame([], $settings->groupSettings([]));
+    }
+
+    public function testGroupSettingsPublicSharingGoesToGeneral(): void
+    {
+        $pdo = \Mockery::mock(PDO::class);
+        $settings = new Settings($pdo);
+
+        $rows = [
+            ['id' => 1, 'name' => 'public_sharing', 'value' => 'true', 'description' => 'd', 'validation' => 'bool'],
+        ];
+
+        $groups = $settings->groupSettings($rows);
+
+        $this->assertArrayHasKey('general', $groups);
+        $this->assertSame('public_sharing', $groups['general']['settings'][0]['name']);
+        $this->assertArrayNotHasKey('other', $groups);
+    }
+
     private function mkdirp(string $path): void
     {
         if (!is_dir($path)) {
