@@ -65,7 +65,18 @@
                                     <option value="{$dept[0]|escape}" {if $i.value eq $dept[0]}selected="selected"{/if}>{$dept[1]|escape:'html'}</option>
                                 {/foreach}
                             </select>
-{elseif $i.name eq 'mail_default_department'}
+{elseif $i.name eq 'mail_protocol'}
+                            <select name="mail_protocol" class="form-select">
+                                <option value="imap" {if $i.value eq 'imap'}selected="selected"{/if}>IMAP</option>
+                                <option value="pop3" {if $i.value eq 'pop3'}selected="selected"{/if}>POP3</option>
+                            </select>
+                        {elseif $i.name eq 'mail_encryption'}
+                            <select name="mail_encryption" class="form-select">
+                                <option value="none" {if $i.value eq 'none'}selected="selected"{/if}>None</option>
+                                <option value="ssl" {if $i.value eq 'ssl'}selected="selected"{/if}>SSL</option>
+                                <option value="tls" {if $i.value eq 'tls'}selected="selected"{/if}>TLS</option>
+                            </select>
+                        {elseif $i.name eq 'mail_default_department'}
                             <select name="mail_default_department" class="form-select">
                                 <option value="" {if $i.value eq ''}selected="selected"{/if}>-- none --</option>
                                 {foreach from=$departments item=dept}
