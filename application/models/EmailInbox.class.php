@@ -77,46 +77,71 @@ class EmailInbox
      */
     public function fetchMessages(): array
     {
-        $folderObj = $this->resolveFolder();
-        $messages = $folderObj->messages()->unseen()->get();
+        return $this->withoutWarnings(function (): array {
+            $folderObj = $this->resolveFolder();
+            $messages = $folderObj->messages()->unseen()->get();
 
-        $result = [];
-        foreach ($messages as $msg) {
-            $em = new EmailMessage(
-                (string) $msg->getUid(),
-                (string) $msg->getSubject(),
-                $this->extractSender($msg)
-            );
+            $result = [];
+            foreach ($messages as $msg) {
+                $em = new EmailMessage(
+                    (string) $msg->getUid(),
+                    (string) $msg->getSubject(),
+                    $this->extractSender($msg)
+                );
 
-            foreach ($msg->getAttachments() as $att) {
-                $name = $att->getName();
-                if ($name === null || $name === '') {
-                    continue;
+                foreach ($msg->getAttachments() as $att) {
+                    $name = $att->getName();
+                    if ($name === null || $name === '') {
+                        continue;
+                    }
+
+                    $path = $this->writeAttachment($att);
+                    if ($path === null) {
+                        continue;
+                    }
+
+                    $mime = $att->getMimeType();
+                    if ($mime === null || $mime === '') {
+                        $mime = $att->getContentType();
+                    }
+                    if ($mime === null || $mime === '') {
+                        $mime = $att->getType();
+                    }
+                    if ($mime === null || $mime === '') {
+                        $mime = 'application/octet-stream';
+                    }
+
+                    $em->attachments[] = ['name' => $name, 'path' => $path, 'mime' => $mime];
                 }
 
-                $path = $this->writeAttachment($att);
-                if ($path === null) {
-                    continue;
-                }
-
-                $mime = $att->getMimeType();
-                if ($mime === null || $mime === '') {
-                    $mime = $att->getContentType();
-                }
-                if ($mime === null || $mime === '') {
-                    $mime = $att->getType();
-                }
-                if ($mime === null || $mime === '') {
-                    $mime = 'application/octet-stream';
-                }
-
-                $em->attachments[] = ['name' => $name, 'path' => $path, 'mime' => $mime];
+                $result[] = $em;
             }
 
-            $result[] = $em;
-        }
+            return $result;
+        });
+    }
 
-        return $result;
+    /**
+     * Run a callable with PHP warnings/notices promoted to exceptions, restoring
+     * the previous error handler afterward. Lets a low-level network failure
+     * (e.g. stream_socket_client) surface as an exception the CLI can catch
+     * cleanly instead of leaking a raw warning to stderr.
+     *
+     * @template T
+     * @param callable():T $callback
+     * @return T
+     * @throws \ErrorException
+     */
+    private function withoutWarnings(callable $callback)
+    {
+        set_error_handler(function ($severity, $message, $file, $line) {
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        });
+        try {
+            return $callback();
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**

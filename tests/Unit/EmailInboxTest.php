@@ -157,6 +157,48 @@ class EmailInboxTest extends TestCase
         $inbox->markRead('42');
     }
 
+    public function testWithoutWarningsPromotesWarningToException(): void
+    {
+        $inbox = new EmailInbox([
+            'host' => 'localhost', 'port' => 993, 'protocol' => 'imap',
+            'encryption' => 'ssl', 'user' => 'u', 'pass' => 'p',
+        ]);
+
+        $method = new \ReflectionMethod(EmailInbox::class, 'withoutWarnings');
+        @$method->setAccessible(true);
+
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage('simulated network warning');
+        $method->invoke($inbox, function () {
+            trigger_error('simulated network warning', E_USER_WARNING);
+        });
+    }
+
+public function testWithoutWarningsReturnsResultAndRestoresHandler(): void
+    {
+        $inbox = new EmailInbox([
+            'host' => 'localhost', 'port' => 993, 'protocol' => 'imap',
+            'encryption' => 'ssl', 'user' => 'u', 'pass' => 'p',
+        ]);
+
+        $method = new \ReflectionMethod(EmailInbox::class, 'withoutWarnings');
+        @$method->setAccessible(true);
+
+        $result = $method->invoke($inbox, function () {
+            return 'ok';
+        });
+        $this->assertSame('ok', $result);
+
+        // A second call must still convert a warning to an exception: the
+        // previous handler was restored (PHPUnit's converters), but our own
+        // set_error_handler inside withoutWarnings is the active one again.
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage('network warning 2');
+        $method->invoke($inbox, function () {
+            trigger_error('network warning 2', E_USER_WARNING);
+        });
+    }
+
     /**
      * Inject a mocked library Client into the private $client property so the
      * adapter's fetch/markRead/delete paths can be exercised offline.
