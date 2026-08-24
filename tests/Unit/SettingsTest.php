@@ -233,6 +233,12 @@ class SettingsTest extends TestCase
         $deptStmt->shouldReceive('fetchAll')->andReturn([['1', 'Public'], ['2', 'HR']]);
         $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
 
+        // Query for categories
+        $catStmt = \Mockery::mock(PDOStatement::class);
+        $catStmt->shouldReceive('execute')->andReturn(true);
+        $catStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*category/'))->andReturn($catStmt);
+
         // Query for user id numbers (getUserIdNums)
         $userStmt = \Mockery::mock(PDOStatement::class);
         $userStmt->shouldReceive('execute')->andReturn(true);
@@ -242,6 +248,50 @@ class SettingsTest extends TestCase
         $smarty = \Mockery::mock('Smarty');
         $smarty->shouldReceive('assign')->with('departments', \Mockery::on(function ($d) {
             return count($d) === 2 && $d[0][0] === '1' && $d[0][1] === 'Public';
+        }))->once();
+        $smarty->shouldReceive('assign')->withAnyArgs()->andReturnNull();
+        $smarty->shouldReceive('display')->andReturnNull();
+        $GLOBALS['smarty'] = $smarty;
+
+        $settings = new Settings($pdo);
+        $settings->edit();
+    }
+
+    public function testEditAssignsCategories(): void
+    {
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', $this->tmpBase . '/');
+        }
+        $this->mkdirp(ABSPATH . 'views');
+        $this->mkdirp(ABSPATH . 'includes/language');
+        if (empty($GLOBALS['CONFIG']['theme'])) {
+            $GLOBALS['CONFIG']['theme'] = 'bootstrap5';
+        }
+
+        $pdo = \Mockery::mock(PDO::class);
+        $stmt = \Mockery::mock(PDOStatement::class);
+        $stmt->shouldReceive('execute')->andReturn(true);
+        $stmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT \* FROM.*settings/'))->andReturn($stmt);
+
+        $deptStmt = \Mockery::mock(PDOStatement::class);
+        $deptStmt->shouldReceive('execute')->andReturn(true);
+        $deptStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
+
+        $catStmt = \Mockery::mock(PDOStatement::class);
+        $catStmt->shouldReceive('execute')->andReturn(true);
+        $catStmt->shouldReceive('fetchAll')->andReturn([['1', 'Invoices'], ['2', 'Contracts']]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*category/'))->andReturn($catStmt);
+
+        $userStmt = \Mockery::mock(PDOStatement::class);
+        $userStmt->shouldReceive('execute')->andReturn(true);
+        $userStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*user/s'))->andReturn($userStmt);
+
+        $smarty = \Mockery::mock('Smarty');
+        $smarty->shouldReceive('assign')->with('categories', \Mockery::on(function ($c) {
+            return count($c) === 2 && $c[0][0] === '1' && $c[0][1] === 'Invoices';
         }))->once();
         $smarty->shouldReceive('assign')->withAnyArgs()->andReturnNull();
         $smarty->shouldReceive('display')->andReturnNull();
@@ -272,6 +322,11 @@ class SettingsTest extends TestCase
         $deptStmt->shouldReceive('execute')->andReturn(true);
         $deptStmt->shouldReceive('fetchAll')->andReturn([]);
         $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*department/'))->andReturn($deptStmt);
+
+        $catStmt = Mockery::mock(PDOStatement::class);
+        $catStmt->shouldReceive('execute')->andReturn(true);
+        $catStmt->shouldReceive('fetchAll')->andReturn([]);
+        $pdo->shouldReceive('prepare')->with(\Mockery::pattern('/SELECT.*FROM.*category/'))->andReturn($catStmt);
 
         $userStmt = Mockery::mock(PDOStatement::class);
         $userStmt->shouldReceive('execute')->andReturn(true);

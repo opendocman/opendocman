@@ -165,6 +165,11 @@ if (!defined('Settings_class')) {
             $deptStmt = $this->connection->prepare($deptQuery);
             $deptStmt->execute();
             $GLOBALS['smarty']->assign('departments', $deptStmt->fetchAll());
+
+            $catQuery = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
+            $catStmt = $this->connection->prepare($catQuery);
+            $catStmt->execute();
+            $GLOBALS['smarty']->assign('categories', $catStmt->fetchAll());
         }
 
         /**
