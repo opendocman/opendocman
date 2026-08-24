@@ -58,7 +58,7 @@
                 { title: 'Department', field: 'department_name', widthGrow: 1 },
                 { title: 'Admin', field: 'is_admin', width: 70, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
                 { title: 'Reviewer', field: 'is_reviewer', width: 80, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
-                { title: '', field: 'actions', width: 190, headerSort: false, formatter: function(cell) {
+                { title: '', field: 'actions', width: 190, minWidth: 190, maxWidth: 190, headerSort: false, resizable: false, formatter: function(cell) {
                     var id = cell.getData().id;
                     return '<button class="btn btn-sm btn-outline-primary edit-row" data-id="' + id + '">Edit</button> ' +
                            '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>' +
