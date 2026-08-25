@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'قائمة الملف الخاصة با�
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'سجل الوصول';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'إضافة ملف';
 $lang['accesslogpage_file_viewed'] = 'إستعراض ملف';
 $lang['accesslogpage_file_downloaded'] = 'تنزيل ملف';

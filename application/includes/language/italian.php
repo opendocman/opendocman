@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'Esporta elenco file (csv)';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Registro attivit&agrave;';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'file creato';
 $lang['accesslogpage_file_viewed'] = 'file visualizzato';
 $lang['accesslogpage_file_downloaded'] = 'file salvato';

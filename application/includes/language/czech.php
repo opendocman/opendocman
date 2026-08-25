@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Záznamy přístupů';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'Soubor přidán';
 $lang['accesslogpage_file_viewed'] = 'Soubor prohlížen';
 $lang['accesslogpage_file_downloaded'] = 'Soubor stažen';

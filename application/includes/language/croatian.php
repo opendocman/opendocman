@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'Izvoz popisa datoteka';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Popis pristupa';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'Datoteka dodana';
 $lang['accesslogpage_file_viewed'] = 'Datoteka pregledana';
 $lang['accesslogpage_file_downloaded'] = 'Datoteka preuzeta';

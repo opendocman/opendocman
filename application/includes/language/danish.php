@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Adgangs-log';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'Fil tilføjet';
 $lang['accesslogpage_file_viewed'] = 'Fil vist';
 $lang['accesslogpage_file_downloaded'] = 'Fil downloaded';

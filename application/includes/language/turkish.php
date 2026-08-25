@@ -526,6 +526,8 @@ $lang['adminpage_reports_file_list'] = 'Dosya Listesi Dışa Aktar';
 
 // Günlük sayfasına erişim
 $lang['accesslogpage_access_log'] = 'Erişim Günlüğü';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'Dosya Eklendi';
 $lang['accesslogpage_file_viewed'] = 'Dosya Görüntülendi';
 $lang['accesslogpage_file_downloaded'] = 'Dosya İndirildi';

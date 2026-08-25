@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'Export Lista Fisiere';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Lista Acces';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'Fisiere Aduagate';
 $lang['accesslogpage_file_viewed'] = 'Fisiere Vizualizate';
 $lang['accesslogpage_file_downloaded'] = 'Fisiere Descarcate';

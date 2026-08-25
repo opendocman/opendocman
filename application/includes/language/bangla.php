@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'ফাইল তালিকা রপ�
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'অধিগমন লগ';
+
+$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
 $lang['accesslogpage_file_added'] = 'যোগ করা ';
 $lang['accesslogpage_file_viewed'] = 'দর্শিত ';
 $lang['accesslogpage_file_downloaded'] = 'ডাউনলোড করা ';
