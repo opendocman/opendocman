@@ -75,6 +75,17 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
             $countQuery = "SELECT COUNT(*) FROM {$db_prefix}category";
             $orderBy = "c.id";
             break;
+        case 'email_audit':
+            $query = "SELECT id, message_id, from_address, outcome, document_id, reason, created FROM {$db_prefix}email_audit";
+            $countQuery = "SELECT COUNT(*) FROM {$db_prefix}email_audit";
+            $orderBy = "id DESC";
+            $outcome = $_REQUEST['outcome'] ?? '';
+            if (in_array($outcome, ['created', 'rejected', 'error'], true)) {
+                $query .= " WHERE outcome = :outcome";
+                $countQuery .= " WHERE outcome = :outcome";
+                $params[':outcome'] = $outcome;
+            }
+            break;
         default:
             http_response_code(400);
             echo json_encode(['error' => 'Invalid entity']);
@@ -87,7 +98,7 @@ function handleList(PDO $pdo, string $db_prefix, string $entity): void
 
     $last_page = max(1, (int)ceil($total / $size));
     $offset = ($page - 1) * $size;
-    $query .= " ORDER BY $orderBy ASC LIMIT $size OFFSET $offset";
+    $query .= " ORDER BY $orderBy LIMIT $size OFFSET $offset";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);

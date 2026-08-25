@@ -29,6 +29,17 @@ class EmailIngest
         return null;
     }
 
+    /**
+     * Remove the ingest token (bracketed or bare) from a subject line so the
+     * token never ends up in the document description or elsewhere user-facing.
+     */
+    private function stripTokenFromSubject(string $subject): string
+    {
+        $stripped = preg_replace('/\s*\[(odm-[a-f0-9]+)\]\s*/i', ' ', $subject);
+        $stripped = preg_replace('/\s*odm-[a-f0-9]+\s*/i', ' ', $stripped);
+        return trim(preg_replace('/\s+/', ' ', $stripped));
+    }
+
     public function resolveUserBySubject(string $subject): ?int
     {
         $token = $this->extractToken($subject);
@@ -66,7 +77,7 @@ class EmailIngest
                 'category' => (int) $this->config['mail_default_category'],
                 'owner_id' => $userId,
                 'realname' => $att['name'],
-                'description' => $message->subject,
+                'description' => $this->stripTokenFromSubject($message->subject),
                 'department' => (int) $this->config['mail_default_department'],
                 'comment' => 'Imported via email from ' . $message->from,
                 'publishable' => $publishable,

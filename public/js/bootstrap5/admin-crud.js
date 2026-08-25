@@ -91,6 +91,25 @@
                            '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>';
                 }}
             ];
+        },
+        email_audit: function() {
+            return [
+                { title: 'Time', field: 'created', widthGrow: 1, headerSort: false },
+                { title: 'From', field: 'from_address', widthGrow: 1 },
+                { title: 'Msg ID', field: 'message_id', widthGrow: 1, headerSort: false },
+                { title: 'Outcome', field: 'outcome', width: 110, headerSort: false, formatter: function(cell) {
+                    var v = cell.getValue();
+                    if (v === 'created') return '<span class="badge bg-success">Created</span>';
+                    if (v === 'rejected') return '<span class="badge bg-warning text-dark">Rejected</span>';
+                    return '<span class="badge bg-danger">Error</span>';
+                }},
+                { title: 'Document', field: 'document_id', width: 110, headerSort: false, formatter: function(cell) {
+                    var v = cell.getValue();
+                    if (!v) return '<span class="text-muted">-</span>';
+                    return '<a href="details?id=' + v + '">#' + v + '</a>';
+                }},
+                { title: 'Reason', field: 'reason', widthGrow: 2 }
+            ];
         }
     };
 
@@ -161,7 +180,13 @@ users: function(rowData) {
             resizableColumns: true,
             placeholder: 'No data available',
             ajaxURL: 'admin_crud_ajax',
-            ajaxParams: function() { return { entity: entity, action: 'list', filter: window.crudFilter || '' }; },
+            ajaxParams: function() {
+                var params = { entity: entity, action: 'list', filter: window.crudFilter || '' };
+                if (entity === 'email_audit' && window.crudOutcome) {
+                    params.outcome = window.crudOutcome;
+                }
+                return params;
+            },
             ajaxConfig: 'GET',
             ajaxContentType: 'form',
             columns: columnGetters[entity]()
@@ -372,9 +397,12 @@ users: function(rowData) {
         var table = initTable();
         window.crudTable = table;
 
-        document.getElementById('addBtn').addEventListener('click', openAddModal);
-        document.getElementById('crudModalSave').addEventListener('click', saveEntity);
-        document.getElementById('deleteConfirmBtn').addEventListener('click', deleteEntity);
+        var addBtn = document.getElementById('addBtn');
+        if (addBtn) addBtn.addEventListener('click', openAddModal);
+        var modalSave = document.getElementById('crudModalSave');
+        if (modalSave) modalSave.addEventListener('click', saveEntity);
+        var deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+        if (deleteConfirmBtn) deleteConfirmBtn.addEventListener('click', deleteEntity);
 
         var multiBtn = document.getElementById('deleteMultiBtn');
         if (multiBtn) {
