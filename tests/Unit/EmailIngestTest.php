@@ -52,55 +52,64 @@ class EmailIngestTest extends TestCase
         return new EmailIngest($this->mockPdo($userRow), $config, [$this, 'creator']);
     }
 
-    public function testResolveUserBySubjectReturnsNullWhenNoMatch(): void
+    private function baseConfig(array $overrides = []): array
+    {
+        return array_merge([
+            'db_prefix' => 'odm_',
+            'authorization' => 'False',
+            'allowedFileTypes' => ['application/pdf'],
+            'mail_default_category' => 3,
+            'mail_default_department' => 2,
+            'max_filesize' => 5000000,
+            'email_max_attachments' => 2,
+        ], $overrides);
+    }
+
+    private function msg(string $id, string $subject, string $body, array $atts = []): EmailMessage
+    {
+        $m = new EmailMessage($id, $subject, 'a@b.com');
+        $m->body = $body;
+        $m->attachments = $atts;
+        return $m;
+    }
+
+    private function pdf(string $name = 'a.pdf', int $size = 100): array
+    {
+        return ['name' => $name, 'path' => '/tmp/' . $name, 'mime' => 'application/pdf', 'size' => $size];
+    }
+
+    public function testResolveUserByBodyReturnsNullWhenNoMatch(): void
     {
         $ingest = $this->makeIngest(['db_prefix' => 'odm_'], null);
-        $this->assertNull($ingest->resolveUserBySubject('Q3 [odm-abc123] report'));
+        $this->assertNull($ingest->resolveUserByBody('Q3 [odm-abc123] report'));
     }
 
-    public function testResolveUserBySubjectReturnsUserIdOnMatch(): void
+    public function testResolveUserByBodyReturnsUserIdOnMatch(): void
     {
         $ingest = $this->makeIngest(['db_prefix' => 'odm_'], ['id' => 7]);
-        $this->assertSame(7, $ingest->resolveUserBySubject('Q3 [odm-abc123] report'));
+        $this->assertSame(7, $ingest->resolveUserByBody('Please file this. [odm-abc123] thanks'));
     }
 
-    public function testResolveUserBySubjectMatchesBareToken(): void
+    public function testResolveUserByBodyMatchesBareToken(): void
     {
         $ingest = $this->makeIngest(['db_prefix' => 'odm_'], ['id' => 7]);
-        $this->assertSame(7, $ingest->resolveUserBySubject('odm-abc123'));
-        $this->assertSame(7, $ingest->resolveUserBySubject('odm-abc123 New File'));
+        $this->assertSame(7, $ingest->resolveUserByBody('odm-abc123'));
+        $this->assertSame(7, $ingest->resolveUserByBody('token: odm-abc123 rest'));
     }
 
-    public function testProcessCreatesOneDocForBareTokenSubject(): void
+    public function testProcessCreatesOneDocForTokenInBody(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('mB', 'odm-abc123 draft', 'a@b.com');
-        $msg->attachments = [
-            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
-        ];
+        $ingest = $this->makeIngest($this->baseConfig(), ['id' => 7]);
+        $msg = $this->msg('mB', 'Contract draft', 'Please attach. [odm-abc123]', [$this->pdf()]);
         $result = $ingest->process($msg);
         $this->assertSame(1, $result['created']);
         $this->assertSame(7, $this->createdCalls[0]['owner_id']);
     }
 
-    public function testDescriptionStripsBracketedToken(): void
+    public function testDescriptionIsSubject(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('mD1', '[odm-abc123] Q3 invoices', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
-        $ingest->process($msg);
-        $this->assertSame('Q3 invoices', $this->createdCalls[0]['description']);
-        $this->assertStringNotContainsString('odm-', $this->createdCalls[0]['description']);
-    }
-
-    public function testDescriptionStripsBareToken(): void
-    {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('mD2', 'odm-abc123 Q3 invoices', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $ingest = $this->makeIngest($this->baseConfig(), ['id' => 7]);
+        $msg = $this->msg('mD1', 'Q3 invoices', 'token in body [odm-abc123]', [$this->pdf()]);
         $ingest->process($msg);
         $this->assertSame('Q3 invoices', $this->createdCalls[0]['description']);
         $this->assertStringNotContainsString('odm-', $this->createdCalls[0]['description']);
@@ -108,8 +117,8 @@ class EmailIngestTest extends TestCase
 
     public function testProcessRejectsMissingToken(): void
     {
-        $ingest = $this->makeIngest(['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf']], null);
-        $msg = new EmailMessage('m1', 'no token here', 'a@b.com');
+        $ingest = $this->makeIngest($this->baseConfig(), null);
+        $msg = $this->msg('m1', 'no token here', 'ordinary body', [$this->pdf()]);
         $result = $ingest->process($msg);
         $this->assertSame(0, $result['created']);
         $this->assertSame(1, $result['rejected']);
@@ -117,13 +126,8 @@ class EmailIngestTest extends TestCase
 
     public function testProcessCreatesOneDocPerValidAttachment(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m2', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [
-            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
-            ['name' => 'b.pdf', 'path' => '/tmp/b.pdf', 'mime' => 'application/pdf'],
-        ];
+        $ingest = $this->makeIngest($this->baseConfig(['email_max_attachments' => 10]), ['id' => 7]);
+        $msg = $this->msg('m2', 'Report', '[odm-abc123]', [$this->pdf('a.pdf'), $this->pdf('b.pdf')]);
         $result = $ingest->process($msg);
         $this->assertSame(2, $result['created']);
         $this->assertSame(0, $result['rejected']);
@@ -132,44 +136,60 @@ class EmailIngestTest extends TestCase
 
     public function testProcessRejectsBadMimePerAttachment(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m3', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [
-            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
-            ['name' => 'x.exe', 'path' => '/tmp/x.exe', 'mime' => 'application/x-msdownload'],
-        ];
+        $ingest = $this->makeIngest($this->baseConfig(), ['id' => 7]);
+        $msg = $this->msg('m3', 'Report', '[odm-abc123]', [
+            $this->pdf('a.pdf'),
+            ['name' => 'x.exe', 'path' => '/tmp/x.exe', 'mime' => 'application/x-msdownload', 'size' => 100],
+        ]);
         $result = $ingest->process($msg);
         $this->assertSame(1, $result['created']);
         $this->assertSame(1, $result['rejected']);
     }
 
+    public function testProcessRejectsAttachmentOverMaxSize(): void
+    {
+        $ingest = $this->makeIngest($this->baseConfig(['max_filesize' => 1000]), ['id' => 7]);
+        $msg = $this->msg('mSz', 'Big file', '[odm-abc123]', [
+            $this->pdf('small.pdf', 100),
+            $this->pdf('big.pdf', 5000),
+        ]);
+        $result = $ingest->process($msg);
+        $this->assertSame(1, $result['created']);
+        $this->assertSame(1, $result['rejected']);
+        $this->assertSame('rejected', $this->auditWrites[1][':outcome']);
+        $this->assertStringContainsString('max file size', $this->auditWrites[1][':reason']);
+    }
+
+    public function testProcessRejectsBeyondAttachmentCap(): void
+    {
+        $ingest = $this->makeIngest($this->baseConfig(['email_max_attachments' => 1]), ['id' => 7]);
+        $msg = $this->msg('mCap', 'Too many', '[odm-abc123]', [$this->pdf('a.pdf'), $this->pdf('b.pdf')]);
+        $result = $ingest->process($msg);
+        $this->assertSame(1, $result['created']);
+        $this->assertSame(1, $result['rejected']);
+        $this->assertStringContainsString('too many attachments', $this->auditWrites[1][':reason']);
+    }
+
     public function testPublishableIsZeroWhenAuthorizationOn(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'True', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m4', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $ingest = $this->makeIngest($this->baseConfig(['authorization' => 'True']), ['id' => 7]);
+        $msg = $this->msg('m4', 'Report', '[odm-abc123]', [$this->pdf()]);
         $ingest->process($msg);
         $this->assertSame('0', $this->createdCalls[0]['publishable']);
     }
 
     public function testPublishableIsOneWhenAuthorizationOff(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m5', 'Subject [odm-abc123]', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $ingest = $this->makeIngest($this->baseConfig(['authorization' => 'False']), ['id' => 7]);
+        $msg = $this->msg('m5', 'Subject', '[odm-abc123]', [$this->pdf()]);
         $ingest->process($msg);
         $this->assertSame('1', $this->createdCalls[0]['publishable']);
     }
 
     public function testAuditWritesCreatedRowForValidAttachment(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m7', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $ingest = $this->makeIngest($this->baseConfig(), ['id' => 7]);
+        $msg = $this->msg('m7', 'Report', '[odm-abc123]', [$this->pdf()]);
         $ingest->process($msg);
 
         $this->assertCount(1, $this->auditWrites);
@@ -182,13 +202,11 @@ class EmailIngestTest extends TestCase
 
     public function testAuditWritesRejectedRowForDisallowedMime(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, ['id' => 7]);
-        $msg = new EmailMessage('m7', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [
-            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
-            ['name' => 'x.exe', 'path' => '/tmp/x.exe', 'mime' => 'application/x-msdownload'],
-        ];
+        $ingest = $this->makeIngest($this->baseConfig(), ['id' => 7]);
+        $msg = $this->msg('m7', 'Report', '[odm-abc123]', [
+            $this->pdf('a.pdf'),
+            ['name' => 'x.exe', 'path' => '/tmp/x.exe', 'mime' => 'application/x-msdownload', 'size' => 100],
+        ]);
         $ingest->process($msg);
 
         $this->assertCount(2, $this->auditWrites);
@@ -200,9 +218,8 @@ class EmailIngestTest extends TestCase
 
     public function testAuditWritesRejectedRowForMissingToken(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = $this->makeIngest($config, null);
-        $msg = new EmailMessage('m8', 'no token here', 'a@b.com');
+        $ingest = $this->makeIngest($this->baseConfig(), null);
+        $msg = $this->msg('m8', 'no token here', 'plain body', [$this->pdf()]);
         $result = $ingest->process($msg);
 
         $this->assertSame(1, $result['rejected']);
@@ -215,12 +232,10 @@ class EmailIngestTest extends TestCase
 
     public function testAuditWritesErrorRowWhenCreatorThrows(): void
     {
-        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
-        $ingest = new EmailIngest($this->mockPdo(['id' => 7]), $config, function (array $params, string $mime): int {
+        $ingest = new EmailIngest($this->mockPdo(['id' => 7]), $this->baseConfig(), function (array $params, string $mime): int {
             throw new \RuntimeException('disk full while writing');
         });
-        $msg = new EmailMessage('m9', 'Report [odm-abc123]', 'a@b.com');
-        $msg->attachments = [ ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'] ];
+        $msg = $this->msg('m9', 'Report', '[odm-abc123]', [$this->pdf()]);
         $result = $ingest->process($msg);
 
         $this->assertSame(1, $result['errors']);

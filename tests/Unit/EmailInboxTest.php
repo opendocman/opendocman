@@ -34,6 +34,8 @@ class EmailInboxTest extends TestCase
         $message->shouldReceive('getUid')->andReturn('42');
         $message->shouldReceive('getSubject')->andReturn('Hello from sender');
         $message->shouldReceive('getFrom')->andReturn(null);
+        $message->shouldReceive('getTextBody')->andReturn('body text');
+        $message->shouldReceive('getHTMLBody')->andReturn('');
         $message->shouldReceive('getAttachments')->andReturn(new \Webklex\PHPIMAP\Support\AttachmentCollection([$attachment]));
 
         $query = \Mockery::mock('\Webklex\PHPIMAP\Query\WhereQuery');
@@ -88,6 +90,8 @@ class EmailInboxTest extends TestCase
         $message->shouldReceive('getUid')->andReturn('7');
         $message->shouldReceive('getSubject')->andReturn('s');
         $message->shouldReceive('getFrom')->andReturn(null);
+        $message->shouldReceive('getTextBody')->andReturn('b');
+        $message->shouldReceive('getHTMLBody')->andReturn('');
         $message->shouldReceive('getAttachments')->andReturn(new \Webklex\PHPIMAP\Support\AttachmentCollection([$attachment]));
 
         $query = \Mockery::mock('\Webklex\PHPIMAP\Query\WhereQuery');

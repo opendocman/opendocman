@@ -89,6 +89,10 @@ class EmailInbox
                     $this->extractSender($msg)
                 );
 
+                $textBody = (string) $msg->getTextBody();
+                $htmlBody = (string) $msg->getHTMLBody();
+                $em->body = trim($textBody !== '' ? $textBody : $htmlBody);
+
                 foreach ($msg->getAttachments() as $att) {
                     $name = $att->getName();
                     if ($name === null || $name === '') {
@@ -100,18 +104,22 @@ class EmailInbox
                         continue;
                     }
 
+                    // Content-derived MIME only. The email's declared
+                    // Content-Type header is attacker-controlled and must not
+                    // influence what we accept. If finfo cannot classify the
+                    // bytes we fall back to octet-stream, which never matches
+                    // the allowlist so the attachment is rejected.
                     $mime = $att->getMimeType();
-                    if ($mime === null || $mime === '') {
-                        $mime = $att->getContentType();
-                    }
-                    if ($mime === null || $mime === '') {
-                        $mime = $att->getType();
-                    }
                     if ($mime === null || $mime === '') {
                         $mime = 'application/octet-stream';
                     }
 
-                    $em->attachments[] = ['name' => $name, 'path' => $path, 'mime' => $mime];
+                    $em->attachments[] = [
+                        'name' => $name,
+                        'path' => $path,
+                        'mime' => $mime,
+                        'size' => (int) @filesize($path),
+                    ];
                 }
 
                 $result[] = $em;

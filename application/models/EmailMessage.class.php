@@ -11,6 +11,7 @@ class EmailMessage
     public string $id;
     public string $subject;
     public string $from;
+    public string $body = '';
     public array $attachments = [];
 
     public function __construct(string $id, string $subject, string $from)

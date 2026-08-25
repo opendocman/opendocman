@@ -607,5 +607,5 @@ $lang['label_supported_formats'] = 'Supported formats';
 
 $lang['email_token'] = 'Mail ingest token';
 $lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the subject, e.g. "[YOUR-TOKEN] Subject".';
+$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
 $lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';

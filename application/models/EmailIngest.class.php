@@ -18,31 +18,22 @@ class EmailIngest
     }
 
     /**
-     * Extract the `odm-xxxx` token from a subject line like "[odm-ab3x7] Q3 invoices"
-     * or a bare "odm-ab3x7" anywhere in the subject.
+     * Extract the `odm-xxxx` token from the message body (e.g. "[odm-ab3x7]"
+     * or a bare "odm-ab3x7" anywhere in the body). The token rides in the body
+     * rather than the subject because subject lines are more widely logged,
+     * forwarded, and displayed — the body is less exposed.
      */
-    private function extractToken(string $subject): ?string
+    private function extractToken(string $body): ?string
     {
-        if (preg_match('/(?:\[)?(odm-[a-f0-9]+)(?:\])?/i', $subject, $m) === 1) {
+        if (preg_match('/(?:\[)?(odm-[a-f0-9]+)(?:\])?/i', $body, $m) === 1) {
             return $m[1];
         }
         return null;
     }
 
-    /**
-     * Remove the ingest token (bracketed or bare) from a subject line so the
-     * token never ends up in the document description or elsewhere user-facing.
-     */
-    private function stripTokenFromSubject(string $subject): string
+    public function resolveUserByBody(string $body): ?int
     {
-        $stripped = preg_replace('/\s*\[(odm-[a-f0-9]+)\]\s*/i', ' ', $subject);
-        $stripped = preg_replace('/\s*odm-[a-f0-9]+\s*/i', ' ', $stripped);
-        return trim(preg_replace('/\s+/', ' ', $stripped));
-    }
-
-    public function resolveUserBySubject(string $subject): ?int
-    {
-        $token = $this->extractToken($subject);
+        $token = $this->extractToken($body);
         if ($token === null) {
             return null;
         }
@@ -55,8 +46,8 @@ class EmailIngest
     public function process(EmailMessage $message): array
     {
         $stats = ['created' => 0, 'rejected' => 0, 'errors' => 0];
-        $userId = $this->resolveUserBySubject($message->subject);
-        $token = $this->extractToken($message->subject) ?? '';
+        $userId = $this->resolveUserByBody($message->body);
+        $token = $this->extractToken($message->body) ?? '';
 
         if ($userId === null) {
             $this->writeAudit($message, null, 'rejected', 'no valid token', null);
@@ -64,7 +55,27 @@ class EmailIngest
             return $stats;
         }
 
-        foreach ($message->attachments as $att) {
+        $maxFilesize = (int) ($this->config['max_filesize'] ?? 0);
+        $attachmentCap = (int) ($this->config['email_max_attachments'] ?? 20);
+        foreach ($message->attachments as $index => $att) {
+            if ($index >= $attachmentCap) {
+                $this->writeAudit($message, $userId, 'rejected', 'too many attachments', null);
+                $stats['rejected']++;
+                continue;
+            }
+
+            if ($maxFilesize > 0 && (int) ($att['size'] ?? 0) > $maxFilesize) {
+                $this->writeAudit(
+                    $message,
+                    $userId,
+                    'rejected',
+                    'attachment exceeds max file size: ' . $att['name'],
+                    null
+                );
+                $stats['rejected']++;
+                continue;
+            }
+
             $mime = $att['mime'];
             if (!in_array($mime, $this->config['allowedFileTypes'], true)) {
                 $this->writeAudit($message, $userId, 'rejected', 'disallowed file type: ' . $mime, null);
@@ -77,7 +88,7 @@ class EmailIngest
                 'category' => (int) $this->config['mail_default_category'],
                 'owner_id' => $userId,
                 'realname' => $att['name'],
-                'description' => $this->stripTokenFromSubject($message->subject),
+                'description' => trim($message->subject),
                 'department' => (int) $this->config['mail_default_department'],
                 'comment' => 'Imported via email from ' . $message->from,
                 'publishable' => $publishable,
@@ -105,7 +116,7 @@ class EmailIngest
     private function writeAudit(EmailMessage $message, ?int $userId, string $outcome, string $reason, ?int $docId): void
     {
         $tokenHash = null;
-        $t = $this->extractToken($message->subject);
+        $t = $this->extractToken($message->body);
         if ($t !== null) {
             $tokenHash = hash('sha256', $t);
         }
