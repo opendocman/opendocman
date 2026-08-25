@@ -18,11 +18,12 @@ class EmailIngest
     }
 
     /**
-     * Extract the `odm-xxxx` token from a subject line like "[odm-ab3x7] Q3 invoices".
+     * Extract the `odm-xxxx` token from a subject line like "[odm-ab3x7] Q3 invoices"
+     * or a bare "odm-ab3x7" anywhere in the subject.
      */
     private function extractToken(string $subject): ?string
     {
-        if (preg_match('/\[(odm-[a-f0-9]+)\]/i', $subject, $m) === 1) {
+        if (preg_match('/(?:\[)?(odm-[a-f0-9]+)(?:\])?/i', $subject, $m) === 1) {
             return $m[1];
         }
         return null;

@@ -64,6 +64,26 @@ class EmailIngestTest extends TestCase
         $this->assertSame(7, $ingest->resolveUserBySubject('Q3 [odm-abc123] report'));
     }
 
+    public function testResolveUserBySubjectMatchesBareToken(): void
+    {
+        $ingest = $this->makeIngest(['db_prefix' => 'odm_'], ['id' => 7]);
+        $this->assertSame(7, $ingest->resolveUserBySubject('odm-abc123'));
+        $this->assertSame(7, $ingest->resolveUserBySubject('odm-abc123 New File'));
+    }
+
+    public function testProcessCreatesOneDocForBareTokenSubject(): void
+    {
+        $config = ['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf'], 'mail_default_category' => 3, 'mail_default_department' => 2];
+        $ingest = $this->makeIngest($config, ['id' => 7]);
+        $msg = new EmailMessage('mB', 'odm-abc123 draft', 'a@b.com');
+        $msg->attachments = [
+            ['name' => 'a.pdf', 'path' => '/tmp/a.pdf', 'mime' => 'application/pdf'],
+        ];
+        $result = $ingest->process($msg);
+        $this->assertSame(1, $result['created']);
+        $this->assertSame(7, $this->createdCalls[0]['owner_id']);
+    }
+
     public function testProcessRejectsMissingToken(): void
     {
         $ingest = $this->makeIngest(['db_prefix' => 'odm_', 'authorization' => 'False', 'allowedFileTypes' => ['application/pdf']], null);
