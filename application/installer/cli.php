@@ -419,6 +419,22 @@ class CliCommand
             return;
         }
 
+        if (($c['mail_validate_cert'] ?? 'True') === 'False') {
+            fwrite(STDERR, "Warning: mail_validate_cert is disabled — the mail server TLS certificate will not be verified. Connections are vulnerable to MITM.\n");
+        }
+
+        // Audit retention: prune rows older than the configured window so the
+        // table does not grow without bound.
+        $retentionDays = (int) ($c['mail_audit_retention_days'] ?? 90);
+        if ($retentionDays > 0) {
+            $prune = $pdo->prepare("DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}email_audit WHERE created < (NOW() - INTERVAL :days DAY)");
+            $prune->execute([':days' => $retentionDays]);
+        }
+
+        // Cap messages processed per poll so a backlog of mail cannot flood
+        // the DB or disk in a single run.
+        $maxMessages = (int) ($c['email_max_messages_per_poll'] ?? 50);
+
         try {
             $inbox = new EmailInbox([
                 'host' => $c['mail_host'] ?? '',
@@ -434,6 +450,7 @@ class CliCommand
             $ingest = new EmailIngest($pdo, $c);
 
             $messages = $inbox->fetchMessages();
+            $messages = array_slice($messages, 0, $maxMessages);
             $totals = ['created' => 0, 'rejected' => 0, 'errors' => 0];
             foreach ($messages as $message) {
                 try {
