@@ -392,6 +392,7 @@ class CliCommand
         require_once __DIR__ . '/../models/Settings.class.php';
         require_once __DIR__ . '/../models/FileTypes.class.php';
         require_once __DIR__ . '/../models/Document.class.php';
+        require_once __DIR__ . '/../models/TextExtractor.class.php';
         require_once __DIR__ . '/../models/TextExtractorFactory.class.php';
 
         $configManager = new ConfigManager();
@@ -427,6 +428,7 @@ class CliCommand
                 'user' => $c['mail_user'] ?? '',
                 'pass' => $c['mail_pass'] ?? '',
                 'folder' => $c['mail_folder'] ?? 'INBOX',
+                'validate_cert' => ($c['mail_validate_cert'] ?? 'True') !== 'False',
             ]);
 
             $ingest = new EmailIngest($pdo, $c);
