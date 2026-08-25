@@ -228,6 +228,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha')",
+            "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_validate_cert', 'True', 'Verify the TLS certificate when connecting to the mail server. Disable only if the mailbox hostname does not match the certificate', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '')",

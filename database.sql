@@ -179,7 +179,7 @@ INSERT INTO `odm_rights` VALUES (-1,'forbidden');
 INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
-INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$bi4a2DdQ2ZKd1pt7eVM7BuxoOQ9ItGeDrDOQuVm1Qq42UZY4Atqwa','1','5555551212','admin@example.com','User','Admin','',1,1,1,NULL);
+INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$zisCW7Ipn6O3BA0VCEbtRuO.Ltj37rIs35ijMtxN0OmU8xrWNVK0y','1','5555551212','admin@example.com','User','Admin','',1,1,1,NULL);
 INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.5');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');
@@ -209,6 +209,7 @@ INSERT INTO `odm_settings` VALUES(NULL, 'mail_encryption', 'ssl', 'Mailbox encry
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '');
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '');
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha');
+INSERT INTO `odm_settings` VALUES(NULL, 'mail_validate_cert', 'True', 'Verify the TLS certificate when connecting to the mail server. Disable only if the mailbox hostname does not match the certificate', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '');
 INSERT INTO `odm_settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '');

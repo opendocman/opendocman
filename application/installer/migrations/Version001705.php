@@ -42,6 +42,7 @@ class Version001705 implements MigrationInterface
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '')");
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '')");
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_validate_cert', 'True', 'Verify the TLS certificate when connecting to the mail server. Disable only if the mailbox hostname does not match the certificate', 'bool')");
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool')");
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '')");
         $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '')");
@@ -51,7 +52,7 @@ class Version001705 implements MigrationInterface
     {
         $pdo->exec("DROP TABLE IF EXISTS `{$prefix}email_audit`");
         $pdo->exec("ALTER TABLE `{$prefix}user` DROP COLUMN mail_token");
-        foreach (['mail_enabled','mail_host','mail_port','mail_protocol','mail_encryption','mail_user','mail_pass','mail_folder','mail_delete','mail_default_category','mail_default_department'] as $name) {
+        foreach (['mail_enabled','mail_host','mail_port','mail_protocol','mail_encryption','mail_user','mail_pass','mail_folder','mail_validate_cert','mail_delete','mail_default_category','mail_default_department'] as $name) {
             $pdo->exec("DELETE FROM `{$prefix}settings` WHERE name = '{$name}'");
         }
     }
