@@ -527,7 +527,7 @@ $lang['adminpage_reports_file_list'] = 'Dosya Listesi Dışa Aktar';
 // Günlük sayfasına erişim
 $lang['accesslogpage_access_log'] = 'Erişim Günlüğü';
 
-$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
+$lang['adminpage_email_ingest_log'] = 'E-posta alım günlüğü';
 $lang['accesslogpage_file_added'] = 'Dosya Eklendi';
 $lang['accesslogpage_file_viewed'] = 'Dosya Görüntülendi';
 $lang['accesslogpage_file_downloaded'] = 'Dosya İndirildi';
@@ -605,7 +605,7 @@ $lang['label_files'] = 'Dokümanlar';
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 
-$lang['email_token'] = 'Mail ingest token';
-$lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
-$lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';
+$lang['email_token'] = 'E-posta alım belirteci';
+$lang['email_token_rotate'] = 'Belirteci döndür';
+$lang['email_token_instruction'] = 'Bir belgeyi e-posta ile göndermek için, yapılandırılmış gelen kutusuna gönderin ve belirtecinizi mesajın gövdesine koyun (konuya değil). Konu, belgenin açıklaması olur. Gövde örneği: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'E-posta alım belirteciniz döndürüldü. Eski belirteç artık çalışmıyor.';

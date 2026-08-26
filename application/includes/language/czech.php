@@ -503,7 +503,7 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Záznamy přístupů';
 
-$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
+$lang['adminpage_email_ingest_log'] = 'Protokol příjmu e-mailu';
 $lang['accesslogpage_file_added'] = 'Soubor přidán';
 $lang['accesslogpage_file_viewed'] = 'Soubor prohlížen';
 $lang['accesslogpage_file_downloaded'] = 'Soubor stažen';
@@ -576,7 +576,7 @@ $lang['label_files'] = 'Dokumenty';
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 
-$lang['email_token'] = 'Mail ingest token';
-$lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
-$lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';
+$lang['email_token'] = 'Token pro příjem e-mailu';
+$lang['email_token_rotate'] = 'Vyměnit token';
+$lang['email_token_instruction'] = 'Pro odeslání dokumentu e-mailem jej zašlete do nakonfigurované schránky s tokenem v těle zprávy (ne v předmětu). Předmět se stane popisem dokumentu. Příklad těla: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Váš token pro příjem e-mailu byl vyměněn. Starý token již nefunguje.';

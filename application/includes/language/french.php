@@ -502,7 +502,7 @@ $lang['adminpage_reports_file_list'] = 'Exporter la liste des Fichiers';
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Journal d\'accés.';
 
-$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
+$lang['adminpage_email_ingest_log'] = 'Journal de réception du courrier';
 $lang['accesslogpage_file_added'] = 'Fichier Ajouté';
 $lang['accesslogpage_file_viewed'] = 'Fichier Lu.';
 $lang['accesslogpage_file_downloaded'] = 'Fichier Téléchargé.';
@@ -576,7 +576,7 @@ $lang['label_files'] = 'Documents';
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 
-$lang['email_token'] = 'Mail ingest token';
-$lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
-$lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';
+$lang['email_token'] = 'Jeton de réception du courrier';
+$lang['email_token_rotate'] = 'Renouveler le jeton';
+$lang['email_token_instruction'] = 'Pour soumettre un document par e-mail, envoyez-le à la boîte configurée avec votre jeton dans le corps du message (pas dans l\'objet). L\'objet devient la description du document. Exemple de corps : "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Votre jeton de réception du courrier a été renouvelé. L\'ancien jeton ne fonctionne plus.';

@@ -502,7 +502,7 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
 
-$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
+$lang['adminpage_email_ingest_log'] = 'Mail-ingest logboek';
 $lang['accesslogpage_file_added'] = 'File Added';
 $lang['accesslogpage_file_viewed'] = 'File Viewed';
 $lang['accesslogpage_file_downloaded'] = 'File Downloaded';
@@ -575,7 +575,7 @@ $lang['label_files'] = 'Documenten';
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 
-$lang['email_token'] = 'Mail ingest token';
-$lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
-$lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';
+$lang['email_token'] = 'Mail-ingest token';
+$lang['email_token_rotate'] = 'Token vernieuwen';
+$lang['email_token_instruction'] = 'Om een document per e-mail in te dienen, stuur het naar de geconfigureerde inbox met uw token in de hoofdtekst van het bericht (niet in het onderwerp). Het onderwerp wordt de beschrijving van het document. Voorbeeld hoofdtekst: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Uw mail-ingest token is vernieuwd. Het oude token werkt niet meer.';

@@ -14,7 +14,12 @@ is needed. Bump `ODM_DB_VERSION` in `application/version.php`.
 # Translation strings
 
 New `$lang[...]` entries must be added to **all 17 language files** under
-`application/includes/language/`, not just `english.php`.
+`application/includes/language/`, not just `english.php`. The **values** in the
+non-English files must be **best-effort translated** — do not leave English
+copies. If you are unsure of a translation, provide your best approximation.
+Keep product names, commands, and placeholders (e.g. `[YOUR-TOKEN]`) literal.
+Mark genuinely uncertain translations with a note in the PR description so
+native speakers can review.
 
 # Testing
 

@@ -502,7 +502,7 @@ $lang['adminpage_reports_file_list'] = 'Esporta elenco file (csv)';
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Registro attivit&agrave;';
 
-$lang['adminpage_email_ingest_log'] = 'Email Ingest Log';
+$lang['adminpage_email_ingest_log'] = 'Registro di ricezione e-mail';
 $lang['accesslogpage_file_added'] = 'file creato';
 $lang['accesslogpage_file_viewed'] = 'file visualizzato';
 $lang['accesslogpage_file_downloaded'] = 'file salvato';
@@ -575,7 +575,7 @@ $lang['label_files'] = 'Documenti';
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
 
-$lang['email_token'] = 'Mail ingest token';
-$lang['email_token_rotate'] = 'Rotate token';
-$lang['email_token_instruction'] = 'To submit a document by email, send it to the configured inbox with your token in the BODY of the message (not the subject). The subject becomes the document description. Example body: "[YOUR-TOKEN]".';
-$lang['email_token_rotated'] = 'Your mail ingest token was rotated. The old token no longer works.';
+$lang['email_token'] = 'Token di ricezione e-mail';
+$lang['email_token_rotate'] = 'Ruota il token';
+$lang['email_token_instruction'] = 'Per inviare un documento via e-mail, inviatelo alla casella configurata con il token nel corpo del messaggio (non nell\'oggetto). L\'oggetto diventa la descrizione del documento. Esempio di corpo: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Il tuo token di ricezione e-mail è stato ruotato. Il vecchio token non funziona più.';
