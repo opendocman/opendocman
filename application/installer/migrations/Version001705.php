@@ -34,26 +34,26 @@ class Version001705 implements MigrationInterface
             ) ENGINE = MYISAM"
         );
 
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_enabled', 'False', 'Enable the email document ingest feature', 'bool')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_host', '', 'Mail server host for the ingest mailbox', 'alpha|req')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_port', '993', 'Mail server port', 'num')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_protocol', 'imap', 'Mailbox protocol: imap or pop3', 'alpha')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_encryption', 'ssl', 'Mailbox encryption: none, ssl, or tls', 'alpha')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_user', '', 'Mailbox username', '')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_pass', '', 'Mailbox password', '')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_validate_cert', 'True', 'Verify the TLS certificate when connecting to the mail server. Disable only if the mailbox hostname does not match the certificate', 'bool')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_audit_retention_days', '90', 'How many days to keep email ingest audit log entries (0 = keep forever)', 'num')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_category', '', 'Default category id for ingested documents', '')");
-        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'mail_default_department', '', 'Default department id for ingested documents', '')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_enabled', 'False', 'Enable the email document ingest feature', 'bool')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_host', '', 'Mail server host for the ingest mailbox', 'alpha|req')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_port', '993', 'Mail server port', 'num')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_protocol', 'imap', 'Mailbox protocol: imap or pop3', 'alpha')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_encryption', 'ssl', 'Mailbox encryption: none, ssl, or tls', 'alpha')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_user', '', 'Mailbox username', '')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_pass', '', 'Mailbox password', '')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_folder', 'INBOX', 'Mailbox folder to poll', 'alpha')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_validate_cert', 'True', 'Verify the TLS certificate when connecting to the mail server. Disable only if the mailbox hostname does not match the certificate', 'bool')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_audit_retention_days', '90', 'How many days to keep email ingest audit log entries (0 = keep forever)', 'num')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_delete', 'False', 'Delete processed messages from the mailbox after ingestion', 'bool')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_default_category', '', 'Default category id for ingested documents', '')");
+        $pdo->exec("INSERT INTO `{$prefix}settings` VALUES(NULL, 'incoming_mail_default_department', '', 'Default department id for ingested documents', '')");
     }
 
     public function down(PDO $pdo, string $prefix): void
     {
         $pdo->exec("DROP TABLE IF EXISTS `{$prefix}email_audit`");
         $pdo->exec("ALTER TABLE `{$prefix}user` DROP COLUMN mail_token");
-        foreach (['mail_enabled','mail_host','mail_port','mail_protocol','mail_encryption','mail_user','mail_pass','mail_folder','mail_validate_cert','mail_audit_retention_days','mail_delete','mail_default_category','mail_default_department'] as $name) {
+        foreach (['incoming_mail_enabled','incoming_mail_host','incoming_mail_port','incoming_mail_protocol','incoming_mail_encryption','incoming_mail_user','incoming_mail_pass','incoming_mail_folder','incoming_mail_validate_cert','incoming_mail_audit_retention_days','incoming_mail_delete','incoming_mail_default_category','incoming_mail_default_department'] as $name) {
             $pdo->exec("DELETE FROM `{$prefix}settings` WHERE name = '{$name}'");
         }
     }

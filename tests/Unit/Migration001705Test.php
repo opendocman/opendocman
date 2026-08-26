@@ -38,15 +38,15 @@ class Migration001705Test extends TestCase
         $migration->up($pdo, 'odm_');
     }
 
-    public function testUpInsertsMailSettings(): void
+public function testUpInsertsMailSettings(): void
     {
         $pdo = \Mockery::mock(PDO::class);
         $pdo->shouldReceive('exec')
-            ->with(\Mockery::pattern('/INSERT INTO.*settings.*mail_enabled/'))
+            ->with(\Mockery::pattern('/INSERT INTO.*settings.*incoming_mail_enabled/'))
             ->once()
             ->andReturn(1);
         $pdo->shouldReceive('exec')
-            ->with(\Mockery::pattern('/INSERT INTO.*settings.*mail_host/'))
+            ->with(\Mockery::pattern('/INSERT INTO.*settings.*incoming_mail_host/'))
             ->once()
             ->andReturn(1);
         $pdo->shouldReceive('exec')->andReturn(1);

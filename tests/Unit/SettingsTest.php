@@ -400,7 +400,7 @@ class SettingsTest extends TestCase
         $settings = new Settings($pdo);
 
         $rows = [
-            ['id' => 1, 'name' => 'mail_host', 'value' => 'imap.example.com', 'description' => 'd', 'validation' => ''],
+            ['id' => 1, 'name' => 'incoming_mail_host', 'value' => 'imap.example.com', 'description' => 'd', 'validation' => ''],
             ['id' => 2, 'name' => 'site_mail', 'value' => 'a@b.co', 'description' => 'd', 'validation' => ''],
         ];
 

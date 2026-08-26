@@ -414,18 +414,18 @@ class CliCommand
         (new FileTypes($pdo))->load();
 
         $c = $GLOBALS['CONFIG'];
-        if (($c['mail_enabled'] ?? 'False') !== 'True') {
-            fwrite(STDERR, "Mail ingest is disabled (mail_enabled is not True).\n");
+        if (($c['incoming_mail_enabled'] ?? 'False') !== 'True') {
+            fwrite(STDERR, "Mail ingest is disabled (incoming_mail_enabled is not True).\n");
             return;
         }
 
-        if (($c['mail_validate_cert'] ?? 'True') === 'False') {
-            fwrite(STDERR, "Warning: mail_validate_cert is disabled — the mail server TLS certificate will not be verified. Connections are vulnerable to MITM.\n");
+        if (($c['incoming_mail_validate_cert'] ?? 'True') === 'False') {
+            fwrite(STDERR, "Warning: incoming_mail_validate_cert is disabled — the mail server TLS certificate will not be verified. Connections are vulnerable to MITM.\n");
         }
 
         // Audit retention: prune rows older than the configured window so the
         // table does not grow without bound.
-        $retentionDays = (int) ($c['mail_audit_retention_days'] ?? 90);
+        $retentionDays = (int) ($c['incoming_mail_audit_retention_days'] ?? 90);
         if ($retentionDays > 0) {
             $prune = $pdo->prepare("DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}email_audit WHERE created < (NOW() - INTERVAL :days DAY)");
             $prune->execute([':days' => $retentionDays]);
@@ -437,14 +437,14 @@ class CliCommand
 
         try {
             $inbox = new EmailInbox([
-                'host' => $c['mail_host'] ?? '',
-                'port' => $c['mail_port'] ?? 993,
-                'protocol' => $c['mail_protocol'] ?? 'imap',
-                'encryption' => $c['mail_encryption'] ?? 'ssl',
-                'user' => $c['mail_user'] ?? '',
-                'pass' => $c['mail_pass'] ?? '',
-                'folder' => $c['mail_folder'] ?? 'INBOX',
-                'validate_cert' => ($c['mail_validate_cert'] ?? 'True') !== 'False',
+                'host' => $c['incoming_mail_host'] ?? '',
+                'port' => $c['incoming_mail_port'] ?? 993,
+                'protocol' => $c['incoming_mail_protocol'] ?? 'imap',
+                'encryption' => $c['incoming_mail_encryption'] ?? 'ssl',
+                'user' => $c['incoming_mail_user'] ?? '',
+                'pass' => $c['incoming_mail_pass'] ?? '',
+                'folder' => $c['incoming_mail_folder'] ?? 'INBOX',
+                'validate_cert' => ($c['incoming_mail_validate_cert'] ?? 'True') !== 'False',
             ]);
 
             $ingest = new EmailIngest($pdo, $c);
@@ -459,7 +459,7 @@ class CliCommand
                         $totals[$k] += $stats[$k];
                     }
                     $inbox->markRead($message->id);
-                    if (($c['mail_delete'] ?? 'False') === 'True') {
+                    if (($c['incoming_mail_delete'] ?? 'False') === 'True') {
                         $inbox->delete($message->id);
                     }
                 } catch (Throwable $e) {

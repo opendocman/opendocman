@@ -7,7 +7,7 @@
 > **POP3 note:** IMAP works without any extension, but POP3 requires PHP's
 > native `imap` extension (the library uses `LegacyProtocol` for non-IMAP).
 
-Configure in Admin → Settings (the `mail_*` keys). Set `mail_enabled` to `True`,
+Configure in Admin → Settings (the `incoming_mail_*` keys). Set `incoming_mail_enabled` to `True`,
 then run (via cron or manually):
 
     php application/installer/cli.php mail:poll
@@ -37,10 +37,10 @@ body) is not stored in the document.
 
 ## Security settings
 
-- `mail_validate_cert` — verify the mail server's TLS certificate (default
+- `incoming_mail_validate_cert` — verify the mail server's TLS certificate (default
   `True`). Leave `True` in production; disabling exposes the connection to
   MITM.
-- `mail_audit_retention_days` — how long to keep `email_audit` rows (default
+- `incoming_mail_audit_retention_days` — how long to keep `email_audit` rows (default
   `90`; `0` = keep forever). Old rows are pruned on each poll.
 
 ## Viewing results
@@ -51,8 +51,8 @@ SHA-256 of the token, never the token itself.
 
 ## Troubleshooting
 
-- `Mail poll failed - connection failed` → check `mail_host`/`mail_port`/
-  `mail_encryption`, that the host actually serves IMAP, and that the TLS
-  certificate matches the host (or enable `mail_validate_cert` carefully).
+- `Mail poll failed - connection failed` → check `incoming_mail_host`/`incoming_mail_port`/
+  `incoming_mail_encryption`, that the host actually serves IMAP, and that the TLS
+  certificate matches the host (or enable `incoming_mail_validate_cert` carefully).
 - An email shows `no valid token` → the token in the body didn't match any
   user's current token (check for typos, or the token was rotated).

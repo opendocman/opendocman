@@ -85,11 +85,11 @@ class EmailIngest
 
             $publishable = ($this->config['authorization'] === 'True') ? '0' : '1';
             $params = [
-                'category' => (int) $this->config['mail_default_category'],
+                'category' => (int) $this->config['incoming_mail_default_category'],
                 'owner_id' => $userId,
                 'realname' => $att['name'],
                 'description' => trim($message->subject),
-                'department' => (int) $this->config['mail_default_department'],
+                'department' => (int) $this->config['incoming_mail_default_department'],
                 'comment' => 'Imported via email from ' . $message->from,
                 'publishable' => $publishable,
                 'is_public' => 0,

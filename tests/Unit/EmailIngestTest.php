@@ -58,8 +58,8 @@ class EmailIngestTest extends TestCase
             'db_prefix' => 'odm_',
             'authorization' => 'False',
             'allowedFileTypes' => ['application/pdf'],
-            'mail_default_category' => 3,
-            'mail_default_department' => 2,
+            'incoming_mail_default_category' => 3,
+            'incoming_mail_default_department' => 2,
             'max_filesize' => 5000000,
             'email_max_attachments' => 2,
         ], $overrides);
