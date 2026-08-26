@@ -179,7 +179,7 @@ INSERT INTO `odm_rights` VALUES (-1,'forbidden');
 INSERT INTO `odm_rights` VALUES (2,'read');
 INSERT INTO `odm_rights` VALUES (3,'write');
 INSERT INTO `odm_rights` VALUES (4,'admin');
-INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$c31hxIW5PiBCdNdw.3sVkOKENaQZfgq2wbhrU6pkzaimT5zdyfJWm','1','5555551212','admin@example.com','User','Admin','',1,1,1,NULL);
+INSERT INTO `odm_user` VALUES (NULL,'admin','$2y$12$/uz3AqsQggtkgx5Gjlj4/.gjSDTkmomHUhHYBN.GnriGQg1E84JZC','1','5555551212','admin@example.com','User','Admin','',1,1,1,NULL);
 INSERT INTO `odm_odmsys` VALUES (NULL,'version','1.7.5');
 INSERT INTO `odm_settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool');
 INSERT INTO `odm_settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like "demo/demo". This will keep users from removing files, users, etc.', 'bool');

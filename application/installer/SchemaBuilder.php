@@ -184,6 +184,15 @@ class SchemaBuilder
         $dataDir = $options['datadir'] ?? '/var/www/document_repository/';
         $snapshotDir = $options['snapshotdir'] ?? '/var/www/snapshots/';
 
+        // When no explicit admin password is supplied (e.g. `dump-sql`), use a
+        // fixed, committed bcrypt hash for the bootstrap "admin" account so the
+        // dump is deterministic and does not churn on every run. The real
+        // installer always overrides this with the admin's chosen password, so
+        // this is only a placeholder for fresh seed/dump output.
+        $adminHash = ($adminPassword === 'admin')
+            ? '$2y$12$/uz3AqsQggtkgx5Gjlj4/.gjSDTkmomHUhHYBN.GnriGQg1E84JZC'
+            : password_hash($adminPassword, PASSWORD_DEFAULT);
+
         return [
             "INSERT INTO `{$prefix}admin` VALUES (1,1)",
             "INSERT INTO `{$prefix}category` VALUES (NULL,'SOP')",
@@ -198,7 +207,7 @@ class SchemaBuilder
             "INSERT INTO `{$prefix}rights` VALUES (2,'read')",
             "INSERT INTO `{$prefix}rights` VALUES (3,'write')",
             "INSERT INTO `{$prefix}rights` VALUES (4,'admin')",
-            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin','" . password_hash($adminPassword, PASSWORD_DEFAULT) . "','1','5555551212','admin@example.com','User','Admin',''," . ((int) $forcePasswordChange) . ",1,1,NULL)",
+            "INSERT INTO `{$prefix}user` VALUES (NULL,'admin','" . $adminHash . "','1','5555551212','admin@example.com','User','Admin',''," . ((int) $forcePasswordChange) . ",1,1,NULL)",
             "INSERT INTO `{$prefix}odmsys` VALUES (NULL,'version','{$this->getVersion()}')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'debug', 'False', '(True/False) - Default=False - Debug the installation (not working)', 'bool')",
             "INSERT INTO `{$prefix}settings` VALUES(NULL, 'demo', 'False', '(True/False) This setting is for a demo installation, where random people will be all loggging in as the same username/password like \"demo/demo\". This will keep users from removing files, users, etc.', 'bool')",
