@@ -500,6 +500,8 @@ $lang['adminpage_reports_file_list'] = 'Exportar Lista de Archivos';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
+
+$lang['adminpage_email_ingest_log'] = 'Registro de recepción de correo';
 $lang['accesslogpage_file_added'] = 'Archivo agregado';
 $lang['accesslogpage_file_viewed'] = 'Archivo Visto';
 $lang['accesslogpage_file_downloaded'] = 'Archivo Descargado';
@@ -571,3 +573,8 @@ $lang['label_files'] = 'Documentos';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'Token de recepción de correo';
+$lang['email_token_rotate'] = 'Rotar token';
+$lang['email_token_instruction'] = 'Para enviar un documento por correo, envíelo a la bandeja configurada con su token en el cuerpo del mensaje (no en el asunto). El asunto se convierte en la descripción del documento. Ejemplo de cuerpo: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Su token de recepción de correo fue rotado. El token anterior ya no funciona.';

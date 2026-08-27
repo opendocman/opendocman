@@ -49,6 +49,9 @@ class CliCommand
             case 'demo:refresh':
                 $this->demoRefresh();
                 break;
+            case 'mail:poll':
+                $this->mailPoll();
+                break;
             default:
                 $this->printUsage();
                 break;
@@ -379,6 +382,104 @@ class CliCommand
         $this->migrate([]);
     }
 
+    private function mailPoll(): void
+    {
+        require_once __DIR__ . '/../version.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
+        require_once __DIR__ . '/../controllers/helpers/functions.php';
+        require_once __DIR__ . '/../models/EmailInbox.class.php';
+        require_once __DIR__ . '/../models/EmailIngest.class.php';
+        require_once __DIR__ . '/../models/Settings.class.php';
+        require_once __DIR__ . '/../models/FileTypes.class.php';
+        require_once __DIR__ . '/../models/Document.class.php';
+        require_once __DIR__ . '/../models/TextExtractor.class.php';
+        require_once __DIR__ . '/../models/TextExtractorFactory.class.php';
+
+        $configManager = new ConfigManager();
+        if (!$configManager->configExists()) {
+            fwrite(STDERR, "Error: No config file found. Run setup-config first.\n");
+            exit(1);
+        }
+        $configManager->loadConfig();
+
+        $dbManager = new DatabaseManager(APP_DB_HOST, APP_DB_NAME, APP_DB_USER, APP_DB_PASS);
+        try {
+            $pdo = $dbManager->connect();
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Database connection failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+
+        (new Settings($pdo))->load();
+        (new FileTypes($pdo))->load();
+
+        $c = $GLOBALS['CONFIG'];
+        if (($c['incoming_mail_enabled'] ?? 'False') !== 'True') {
+            fwrite(STDERR, "Mail ingest is disabled (incoming_mail_enabled is not True).\n");
+            return;
+        }
+
+        if (($c['incoming_mail_validate_cert'] ?? 'True') === 'False') {
+            fwrite(STDERR, "Warning: incoming_mail_validate_cert is disabled — the mail server TLS certificate will not be verified. Connections are vulnerable to MITM.\n");
+        }
+
+        // Audit retention: prune rows older than the configured window so the
+        // table does not grow without bound.
+        $retentionDays = (int) ($c['incoming_mail_audit_retention_days'] ?? 90);
+        if ($retentionDays > 0) {
+            $prune = $pdo->prepare("DELETE FROM {$GLOBALS['CONFIG']['db_prefix']}email_audit WHERE created < (NOW() - INTERVAL :days DAY)");
+            $prune->execute([':days' => $retentionDays]);
+        }
+
+        // Cap messages processed per poll so a backlog of mail cannot flood
+        // the DB or disk in a single run.
+        $maxMessages = (int) ($c['email_max_messages_per_poll'] ?? 50);
+
+        try {
+            $inbox = new EmailInbox([
+                'host' => $c['incoming_mail_host'] ?? '',
+                'port' => $c['incoming_mail_port'] ?? 993,
+                'protocol' => $c['incoming_mail_protocol'] ?? 'imap',
+                'encryption' => $c['incoming_mail_encryption'] ?? 'ssl',
+                'user' => $c['incoming_mail_user'] ?? '',
+                'pass' => $c['incoming_mail_pass'] ?? '',
+                'folder' => $c['incoming_mail_folder'] ?? 'INBOX',
+                'validate_cert' => ($c['incoming_mail_validate_cert'] ?? 'True') !== 'False',
+            ]);
+
+            $ingest = new EmailIngest($pdo, $c);
+
+            $messages = $inbox->fetchMessages();
+            $messages = array_slice($messages, 0, $maxMessages);
+            $totals = ['created' => 0, 'rejected' => 0, 'errors' => 0];
+            foreach ($messages as $message) {
+                try {
+                    $stats = $ingest->process($message);
+                    foreach (array_keys($totals) as $k) {
+                        $totals[$k] += $stats[$k];
+                    }
+                    $inbox->markRead($message->id);
+                    if (($c['incoming_mail_delete'] ?? 'False') === 'True') {
+                        $inbox->delete($message->id);
+                    }
+                } catch (Throwable $e) {
+                    fwrite(STDERR, "Error: Failed to process message " . $message->id . " - " . $e->getMessage() . "\n");
+                    $totals['errors']++;
+                    continue;
+                }
+            }
+            $inbox->cleanup();
+
+            echo "mail:poll complete — created {$totals['created']}, rejected {$totals['rejected']}, errors {$totals['errors']}\n";
+        } catch (EmailInboxException $e) {
+            fwrite(STDERR, "Error: Mailbox error - " . $e->getMessage() . "\n");
+            exit(1);
+        } catch (Exception $e) {
+            fwrite(STDERR, "Error: Mail poll failed - " . $e->getMessage() . "\n");
+            exit(1);
+        }
+    }
+
     private function getArg(array $argv, string $prefix): ?string
     {
         foreach ($argv as $arg) {
@@ -414,6 +515,7 @@ class CliCommand
         echo "  snapshot:list                                     List all snapshots\n";
         echo "  snapshot:delete --name=NAME                       Delete a snapshot\n";
         echo "  demo:refresh                                      Restore demo-baseline + enable demo mode\n";
+        echo "  mail:poll                                         Poll the inbox and ingest email documents\n";
     }
 }
 

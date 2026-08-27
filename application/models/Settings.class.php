@@ -77,7 +77,7 @@ if (!defined('Settings_class')) {
             foreach ($rows as $row) {
                 $name = $row['name'];
                 $group = self::GROUP_MAP[$name] ?? null;
-                if ($group === null && strncmp($name, 'mail_', 5) === 0) {
+                if ($group === null && (strncmp($name, 'incoming_mail_', 14) === 0 || strncmp($name, 'incoming_', 9) === 0)) {
                     $group = 'email';
                 }
                 $group = $group ?? 'other';
@@ -165,6 +165,11 @@ if (!defined('Settings_class')) {
             $deptStmt = $this->connection->prepare($deptQuery);
             $deptStmt->execute();
             $GLOBALS['smarty']->assign('departments', $deptStmt->fetchAll());
+
+            $catQuery = "SELECT id, name FROM {$GLOBALS['CONFIG']['db_prefix']}category ORDER BY name";
+            $catStmt = $this->connection->prepare($catQuery);
+            $catStmt->execute();
+            $GLOBALS['smarty']->assign('categories', $catStmt->fetchAll());
         }
 
         /**

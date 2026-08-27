@@ -58,10 +58,11 @@
                 { title: 'Department', field: 'department_name', widthGrow: 1 },
                 { title: 'Admin', field: 'is_admin', width: 70, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
                 { title: 'Reviewer', field: 'is_reviewer', width: 80, formatter: function(c) { return c.getValue() == 1 ? 'Yes' : 'No'; } },
-                { title: '', field: 'actions', width: 120, headerSort: false, formatter: function(cell) {
+                { title: '', field: 'actions', width: 240, minWidth: 240, maxWidth: 240, headerSort: false, resizable: false, formatter: function(cell) {
                     var id = cell.getData().id;
                     return '<button class="btn btn-sm btn-outline-primary edit-row" data-id="' + id + '">Edit</button> ' +
-                           '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>';
+                           '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>' +
+                           '<button class="btn btn-sm btn-outline-warning rotate-token" data-id="' + id + '">' + (window.rotateLabel || 'Rotate') + '</button>';
                 }}
             ];
         },
@@ -71,7 +72,7 @@
                 { title: 'ID', field: 'id', width: 60 },
                 { title: 'Name', field: 'name', widthGrow: 3 },
                 { title: 'Users', field: 'user_count', width: 80 },
-                { title: '', field: 'actions', width: 120, headerSort: false, formatter: function(cell) {
+                { title: '', field: 'actions', width: 120, minWidth: 120, headerSort: false, resizable: false, formatter: function(cell) {
                     var id = cell.getData().id;
                     return '<button class="btn btn-sm btn-outline-primary edit-row" data-id="' + id + '">Edit</button> ' +
                            '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>';
@@ -84,11 +85,30 @@
                 { title: 'ID', field: 'id', width: 60 },
                 { title: 'Name', field: 'name', widthGrow: 3 },
                 { title: 'Files', field: 'file_count', width: 80 },
-                { title: '', field: 'actions', width: 120, headerSort: false, formatter: function(cell) {
+                { title: '', field: 'actions', width: 120, minWidth: 120, headerSort: false, resizable: false, formatter: function(cell) {
                     var id = cell.getData().id;
                     return '<button class="btn btn-sm btn-outline-primary edit-row" data-id="' + id + '">Edit</button> ' +
                            '<button class="btn btn-sm btn-outline-danger delete-row" data-id="' + id + '">Del</button>';
                 }}
+            ];
+        },
+        email_audit: function() {
+            return [
+                { title: 'Time', field: 'created', widthGrow: 1, headerSort: false },
+                { title: 'From', field: 'from_address', widthGrow: 1 },
+                { title: 'Msg ID', field: 'message_id', widthGrow: 1, headerSort: false },
+                { title: 'Outcome', field: 'outcome', width: 110, headerSort: false, formatter: function(cell) {
+                    var v = cell.getValue();
+                    if (v === 'created') return '<span class="badge bg-success">Created</span>';
+                    if (v === 'rejected') return '<span class="badge bg-warning text-dark">Rejected</span>';
+                    return '<span class="badge bg-danger">Error</span>';
+                }},
+                { title: 'Document', field: 'document_id', width: 110, headerSort: false, formatter: function(cell) {
+                    var v = cell.getValue();
+                    if (!v) return '<span class="text-muted">-</span>';
+                    return '<a href="details?id=' + v + '">#' + v + '</a>';
+                }},
+                { title: 'Reason', field: 'reason', widthGrow: 2 }
             ];
         }
     };
@@ -160,7 +180,13 @@ users: function(rowData) {
             resizableColumns: true,
             placeholder: 'No data available',
             ajaxURL: 'admin_crud_ajax',
-            ajaxParams: function() { return { entity: entity, action: 'list', filter: window.crudFilter || '' }; },
+            ajaxParams: function() {
+                var params = { entity: entity, action: 'list', filter: window.crudFilter || '' };
+                if (entity === 'email_audit' && window.crudOutcome) {
+                    params.outcome = window.crudOutcome;
+                }
+                return params;
+            },
             ajaxConfig: 'GET',
             ajaxContentType: 'form',
             columns: columnGetters[entity]()
@@ -371,9 +397,12 @@ users: function(rowData) {
         var table = initTable();
         window.crudTable = table;
 
-        document.getElementById('addBtn').addEventListener('click', openAddModal);
-        document.getElementById('crudModalSave').addEventListener('click', saveEntity);
-        document.getElementById('deleteConfirmBtn').addEventListener('click', deleteEntity);
+        var addBtn = document.getElementById('addBtn');
+        if (addBtn) addBtn.addEventListener('click', openAddModal);
+        var modalSave = document.getElementById('crudModalSave');
+        if (modalSave) modalSave.addEventListener('click', saveEntity);
+        var deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+        if (deleteConfirmBtn) deleteConfirmBtn.addEventListener('click', deleteEntity);
 
         var multiBtn = document.getElementById('deleteMultiBtn');
         if (multiBtn) {
@@ -386,9 +415,10 @@ users: function(rowData) {
         document.getElementById('crud-table').addEventListener('click', function(e) {
             var editBtn = e.target.closest('.edit-row');
             var deleteBtn = e.target.closest('.delete-row');
-            if (!editBtn && !deleteBtn) return;
+            var rotateBtn = e.target.closest('.rotate-token');
+            if (!editBtn && !deleteBtn && !rotateBtn) return;
 
-            var id = (editBtn || deleteBtn).dataset.id;
+            var id = (editBtn || deleteBtn || rotateBtn).dataset.id;
             var rowData = null;
             table.getData().forEach(function(row) {
                 if (parseInt(row.id) === parseInt(id)) rowData = row;
@@ -396,6 +426,37 @@ users: function(rowData) {
 
             if (editBtn && rowData) openEditModal(rowData);
             if (deleteBtn && rowData) openDeleteModal(rowData);
+            if (rotateBtn) rotateToken(id);
         });
     });
+
+    function rotateToken(id) {
+        var formData = new FormData();
+        formData.append('entity', 'users');
+        formData.append('action', 'rotate_mail_token');
+        formData.append('item', id);
+        formData.append(csrfFieldName, csrfToken);
+        if (csrfIndexName) {
+            formData.append(csrfIndexName, csrfIndex);
+        }
+        fetch('admin_crud_ajax', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(result) {
+            if (result.csrf_token) {
+                csrfToken = result.csrf_token;
+                csrfIndex = result.csrf_index || '';
+            }
+            if (result.error) {
+                alert(result.error);
+                return;
+            }
+            alert(window.rotateLabel + ': ' + result.token);
+        })
+        .catch(function(err) {
+            alert('Error rotating token: ' + err.message);
+        });
+    }
 })();

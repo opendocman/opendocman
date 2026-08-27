@@ -296,130 +296,28 @@ if (!isset($_POST['submit'])) {
             exit;
         }
 
-        // INSERT file info into data table
-        $file_data_query = "INSERT INTO
-        {$GLOBALS['CONFIG']['db_prefix']}data (
-            status,
-            category,
-            owner,
-            realname,
-            created,
-            description,
-            department,
-            comment,
-            default_rights,
-            publishable,
-            is_public
-        )
-            VALUES
-        (
-            0,
-            :category,
-            :owner_id,
-            :realname,
-            NOW(),
-            :description,
-            :current_user_dept,
-            :comment,
-            0,
-            $publishable,
-            $is_public
-        )";
+        // Gather perms arrays exactly as today
+        $userPermission = $_REQUEST['user_permission'] ?? [];
+        $deptPermission = $_POST['department_permission'] ?? [];
 
-        $file_data_stmt = $pdo->prepare($file_data_query);
-
-        $file_data_stmt->bindParam(':category', $_REQUEST['category']);
-        $file_data_stmt->bindParam(':owner_id', $owner_id);
-        $file_data_stmt->bindParam(':realname', $_FILES['file']['name'][$count]);
-        $file_data_stmt->bindParam(':description', $_REQUEST['description']);
-        $file_data_stmt->bindParam(':current_user_dept', $current_user_dept);
-        $file_data_stmt->bindParam(':comment', $_REQUEST['comment']);
-
-        $file_data_stmt->execute();
-
-        // get id from INSERT operation
-        $fileId = $pdo->lastInsertId();
+        $fileId = Document::create($pdo, [
+            'category' => (int) $_REQUEST['category'],
+            'owner_id' => (int) $owner_id,
+            'realname' => $_FILES['file']['name'][$count],
+            'description' => $_REQUEST['description'],
+            'department' => (int) $current_user_dept,
+            'comment' => $_REQUEST['comment'],
+            'publishable' => $publishable,
+            'is_public' => $is_public,
+            'dept_perms' => $deptPermission,
+            'user_perms' => $userPermission,
+            'source_path' => $tmp_name[$count],
+            'source_is_upload' => true,
+            'username' => $user_obj->getUserName(),
+            'mime' => $file_mime,
+        ]);
 
         udf_add_file_insert($fileId);
-
-        $username = $user_obj->getUserName();
-
-        // Add a file history entry
-        $history_query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}log
-            (
-                id,
-                modified_on,
-                modified_by,
-                note,
-                revision
-            ) VALUES (
-                '$fileId',
-                NOW(),
-                :username,
-                'Initial import',
-                'current'
-            )";
-
-        $history_stmt = $pdo->prepare($history_query);
-        $history_stmt->bindParam(':username', $username);
-        $history_stmt->execute();
-
-        //Insert Department Rights into dept_perms
-        foreach ($_POST['department_permission'] as $dept_id=>$dept_perm) {
-            $dept_perms_query = "
-                INSERT INTO
-                    {$GLOBALS['CONFIG']['db_prefix']}dept_perms
-                    (
-                        fid,
-                        rights,
-                        dept_id
-                    ) VALUES (
-                        $fileId,
-                        :dept_perm,
-                        :dept_id
-                    )";
-
-            $dept_perms_stmt = $pdo->prepare($dept_perms_query);
-            $dept_perms_stmt->bindParam(':dept_perm', $dept_perm);
-            $dept_perms_stmt->bindParam(':dept_id', $dept_id);
-            $dept_perms_stmt->execute();
-        }
-        // Search for similar names in the two array (merge the array.  repetitions are deleted)
-        // In case of repetitions, higher priority ones stay.
-        // Priority is in this order (admin, modify, read, view)
-
-        foreach ($_REQUEST['user_permission'] as $user_id => $permission) {
-            $user_perms_query = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}user_perms (fid, uid, rights) VALUES($fileId, :user_id, :permission)";
-
-            $user_perms_stmt = $pdo->prepare($user_perms_query);
-            $user_perms_stmt->bindParam(':user_id', $user_id);
-            $user_perms_stmt->bindParam(':permission', $permission);
-            $user_perms_stmt->execute();
-        }
-
-        // Save uploaded file with original filename in ID subfolder
-        $realname = $_FILES['file']['name'][$count];
-        $newFilePath = getFilePath($fileId, $realname, 'data');
-        $newFileDir = dirname($newFilePath);
-        if (!is_dir($newFileDir)) {
-            mkdir($newFileDir, 0775, true);
-        }
-        move_uploaded_file($tmp_name[$count], $newFilePath);
-
-        // Extract text content for search indexing
-        $file_mime = File::mime($newFilePath, $_FILES['file']['name'][$count]);
-        if (TextExtractorFactory::isExtractable($file_mime)) {
-            $extractor = TextExtractorFactory::create($file_mime);
-            if ($extractor !== null) {
-                $contentText = $extractor->extract($newFilePath);
-                $indexQuery = "INSERT INTO {$GLOBALS['CONFIG']['db_prefix']}content_index (file_id, content_text, indexed_at) VALUES (:file_id, :content_text, NOW())";
-                $indexStmt = $pdo->prepare($indexQuery);
-                $indexStmt->execute([
-                    ':file_id' => $fileId,
-                    ':content_text' => $contentText,
-                ]);
-            }
-        }
 
         AccessLog::addLogEntry($fileId, 'A', $pdo);
 

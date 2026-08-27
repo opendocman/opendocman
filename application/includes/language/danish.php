@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Adgangs-log';
+
+$lang['adminpage_email_ingest_log'] = 'Log over mail-indtag';
 $lang['accesslogpage_file_added'] = 'Fil tilføjet';
 $lang['accesslogpage_file_viewed'] = 'Fil vist';
 $lang['accesslogpage_file_downloaded'] = 'Fil downloaded';
@@ -573,3 +575,8 @@ $lang['label_files'] = 'Dokumenter';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'Token til mail-indtag';
+$lang['email_token_rotate'] = 'Skift token';
+$lang['email_token_instruction'] = 'For at indsende et dokument via e-mail, send det til den konfigurerede indbakke med din token i beskedens brødtekst (ikke i emnefeltet). Emnefeltet bliver dokumentbeskrivelsen. Eksempel på brødtekst: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Dit mail-indtag token er blevet skiftet. Det gamle token virker ikke længere.';

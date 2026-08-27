@@ -37,6 +37,19 @@ ob_start();
         <a href="user?submit=Modify+User&item=<?php echo $_SESSION['uid']; ?>" class="btn btn-primary"><?php echo msg('profilepage_update_profile')?></a>
     </div>
 <?php
+$token = (new User($_SESSION['uid'], $GLOBALS['pdo']))->getMailToken();
+if ($token !== '') {
+    $rotate_csrf = $GLOBALS['csrf']->getTokenForTemplate('/user');
+    echo '<div class="alert alert-info mt-3">';
+    echo '<strong>' . htmlspecialchars(msg('email_token')) . ':</strong> <code>' . htmlspecialchars($token) . '</code><br>';
+    echo msg('email_token_instruction');
+    echo '<br><form method="post" action="user" class="d-inline">';
+    echo '<input type="hidden" name="item" value="' . (int) $_SESSION['uid'] . '">';
+    echo '<button type="submit" name="submit" value="Rotate Mail Token" class="btn btn-warning btn-sm">' . msg('email_token_rotate') . '</button>';
+    echo $rotate_csrf['field'];
+    echo '</form>';
+    echo '</div>';
+}
 $content = ob_get_clean();
 $GLOBALS['smarty']->assign('content', $content);
 display_smarty_template('_content.tpl');

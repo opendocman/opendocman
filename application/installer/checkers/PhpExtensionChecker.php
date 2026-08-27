@@ -9,6 +9,7 @@ class PhpExtensionChecker implements CheckerInterface
         'mbstring' => ['severity' => 'required',    'why' => 'Multibyte text processing'],
         'fileinfo' => ['severity' => 'required',    'why' => 'MIME type detection'],
         'gd'       => ['severity' => 'recommended', 'why' => 'Image thumbnails'],
+        'imap'     => ['severity' => 'recommended', 'why' => 'POP3 mailbox access for email ingest (IMAP works without it)'],
     ];
 
     public function getName(): string

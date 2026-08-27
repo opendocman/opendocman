@@ -7,7 +7,7 @@
 .phplint-cache
 Thumbs.db
 /nbproject
-config.php
+/application/configs/config.php
 **/*.tpl.php
 .phpunit.result.cache
 .env

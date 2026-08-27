@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
+
+$lang['adminpage_email_ingest_log'] = '邮件接收日志';
 $lang['accesslogpage_file_added'] = 'File Added';
 $lang['accesslogpage_file_viewed'] = 'File Viewed';
 $lang['accesslogpage_file_downloaded'] = 'File Downloaded';
@@ -573,3 +575,8 @@ $lang['label_files'] = '文档';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = '邮件接收令牌';
+$lang['email_token_rotate'] = '轮换令牌';
+$lang['email_token_instruction'] = '要通过电子邮件提交文档，请发送到已配置的收件箱，并将您的令牌放在邮件正文中（而不是主题中）。主题将成为文档描述。正文示例："[YOUR-TOKEN]"。';
+$lang['email_token_rotated'] = '您的邮件接收令牌已轮换。旧令牌不再有效。';

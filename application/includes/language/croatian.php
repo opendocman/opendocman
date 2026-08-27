@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'Izvoz popisa datoteka';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Popis pristupa';
+
+$lang['adminpage_email_ingest_log'] = 'Dnevnik unosa pošte';
 $lang['accesslogpage_file_added'] = 'Datoteka dodana';
 $lang['accesslogpage_file_viewed'] = 'Datoteka pregledana';
 $lang['accesslogpage_file_downloaded'] = 'Datoteka preuzeta';
@@ -573,3 +575,8 @@ $lang['label_files'] = 'Dokumenti';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'Token za unos pošte';
+$lang['email_token_rotate'] = 'Zamijeni token';
+$lang['email_token_instruction'] = 'Za slanje dokumenta e-poštom, pošaljite ga u konfigurirani sandučić s tokenom u tijelu poruke (ne u naslovu). Naslov postaje opis dokumenta. Primjer tijela: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Vaš token za unos pošte je zamijenjen. Stari token više ne radi.';

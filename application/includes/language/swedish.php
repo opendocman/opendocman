@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'Fil liste Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Tillträde Log';
+
+$lang['adminpage_email_ingest_log'] = 'Logg för e-postinmatning';
 $lang['accesslogpage_file_added'] = 'Fil Tillagd';
 $lang['accesslogpage_file_viewed'] = 'Fil Visad';
 $lang['accesslogpage_file_downloaded'] = 'Fil Nerladdad';
@@ -573,3 +575,8 @@ $lang['label_files'] = 'Dokument';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'Token för e-postinmatning';
+$lang['email_token_rotate'] = 'Rotera token';
+$lang['email_token_instruction'] = 'För att skicka in ett dokument via e-post, skicka det till den konfigurerade inkorgen med din token i meddelandets brödtext (inte i ämnet). Ämnet blir dokumentbeskrivningen. Exempel på brödtext: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Din token för e-postinmatning har roterats. Den gamla token fungerar inte längre.';

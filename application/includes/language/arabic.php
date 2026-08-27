@@ -502,6 +502,8 @@ $lang['adminpage_reports_file_list'] = 'قائمة الملف الخاصة با�
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'سجل الوصول';
+
+$lang['adminpage_email_ingest_log'] = 'سجل استقبال البريد';
 $lang['accesslogpage_file_added'] = 'إضافة ملف';
 $lang['accesslogpage_file_viewed'] = 'إستعراض ملف';
 $lang['accesslogpage_file_downloaded'] = 'تنزيل ملف';
@@ -573,3 +575,8 @@ $lang['label_files'] = 'المستندات';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'رمز استقبال البريد';
+$lang['email_token_rotate'] = 'تغيير الرمز';
+$lang['email_token_instruction'] = 'لإرسال مستند عبر البريد الإلكتروني، أرسله إلى صندوق البريد المُهيأ مع وضع الرمز في نص الرسالة (وليس في الموضوع). يُصبح الموضوع وصف المستند. مثال النص: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'تم تغيير رمز استقبال البريد. الرمز القديم لم يعد يعمل.';

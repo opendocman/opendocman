@@ -21,6 +21,8 @@
 // User administration
 use Aura\Html\Escaper as e;
 
+require_once dirname(__FILE__) . '/../models/MailToken.class.php';
+
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 if (!isset($_SESSION['uid'])) {
@@ -55,6 +57,22 @@ if ($mode == 'disabled' && isset($_GET['item']) && $_GET['item'] != $_SESSION['u
     exit;
 }
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit']) && $_POST['submit'] == 'Rotate Mail Token') {
+    if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST, '/user')) {
+        header('Location: error?ec=1&last_message=' . urlencode('CSRF token validation failed'));
+        exit;
+    }
+    $uid = (int) $_POST['item'];
+    if ($uid !== $_SESSION['uid'] && !(new User($_SESSION['uid'], $GLOBALS['pdo']))->isAdmin()) {
+        header('Location: error?ec=4');
+        exit;
+    }
+    $u = new User($uid, $GLOBALS['pdo']);
+    $u->rotateMailToken();
+    header('Location: profile?last_message=' . urlencode(msg('email_token_rotated')));
+    exit;
+}
 
 if (isset($_REQUEST['submit']) and $_REQUEST['submit'] == 'adduser') {
     header('Location: admin_users');

@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'Export Lista Fisiere';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Lista Acces';
+
+$lang['adminpage_email_ingest_log'] = 'Jurnal de primire a e-mailurilor';
 $lang['accesslogpage_file_added'] = 'Fisiere Aduagate';
 $lang['accesslogpage_file_viewed'] = 'Fisiere Vizualizate';
 $lang['accesslogpage_file_downloaded'] = 'Fisiere Descarcate';
@@ -572,3 +574,8 @@ $lang['label_files'] = 'Documente';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'Token de primire a e-mailurilor';
+$lang['email_token_rotate'] = 'Rotește tokenul';
+$lang['email_token_instruction'] = 'Pentru a trimite un document prin e-mail, trimiteți-l căsuței configurate cu tokenul în corpul mesajului (nu în subiect). Subiectul devine descrierea documentului. Exemplu de corp: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'Tokenul dvs. de primire a e-mailurilor a fost rotit. Tokenul vechi nu mai funcționează.';

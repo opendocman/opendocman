@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'ফাইল তালিকা রপ�
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'অধিগমন লগ';
+
+$lang['adminpage_email_ingest_log'] = 'মেইল ইনজেস্ট লগ';
 $lang['accesslogpage_file_added'] = 'যোগ করা ';
 $lang['accesslogpage_file_viewed'] = 'দর্শিত ';
 $lang['accesslogpage_file_downloaded'] = 'ডাউনলোড করা ';
@@ -572,3 +574,8 @@ $lang['label_files'] = 'নথি';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'মেইল ইনজেস্ট টোকেন';
+$lang['email_token_rotate'] = 'টোকেন পরিবর্তন করুন';
+$lang['email_token_instruction'] = 'ইমেইলের মাধ্যমে একটি নথি জমা দিতে, কনফিগার করা ইনবক্সে পাঠান এবং আপনার টোকেন বার্তার মূল অংশে রাখুন (বিষয়ে নয়)। বিষয়টি নথির বিবরণ হয়ে যায়। উদাহরণ মূল অংশ: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'আপনার মেইল ইনজেস্ট টোকেন পরিবর্তন করা হয়েছে। পুরানো টোকেন আর কাজ করবে না।';

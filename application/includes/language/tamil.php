@@ -501,6 +501,8 @@ $lang['adminpage_reports_file_list'] = 'File List Export';
 
 // Access Log page
 $lang['accesslogpage_access_log'] = 'Access Log';
+
+$lang['adminpage_email_ingest_log'] = 'மின்னஞ்சல் உட்செலுத்தல் பதிவு';
 $lang['accesslogpage_file_added'] = 'File Added';
 $lang['accesslogpage_file_viewed'] = 'File Viewed';
 $lang['accesslogpage_file_downloaded'] = 'File Downloaded';
@@ -572,3 +574,8 @@ $lang['label_files'] = 'ஆவணங்கள்';
 
 $lang['label_open'] = 'Open';
 $lang['label_supported_formats'] = 'Supported formats';
+
+$lang['email_token'] = 'மின்னஞ்சல் உட்செலுத்தல் டோக்கன்';
+$lang['email_token_rotate'] = 'டோக்கனை சுழற்று';
+$lang['email_token_instruction'] = 'மின்னஞ்சல் வழியாக ஒரு ஆவணத்தை சமர்ப்பிக்க, கட்டமைக்கப்பட்ட உள்வரும் அஞ்சலுக்கு அனுப்பி, செய்தியின் உடலில் உங்கள் டோக்கனை வைக்கவும் (பொருள் அல்ல). பொருள் ஆவண விளக்கமாகிறது. எடுத்துக்காட்டு உடல்: "[YOUR-TOKEN]".';
+$lang['email_token_rotated'] = 'உங்கள் மின்னஞ்சல் உட்செலுத்தல் டோக்கன் சுழற்றப்பட்டது. பழைய டோக்கன் இனி வேலை செய்யாது.';

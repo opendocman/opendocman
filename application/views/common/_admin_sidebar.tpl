@@ -24,6 +24,7 @@
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'rejections'}active{/if}" href="rejects">{$g_lang_label_rejections|default:'Rejections'}</a></li>
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'expiration'}active{/if}" href="check-exp">{$g_lang_label_check_expiration|default:'Check Expiration'}</a></li>
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'file_ops'}active{/if}" href="file_ops?submit=view_checkedout">{$g_lang_label_checked_out_files|default:'Checked-out Files'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'email_audit'}active{/if}" href="admin_email_audit">{$g_lang_adminpage_email_ingest_log|default:'Email Ingest Log'}</a></li>
 
         <li class="nav-item mt-2">
             <div class="admin-sidebar-group-label">{$g_lang_settings_sidebar_group_system|default:'Settings &amp; System'}</div>
