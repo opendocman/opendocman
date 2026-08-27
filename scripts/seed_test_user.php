@@ -73,8 +73,20 @@ $userTable = $dbPrefix . 'user';
 // Check whether the user already exists
 $check = $pdo->prepare("SELECT id FROM `{$userTable}` WHERE username = :u");
 $check->execute([':u' => $username]);
-if ($check->fetchColumn()) {
-    echo "Test user '{$username}' already exists. Nothing to do.\n";
+if ($existingId = $check->fetchColumn()) {
+    // Keep the display name stable for E2E (NON_ADMIN_DISPLAY is "last_name,
+    // first_name"). A profile self-edit E2E test may mutate these fields.
+    $reset = $pdo->prepare(
+        "UPDATE `{$userTable}` SET first_name = :fn, last_name = :ln, department = :d, Email = :e WHERE id = :id"
+    );
+    $reset->execute([
+        ':fn' => $firstName,
+        ':ln' => $lastName,
+        ':d' => $department,
+        ':e' => $email,
+        ':id' => $existingId,
+    ]);
+    echo "Test user '{$username}' exists (id {$existingId}); reset display name.\n";
     exit(0);
 }
 
