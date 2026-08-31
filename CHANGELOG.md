@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.10.0-release](https://github.com/opendocman/opendocman/compare/v2.9.0-release...v2.10.0-release) (2026-08-27)
+
+
+### Features
+
+* add documents by email (mail-in ingest, fixes [#17](https://github.com/opendocman/opendocman/issues/17)) ([#442](https://github.com/opendocman/opendocman/issues/442)) ([cc499ab](https://github.com/opendocman/opendocman/commit/cc499ab2100b3ac0d3c44db8167a50f0278357e9))
+
+
+### Bug Fixes
+
+* restore per-user profile self-edit form (regression from [#421](https://github.com/opendocman/opendocman/issues/421)) ([#441](https://github.com/opendocman/opendocman/issues/441)) ([e5043ca](https://github.com/opendocman/opendocman/commit/e5043ca45df560cae2caac96540552fe2f9ec648))
+
 ## [2.9.0-release](https://github.com/opendocman/opendocman/compare/v2.8.0-release...v2.9.0-release) (2026-08-20)
 
 
