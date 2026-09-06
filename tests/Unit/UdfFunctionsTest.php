@@ -69,8 +69,9 @@ class UdfFunctionsTest extends TestCase
         udf_add_file_form();
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('href="udf_help.html#Add_File_My Field"', $output);
+        $this->assertStringContainsString('href="udf_help.html#Add_File_Type_3"', $output);
         $this->assertStringContainsString("onClick=\"return popup(this,'Help')\"", $output);
+        $this->assertStringContainsString('>My Field</a>', $output);
     }
 
     public function testUdfAddFileFormOutputsPlainTextWhenHelpFileMissing(): void

@@ -28,6 +28,15 @@ use Aura\Html\Escaper as e;
 if (!defined('udf_functions')) {
     define('udf_functions', 'true', false);
 
+    function udf_help_link($display_name, $field_type)
+    {
+        $docroot = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : getcwd();
+        if (file_exists($docroot . '/udf_help.html')) {
+            return '<a class="body" href="udf_help.html#Add_File_Type_' . (int) $field_type . '" onClick="return popup(this,\'Help\')" style="text-decoration:none">' . e::h($display_name) . '</a>';
+        }
+        return e::h($display_name);
+    }
+
     function udf_add_file_form()
     {
         global $pdo;
@@ -48,13 +57,7 @@ if (!defined('udf_functions')) {
 
         foreach ($result as $row) {
             echo '<tr><td>';
-            $docroot = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : getcwd();
-            if (file_exists($docroot . '/udf_help.html')) {
-                echo '<a class="body" href="udf_help.html#Add_File_'. e::h($row[2]) .'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'. e::h($row[2]) .'</a>';
-            } else {
-                echo e::h($row[2]);
-            }
-
+            echo udf_help_link($row[2], $row[1]);
             echo '</td><td>';
 
             //Type is Select List
