@@ -212,7 +212,7 @@ if (!defined('udf_functions')) {
 
         foreach ($result as $row) {
             if ($row[1] == 1 || $row[1] == 2) {
-                echo '<tr><td>' . $row[0] . '</td><td>';
+                echo '<tr><td>' . udf_help_link($row[0], $row[1]) . '</td><td>';
                 if ($row[1] == 1) {
                     echo '<select name="'.$row[2].'" class="form-select">';
                 }
@@ -262,7 +262,7 @@ if (!defined('udf_functions')) {
                 }
                 echo '</td></tr>';
             } elseif ($row[1] == 3) {
-                echo '<tr><td>' . e::h($row[0]) . '</td><td>';
+                echo '<tr><td>' . udf_help_link($row[0], $row[1]) . '</td><td>';
                 $query = "
                   SELECT
                     {$row['2']}
@@ -277,12 +277,11 @@ if (!defined('udf_functions')) {
 
                 echo '<input type="text" name="' . e::h($row[2]) . '" value="' . e::h($sub_row[0]) . '" class="form-control">';
             }
-            //CHM
             elseif ($row[1] == 4) {
                 $explode_row = explode('_', $row[2]);
                 $field_name = $explode_row[2];
                 
-                echo '<tr><td>' . e::h($row[0]) . '</td><td>';
+                echo '<tr><td>' . udf_help_link($row[0], $row[1]) . '</td><td>';
                 echo '<select name="'. e::h($row[2]) .'" class="form-select" onchange="showdropdowns(this.value, \'edit\',\'' . e::h($field_name) . '\')">';
                 echo '<option value="">Please select one</option>';
 
@@ -365,7 +364,6 @@ if (!defined('udf_functions')) {
                 echo '</select>';
                 echo '</div></td></tr>';
             }
-            //CHM
         }
     }
 

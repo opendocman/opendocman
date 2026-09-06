@@ -36,6 +36,7 @@ class UdfFunctionsTest extends TestCase
     protected function tearDown(): void
     {
         unset($_SERVER['DOCUMENT_ROOT']);
+        unset($_REQUEST['id']);
         if (file_exists($this->tempDocroot . '/udf_help.html')) {
             unlink($this->tempDocroot . '/udf_help.html');
         }
@@ -85,6 +86,57 @@ class UdfFunctionsTest extends TestCase
         $output = ob_get_clean();
 
         $this->assertStringContainsString('<tr><td>My Field</td>', $output);
+        $this->assertStringNotContainsString('popup(this', $output);
+    }
+
+    public function testUdfEditFileFormOutputsHelpLinkWhenHelpFileExistsInDocroot(): void
+    {
+        file_put_contents($this->tempDocroot . '/udf_help.html', '<html></html>');
+        $_SERVER['DOCUMENT_ROOT'] = $this->tempDocroot;
+        $_REQUEST['id'] = 5;
+
+        $stmtUdf = \Mockery::mock(\PDOStatement::class);
+        $stmtUdf->shouldReceive('execute')->once()->with([])->andReturn(true);
+        $stmtUdf->shouldReceive('fetchAll')->once()->andReturn([['My Field', 3, 'myfield']]);
+
+        $stmtData = \Mockery::mock(\PDOStatement::class);
+        $stmtData->shouldReceive('execute')->once()->with([':id' => 5])->andReturn(true);
+        $stmtData->shouldReceive('fetch')->once()->andReturn(['current value']);
+
+        global $pdo;
+        $pdo = \Mockery::mock(PDO::class);
+        $pdo->shouldReceive('prepare')->andReturn($stmtUdf, $stmtData);
+
+        ob_start();
+        udf_edit_file_form();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('href="udf_help.html#Add_File_Type_3"', $output);
+        $this->assertStringContainsString('>My Field</a>', $output);
+    }
+
+    public function testUdfEditFileFormOutputsPlainTextWhenHelpFileMissing(): void
+    {
+        $_SERVER['DOCUMENT_ROOT'] = $this->tempDocroot;
+        $_REQUEST['id'] = 5;
+
+        $stmtUdf = \Mockery::mock(\PDOStatement::class);
+        $stmtUdf->shouldReceive('execute')->once()->with([])->andReturn(true);
+        $stmtUdf->shouldReceive('fetchAll')->once()->andReturn([['My Field', 3, 'myfield']]);
+
+        $stmtData = \Mockery::mock(\PDOStatement::class);
+        $stmtData->shouldReceive('execute')->once()->with([':id' => 5])->andReturn(true);
+        $stmtData->shouldReceive('fetch')->once()->andReturn(['current value']);
+
+        global $pdo;
+        $pdo = \Mockery::mock(PDO::class);
+        $pdo->shouldReceive('prepare')->andReturn($stmtUdf, $stmtData);
+
+        ob_start();
+        udf_edit_file_form();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('My Field', $output);
         $this->assertStringNotContainsString('popup(this', $output);
     }
 }
