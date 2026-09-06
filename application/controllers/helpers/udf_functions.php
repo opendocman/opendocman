@@ -48,7 +48,8 @@ if (!defined('udf_functions')) {
 
         foreach ($result as $row) {
             echo '<tr><td>';
-            if (file_exists("udf_help.html")) {
+            $docroot = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : getcwd();
+            if (file_exists($docroot . '/udf_help.html')) {
                 echo '<a class="body" href="udf_help.html#Add_File_'. e::h($row[2]) .'" onClick="return popup(this,\'Help\')" style="text-decoration:none">'. e::h($row[2]) .'</a>';
             } else {
                 echo e::h($row[2]);
