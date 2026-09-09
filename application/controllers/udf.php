@@ -46,6 +46,31 @@ if (isset($_GET['submit']) && $_GET['submit'] == 'add') {
     $GLOBALS['smarty']->assign('content', ob_get_clean());
     display_smarty_template('_admin_content.tpl');
     draw_footer();
+} elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'manage') {
+    draw_header(msg('label_user_defined_fields'), $last_message);
+
+    $query = "
+      SELECT
+        id,
+        table_name,
+        display_name,
+        field_type
+      FROM
+        {$GLOBALS['CONFIG']['db_prefix']}udf
+      ORDER BY
+        id
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(array());
+    $result = $stmt->fetchAll();
+
+    $GLOBALS['smarty']->assign('udfs', $result);
+    $GLOBALS['smarty']->assign('active_admin', 'udf');
+    ob_start();
+    display_smarty_template('udf/manage.tpl');
+    $GLOBALS['smarty']->assign('content', ob_get_clean());
+    display_smarty_template('_admin_content.tpl');
+    draw_footer();
 } elseif (isset($_REQUEST['submit']) && $_REQUEST['submit'] == 'Add User Defined Field') {
     // Validate CSRF token for Add UDF operation
     if (isset($GLOBALS['csrf']) && !$GLOBALS['csrf']->validateToken($_POST)) {
