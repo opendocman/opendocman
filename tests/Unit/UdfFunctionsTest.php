@@ -94,5 +94,6 @@ class UdfFunctionsTest extends TestCase
         $this->assertStringContainsString('name="item" value="{$item.table_name|escape:\'html\'}"', $tpl);
         $this->assertStringContainsString('{$csrf_token_field}', $tpl);
         $this->assertStringContainsString('udf?submit=add', $tpl);
+        $this->assertStringNotContainsString('href="udf?submit=delete&item=', $tpl);
     }
 }
