@@ -480,30 +480,6 @@ if (!defined('udf_functions')) {
         return $return_string;
     }
 
-    function udf_admin_header()
-    {
-        echo '<th bgcolor ="#83a9f7"><font color="#FFFFFF">' .msg('label_user_defined_fields'). '</font></th>';
-    }
-
-    function udf_admin_menu()
-    {
-        global $pdo;
-
-        echo '<td valign=top><table border=0>';
-        echo '<tr><td><b><a href="udf?submit=add&state=' . (e::h($_REQUEST['state'] + 1)).'">' .msg('label_add'). '</a></b></td></tr>';
-        echo '<tr><td><b><a href="udf?submit=deletepick&state=' . (e::h($_REQUEST['state'] + 1)).'">' .msg('label_delete'). '</a></b></td></tr>';
-        echo '<tr><td><hr></td></tr>';
-        $query = "SELECT table_name,field_type,display_name FROM {$GLOBALS['CONFIG']['db_prefix']}udf ORDER BY id";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-
-        foreach ($result as $row) {
-            echo '<tr><td><b><a href="udf?submit=edit&udf='. e::h($row[0]) .'&state=' . (e::h($_REQUEST['state'] + 1)).'">'. e::h($row[2]) .'</a></b></td></tr>';
-        }
-        echo '</table></td>';
-    }
-
     function udf_functions_java_menu()
     {
         global $pdo;
