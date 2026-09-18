@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.11.0-release](https://github.com/opendocman/opendocman/compare/v2.10.0-release...v2.11.0-release) (2026-09-18)
+
+
+### Features
+
+* type-based UDF help sections on add and edit forms ([#443](https://github.com/opendocman/opendocman/issues/443)) ([6f29a47](https://github.com/opendocman/opendocman/commit/6f29a4714b0cce7d2bcc0aa5d68bb87bb3bd0975))
+
 ## [2.10.0-release](https://github.com/opendocman/opendocman/compare/v2.9.0-release...v2.10.0-release) (2026-08-27)
 
 
