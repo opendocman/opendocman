@@ -14,7 +14,7 @@
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'users'}active{/if}" href="admin_users">{$g_lang_users|default:'Users'}</a></li>
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'departments'}active{/if}" href="admin_departments">{$g_lang_label_department|default:'Departments'}</a></li>
         <li class="nav-item"><a class="nav-link {if $active_admin eq 'categories'}active{/if}" href="admin_categories">{$g_lang_category|default:'Categories'}</a></li>
-        <li class="nav-item"><a class="nav-link {if $active_admin eq 'udf'}active{/if}" href="udf?submit=add">{$g_lang_label_user_defined_fields|default:'User Defined Fields'}</a></li>
+        <li class="nav-item"><a class="nav-link {if $active_admin eq 'udf'}active{/if}" href="udf?submit=manage">{$g_lang_label_user_defined_fields|default:'User Defined Fields'}</a></li>
 
         <li class="nav-item mt-2">
             <div class="admin-sidebar-group-label">{$g_lang_settings_sidebar_group_files|default:'Files'}</div>

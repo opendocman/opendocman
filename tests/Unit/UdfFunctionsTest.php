@@ -199,4 +199,14 @@ class UdfFunctionsTest extends TestCase
         $this->assertStringNotContainsString('<script>', $output);
         $this->assertStringNotContainsString('popup(this', $output);
     }
+
+    public function testManageTemplateContainsDeleteForm(): void
+    {
+        $tpl = file_get_contents(APPLICATION_PATH . '/views/common/udf/manage.tpl');
+        $this->assertStringContainsString('name="submit" value="delete"', $tpl);
+        $this->assertStringContainsString('name="item" value="{$item.table_name|escape:\'html\'}"', $tpl);
+        $this->assertStringContainsString('{$csrf_token_field}', $tpl);
+        $this->assertStringContainsString('udf?submit=add', $tpl);
+        $this->assertStringNotContainsString('href="udf?submit=delete&item=', $tpl);
+    }
 }
