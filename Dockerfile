@@ -1,4 +1,4 @@
-FROM php:8.2.29-apache
+FROM php:8.2.35-apache
 MAINTAINER Logical Arts, LLC <info@logicalarts.net>
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
